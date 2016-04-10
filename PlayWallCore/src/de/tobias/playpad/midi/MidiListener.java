@@ -1,0 +1,9 @@
+package de.tobias.playpad.midi;
+
+import javax.sound.midi.MidiMessage;
+
+public interface MidiListener {
+
+	public void onMidiAction(MidiMessage message);
+
+}
