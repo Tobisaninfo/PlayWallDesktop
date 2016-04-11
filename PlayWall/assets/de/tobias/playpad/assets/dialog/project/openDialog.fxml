@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane fx:id="rootNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ListView fx:id="projectList" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox layoutX="200.0" prefHeight="200.0" prefWidth="100.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="14.0">
+                     <children>
+                        <Label text="%project.label.name" />
+                        <TextField fx:id="nameTextField" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="renameButton" mnemonicParsing="false" onAction="#renameButtonHandler" text="%project.button.rename" />
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox spacing="14.0">
+                     <children>
+                        <VBox spacing="14.0">
+                           <children>
+                              <Label text="%project.label.fileSize" />
+                              <Label text="%project.label.lastModified" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="14.0">
+                           <children>
+                              <Label fx:id="sizeLabel" text="100 MB" />
+                              <Label fx:id="dateLabel" text="20. Dez 2015 19:45" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox spacing="14.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="newButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newButtonHandler" text="%project.button.new" VBox.vgrow="ALWAYS" />
+                              <Button fx:id="duplicateButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#duplicateButtonHandler" text="%project.button.duplicate" VBox.vgrow="ALWAYS" />
+                              <Button fx:id="deleteButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%project.button.delete" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                        <VBox spacing="14.0">
+                           <children>
+                              <Button fx:id="exportButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#exportButtonHandler" text="%project.button.export" VBox.vgrow="ALWAYS" />
+                              <Button fx:id="importButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importButtonHandler" text="%project.button.import" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox alignment="TOP_RIGHT" spacing="14.0">
+                     <children>
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonHandler" text="%project.button.cancel" />
+                        <Button fx:id="openButton" mnemonicParsing="false" onAction="#openButtonHandler" text="%project.button.finish" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+               </padding>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

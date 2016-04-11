@@ -1,0 +1,15 @@
+name: PlayWall
+version: b5.0.0
+build: 24
+identifier: de.tobias.playpad
+main: de.tobias.playpad.PlayPadMain
+author: Tobias Ullerich
+backup: false
+iconPath: icon
+updateURL: http://s522730663.online.de/programmer/files/PlayWall
+userInfo:
+  Website: http://tobisan.no-ip.org/
+  ErrorURL: http://s522730663.online.de/programmer/upload.php
+  PluginsURL: http://s522730663.online.de/programmer/files/PlayWall/plugins.yml
+  ChangelogURL: http://s522730663.online.de/programmer/whatsnew-2.php?id=1
+  UpdaterProgram: http://s522730663.online.de/programmer/files/Updater/

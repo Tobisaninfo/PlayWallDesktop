@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="rootContainer" maxWidth="1.7976931348623157E308" spacing="14.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="%cartAction.label.headline" underline="true" />
+      <VBox fx:id="settingsView">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="150.0" text="%cartAction.label.type" />
+                  <ComboBox fx:id="controlMode" prefWidth="150.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="settingsView1">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="150.0" text="%cartAction.label.autoColor" />
+                  <CheckBox fx:id="autoColorCheckbox" mnemonicParsing="false" text="%cartAction.checkbox.autoColor" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

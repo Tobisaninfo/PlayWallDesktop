@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="14.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%keyboard.label.key" />
+            <Label fx:id="keyLabel" prefWidth="68.0" text="KEY" />
+            <Button fx:id="mappingButton" mnemonicParsing="false" onAction="#mappingButtonHandler" prefWidth="68.0" text="%keyboard.button.new" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

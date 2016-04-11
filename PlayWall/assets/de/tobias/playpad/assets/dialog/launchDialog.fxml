@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="24.0" layoutY="5.0" spacing="7.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+            <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0" prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="212.0">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <VBox layoutX="109.0" layoutY="259.0" spacing="14.0">
+               <children>
+                  <Button fx:id="newProfileButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newProfileButtonHandler" text="%launch.button.new" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="importProfileButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importProfileButtonHandler" text="%launch.button.import" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" layoutX="371.0" prefHeight="345.0" prefWidth="269.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="371.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <HBox layoutX="494.0" layoutY="305.0" spacing="14.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0">
+         <children>
+            <Button fx:id="deleteButton" layoutX="494.0" layoutY="305.0" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%launch.button.delete" />
+            <Button fx:id="openButton" layoutX="568.0" layoutY="305.0" mnemonicParsing="false" onAction="#openButtonHandler" text="%launch.button.open" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

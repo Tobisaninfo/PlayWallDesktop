@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="517.0" spacing="14.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefWidth="150.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%layout.label.color" textAlignment="RIGHT" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox layoutX="110.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="110.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.background" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="backgroundColorPicker" layoutX="110.0" layoutY="68.0" maxWidth="1.7976931348623157E308" />
+               </children>
+            </VBox>
+            <VBox layoutX="243.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.playground" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="playgroundColorPicker" layoutX="244.0" layoutY="68.0" maxWidth="1.7976931348623157E308" />
+               </children>
+            </VBox>
+            <VBox layoutX="374.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="374.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.warnColor" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="warnColorPicker" layoutX="374.0" layoutY="68.0" maxWidth="1.7976931348623157E308" />
+               </children>
+            </VBox>
+            <VBox layoutX="507.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="508.0" layoutY="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.fadeColor" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="fadeColorPicker" layoutX="507.0" layoutY="68.0" maxWidth="1.7976931348623157E308" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Separator prefHeight="3.0" prefWidth="600.0" />
+      <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="BOTTOM_LEFT" layoutX="26.0" layoutY="184.0" prefWidth="150.0" spacing="23.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="184.0" prefWidth="150.0" text="%layout.label.color" textAlignment="RIGHT" AnchorPane.leftAnchor="26.0" />
+               </children>
+               <HBox.margin>
+                  <Insets bottom="7.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox layoutX="109.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="TOP_CENTER" layoutX="109.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.infoLabel" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="infoLabelColorPicker" layoutX="109.0" layoutY="179.0" maxWidth="1.7976931348623157E308" />
+               </children>
+            </VBox>
+            <VBox layoutX="243.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="100.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="TOP_CENTER" layoutX="243.0" layoutY="154.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="%layout.label.titleLabel" AnchorPane.leftAnchor="243.0" VBox.vgrow="ALWAYS" />
+                  <ColorPicker fx:id="titleLabelColorPicker" layoutX="243.0" layoutY="179.0" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="243.0" />
+               </children>
+            </VBox>
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonHandler" text="%layout.button.reset">
+         <VBox.margin>
+            <Insets left="164.0" />
+         </VBox.margin></Button>
+   </children>
+</VBox>

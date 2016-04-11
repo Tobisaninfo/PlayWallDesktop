@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox spacing="14.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.midi.label.device">
+               <HBox.margin>
+                  <Insets top="4.0" />
+               </HBox.margin>
+            </Label>
+            <HBox maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <ComboBox fx:id="deviceComboBox" onAction="#deviceHandler" prefWidth="150.0" />
+                  <Pane HBox.hgrow="ALWAYS" />
+                  <CheckBox fx:id="midiActiveCheckBox" mnemonicParsing="false" text="%settings.checkbox.activate">
+                     <padding>
+                        <Insets top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets top="4.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</VBox>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox fx:id="root" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER_LEFT" spacing="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" layoutX="18.0" layoutY="76.0" prefWidth="150.0" text="%midi.label.key" />
+            <Label fx:id="midiInputKeyLabel" prefWidth="68.0" />
+            <Button fx:id="midiInputRecordButton" layoutX="167.0" layoutY="71.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#midiInputRecordButtonHandler" prefWidth="68.0" text="%midi.button.new" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

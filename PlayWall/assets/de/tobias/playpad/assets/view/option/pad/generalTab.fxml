@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" spacing="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="14.0" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="19.0" prefWidth="150.0" text="%padSettings.gen.label.title" AnchorPane.leftAnchor="14.0" />
+                  <TextField fx:id="titleTextField" layoutX="125.0" layoutY="14.0" prefWidth="250.0" AnchorPane.leftAnchor="127.0" />
+                  <VBox HBox.hgrow="ALWAYS" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%padSettings.button.delete" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="48.0" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="50.0" prefWidth="150.0" text="%padSettings.gen.label.volume" AnchorPane.leftAnchor="14.0" />
+                  <Slider fx:id="volumeSlider" layoutX="122.0" layoutY="54.0" prefWidth="250.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" AnchorPane.leftAnchor="127.0" />
+                  <VBox HBox.hgrow="ALWAYS" />
+                  <CheckBox fx:id="repeatCheckBox" mnemonicParsing="false" text="%padSettings.checkbox.loop" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="84.0" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="89.0" prefWidth="150.0" text="%padSettings.gen.label.timeDisplay" AnchorPane.leftAnchor="14.0" />
+                  <ComboBox fx:id="timeDisplayComboBox" layoutX="127.0" layoutY="84.0" prefWidth="250.0" AnchorPane.leftAnchor="127.0" />
+                  <VBox HBox.hgrow="ALWAYS" />
+                  <CheckBox fx:id="customTimeDisplayCheckBox" layoutX="406.0" layoutY="88.0" mnemonicParsing="false" text="%padSettings.gen.checkbox.customSettings" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+   </padding>
+</VBox>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox spacing="14.0">
+         <children>
+            <VBox alignment="BOTTOM_LEFT" prefWidth="150.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%layout.label.color" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin></Label>
+               </children>
+            </VBox>
+            <VBox layoutX="110.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="125.0" spacing="14.0">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="110.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0" text="%layout.label.background" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="backgroundColorButton" focusTraversable="false" mnemonicParsing="false" onAction="#backgroundColorButtonHandler" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox layoutX="243.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="125.0" spacing="14.0">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0" text="%layout.label.playground" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="playColorButton" focusTraversable="false" mnemonicParsing="false" onAction="#playColorButtonHandler" prefWidth="150.0" />
+               </children>
+            </VBox>
+            <VBox maxWidth="1.7976931348623157E308" prefWidth="150.0" spacing="14.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0" text="%layout.label.animation" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <CheckBox fx:id="warnAnimationCheckBox" mnemonicParsing="false" text="%layout.label.warnAnimation" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Button fx:id="resetButton" mnemonicParsing="false" onAction="#resetButtonHandler" text="%layout.button.reset">
+         <VBox.margin>
+            <Insets left="164.0" />
+         </VBox.margin></Button>
+   </children>
+</VBox>

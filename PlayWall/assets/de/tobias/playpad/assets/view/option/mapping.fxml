@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutX="14.0" layoutY="14.0" spacing="14.0">
+         <children>
+            <Label alignment="BASELINE_RIGHT" layoutX="14.0" layoutY="19.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.mapping.label.mapping" />
+            <ComboBox fx:id="mappingComboBox" layoutX="100.0" layoutY="14.0" prefWidth="150.0" />
+            <Button fx:id="editMappingsButton" layoutX="264.0" layoutY="14.0" mnemonicParsing="false" onAction="#editMappingsHandler" text="%settings.mapping.button.edit" />
+         </children>
+      </HBox>
+      <HBox layoutY="50.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <TreeView fx:id="treeView" prefHeight="400.0" prefWidth="200.0" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0" />
+            <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+               <content>
+                  <VBox fx:id="detailView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="14.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

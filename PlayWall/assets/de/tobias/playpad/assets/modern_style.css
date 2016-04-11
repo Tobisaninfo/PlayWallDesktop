@@ -1,0 +1,134 @@
+.root {
+	-fx-base: rgb(30, 30, 30);
+}
+
+.deleteButton {
+	-fx-background-color: transparent;
+	-fx-padding: 0;
+}
+
+.pad:drag {
+	-fx-opacity: 0.8;
+}
+
+.text-field:error {
+	-fx-text-box-border: red;
+	-fx-focus-color: red;
+}
+
+.live-label {
+	-fx-text-fill: red !important;
+}
+
+// Neu
+.pad {
+	/*
+	-fx-background-color: linear-gradient(#A7FF9A, #8FD673); // Grün
+	-fx-background-color: linear-gradient(#469fe2, #0080e2); // Blau
+
+
+	-fx-background-color: linear-gradient(#a90329, #6d0019); // Weinrot F
+	-fx-background-color: linear-gradient(#55B7FF, #369FE9); // Blau F
+	-fx-background-color: linear-gradient(#FF6E6B, #EF5350); // Rot F
+	-fx-background-color: linear-gradient(#73E178, #66BB6A); // Grün F
+	-fx-background-color: linear-gradient(#ffe08c, #d5bf54); // Gelb F
+	-fx-background-color: linear-gradient(#db7ab7, #dd61b0); // Pink F
+	-fx-background-color: linear-gradient(#ff9254, #ff7526); // Orange F
+	-fx-background-color: linear-gradient(#86F7FF, #52E3EC); // Aqua F
+	-fx-background-color: linear-gradient(#555555, #333333); // Dark F	
+	-fx-background-color: linear-gradient(#eeeeee, #cccccc); // Grau F
+	-fx-background-color: linear-gradient(#cccccc, #aaaaaa); // Mittel Grau F
+	*/
+
+	-fx-background-radius: 10px;
+	
+	-fx-border-color: rgb(20, 20, 20);
+	-fx-border-width: 2px;
+	-fx-border-radius: 8px;
+	
+	-fx-padding: 5 10 5 10;
+}
+
+.pad-root {
+	-fx-spacing: 4px;
+}
+
+.pad-button-box {
+	-fx-spacing: 0px;
+}
+
+.pad-grid {
+	-fx-background-color: rgb(60, 60, 60);
+
+	-fx-hgap: 6px;
+	-fx-vgap: 6px;
+	
+	-fx-padding: 6px;
+}
+
+.pad-info {
+	-fx-text-fill: white;
+	-fx-font-size: 15px;
+}
+
+.pad-button {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+
+.pad-button:hover {
+	-fx-background-color: transparent;
+	-fx-border-width: 1px;
+	-fx-border-color: rgb(30, 30, 30, 0.5);
+	-fx-border-radius: 10px;
+}
+
+.pad-button:pressed {
+	-fx-background-color: transparent;
+	-fx-border-width: 1px;
+	-fx-border-color: black;
+	-fx-border-radius: 10px;
+}
+
+.fonticon {
+	-fx-text-fill: white;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
+}
+
+.pad-playbar .bar {
+    -fx-background-color: white;
+    -fx-padding: 0.5em;
+    
+    -fx-background-radius: 10px;    
+}
+
+.pad-playbar .track { 
+	-fx-base: black;
+    -fx-background-radius: 10px; 
+}
+
+.pad-playbar {
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow( gaussian , rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);     
+}
+
+.tool-bar {
+	-fx-base: rgb(60, 60, 60);
+}
+
+.menu-bar {
+	-fx-base: rgb(60, 60, 60);
+}
+
+.current-page-button {
+	-fx-base: lightgray;
+}
+
+.slider .thumb {
+	-fx-base: white;
+}
+
+.volume-item {
+	-fx-text-fill: white !important;
+}
