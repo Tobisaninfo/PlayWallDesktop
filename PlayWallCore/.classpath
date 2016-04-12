@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="de/tobias/playpad/audio/AudioCache.java|de/tobias/playpad/midi/device/DisplayableDevice.java|de/tobias/playpad/plugin/ProjectHandler.java|de/tobias/playpad/plugin/Updatable.java|de/tobias/playpad/plugin/viewcontroller/IPadViewController.java|de/tobias/playpad/project/ProjectImporterOld.java|de/tobias/playpad/settings/MidiPreset.java|de/tobias/playpad/settings/MidiSettings.java|de/tobias/playpad/model/Pad.java|de/tobias/playpad/model/Project.java|de/tobias/playpad/layout/LayoutContainer.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libUtils"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Plugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TinySound"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/XML"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/YML"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JLayer"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Json"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
