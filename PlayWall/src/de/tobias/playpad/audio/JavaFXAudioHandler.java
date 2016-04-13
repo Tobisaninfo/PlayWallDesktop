@@ -89,7 +89,7 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 	}
 
 	@Override
-	public void loadMedia() {
+	public void loadMedia(Path[] paths) {
 		Platform.runLater(() ->
 		{
 			if (getContent().getPad().isPadVisible()) {

@@ -195,7 +195,7 @@ public class ClipAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void loadMedia() {
+	public void loadMedia(Path[] paths) {
 		mixer = AudioSystem.getMixer(AudioSystem.getMixerInfo()[0]);
 
 		DataLine.Info info = new Info(Clip.class, null);

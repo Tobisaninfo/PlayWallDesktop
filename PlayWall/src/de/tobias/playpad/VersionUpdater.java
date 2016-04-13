@@ -51,7 +51,7 @@ public class VersionUpdater implements UpdateService {
 
 					Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, name);
 					Path newProjectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, uuid + Project.FILE_EXTENSION);
-					Files.createDirectories(newProjectPath);
+					Files.createDirectories(newProjectPath.getParent());
 
 					Files.move(projectPath, newProjectPath);
 

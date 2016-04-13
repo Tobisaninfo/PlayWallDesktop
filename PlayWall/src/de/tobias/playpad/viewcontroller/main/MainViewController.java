@@ -427,6 +427,9 @@ public class MainViewController extends ViewController implements IMainViewContr
 						return false;
 			}
 
+			// Mapper Clear Feedback
+			Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
+
 			// MIDI Shutdown
 			if (profilSettings.isMidiActive()) {
 				try {
@@ -444,13 +447,9 @@ public class MainViewController extends ViewController implements IMainViewContr
 		// Verbindung von Pad und PadView wird getrennt. Zudem wird bei PLAY oder PAUSE auf STOP gesetzt
 		padViewList.forEach(padView -> padView.unconnectPad());
 
-		Worker.shutdown();
-
-		// Mapper Clear Feedback
-		Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
-
 		saveSettings();
 
+		Worker.shutdown();
 		System.exit(0);
 		return true;
 	}

@@ -208,7 +208,7 @@ public class TinyAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void loadMedia() {
+	public void loadMedia(Path[] paths) {
 		initTinySound();
 
 		unloadMedia();

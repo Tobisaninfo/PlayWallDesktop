@@ -1,5 +1,7 @@
 package de.tobias.playpad.audio;
 
+import java.nio.file.Path;
+
 import de.tobias.playpad.pad.conntent.PadContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.util.Duration;
@@ -37,7 +39,7 @@ public abstract class AudioHandler {
 
 	public abstract boolean isMediaLoaded();
 
-	public abstract void loadMedia();
+	public abstract void loadMedia(Path[] paths);
 
 	public abstract void unloadMedia();
 

@@ -206,7 +206,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public void loadMedia() {
 		audioHandler = AudioRegistry.geAudioType().createAudioHandler(this);
 		if (Files.exists(path)) {
-			audioHandler.loadMedia();
+			audioHandler.loadMedia(new Path[] { path });
 
 			durationProperty.bind(audioHandler.durationProperty());
 			positionProperty.bind(audioHandler.positionProperty());
