@@ -13,6 +13,7 @@
                   <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
             </MenuItem>
+            <Menu fx:id="recentOpenMenu" mnemonicParsing="false" text="%main.menuitem.recentFiles" />
             <MenuItem mnemonicParsing="false" onAction="#openDocumentHandler" text="%main.menuitem.project">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
@@ -23,7 +24,6 @@
                   <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
             </MenuItem>
-            <Menu fx:id="recentOpenMenu" mnemonicParsing="false" text="%main.menuitem.recentFiles" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="profileMenu" mnemonicParsing="false" onAction="#profileMenuHandler" text="%main.menuitem.profile" />
             <SeparatorMenuItem mnemonicParsing="false" />

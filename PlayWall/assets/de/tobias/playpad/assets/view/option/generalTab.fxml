@@ -5,66 +5,111 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefWidth="587.0" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label text="%settings.gen.label.view" underline="true" />
-      <HBox spacing="14.0">
+<ScrollPane fitToWidth="true" prefHeight="775.0" prefWidth="590.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox spacing="14.0">
          <children>
-            <Label alignment="BASELINE_RIGHT" layoutX="21.0" layoutY="40.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.pages" />
-            <TextField fx:id="pageCountTextField" prefWidth="50.0" />
+            <Label text="%settings.gen.label.view" underline="true" />
+            <HBox spacing="14.0">
+               <children>
+                  <Label alignment="BASELINE_RIGHT" layoutX="21.0" layoutY="40.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.pages" />
+                  <TextField fx:id="pageCountTextField" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <HBox spacing="14.0">
+               <children>
+                  <Label alignment="BASELINE_RIGHT" layoutX="20.0" layoutY="68.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.columns" />
+                  <TextField fx:id="columnTextField" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <HBox spacing="14.0">
+               <children>
+                  <Label alignment="BASELINE_RIGHT" layoutX="18.0" layoutY="96.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.rows" />
+                  <TextField fx:id="rowTextField" prefWidth="50.0" />
+               </children>
+            </HBox>
+            <Separator prefHeight="2.0" prefWidth="600.0" />
+            <Label text="%settings.gen.label.additional" underline="true" />
+            <HBox spacing="14.0">
+               <children>
+                  <Label alignment="BASELINE_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.liveMode" />
+                  <CheckBox fx:id="liveModeCheckBox" layoutX="30.0" layoutY="269.0" mnemonicParsing="false" text="%settings.gen.checkbox.liveMode" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="269.0" />
+               </children>
+            </HBox>
+            <HBox spacing="14.0">
+               <children>
+                  <Label prefWidth="150.0" text="%settings.gen.label.liveMode.pageChange" />
+                  <RadioButton fx:id="pageEnable" mnemonicParsing="false" prefWidth="125.0" text="%settings.gen.radio.liveMode.enable" />
+                  <RadioButton fx:id="pageDisable" mnemonicParsing="false" prefWidth="100.0" text="%settings.gen.radio.liveMode.disable" />
+               </children>
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox spacing="14.0">
+               <children>
+                  <Label prefWidth="150.0" text="%settings.gen.label.liveMode.dragPads" />
+                  <RadioButton fx:id="dragEnable" mnemonicParsing="false" prefWidth="125.0" text="%settings.gen.radio.liveMode.enable" />
+                  <RadioButton fx:id="dragDisable" mnemonicParsing="false" prefWidth="100.0" text="%settings.gen.radio.liveMode.disable" />
+               </children>
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox spacing="14.0">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+               <children>
+                  <Label prefWidth="150.0" text="%settings.gen.label.liveMode.media" />
+                  <RadioButton fx:id="fileEnable" mnemonicParsing="false" prefWidth="125.0" text="%settings.gen.radio.liveMode.enable" />
+                  <RadioButton fx:id="fileDisable" mnemonicParsing="false" prefWidth="100.0" text="%settings.gen.radio.liveMode.disable" />
+               </children>
+            </HBox>
+            <HBox spacing="14.0">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+               <children>
+                  <Label prefWidth="150.0" text="%settings.gen.label.liveMode.settings" />
+                  <RadioButton fx:id="settingsEnable" mnemonicParsing="false" prefWidth="125.0" text="%settings.gen.radio.liveMode.enable" />
+                  <RadioButton fx:id="settingsDisable" mnemonicParsing="false" prefWidth="100.0" text="%settings.gen.radio.liveMode.disable" />
+               </children>
+            </HBox>
+            <Label text="%settings.gen.label.liveModeInfo" wrapText="true">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </Label>
+            <HBox spacing="14.0">
+               <children>
+                  <Label alignment="BASELINE_RIGHT" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.cache.label" />
+                  <TextField fx:id="cacheTextField" promptText="C:\Users\Max\Cache" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#cacheChooseHandler" text="%settings.gen.cache.button.choose" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label prefWidth="150.0" />
+                  <Button mnemonicParsing="false" onAction="#cacheResetButtonHandler" text="%settings.gen.cache.button.reset" />
+                  <Label fx:id="cacheSizeLabel" text="Label" />
+               </children>
+            </HBox>
+            <Label text="%settings.gen.cache.label.info" wrapText="true">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </Label>
+            <Separator prefWidth="200.0" />
+            <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#resetDialogs" text="%settings.gen.warning.button.reset">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </Button>
          </children>
-      </HBox>
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="BASELINE_RIGHT" layoutX="20.0" layoutY="68.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.columns" />
-            <TextField fx:id="columnTextField" prefWidth="50.0" />
-         </children>
-      </HBox>
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="BASELINE_RIGHT" layoutX="18.0" layoutY="96.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.rows" />
-            <TextField fx:id="rowTextField" prefWidth="50.0" />
-         </children>
-      </HBox>
-      <Separator prefHeight="2.0" prefWidth="600.0" />
-      <Label text="%settings.gen.label.additional" underline="true" />
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="BASELINE_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.liveMode" />
-            <CheckBox fx:id="liveModeCheckBox" layoutX="30.0" layoutY="269.0" mnemonicParsing="false" text="%settings.gen.checkbox.liveMode" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="269.0" />
-         </children>
-      </HBox>
-      <Label text="%settings.gen.label.liveModeInfo" wrapText="true">
-         <VBox.margin>
-            <Insets left="164.0" />
-         </VBox.margin>
-      </Label>
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="BASELINE_RIGHT" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.cache.label" />
-            <TextField fx:id="cacheTextField" promptText="C:\Users\Max\Cache" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onAction="#cacheChooseHandler" text="%settings.gen.cache.button.choose" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" spacing="14.0">
-         <children>
-            <Label prefWidth="150.0" />
-            <Button mnemonicParsing="false" onAction="#cacheResetButtonHandler" text="%settings.gen.cache.button.reset" />
-            <Label fx:id="cacheSizeLabel" text="Label" />
-         </children>
-      </HBox>
-      <Label text="%settings.gen.cache.label.info" wrapText="true">
-         <VBox.margin>
-            <Insets left="164.0" />
-         </VBox.margin>
-      </Label>
-      <Separator prefWidth="200.0" />
-      <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#resetDialogs" text="%settings.gen.warning.button.reset">
-         <VBox.margin>
-            <Insets left="164.0" />
-         </VBox.margin></Button>
-   </children>
-   <padding>
-      <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
-   </padding>
-</VBox>
+         <padding>
+            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+         </padding>
+      </VBox>
+   </content>
+</ScrollPane>

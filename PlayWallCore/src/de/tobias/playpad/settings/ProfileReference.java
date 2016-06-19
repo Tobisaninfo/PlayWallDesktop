@@ -130,7 +130,6 @@ public class ProfileReference implements Displayable {
 	/**
 	 * Duplicate one profile on drive. To use the new profile, it must be load manually.
 	 * 
-	 * @see Profile#load(String)
 	 * 
 	 * @param src
 	 *            Name of the original Profile

@@ -21,7 +21,9 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.PluginViewController;
 import de.tobias.playpad.viewcontroller.PrintDialog;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
@@ -41,6 +43,8 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -55,7 +59,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import net.xeoh.plugins.base.PluginManager;
 
-public class MainMenuBarController implements EventHandler<ActionEvent>, Initializable {
+public class MainMenuBarController implements EventHandler<ActionEvent>, Initializable, ProfileListener {
 
 	@FXML private MenuBar menuBar;
 	@FXML CheckMenuItem dndModeMenuItem;
@@ -74,6 +78,8 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	private PluginManager manager;
 	private MainViewController mvc;
 
+	private ChangeListener<Boolean> lockedListener;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		menuBar.setUseSystemMenuBar(true);
@@ -81,6 +87,20 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 		if (OS.getType() == OSType.MacOSX) {
 			menuBar.setMaxHeight(0);
 		}
+
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+		Profile.registerListener(this); // Update, wenn sich das Profil ändert (remove Listener & add Listener)
+
+		// Listener
+		lockedListener = new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				dndModeMenuItem.setDisable(newValue);
+			}
+		};
+		profileSettings.lockedProperty().addListener(lockedListener);
+		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
 	}
 
 	// Event
@@ -136,7 +156,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	private void saveMenuHandler(ActionEvent event) {
 		try {
 			mvc.getProject().save();
-			mvc.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.notificationDisplayTimeMillis);
+			mvc.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mvc.showError(Localization.getString(Strings.Error_Project_Save));
 			e.printStackTrace();
@@ -173,9 +193,16 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	@FXML
 	private void settingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
+		Project project = mvc.getProject();
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+
+		if (settings.isLiveMode() && settings.isLiveModeSettings() && project.getPlayedPlayers() > 0) {
+			mvc.showLiveInfo();
+			return;
+		}
 
 		if (settingsViewController == null) {
-			settingsViewController = new SettingsViewController(midi, mvc.getScreen(), mvc.getStage(), mvc.getProject()) {
+			settingsViewController = new SettingsViewController(midi, mvc.getScreen(), mvc.getStage(), project) {
 
 				@Override
 				public void updateData() {
@@ -185,7 +212,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 					for (SettingsTabViewController controller : tabs) {
 						if (controller.needReload()) {
 							change = true;
-							controller.reload(Profile.currentProfile(), mvc.getProject(), mvc);
+							controller.reload(Profile.currentProfile(), project, mvc);
 						}
 					}
 
@@ -224,19 +251,22 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	@FXML
 	private void dndModeHandler(ActionEvent event) {
 		if (dndModeMenuItem.isSelected()) {
-			doAction(() ->
-			{
+			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && mvc.getProject().getPlayedPlayers() > 0) {
+				mvc.showLiveInfo();
+			} else {
 				PadDragListener.setDndMode(true);
 				for (IPadViewController view : mvc.padViewList) {
 					view.showDnDLayout(true);
 				}
-			});
+			}
 		} else {
 			PadDragListener.setDndMode(false);
 			for (IPadViewController view : mvc.padViewList) {
 				view.showDnDLayout(false);
 			}
 		}
+
 	}
 
 	@FXML
@@ -358,4 +388,13 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 		this.mvc = mvc;
 	}
 
+	@Override
+	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
+		if (oldProfile != null) {
+			oldProfile.getProfileSettings().lockedProperty().removeListener(lockedListener);
+		}
+		ProfileSettings profileSettings = currentProfile.getProfileSettings();
+		profileSettings.lockedProperty().addListener(lockedListener);
+		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
+	}
 }

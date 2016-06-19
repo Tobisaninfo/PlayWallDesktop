@@ -163,8 +163,8 @@ public class ClipAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume) {
-		setVolume(masterVolume * volume);
+	public void setVolume(double volume, double masterVolume, double customVolume) {
+		setVolume(masterVolume * volume * customVolume);
 	}
 
 	/**
@@ -244,9 +244,8 @@ public class ClipAudioHandler extends AudioHandler {
 		mixer = null;
 	}
 
-	@Override
-	public void updateVolume(double masterVolume) {
-		setVolume(getContent().getPad().getVolume(), masterVolume);
+	public static void shutdown() {
+		positionThread.interrupt();
 	}
 
 }

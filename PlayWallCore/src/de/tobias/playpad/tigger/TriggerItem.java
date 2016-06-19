@@ -16,7 +16,7 @@ public abstract class TriggerItem {
 
 	public TriggerItem() {
 		durationFromPoint = Duration.ZERO;
-		performedAt = Duration.ZERO;
+		performedAt = null;
 	}
 
 	public Duration getDurationFromPoint() {
@@ -46,12 +46,22 @@ public abstract class TriggerItem {
 
 	private static final String DURATION_ATTR = "duration";
 
+	/**
+	 * You must call super.load
+	 * 
+	 * @param element
+	 */
 	public void load(Element element) {
 		if (element.attributeValue(DURATION_ATTR) != null) {
 			durationFromPoint = Duration.millis(Double.valueOf(element.attributeValue(DURATION_ATTR)));
 		}
 	}
 
+	/**
+	 * You must call super.save
+	 * 
+	 * @param element
+	 */
 	public void save(Element element) {
 		element.addAttribute(DURATION_ATTR, String.valueOf(durationFromPoint.toMillis()));
 	}

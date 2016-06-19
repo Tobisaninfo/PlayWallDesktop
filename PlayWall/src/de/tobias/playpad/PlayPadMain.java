@@ -52,6 +52,7 @@ import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.tigger.TriggerRegistry;
 import de.tobias.playpad.trigger.CartTriggerItemConnect;
+import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
@@ -91,30 +92,29 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 // Profile mit UUID
 
 // FEATURE Backups irgendwann löschen
+// FEATURE Global Volume Trigger mit x% und 100%
 
 // Pad System neu machen
 // Neue PadViewController für jedes pad
 // Midi Modell Überarbeiten
 // Bei Seitenwechsel Pad auf Play lassen
 
-// FEATURE Trigger
+// TEST Trigger
 
 // FEATURE Option bei Import Media auch Copy Media in Library
 
 // FEATURE lnk für Windows mit Dateiparameter
 
-// FEATURE PFL
-// FEATURE Sound Card Pro Cart
-
 public class PlayPadMain extends Application implements LocalizationDelegate, PlayPad, ProfileListener {
 
+	private static final String PLUGIN_INFO_TXT = "pluginInfo.txt";
 	private static final String iconPath = "icon_small.png";
 	public static Optional<Image> stageIcon = Optional.empty();
 
-	public static final long notificationDisplayTimeMillis = 1500;
+	public static final long displayTimeMillis = 1500;
 
 	public static final String[] projectType = { "*.xml" };
-	public static final String[] projectCompressedType = { "*.zip" };
+	public static final String[] projectZIPType = { "*.zip" };
 	public static final String[] midiPresetType = { "*.pre" };
 
 	private static ResourceBundle uiResourceBundle;
@@ -183,26 +183,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		ProfileReference.loadProfiles();
 		ProjectReference.loadProjects();
 
-		Runtime.getRuntime().addShutdownHook(new Thread(() ->
-		{
-			try {
-				if (mainViewController != null) {
-					if (mainViewController.getProject().getRef() != null) {
-						// Projekt Speichern
-						mainViewController.getProject().save();
-					}
-				}
-
-				if (Profile.currentProfile() != null)
-					Profile.currentProfile().save();
-
-				ProfileReference.saveProfiles();
-				ProjectReference.saveProjects();
-			} catch (Exception e) {
-				e.printStackTrace(); // Speichern Fehler
-			}
-		}));
-
 		// Changelog nach Update anzeigen
 		try {
 			ViewController.create(ChangelogDialog.class);
@@ -213,15 +193,50 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		// Auto Open Project
 		if (getParameters().getRaw().size() > 0) {
 			try {
-				UUID uuid = UUID.fromString(getParameters().getRaw().get(0));
+				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		ViewController.create(LaunchDialog.class, stage);
+
+	}
+
+	@Override
+	public void stop() throws Exception {
+		try {
+			ProfileReference.saveProfiles();
+			ProjectReference.saveProjects();
+		} catch (Exception e) {
+			e.printStackTrace(); // Speichern Fehler
+		}
+
+		TinyAudioHandler.shutdown();
+		ClipAudioHandler.shutdown();
+
+		pluginManager.shutdown();
+
+		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, PLUGIN_INFO_TXT);
+		try {
+			if (Files.notExists(pluginInfoPath)) {
+				Files.createDirectories(pluginInfoPath.getParent());
+				Files.createFile(pluginInfoPath);
+			}
+			PrintWriter deleteWriter = new PrintWriter(Files.newOutputStream(pluginInfoPath));
+			for (Path path : deletedPlugins) {
+				deleteWriter.println(path.toString());
+			}
+			deleteWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Worker.shutdown();
+		Platform.exit();
+		System.exit(0);
 	}
 
 	private void registerComponents() {
@@ -242,7 +257,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Trigger
 		TriggerRegistry.register(new CartTriggerItemConnect());
-//		TriggerRegistry.register(new VolumeTriggerItemConnect());
+		TriggerRegistry.register(new VolumeTriggerItemConnect());
 
 		// Actions
 		ActionRegistery.registerActionConnect(new CartActionConnect());
@@ -268,7 +283,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		/*
 		 * Plugins
 		 */
-		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "pluginInfo.txt");
+		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, PLUGIN_INFO_TXT);
 
 		// Delete Plugin
 		if (Files.exists(pluginInfoPath)) {
@@ -289,26 +304,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 			pluginManager.addPluginsFrom(Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
 		else
 			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
-
-		// Shutdown Plugins
-		Runtime.getRuntime().addShutdownHook(new Thread(() ->
-		{
-			pluginManager.shutdown();
-
-			try {
-				if (Files.notExists(pluginInfoPath)) {
-					Files.createDirectories(pluginInfoPath.getParent());
-					Files.createFile(pluginInfoPath);
-				}
-				PrintWriter deleteWriter = new PrintWriter(Files.newOutputStream(pluginInfoPath));
-				for (Path path : deletedPlugins) {
-					deleteWriter.println(path.toString());
-				}
-				deleteWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}));
 	}
 
 	private void setupLocalization() {
@@ -324,6 +319,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 	@Override
 	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
+		// Update PlayWall
 		if (currentProfile.getProfileSettings().isAutoUpdate()) {
 			Worker.runLater(() ->
 			{
@@ -434,7 +430,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 	}
 
 	@Override
-	public MainViewController getMainViewController() {
+	public IMainViewController getMainViewController() {
 		return mainViewController;
 	}
 

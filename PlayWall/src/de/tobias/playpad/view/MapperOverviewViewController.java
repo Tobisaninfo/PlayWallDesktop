@@ -21,6 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+// Diese Klasse zeigt die Mapper zu einer Action an
 public class MapperOverviewViewController implements IMapperOverviewViewController {
 
 	private VBox root;

@@ -91,6 +91,17 @@
 	-fx-border-radius: 10px;
 }
 
+.pad-button:selected {
+	-fx-background-color: transparent;
+	-fx-border-width: 1px;
+	-fx-border-color: black;
+	-fx-border-radius: 10px;
+}
+
+.font-icon:selected {
+	-fx-text-fill: red;
+}
+
 .fonticon {
 	-fx-text-fill: white;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
@@ -131,4 +142,8 @@
 
 .volume-item {
 	-fx-text-fill: white !important;
+}
+
+.progress-indicator .percentage {
+    -fx-fill: white;
 }

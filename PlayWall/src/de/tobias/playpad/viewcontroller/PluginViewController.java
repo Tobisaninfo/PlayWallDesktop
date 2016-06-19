@@ -1,15 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
 import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
@@ -18,7 +10,6 @@ import de.tobias.playpad.plugin.Plugin;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.PluginCell;
 import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
@@ -49,33 +40,11 @@ public class PluginViewController extends ViewController {
 		Worker.runLater(() ->
 		{
 			try {
-				List<Plugin> plugins = new ArrayList<>();
+				String pluginInfoURL = ApplicationUtils.getApplication().getInfo().getUserInfo().getString(AppUserInfoStrings.PLUGINS_URL);
+				Plugin.load(pluginInfoURL);
 
-				URL url = new URL(ApplicationUtils.getApplication().getInfo().getUserInfo().getString(AppUserInfoStrings.PLUGINS_URL));
-				FileConfiguration cfg = YamlConfiguration.loadConfiguration(url.openStream());
-
-				// Iterate over all plugins that are online avialable
-				for (String key : cfg.getConfigurationSection("plugins").getKeys(false)) {
-					String name = cfg.getString("plugins." + key + ".name");
-					String pluginUrl = cfg.getString("plugins." + key + ".url");
-					String fileName = cfg.getString("plugins." + key + ".filename");
-					boolean active = false;
-
-					try {
-						Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, fileName);
-						if (Files.exists(path))
-							active = true;
-					} catch (Exception e) {
-						e.printStackTrace();
-						showErrorMessage(Localization.getString(Strings.Error_Plugins_Download, name), PlayPadMain.stageIcon);
-					}
-
-					Plugin plugin = new Plugin(name, fileName, pluginUrl, active);
-					plugins.add(plugin);
-				}
-
-				Collections.sort(plugins, (o1, o2) -> o1.getName().compareTo(o2.getName()));
-				pluginListView.getItems().addAll(plugins);
+				Collections.sort(Plugin.getPlugins());
+				pluginListView.getItems().addAll(Plugin.getPlugins());
 			} catch (IOException e) {
 				e.printStackTrace();
 				showErrorMessage(Localization.getString(Strings.Error_Standard_Gen), PlayPadMain.stageIcon);

@@ -30,4 +30,8 @@ public interface IMainViewController {
 	public void showPage(int page);
 
 	public void loadUserCss();
+
+	public void applyColorsToMappers();
+	
+	public void showLiveInfo();
 }

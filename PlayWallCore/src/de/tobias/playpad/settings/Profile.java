@@ -93,7 +93,7 @@ public class Profile {
 		App app = ApplicationUtils.getApplication();
 		Profile profile = new Profile(ref);
 
-		System.out.println("+++ Load Profile: " + ref + " +++");
+		System.out.println("+++ Load Profile: " + ref + " (" + ref.getUuid() + ") +++");
 
 		if (Files.exists(app.getPath(PathType.CONFIGURATION, ref.getFileName()))) {
 

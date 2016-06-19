@@ -103,7 +103,6 @@ public class TinyAudioHandler extends AudioHandler {
 		positionThread.start();
 
 		executorService = Executors.newFixedThreadPool(1);
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> executorService.shutdown()));
 	}
 
 	private Music music;
@@ -196,9 +195,9 @@ public class TinyAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume) {
+	public void setVolume(double volume, double masterVolume, double customVolume) {
 		if (music != null) {
-			music.setVolume(volume * masterVolume);
+			music.setVolume(volume * masterVolume * customVolume);
 		}
 	}
 
@@ -284,13 +283,6 @@ public class TinyAudioHandler extends AudioHandler {
 		loadedProperty.set(false);
 	}
 
-	@Override
-	public void updateVolume(double masterVolume) {
-		if (music != null) {
-			music.setVolume(getContent().getPad().getVolume() * masterVolume);
-		}
-	}
-
 	public void setMusic(Music music, URL url) throws UnsupportedAudioFileException, IOException {
 		this.music = music;
 		calcDuration(url);
@@ -329,5 +321,10 @@ public class TinyAudioHandler extends AudioHandler {
 				TinySound.init();
 			}
 		}
+	}
+
+	public static void shutdown() {
+		executorService.shutdown();
+		positionThread.interrupt();
 	}
 }

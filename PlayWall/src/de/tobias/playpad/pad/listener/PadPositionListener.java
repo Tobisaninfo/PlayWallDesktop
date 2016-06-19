@@ -5,6 +5,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.Warning;
 import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.Fadeable;
+import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.pad.PadViewController;
 import javafx.beans.value.ChangeListener;
@@ -35,31 +36,42 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 
 		// Progressbar (Prozente)
 		if (pad != null) {
-			// Zeit aktualiesieren bei Play und wenn Fade Out ist
-			if (pad.getContent() instanceof Durationable && (pad.getStatus() == PadStatus.PLAY
-					|| (pad.getContent() instanceof Fadeable && ((Fadeable) pad.getContent()).isFading()))) {
+			PadContent content = pad.getContent();
 
-				Durationable durationable = (Durationable) pad.getContent();
+			// Zeit aktualiesieren bei Play und wenn Fade Out ist
+			boolean isFading = content instanceof Fadeable && ((Fadeable) content).isFading();
+			boolean isPlaying = pad.getStatus() == PadStatus.PLAY;
+
+			if (content instanceof Durationable && (isPlaying || isFading)) {
+
+				Durationable durationable = (Durationable) content;
 				Duration totalDuration = durationable.getDuration();
 
-				double value = newValue.toMillis() / totalDuration.toMillis();
-				controller.getParent().getPlayBar().setProgress(value);
-
-				// Label (Restlaufzeit)
-				controller.updateTimeLabel();
-
-				// Warning nur wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig Reseted wird
-				if (!pad.isLoop() && pad.getStatus() == PadStatus.PLAY) {
-					// Warning
-					Warning warning = pad.getWarning();
-					Duration rest = durationable.getDuration().subtract(newValue);
-					double seconds = rest.toSeconds();
-
-					if (warning.getTime().toSeconds() > seconds && !send) {
-						startWarningThread();
-						send = true;
-					}
+				if (totalDuration != null) {
+					updateDuration(newValue, durationable, totalDuration);
 				}
+			}
+		}
+	}
+
+	private void updateDuration(Duration newValue, Durationable durationable, Duration totalDuration) {
+		double value = newValue.toMillis() / totalDuration.toMillis();
+		controller.getParent().getPlayBar().setProgress(value);
+
+		// Label (Restlaufzeit)
+		controller.updateTimeLabel();
+
+		// Warning nur wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig Reseted
+		// wird
+		if (!pad.isLoop() && pad.getStatus() == PadStatus.PLAY) {
+			// Warning
+			Warning warning = pad.getWarning();
+			Duration rest = durationable.getDuration().subtract(newValue);
+			double seconds = rest.toSeconds();
+
+			if (warning.getTime().toSeconds() > seconds && !send) {
+				startWarningThread();
+				send = true;
 			}
 		}
 	}

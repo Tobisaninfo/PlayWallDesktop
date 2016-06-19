@@ -56,6 +56,9 @@ public class Pad {
 	// Trigger
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
 
+	// Custom Volume
+	private transient DoubleProperty customVolumeProperty = new SimpleDoubleProperty(1.0);
+
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
 	private transient PadStatusListener padStatusListener;
 
@@ -74,7 +77,7 @@ public class Pad {
 		this.project = project;
 		load(element);
 
-		initPadStatusListener();
+		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
 	}
 
@@ -83,7 +86,7 @@ public class Pad {
 		setIndex(index);
 		setStatus(PadStatus.EMPTY);
 
-		initPadStatusListener();
+		initPadListener();
 		updateTrigger();
 	}
 
@@ -93,7 +96,7 @@ public class Pad {
 		setContent(content);
 	}
 
-	private void initPadStatusListener() {
+	private void initPadListener() {
 		padStatusListener = new PadStatusListener(this);
 		statusProperty.addListener(padStatusListener);
 
@@ -102,6 +105,7 @@ public class Pad {
 
 		padTriggerDurationListener = new PadTriggerDurationListener(this);
 
+		// Das ist für die Position Listener notwendig, wenn sich der Content ändert
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
 	}
@@ -408,6 +412,10 @@ public class Pad {
 			contentProperty.get().unloadMedia();
 		setContent(null);
 		setStatus(PadStatus.EMPTY);
+
+		if (project != null) {
+			project.removeExceptions(this);
+		}
 	}
 
 	// Storage
@@ -443,14 +451,16 @@ public class Pad {
 
 		// Settings
 		Element settingsElement = element.element(SETTINGS_ELEMENT);
-		volumeProperty.set(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
-		loopProperty.set(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
+		if (settingsElement.element(VOLUME_ELEMENT) != null)
+			volumeProperty.set(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
+		if (settingsElement.element(LOOP_ELEMENT) != null)
+			loopProperty.set(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
 		if (settingsElement.element(TIMEMODE_ELEMENT) != null)
 			timeModeProperty.set(TimeMode.valueOf(settingsElement.element(TIMEMODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
 			fadeProperty.set(Fade.load(settingsElement.element(FADE_ELEMENT)));
 		if (settingsElement.element(WARNING_ELEMENT) != null)
-			warningProperty.set(Warning.loadV2(settingsElement.element(WARNING_ELEMENT)));
+			warningProperty.set(Warning.load(settingsElement.element(WARNING_ELEMENT)));
 
 		// Laoyut
 		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
@@ -515,7 +525,11 @@ public class Pad {
 	public void save(Element element) {
 		element.addAttribute(INDEX_ATTR, String.valueOf(indexProperty.get()));
 		element.addAttribute(NAME_ATTR, nameProperty.get());
-		element.addAttribute(STATUS_ATTR, statusProperty.get().name());
+		if (statusProperty.get() == PadStatus.EMPTY || statusProperty.get() == PadStatus.ERROR) {
+			element.addAttribute(STATUS_ATTR, PadStatus.EMPTY.name());
+		} else {
+			element.addAttribute(STATUS_ATTR, PadStatus.READY.name());
+		}
 
 		// Settings
 		Element settingsElement = element.addElement(SETTINGS_ELEMENT);
@@ -564,5 +578,22 @@ public class Pad {
 	@Override
 	public String toString() {
 		return "Pad: " + indexProperty.get() + " - " + nameProperty.get();
+	}
+
+	public String toReadableString() {
+		return (indexProperty.get() + 1) + " - " + nameProperty.get();
+	}
+
+	// TODO Reorder
+	public void setCustomVolume(double volume) {
+		customVolumeProperty.set(volume);
+	}
+
+	public double getCustomVolume() {
+		return customVolumeProperty.get();
+	}
+
+	public DoubleProperty customVolumeProperty() {
+		return customVolumeProperty;
 	}
 }

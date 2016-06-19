@@ -29,7 +29,7 @@ public class PadView extends StackPane implements IPadView {
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
-	private Label messageLabel;
+	private Label errorLabel;
 
 	private HBox infoBox;
 	private Label timeLabel;
@@ -64,8 +64,8 @@ public class PadView extends StackPane implements IPadView {
 		triggerLabel = new Label();
 		triggerLabel.setGraphic(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
 
-		messageLabel = new Label();
-		messageLabel.setGraphic(new FontIcon(FontAwesomeType.WARNING));
+		errorLabel = new Label();
+		errorLabel.setGraphic(new FontIcon(FontAwesomeType.WARNING));
 
 		timeLabel = new Label();
 
@@ -109,7 +109,7 @@ public class PadView extends StackPane implements IPadView {
 
 	// wird über den Status listener gesteuert
 	public void setErrorLabelActive(boolean active) {
-		messageLabel.setVisible(active);
+		errorLabel.setVisible(active);
 	}
 
 	public void setTriggerLabelActive(boolean active) {
@@ -165,7 +165,7 @@ public class PadView extends StackPane implements IPadView {
 	}
 
 	public Label getErrorLabel() {
-		return messageLabel;
+		return errorLabel;
 	}
 
 	public VBox getRoot() {
@@ -220,7 +220,7 @@ public class PadView extends StackPane implements IPadView {
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 			}
 		}
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, messageLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
 
 		// Buttons unten Full Width
 		buttonBox.prefWidthProperty().bind(widthProperty());
@@ -249,7 +249,7 @@ public class PadView extends StackPane implements IPadView {
 		timeLabel.pseudoClassStateChanged(pseudoClass, active);
 		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 		triggerLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		messageLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		errorLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 
 		if (preview != null) {
 			preview.getChildren().forEach(i -> i.pseudoClassStateChanged(pseudoClass, active));
@@ -269,38 +269,25 @@ public class PadView extends StackPane implements IPadView {
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + pad.getIndex() + "-index", "pad-info", "pad" + pad.getIndex() + "-info");
 		timeLabel.getStyleClass().addAll("pad-time", "pad" + pad.getIndex() + "-time", "pad-info", "pad" + pad.getIndex() + "-info");
-		loopLabel.getGraphic().getStyleClass().addAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
-		triggerLabel.getGraphic().getStyleClass().addAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
-		messageLabel.getGraphic().getStyleClass().addAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
+		loopLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		triggerLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		errorLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
 
 		preview.getChildren().forEach(i -> i.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title"));
 
 		playBar.getStyleClass().addAll("pad-playbar", "pad" + pad.getIndex() + "-playbar");
 
-		playButton.getStyleClass().addAll("pad-button", "pad-playbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-playbutton");
-		pauseButton.getStyleClass().addAll("pad-button", "pad-pausebutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-pausebutton");
-		stopButton.getStyleClass().addAll("pad-button", "pad-stopbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-stopbutton");
-		newButton.getStyleClass().addAll("pad-button", "pad-newbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-newbutton");
-		settingsButton.getStyleClass().addAll("pad-button", "pad-settingsbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-settingsbutton");
+		playButton.getStyleClass().addAll("pad-button", "pad" + pad.getIndex() + "-button");
+		pauseButton.getStyleClass().addAll("pad-button", "pad" + pad.getIndex() + "-button");
+		stopButton.getStyleClass().addAll("pad-button", "pad" + pad.getIndex() + "-button");
+		newButton.getStyleClass().addAll("pad-button", "pad" + pad.getIndex() + "-button");
+		settingsButton.getStyleClass().addAll("pad-button", "pad" + pad.getIndex() + "-button");
 
-		playButton.getGraphic().getStyleClass().addAll("pad-icon", "pad-playbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-playbutton-icon");
-		pauseButton.getGraphic().getStyleClass().addAll("pad-icon", "pad-pausebutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-pausebutton-icon");
-		stopButton.getGraphic().getStyleClass().addAll("pad-icon", "pad-stopbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-stopbutton-icon");
-		newButton.getGraphic().getStyleClass().addAll("pad-icon", "pad-newbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-newbutton-icon");
-		settingsButton.getGraphic().getStyleClass().addAll("pad-icon", "pad-deletebutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-settingsbutton-icon");
+		playButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		pauseButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		stopButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		newButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		settingsButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
 
 		getButtonBox().getStyleClass().add("pad-button-box");
 		getRoot().getStyleClass().add("pad-root");
@@ -311,38 +298,25 @@ public class PadView extends StackPane implements IPadView {
 
 		indexLabel.getStyleClass().removeAll("pad-index", "pad" + pad.getIndex() + "-index", "pad-info", "pad" + pad.getIndex() + "-info");
 		timeLabel.getStyleClass().removeAll("pad-time", "pad" + pad.getIndex() + "-time", "pad-info", "pad" + pad.getIndex() + "-info");
-		loopLabel.getGraphic().getStyleClass().removeAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
-		triggerLabel.getGraphic().getStyleClass().removeAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
-		messageLabel.getGraphic().getStyleClass().removeAll("pad-loop", "pad" + pad.getIndex() + "-loop", "pad-icon",
-				"pad" + pad.getIndex() + "-icon");
+		loopLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		triggerLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		errorLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
 
 		preview.getChildren().forEach(i -> i.getStyleClass().removeAll("pad-title", "pad" + pad.getIndex() + "-title"));
 
 		playBar.getStyleClass().removeAll("pad-playbar", "pad" + pad.getIndex() + "-playbar");
 
-		playButton.getStyleClass().removeAll("pad-button", "pad-playbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-playbutton");
-		pauseButton.getStyleClass().removeAll("pad-button", "pad-pausebutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-pausebutton");
-		stopButton.getStyleClass().removeAll("pad-button", "pad-stopbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-stopbutton");
-		newButton.getStyleClass().removeAll("pad-button", "pad-newbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-newbutton");
-		settingsButton.getStyleClass().removeAll("pad-button", "pad-settingsbutton", "pad" + pad.getIndex() + "-button",
-				"pad" + pad.getIndex() + "-settingsbutton");
+		playButton.getStyleClass().removeAll("pad-button", "pad" + pad.getIndex() + "-button");
+		pauseButton.getStyleClass().removeAll("pad-button", "pad" + pad.getIndex() + "-button");
+		stopButton.getStyleClass().removeAll("pad-button", "pad" + pad.getIndex() + "-button");
+		newButton.getStyleClass().removeAll("pad-button", "pad" + pad.getIndex() + "-button");
+		settingsButton.getStyleClass().removeAll("pad-button", "pad" + pad.getIndex() + "-button");
 
-		playButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad-playbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-playbutton-icon");
-		pauseButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad-pausebutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-pausebutton-icon");
-		stopButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad-stopbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-stopbutton-icon");
-		newButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad-newbutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-newbutton-icon");
-		settingsButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad-deletebutton-icon", "pad" + pad.getIndex() + "-icon",
-				"pad" + pad.getIndex() + "-settingsbutton-icon");
+		playButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		pauseButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		stopButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		newButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		settingsButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
 
 		getButtonBox().getStyleClass().add("pad-button-box");
 		getRoot().getStyleClass().add("pad-root");

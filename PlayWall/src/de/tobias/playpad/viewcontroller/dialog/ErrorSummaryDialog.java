@@ -57,7 +57,7 @@ public class ErrorSummaryDialog extends ViewController {
 
 		padColumn.setCellValueFactory(param ->
 		{
-			StringProperty value = new SimpleStringProperty(param.getValue().getPad().toString());
+			StringProperty value = new SimpleStringProperty(param.getValue().getPad().toReadableString());
 			return value;
 		});
 
@@ -72,7 +72,7 @@ public class ErrorSummaryDialog extends ViewController {
 					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
 							padException.getPad().getIndexReadable());
 				else
-					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(), padException.getPath());
+					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(), padException.getPath().toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

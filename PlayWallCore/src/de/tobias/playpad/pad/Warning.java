@@ -2,11 +2,15 @@ package de.tobias.playpad.pad;
 
 import org.dom4j.Element;
 
+import de.tobias.utils.settings.SettingsSerializable;
+import de.tobias.utils.settings.Storable;
 import javafx.util.Duration;
 
-public class Warning {
+public class Warning implements SettingsSerializable{
 
-	private Duration time;
+	private static final long serialVersionUID = 1L;
+	
+	@Storable private Duration time;
 
 	public Warning() {
 		time = Duration.seconds(5);
@@ -26,7 +30,7 @@ public class Warning {
 
 	private static final String TIME_ELEMENT = "Time";
 
-	public static Warning loadV2(Element feedbackElement) {
+	public static Warning load(Element feedbackElement) {
 		try {
 			if (feedbackElement.element(TIME_ELEMENT) != null) {
 				Duration dutation = Duration.valueOf(feedbackElement.element(TIME_ELEMENT).getStringValue().replace(" ", ""));

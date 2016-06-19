@@ -47,8 +47,6 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 * 
 	 * @param type
 	 *            input type
-	 * @param messageID
-	 *            Message ID (for identiication of the next message)
 	 * @param project
 	 *            Current Project
 	 * @param mainViewController
@@ -76,8 +74,10 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	/**
 	 * Init first Feedback to Mapper (Feedback)
 	 * 
-	 * @param message
-	 *            Type of Message (Feedback)
+	 * @param project
+	 *            refence to the current opened project
+	 * @param controller
+	 *            reference to the main view controller
 	 */
 	public abstract void initFeedback(Project project, IMainViewController controller);
 

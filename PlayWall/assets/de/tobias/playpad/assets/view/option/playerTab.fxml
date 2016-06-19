@@ -7,11 +7,11 @@
 
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="%settings.player.label.warning" underline="true" />
-      <VBox fx:id="warningFeedbackContainer" minHeight="25.0" />
-      <Separator prefWidth="200.0" />
       <Label text="%settings.player.label.fade" underline="true" />
       <VBox fx:id="fadeContainer" minHeight="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Separator prefWidth="200.0" />
+      <Label text="%settings.player.label.warning" underline="true" />
+      <VBox fx:id="warningFeedbackContainer" minHeight="25.0" />
       <Separator layoutY="91.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="105.0" spacing="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
          <children>

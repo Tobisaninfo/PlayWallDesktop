@@ -20,18 +20,26 @@ import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.NumberUtils;
+import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 public class GeneralTabViewController extends SettingsTabViewController {
 
 	private static final String DIGIT_POSITIV = "^[1-9]\\d*$";
-	
+
 	private Screen mainWindowScreen;
 	private ViewController parentController; // Für Benachrichtungen
 
@@ -43,6 +51,19 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 	@FXML private TextField cacheTextField;
 	@FXML private Label cacheSizeLabel;
+
+	@FXML private RadioButton pageEnable;
+	@FXML private RadioButton pageDisable;
+	@FXML private ToggleGroup pageGroup;
+	@FXML private RadioButton dragEnable;
+	@FXML private RadioButton dragDisable;
+	@FXML private ToggleGroup dragGroup;
+	@FXML private RadioButton fileEnable;
+	@FXML private RadioButton fileDisable;
+	@FXML private ToggleGroup fileGroup;
+	@FXML private RadioButton settingsEnable;
+	@FXML private RadioButton settingsDisable;
+	@FXML private ToggleGroup settingsGroup;
 
 	private boolean changeSettings;
 
@@ -100,6 +121,31 @@ public class GeneralTabViewController extends SettingsTabViewController {
 				rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true); // Negativ oder leer
 			}
 		});
+
+		pageGroup = new ToggleGroup();
+		pageGroup.getToggles().addAll(pageEnable, pageDisable);
+		dragGroup = new ToggleGroup();
+		dragGroup.getToggles().addAll(dragEnable, dragDisable);
+		fileGroup = new ToggleGroup();
+		fileGroup.getToggles().addAll(fileEnable, fileDisable);
+		settingsGroup = new ToggleGroup();
+		settingsGroup.getToggles().addAll(settingsEnable, settingsDisable);
+
+		liveModeCheckBox.selectedProperty().addListener((a, b, c) ->
+		{
+			disableLiveSettings(c);
+		});
+	}
+
+	private void disableLiveSettings(Boolean enableLiveSettings) {
+		pageEnable.setDisable(!enableLiveSettings);
+		pageDisable.setDisable(!enableLiveSettings);
+		dragEnable.setDisable(!enableLiveSettings);
+		dragDisable.setDisable(!enableLiveSettings);
+		fileEnable.setDisable(!enableLiveSettings);
+		fileDisable.setDisable(!enableLiveSettings);
+		settingsEnable.setDisable(!enableLiveSettings);
+		settingsDisable.setDisable(!enableLiveSettings);
 	}
 
 	@FXML
@@ -139,9 +185,6 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 	@FXML
 	private void resetDialogs(ActionEvent event) {
-		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
-
-		profilSettings.setDialogDragAndDrop(true);
 		parentController.showInfoMessage(Localization.getString(Strings.Info_Settings_ResetWarning));
 	}
 
@@ -188,7 +231,7 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 		liveModeCheckBox.setSelected(profileSettings.isLiveMode());
 		cacheTextField.setText(profileSettings.getCachePath().toString());
-		
+
 		if (screenValid()) {
 			columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 			rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
@@ -196,6 +239,28 @@ public class GeneralTabViewController extends SettingsTabViewController {
 			columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 			rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 		}
+
+		if (profileSettings.isLiveModePage() == true)
+			pageEnable.setSelected(true);
+		else
+			pageDisable.setSelected(true);
+
+		if (profileSettings.isLiveModeDrag() == true)
+			dragEnable.setSelected(true);
+		else
+			dragDisable.setSelected(true);
+
+		if (profileSettings.isLiveModeFile() == true)
+			fileEnable.setSelected(true);
+		else
+			fileDisable.setSelected(true);
+
+		if (profileSettings.isLiveModeSettings() == true)
+			settingsEnable.setSelected(true);
+		else
+			settingsDisable.setSelected(true);
+
+		disableLiveSettings(profileSettings.isLiveMode());
 	}
 
 	@Override
@@ -218,6 +283,11 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 		profileSettings.setLiveMode(liveModeCheckBox.isSelected());
 		profileSettings.setCachePath(Paths.get(cacheTextField.getText()));
+
+		profileSettings.setLiveModePage(pageEnable.isSelected());
+		profileSettings.setLiveModeDrag(dragEnable.isSelected());
+		profileSettings.setLiveModeFile(fileEnable.isSelected());
+		profileSettings.setLiveModeSettings(settingsEnable.isSelected());
 	}
 
 	@Override
@@ -227,9 +297,28 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 	@Override
 	public void reload(Profile profile, Project project, IMainViewController controller) {
-		controller.getToolbarController().createPageButtons();
-		controller.createPadViews();
-		controller.showPage(controller.getPage());
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
+
+		alert.getButtonTypes().clear();
+		alert.initOwner(controller.getStage());
+		alert.initModality(Modality.WINDOW_MODAL);
+		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+		alert.show();
+
+		Worker.runLater(() ->
+		{
+			Platform.runLater(() ->
+			{
+				controller.getToolbarController().createPageButtons();
+				controller.createPadViews();
+				controller.showPage(controller.getPage());
+				stage.close();
+			});
+		});
+
 	}
 
 	@Override

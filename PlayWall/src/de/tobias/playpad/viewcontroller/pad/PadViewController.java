@@ -17,12 +17,16 @@ import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.listener.PadContentListener;
 import de.tobias.playpad.pad.listener.PadDurationListener;
+import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadView;
 import de.tobias.playpad.viewcontroller.IPadView;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.FileUtils;
@@ -43,6 +47,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	private PadView view;
 	private Pad pad;
 
+	private PadLockedListener padLockedListener;
 	private PadStatusListener padStatusListener;
 	private PadContentListener padContentListener;
 	private PadDurationListener padDurationListener;
@@ -53,10 +58,15 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	public PadViewController() {
 		view = new PadView(this);
 
+		padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
 		padContentListener = new PadContentListener(this);
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
+
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+		profileSettings.lockedProperty().addListener(padLockedListener);
 	}
 
 	@Override
@@ -98,6 +108,14 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	}
 
 	private void onNew(ActionEvent event) {
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		if (pad.getProject() != null) {
+			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
+				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+				return;
+			}
+		}
+
 		FileChooser chooser = new FileChooser();
 
 		// File Extension
@@ -153,13 +171,26 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	}
 
 	private void onSettings() {
-		Stage owner = PlayPadPlugin.getImplementation().getMainViewController().getStage();
-		PadSettingsViewController controller = new PadSettingsViewController(pad, owner);
-		controller.getStage().setOnHidden(ev ->
-		{
-			view.setTriggerLabelActive(pad.hasTriggerItems());
-		});
-		controller.getStage().show();
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		IMainViewController mvc = PlayPadPlugin.getImplementation().getMainViewController();
+
+		if (mvc != null) {
+			if (pad.getProject() != null) {
+				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getPlayedPlayers() > 0) {
+					mvc.showLiveInfo();
+					return;
+				}
+			}
+
+			Stage owner = mvc.getStage();
+			PadSettingsViewController controller = new PadSettingsViewController(pad, owner);
+			controller.getStage().setOnHiding(ev ->
+			{
+				if (view != null && pad != null)
+					view.setTriggerLabelActive(pad.hasTriggerItems());
+			});
+			controller.getStage().show();
+		}
 	}
 
 	@Override
@@ -199,6 +230,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	@Override
 	public void setPad(Pad pad) {
 		unconnectPad();
+		
 		this.pad = pad;
 
 		view.setPreviewContent(pad);
@@ -212,6 +244,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 		pad.setController(this);
 
 		try {
+			// Settings
 			view.getIndexLabel().setText(String.valueOf(pad.getIndexReadable()));
 			view.getLoopLabel().visibleProperty().bind(pad.loopProperty());
 
@@ -256,12 +289,14 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 
 						if (timeMode == TimeMode.REST) {
 							Duration leftTime = duration.subtract(position);
+
 							view.getTimeLabel().setText("- " + durationToString(leftTime));
 						} else if (timeMode == TimeMode.PLAYED) {
 							view.getTimeLabel().setText(durationToString(position));
 						} else if (timeMode == TimeMode.BOTH) {
 							String time = durationToString(position);
 							String totalTime = durationToString(duration);
+
 							view.getTimeLabel().setText(time + "/" + totalTime);
 						}
 					}
@@ -285,6 +320,9 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	}
 
 	public void updateButtonDisable() {
+		if (pad == null) {
+			return;
+		}
 		if (pad.getContent() != null) {
 			if (pad.getStatus() == PadStatus.PLAY) {
 				view.getPlayButton().setDisable(true);
@@ -310,6 +348,12 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 				view.getStopButton().setDisable(true);
 				view.getNewButton().setDisable(false);
 				view.getSettingsButton().setDisable(false);
+			} else if (pad.getStatus() == PadStatus.ERROR) {
+				view.getPlayButton().setDisable(true);
+				view.getPauseButton().setDisable(true);
+				view.getStopButton().setDisable(true);
+				view.getNewButton().setDisable(false);
+				view.getSettingsButton().setDisable(false);
 			}
 		} else if (pad.getStatus() == PadStatus.EMPTY || pad.getStatus() == PadStatus.ERROR || pad.getContent() == null
 				|| !pad.getContent().isPadLoaded()) {
@@ -318,6 +362,11 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			view.getStopButton().setDisable(true);
 			view.getNewButton().setDisable(false);
 			view.getSettingsButton().setDisable(false);
+		}
+
+		if (Profile.currentProfile().getProfileSettings().isLocked()) {
+			view.getNewButton().setDisable(true);
+			view.getSettingsButton().setDisable(true);
 		}
 	}
 

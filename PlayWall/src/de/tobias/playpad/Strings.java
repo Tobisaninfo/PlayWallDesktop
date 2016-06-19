@@ -6,6 +6,7 @@ public class Strings {
 	public static final String Standard_File_Save = "Standard.File.Save";
 	public static final String Standard_Copy = "Standard.Copy";
 	public static final String Standard_Time_Seconds = "Standard.Time.Seconds";
+	public static final String Standard_Time_Volume = "Standard.Time.Volume";
 
 	// File - Filter
 	public static final String File_Filter_ZIP = "File.Filter.ZIP";
@@ -42,6 +43,7 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
+	public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
 	// UI - Dialog - Launch
@@ -50,6 +52,7 @@ public class Strings {
 	// UI - Window - Settings
 	public static final String UI_Window_Settings_Gen_Title = "UI.Window.Settings.Gen.Title";
 	public static final String UI_Window_Settings_Gen_CacheSize = "UI.Window.Settings.Gen.CacheSize";
+	public static final String UI_Window_Settings_Gen_Wait = "UI.Window.Settings.Gen.Wait";
 	public static final String UI_Window_Settings_Mapping_Title = "UI.Window.Settings.Mapping.Title";
 	public static final String UI_Window_Settings_Midi_Title = "UI.Window.Settings.Midi.Title";
 	public static final String UI_Window_Settings_Layout_Title = "UI.Window.Settings.Layout.Title";
@@ -141,6 +144,7 @@ public class Strings {
 
 	// Error - Fix
 	public static final String Error_Fix_NewFile = "Error.Fix.NewFile";
+	public static final String Error_Fix_Delete = "Error.Fix.Delete";
 
 	// Error - Midi
 	public static final String Error_Midi_Settings_Unkown = "Error.Midi.Settings.Unkown";
@@ -150,7 +154,7 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
-	public static final String Error_Plugins_Download = "Error.Plugins.Download";
+	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
 
 	/*
 	 * NEU
@@ -215,4 +219,8 @@ public class Strings {
 
 	// TriggerPoint - Enum
 	public static final String TriggerPoint_BaseName = "TriggerPoint.";
+	
+	// Drag and Drop Mode
+	public static final String DnDMode_Move = "DnDMode.Move";
+	public static final String DnDMode_Replace = "DnDMode.Replace";
 }

@@ -42,6 +42,7 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 	@FXML private VBox detailView;
 	private IMapperOverviewViewController mapperOverviewViewController;
 
+	private Mapping oldMapping;
 	private Mapping mapping;
 
 	public MappingTabViewController() {
@@ -138,6 +139,7 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 	// Tab Utils
 	@Override
 	public void loadSettings(Profile profile) {
+		oldMapping = profile.getMappings().getActiveMapping();
 		setMappingItemsToList();
 		createTreeViewContent();
 	}
@@ -152,9 +154,13 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 
 	@Override
 	public void reload(Profile profile, Project project, IMainViewController controller) {
-		Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
-		Profile.currentProfile().getMappings().getActiveMapping().showFeedback(project, controller);
-		Profile.currentProfile().getMappings().getActiveMapping().initFeedback();
+		controller.applyColorsToMappers();
+
+		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+
+		oldMapping.clearFeedback();
+		activeMapping.showFeedback(project);
+		activeMapping.initFeedback();
 	}
 
 	@Override

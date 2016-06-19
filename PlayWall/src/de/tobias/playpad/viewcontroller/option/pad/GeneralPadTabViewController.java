@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.option.pad;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
@@ -35,6 +36,10 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	public GeneralPadTabViewController(Pad pad) {
 		super("generalTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
+		
+		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
+			deleteButton.setDisable(true);
+		}
 	}
 
 	@Override

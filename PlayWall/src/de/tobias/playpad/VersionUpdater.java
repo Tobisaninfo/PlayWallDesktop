@@ -35,40 +35,12 @@ public class VersionUpdater implements UpdateService {
 
 	@Override
 	public void update(App app, long oldVersion, long newVersion) {
-		System.out.println("Update");
-		if (oldVersion <= 18) {
-			SAXReader reader = new SAXReader();
-			Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Profiles.xml");
+		update18(oldVersion);
+		update23(app, oldVersion);
+	}
 
-			try {
-				Document document = reader.read(Files.newInputStream(path));
-				Element root = document.getRootElement();
-				for (Object object : root.elements("Document")) {
-					Element element = (Element) object;
-					String name = element.getStringValue();
-
-					UUID uuid = UUID.randomUUID();
-
-					Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, name);
-					Path newProjectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, uuid + Project.FILE_EXTENSION);
-					Files.createDirectories(newProjectPath.getParent());
-
-					Files.move(projectPath, newProjectPath);
-
-					ProjectReference projectReference = new ProjectReference(uuid, name, ProfileReference.getProfiles().get(0));
-					ProjectReference.addProject(projectReference);
-
-					convertProject(newProjectPath);
-				}
-
-				ProjectReference.saveProjects();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
+	private void update23(App app, long oldVersion) {
 		if (oldVersion <= 23) {
-			System.out.println("Update Data");
 			Path configPath = app.getPath(PathType.CONFIGURATION);
 			SAXReader reader = new SAXReader();
 			try {
@@ -127,6 +99,39 @@ public class VersionUpdater implements UpdateService {
 				ProfileReference.saveProfiles();
 				ProjectReference.saveProjects();
 			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void update18(long oldVersion) {
+		if (oldVersion <= 18) {
+			SAXReader reader = new SAXReader();
+			Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Profiles.xml");
+
+			try {
+				Document document = reader.read(Files.newInputStream(path));
+				Element root = document.getRootElement();
+				for (Object object : root.elements("Document")) {
+					Element element = (Element) object;
+					String name = element.getStringValue();
+
+					UUID uuid = UUID.randomUUID();
+
+					Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, name);
+					Path newProjectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, uuid + Project.FILE_EXTENSION);
+					Files.createDirectories(newProjectPath.getParent());
+
+					Files.move(projectPath, newProjectPath);
+
+					ProjectReference projectReference = new ProjectReference(uuid, name, ProfileReference.getProfiles().get(0));
+					ProjectReference.addProject(projectReference);
+
+					convertProject(newProjectPath);
+				}
+
+				ProjectReference.saveProjects();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

@@ -200,7 +200,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		String oldName = projectReference.toString();
 
 		try {
-			String newProjectName = (String) nameTextField.getTextFormatter().getValue(); // Name + XML
+			String newProjectName = (String) nameTextField.getText();
 			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.projectNameEx)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
@@ -241,16 +241,19 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	@FXML
 	private void importButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters()
-				.add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectCompressedType));
+		chooser.getExtensionFilters().add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
 		File file = chooser.showOpenDialog(getStage());
 		if (file != null) {
 			Path zipFile = file.toPath();
 			try {
-				ProjectReference ref = ProjectImporter.importProject(zipFile, ImportDialog.getInstance(getStage()),
-						ImportDialog.getInstance(getStage()));
-				projectList.getItems().add(ref);
-				selectProject(ref);
+				ImportDialog inportDialog = ImportDialog.getInstance(getStage());
+				ProjectReference ref = ProjectImporter.importProject(zipFile, inportDialog, inportDialog);
+				if (ref != null) {
+					projectList.getItems().add(ref);
+					selectProject(ref);
+				} else {
+					showErrorMessage(Localization.getString(Strings.Error_Project_Open, "null"));
+				}
 			} catch (IOException | DocumentException e) {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
 				e.printStackTrace();
@@ -260,7 +263,18 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 	@FXML
 	private void exportButtonHandler(ActionEvent event) {
-		ExportDialog dialog = new ExportDialog(getSelectedProject(), getStage(), this);
+		ProjectReference selectedProject = getSelectedProject();
+
+		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
+		if (currentProject.getRef().equals(selectedProject)) {
+			try {
+				currentProject.save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		ProjectExportDialog dialog = new ProjectExportDialog(selectedProject, getStage(), this);
 		dialog.getStage().show();
 	}
 

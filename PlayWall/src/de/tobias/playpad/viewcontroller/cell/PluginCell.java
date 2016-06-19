@@ -57,17 +57,32 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 	public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 		if (newValue) { // Wurde Aktiviert
-			if (Files.notExists(path)) {
-				try {
-					Files.createDirectories(path.getParent());
-					Files.copy(new URL(plugin.getUrl()).openStream(), path);
-				} catch (IOException e) {
-					e.printStackTrace();
+			downloadPlugin(plugin, path);
+
+			// Dependencies
+			for (String dependencyName : plugin.getDependencies()) {
+				for (Plugin plugin : Plugin.getPlugins()) {
+					if (plugin.getName().equals(dependencyName)) {
+						Path decPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+						downloadPlugin(plugin, decPath);
+					}
 				}
 			}
+
 			manager.addPluginsFrom(path.toUri());
 		} else {
 			PlayPadMain.addDeletedPlugin(path);
+		}
+	}
+
+	private void downloadPlugin(Plugin plugin, Path path) {
+		if (Files.notExists(path)) {
+			try {
+				Files.createDirectories(path.getParent());
+				Files.copy(new URL(plugin.getUrl()).openStream(), path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

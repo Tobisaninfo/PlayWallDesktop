@@ -48,7 +48,8 @@ public class PlayPadUpdater implements Updatable {
 	public boolean checkUpdate() {
 		App app = ApplicationUtils.getMainApplication();
 		try {
-			FileConfiguration config = YamlConfiguration.loadConfiguration(new URL(app.getInfo().getUpdateURL() + "/version.yml").openStream());
+			URL url = new URL(app.getInfo().getUpdateURL() + "/version.yml");
+			FileConfiguration config = YamlConfiguration.loadConfiguration(url.openStream());
 			newBuild = config.getInt("build");
 			newVersion = config.getString("version");
 

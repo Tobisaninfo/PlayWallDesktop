@@ -23,7 +23,8 @@ public class PadStatusFeedbackListener implements ChangeListener<PadStatus> {
 			Pad pad = action.getPad();
 			if (pad.isPadVisible()) {
 				switch (newValue) {
-				case EMPTY: case ERROR:
+				case EMPTY:
+				case ERROR:
 					action.handleFeedback(FeedbackMessage.OFF);
 					break;
 				case PAUSE:

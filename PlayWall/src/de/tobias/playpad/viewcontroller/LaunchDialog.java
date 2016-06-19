@@ -127,7 +127,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	private void importProfileButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters()
-				.add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectCompressedType));
+				.add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
 		File file = chooser.showOpenDialog(getStage());
 		if (file != null) {
 			Path zipFile = file.toPath();

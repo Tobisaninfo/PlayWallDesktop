@@ -13,6 +13,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.layout.CartLayout;
+import de.tobias.playpad.layout.GlobalLayout;
 import de.tobias.playpad.layout.Layout;
 import de.tobias.playpad.pad.Warning;
 import de.tobias.playpad.pad.view.IPadViewController;
@@ -233,6 +234,21 @@ public class ClassicCartLayout extends Layout implements CartLayout {
 				view.pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				view.pseudoClassState(PseudoClasses.PLAY_CALSS, false);
 			});
+		}
+	}
+
+	@Override
+	public void copyGlobalLayout(GlobalLayout globalLayout) {
+		if (globalLayout instanceof ClassicGlobalLayout) {
+			ClassicGlobalLayout classicGlobalLayout = (ClassicGlobalLayout) globalLayout;
+			backgroundColor = classicGlobalLayout.getBackgroundColor();
+			playbackColor = classicGlobalLayout.getPlaybackColor();
+			warnColor = classicGlobalLayout.getWarnColor();
+			fadeColor = classicGlobalLayout.getFadeColor();
+
+			accentColor = classicGlobalLayout.getAccentColor();
+			infoLabelColor = classicGlobalLayout.getInfoLabelColor();
+			titleLabelColor = classicGlobalLayout.getAccentColor();
 		}
 	}
 }

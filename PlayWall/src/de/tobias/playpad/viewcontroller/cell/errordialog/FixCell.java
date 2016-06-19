@@ -12,12 +12,16 @@ import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class FixCell extends TableCell<PadException, PadException> {
 
 	private Stage stage;
+	private VBox vbox;
 
 	public FixCell(Stage stage) {
 		this.stage = stage;
@@ -26,6 +30,8 @@ public class FixCell extends TableCell<PadException, PadException> {
 	@Override
 	protected void updateItem(PadException item, boolean empty) {
 		super.updateItem(item, empty);
+
+		vbox = new VBox();
 		if (!empty) {
 			switch (item.getType()) {
 			case FILE_NOT_FOUND:
@@ -51,7 +57,7 @@ public class FixCell extends TableCell<PadException, PadException> {
 						}
 					}
 				});
-				setGraphic(notExistsButton);
+				vbox.getChildren().add(notExistsButton);
 				break;
 
 			case FILE_FORMAT_NOT_SUPPORTED:
@@ -78,12 +84,31 @@ public class FixCell extends TableCell<PadException, PadException> {
 						}
 					}
 				});
-				setGraphic(supportButton);
+				vbox.getChildren().add(supportButton);
 				break;
 
 			default:
 				break;
 			}
+
+			ExceptionButton<Path> deleteExButton = ExceptionButton.DELETE_EXCEPTION;
+			Button deleteButton = deleteExButton.getButton();
+			deleteButton.setOnAction(a ->
+			{
+				deleteExButton.getHandler().handle(item.getPad(), stage);
+				item.getPad().getProject().removeException(item);
+			});
+			vbox.getChildren().add(deleteButton);
+
+			vbox.setSpacing(7);
+			vbox.getChildren().forEach(node ->
+			{
+				if (node instanceof Control)
+					((Control) node).setMaxWidth(Double.MAX_VALUE);
+				VBox.setVgrow(node, Priority.ALWAYS);
+			});
+
+			setGraphic(vbox);
 		} else {
 			setGraphic(null);
 		}

@@ -13,6 +13,8 @@ import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.drag.PadDragModeRegistery;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.view.PadView;
@@ -50,8 +52,20 @@ public class PadDragListener {
 	}
 
 	private void dragOver(DragEvent event) {
+		if (Profile.currentProfile().getProfileSettings().isLocked()) {
+			return;
+		}
+
 		if (event.getGestureSource() != this && event.getDragboard().hasFiles()) {
 			if (event.getDragboard().getFiles().get(0).isFile()) {
+				ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+				if (pad.getProject() != null) {
+					if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
+						PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+						return;
+					}
+				}
+				
 				File file = event.getDragboard().getFiles().get(0);
 
 				// Build In Filesupport
@@ -73,6 +87,7 @@ public class PadDragListener {
 			}
 		}
 
+		// Drag and Drop von Pads
 		if (event.getDragboard().hasString() && event.getDragboard().getString().trim().matches(REGEX)) {
 			int padID = Integer.valueOf(event.getDragboard().getString());
 			if (padID != view.getController().getPad().getIndex()) {
@@ -141,6 +156,14 @@ public class PadDragListener {
 
 	private void dragDetacted(MouseEvent event) {
 		if (dndMode) {
+			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+			if (pad.getProject() != null) {
+				if (settings.isLiveMode() && settings.isLiveModeDrag() && pad.getProject().getPlayedPlayers() > 0) {
+					PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+					return;
+				}
+			}
+			
 			Dragboard dragboard = view.startDragAndDrop(TransferMode.MOVE);
 
 			SnapshotParameters parameters = new SnapshotParameters();

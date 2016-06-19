@@ -2,10 +2,12 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectExporter;
+import de.tobias.playpad.project.ProjectExporter.ExportView;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.ui.NotificationHandler;
@@ -18,13 +20,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ExportDialog extends ViewController {
+public class ProjectExportDialog extends ViewController implements ExportView {
 
 	@FXML private CheckBox profileCheckBox;
 	@FXML private CheckBox mediaCheckBox;
@@ -37,7 +40,7 @@ public class ExportDialog extends ViewController {
 	private ProjectReference projectRef;
 	private NotificationHandler notificationHandler;
 
-	public ExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
+	public ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
 		super("exportDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.projectRef = projectRef;
 		this.notificationHandler = notificationHandler;
@@ -53,7 +56,7 @@ public class ExportDialog extends ViewController {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
-		stage.setWidth(320);
+		stage.setWidth(375);
 		stage.setHeight(180);
 
 		Profile.currentProfile().currentLayout().applyCss(getStage());
@@ -67,35 +70,62 @@ public class ExportDialog extends ViewController {
 	@FXML
 	private void saveButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters()
-				.add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectCompressedType));
+
+		// Extensionfilter in FileChooser
+		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		chooser.getExtensionFilters().add(extensionFilter);
+
 		File file = chooser.showSaveDialog(getStage());
 		if (file != null) {
 			cancelButton.setDisable(true);
+
+			busyView.getIndicator().setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 			busyView.showProgress(true);
 
 			Worker.runLater(() ->
 			{
 				try {
-					ProjectExporter.exportProject(projectRef, file.toPath(), profileCheckBox.isSelected(), mediaCheckBox.isSelected());
+					Path path = file.toPath();
+					boolean includeProject = profileCheckBox.isSelected();
+					boolean includeMedia = mediaCheckBox.isSelected();
+
+					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, (ExportView) this);
 
 					Platform.runLater(() ->
 					{
-						busyView.showProgress(false);
 						getStage().close();
-						notificationHandler.notify(Localization.getString(Strings.Standard_File_Save),
-								PlayPadMain.notificationDisplayTimeMillis);
+
+						String notificationString = Localization.getString(Strings.Standard_File_Save);
+						notificationHandler.notify(notificationString, PlayPadMain.displayTimeMillis);
 					});
 				} catch (IOException e) {
+					busyView.showProgress(false);
+
+					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
+					showErrorMessage(errorMessage, PlayPadMain.stageIcon);
 					e.printStackTrace();
-					Platform.runLater(() ->
-					{
-						busyView.showProgress(false);
-						showErrorMessage(Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage()),
-								PlayPadMain.stageIcon);
-					});
 				}
 			});
 		}
+	}
+
+	private int tasks;
+	private int complete;
+
+	@Override
+	public void setTasks(int value) {
+		this.tasks = value;
+		complete = 0;
+	}
+
+	@Override
+	public void tastComplete() {
+		if (!Platform.isFxApplicationThread()) {
+			Platform.runLater(() -> tastComplete());
+			return;
+		}
+		complete++;
+		busyView.getIndicator().setProgress((float) complete / (float) tasks);
 	}
 }

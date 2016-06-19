@@ -7,6 +7,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.settings.Profile;
@@ -42,8 +43,9 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 		if (pad.getContent() != null) {
 			try {
-				PadSettingsTabViewController contentTab = PadContentRegistry.getPadContentConnect(pad.getContent().getType())
-						.getSettingsViewController(pad);
+				// Get Pad Type specific tab
+				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
+				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
 			} catch (UnkownPadContentException e) {
@@ -65,6 +67,10 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 		// Show Current Settings
 		showCurrentSettings();
+		setTitle(pad);
+	}
+
+	private void setTitle(Pad pad) {
 		getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
 	}
 
@@ -78,7 +84,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(650);
-		stage.setMinHeight(500);
+		stage.setMinHeight(550);
 
 		Profile.currentProfile().currentLayout().applyCss(getStage());
 	}

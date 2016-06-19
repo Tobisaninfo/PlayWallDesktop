@@ -35,7 +35,10 @@ public abstract class Mapper implements Displayable, Cloneable {
 	public abstract Mapper cloneMapper() throws CloneNotSupportedException;
 
 	public static DisplayableFeedbackColor searchColor(ColorAssociator colorAssociator, FeedbackMessage message, Color color) {
-		DisplayableFeedbackColor minColor = null;
+		DisplayableFeedbackColor minColor = colorAssociator.map(color);
+		if (minColor != null) {
+			return minColor;
+		}
 		double minVal = 1;
 
 		for (DisplayableFeedbackColor feedbackColor : colorAssociator.getColors()) {
@@ -50,7 +53,7 @@ public abstract class Mapper implements Displayable, Cloneable {
 				}
 			}
 		}
-		if (minColor != null && minVal < 0.4) {
+		if (minColor != null && minVal < 0.35) {
 			return minColor;
 		} else if (message == FeedbackMessage.STANDARD) {
 			return colorAssociator.getDefaultStandardColor();

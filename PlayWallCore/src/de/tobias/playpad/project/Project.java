@@ -1,8 +1,6 @@
 package de.tobias.playpad.project;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -56,32 +54,16 @@ public class Project {
 	}
 
 	public void setPad(int index, Pad pad) {
+		pad.setIndex(index);
 		pads.put(index, pad);
 	}
 
-	public void replacePads(int src, int des) {
-		Pad srcPad = getPad(src);
-		srcPad.setIndex(des);
-		pads.put(des, srcPad);
-		pads.remove(src);
-	}
-
-	public void movePads(int src, int des) {
-		Pad oldPad = getPad(src);
-		Pad newPad = getPad(des);
-
-		oldPad.setIndex(des);
-		newPad.setIndex(src);
-
-		pads.put(des, oldPad);
-		pads.put(src, newPad);
-	}
-
 	private static final String ROOT_ELEMENT = "Project";
-	private static final String PAD_ELEMENT = "Pad";
+	static final String PAD_ELEMENT = "Pad";
 
 	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
 			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException {
+
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		if (Files.exists(projectPath)) {
 			SAXReader reader = new SAXReader();
@@ -120,7 +102,7 @@ public class Project {
 		}
 	}
 
-	public void save() throws UnsupportedEncodingException, IOException {
+	public void save() throws IOException {
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		Document document = DocumentHelper.createDocument();
 
@@ -140,67 +122,6 @@ public class Project {
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(projectPath), OutputFormat.createPrettyPrint());
 		writer.write(document);
 		writer.close();
-	}
-
-	/**
-	 * Load an project internal, so that each PadContent cloud import the needed medai from the zip filesystems. Each PadContent must
-	 * override the path saves in the Element Object.
-	 * 
-	 * @param ref
-	 *            Project to import
-	 * @param destination
-	 *            Media Destination
-	 * @throws DocumentException
-	 * @throws IOException
-	 */
-	public static void importMedia(ProjectReference ref, FileSystem zipfs, Path destination) throws DocumentException, IOException {
-		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(Files.newInputStream(projectPath));
-
-		Element rootElement = document.getRootElement();
-		for (Object padObj : rootElement.elements(PAD_ELEMENT)) {
-			if (padObj instanceof Element) {
-				Element padElement = (Element) padObj;
-
-				Pad pad = new Pad(null, padElement); // Null für Project, da das pad nicht weiter verwendet wird
-				if (pad.getContent() != null) {
-					pad.getContent().importMedia(destination, zipfs, padElement.element(Pad.CONTENT_ELEMENT));
-				}
-			}
-		}
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(projectPath), OutputFormat.createPrettyPrint());
-		writer.write(document);
-		writer.close();
-	}
-
-	/**
-	 * Load an project internal, so that each PadContent cloud export the needed medai into the zip filesystems. Each PadContent can read
-	 * the save path from the Element object.
-	 * 
-	 * @param ref
-	 *            Project to export
-	 * @param des
-	 *            Destination zip file
-	 * @throws DocumentException
-	 * @throws IOException
-	 */
-	public static void exportMedia(ProjectReference ref, FileSystem des) throws DocumentException, IOException {
-		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(Files.newInputStream(projectPath));
-
-		Element rootElement = document.getRootElement();
-		for (Object padObj : rootElement.elements(PAD_ELEMENT)) {
-			if (padObj instanceof Element) {
-				Element padElement = (Element) padObj;
-
-				Pad pad = new Pad(null, padElement); // Null für Project, da das pad nicht weiter verwendet wird
-				if (pad.getContent() != null) {
-					pad.getContent().exportMedia(des, padElement.element(Pad.CONTENT_ELEMENT));
-				}
-			}
-		}
 	}
 
 	public HashMap<Integer, Pad> getPads() {
@@ -251,5 +172,10 @@ public class Project {
 
 	public ObservableList<PadException> getExceptions() {
 		return exceptions;
+	}
+
+	@Override
+	public String toString() {
+		return ref.getName() + " (" + ref.getUuid() + ")";
 	}
 }

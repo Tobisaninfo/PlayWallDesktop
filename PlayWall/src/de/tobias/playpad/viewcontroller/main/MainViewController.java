@@ -10,6 +10,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.action.feedback.ColorAssociator;
@@ -44,6 +45,7 @@ import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -149,6 +151,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		// Setup Settings
 		reloadSettings(null, Profile.currentProfile());
 
+		// Listener
 		listener.forEach(l -> l.onInit(this));
 	}
 
@@ -181,7 +184,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	private void setPadVolume(double volume) {
 		for (Pad pad : project.getPads().values()) {
-			pad.setMasterVolume(volume);
+			if (pad != null)
+				pad.setMasterVolume(volume);
 		}
 	}
 
@@ -196,6 +200,12 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	public void initStage(Stage stage) {
+		stage.fullScreenProperty().addListener((a, b, c) ->
+		{
+			if (Profile.currentProfile() != null)
+				stage.setAlwaysOnTop(Profile.currentProfile().getProfileSettings().isWindowAlwaysOnTop());
+		});
+
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 		stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(KeyCombination.SHIFT_DOWN + "+Esc"));
 		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title));
@@ -228,6 +238,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 			for (IPadViewController controller : padViewList) {
 				controller.unconnectPad();
 			}
+			// Speichert das alte Projekt, bevor ein neues geladen wird
 			try {
 				this.project.save();
 			} catch (IOException e) {
@@ -252,49 +263,53 @@ public class MainViewController extends ViewController implements IMainViewContr
 		applyColorsToMappers();
 	}
 
-	private void applyColorsToMappers() {
+	public void applyColorsToMappers() {
 		// Apply Layout to Mapper
 		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions(CartActionConnect.TYPE);
 		for (CartAction cartAction : actions) {
 			if (cartAction.isAutoFeedbackColors()) {
 				for (Mapper mapper : cartAction.getMappers()) {
 					if (mapper instanceof MapperFeedbackable) {
-						MapperFeedbackable feedbackable = (MapperFeedbackable) mapper;
-						if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
-							ColorAssociator colorAssociator = (ColorAssociator) mapper;
-
-							Pad pad = project.getPad(cartAction.getCart());
-							Color layoutStandardColor = null;
-							Color layoutEventColor = null;
-
-							if (pad.isCustomLayout()) {
-								CartLayout layout = pad.getLayout();
-								if (layout instanceof LayoutColorAssociator) {
-									layoutStandardColor = ((LayoutColorAssociator) layout).getAssociatedStandardColor();
-									layoutEventColor = ((LayoutColorAssociator) layout).getAssociatedEventColor();
-								}
-							} else {
-								GlobalLayout layout = Profile.currentProfile().currentLayout();
-								if (layout instanceof LayoutColorAssociator) {
-									layoutStandardColor = ((LayoutColorAssociator) layout).getAssociatedStandardColor();
-									layoutEventColor = ((LayoutColorAssociator) layout).getAssociatedEventColor();
-								}
-							}
-
-							if (layoutStandardColor != null) {
-								DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD,
-										layoutStandardColor);
-								colorAssociator.setColor(FeedbackMessage.STANDARD, associator.midiVelocity());
-							}
-
-							if (layoutEventColor != null) {
-								DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT,
-										layoutEventColor);
-								colorAssociator.setColor(FeedbackMessage.EVENT, associator.midiVelocity());
-							}
-						}
+						mapColorForMapper(cartAction, mapper);
 					}
 				}
+			}
+		}
+	}
+
+	private void mapColorForMapper(CartAction cartAction, Mapper mapper) {
+		MapperFeedbackable feedbackable = (MapperFeedbackable) mapper;
+		if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
+			ColorAssociator colorAssociator = (ColorAssociator) mapper;
+
+			Pad pad = project.getPad(cartAction.getCart());
+			Color layoutStdColor = null;
+			Color layoutEvColor = null;
+
+			if (pad.isCustomLayout()) {
+				CartLayout layout = pad.getLayout();
+				if (layout instanceof LayoutColorAssociator) {
+					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
+					layoutStdColor = associator.getAssociatedStandardColor();
+					layoutEvColor = associator.getAssociatedEventColor();
+				}
+			} else {
+				GlobalLayout layout = Profile.currentProfile().currentLayout();
+				if (layout instanceof LayoutColorAssociator) {
+					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
+					layoutStdColor = associator.getAssociatedStandardColor();
+					layoutEvColor = associator.getAssociatedEventColor();
+				}
+			}
+
+			if (layoutStdColor != null) {
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
+				colorAssociator.setColor(FeedbackMessage.STANDARD, associator.midiVelocity());
+			}
+
+			if (layoutEvColor != null) {
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
+				colorAssociator.setColor(FeedbackMessage.EVENT, associator.midiVelocity());
 			}
 		}
 	}
@@ -347,11 +362,15 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		// Min Size of window
-		getStage().setMinWidth(Profile.currentProfile().currentLayout().getMinWidth(profileSettings.getColumns()));
+		GlobalLayout currentLayout = Profile.currentProfile().currentLayout();
+		double minWidth = currentLayout.getMinWidth(profileSettings.getColumns());
+		double minHeight = currentLayout.getMinHeight(profileSettings.getRows());
+
+		getStage().setMinWidth(minWidth);
 		if (OS.getType() == OSType.MacOSX) {
-			getStage().setMinHeight(Profile.currentProfile().currentLayout().getMinHeight(profileSettings.getRows()) + 100);
+			getStage().setMinHeight(minHeight + 100);
 		} else {
-			getStage().setMinHeight(Profile.currentProfile().currentLayout().getMinHeight(profileSettings.getRows()) + 150);
+			getStage().setMinHeight(minHeight + 150);
 		}
 	}
 
@@ -364,6 +383,12 @@ public class MainViewController extends ViewController implements IMainViewContr
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		if (!(newPage >= 0 && newPage < profileSettings.getPageCount())) {
+			return;
+		}
+
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		if (settings.isLiveMode() && settings.isLiveModePage() && getProject().getPlayedPlayers() > 0) {
+			showLiveInfo();
 			return;
 		}
 
@@ -411,7 +436,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 
-			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol wenn ein Pad noch im Status Play ist
+			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
+			// wenn ein Pad noch im Status Play ist
 			if (project.getPlayedPlayers() > 0 && profilSettings.isLiveMode()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
@@ -427,10 +453,57 @@ public class MainViewController extends ViewController implements IMainViewContr
 						return false;
 			}
 
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setContentText(Localization.getString(Strings.UI_Window_Main_SaveRequest));
+			alert.getButtonTypes().setAll(ButtonType.CANCEL, ButtonType.NO, ButtonType.YES);
+
+			Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
+			yesButton.defaultButtonProperty().bind(yesButton.focusedProperty());
+
+			Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
+			noButton.defaultButtonProperty().bind(noButton.focusedProperty());
+
+			Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
+			cancelButton.defaultButtonProperty().bind(cancelButton.focusedProperty());
+
+			alert.initOwner(getStage());
+			alert.initModality(Modality.WINDOW_MODAL);
+			Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+			PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.isPresent()) {
+				ButtonType buttonType = result.get();
+				if (buttonType == ButtonType.YES) {
+					// Projekt Speichern
+					try {
+						if (project.getRef() != null) {
+							project.save();
+							System.out.println("Saved Project: " + project);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+					}
+				} else if (buttonType == ButtonType.CANCEL) {
+					return false;
+				}
+			}
+
+			// Save Config - Its unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
+			try {
+				if (Profile.currentProfile() != null)
+					Profile.currentProfile().save();
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Profile_Save));
+			}
+
 			// Mapper Clear Feedback
 			Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
 
 			// MIDI Shutdown
+			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
 			if (profilSettings.isMidiActive()) {
 				try {
 					midi.close();
@@ -440,17 +513,17 @@ public class MainViewController extends ViewController implements IMainViewContr
 			}
 		}
 
-		if (getStage().isIconified()) {
+		if (
+
+		getStage().isIconified()) {
 			getStage().setIconified(false);
 		}
 
-		// Verbindung von Pad und PadView wird getrennt. Zudem wird bei PLAY oder PAUSE auf STOP gesetzt
+		// Verbindung von Pad und PadView wird getrennt. Zudem wird bei PLAY
+		// oder PAUSE auf STOP gesetzt
 		padViewList.forEach(padView -> padView.unconnectPad());
 
 		saveSettings();
-
-		Worker.shutdown();
-		System.exit(0);
 		return true;
 	}
 
@@ -469,8 +542,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private void loadMidiDevice(String name) {
 		try {
 			midi.lookupMidiDevice(name);
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name),
-					PlayPadMain.notificationDisplayTimeMillis);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
 		} catch (NullPointerException e) {
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
@@ -522,7 +594,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	private boolean shown = false;
 
-	protected void showLiveInfo() {
+	public void showLiveInfo() {
 		if (!shown) {
 			toolbarController.getToolbarHBox().setOpacity(0.5);
 			liveLabel.setVisible(true);
@@ -530,7 +602,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Worker.runLater(() ->
 			{
 				try {
-					Thread.sleep(PlayPadMain.notificationDisplayTimeMillis * 2);
+					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
 				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
@@ -544,9 +616,11 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	public void reloadSettings(Profile old, Profile currentProfile) {
+		final DoubleProperty valueProperty = toolbarController.getVolumeSlider().valueProperty();
+
 		if (old != null) {
 			// Unbind Volume Slider
-			toolbarController.getVolumeSlider().valueProperty().unbindBidirectional(old.getProfileSettings().volumeProperty());
+			valueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
 			// Clear Feedback on Devie (LaunchPad Light off)
 			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
 		}
@@ -556,36 +630,29 @@ public class MainViewController extends ViewController implements IMainViewContr
 		toolbarController.createPageButtons();
 
 		// Volume
-		toolbarController.getVolumeSlider().valueProperty().bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		valueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
 
-		// Apply Layout
-		currentProfile.currentLayout().applyCssMainView(this, getStage(), project);
+		final ProfileSettings profilSettings = currentProfile.getProfileSettings();
+		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
 
 		// MIDI
-		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
-		if (profilSettings.isMidiActive()) {
+		if (profilSettings.isMidiActive() && profilSettings.getMidiDevice() != null) {
 			// Load known MIDI Device
 			Worker.runLater(() ->
 			{
-				if (profilSettings.getMidiDevice() != null) {
-					loadMidiDevice(profilSettings.getMidiDevice());
+				loadMidiDevice(profilSettings.getMidiDevice());
 
-					applyColorsToMappers();
+				applyColorsToMappers();
 
-					Platform.runLater(() ->
-					{
-						// Handle Mapper
-						if (Profile.currentProfile() != null) {
-							Profile.currentProfile().getMappings().getActiveMapping().initFeedback();
-							Profile.currentProfile().getMappings().getActiveMapping().showFeedback(project, this);
-						}
-					});
-				}
+				Platform.runLater(() ->
+				{
+					// Handle Mapper
+					if (Profile.currentProfile() != null) {
+						activeMapping.initFeedback();
+						activeMapping.showFeedback(project);
+					}
+				});
 			});
-		}
-
-		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().getMappings().getActiveMapping().showFeedback(project, this);
 		}
 
 		// WINDOW Settings
@@ -593,7 +660,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		getStage().setAlwaysOnTop(profilSettings.isWindowAlwaysOnTop());
 
 		setTitle();
-		showPage(pageNumber);
+		showPage(pageNumber); // Show Mapper Feedback und apply css und zeigt pads
 	}
 
 	@Override

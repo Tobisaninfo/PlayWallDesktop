@@ -53,6 +53,7 @@
                         </VBox>
                      </children>
                   </HBox>
+                  <Label text="%project.label.export" wrapText="true" />
                   <Separator prefWidth="200.0" />
                   <HBox alignment="TOP_RIGHT" spacing="14.0">
                      <children>

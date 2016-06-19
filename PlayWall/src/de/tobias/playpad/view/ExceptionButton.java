@@ -30,6 +30,16 @@ public class ExceptionButton<T> {
 					return file != null ? file.toPath() : null;
 				}
 			});
+	
+	public static ExceptionButton<Path> DELETE_EXCEPTION = new ExceptionButton<>(Localization.getString(Strings.Error_Fix_Delete),
+			new Handler<Path>() {
+
+				@Override
+				public Path handle(Pad pad, Window owner) {
+					pad.clear();
+					return null;
+				}
+			});
 
 	public static interface Handler<T> {
 

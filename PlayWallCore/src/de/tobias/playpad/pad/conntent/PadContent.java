@@ -1,11 +1,11 @@
 package de.tobias.playpad.pad.conntent;
 
-import java.nio.file.FileSystem;
 import java.nio.file.Path;
 
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.utils.util.ZipFile;
 
 public abstract class PadContent {
 
@@ -56,8 +56,8 @@ public abstract class PadContent {
 	 * @param element
 	 *            current settings, should update path
 	 */
-	public abstract void importMedia(Path mediaFolder, FileSystem zipfs, Element element);
+	public abstract void importMedia(Path mediaFolder, ZipFile zipfs, Element element);
 
-	public abstract void exportMedia(FileSystem mediaFolder, Element element);
+	public abstract void exportMedia(ZipFile zip, Element element);
 
 }

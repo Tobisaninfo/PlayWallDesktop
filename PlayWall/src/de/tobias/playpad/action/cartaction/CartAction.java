@@ -31,6 +31,7 @@ public class CartAction extends Action {
 	private boolean autoFeedbackColors;
 
 	private transient Pad pad;
+	private transient PadContentFeedbackListener padContentFeedbackListener = new PadContentFeedbackListener();
 	private transient PadStatusFeedbackListener padStatusFeedbackListener = new PadStatusFeedbackListener();
 	private transient PadPositionWarningListener padPositionListener = new PadPositionWarningListener(this);
 
@@ -178,7 +179,7 @@ public class CartAction extends Action {
 		root.addAttribute(AUTO_FEEDBACK_COLORS, String.valueOf(autoFeedbackColors));
 	}
 
-	public void setPad(Pad newPad) {
+	void setPad(Pad newPad) {
 		Pad oldPad = this.pad;
 		if (newPad == null || !newPad.equals(oldPad) || oldPad == null) {
 			// Remove old Listener
@@ -189,33 +190,33 @@ public class CartAction extends Action {
 						durationable.positionProperty().removeListener(padPositionListener);
 					}
 				}
+				oldPad.contentProperty().removeListener(padContentFeedbackListener);
 				oldPad.statusProperty().removeListener(padStatusFeedbackListener);
 			}
 
 			this.pad = newPad;
 
+			padPositionListener.setPad(newPad);
+			padStatusFeedbackListener.setAction(this);
+			padContentFeedbackListener.setAction(this);
+
 			if (newPad != null) {
 				// Add new listener
 				if (newPad.getContent() != null) {
 					if (newPad.getContent() instanceof Durationable) {
-						padPositionListener.setPad(newPad);
 						Durationable durationable = (Durationable) newPad.getContent();
 						durationable.positionProperty().addListener(padPositionListener);
 					}
 				}
-				padStatusFeedbackListener.setAction(this);
+
 				newPad.statusProperty().addListener(padStatusFeedbackListener);
+				newPad.contentProperty().addListener(padContentFeedbackListener);
 			}
 		}
 	}
 
-	// Listener
-	public PadPositionWarningListener getPadPositionListener() {
+	PadPositionWarningListener getPadPositionListener() {
 		return padPositionListener;
-	}
-
-	public PadStatusFeedbackListener getPadStatusFeedbackListener() {
-		return padStatusFeedbackListener;
 	}
 
 	// Helper

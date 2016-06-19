@@ -41,8 +41,8 @@ public class PadPositionWarningListener implements ChangeListener<Duration> {
 
 						if (warning.getTime().toSeconds() > seconds && !send) {
 							action.handleFeedback(FeedbackMessage.WARNING);
+							send = true;
 						}
-						send = true;
 					}
 				}
 			}

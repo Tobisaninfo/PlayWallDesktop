@@ -1,14 +1,20 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import java.util.List;
+
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.cartaction.CartAction;
+import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.layout.CartLayout;
 import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.CartLayoutViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -44,14 +50,12 @@ public class LayoutPadTabViewController extends PadSettingsTabViewController {
 			if (c && !pad.isCustomLayout()) {
 				try {
 					pad.setCustomLayout(true);
-					try {
-						String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-						CartLayout layout = pad.getLayout(layoutType);
-						setLayoutController(LayoutRegistry.getLayout(layoutType).getCartLayoutViewController(layout));
-					} catch (Exception e) {
-						e.printStackTrace();
-						showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
-					}
+
+					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
+					CartLayout layout = pad.getLayout(layoutType);
+					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
+
+					setLayoutViewController(pad);
 				} catch (Exception e) {
 					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
 					e.printStackTrace();
@@ -72,19 +76,34 @@ public class LayoutPadTabViewController extends PadSettingsTabViewController {
 	public void loadSettings(Pad pad) {
 		enableLayoutCheckBox.setSelected(pad.isCustomLayout());
 		if (pad.isCustomLayout()) {
-			try {
-				String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-				CartLayout layout = pad.getLayout(layoutType);
-				setLayoutController(LayoutRegistry.getLayout(layoutType).getCartLayoutViewController(layout));
-			} catch (Exception e) {
-				e.printStackTrace();
-				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
-			}
+			setLayoutViewController(pad);
+		}
+	}
+
+	private void setLayoutViewController(Pad pad) {
+		try {
+			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
+			CartLayout layout = pad.getLayout(layoutType);
+
+			CartLayoutViewController controller = LayoutRegistry.getLayout(layoutType).getCartLayoutViewController(layout);
+			setLayoutController(controller);
+		} catch (Exception e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
 		}
 	}
 
 	@Override
 	public void saveSettings(Pad pad) {
-		PlayPadPlugin.getImplementation().getMainViewController().loadUserCss();
+		// CSS
+		IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+		mainViewController.loadUserCss();
+
+		// Mapping Auto Matched Colors
+		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+		List<CartAction> actions = activeMapping.getActions(CartActionConnect.TYPE);
+		// Update die Mapper der CartAction
+		actions.stream().filter(item -> item.getCart() == pad.getIndex())
+				.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
 	}
 }

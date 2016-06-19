@@ -22,47 +22,71 @@ import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.pad.Warning;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.settings.SettingsSerializable;
+import de.tobias.utils.settings.Storable;
 import de.tobias.utils.settings.UserDefaults;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.util.Duration;
 
-public class ProfileSettings {
+public class ProfileSettings implements SettingsSerializable {
+
+	private static final long serialVersionUID = 1L;
 
 	public static final int MAX_PAGES = 8;
 
+	@Storable private BooleanProperty lockedProperty = new SimpleBooleanProperty(false);
+
 	// MIDI
-	private String midiDevice;
+	@Storable private String midiDevice;
 
 	// GridPane
-	private int pageCount = 2;
-	private int columns = 6;
-	private int rows = 5;
+	@Storable private int pageCount = 2;
+	@Storable private int columns = 6;
+	@Storable private int rows = 5;
 
 	// Audio Output
-	private String audioClass = AudioRegistry.getDefaultAudioInterface();
-	private HashMap<String, Object> audioUserInfo = new HashMap<>();
+	@Storable private String audioClass = AudioRegistry.getDefaultAudioInterface();
+	@Storable private HashMap<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
-	private String layoutType = LayoutRegistry.getDefaultLayout();
+	@Storable private String layoutType = LayoutRegistry.getDefaultLayout();
 
 	// Cart Settings
-	private Warning warningFeedback = new Warning(Duration.seconds(5));
+	@Storable private Warning warningFeedback = new Warning(Duration.seconds(5));
 
-	private boolean midiActive = false;
-	private boolean liveMode = true;
-	private DoubleProperty volume = new SimpleDoubleProperty(1.0);
+	@Storable private boolean midiActive = false;
+	@Storable private boolean liveMode = true;
+	@Storable private boolean liveModePage = true;
+	@Storable private boolean liveModeDrag = true;
+	@Storable private boolean liveModeFile = true;
+	@Storable private boolean liveModeSettings = true;
+	@Storable private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 
-	private boolean windowAlwaysOnTop = false;
+	@Storable private boolean windowAlwaysOnTop = false;
 
-	private Fade fade = new Fade();
-	private TimeMode player_timeDisplayMode = TimeMode.REST;
+	@Storable private Fade fade = new Fade();
+	@Storable private TimeMode player_timeDisplayMode = TimeMode.REST;
 
-	private boolean dialogDragAndDrop = true;
+	// Folder
+	@Storable private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
 
-	private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
+	// Update
+	@Storable private boolean autoUpdate = true;
 
-	private boolean autoUpdate = true;
+	public boolean isLocked() {
+		return lockedProperty.get();
+	}
+
+	public void setLocked(boolean locked) {
+		this.lockedProperty.set(locked);
+	}
+
+	public BooleanProperty lockedProperty() {
+		return lockedProperty;
+	}
 
 	// Getter
 	public String getMidiDevice() {
@@ -111,8 +135,24 @@ public class ProfileSettings {
 		return liveMode;
 	}
 
+	public boolean isLiveModeDrag() {
+		return liveModeDrag;
+	}
+
+	public boolean isLiveModeFile() {
+		return liveModeFile;
+	}
+
+	public boolean isLiveModePage() {
+		return liveModePage;
+	}
+
+	public boolean isLiveModeSettings() {
+		return liveModeSettings;
+	}
+
 	public double getVolume() {
-		return volume.get();
+		return volumeProperty.get();
 	}
 
 	public boolean isWindowAlwaysOnTop() {
@@ -125,10 +165,6 @@ public class ProfileSettings {
 
 	public TimeMode getPlayerTimeDisplayMode() {
 		return player_timeDisplayMode;
-	}
-
-	public boolean isDialogDragAndDrop() {
-		return dialogDragAndDrop;
 	}
 
 	public String getAudioClass() {
@@ -182,8 +218,24 @@ public class ProfileSettings {
 		this.liveMode = liveMode;
 	}
 
+	public void setLiveModeDrag(boolean liveModeDrag) {
+		this.liveModeDrag = liveModeDrag;
+	}
+
+	public void setLiveModeFile(boolean liveModeFile) {
+		this.liveModeFile = liveModeFile;
+	}
+
+	public void setLiveModePage(boolean liveModePage) {
+		this.liveModePage = liveModePage;
+	}
+
+	public void setLiveModeSettings(boolean liveModeSettings) {
+		this.liveModeSettings = liveModeSettings;
+	}
+
 	public void setVolume(double volume) {
-		this.volume.set(volume);
+		this.volumeProperty.set(volume);
 	}
 
 	public void setWindowAlwaysOnTop(boolean windowAlwaysOnTop) {
@@ -198,10 +250,6 @@ public class ProfileSettings {
 		this.player_timeDisplayMode = player_timeDisplayMode;
 	}
 
-	public void setDialogDragAndDrop(boolean dialogDragAndDrop) {
-		this.dialogDragAndDrop = dialogDragAndDrop;
-	}
-
 	public void setAudioClass(String audioClass) {
 		this.audioClass = audioClass;
 	}
@@ -212,9 +260,10 @@ public class ProfileSettings {
 
 	// Properties
 	public DoubleProperty volumeProperty() {
-		return volume;
+		return volumeProperty;
 	}
 
+	private static final String LOCKED_ELEMENT = "Locked";
 	private static final String ITEM_ELEMENT = "Item";
 	private static final String AUTO_UPDATE_ELEMENT = "AutoUpdate";
 	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
@@ -222,9 +271,12 @@ public class ProfileSettings {
 	private static final String KEY_ATTRIBUTE = "key";
 	private static final String AUDIO_USER_INFO_ELEMENT = "AudioUserInfo";
 	private static final String AUDIO_CLASS_ELEMENT = "AudioClass";
-	private static final String DRAG_AND_DROP_DIALOG_ELEMENT = "DragAndDropDialog";
 	private static final String WINDOW_ALWAYS_ON_TOP_ELEMENT = "WindowAlwaysOnTop";
 	private static final String LIVE_MODE_ELEMENT = "LiveMode";
+	private static final String LIVE_MODE_PAGE_ATTR = "page";
+	private static final String LIVE_MODE_DRAG_ATTR = "drag";
+	private static final String LIVE_MODE_FILE_ATTR = "file";
+	private static final String LIVE_MODE_SETTINGS_ATTR = "settings";
 	private static final String TIME_DISPLAY_ELEMENT = "TimeDisplay";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
@@ -244,6 +296,8 @@ public class ProfileSettings {
 			Document document = reader.read(Files.newInputStream(path));
 			Element root = document.getRootElement();
 
+			if (root.element(LOCKED_ELEMENT) != null)
+				profileSettings.setLocked(Boolean.valueOf(root.element(LOCKED_ELEMENT).getStringValue()));
 			if (root.element(MIDI_DEVICE_ELEMENT) != null)
 				profileSettings.setMidiDeviceName(root.element(MIDI_DEVICE_ELEMENT).getStringValue());
 			if (root.element(MIDI_ACTIVE_ELEMENT) != null)
@@ -261,7 +315,7 @@ public class ProfileSettings {
 			}
 
 			if (root.element(WARNING_ELEMENT) != null) {
-				Warning warning = Warning.loadV2(root.element(WARNING_ELEMENT));
+				Warning warning = Warning.load(root.element(WARNING_ELEMENT));
 				if (warning != null) {
 					profileSettings.setWarningFeedback(warning);
 				}
@@ -281,12 +335,25 @@ public class ProfileSettings {
 				}
 			}
 
-			if (root.element(LIVE_MODE_ELEMENT) != null)
-				profileSettings.setLiveMode(Boolean.valueOf(root.element(LIVE_MODE_ELEMENT).getStringValue()));
+			Element liveElement = root.element(LIVE_MODE_ELEMENT);
+			if (liveElement != null) {
+				profileSettings.setLiveMode(Boolean.valueOf(liveElement.getStringValue()));
+				if (liveElement.attributeValue(LIVE_MODE_PAGE_ATTR) != null) {
+					profileSettings.setLiveModePage(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_PAGE_ATTR)));
+				}
+				if (liveElement.attributeValue(LIVE_MODE_DRAG_ATTR) != null) {
+					profileSettings.setLiveModeDrag(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_DRAG_ATTR)));
+				}
+				if (liveElement.attributeValue(LIVE_MODE_FILE_ATTR) != null) {
+					profileSettings.setLiveModeFile(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_FILE_ATTR)));
+				}
+				if (liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR) != null) {
+					profileSettings.setLiveModeSettings(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR)));
+				}
+			}
+
 			if (root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT) != null)
 				profileSettings.setWindowAlwaysOnTop(Boolean.valueOf(root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT).getStringValue()));
-			if (root.element(DRAG_AND_DROP_DIALOG_ELEMENT) != null)
-				profileSettings.setDialogDragAndDrop(Boolean.valueOf(root.element(DRAG_AND_DROP_DIALOG_ELEMENT).getStringValue()));
 			if (root.element(AUDIO_CLASS_ELEMENT) != null)
 				profileSettings.setAudioClass(root.element(AUDIO_CLASS_ELEMENT).getStringValue());
 
@@ -319,6 +386,8 @@ public class ProfileSettings {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement("Config");
 
+		root.addElement(LOCKED_ELEMENT).addText(String.valueOf(lockedProperty.get()));
+
 		// MIDI
 		if (midiDevice != null)
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
@@ -335,9 +404,14 @@ public class ProfileSettings {
 		fade.save(root.addElement(FADE_ELEMENT));
 		root.addElement(TIME_DISPLAY_ELEMENT).addText(player_timeDisplayMode.name());
 
-		root.addElement(LIVE_MODE_ELEMENT).addText(String.valueOf(liveMode));
+		Element liveElement = root.addElement(LIVE_MODE_ELEMENT);
+		liveElement.addText(String.valueOf(liveMode));
+		liveElement.addAttribute(LIVE_MODE_PAGE_ATTR, String.valueOf(liveModePage));
+		liveElement.addAttribute(LIVE_MODE_DRAG_ATTR, String.valueOf(liveModeDrag));
+		liveElement.addAttribute(LIVE_MODE_FILE_ATTR, String.valueOf(liveModeFile));
+		liveElement.addAttribute(LIVE_MODE_SETTINGS_ATTR, String.valueOf(liveModeSettings));
+		
 		root.addElement(WINDOW_ALWAYS_ON_TOP_ELEMENT).addText(String.valueOf(windowAlwaysOnTop));
-		root.addElement(DRAG_AND_DROP_DIALOG_ELEMENT).addText(String.valueOf(dialogDragAndDrop));
 
 		// Audio
 		root.addElement(AUDIO_CLASS_ELEMENT).addText(audioClass);
@@ -346,7 +420,7 @@ public class ProfileSettings {
 			Element itemElement = userInfoElement.addElement(ITEM_ELEMENT);
 			UserDefaults.save(itemElement, audioUserInfo.get(key), key);
 		}
-		root.addElement(VOLUME_ELEMENT).addText(String.valueOf(volume.get()));
+		root.addElement(VOLUME_ELEMENT).addText(String.valueOf(volumeProperty.get()));
 
 		// Paths
 		root.addElement(CACHE_PATH_ELEMENT).addText(cachePath.toString());

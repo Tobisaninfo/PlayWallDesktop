@@ -35,7 +35,7 @@ public interface IPadView {
 	public void addDefaultButton(Pad pad);
 
 	public void setErrorLabelActive(boolean b);
-	
+
 	public void setTriggerLabelActive(boolean b);
 
 	public IPadContentView getPadContentView();

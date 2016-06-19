@@ -78,9 +78,9 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume) {
+	public void setVolume(double volume, double masterVolume, double customVolume) {
 		if (player != null)
-			player.setVolume(volume * masterVolume);
+			player.setVolume(volume * masterVolume * customVolume);
 	}
 
 	@Override
@@ -150,11 +150,5 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 		media = null;
 		durationProperty.set(null);
 		loadedProperty.set(false);
-	}
-
-	@Override
-	public void updateVolume(double masterVolume) {
-		if (player != null)
-			player.setVolume(getContent().getPad().getVolume() * masterVolume);
 	}
 }

@@ -5,6 +5,7 @@ import org.dom4j.Element;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.layout.CartLayout;
 import de.tobias.playpad.layout.FadeableColor;
+import de.tobias.playpad.layout.GlobalLayout;
 import de.tobias.playpad.layout.Layout;
 import de.tobias.playpad.layout.LayoutColorAssociator;
 import de.tobias.playpad.pad.Pad;
@@ -22,7 +23,7 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 	public static final double minHeight = 110;
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
-	private ModernColor playColor = ModernColor.RED1;
+	private ModernColor playColor = ModernColor.RED3;
 
 	private boolean isWarnAnimation = true;
 
@@ -195,5 +196,15 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 	@Override
 	public Color getAssociatedStandardColor() {
 		return Color.web(backgroundColor.getColorHi());
+	}
+
+	@Override
+	public void copyGlobalLayout(GlobalLayout globalLayout) {
+		if (globalLayout instanceof ModernLayoutGlobal) {
+			ModernLayoutGlobal modernLayoutGlobal = (ModernLayoutGlobal) globalLayout;
+			backgroundColor = modernLayoutGlobal.getBackgroundColor();
+			playColor = modernLayoutGlobal.getPlayColor();
+			isWarnAnimation = modernLayoutGlobal.isWarnAnimation();
+		}
 	}
 }

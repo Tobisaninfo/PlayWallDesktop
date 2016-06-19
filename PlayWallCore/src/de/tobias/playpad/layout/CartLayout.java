@@ -30,4 +30,6 @@ public interface CartLayout {
 	public default void stopWarning(IPadViewController controller) {}
 
 	public void reset();
+	
+	public void copyGlobalLayout(GlobalLayout globalLayout);
 }

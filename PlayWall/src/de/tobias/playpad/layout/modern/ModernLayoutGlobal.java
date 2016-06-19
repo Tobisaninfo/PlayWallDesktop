@@ -33,7 +33,7 @@ public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutCo
 	public static final double minHeight = 110;
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
-	private ModernColor playColor = ModernColor.RED1;
+	private ModernColor playColor = ModernColor.RED3;
 
 	private boolean isWarnAnimation = true;
 
@@ -255,7 +255,7 @@ public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutCo
 		Element titleFontSizeElement = rootElement.element("TitleFontSize");
 		if (titleFontSizeElement != null) {
 			try {
-				infoFontSize = Integer.valueOf(titleFontSizeElement.getStringValue());
+				titleFontSize = Integer.valueOf(titleFontSizeElement.getStringValue());
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			}

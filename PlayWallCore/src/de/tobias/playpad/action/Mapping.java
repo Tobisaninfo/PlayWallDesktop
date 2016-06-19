@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
@@ -132,6 +133,11 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		}
 	}
 
+	public void showFeedback(Project project) {
+		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+		showFeedback(project, controller);
+	}
+
 	public void showFeedback(Project project, IMainViewController controller) {
 		clearFeedback();
 
@@ -151,6 +157,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 				((MapperConnectFeedbackable) mapper).clearFeedbackType();
 			}
 		}
+		getActions().forEach(action -> action.clearFeedback());
 	}
 
 	private static final String NAME = "name";

@@ -21,6 +21,7 @@ import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.paint.Color;
 
 public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbackable {
 
@@ -141,6 +142,18 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 			Device device = midiDevice.get();
 			if (device instanceof DeviceColorAssociatorConnector) {
 				return ((DeviceColorAssociatorConnector) device).getDefaultStandardColor();
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public DisplayableFeedbackColor map(Color color) {
+		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
+		if (midiDevice.isPresent()) {
+			Device device = midiDevice.get();
+			if (device instanceof DeviceColorAssociatorConnector) {
+				return ((DeviceColorAssociatorConnector) device).map(color);
 			}
 		}
 		return null;

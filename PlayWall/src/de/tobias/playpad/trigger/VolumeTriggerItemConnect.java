@@ -4,6 +4,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemConnect;
+import de.tobias.playpad.viewcontroller.option.pad.trigger.VolumeTriggerViewController;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 
@@ -23,7 +24,7 @@ public class VolumeTriggerItemConnect extends TriggerItemConnect {
 
 	@Override
 	public ContentViewController getSettingsController(TriggerItem item) {
-		return null;
+		return new VolumeTriggerViewController((VolumeTriggerItem) item);
 	}
 
 	@Override

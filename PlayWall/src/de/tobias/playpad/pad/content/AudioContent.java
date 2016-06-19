@@ -1,11 +1,9 @@
 package de.tobias.playpad.pad.content;
 
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 import org.dom4j.Element;
 
@@ -20,6 +18,7 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.util.ZipFile;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -40,6 +39,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	private ObjectProperty<Duration> positionProperty = new SimpleObjectProperty<>();
 
 	private ChangeListener<Number> volumeListener;
+	private ChangeListener<Number> customVolumeListener;
 
 	private transient Transition transition;
 
@@ -47,7 +47,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		super(pad);
 		volumeListener = (a, b, c) ->
 		{
-			audioHandler.setVolume(c.doubleValue(), Profile.currentProfile().getProfileSettings().getVolume());
+			audioHandler.setVolume(c.doubleValue(), Profile.currentProfile().getProfileSettings().getVolume(), pad.getCustomVolume());
+		};
+		customVolumeListener = (a, b, c) ->
+		{
+			audioHandler.setVolume(pad.getVolume(), Profile.currentProfile().getProfileSettings().getVolume(), c.doubleValue());
 		};
 	}
 
@@ -74,7 +78,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	@Override
 	public void setMasterVolume(double masterVolume) {
 		if (audioHandler != null) {
-			audioHandler.setVolume(getPad().getVolume(), masterVolume);
+			audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
 		}
 	}
 
@@ -85,6 +89,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public void play() {
+		getPad().setCustomVolume(1);
 		getPad().setEof(false);
 		audioHandler.play();
 	}
@@ -106,18 +111,20 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			transition.stop();
 		}
 
-		if (getPad().getFade().getFadeIn().toMillis() > 0) {
+		Pad pad = getPad();
+
+		if (pad.getFade().getFadeIn().toMillis() > 0) {
 			double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-			audioHandler.setVolume(0, masterVolume);
+			audioHandler.setVolume(0, masterVolume, pad.getCustomVolume());
 			transition = new Transition() {
 
 				{
-					setCycleDuration(getPad().getFade().getFadeIn());
+					setCycleDuration(pad.getFade().getFadeIn());
 				}
 
 				@Override
 				protected void interpolate(double frac) {
-					audioHandler.setVolume(frac * getPad().getVolume(), masterVolume);
+					audioHandler.setVolume(frac * pad.getVolume(), masterVolume, pad.getCustomVolume());
 				}
 			};
 			transition.setOnFinished(e ->
@@ -144,7 +151,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 				@Override
 				protected void interpolate(double frac) {
 					double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-					audioHandler.setVolume(getPad().getVolume() - frac * getPad().getVolume(), masterVolume);
+					audioHandler.setVolume(getPad().getVolume() - frac * getPad().getVolume(), masterVolume, getPad().getCustomVolume());
 				}
 			};
 			transition.setOnFinished(event ->
@@ -152,7 +159,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 				onFinish.run();
 
 				double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-				audioHandler.setVolume(getPad().getVolume(), masterVolume);
+				audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
 				transition = null;
 			});
 			transition.play();
@@ -212,6 +219,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			positionProperty.bind(audioHandler.positionProperty());
 
 			getPad().volumeProperty().addListener(volumeListener);
+			getPad().customVolumeProperty().addListener(customVolumeListener);
 		} else {
 			getPad().throwException(path, new FileNotFoundException());
 		}
@@ -223,14 +231,17 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		positionProperty.unbind();
 
 		getPad().volumeProperty().removeListener(volumeListener);
+		getPad().customVolumeProperty().removeListener(customVolumeListener);
 
 		if (audioHandler != null)
 			audioHandler.unloadMedia();
-		try {
-			getPad().setStatus(PadStatus.EMPTY);
-		} catch (Exception e) {
-			Platform.runLater(() -> getPad().setStatus(PadStatus.EMPTY));
-		}
+
+		Platform.runLater(() ->
+		{
+			if (getPad() != null) {
+				getPad().setStatus(PadStatus.EMPTY);
+			}
+		});
 	}
 
 	@Override
@@ -244,33 +255,34 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void importMedia(Path mediaFolder, FileSystem zipfs, Element element) {
+	public void importMedia(Path mediaFolder, ZipFile zip, Element element) {
 		String fileName = Paths.get(element.getStringValue()).getFileName().toString();
-		Path mediaFile = zipfs.getPath(ProjectExporter.mediaFolder, fileName);
-		if (Files.exists(mediaFile)) {
-			Path desFile = mediaFolder.resolve(fileName);
+		Path mediaFile = Paths.get(ProjectExporter.mediaFolder, fileName);
 
-			try {
-				if (Files.notExists(desFile.getParent())) {
-					Files.createDirectories(desFile.getParent());
-				}
-				Files.copy(mediaFile, desFile, StandardCopyOption.REPLACE_EXISTING);
+		Path desFile = mediaFolder.resolve(fileName);
 
-				element.setText(desFile.toString());
-			} catch (Exception e) {
-				e.printStackTrace();
+		try {
+			if (Files.notExists(desFile.getParent())) {
+				Files.createDirectories(desFile.getParent());
 			}
+
+			if (Files.notExists(desFile))
+				zip.getFile(mediaFile, desFile);
+
+			element.setText(desFile.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void exportMedia(FileSystem mediaFolder, Element element) {
-		Path desPath = mediaFolder.getPath(ProjectExporter.mediaFolder, path.getFileName().toString());
+	public void exportMedia(ZipFile zip, Element element) {
+		Path desPath = Paths.get(ProjectExporter.mediaFolder, path.getFileName().toString());
 		try {
 			if (Files.notExists(desPath.getParent())) {
 				Files.createDirectories(desPath.getParent());
 			}
-			Files.copy(path, desPath, StandardCopyOption.REPLACE_EXISTING);
+			zip.addFile(path, desPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

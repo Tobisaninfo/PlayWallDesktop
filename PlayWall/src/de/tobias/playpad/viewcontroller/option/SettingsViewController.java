@@ -11,15 +11,19 @@ import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -27,6 +31,7 @@ import javafx.stage.Window;
 public class SettingsViewController extends ViewController implements ISettingsViewController {
 
 	@FXML private TabPane tabPane;
+	@FXML private ToggleButton lockedButton;
 	@FXML private Button finishButton;
 
 	protected List<SettingsTabViewController> tabs = new ArrayList<>();
@@ -73,8 +78,28 @@ public class SettingsViewController extends ViewController implements ISettingsV
 
 	@Override
 	public void init() {
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+
 		// KeyCode
 		addCloseKeyShortcut(() -> finishButton.fire());
+
+		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
+		lockedButton.setOnAction(e ->
+		{
+			boolean isLocked = lockedButton.isSelected();
+			// Model
+			profileSettings.setLocked(isLocked);
+
+			// SettingsUI
+			tabPane.setDisable(isLocked);
+		});
+
+		if (profileSettings.isLocked()) {
+			// SettingsUI
+			lockedButton.setSelected(true);
+			tabPane.setDisable(true);
+		}
+
 		finishButton.defaultButtonProperty().bind(finishButton.focusedProperty());
 	}
 

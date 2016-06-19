@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad;
 
 public enum PadStatus {
+
 	EMPTY,
 	ERROR,
 	READY,

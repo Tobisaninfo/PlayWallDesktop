@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.conntent.Pauseable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-class PadStatusListener implements ChangeListener<PadStatus> {
+public class PadStatusListener implements ChangeListener<PadStatus> {
 
 	private Pad pad;
 

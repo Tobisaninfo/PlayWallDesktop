@@ -6,7 +6,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemConnect;
 import de.tobias.playpad.tigger.TriggerRegistry;
-import de.tobias.playpad.trigger.TriggerWrapper;
+import de.tobias.playpad.trigger.TriggerUIWrapper;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -22,9 +22,9 @@ public class TriggerPointViewController extends ContentViewController {
 	@FXML private VBox itemView;
 	@FXML private HBox buttonBox;
 
-	private TriggerWrapper triggerWrapper;
+	private TriggerUIWrapper triggerWrapper;
 
-	public TriggerPointViewController(TriggerWrapper triggerWrapper) {
+	public TriggerPointViewController(TriggerUIWrapper triggerWrapper) {
 		super("triggerPoint", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
 		this.triggerWrapper = triggerWrapper;
 
@@ -77,6 +77,8 @@ public class TriggerPointViewController extends ContentViewController {
 				triggerWrapper.removeItem(item);
 				itemView.getChildren().removeAll(rootBox);
 			});
+
+//			HBox.setHgrow(itemBox, Priority.ALWAYS);
 		}
 	}
 }

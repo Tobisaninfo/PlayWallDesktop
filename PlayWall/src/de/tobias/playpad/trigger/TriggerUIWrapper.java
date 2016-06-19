@@ -8,11 +8,11 @@ import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class TriggerWrapper implements Displayable {
+public class TriggerUIWrapper implements Displayable {
 
 	private Trigger trigger;
 
-	public TriggerWrapper(Trigger trigger) {
+	public TriggerUIWrapper(Trigger trigger) {
 		this.trigger = trigger;
 		updateString();
 	}

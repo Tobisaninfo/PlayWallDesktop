@@ -5,10 +5,8 @@ import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
 import javafx.scene.text.Text;
 
-
 public class ErrorCell extends TableCell<PadException, String> {
 
-	
 	public ErrorCell() {
 		Text text = new Text();
 		text.getStyleClass().add("label");
