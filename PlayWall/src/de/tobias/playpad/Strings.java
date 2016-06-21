@@ -184,7 +184,7 @@ public class Strings {
 	public static final String Action_Navigate_Name = "Action.Navigate.Name";
 
 	// Content
-	public static final String Content_Empty = "Content.Empyt";
+	public static final String Content_Empty = "Content.Empty";
 	public static final String Content_Audio_Name = "Content.Audio.Name";
 
 	// NavigationType - Enum

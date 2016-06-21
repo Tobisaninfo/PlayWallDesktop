@@ -494,7 +494,7 @@ public class Pad {
 		}
 
 		// Trigger
-		Element triggersElement = element.element("Triggers");
+		Element triggersElement = element.element("Triggers");			// TODO Externalize
 		if (triggersElement != null) {
 			for (Object triggerObj : triggersElement.elements("Trigger")) {
 				if (triggerObj instanceof Element) {

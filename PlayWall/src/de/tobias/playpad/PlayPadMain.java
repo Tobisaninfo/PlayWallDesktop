@@ -91,8 +91,6 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 // Profile mit UUID
 
-// FEATURE Backups irgendwann löschen
-// FEATURE Global Volume Trigger mit x% und 100%
 
 // Pad System neu machen
 // Neue PadViewController für jedes pad
@@ -101,9 +99,13 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 // TEST Trigger
 
-// FEATURE Option bei Import Media auch Copy Media in Library
 
+
+// PlayWall 5.1
+// FEATURE Global Volume Trigger mit x% und 100%
+// FEATURE Option bei Import Media auch Copy Media in Library
 // FEATURE lnk für Windows mit Dateiparameter
+// FEATURE Backups irgendwann löschen
 
 public class PlayPadMain extends Application implements LocalizationDelegate, PlayPad, ProfileListener {
 
