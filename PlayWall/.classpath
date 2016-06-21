@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**/.DS_Store|**/.gitignore|de/tobias/playpad/viewcontroller/PadSettingsViewController.java|de/tobias/playpad/viewcontroller/PresetsViewController.java|de/tobias/playpad/viewcontroller/cell/TimeModeCell.java|de/tobias/playpad/viewcontroller/dialog/DragAndDropDialog.java|de/tobias/playpad/viewcontroller/option/MidiTabViewController2.java|de/tobias/playpad/viewcontroller/pad/PadDragHandler.java|de/tobias/playpad/viewcontroller/pad/PadViewControllerOld.java|de/tobias/playpad/viewcontroller/pad/PlayDurationEventHandler.java|de/tobias/playpad/viewcontroller/settings/midi/action/CartActionViewController.java|de/tobias/playpad/viewcontroller/settings/midi/action/CartSimpleViewController.java|de/tobias/playpad/viewcontroller/settings/midi/action/CustomSettingsViewController.java|de/tobias/playpad/viewcontroller/settings/midi/action/MidiKeySettingsViewController.java|de/tobias/playpad/viewcontroller/settings/midi/action/PageSettingsViewController.java|icon.icns|icon.ico" kind="src" path="src"/>
+	<classpathentry excluding="**/.DS_Store|**/.gitignore|icon.icns|icon.ico" kind="src" path="src"/>
 	<classpathentry excluding="**/.gitignor|de/tobias/playpad/assets/files/dialogDnD.pxm" kind="src" path="assets"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
