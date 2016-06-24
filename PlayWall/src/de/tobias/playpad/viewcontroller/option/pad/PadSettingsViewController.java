@@ -7,6 +7,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
@@ -44,7 +45,8 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		if (pad.getContent() != null) {
 			try {
 				// Get Pad Type specific tab
-				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
+				PadContentConnect padContentConnect = PadContentRegistry
+						.getPadContentConnect(pad.getContent().getType());
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
@@ -54,8 +56,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		}
 
 		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l ->
-		{
+		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> {
 			try {
 				l.onInit(this);
 			} catch (Exception e) {
@@ -71,7 +72,13 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	}
 
 	private void setTitle(Pad pad) {
-		getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+		if (pad.getStatus() != PadStatus.EMPTY) {
+			getStage().setTitle(
+					Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+		} else {
+			getStage().setTitle(
+					Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable()));
+		}
 	}
 
 	@Override

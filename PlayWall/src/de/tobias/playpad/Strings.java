@@ -22,6 +22,7 @@ public class Strings {
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
+	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
 	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
