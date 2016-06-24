@@ -68,6 +68,8 @@ import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.ConsoleUtils;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
+import de.tobias.utils.util.OS;
+import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -91,15 +93,12 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 // Profile mit UUID
 
-
 // Pad System neu machen
 // Neue PadViewController für jedes pad
 // Midi Modell Überarbeiten
 // Bei Seitenwechsel Pad auf Play lassen
 
 // TEST Trigger
-
-
 
 // PlayWall 5.1
 // FEATURE Global Volume Trigger mit x% und 100%
@@ -138,6 +137,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 	}
 
 	public static void main(String[] args) throws Exception {
+		if (OS.getType() == OSType.Windows) {
+			System.setProperty("glass.accessible.force", "false");
+		}
+
 		// Debug
 		System.setOut(ConsoleUtils.convertStream(System.out, "[PlayWall] "));
 		System.setErr(ConsoleUtils.convertStream(System.err, "[PlayWall] "));
