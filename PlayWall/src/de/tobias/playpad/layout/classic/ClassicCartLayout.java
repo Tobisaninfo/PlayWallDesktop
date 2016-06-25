@@ -210,7 +210,7 @@ public class ClassicCartLayout extends Layout implements CartLayout {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
+	public void handleWarning(IPadViewController controller, Warning warning, GlobalLayout layout) {
 		final IPadView view = controller.getParent();
 
 		try {

@@ -88,7 +88,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		Warning warning = pad.getWarning();
 
 		if (pad.isCustomLayout()) {
-			pad.getLayout().handleWarning(controller, warning);
+			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}

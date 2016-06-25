@@ -25,11 +25,11 @@ public interface CartLayout {
 	 * @param controller
 	 * @param warning
 	 */
-	public abstract void handleWarning(IPadViewController controller, Warning warning);
+	public abstract void handleWarning(IPadViewController controller, Warning warning, GlobalLayout animate);
 
 	public default void stopWarning(IPadViewController controller) {}
 
 	public void reset();
-	
+
 	public void copyGlobalLayout(GlobalLayout globalLayout);
 }
