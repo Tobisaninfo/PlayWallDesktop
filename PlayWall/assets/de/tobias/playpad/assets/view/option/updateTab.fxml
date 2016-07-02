@@ -13,12 +13,6 @@
             <Label fx:id="currentVersionLabel" layoutX="175.0" layoutY="14.0" text="5.0.1 (stable)" />
          </children>
       </HBox>
-      <HBox layoutX="14.0" layoutY="36.0" spacing="14.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="36.0" prefWidth="150.0" text="%settings.update.label.new" />
-            <Label fx:id="newVersionLabel" layoutX="175.0" layoutY="36.0" text="5.0.2 (stable)" />
-         </children>
-      </HBox>
       <Separator prefWidth="200.0" />
       <HBox spacing="14.0">
          <children>
