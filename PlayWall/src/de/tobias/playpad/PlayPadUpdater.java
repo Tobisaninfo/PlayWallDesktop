@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import de.tobias.playpad.update.Updatable;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.SystemUtils;

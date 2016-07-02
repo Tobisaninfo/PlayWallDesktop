@@ -15,9 +15,10 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.Updatable;
-import de.tobias.playpad.UpdateRegistery;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.update.Updatable;
+import de.tobias.playpad.update.UpdateChannel;
+import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
 import de.tobias.playpad.viewcontroller.dialog.UpdaterDialog;
@@ -35,6 +36,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
@@ -58,6 +60,9 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	@FXML private ListView<Updatable> openUpdateList;
 	@FXML private Button updateButton;
 
+	@FXML private ComboBox<UpdateChannel> updateChannelComboBox;
+
+	// Placeholder for List
 	private ProgressIndicator progressIndecator;
 	private Label placeholderLabel;
 
@@ -84,6 +89,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	@Override
 	public void init() {
 		openUpdateList.setCellFactory(list -> new UpdateCell());
+		updateChannelComboBox.getItems().setAll(UpdateChannel.values());
 
 		progressIndecator = new ProgressIndicator(-1);
 		progressIndecator.setMinSize(25, 25);

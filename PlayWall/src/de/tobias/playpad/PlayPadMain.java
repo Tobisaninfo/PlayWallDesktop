@@ -53,6 +53,8 @@ import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.tigger.TriggerRegistry;
 import de.tobias.playpad.trigger.CartTriggerItemConnect;
 import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
+import de.tobias.playpad.update.Updatable;
+import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;

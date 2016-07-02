@@ -5,7 +5,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutX="14.0" layoutY="14.0" spacing="14.0">
@@ -38,6 +37,12 @@
          <children>
             <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.update.label.available" />
             <ListView fx:id="openUpdateList" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" spacing="14.0">
+         <children>
+            <Label prefWidth="150.0" text="%settings.update.label.channel" />
+            <ComboBox fx:id="updateChannelComboBox" prefWidth="150.0" />
          </children>
       </HBox>
       <HBox alignment="TOP_RIGHT">

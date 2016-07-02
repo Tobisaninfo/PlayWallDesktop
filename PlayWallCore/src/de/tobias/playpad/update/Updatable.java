@@ -1,4 +1,4 @@
-package de.tobias.playpad;
+package de.tobias.playpad.update;
 
 import java.net.URL;
 import java.nio.file.Path;
