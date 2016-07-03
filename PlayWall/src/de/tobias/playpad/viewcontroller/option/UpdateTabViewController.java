@@ -93,7 +93,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		});
 
 		progressIndecator = new ProgressIndicator(-1);
-		progressIndecator.setMinSize(25, 25);
+		progressIndecator.setMinSize(75, 75);
+		progressIndecator.setMaxSize(75, 75);
 
 		placeholderLabel = new Label(Localization.getString(Strings.UI_Placeholder_Updates));
 		openUpdateList.setPlaceholder(placeholderLabel);
