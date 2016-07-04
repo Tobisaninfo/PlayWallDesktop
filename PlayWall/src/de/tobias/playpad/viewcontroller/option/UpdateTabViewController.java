@@ -44,6 +44,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -63,6 +64,9 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	@FXML private Button updateButton;
 
 	@FXML private ComboBox<UpdateChannel> updateChannelComboBox;
+
+	@FXML private Label infoCLabel;
+	@FXML private Label infoELabel;
 
 	// Placeholder for List
 	private ProgressIndicator progressIndecator;
@@ -91,6 +95,9 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		{
 			Profile.currentProfile().getProfileSettings().setUpdateChannel(c);
 		});
+
+		infoCLabel.setGraphic(new ImageView("de/tobias/playpad/assets/files/class_obj.png"));
+		infoELabel.setGraphic(new ImageView("de/tobias/playpad/assets/files/enum_obj.png"));
 
 		progressIndecator = new ProgressIndicator(-1);
 		progressIndecator.setMinSize(75, 75);
