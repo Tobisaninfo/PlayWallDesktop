@@ -54,6 +54,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	private PadPositionListener padPositionListener;
 
 	private PadDragListener padDragListener;
+	private transient PadSettingsViewController padSettingsViewController;
 
 	public PadViewController() {
 		view = new PadView(this);
@@ -183,13 +184,15 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			}
 
 			Stage owner = mvc.getStage();
-			PadSettingsViewController controller = new PadSettingsViewController(pad, owner);
-			controller.getStage().setOnHiding(ev ->
-			{
-				if (view != null && pad != null)
-					view.setTriggerLabelActive(pad.hasTriggerItems());
-			});
-			controller.getStage().show();
+			if (padSettingsViewController == null) {
+				padSettingsViewController = new PadSettingsViewController(pad, owner);
+				padSettingsViewController.getStage().setOnHiding(ev ->
+				{
+					if (view != null && pad != null)
+						view.setTriggerLabelActive(pad.hasTriggerItems());
+				});
+			}
+			padSettingsViewController.getStage().show();
 		}
 	}
 
@@ -230,7 +233,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	@Override
 	public void setPad(Pad pad) {
 		unconnectPad();
-		
+
 		this.pad = pad;
 
 		view.setPreviewContent(pad);
