@@ -198,6 +198,9 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 
+	// Update Channel - Basename
+	public static final String Update_Channel_BaseName = "UpdateChannel.";
+	
 	// Error - Layout
 	public static final String Error_Layout_Load = "Error.Layout.Load";
 

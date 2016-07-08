@@ -22,6 +22,7 @@ import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
+import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
 import de.tobias.playpad.viewcontroller.dialog.UpdaterDialog;
 import de.tobias.utils.application.ApplicationInfo;
@@ -81,8 +82,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
 
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
-		String currentVersionString = Localization.getString(Strings.UI_Window_Settings_Updates_CurrentVersion, info.getVersion(),
-				info.getBuild());
+		String currentVersionString = Localization.getString(Strings.UI_Window_Settings_Updates_CurrentVersion,
+				info.getVersion(), info.getBuild());
 		currentVersionLabel.setText(currentVersionString);
 	}
 
@@ -90,9 +91,10 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	public void init() {
 		openUpdateList.setCellFactory(list -> new UpdateCell());
 		updateChannelComboBox.getItems().setAll(UpdateChannel.values());
+		updateChannelComboBox.setCellFactory(list -> new EnumCell<>(Strings.Update_Channel_BaseName));
+		updateChannelComboBox.setButtonCell(new EnumCell<>(Strings.Update_Channel_BaseName));
 
-		updateChannelComboBox.valueProperty().addListener((a, b, c) ->
-		{
+		updateChannelComboBox.valueProperty().addListener((a, b, c) -> {
 			Profile.currentProfile().getProfileSettings().setUpdateChannel(c);
 		});
 
@@ -117,8 +119,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		if (profile != null) {
 			openUpdateList.setPlaceholder(progressIndecator);
 
-			Worker.runLater(() ->
-			{
+			Worker.runLater(() -> {
 				// Search for updates
 				try {
 					UpdateRegistery.lookupUpdates(profile.getProfileSettings().getUpdateChannel());
@@ -127,8 +128,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 					showErrorMessage(Localization.getString(Strings.Error_Update_Download, e.getLocalizedMessage()));
 				}
 
-				Platform.runLater(() ->
-				{
+				Platform.runLater(() -> {
 					openUpdateList.setPlaceholder(placeholderLabel);
 					openUpdateList.getItems().setAll(UpdateRegistery.getAvailableUpdates());
 					updateButton.setDisable(openUpdateList.getItems().isEmpty());
@@ -144,8 +144,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	}
 
 	public static void update(Window dialogOwner) {
-		String parameter = UpdateRegistery
-				.buildParamaterString(ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, DOWNLOAD_FOLDER).toString());
+		String parameter = UpdateRegistery.buildParamaterString(
+				ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, DOWNLOAD_FOLDER).toString());
 		if (OS.getType() == OSType.Windows) {
 			windowsUpdate(dialogOwner, parameter);
 		} else {
@@ -173,10 +173,9 @@ public class UpdateTabViewController extends SettingsTabViewController {
 				UpdaterDialog dialog = new UpdaterDialog(dialogOwner);
 				dialog.show();
 
-				Worker.runLater(() ->
-				{
-					String updaterURL = ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM)
-							+ UPDATER_JAR;
+				Worker.runLater(() -> {
+					String updaterURL = ApplicationUtils.getApplication().getInfo().getUserInfo()
+							.get(AppUserInfoStrings.UPDATER_PROGRAM) + UPDATER_JAR;
 					Path path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_JAR);
 					try {
 						downloadUpdater(updaterURL, path);
@@ -213,8 +212,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 				UpdaterDialog dialog = new UpdaterDialog(dialogOwner);
 				dialog.show();
 
-				Worker.runLater(() ->
-				{
+				Worker.runLater(() -> {
 					ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 					String updaterURL = info.getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM) + UPDATER_EXE;
 					Path path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_EXE);
@@ -258,7 +256,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	}
 
 	private static void startJarFile(String parameter, Path fileJarFolder) throws IOException {
-		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileJarFolder.toAbsolutePath().toString(), parameter);
+		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileJarFolder.toAbsolutePath().toString(),
+				parameter);
 		builder.start();
 		System.exit(0);
 	}
