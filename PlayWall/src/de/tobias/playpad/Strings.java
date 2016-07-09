@@ -156,10 +156,7 @@ public class Strings {
 
 	// Error - Plugins
 	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
-
-	/*
-	 * NEU
-	 */
+	public static final String Error_Plugins_Available = "Error.Plugins.Available";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";
