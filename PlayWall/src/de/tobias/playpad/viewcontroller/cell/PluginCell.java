@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.Plugin;
+import de.tobias.playpad.plugin.Plugins;
+import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import javafx.beans.value.ChangeListener;
@@ -47,7 +51,7 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 				checkBox.setSelected(false);
 			}
 			setGraphic(buttons);
-			checkBox.setText(item.getName());
+			checkBox.setText(item.toString());
 		} else {
 			setGraphic(null);
 		}
@@ -55,24 +59,41 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 
 	@Override
 	public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+		App app = ApplicationUtils.getApplication();
+
+		Path path = app.getPath(PathType.LIBRARY, plugin.getFileName());
 		if (newValue) { // Wurde Aktiviert
 			downloadPlugin(plugin, path);
 
 			// Dependencies
-			for (String dependencyName : plugin.getDependencies()) {
-				for (Plugin plugin : Plugin.getPlugins()) {
-					if (plugin.getName().equals(dependencyName)) {
-						Path decPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-						downloadPlugin(plugin, decPath);
-					}
-				}
-			}
+			List<Plugin> dependencies = findDependencies();
+			dependencies.forEach(p ->
+			{
+				Path decPath = app.getPath(PathType.LIBRARY, p.getFileName());
+				downloadPlugin(p, decPath);
 
+				// Add Plugin to classpath
+				manager.addPluginsFrom(decPath.toUri());
+			});
+
+			// Add Plugin to classpath
 			manager.addPluginsFrom(path.toUri());
 		} else {
+			// Deaktivieren
 			PlayPadMain.addDeletedPlugin(path);
 		}
+	}
+
+	private List<Plugin> findDependencies() {
+		List<Plugin> plugins = new ArrayList<>();
+		for (String dependencyName : plugin.getDependencies()) {
+			for (Plugin plugin : Plugins.getPlugins()) {
+				if (plugin.getName().equals(dependencyName)) {
+					plugins.add(plugin);
+				}
+			}
+		}
+		return plugins;
 	}
 
 	private void downloadPlugin(Plugin plugin, Path path) {

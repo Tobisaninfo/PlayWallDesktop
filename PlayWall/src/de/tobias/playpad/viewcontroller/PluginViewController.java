@@ -2,17 +2,23 @@ package de.tobias.playpad.viewcontroller;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
+
+import org.bukkit.configuration.MemorySection;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.plugin.Plugin;
+import de.tobias.playpad.plugin.Plugins;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.playpad.viewcontroller.cell.PluginCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -40,11 +46,28 @@ public class PluginViewController extends ViewController {
 		Worker.runLater(() ->
 		{
 			try {
-				String pluginInfoURL = ApplicationUtils.getApplication().getInfo().getUserInfo().getString(AppUserInfoStrings.PLUGINS_URL);
-				Plugin.load(pluginInfoURL);
+				String pluginInfoURL = null;
 
-				Collections.sort(Plugin.getPlugins());
-				pluginListView.getItems().addAll(Plugin.getPlugins());
+				MemorySection userInfo = ApplicationUtils.getApplication().getInfo().getUserInfo();
+				UpdateChannel updateChannel = Profile.currentProfile().getProfileSettings().getUpdateChannel();
+
+				if (updateChannel == UpdateChannel.STABLE) {
+					pluginInfoURL = userInfo.getString(AppUserInfoStrings.PLUGINS_URL_STABLE);
+				} else if (updateChannel == UpdateChannel.BETA) {
+					pluginInfoURL = userInfo.getString(AppUserInfoStrings.PLUGINS_URL_BETA);
+				} else {
+					// No Plugins for this UpdateChannel Available --> Return
+					showInfoMessage(Localization.getString(Strings.Error_Plugins_Available));
+					return;
+				}
+
+				List<Plugin> plugins = Plugins.load(pluginInfoURL, true);
+
+				Collections.sort(plugins);
+				Platform.runLater(() ->
+				{
+					pluginListView.getItems().setAll(plugins);
+				});
 			} catch (IOException e) {
 				e.printStackTrace();
 				showErrorMessage(Localization.getString(Strings.Error_Standard_Gen), PlayPadMain.stageIcon);
