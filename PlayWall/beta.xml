@@ -17,5 +17,10 @@
 		<!-- Upload Jar -->
 		<input addproperty="password">Enter password</input>
 		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="beta" remoteFileName="PlayWall.jar"/>
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/ActionPlugin.jar" remotePath="beta/plugins" remoteFileName="ActionPlugin.jar"/>
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/AwakePlugin.jar" remotePath="beta/plugins" remoteFileName="AwakePlugin.jar"/>
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/EqualizerPlugin.jar" remotePath="beta/plugins" remoteFileName="EqualizerPlugin.jar"/>
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/LaunchPadPlugin.jar" remotePath="beta/plugins" remoteFileName="LaunchPadPlugin.jar"/>
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/MediaPlugin.jar" remotePath="beta/plugins" remoteFileName="MediaPlugin.jar"/>
 	</target>
 </project>

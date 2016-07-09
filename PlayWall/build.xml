@@ -7,7 +7,7 @@
 					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
 					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/snakeyaml-1.11.jar:
 					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/guava-15.0.jar" />
-		<taskdef name="buildNumber" classname="de.tobias.playwallpm.task.BuildNumberTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
+	<taskdef name="buildNumber" classname="de.tobias.playwallpm.task.BuildNumberTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
 					/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar:
 					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
 					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/snakeyaml-1.11.jar:
@@ -29,7 +29,12 @@
 
 		<input addproperty="password">Enter password</input>
 
-		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="beta" remoteFileName="PlayWall.jar" />
-		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.exe" remotePath="beta" remoteFileName="PlayWall.exe" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="stable" remoteFileName="PlayWall.jar" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.exe" remotePath="stable" remoteFileName="PlayWall.exe" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/ActionPlugin.jar" remotePath="stable/plugins" remoteFileName="ActionPlugin.jar" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/AwakePlugin.jar" remotePath="stable/plugins" remoteFileName="AwakePlugin.jar" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/EqualizerPlugin.jar" remotePath="stable/plugins" remoteFileName="EqualizerPlugin.jar" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/LaunchPadPlugin.jar" remotePath="stable/plugins" remoteFileName="LaunchPadPlugin.jar" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/MediaPlugin.jar" remotePath="stable/plugins" remoteFileName="MediaPlugin.jar" />
 	</target>
 </project>
