@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,6 +54,8 @@ import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.tigger.TriggerRegistry;
 import de.tobias.playpad.trigger.CartTriggerItemConnect;
 import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
+import de.tobias.playpad.update.Updatable;
+import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
@@ -322,25 +325,30 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		mainViewController = new MainViewController(project, mainViewListeners, pluginManager);
 	}
 
+	/**
+	 * Handle Auto Update on profile reload
+	 */
 	@Override
-	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
+	public void reloadSettings(Profile oldProfile, Profile newProfile) {
 		// Update PlayWall
-		if (currentProfile.getProfileSettings().isAutoUpdate()) {
+		if (newProfile.getProfileSettings().isAutoUpdate()) {
 			Worker.runLater(() ->
 			{
-				UpdateRegistery.lookupUpdates();
-				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
-					Platform.runLater(() ->
-					{
-						Alert alert = new Alert(AlertType.CONFIRMATION);
-						alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
-						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
+				try {
+					UpdateRegistery.lookupUpdates(newProfile.getProfileSettings().getUpdateChannel());
+					if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
+						Platform.runLater(() ->
 						{
-							UpdateTabViewController.update(null);
+							Alert alert = new Alert(AlertType.CONFIRMATION);
+							alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
+							alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
+							alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
+							{
+								UpdateTabViewController.update(null);
+							});
 						});
-					});
-				}
+					}
+				} catch (IOException | URISyntaxException e) {}
 			});
 		}
 	}

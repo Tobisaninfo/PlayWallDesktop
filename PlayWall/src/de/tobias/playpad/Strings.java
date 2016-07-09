@@ -198,13 +198,15 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 
+	// Update Channel - Basename
+	public static final String Update_Channel_BaseName = "UpdateChannel.";
+	
 	// Error - Layout
 	public static final String Error_Layout_Load = "Error.Layout.Load";
 
 	// UI - Dialog - Update
 	public static final String UI_Dialog_Update_Cell = "UI.Dialog.Update.Cell";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
-	public static final String UI_Window_Settings_Updates_NewVersion = "UI.Window.Settings.Updates.NewVersion";
 
 	// Error - Update - Downlaod
 	public static final String Error_Update_Download = "Error.Update.Download";

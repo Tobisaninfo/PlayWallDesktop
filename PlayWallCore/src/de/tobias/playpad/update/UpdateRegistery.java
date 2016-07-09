@@ -1,5 +1,6 @@
-package de.tobias.playpad;
+package de.tobias.playpad.update;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,11 @@ public class UpdateRegistery {
 		return availableUpdates;
 	}
 
-	public static List<Updatable> lookupUpdates() {
+	public static List<Updatable> lookupUpdates(UpdateChannel channel) throws IOException, URISyntaxException {
 		availableUpdates.clear();
 		for (Updatable updatable : UpdateRegistery.updatables) {
-			if (updatable.checkUpdate()) {
+			updatable.loadInformation(channel);
+			if (updatable.isUpdateAvailable()) {
 				availableUpdates.add(updatable);
 			}
 		}
@@ -38,6 +40,8 @@ public class UpdateRegistery {
 	private static final String URL = "url";
 	private static final String EXECUTE_FILE = "executePath";
 
+	
+	
 	public static String buildParamaterString(String downloadPath) {
 		JSONObject data = new JSONObject();
 		data.put(DOWNLOAD_PATH, downloadPath);

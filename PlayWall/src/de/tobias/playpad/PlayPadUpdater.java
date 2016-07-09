@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import de.tobias.playpad.update.Updatable;
+import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.SystemUtils;
@@ -30,47 +32,36 @@ public class PlayPadUpdater implements Updatable {
 
 	@Override
 	public int getNewBuild() {
-		if (newBuild == 0) {
-			checkUpdate();
-		}
 		return newBuild;
 	}
 
 	@Override
 	public String getNewVersion() {
-		if (newVersion == null) {
-			checkUpdate();
-		}
 		return newVersion;
 	}
 
 	@Override
-	public boolean checkUpdate() {
+	public void loadInformation(UpdateChannel channel) throws IOException, URISyntaxException {
 		App app = ApplicationUtils.getMainApplication();
-		try {
-			URL url = new URL(app.getInfo().getUpdateURL() + "/version.yml");
-			FileConfiguration config = YamlConfiguration.loadConfiguration(url.openStream());
-			newBuild = config.getInt("build");
-			newVersion = config.getString("version");
+		URL url = new URL(app.getInfo().getUpdateURL() + "/" + channel + "/version.yml");
+		FileConfiguration config = YamlConfiguration.loadConfiguration(url.openStream());
+		newBuild = config.getInt("build");
+		newVersion = config.getString("version");
 
-			if (SystemUtils.isExe()) {
-				remotePath = new URL(config.getString("pathExe"));
-			} else {
-				remotePath = new URL(config.getString("pathJar"));				
-			}
-			
-			return getCurrentBuild() < getNewBuild();
-		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+		if (SystemUtils.isExe() && channel == UpdateChannel.STABLE) { // EXE only for stable release
+			remotePath = new URL(config.getString("pathExe"));
+		} else {
+			remotePath = new URL(config.getString("pathJar"));
 		}
-		return false;
+	}
+
+	@Override
+	public boolean isUpdateAvailable() {
+		return getCurrentBuild() < getNewBuild();
 	}
 
 	@Override
 	public URL getDownloadPath() {
-		if (remotePath == null) {
-			checkUpdate();
-		}
 		return remotePath;
 	}
 
