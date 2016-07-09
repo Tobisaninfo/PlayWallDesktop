@@ -3,7 +3,10 @@
 	<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="/Users/tobias/Documents/Programmieren/Java/ant/lib/appbundler-1.0.jar" />
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="/Users/tobias/Documents/Programmieren/Java/ant/lib/launch4j/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
 	<taskdef name="upload" classname="de.tobias.playwallpm.task.PlayWallPMTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
-				/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar" />
+				/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar:
+				/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
+				/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/snakeyaml-1.11.jar:
+				/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/guava-15.0.jar" />
 	<taskdef name="buildNumber" classname="de.tobias.playwallpm.task.BuildNumberTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
 				/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar:
 				/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
@@ -13,8 +16,11 @@
 	<target name="buildApp">
 
 		<!-- Update Version Number -->
+		<buildNumber path="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/application.yml" />
+		<buildNumber path="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin/application.yml" />
 
-		<jar destfile="PlayWall/build/PlayWall.jar">
+		<!-- Build Jar -->
+		<jar destfile="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar">
 			<manifest>
 				<attribute name="Main-Class" value="de.tobias.playpad.PlayPadMain" />
 			</manifest>
@@ -39,22 +45,9 @@
 			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/JLayer1.0.1/" includes="jl1.0.1.jar" />
 		</jar>
 
-		<bundleapp outputdirectory="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist" name="Play Wall" displayname="Play Wall" identifier="de.tobias.playwall" mainclassname="de.tobias.playpad.PlayPadMain" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.icns">
-			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home" />
-			<classpath file="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" />
-		</bundleapp>
-
-		<launch4j>
-			<config headerType="gui" outfile="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist/PlayWall.exe" dontWrapJar="false" jarPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.ico">
-				<classPath mainClass="de.tobias.playpad.PlayPadMain" />
-				<jre minVersion="1.8.0">
-				</jre>
-			</config>
-		</launch4j>
-
+		<!-- Upload Jar -->
 		<input addproperty="password">Enter password</input>
 
-		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="beta" remoteFileName="PlayWall.jar" />
-		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.exe" remotePath="beta" remoteFileName="PlayWall.exe" />
+		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="beta" remoteFileName="PlayWall.jar"/>
 	</target>
 </project>
