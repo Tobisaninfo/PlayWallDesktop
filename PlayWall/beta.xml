@@ -14,40 +14,8 @@
 				/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/guava-15.0.jar" />
 
 	<target name="buildApp">
-
-		<!-- Update Version Number -->
-		<buildNumber path="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/application.yml" />
-		<buildNumber path="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin/application.yml" />
-
-		<!-- Build Jar -->
-		<jar destfile="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar">
-			<manifest>
-				<attribute name="Main-Class" value="de.tobias.playpad.PlayPadMain" />
-			</manifest>
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.class" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.png" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.yml" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.fxml" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.css" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/bin" includes="**/*.properties" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWallCore/bin" includes="**/*.class" />
-			<fileset dir="/Users/tobias/Documents/Programmieren/Java/git/libs/libUtils/bin" includes="**/*.class" />
-
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/JavaFX/controlsfx-8/" includes="controlsfx-8.40.10.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/XML/" includes="dom4j-1.6.1.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/" includes="guava-15.0.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/" includes="snakeyaml-1.11.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/" includes="YAMLStorage.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/HTML/" includes="gagawa-1.0.1.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/jspf/dist/" includes="jspf.core-1.0.2.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/tinysound/" includes="tinysound-1.1.1.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/tinysound/lib/" includes="**/*.jar" />
-			<zipgroupfileset dir="/Users/tobias/Documents/Programmieren/Java/Libraries/JLayer1.0.1/" includes="jl1.0.1.jar" />
-		</jar>
-
 		<!-- Upload Jar -->
 		<input addproperty="password">Enter password</input>
-
 		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="beta" remoteFileName="PlayWall.jar"/>
 	</target>
 </project>
