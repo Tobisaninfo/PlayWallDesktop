@@ -40,7 +40,7 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.projectNameEx)) {
+			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);

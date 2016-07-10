@@ -19,52 +19,110 @@ import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Hold all information about the pads and it's settings.
+ * 
+ * @author tobias
+ *
+ */
 public class Project {
 
-	public static final String projectNameEx = "\\w{1}[\\w\\s-_]{0,}";
+	/**
+	 * Pattern für den Namen des Projekts
+	 */
+	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
+	/**
+	 * Dateiendung für eine projekt Datei
+	 */
 	public static final String FILE_EXTENSION = ".xml";
 
+	/**
+	 * Die projektreferenz gibt auskunft über den Namen und die UUID des Projektes
+	 */
 	private ProjectReference ref;
+	/**
+	 * Liste mit allen Pads.
+	 */
 	private HashMap<Integer, Pad> pads;
+	/**
+	 * Liste mit den aktuellen Laufzeitfehlern.
+	 */
 	private ObservableList<PadException> exceptions;
 
+	/**
+	 * Erstellt ein neues leeres Projekt mit einer Referenz.
+	 * 
+	 * @param ref
+	 *            Referenz mit Namen des Projekts.
+	 */
 	public Project(ProjectReference ref) {
 		this.ref = ref;
 		this.pads = new HashMap<>();
 		this.exceptions = FXCollections.observableArrayList();
 	}
 
+	/**
+	 * Gibt die Projekt Referenz zurück. Dazu zählen Name und UUID sowie das zugehörige Profile.
+	 * 
+	 * @return Referenz.
+	 */
 	public ProjectReference getRef() {
 		return ref;
 	}
 
+	// TODO Update in 5.1.0
+	/**
+	 * Gibt ein Pad an einem Index zurück. Sollte kein pad vorhanden sein (weil null, so wird vorher ein neues erzeugt.)
+	 * 
+	 * @param index
+	 *            Index
+	 * @return Pad am Index i
+	 */
 	public Pad getPad(int index) {
-		if (pads.containsKey(index)) {
-			return pads.get(index);
-		} else {
-			pads.put(index, new Pad(this, index)); // Create Pad if not exists
-			return pads.get(index);
+		if (!pads.containsKey(index)) {
+			addPadForIndex(index);
 		}
+		return pads.get(index);
 	}
 
+	/**
+	 * Erstellt ein neues leeres Pad (mit Referenz zu diesem Projekt) am Index i.
+	 * 
+	 * @param index
+	 *            Index i
+	 */
+	private void addPadForIndex(int index) {
+		pads.put(index, new Pad(this, index));
+	}
+
+	/**
+	 * Ersetz ein Pad an einem Index i.
+	 * 
+	 * @param index
+	 *            Index i
+	 * @param pad
+	 *            Neues Pad für den Index i
+	 */
 	public void setPad(int index, Pad pad) {
 		pad.setIndex(index);
 		pads.put(index, pad);
 	}
 
+	/*
+	 * Speichern und Laden
+	 */
+
 	private static final String ROOT_ELEMENT = "Project";
-	static final String PAD_ELEMENT = "Pad";
+	protected static final String PAD_ELEMENT = "Pad";
 
 	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
 			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException {
+		Path projectPath = ref.getProjectPath();
 
-		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		if (Files.exists(projectPath)) {
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(Files.newInputStream(projectPath));
@@ -103,7 +161,7 @@ public class Project {
 	}
 
 	public void save() throws IOException {
-		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
+		Path projectPath = ref.getProjectPath();
 		Document document = DocumentHelper.createDocument();
 
 		Element rootElement = document.addElement(ROOT_ELEMENT);

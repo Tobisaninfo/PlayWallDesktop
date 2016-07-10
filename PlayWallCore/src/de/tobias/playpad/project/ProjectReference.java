@@ -19,6 +19,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.SimpleStringProperty;
@@ -235,6 +236,12 @@ public class ProjectReference implements Displayable {
 
 	public String getFileName() {
 		return uuid + Project.FILE_EXTENSION;
+	}
+
+	public Path getProjectPath() {
+		App application = ApplicationUtils.getApplication();
+		Path projectPath = application.getPath(PathType.DOCUMENTS, getFileName());
+		return projectPath;
 	}
 
 	public static ProjectReference getProject(UUID project) {
