@@ -23,6 +23,7 @@ public class Plugins {
 
 	public static List<Plugin> load(String pluginInfoURL, boolean fetch) throws IOException {
 		if (plugins.isEmpty() || fetch) {
+			plugins.clear();
 			URL url = new URL(pluginInfoURL);
 
 			FileConfiguration cfg = YamlConfiguration.loadConfiguration(url.openStream());
