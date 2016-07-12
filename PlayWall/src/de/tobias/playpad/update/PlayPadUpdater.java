@@ -1,4 +1,4 @@
-package de.tobias.playpad;
+package de.tobias.playpad.update;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

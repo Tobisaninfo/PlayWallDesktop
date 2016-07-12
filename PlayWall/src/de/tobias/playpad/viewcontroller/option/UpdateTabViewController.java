@@ -53,7 +53,7 @@ import javafx.stage.Window;
 
 public class UpdateTabViewController extends SettingsTabViewController {
 
-	private static final String DOWNLOAD_FOLDER = "Updates";
+	@Deprecated private static final String DOWNLOAD_FOLDER = "Updates";
 	private static final String UPDATER_JAR = "Updater.jar";
 	private static final String UPDATER_EXE = "Updater.exe";
 
@@ -268,6 +268,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		oStr.close();
 	}
 
+	@Deprecated
 	private static void startExeFile(String parameter, Path fileExe, boolean admin) throws IOException {
 		if (admin) {
 			NativeLauncher.executeAsAdministrator(fileExe.toAbsolutePath().toString(), parameter);
@@ -279,6 +280,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		System.exit(0);
 	}
 
+	@Deprecated
 	private static void startJarFile(String parameter, Path fileJar) throws IOException {
 		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileJar.toAbsolutePath().toString(), parameter);
 		builder.start();
