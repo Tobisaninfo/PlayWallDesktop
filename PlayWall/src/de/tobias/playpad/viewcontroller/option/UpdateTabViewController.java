@@ -21,6 +21,7 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
@@ -144,7 +145,17 @@ public class UpdateTabViewController extends SettingsTabViewController {
 
 	@FXML
 	private void updateHandler(ActionEvent event) {
-		update(getStage());
+		UpdaterDialog dialog = new UpdaterDialog(getStage());
+		dialog.show();
+
+		Worker.runLater(() ->
+		{
+			try {
+				Updates.update();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	/**
@@ -154,6 +165,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	 * @param dialogOwner
 	 *            Window owner für Dialoge
 	 */
+	@Deprecated
 	public static void update(Window dialogOwner) {
 		// Parameter für Updater und Pfad für Downloads
 		App app = ApplicationUtils.getApplication();
@@ -175,6 +187,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	 *            Owner window
 	 * @param parameter
 	 */
+	@Deprecated
 	private static void macUpdate(Window dialogOwner, String parameter) {
 		try {
 			Path fileJar = Paths.get(UPDATER_JAR);
@@ -211,6 +224,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		}
 	}
 
+	@Deprecated
 	private static void windowsUpdate(Window dialogOwner, String parameter, boolean admin) {
 		try {
 			Path fileExe = Paths.get(UPDATER_EXE);

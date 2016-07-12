@@ -57,6 +57,7 @@ import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
@@ -64,7 +65,6 @@ import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
-import de.tobias.playpad.viewcontroller.option.UpdateTabViewController;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -165,8 +165,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Console
 		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+			System.setOut(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
+			System.setErr(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -176,7 +178,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		try {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 
 		/*
 		 * Setup
@@ -205,7 +208,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -310,7 +314,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		pluginManager = PluginManagerFactory.createPluginManager();
 		if (ApplicationUtils.getApplication().isDebug())
 			// DEBUG PLUGINS EINBINDEN
-			pluginManager.addPluginsFrom(Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
+			pluginManager.addPluginsFrom(
+					Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
 		else
 			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
 	}
@@ -345,11 +350,16 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 							alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
 							alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 							{
-								UpdateTabViewController.update(null);
+								try {
+									Updates.update();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							});
 						});
 					}
-				} catch (IOException | URISyntaxException e) {}
+				} catch (IOException | URISyntaxException e) {
+				}
 			});
 		}
 	}
