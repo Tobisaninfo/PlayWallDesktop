@@ -2,6 +2,7 @@ package de.tobias.playpad.update;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,5 +63,14 @@ public class UpdateRegistery {
 
 		String json = data.toJSONString(JSONStyle.MAX_COMPRESS);
 		return json;
+	}
+	
+	public static boolean needsAdminPermission() {
+		for (Updatable updatable : availableUpdates) {
+			if (!Files.isWritable(updatable.getLocalPath())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

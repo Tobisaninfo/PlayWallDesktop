@@ -25,6 +25,7 @@ import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
 import de.tobias.playpad.viewcontroller.dialog.UpdaterDialog;
+import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.NativeLauncher;
@@ -94,7 +95,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		updateChannelComboBox.setCellFactory(list -> new EnumCell<>(Strings.Update_Channel_BaseName));
 		updateChannelComboBox.setButtonCell(new EnumCell<>(Strings.Update_Channel_BaseName));
 
-		updateChannelComboBox.valueProperty().addListener((a, b, c) -> {
+		updateChannelComboBox.valueProperty().addListener((a, b, c) ->
+		{
 			Profile.currentProfile().getProfileSettings().setUpdateChannel(c);
 		});
 
@@ -119,7 +121,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		if (profile != null) {
 			openUpdateList.setPlaceholder(progressIndecator);
 
-			Worker.runLater(() -> {
+			Worker.runLater(() ->
+			{
 				// Search for updates
 				try {
 					UpdateRegistery.lookupUpdates(profile.getProfileSettings().getUpdateChannel());
@@ -128,7 +131,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 					showErrorMessage(Localization.getString(Strings.Error_Update_Download, e.getLocalizedMessage()));
 				}
 
-				Platform.runLater(() -> {
+				Platform.runLater(() ->
+				{
 					openUpdateList.setPlaceholder(placeholderLabel);
 					openUpdateList.getItems().setAll(UpdateRegistery.getAvailableUpdates());
 					updateButton.setDisable(openUpdateList.getItems().isEmpty());
@@ -143,11 +147,22 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		update(getStage());
 	}
 
+	/**
+	 * Startet den Update Prozess, lädt bei Bedarf den Updater herunter und führt ihn aus. Die Methode für Mac und
+	 * Windows beenden dann auch PlayWall.
+	 * 
+	 * @param dialogOwner
+	 *            Window owner für Dialoge
+	 */
 	public static void update(Window dialogOwner) {
-		String parameter = UpdateRegistery.buildParamaterString(
-				ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, DOWNLOAD_FOLDER).toString());
+		// Parameter für Updater und Pfad für Downloads
+		App app = ApplicationUtils.getApplication();
+		String downloadFolder = app.getPath(PathType.DOWNLOAD, DOWNLOAD_FOLDER).toString();
+		String parameter = UpdateRegistery.buildParamaterString(downloadFolder);
+
+		// Update Aufrufen
 		if (OS.getType() == OSType.Windows) {
-			windowsUpdate(dialogOwner, parameter);
+			windowsUpdate(dialogOwner, parameter, UpdateRegistery.needsAdminPermission());
 		} else {
 			macUpdate(dialogOwner, parameter);
 		}
@@ -173,7 +188,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 				UpdaterDialog dialog = new UpdaterDialog(dialogOwner);
 				dialog.show();
 
-				Worker.runLater(() -> {
+				Worker.runLater(() ->
+				{
 					String updaterURL = ApplicationUtils.getApplication().getInfo().getUserInfo()
 							.get(AppUserInfoStrings.UPDATER_PROGRAM) + UPDATER_JAR;
 					Path path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_JAR);
@@ -182,8 +198,11 @@ public class UpdateTabViewController extends SettingsTabViewController {
 						startJarFile(parameter, path);
 					} catch (Exception e) {
 						e.printStackTrace();
+
+						// Error Message
 						String errorMessage = Localization.getString(Strings.Error_Update_Download, e.getMessage());
-						showErrorMessage(errorMessage, PlayPadPlugin.getImplementation().getIcon(), dialogOwner);
+						Optional<Image> icon = PlayPadPlugin.getImplementation().getIcon();
+						showErrorMessage(errorMessage, icon, dialogOwner);
 					}
 				});
 			}
@@ -192,37 +211,36 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		}
 	}
 
-	private static void windowsUpdate(Window dialogOwner, String parameter) {
+	private static void windowsUpdate(Window dialogOwner, String parameter, boolean admin) {
 		try {
-			Path fileJar = Paths.get(UPDATER_JAR);
 			Path fileExe = Paths.get(UPDATER_EXE);
-			Path fileJarFolder = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_JAR);
 			Path fileExeFolder = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_EXE);
 
-			if (Files.exists(fileJar)) {
-				startJarFile(parameter, fileJar);
-			} else if (Files.exists(fileExe)) {
-				startExeFile(parameter, fileExe);
-
-			} else if (Files.exists(fileJarFolder)) {
-				startJarFile(parameter, fileJarFolder);
+			if (Files.exists(fileExe)) {
+				startExeFile(parameter, fileExe, admin);
 			} else if (Files.exists(fileExeFolder)) {
-				startExeFile(parameter, fileExeFolder);
+				startExeFile(parameter, fileExeFolder, admin);
 			} else {
 				UpdaterDialog dialog = new UpdaterDialog(dialogOwner);
 				dialog.show();
 
-				Worker.runLater(() -> {
-					ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
-					String updaterURL = info.getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM) + UPDATER_EXE;
-					Path path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, UPDATER_EXE);
+				Worker.runLater(() ->
+				{
+					App app = ApplicationUtils.getApplication();
+
+					String updaterURL = app.getInfo().getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM)
+							+ UPDATER_EXE;
+					Path path = app.getPath(PathType.DOWNLOAD, UPDATER_EXE);
 					try {
 						downloadUpdater(updaterURL, path);
-						startExeFile(parameter, path);
+						startExeFile(parameter, path, admin);
 					} catch (Exception e) {
 						e.printStackTrace();
+
+						// Error Message
 						String errorMessage = Localization.getString(Strings.Error_Update_Download, e.getMessage());
-						showErrorMessage(errorMessage, PlayPadPlugin.getImplementation().getIcon(), dialogOwner);
+						Optional<Image> icon = PlayPadPlugin.getImplementation().getIcon();
+						showErrorMessage(errorMessage, icon, dialogOwner);
 					}
 				});
 			}
@@ -250,14 +268,19 @@ public class UpdateTabViewController extends SettingsTabViewController {
 		oStr.close();
 	}
 
-	private static void startExeFile(String parameter, Path fileExeFolder) {
-		NativeLauncher.executeAsAdministrator(fileExeFolder.toAbsolutePath().toString(), parameter);
+	private static void startExeFile(String parameter, Path fileExe, boolean admin) throws IOException {
+		if (admin) {
+			NativeLauncher.executeAsAdministrator(fileExe.toAbsolutePath().toString(), parameter);
+		} else {
+			ProcessBuilder builder = new ProcessBuilder(fileExe.toAbsolutePath().toString(), parameter);
+			builder.start();
+		}
+
 		System.exit(0);
 	}
 
-	private static void startJarFile(String parameter, Path fileJarFolder) throws IOException {
-		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileJarFolder.toAbsolutePath().toString(),
-				parameter);
+	private static void startJarFile(String parameter, Path fileJar) throws IOException {
+		ProcessBuilder builder = new ProcessBuilder("java", "-jar", fileJar.toAbsolutePath().toString(), parameter);
 		builder.start();
 		System.exit(0);
 	}
