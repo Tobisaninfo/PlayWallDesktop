@@ -58,9 +58,9 @@ public class Updates {
 			App app = ApplicationUtils.getApplication();
 
 			String updaterURL = app.getInfo().getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM) + EXE_NAME;
-			Path downloadUpdaterFile = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, EXE_NAME);
+			path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, EXE_NAME);
 
-			downloadUpdater(updaterURL, downloadUpdaterFile);
+			downloadUpdater(updaterURL, path);
 		}
 		startExeFile(parameter, path, needAdminPermission);
 		return false;
@@ -72,9 +72,9 @@ public class Updates {
 			App app = ApplicationUtils.getApplication();
 
 			String updaterURL = app.getInfo().getUserInfo().get(AppUserInfoStrings.UPDATER_PROGRAM) + JAR_NAME;
-			Path downloadUpdaterFile = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, JAR_NAME);
+			path = ApplicationUtils.getApplication().getPath(PathType.DOWNLOAD, JAR_NAME);
 
-			downloadUpdater(updaterURL, downloadUpdaterFile);
+			downloadUpdater(updaterURL, path);
 		}
 		startJarFile(parameter, path);
 		return false;
