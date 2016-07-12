@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobias.utils.util.OS;
 import de.tobias.utils.util.SystemUtils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -41,8 +42,6 @@ public class UpdateRegistery {
 	private static final String URL = "url";
 	private static final String EXECUTE_FILE = "executePath";
 
-	
-	
 	public static String buildParamaterString(String downloadPath) {
 		JSONObject data = new JSONObject();
 		data.put(DOWNLOAD_PATH, downloadPath);
@@ -64,11 +63,18 @@ public class UpdateRegistery {
 		String json = data.toJSONString(JSONStyle.MAX_COMPRESS);
 		return json;
 	}
-	
+
 	public static boolean needsAdminPermission() {
 		for (Updatable updatable : availableUpdates) {
 			if (!Files.isWritable(updatable.getLocalPath())) {
 				return true;
+			}
+			if (OS.isWindows()) {
+				try {
+					if (Files.getOwner(updatable.getLocalPath()).getName().toLowerCase().contains("admin")) {
+						return true;
+					}
+				} catch (IOException e) {}
 			}
 		}
 		return false;
