@@ -351,7 +351,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 							alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 							{
 								try {
-									Updates.update();
+									Updates.startUpdate();
 								} catch (IOException e) {
 									e.printStackTrace();
 								}

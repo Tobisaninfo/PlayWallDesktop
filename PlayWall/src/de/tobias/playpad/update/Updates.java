@@ -31,7 +31,7 @@ public class Updates {
 	 * 
 	 * @throws IOException
 	 */
-	public static void update() throws IOException {
+	public static void startUpdate() throws IOException {
 		App app = ApplicationUtils.getApplication();
 		String downloadPath = app.getPath(PathType.DOWNLOAD, CACHE_FOLER).toString();
 		String updateParameter = UpdateRegistery.buildParamaterString(downloadPath);
