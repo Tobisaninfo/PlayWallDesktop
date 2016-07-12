@@ -165,10 +165,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Console
 		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(
-					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(
-					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
+			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -178,8 +176,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		try {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 
 		/*
 		 * Setup
@@ -187,7 +184,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		updater = new PlayPadUpdater();
 		UpdateRegistery.registerUpdateable(updater);
 		registerComponents();
-		setupPlugins();
+
+		// Load Plugin Path
+		Path pluginFolder;
+		if (getParameters().getNamed().containsKey("plugin")) {
+			pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
+		} else {
+			pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
+		}
+		setupPlugins(pluginFolder);
 
 		/*
 		 * Load Data
@@ -208,8 +213,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (IllegalArgumentException | NullPointerException e) {
-			} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -292,7 +296,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		Profile.registerListener(this);
 	}
 
-	private void setupPlugins() throws IOException, MalformedURLException {
+	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {
 		/*
 		 * Plugins
 		 */
@@ -312,12 +316,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Load Plugins
 		pluginManager = PluginManagerFactory.createPluginManager();
-		if (ApplicationUtils.getApplication().isDebug())
-			// DEBUG PLUGINS EINBINDEN
-			pluginManager.addPluginsFrom(
-					Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
-		else
-			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
+		pluginManager.addPluginsFrom(pluginPath.toUri());
 	}
 
 	private void setupLocalization() {
@@ -358,8 +357,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 							});
 						});
 					}
-				} catch (IOException | URISyntaxException e) {
-				}
+				} catch (IOException | URISyntaxException e) {}
 			});
 		}
 	}
