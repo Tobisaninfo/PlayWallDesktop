@@ -23,8 +23,8 @@ public class Updates {
 	private static final String CACHE_FOLER = "Updates";
 
 	// Name der Updater Datei
-	private static String JAR_NAME = "Updater.jar";
-	private static String EXE_NAME = "Updater.exe";
+	private static String JAR_NAME = "PlayWallUp.jar";
+	private static String EXE_NAME = "PlayWallUp.exe";
 
 	/**
 	 * Sollte in einem Extra Thread gemacht werden, da der Updater gedownloaded wird.
