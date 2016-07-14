@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
@@ -99,12 +98,7 @@ public class UpdateTabViewController extends SettingsTabViewController {
 			Worker.runLater(() ->
 			{
 				// Search for updates
-				try {
-					UpdateRegistery.lookupUpdates(profile.getProfileSettings().getUpdateChannel());
-				} catch (IOException | URISyntaxException e) {
-					e.printStackTrace();
-					showErrorMessage(Localization.getString(Strings.Error_Update_Download, e.getLocalizedMessage()));
-				}
+				UpdateRegistery.lookupUpdates(profile.getProfileSettings().getUpdateChannel());
 
 				Platform.runLater(() ->
 				{

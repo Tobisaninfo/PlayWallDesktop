@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -339,25 +338,23 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		if (newProfile.getProfileSettings().isAutoUpdate()) {
 			Worker.runLater(() ->
 			{
-				try {
-					UpdateRegistery.lookupUpdates(newProfile.getProfileSettings().getUpdateChannel());
-					if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
-						Platform.runLater(() ->
+				UpdateRegistery.lookupUpdates(newProfile.getProfileSettings().getUpdateChannel());
+				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
+					Platform.runLater(() ->
+					{
+						Alert alert = new Alert(AlertType.CONFIRMATION);
+						alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
+						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
+						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 						{
-							Alert alert = new Alert(AlertType.CONFIRMATION);
-							alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-							alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
-							alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
-							{
-								try {
-									Updates.startUpdate();
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							});
+							try {
+								Updates.startUpdate();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 						});
-					}
-				} catch (IOException | URISyntaxException e) {}
+					});
+				}
 			});
 		}
 	}

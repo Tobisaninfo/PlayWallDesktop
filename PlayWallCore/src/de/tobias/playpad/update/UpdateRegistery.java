@@ -25,12 +25,16 @@ public class UpdateRegistery {
 		return availableUpdates;
 	}
 
-	public static List<Updatable> lookupUpdates(UpdateChannel channel) throws IOException, URISyntaxException {
+	public static List<Updatable> lookupUpdates(UpdateChannel channel) {
 		availableUpdates.clear();
 		for (Updatable updatable : UpdateRegistery.updatables) {
-			updatable.loadInformation(channel);
-			if (updatable.isUpdateAvailable()) {
-				availableUpdates.add(updatable);
+			try {
+				updatable.loadInformation(channel);
+				if (updatable.isUpdateAvailable()) {
+					availableUpdates.add(updatable);
+				}
+			} catch (IOException | URISyntaxException e) {
+
 			}
 		}
 		return availableUpdates;

@@ -197,7 +197,7 @@ public class Strings {
 
 	// Update Channel - Basename
 	public static final String Update_Channel_BaseName = "UpdateChannel.";
-	
+
 	// Error - Layout
 	public static final String Error_Layout_Load = "Error.Layout.Load";
 
@@ -206,7 +206,7 @@ public class Strings {
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
 
 	// Error - Update - Downlaod
-	public static final String Error_Update_Download = "Error.Update.Download";
+	@Deprecated public static final String Error_Update_Download = "Error.Update.Download";
 
 	// Layout
 	public static final String Layout_Modern_Name = "Layout.Modern.Name";
@@ -219,7 +219,7 @@ public class Strings {
 
 	// TriggerPoint - Enum
 	public static final String TriggerPoint_BaseName = "TriggerPoint.";
-	
+
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
