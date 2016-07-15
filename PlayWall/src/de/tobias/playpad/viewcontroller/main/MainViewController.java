@@ -189,7 +189,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 	}
 
-	private void setTitle() {
+	void setTitle() {
 		if (project != null && Profile.currentProfile() != null) {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, project.getRef().getName(),
 					Profile.currentProfile().getRef().getName()));

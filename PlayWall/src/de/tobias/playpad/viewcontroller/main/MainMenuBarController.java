@@ -170,6 +170,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 		{
 			ProfileViewController controller = new ProfileViewController(mvc.getStage(), mvc.getProject());
 			controller.getStage().showAndWait();
+			mvc.setTitle();
 		});
 	}
 
