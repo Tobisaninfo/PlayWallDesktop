@@ -23,9 +23,11 @@ import org.dom4j.io.SAXReader;
 public class ComponentRegistry<C> implements Registry<C> {
 
 	private HashMap<String, C> components;
+	private String name;
 
-	public ComponentRegistry() {
+	public ComponentRegistry(String name) {
 		components = new HashMap<>();
+		this.name = name;
 	}
 
 	@Override
@@ -34,6 +36,7 @@ public class ComponentRegistry<C> implements Registry<C> {
 			throw new IllegalArgumentException("A components already exists with this id: " + id);
 		}
 		components.put(id, component);
+		System.out.println("Registered: " + name + "#" + id);
 	}
 
 	@Override

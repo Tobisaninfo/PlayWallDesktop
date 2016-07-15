@@ -37,6 +37,7 @@ import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.layout.classic.ClassicGlobalLayout;
 import de.tobias.playpad.layout.classic.ClassicLayoutConnect;
 import de.tobias.playpad.layout.modern.ModernLayoutConnect;
+import de.tobias.playpad.layout.modern.ModernLayoutGlobal;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
@@ -49,6 +50,7 @@ import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileReference;
@@ -157,10 +159,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Console
 		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(
-					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(
-					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
+			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -170,8 +170,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		try {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 
 		/*
 		 * Setup
@@ -200,8 +199,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (IllegalArgumentException | NullPointerException e) {
-			} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -269,13 +267,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		ActionRegistery.registerActionConnect(new PageActionConnect());
 		ActionRegistery.registerActionConnect(new NavigateActionConnect());
 
-		try {
-			PlayPadRegistry.getActionRegistry().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException
-				| DocumentException e) {
-			e.printStackTrace();
-		}
-
 		// Mapper
 		MapperRegistry.registerMapperConnect(new MidiMapperConnect());
 		MapperRegistry.registerMapperConnect(new KeyboardMapperConnect());
@@ -289,6 +280,24 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		PadDragModeRegistery.registerActionConnect(new ReplaceDragMode());
 
 		Profile.registerListener(this);
+
+		try {
+			// Load Components
+			PlayPadRegistry.getActionRegistry().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
+			PlayPadRegistry.getAudioHandlerRegistry().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
+			PlayPadRegistry.getDragModeRegistry().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
+			PlayPadRegistry.getLayoutRegistry().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
+			PlayPadRegistry.getMapperRegistry().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
+			PlayPadRegistry.getPadContentRegistry().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
+			PlayPadRegistry.getTriggerItemRegistry().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
+
+			// Set Default
+			PlayPadRegistry.getAudioHandlerRegistry().setDefaultID(JavaFXAudioHandler.NAME);
+			PlayPadRegistry.getLayoutRegistry().setDefaultID(ModernLayoutGlobal.TYPE);
+		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
+				| NoSuchComponentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void setupPlugins() throws IOException, MalformedURLException {
@@ -313,8 +322,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		pluginManager = PluginManagerFactory.createPluginManager();
 		if (ApplicationUtils.getApplication().isDebug())
 			// DEBUG PLUGINS EINBINDEN
-			pluginManager.addPluginsFrom(
-					Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
+			pluginManager.addPluginsFrom(Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
 		else
 			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
 	}
