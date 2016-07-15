@@ -1,0 +1,5 @@
+<Actions>
+	<Component id="CART">de.tobias.playpad.action.connect.CartActionConnect</Component>
+	<Component id="PAGE">de.tobias.playpad.action.connect.PageActionConnect</Component>
+	<Component id="NAVIGATE">de.tobias.playpad.action.connect.NavigateActionConnect</Component>
+</Actions>

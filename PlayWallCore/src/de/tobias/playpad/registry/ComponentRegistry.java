@@ -52,6 +52,9 @@ public class ComponentRegistry<C> implements Registry<C> {
 	@Override
 	public void loadComponentsFromFile(URL url)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (url == null) {
+			throw new IOException("URL not found: " + url);
+		}
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(url);
 

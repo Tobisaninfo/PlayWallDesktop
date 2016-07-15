@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import de.tobias.playpad.settings.Profile;
 
+@Deprecated
 public class AudioRegistry {
 
 	private static String defaultAudioInterface;

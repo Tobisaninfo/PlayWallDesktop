@@ -3,6 +3,7 @@ package de.tobias.playpad.tigger;
 import java.util.HashMap;
 import java.util.Set;
 
+@Deprecated
 public class TriggerRegistry {
 
 	private static HashMap<String, TriggerItemConnect> triggers = new HashMap<>();;

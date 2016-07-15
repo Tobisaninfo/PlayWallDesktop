@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated
 public class PadContentRegistry {
 
 	private static HashMap<String, PadContentConnect> padContents;
@@ -45,6 +46,7 @@ public class PadContentRegistry {
 		return null;
 	}
 
+	// TODO
 	public static Set<PadContentConnect> getPadContentConnectsForFile(Path path) throws UnkownPadContentException {
 		Set<PadContentConnect> connects = new HashSet<>();
 		for (String type : PadContentRegistry.getTypes()) {

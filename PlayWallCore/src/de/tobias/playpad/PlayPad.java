@@ -102,7 +102,9 @@ public interface PlayPad {
 
 	public PluginManager getPluginManager();
 
+	@Deprecated
 	public String[] getProjectFiles();
 
 	public Optional<Image> getIcon();
+
 }

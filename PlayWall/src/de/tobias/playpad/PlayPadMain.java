@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 
+import org.dom4j.DocumentException;
+
 import de.tobias.playpad.action.ActionRegistery;
 import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.action.connect.NavigateActionConnect;
@@ -91,15 +93,12 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 // Profile mit UUID
 
-
 // Pad System neu machen
 // Neue PadViewController für jedes pad
 // Midi Modell Überarbeiten
 // Bei Seitenwechsel Pad auf Play lassen
 
 // TEST Trigger
-
-
 
 // PlayWall 5.1
 // FEATURE Global Volume Trigger mit x% und 100%
@@ -158,8 +157,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Console
 		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+			System.setOut(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
+			System.setErr(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -169,7 +170,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		try {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 
 		/*
 		 * Setup
@@ -198,7 +200,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -266,6 +269,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		ActionRegistery.registerActionConnect(new PageActionConnect());
 		ActionRegistery.registerActionConnect(new NavigateActionConnect());
 
+		try {
+			PlayPadRegistry.getActionRegistry().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException
+				| DocumentException e) {
+			e.printStackTrace();
+		}
+
 		// Mapper
 		MapperRegistry.registerMapperConnect(new MidiMapperConnect());
 		MapperRegistry.registerMapperConnect(new KeyboardMapperConnect());
@@ -303,7 +313,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		pluginManager = PluginManagerFactory.createPluginManager();
 		if (ApplicationUtils.getApplication().isDebug())
 			// DEBUG PLUGINS EINBINDEN
-			pluginManager.addPluginsFrom(Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
+			pluginManager.addPluginsFrom(
+					Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
 		else
 			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
 	}

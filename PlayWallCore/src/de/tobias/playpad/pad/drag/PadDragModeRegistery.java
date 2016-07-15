@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
+@Deprecated
 public class PadDragModeRegistery {
 
 	private static HashMap<String, PadDragMode> padDragMode;

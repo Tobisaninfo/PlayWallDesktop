@@ -3,6 +3,7 @@ package de.tobias.playpad.action;
 import java.util.HashMap;
 import java.util.Set;
 
+@Deprecated
 public class ActionRegistery {
 
 	private static HashMap<String, ActionConnect> actions;

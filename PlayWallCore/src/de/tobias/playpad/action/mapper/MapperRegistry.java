@@ -5,6 +5,7 @@ import java.util.Set;
 
 import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
 
+@Deprecated
 public class MapperRegistry {
 
 	private static HashMap<String, MapperConnect> mappers;
@@ -29,6 +30,7 @@ public class MapperRegistry {
 		return mappers.keySet();
 	}
 
+	//TODO New Implementation
 	private static IMapperOverviewViewController controllerInstance;
 
 	public static void setOverviewViewController(IMapperOverviewViewController controller) {
