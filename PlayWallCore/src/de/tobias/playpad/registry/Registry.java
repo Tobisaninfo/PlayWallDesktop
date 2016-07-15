@@ -26,5 +26,10 @@ public interface Registry<C> extends WriteOnlyRegistry<C> {
 	 */
 	public C getComponent(String id) throws NoSuchComponentException;
 
+	/**
+	 * Listet alle Type ID auf, die registriert wurden.
+	 * 
+	 * @return Liste mit IDs
+	 */
 	public Set<String> getTypes();
 }
