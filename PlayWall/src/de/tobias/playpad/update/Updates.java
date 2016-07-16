@@ -83,6 +83,10 @@ public class Updates {
 	private static void downloadUpdater(String updaterURL, Path path) throws IOException, MalformedURLException {
 		URL url = new URL(updaterURL);
 		InputStream iStr = url.openStream();
+		
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+		}
 
 		IOUtils.copy(iStr, path);
 
