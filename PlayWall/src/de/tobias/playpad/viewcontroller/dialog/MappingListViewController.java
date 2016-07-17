@@ -26,6 +26,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * Dieser ViewController listet alle Mappings auf. Man kann diese importieren, exportieren und aktivieren/deaktivieren.
+ * 
+ * @author tobias
+ *
+ */
 public class MappingListViewController extends ViewController {
 
 	@FXML private ComboBox<Mapping> presetsListView;

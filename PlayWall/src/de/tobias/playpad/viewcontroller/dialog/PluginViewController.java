@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller;
+package de.tobias.playpad.viewcontroller.dialog;
 
 import java.io.IOException;
 import java.util.Collections;
