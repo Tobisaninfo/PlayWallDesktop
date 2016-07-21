@@ -9,7 +9,7 @@ import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.Durationable;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.actions.CartActionViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;

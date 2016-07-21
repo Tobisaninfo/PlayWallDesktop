@@ -26,13 +26,9 @@ import de.tobias.playpad.action.connect.PageActionConnect;
 import de.tobias.playpad.action.mapper.KeyboardMapperConnect;
 import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.action.mapper.MidiMapperConnect;
-import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.audio.ClipAudioHandler;
-import de.tobias.playpad.audio.ClipAudioHandlerConnect;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
-import de.tobias.playpad.audio.JavaFXHandlerConnect;
 import de.tobias.playpad.audio.TinyAudioHandler;
-import de.tobias.playpad.audio.TinyAudioHandlerConnect;
 import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.layout.classic.ClassicGlobalLayout;
 import de.tobias.playpad.layout.classic.ClassicLayoutConnect;
@@ -42,9 +38,6 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.content.AudioContentConnect;
-import de.tobias.playpad.pad.drag.MoveDragMode;
-import de.tobias.playpad.pad.drag.PadDragModeRegistery;
-import de.tobias.playpad.pad.drag.ReplaceDragMode;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
@@ -153,6 +146,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 	@Override
 	public void init() throws Exception {
 		PlayPadPlugin.setImplementation(this);
+		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 
 		// Localization
 		setupLocalization();
@@ -243,13 +237,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 	}
 
 	private void registerComponents() {
-		// Audio
-		AudioRegistry.register(new JavaFXHandlerConnect(), JavaFXAudioHandler.NAME);
-		AudioRegistry.register(new TinyAudioHandlerConnect(), TinyAudioHandler.NAME);
-		AudioRegistry.register(new ClipAudioHandlerConnect(), ClipAudioHandler.NAME);
-
-		AudioRegistry.setDefaultAudioInterface(JavaFXAudioHandler.NAME);
-
 		// Layout
 		LayoutRegistry.registerLayout(new ClassicLayoutConnect());
 		LayoutRegistry.registerLayout(new ModernLayoutConnect());
@@ -275,25 +262,23 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		// Pad Content
 		PadContentRegistry.registerActionConnect(new AudioContentConnect());
 
-		// Pad Drag Mode
-		PadDragModeRegistery.registerActionConnect(new MoveDragMode());
-		PadDragModeRegistery.registerActionConnect(new ReplaceDragMode());
-
 		Profile.registerListener(this);
 
 		try {
 			// Load Components
-			PlayPadRegistry.getActionRegistry().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
-			PlayPadRegistry.getAudioHandlerRegistry().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
-			PlayPadRegistry.getDragModeRegistry().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
-			PlayPadRegistry.getLayoutRegistry().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
-			PlayPadRegistry.getMapperRegistry().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
-			PlayPadRegistry.getPadContentRegistry().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
-			PlayPadRegistry.getTriggerItemRegistry().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
+			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
+			
+			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
+			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
+			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
+			registryCollection.getLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
+			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
+			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
+			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
 
 			// Set Default
-			PlayPadRegistry.getAudioHandlerRegistry().setDefaultID(JavaFXAudioHandler.NAME);
-			PlayPadRegistry.getLayoutRegistry().setDefaultID(ModernLayoutGlobal.TYPE);
+			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);
+			registryCollection.getLayouts().setDefaultID(ModernLayoutGlobal.TYPE);
 		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
 				| NoSuchComponentException e) {
 			e.printStackTrace();

@@ -10,17 +10,18 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.listener.PadContentListener;
 import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
@@ -166,7 +167,12 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			this.pad.setContent(content);
 		}
 
-		content.handlePath(file.toPath());
+		try {
+			content.handlePath(file.toPath());
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 	}
 

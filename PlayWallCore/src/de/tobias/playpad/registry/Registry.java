@@ -1,5 +1,6 @@
 package de.tobias.playpad.registry;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -32,4 +33,11 @@ public interface Registry<C> extends WriteOnlyRegistry<C> {
 	 * @return Liste mit IDs
 	 */
 	public Set<String> getTypes();
+
+	/**
+	 * Listet alle Implementierungen auf.
+	 * 
+	 * @return Implementierungen
+	 */
+	public Collection<C> getComponents();
 }

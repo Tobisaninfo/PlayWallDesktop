@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad.conntent;
+package de.tobias.playpad.pad.conntent.play;
 
 public interface Pauseable {
 

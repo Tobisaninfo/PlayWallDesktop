@@ -1,8 +1,8 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.conntent.Fadeable;
-import de.tobias.playpad.pad.conntent.Pauseable;
+import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

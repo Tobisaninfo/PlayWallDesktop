@@ -7,16 +7,19 @@ import java.nio.file.Paths;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.audio.Equalizable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.Durationable;
-import de.tobias.playpad.pad.conntent.Fadeable;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.Pauseable;
+import de.tobias.playpad.pad.conntent.path.SinglePathContent;
+import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.util.ZipFile;
 import javafx.animation.Transition;
@@ -28,7 +31,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable {
+// TODO Extract Fade in / Fade Out
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent {
 
 	private static final String TYPE = "audio";
 
@@ -55,23 +59,19 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		};
 	}
 
-	public AudioContent(Pad pad, Path path) {
-		this(pad);
-		this.path = path;
-	}
-
+	@Override
 	public Path getPath() {
 		return path;
 	}
 
-	public void setPath(Path path) {
-		this.path = path;
-	}
-
 	@Override
-	public void handlePath(Path path) {
+	public void handlePath(Path path) throws NoSuchComponentException {
+		// handle old media
 		unloadMedia();
-		setPath(path);
+
+		this.path = path;
+
+		// handle new media
 		loadMedia();
 	}
 
@@ -210,8 +210,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void loadMedia() {
-		audioHandler = AudioRegistry.geAudioType().createAudioHandler(this);
+	public void loadMedia() throws NoSuchComponentException {
+		// init audio implementation
+		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
+
 		if (Files.exists(path)) {
 			audioHandler.loadMedia(new Path[] { path });
 

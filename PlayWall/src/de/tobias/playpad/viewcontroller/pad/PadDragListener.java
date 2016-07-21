@@ -11,8 +11,8 @@ import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.drag.PadDragMode;
-import de.tobias.playpad.pad.drag.PadDragModeRegistery;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
@@ -65,7 +65,7 @@ public class PadDragListener {
 						return;
 					}
 				}
-				
+
 				File file = event.getDragboard().getFiles().get(0);
 
 				// Build In Filesupport
@@ -92,7 +92,7 @@ public class PadDragListener {
 			int padID = Integer.valueOf(event.getDragboard().getString());
 			if (padID != view.getController().getPad().getIndex()) {
 
-				Collection<PadDragMode> connects = PadDragModeRegistery.getValues();
+				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
 
 				if (!connects.isEmpty()) {
 					if (padHud == null) {
@@ -130,7 +130,12 @@ public class PadDragListener {
 					content = connect.newInstance(pad);
 				}
 
-				content.handlePath(file.toPath());
+				try {
+					content.handlePath(file.toPath());
+				} catch (NoSuchComponentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				this.pad.setContent(content);
 				this.pad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
@@ -163,7 +168,7 @@ public class PadDragListener {
 					return;
 				}
 			}
-			
+
 			Dragboard dragboard = view.startDragAndDrop(TransferMode.MOVE);
 
 			SnapshotParameters parameters = new SnapshotParameters();

@@ -18,6 +18,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+// TODO Rewrite --> Extract Button Listeners
 public class FixCell extends TableCell<PadException, PadException> {
 
 	private Stage stage;
@@ -48,7 +49,12 @@ public class FixCell extends TableCell<PadException, PadException> {
 							PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(content.getType());
 
 							if (Files.exists(path) && PadContentConnect.isFileSupported(path, padContentConnect)) {
-								content.handlePath(path);
+								try {
+									content.handlePath(path);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 								pad.removeException(item);
 							}
@@ -75,7 +81,12 @@ public class FixCell extends TableCell<PadException, PadException> {
 							PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(content.getType());
 
 							if (Files.exists(path) && PadContentConnect.isFileSupported(path, padContentConnect)) {
-								content.handlePath(path);
+								try {
+									content.handlePath(path);
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 								pad.removeException(item);
 							}

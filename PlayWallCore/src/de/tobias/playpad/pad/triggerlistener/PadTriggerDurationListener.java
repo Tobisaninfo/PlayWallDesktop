@@ -2,8 +2,8 @@ package de.tobias.playpad.pad.triggerlistener;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;

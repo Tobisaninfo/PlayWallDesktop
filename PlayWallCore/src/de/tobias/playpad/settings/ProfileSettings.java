@@ -15,7 +15,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import de.tobias.playpad.audio.AudioRegistry;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.pad.Fade;
 import de.tobias.playpad.pad.TimeMode;
@@ -48,7 +48,8 @@ public class ProfileSettings implements SettingsSerializable {
 	@Storable private int rows = 5;
 
 	// Audio Output
-	@Storable private String audioClass = AudioRegistry.getDefaultAudioInterface();
+	// TODO Rewrite
+	@Storable private String audioClass = PlayPadPlugin.getRegistryCollection().getAudioHandlers().getDefaultID();
 	@Storable private HashMap<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
@@ -410,7 +411,7 @@ public class ProfileSettings implements SettingsSerializable {
 		liveElement.addAttribute(LIVE_MODE_DRAG_ATTR, String.valueOf(liveModeDrag));
 		liveElement.addAttribute(LIVE_MODE_FILE_ATTR, String.valueOf(liveModeFile));
 		liveElement.addAttribute(LIVE_MODE_SETTINGS_ATTR, String.valueOf(liveModeSettings));
-		
+
 		root.addElement(WINDOW_ALWAYS_ON_TOP_ELEMENT).addText(String.valueOf(windowAlwaysOnTop));
 
 		// Audio

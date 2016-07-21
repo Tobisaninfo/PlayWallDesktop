@@ -5,8 +5,17 @@ import java.nio.file.Path;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.util.ZipFile;
 
+/**
+ * Verarbeitet den Inhalt eines Pads. Die Einstellungen und der Status ist in Pad ausgelagert.
+ * 
+ * @author tobias
+ *
+ * @version 5.1.0
+ * @see Pad
+ */
 public abstract class PadContent {
 
 	// Refrence
@@ -16,9 +25,11 @@ public abstract class PadContent {
 		this.pad = pad;
 	}
 
-	public abstract String getType();
+	public Pad getPad() {
+		return pad;
+	}
 
-	public abstract void setMasterVolume(double masterVolume);
+	public abstract String getType();
 
 	public abstract void play();
 
@@ -26,15 +37,30 @@ public abstract class PadContent {
 
 	public abstract boolean isPadLoaded();
 
-	public Pad getPad() {
-		return pad;
-	}
+	/**
+	 * Verarbeitet eien neuen Path für das Pad.
+	 * 
+	 * @param path
+	 *            path
+	 * @throws NoSuchComponentException
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
+	 */
+	public abstract void handlePath(Path path) throws NoSuchComponentException;
 
-	public abstract void handlePath(Path path);
+	/**
+	 * Lädt die Medien, sodass sie auf abruf verfügbar sind.
+	 * 
+	 * @throws NoSuchComponentException
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
+	 */
+	public abstract void loadMedia() throws NoSuchComponentException;
 
-	public abstract void loadMedia();
-
+	/**
+	 * Entfernt die Medien aus dem Speicher (lässt diese aber im Pad).
+	 */
 	public abstract void unloadMedia();
+
+	public abstract void setMasterVolume(double masterVolume);
 
 	@Override
 	protected void finalize() throws Throwable {

@@ -17,6 +17,7 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.application.ApplicationUtils;
@@ -89,7 +90,12 @@ public class Project {
 
 					// Load Media
 					if (loadMedia) {
-						pad.loadContent();
+						try {
+							pad.loadContent();
+						} catch (NoSuchComponentException e) {
+							e.printStackTrace();
+							// TODO handle exception withon project
+						}
 					}
 
 					project.pads.put(pad.getIndex(), pad);
@@ -172,6 +178,19 @@ public class Project {
 
 	public ObservableList<PadException> getExceptions() {
 		return exceptions;
+	}
+
+	// Load Methods
+	public void loadPadsContent() {
+		getPads().values().forEach(pad ->
+		{
+			try {
+				pad.loadContent();
+			} catch (NoSuchComponentException e) {
+				e.printStackTrace();
+				// TODO handle exception withon project
+			}
+		});
 	}
 
 	@Override

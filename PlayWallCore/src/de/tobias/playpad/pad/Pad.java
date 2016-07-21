@@ -9,13 +9,14 @@ import de.tobias.playpad.layout.CartLayout;
 import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.Pauseable;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerDurationListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerStatusListener;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
@@ -340,7 +341,7 @@ public class Pad {
 	}
 
 	// Helper Methodes
-	public void loadContent() {
+	public void loadContent() throws NoSuchComponentException {
 		if (contentProperty.get() != null)
 			contentProperty.get().loadMedia();
 	}
@@ -494,7 +495,7 @@ public class Pad {
 		}
 
 		// Trigger
-		Element triggersElement = element.element("Triggers");			// TODO Externalize
+		Element triggersElement = element.element("Triggers"); // TODO Externalize
 		if (triggersElement != null) {
 			for (Object triggerObj : triggersElement.elements("Trigger")) {
 				if (triggerObj instanceof Element) {

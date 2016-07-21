@@ -2,6 +2,7 @@ package de.tobias.playpad.registry;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -53,6 +54,11 @@ public class ComponentRegistry<C> implements Registry<C> {
 	}
 
 	@Override
+	public Collection<C> getComponents() {
+		return components.values();
+	}
+
+	@Override
 	public void loadComponentsFromFile(URL url)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (url == null) {
@@ -75,4 +81,5 @@ public class ComponentRegistry<C> implements Registry<C> {
 			}
 		}
 	}
+
 }

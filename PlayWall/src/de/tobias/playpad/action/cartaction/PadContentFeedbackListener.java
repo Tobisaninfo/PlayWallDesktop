@@ -1,7 +1,7 @@
 package de.tobias.playpad.action.cartaction;
 
-import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

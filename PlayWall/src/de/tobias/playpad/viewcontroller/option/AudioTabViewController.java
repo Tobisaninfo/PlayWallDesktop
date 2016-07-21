@@ -1,9 +1,12 @@
 package de.tobias.playpad.viewcontroller.option;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.RegistryCollectionImpl;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.AudioTypeViewController;
@@ -36,8 +39,11 @@ public class AudioTabViewController extends SettingsTabViewController {
 	public void init() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
-		// Audio
-		audioTypeComboBox.getItems().addAll(AudioRegistry.getAudioSystems().keySet());
+		// Audio Classes
+		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		audioTypeComboBox.getItems().addAll(audioHandlerRegistry.getTypes());
+
+		// Listener for selection
 		audioTypeComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
 			if (b != null && c != null)
@@ -56,9 +62,16 @@ public class AudioTabViewController extends SettingsTabViewController {
 
 		audioUserInfoSettings.getChildren().clear();
 
-		audioViewController = AudioRegistry.getAudioSystems().get(classID).getAudioViewController();
-		if (audioViewController != null) {
-			audioUserInfoSettings.getChildren().add(audioViewController.getParent());
+		try {
+			AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+			audioViewController = audioHandlerRegistry.getComponent(classID).getAudioViewController();
+
+			if (audioViewController != null) {
+				audioUserInfoSettings.getChildren().add(audioViewController.getParent());
+			}
+		} catch (NoSuchComponentException e) {
+			e.printStackTrace();
+			// TODO Errorhandling
 		}
 	}
 
@@ -92,7 +105,7 @@ public class AudioTabViewController extends SettingsTabViewController {
 	public void reload(Profile profile, Project project, IMainViewController controller) {
 		Worker.runLater(() ->
 		{
-			project.getPads().values().forEach(pad -> pad.loadContent());
+			project.loadPadsContent();
 		});
 	}
 

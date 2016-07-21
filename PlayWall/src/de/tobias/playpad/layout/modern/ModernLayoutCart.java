@@ -10,7 +10,7 @@ import de.tobias.playpad.layout.Layout;
 import de.tobias.playpad.layout.LayoutColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.Warning;
-import de.tobias.playpad.pad.conntent.Durationable;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.view.IPadViewController;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
