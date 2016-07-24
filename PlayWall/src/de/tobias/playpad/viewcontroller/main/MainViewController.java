@@ -46,6 +46,8 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -57,6 +59,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -68,7 +71,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import net.xeoh.plugins.base.PluginManager;
 
-public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
+public class MainViewController extends ViewController
+		implements IMainViewController, NotificationHandler, ProfileListener {
 
 	private static final String CURRENT_PAGE_BUTTON = "current-page-button";
 
@@ -99,7 +103,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 	// Style
 	private Color gridColor;
 
-	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener, PluginManager manager) {
+	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener,
+			PluginManager manager) {
 		super("mainView", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 
 		// Include FXML Setup
@@ -214,8 +219,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	protected void loadSettings(BasicControllerSettings settings) {
-		List<Screen> screens = Screen.getScreensForRectangle(settings.getUserInfoAsDouble("x"), settings.getUserInfoAsDouble("y"),
-				settings.width, settings.height);
+		List<Screen> screens = Screen.getScreensForRectangle(settings.getUserInfoAsDouble("x"),
+				settings.getUserInfoAsDouble("y"), settings.width, settings.height);
 		if (!screens.isEmpty()) {
 			getStage().setX(settings.getUserInfoAsDouble("x"));
 			getStage().setY(settings.getUserInfoAsDouble("y"));
@@ -265,7 +270,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	public void applyColorsToMappers() {
 		// Apply Layout to Mapper
-		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions(CartActionConnect.TYPE);
+		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping()
+				.getActions(CartActionConnect.TYPE);
 		for (CartAction cartAction : actions) {
 			if (cartAction.isAutoFeedbackColors()) {
 				for (Mapper mapper : cartAction.getMappers()) {
@@ -303,12 +309,14 @@ public class MainViewController extends ViewController implements IMainViewContr
 			}
 
 			if (layoutStdColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD,
+						layoutStdColor);
 				colorAssociator.setColor(FeedbackMessage.STANDARD, associator.midiVelocity());
 			}
 
 			if (layoutEvColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT,
+						layoutEvColor);
 				colorAssociator.setColor(FeedbackMessage.EVENT, associator.midiVelocity());
 			}
 		}
@@ -393,7 +401,9 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		// Button in Toolbar
-		Button oldButton = (Button) toolbarController.getPageHBox().getChildren().get(pageNumber); // Der Aktuell andersfarbende Button
+		Button oldButton = (Button) toolbarController.getPageHBox().getChildren().get(pageNumber); // Der Aktuell
+																									// andersfarbende
+																									// Button
 		oldButton.getStyleClass().remove(CURRENT_PAGE_BUTTON);
 
 		this.pageNumber = newPage;
@@ -428,6 +438,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		return toolbarController.getVolumeSlider();
 	}
 
+	// TODO REDO
 	@Override
 	public boolean closeRequest() {
 		if (errorSummaryDialog != null)
@@ -542,7 +553,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private void loadMidiDevice(String name) {
 		try {
 			midi.lookupMidiDevice(name);
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name),
+					PlayPadMain.displayTimeMillis);
 		} catch (NullPointerException e) {
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
@@ -603,7 +615,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					toolbarController.getToolbarHBox().setOpacity(1);
@@ -707,5 +720,10 @@ public class MainViewController extends ViewController implements IMainViewContr
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
+		getParent().getScene().addEventHandler(eventType, listener);
 	}
 }

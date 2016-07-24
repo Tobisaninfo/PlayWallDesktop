@@ -21,13 +21,11 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 		this.project = project;
 		this.mainViewController = mainViewController;
 
-		mainViewController.getParent().getScene().setOnKeyPressed(this);
-		mainViewController.getParent().getScene().setOnKeyReleased(this);
-		mainViewController.getParent().getScene().setOnKeyTyped(this);
+		// TEST
+		mainViewController.registerKeyboardListener(KeyEvent.ANY, this);
 	}
 
-	private boolean[] keys = new boolean[KeyCode.values().length];
-
+	// KeyType ist nicht unterstützt.
 	@Override
 	public void handle(KeyEvent event) {
 		if (!event.isShortcutDown()) {
@@ -38,25 +36,29 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 				code = event.getCode();
 				type = InputType.PRESSED;
 
-				if (keys[code.ordinal()] == true) {
-					return;
-				}
-
-				keys[code.ordinal()] = true;
 			} else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
 				code = event.getCode();
 				type = InputType.RELEASED;
 
-				keys[code.ordinal()] = false;
 			}
 
 			// Only execute this, then the right event is triggered and this var is set
 			if (code != null) {
-				List<Action> actions = MappingUtils.getActionsForKey(code, Profile.currentProfile().getMappings().getActiveMapping());
+				List<Action> actions = MappingUtils.getActionsForKey(code,
+						Profile.currentProfile().getMappings().getActiveMapping());
 
-				for (Action action : actions) {
-					action.performAction(type, project, mainViewController);
-				}
+				executeActions(type, actions);
+			}
+		}
+	}
+
+	private void executeActions(InputType type, List<Action> actions) {
+		for (Action action : actions) {
+			try {
+				action.performAction(type, project, mainViewController);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO Exception Hadling
 			}
 		}
 	}
