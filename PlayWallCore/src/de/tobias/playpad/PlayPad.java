@@ -12,6 +12,14 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
 import net.xeoh.plugins.base.PluginManager;
 
+/**
+ * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
+ * 
+ * @author tobias
+ * 
+ * @since 5.0.0
+ *
+ */
 public interface PlayPad {
 
 	/**
@@ -30,6 +38,7 @@ public interface PlayPad {
 	 * 
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public void removeMainViewListener(WindowListener<IMainViewController> listener);
 
 	/**
@@ -39,6 +48,7 @@ public interface PlayPad {
 	 * 
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public void addSettingsViewListener(WindowListener<ISettingsViewController> listener);
 
 	/**
@@ -48,8 +58,10 @@ public interface PlayPad {
 	 * 
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public void removeSettingsViewListener(WindowListener<ISettingsViewController> listener);
 
+	@Deprecated
 	public List<WindowListener<ISettingsViewController>> getSettingsViewListener();
 
 	/**
@@ -59,6 +71,7 @@ public interface PlayPad {
 	 * 
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public void addPadSettingsViewListener(WindowListener<IPadSettingsViewController> listener);
 
 	/**
@@ -68,8 +81,10 @@ public interface PlayPad {
 	 * 
 	 * @since 2.0.0
 	 */
+	@Deprecated
 	public void removePadSettingsViewListener(WindowListener<IPadSettingsViewController> listener);
 
+	@Deprecated
 	public List<WindowListener<IPadSettingsViewController>> getPadSettingsViewListener();
 
 	/**
@@ -102,7 +117,13 @@ public interface PlayPad {
 
 	public PluginManager getPluginManager();
 
-	public String[] getProjectFiles();
-
+	@Deprecated
+	public String[] getProjectFileTypes();
+	
+	/**
+	 * Gibt das Programmicon zurück.
+	 * 
+	 * @return Programmicon
+	 */
 	public Optional<Image> getIcon();
 }

@@ -73,7 +73,7 @@ public class ImportDialog implements Importable, ProfileChooseable {
 
 	@Override
 	public String replaceProject(String name) {
-		TextInputDialog alert = new TextInputDialog(name.replace(PlayPadMain.projectType[0].substring(1), ""));
+		TextInputDialog alert = new TextInputDialog(name.replace(PlayPadMain.projectType.substring(1), ""));
 		alert.initOwner(getStage());
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.setContentText(Localization.getString(Strings.UI_Dialog_Import_ReplaceProject_ReplaceContent, name));

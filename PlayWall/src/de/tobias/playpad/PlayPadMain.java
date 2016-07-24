@@ -117,9 +117,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 	public static final long displayTimeMillis = 1500;
 
-	public static final String[] projectType = { "*.xml" };
-	public static final String[] projectZIPType = { "*.zip" };
-	public static final String[] midiPresetType = { "*.pre" };
+	public static final String projectType = "*.xml";
+	public static final String projectZIPType = "*.zip";
+	public static final String midiPresetType = "*.pre";
 
 	private static ResourceBundle uiResourceBundle;
 	private static MainViewController mainViewController;
@@ -164,8 +164,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 
 		// Console
 		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+			System.setOut(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
+			System.setErr(
+					ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -175,7 +177,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		try {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+		}
 
 		/*
 		 * Setup
@@ -212,7 +215,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
-			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
+			} catch (IllegalArgumentException | NullPointerException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -459,8 +463,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 	}
 
 	@Override
-	public String[] getProjectFiles() {
-		return projectType;
+	public String[] getProjectFileTypes() {
+		return new String[] { projectType };
 	}
 
 	@Override
