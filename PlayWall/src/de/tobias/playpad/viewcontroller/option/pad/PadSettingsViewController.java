@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +8,12 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.path.MultiPathContent;
+import de.tobias.playpad.pad.conntent.path.SinglePathContent;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -17,9 +21,14 @@ import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -29,6 +38,9 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 	@FXML private TabPane tabPane;
 	protected List<PadSettingsTabViewController> tabs = new ArrayList<>();
+
+	private Control pathLookupButton;
+	private PathLookupListener pathLookupListener;
 
 	@FXML private Button finishButton;
 
@@ -44,7 +56,8 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		if (pad.getContent() != null) {
 			try {
 				// Get Pad Type specific tab
-				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
+				PadContentConnect padContentConnect = PadContentRegistry
+						.getPadContentConnect(pad.getContent().getType());
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
@@ -52,6 +65,8 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 				e.printStackTrace();
 			}
 		}
+
+		setupPathLookupButton();
 
 		// Listener
 		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l ->
@@ -70,8 +85,56 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		setTitle(pad);
 	}
 
+	private void setupPathLookupButton() {
+		pathLookupListener = new PathLookupListener();
+		
+		if (pad.getContent() != null) {
+			PadContent content = pad.getContent();
+			// nur EIN Path
+			if (content instanceof SinglePathContent) {
+				Button button = new Button("Show Path");
+
+				// Referenz auf das Model
+				Path path = ((SinglePathContent) content).getPath();
+				button.setUserData(path);
+
+				button.setOnAction(pathLookupListener);
+
+				// Setzt globales Feld
+				pathLookupButton = button;
+			} else if (content instanceof MultiPathContent) {
+				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString(""));
+				List<Path> paths = ((MultiPathContent) content).getPaths();
+
+				for (Path path : paths) {
+					MenuItem item = new MenuItem(path.getFileName().toString());
+					button.getItems().add(item);
+
+					// Referenz auf das Model
+					item.setUserData(path);
+
+					item.setOnAction(pathLookupListener);
+				}
+
+				// Setzt globales Feld
+				pathLookupButton = button;
+			}
+
+			// Hüge Path Button zum Root Container hinzu.
+			Parent parent = getParent();
+			if (parent instanceof AnchorPane && pathLookupButton != null) {
+				AnchorPane anchorPane = (AnchorPane) parent;
+				anchorPane.getChildren().add(pathLookupButton);
+
+				AnchorPane.setLeftAnchor(pathLookupButton, 14.0);
+				AnchorPane.setBottomAnchor(pathLookupButton, 14.0);
+			}
+		}
+	}
+
 	private void setTitle(Pad pad) {
-		getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+		getStage().setTitle(
+				Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
 	}
 
 	@Override
