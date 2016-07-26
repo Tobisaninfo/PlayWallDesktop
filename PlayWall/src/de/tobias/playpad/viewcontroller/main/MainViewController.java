@@ -67,6 +67,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+// TODO Extract Color Adjust methodes
 public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
 	private static final String CURRENT_PAGE_BUTTON = "current-page-button";
@@ -157,7 +158,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public void init() {
 		padGridPane.getStyleClass().add("pad-grid");
 
-		menuBarController.extensionMenu.setVisible(false);
+		menuBarController.getExtensionMenu().setVisible(false);
 
 		liveLabel.setVisible(false);
 		liveLabel.getStyleClass().add("live-label");
@@ -170,7 +171,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		getStage().fullScreenProperty().addListener((a, b, c) ->
 		{
-			menuBarController.fullScreenMenuItem.setSelected(c);
+			menuBarController.getFullScreenMenuItem().setSelected(c);
 		});
 
 		// Lautstärke Veränderung
@@ -654,7 +655,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		// WINDOW Settings
-		menuBarController.alwaysOnTopItem.setSelected(profilSettings.isWindowAlwaysOnTop());
+		menuBarController.getAlwaysOnTopItem().setSelected(profilSettings.isWindowAlwaysOnTop());
 		getStage().setAlwaysOnTop(profilSettings.isWindowAlwaysOnTop());
 
 		setTitle();
@@ -683,9 +684,9 @@ public class MainViewController extends ViewController implements IMainViewContr
 	 * @since 2.0.0
 	 */
 	public void addMenuItem(MenuItem item) {
-		menuBarController.extensionMenu.getItems().add(item);
-		if (!menuBarController.extensionMenu.isVisible()) {
-			menuBarController.extensionMenu.setVisible(true);
+		menuBarController.getExtensionMenu().getItems().add(item);
+		if (!menuBarController.getExtensionMenu().isVisible()) {
+			menuBarController.getExtensionMenu().setVisible(true);
 		}
 	}
 

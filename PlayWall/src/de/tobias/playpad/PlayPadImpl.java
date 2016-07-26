@@ -55,41 +55,6 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public void removeMainViewListener(WindowListener<IMainViewController> listener) {
-		mainViewListeners.remove(listener);
-	}
-
-	@Override
-	public void addSettingsViewListener(WindowListener<ISettingsViewController> listener) {
-		settingsViewListeners.add(listener);
-	}
-
-	@Override
-	public void removeSettingsViewListener(WindowListener<ISettingsViewController> listener) {
-		settingsViewListeners.remove(listener);
-	}
-
-	@Override
-	public List<WindowListener<ISettingsViewController>> getSettingsViewListener() {
-		return settingsViewListeners;
-	}
-
-	@Override
-	public void addPadSettingsViewListener(WindowListener<IPadSettingsViewController> listener) {
-		padSettingsViewListeners.add(listener);
-	}
-
-	@Override
-	public void removePadSettingsViewListener(WindowListener<IPadSettingsViewController> listener) {
-		padSettingsViewListeners.remove(listener);
-	}
-
-	@Override
-	public List<WindowListener<IPadSettingsViewController>> getPadSettingsViewListener() {
-		return padSettingsViewListeners;
-	}
-
-	@Override
 	public void addSettingsListener(SettingsListener listener) {
 		settingsListeners.add(listener);
 	}
@@ -122,16 +87,6 @@ public class PlayPadImpl implements PlayPad {
 	@Override
 	public IMainViewController getMainViewController() {
 		return mainViewController;
-	}
-
-	@Override
-	public PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public String[] getProjectFileTypes() {
-		return new String[] { PlayPadMain.projectType };
 	}
 
 	@Override

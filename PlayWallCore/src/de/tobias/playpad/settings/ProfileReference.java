@@ -9,79 +9,102 @@ import java.util.List;
 import java.util.UUID;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.list.UniqList;
 import de.tobias.utils.util.FileUtils;
-import de.tobias.utils.util.FileUtils.FileAction;
+import de.tobias.utils.util.FileUtils.FileActionAdapter;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Container für Profile Referenzen
+ * 
+ * @author tobias
+ * 
+ * @see Profile
+ * @since 5.0.0
+ */
 public class ProfileReference implements Displayable {
 
 	private static final String DEFAULT_PROFILE_NAME = "Default";
 
-	private static List<ProfileReference> profiles = new UniqList<ProfileReference>() {
-
-		private static final long serialVersionUID = 1L;
-
-		public boolean contains(Object o) {
-			if (o instanceof String) {
-				for (ProfileReference reference : this) {
-					if (reference.getName().equals(o)) {
-						return true;
-					} else if (reference.toString().equals(o)) {
-						return true;
-					}
-				}
-			} else if (o instanceof ProfileReference) {
-				for (ProfileReference reference : this) {
-					if (reference.getName() == o) {
-						return true;
-					} else if (reference.getName() == ((ProfileReference) o).getName()) {
-						return true;
-					}
-				}
-			}
-			return super.contains(o);
-		};
-	};
-
 	private final UUID uuid;
 	private String name;
 
+	/**
+	 * Erstellt eine neue Referenz mit einer Random UUID.
+	 * 
+	 * @param name
+	 *            Name
+	 */
 	public ProfileReference(String name) {
 		this.name = name;
 		this.uuid = UUID.randomUUID();
 		updateDisplayProperty();
 	}
 
+	/**
+	 * Erstellt eine neue Referenz mit Namen und UUID.
+	 * 
+	 * @param uuid
+	 *            UUID
+	 * @param name
+	 *            Name
+	 */
 	public ProfileReference(UUID uuid, String name) {
 		this.uuid = uuid;
 		this.name = name;
 		updateDisplayProperty();
 	}
 
+	/**
+	 * Gibt den Namen zurück
+	 * 
+	 * @return Name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Gibt die UUID zurück
+	 * 
+	 * @return uudi
+	 */
 	public UUID getUuid() {
 		return uuid;
 	}
 
+	/**
+	 * Setzt einen neuen Namen.
+	 * 
+	 * @param name
+	 *            Neuer Name
+	 */
 	public void setName(String name) {
 		this.name = name;
 		updateDisplayProperty();
 	}
 
+	// Verwaltungsmethoden für Profile Referenzen // TODO Extract in Extra Class
+
+	/**
+	 * Liste mit allen Referenzen
+	 */
+	private static List<ProfileReference> profiles = new ProfileReferenceList();
+
+	/**
+	 * Sucht eine Referenz zu einer UUID raus.
+	 * 
+	 * @param profile
+	 * @return
+	 */
 	public static ProfileReference getReference(UUID profile) {
 		for (ProfileReference ref : profiles) {
 			if (ref.uuid.equals(profile)) {
@@ -91,6 +114,11 @@ public class ProfileReference implements Displayable {
 		return null;
 	}
 
+	/**
+	 * Listet alle verfügbaren Profil Refernzen auf.
+	 * 
+	 * @return Liste von Referenzen (Name, UUID)
+	 */
 	public static List<ProfileReference> getProfiles() {
 		return profiles;
 	}
@@ -103,6 +131,7 @@ public class ProfileReference implements Displayable {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 * @throws IOException
+	 *             IO Fehler
 	 */
 	public static Profile newProfile(String name) throws UnsupportedEncodingException, IOException {
 		ProfileReference ref = new ProfileReference(UUID.randomUUID(), name);
@@ -114,9 +143,17 @@ public class ProfileReference implements Displayable {
 		return profile;
 	}
 
+	/**
+	 * Fügt ein Profile hinzu und erstellt den Ordner auf der Festplatte.
+	 * 
+	 * @param ref
+	 *            Referenz zu diesem Profile (Name, UUID)
+	 */
 	public static void addProfile(ProfileReference ref) {
+		// MODEL
 		profiles.add(ref);
 
+		// DRIVE
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, ref.getFileName());
 		if (Files.notExists(path)) {
 			try {
@@ -128,19 +165,19 @@ public class ProfileReference implements Displayable {
 	}
 
 	/**
-	 * Duplicate one profile on drive. To use the new profile, it must be load manually.
-	 * 
+	 * Dupliziert eine Profile. Dabei werden die Dateien auf der Festplatte auch dupliziert.
 	 * 
 	 * @param src
-	 *            Name of the original Profile
+	 *            Name des Orginalprofiles
 	 * @param des
-	 *            Name of the new Profile
+	 *            Name des neuen Profiles
 	 * @throws IOException
+	 *             IO Fehler
 	 */
 	public static void duplicate(ProfileReference src, ProfileReference des) throws IOException {
 		if (!des.equals(src)) {
 			FileUtils.loopThroughDirectory(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, src.getFileName()),
-					new FileAction() {
+					new FileActionAdapter() {
 
 						@Override
 						public void onFile(Path file) throws IOException {
@@ -151,18 +188,25 @@ public class ProfileReference implements Displayable {
 							}
 							Files.copy(file, desPath, StandardCopyOption.REPLACE_EXISTING);
 						}
-
-						@Override
-						public void onDirectory(Path file) throws IOException {}
 					});
 
 			profiles.add(des);
 		}
 	}
 
+	/**
+	 * Entfernt eine ProfileReferenz und das Profile.
+	 * 
+	 * @param ref
+	 *            Profile Referenz
+	 * @throws IOException
+	 *             IO Fehler
+	 */
 	public static void removeProfile(ProfileReference ref) throws IOException {
+		// Model
 		profiles.remove(ref);
 
+		// DRIVE
 		Path root = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, ref.getFileName());
 		if (Files.exists(root)) {
 			Files.walk(root).forEach(path ->
@@ -178,58 +222,74 @@ public class ProfileReference implements Displayable {
 		}
 	}
 
+	// Load and Save
+
+	private static final String FILE_NAME = "Profiles.xml";
 	private static final String ROOT_ELEMENT = "Settings";
 	private static final String PROFILE_ELEMENT = "Profile";
-	private static final String UUID_ATTR = "uuid";
-	private static final String NAME_ATTR = "name";
 
-	public static void loadProfiles() throws Exception {
+	/**
+	 * Lädt alle Profile Referenzen.
+	 * 
+	 * @throws IOException
+	 *             IO Fehler
+	 * @throws DocumentException
+	 *             XML Fehler
+	 */
+	public static void loadProfiles() throws IOException, DocumentException {
 		profiles.clear();
 
-		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Profiles.xml");
+		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
 
 		if (Files.exists(path)) {
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(path));
-			Element root = document.getRootElement();
-			for (Object object : root.elements(PROFILE_ELEMENT)) {
-				Element element = (Element) object;
-
-				UUID uuid = UUID.fromString(element.attributeValue(UUID_ATTR));
-				String name = element.attributeValue(NAME_ATTR);
-
-				ProfileReference ref = new ProfileReference(uuid, name);
-				profiles.add(ref);
-			}
+			// Load data from xml
+			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
+			profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
+			System.out.println(profiles);
 		}
 
+		// Add Default Element if list is empty
 		if (profiles.isEmpty()) {
 			Profile profile = newProfile(DEFAULT_PROFILE_NAME);
 			profile.save();
 		}
 	}
 
+	/**
+	 * Speichert alle Profile Referenzen in eine Datei.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 *             XML Fehler
+	 * @throws IOException
+	 *             IO Fehler
+	 */
 	public static void saveProfiles() throws UnsupportedEncodingException, IOException {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement(ROOT_ELEMENT);
 
-		for (ProfileReference ref : profiles) {
-			Element element = root.addElement(PROFILE_ELEMENT);
+		// Save data to xml
+		XMLHandler<ProfileReference> handler = new XMLHandler<>(root);
+		handler.saveElements(PROFILE_ELEMENT, profiles, new ProfileReferenceSerializer());
 
-			element.addAttribute(UUID_ATTR, ref.uuid.toString());
-			element.addAttribute(NAME_ATTR, ref.name);
-		}
-
-		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Profiles.xml");
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
-		writer.write(document);
-		writer.close();
+		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+		XMLHandler.save(path, document);
 	}
 
+	/**
+	 * Gibt einen Pfad für einen Dateinamen in diesem Profile zurück.
+	 * 
+	 * @param name
+	 * @return
+	 */
 	public Path getCustomFilePath(String name) {
 		return ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, getFileName(), name);
 	}
 
+	/**
+	 * Gibt den internen (File-) Namen des Profiles zurück.
+	 * 
+	 * @return Ordnernamen
+	 */
 	public String getFileName() {
 		return uuid.toString();
 	}
@@ -239,6 +299,7 @@ public class ProfileReference implements Displayable {
 		return name;
 	}
 
+	// Displayable
 	private StringProperty displayProperty = new SimpleStringProperty(toString());
 
 	@Override

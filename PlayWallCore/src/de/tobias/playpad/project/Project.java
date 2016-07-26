@@ -196,6 +196,10 @@ public class Project {
 		return count;
 	}
 
+	public boolean hasPlayedPlayers() {
+		return getPlayedPlayers() > 0;
+	}
+
 	// Exceptions
 	public void addException(Pad pad, Path path, Exception exception) {
 		if (!Platform.isFxApplicationThread()) {

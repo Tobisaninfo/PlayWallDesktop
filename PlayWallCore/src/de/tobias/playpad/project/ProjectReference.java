@@ -13,12 +13,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -27,31 +25,7 @@ import javafx.beans.property.StringProperty;
 
 public class ProjectReference implements Displayable {
 
-	private static List<ProjectReference> projects = new ArrayList<ProjectReference>() {
-
-		private static final long serialVersionUID = 1L;
-
-		public boolean contains(Object o) {
-			if (o instanceof String) {
-				for (ProjectReference reference : this) {
-					if (reference.getName().equals(o)) {
-						return true;
-					} else if (reference.toString().equals(o)) {
-						return true;
-					}
-				}
-			} else if (o instanceof ProjectReference) {
-				for (ProjectReference reference : this) {
-					if (reference.getName() == o) {
-						return true;
-					} else if (reference.getName() == ((ProjectReference) o).getName()) {
-						return true;
-					}
-				}
-			}
-			return super.contains(o);
-		};
-	};
+	private static List<ProjectReference> projects = new ProjectReferenceList();
 	private static boolean loadedProjectOverview = false;
 
 	/**
@@ -144,12 +118,16 @@ public class ProjectReference implements Displayable {
 		ProjectReference newProjectReference = new ProjectReference(UUID.randomUUID(), name, currentProject.getProfileReference());
 		addProject(newProjectReference);
 
-		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getName());
-		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getName());
-		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
+		duplicateFiles(currentProject, newProjectReference);
 
 		saveProjects();
 		return newProjectReference;
+	}
+
+	private static void duplicateFiles(ProjectReference currentProject, ProjectReference newProjectReference) throws IOException {
+		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getName());
+		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getName());
+		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 
 	public static List<ProjectReference> getProjects() {
@@ -162,59 +140,28 @@ public class ProjectReference implements Displayable {
 		return projects;
 	}
 
-	private static final String UUID_ATTR = "uuid";
-	private static final String NAME_ATTR = "name";
-	private static final String PROFILE_ATTR = "profile";
+	// Load and Save
+	private static final String FILE_NAME = "Projects.xml";
+	private static final String PROJECT_ELEMENT = "Project";
+	private static final String ROOT_ELEMENT = "Settings";
 
 	public static void loadProjects() throws DocumentException, IOException {
-		projects.clear();
+		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+		XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
+		projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
 
-		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Projects.xml");
-
-		if (Files.exists(path)) {
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(path));
-			Element root = document.getRootElement();
-
-			for (Object object : root.elements("Project")) {
-				Element element = (Element) object;
-
-				UUID uuid = UUID.fromString(element.attributeValue(UUID_ATTR));
-				String name = element.attributeValue(NAME_ATTR);
-				UUID profile = UUID.fromString(element.attributeValue(PROFILE_ATTR));
-
-				ProfileReference profileRef = ProfileReference.getReference(profile);
-				ProjectReference ref = new ProjectReference(uuid, name, profileRef);
-
-				Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
-				if (Files.exists(projectPath)) {
-					ref.setLastMofied(Files.getLastModifiedTime(projectPath).toMillis());
-					ref.setSize(Files.size(projectPath));
-				}
-
-				projects.add(ref);
-			}
-
-			loadedProjectOverview = true;
-		}
+		loadedProjectOverview = true;
 	}
 
 	public static void saveProjects() throws UnsupportedEncodingException, IOException {
 		Document document = DocumentHelper.createDocument();
-		Element root = document.addElement("Settings");
+		Element root = document.addElement(ROOT_ELEMENT);
 
-		for (ProjectReference project : projects) {
-			Element projectElement = root.addElement("Project");
-			projectElement.addAttribute(UUID_ATTR, project.uuid.toString());
-			projectElement.addAttribute(NAME_ATTR, project.name);
-			projectElement.addAttribute(PROFILE_ATTR, project.profileReference.getUuid().toString());
-		}
+		XMLHandler<ProjectReference> handler = new XMLHandler<>(root);
+		handler.saveElements(PROJECT_ELEMENT, projects, new ProjectReferenceSerializer());
 
-		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Projects.xml");
-
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
-		writer.write(document);
-		writer.close();
+		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+		XMLHandler.save(path, document);
 	}
 
 	public static List<ProjectReference> getProjectsSorted() {

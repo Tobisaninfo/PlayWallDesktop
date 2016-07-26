@@ -10,11 +10,7 @@ import java.util.ResourceBundle;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.project.Project;
@@ -61,16 +57,16 @@ import javafx.stage.Stage;
 public class MainMenuBarController implements EventHandler<ActionEvent>, Initializable, ProfileListener {
 
 	@FXML private MenuBar menuBar;
-	@FXML CheckMenuItem dndModeMenuItem;
-	@FXML CheckMenuItem alwaysOnTopItem;
-	@FXML CheckMenuItem fullScreenMenuItem;
-	@FXML Menu recentOpenMenu;
-	@FXML MenuItem profileMenu;
+	@FXML private CheckMenuItem dndModeMenuItem;
+	@FXML private CheckMenuItem alwaysOnTopItem;
+	@FXML private CheckMenuItem fullScreenMenuItem;
+	@FXML private Menu recentOpenMenu;
+	@FXML private MenuItem profileMenu;
 
-	@FXML CheckMenuItem quickEditMenuItem;
-	@FXML MenuItem settingsMenuItem;
+	@FXML private CheckMenuItem quickEditMenuItem;
+	@FXML private MenuItem settingsMenuItem;
 
-	@FXML Menu extensionMenu;
+	@FXML private Menu extensionMenu;
 
 	// Open Windows
 	private SettingsViewController settingsViewController;
@@ -173,23 +169,6 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	}
 
 	@FXML
-	private void quickEditMenuHandler(ActionEvent event) {
-		try {
-			for (Action action : Profile.currentProfile().getMappings().getActiveMapping().getActionsOfType(CartActionConnect.TYPE)) {
-				CartAction cartAction = (CartAction) action;
-				if (cartAction.getCart() < mvc.padViewList.size()) {
-					cartAction.getPad().getController().getParent().setBusy(quickEditMenuItem.isSelected());
-					// IPadViewController controller = mvc.padViewList.get(cartAction.getCart());
-					// MapperQuickSettingsView view = new MapperQuickSettingsView((Pane) controller.getParent().getParent());
-					// view.showDropOptions(action.getMappers());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@FXML
 	private void settingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
 		Project project = mvc.getProject();
@@ -216,7 +195,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 					}
 
 					if (change) {
-						PlayPadPlugin.getImplementation().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
+						PlayPadMain.getProgramInstance().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
 					}
 
 					settingsViewController = null;
@@ -391,5 +370,19 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 		ProfileSettings profileSettings = currentProfile.getProfileSettings();
 		profileSettings.lockedProperty().addListener(lockedListener);
 		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
+	}
+
+	// Getter
+
+	public CheckMenuItem getAlwaysOnTopItem() {
+		return alwaysOnTopItem;
+	}
+
+	public Menu getExtensionMenu() {
+		return extensionMenu;
+	}
+
+	public CheckMenuItem getFullScreenMenuItem() {
+		return fullScreenMenuItem;
 	}
 }

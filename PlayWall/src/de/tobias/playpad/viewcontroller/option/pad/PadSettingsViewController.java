@@ -44,8 +44,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		if (pad.getContent() != null) {
 			try {
 				// Get Pad Type specific tab
-				PadContentConnect padContentConnect = PadContentRegistry
-						.getPadContentConnect(pad.getContent().getType());
+				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
@@ -53,15 +52,6 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 				e.printStackTrace();
 			}
 		}
-
-		// Listener
-		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> {
-			try {
-				l.onInit(this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
 
 		getStage().initOwner(owner);
 
@@ -72,11 +62,9 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 	private void setTitle(Pad pad) {
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			getStage().setTitle(
-					Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
 		} else {
-			getStage().setTitle(
-					Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable()));
+			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable()));
 		}
 	}
 
@@ -116,25 +104,23 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 	@Override
 	public boolean closeRequest() {
-		saveChanges();
-
-		// Listener
-		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> l.onClose(this));
+		onFinish();
 		return true;
-	}
-
-	private void saveChanges() {
-		for (PadSettingsTabViewController controller : tabs) {
-			controller.saveSettings(pad);
-		}
 	}
 
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		saveChanges();
-		// Listener
-		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> l.onClose(this));
-		getStage().close();
+		onFinish();
 	}
 
+	/**
+	 * Diese Methode wird aufgerufen, wenn das Fenster geschlossen wird (Per X oder Finish Button). Hier geschehen alle Aktionen zum
+	 * manuellen Speichern.
+	 */
+	private void onFinish() {
+		// Speichern der einzelen Tabs
+		for (PadSettingsTabViewController controller : tabs) {
+			controller.saveSettings(pad);
+		}
+	}
 }
