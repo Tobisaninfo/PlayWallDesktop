@@ -66,7 +66,6 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import net.xeoh.plugins.base.PluginManager;
 
 public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
@@ -99,13 +98,12 @@ public class MainViewController extends ViewController implements IMainViewContr
 	// Style
 	private Color gridColor;
 
-	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener, PluginManager manager) {
+	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener) {
 		super("mainView", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 
 		// Include FXML Setup
 		toolbarController.setMainViewController(this);
 		menuBarController.setMainViewController(this);
-		menuBarController.setPluginManager(manager);
 
 		padGridPane.setGridLinesVisible(true);
 

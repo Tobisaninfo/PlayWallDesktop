@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -56,7 +55,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		}
 
 		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> {
+		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> {
 			try {
 				l.onInit(this);
 			} catch (Exception e) {
@@ -120,7 +119,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		saveChanges();
 
 		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> l.onClose(this));
+		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> l.onClose(this));
 		return true;
 	}
 
@@ -134,7 +133,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	private void finishButtonHandler(ActionEvent event) {
 		saveChanges();
 		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> l.onClose(this));
+		PlayPadMain.getProgramInstance().getPadSettingsViewListener().forEach(l -> l.onClose(this));
 		getStage().close();
 	}
 

@@ -27,18 +27,14 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import net.xeoh.plugins.base.PluginManager;
 
 public class PluginViewController extends ViewController {
 
 	@FXML private ListView<Plugin> pluginListView;
 	@FXML private Button finishButton;
 
-	private PluginManager manager;
-
-	public PluginViewController(PluginManager manager, Window owner) {
+	public PluginViewController(Window owner) {
 		super("pluginView", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
-		this.manager = manager;
 
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
@@ -77,7 +73,7 @@ public class PluginViewController extends ViewController {
 
 	@Override
 	public void init() {
-		pluginListView.setCellFactory(list -> new PluginCell(manager));
+		pluginListView.setCellFactory(list -> new PluginCell());
 		pluginListView.setPlaceholder(new Label(Localization.getString(Strings.UI_Placeholder_Plugins)));
 
 		addCloseKeyShortcut(() -> getStage().close());

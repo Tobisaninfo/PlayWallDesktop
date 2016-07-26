@@ -1,5 +1,6 @@
 package de.tobias.playpad;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -115,15 +116,26 @@ public interface PlayPad {
 
 	public IMainViewController getMainViewController();
 
+	@Deprecated
 	public PluginManager getPluginManager();
 
 	@Deprecated
 	public String[] getProjectFileTypes();
-	
+
 	/**
 	 * Gibt das Programmicon zurück.
 	 * 
 	 * @return Programmicon
 	 */
 	public Optional<Image> getIcon();
+
+	public void shutdown();
+
+	/**
+	 * Lädt ein Plugin sofort ins System.
+	 * 
+	 * @param uri
+	 *            Quelle des Plugin
+	 */
+	public void loadPlugin(URI uri);
 }

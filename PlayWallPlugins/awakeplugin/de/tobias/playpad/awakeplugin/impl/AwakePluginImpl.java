@@ -32,7 +32,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
-import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
@@ -58,8 +57,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		if (OS.getType() == OSType.Windows) {
 			try {
 				loadJNA();
-				PluginManager manager = PlayPadPlugin.getImplementation().getPluginManager();
-				manager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna").toUri());
+				PlayPadPlugin.getImplementation().loadPlugin(ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna").toUri());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

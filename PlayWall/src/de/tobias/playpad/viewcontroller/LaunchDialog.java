@@ -1,5 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
+import static de.tobias.utils.util.Localization.getString;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,6 +9,7 @@ import java.nio.file.Path;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProfileChooseable;
 import de.tobias.playpad.project.Project;
@@ -22,8 +25,6 @@ import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
-import static de.tobias.utils.util.Localization.getString;
-import de.tobias.utils.util.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -107,10 +108,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
-		stage.setOnCloseRequest(e ->
-		{
-			Worker.shutdown();
-		});
+		PlayPadPlugin.getImplementation().shutdown();
 
 		stage.setResizable(false);
 		stage.setWidth(650);
@@ -124,7 +122,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 		Project project = dialog.getProject();
 		if (project != null) {
-			PlayPadMain.launchProject(project);
+			PlayPadMain.getProgramInstance().openProject(project);
 			getStage().close();
 		}
 	}
@@ -197,7 +195,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	private void launchProject(ProjectReference ref) {
 		try {
 			Project project = Project.load(ref, true, this);
-			PlayPadMain.launchProject(project);
+			PlayPadMain.getProgramInstance().openProject(project);
 			getStage().close();
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();

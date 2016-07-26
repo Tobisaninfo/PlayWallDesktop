@@ -19,7 +19,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
-import net.xeoh.plugins.base.PluginManager;
 
 public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boolean> {
 
@@ -27,11 +26,7 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 	private HBox buttons;
 	private CheckBox checkBox;
 
-	private PluginManager manager;
-
-	public PluginCell(PluginManager manager) {
-		this.manager = manager;
-
+	public PluginCell() {
 		checkBox = new CheckBox();
 		checkBox.selectedProperty().addListener(this);
 
@@ -66,22 +61,26 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 			downloadPlugin(plugin, path);
 
 			// Dependencies
-			List<Plugin> dependencies = findDependencies();
-			dependencies.forEach(p ->
-			{
-				Path decPath = app.getPath(PathType.LIBRARY, p.getFileName());
-				downloadPlugin(p, decPath);
-
-				// Add Plugin to classpath
-				manager.addPluginsFrom(decPath.toUri());
-			});
+			loadDependencies(app);
 
 			// Add Plugin to classpath
-			manager.addPluginsFrom(path.toUri());
+			PlayPadMain.getProgramInstance().loadPlugin(path.toUri());
 		} else {
 			// Deaktivieren
-			PlayPadMain.addDeletedPlugin(path);
+			PlayPadMain.getProgramInstance().addDeletedPlugin(path);
 		}
+	}
+
+	private void loadDependencies(App app) {
+		List<Plugin> dependencies = findDependencies();
+		dependencies.forEach(p ->
+		{
+			Path decPath = app.getPath(PathType.LIBRARY, p.getFileName());
+			downloadPlugin(p, decPath);
+
+			// Add Plugin to classpath
+			PlayPadMain.getProgramInstance().loadPlugin(decPath.toUri());
+		});
 	}
 
 	private List<Plugin> findDependencies() {

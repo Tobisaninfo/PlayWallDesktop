@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
@@ -60,7 +59,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		}
 
 		// Listener
-		PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l ->
+		PlayPadMain.getProgramInstance().getSettingsViewListener().forEach(l ->
 		{
 			try {
 				l.onInit(this);
@@ -125,7 +124,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 
 		if (valid) { // Einstellungen sind Valide
 			// Listener
-			PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l -> l.onClose(this));
+			PlayPadMain.getProgramInstance().getSettingsViewListener().forEach(l -> l.onClose(this));
 
 			saveChanges();
 			getStage().close();
@@ -179,7 +178,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 
 		if (valid) { // Einstellungen sind Valide
 			// Listener
-			PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l -> l.onClose(this));
+			PlayPadMain.getProgramInstance().getSettingsViewListener().forEach(l -> l.onClose(this));
 
 			saveChanges();
 			getStage().close();

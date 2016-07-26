@@ -57,7 +57,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import net.xeoh.plugins.base.PluginManager;
 
 public class MainMenuBarController implements EventHandler<ActionEvent>, Initializable, ProfileListener {
 
@@ -75,7 +74,6 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 
 	// Open Windows
 	private SettingsViewController settingsViewController;
-	private PluginManager manager;
 	private MainViewController mvc;
 
 	private ChangeListener<Boolean> lockedListener;
@@ -319,7 +317,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 	private void pluginMenuItemHandler(ActionEvent e) {
 		doAction(() ->
 		{
-			PluginViewController controller = new PluginViewController(manager, mvc.getStage());
+			PluginViewController controller = new PluginViewController(mvc.getStage());
 			controller.getStage().showAndWait();
 			mvc.showPage(mvc.getPage());
 		});
@@ -379,10 +377,6 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 			menuItem.setOnAction(this);
 			recentOpenMenu.getItems().add(menuItem);
 		});
-	}
-
-	public void setPluginManager(PluginManager manager) {
-		this.manager = manager;
 	}
 
 	public void setMainViewController(MainViewController mvc) {
