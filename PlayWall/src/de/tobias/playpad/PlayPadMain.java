@@ -190,7 +190,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		}
 
 		ViewController.create(LaunchDialog.class, stage);
-
 	}
 
 	@Override
@@ -256,7 +255,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {
 		// Delete old plugins
 		impl.deletePlugins();
-		
+
 		// Load Plugins
 		impl.loadPlugin(pluginPath.toUri());
 	}

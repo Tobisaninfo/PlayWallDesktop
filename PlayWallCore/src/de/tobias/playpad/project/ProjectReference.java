@@ -147,9 +147,10 @@ public class ProjectReference implements Displayable {
 
 	public static void loadProjects() throws DocumentException, IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
-		XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
-		projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
-
+		if (Files.exists(path)) {
+			XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
+			projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
+		}
 		loadedProjectOverview = true;
 	}
 
@@ -161,6 +162,10 @@ public class ProjectReference implements Displayable {
 		handler.saveElements(PROJECT_ELEMENT, projects, new ProjectReferenceSerializer());
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+			Files.createFile(path);
+		}
 		XMLHandler.save(path, document);
 	}
 

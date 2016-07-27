@@ -272,6 +272,10 @@ public class ProfileReference implements Displayable {
 		handler.saveElements(PROFILE_ELEMENT, profiles, new ProfileReferenceSerializer());
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+			Files.createFile(path);
+		}
 		XMLHandler.save(path, document);
 	}
 
