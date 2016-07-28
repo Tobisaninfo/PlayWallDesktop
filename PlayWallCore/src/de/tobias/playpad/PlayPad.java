@@ -87,9 +87,6 @@ public interface PlayPad {
 	 */
 	public IMainViewController getMainViewController();
 
-	@Deprecated
-	public String[] getProjectFiles();
-
 	/**
 	 * Gibt das Programm Icon zurück.
 	 * 
