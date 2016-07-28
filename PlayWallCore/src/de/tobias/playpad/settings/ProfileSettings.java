@@ -17,9 +17,8 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.LayoutRegistry;
-import de.tobias.playpad.pad.Fade;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.Warning;
+import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.settings.SettingsSerializable;
@@ -74,8 +73,9 @@ public class ProfileSettings implements SettingsSerializable {
 	// Folder
 	@Storable private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
 
-	// Update
+	// Update - TODO GlobalSettings
 	@Storable private boolean autoUpdate = true;
+	@Storable private UpdateChannel updateChannel = UpdateChannel.STABLE;
 
 	public boolean isLocked() {
 		return lockedProperty.get();
@@ -180,6 +180,10 @@ public class ProfileSettings implements SettingsSerializable {
 		return autoUpdate;
 	}
 
+	public UpdateChannel getUpdateChannel() {
+		return updateChannel;
+	}
+
 	// Setter
 	public void setMidiDeviceName(String midiDevice) {
 		this.midiDevice = midiDevice;
@@ -259,6 +263,10 @@ public class ProfileSettings implements SettingsSerializable {
 		this.autoUpdate = autoUpdate;
 	}
 
+	public void setUpdateChannel(UpdateChannel updateChannel) {
+		this.updateChannel = updateChannel;
+	}
+
 	// Properties
 	public DoubleProperty volumeProperty() {
 		return volumeProperty;
@@ -267,6 +275,7 @@ public class ProfileSettings implements SettingsSerializable {
 	private static final String LOCKED_ELEMENT = "Locked";
 	private static final String ITEM_ELEMENT = "Item";
 	private static final String AUTO_UPDATE_ELEMENT = "AutoUpdate";
+	private static final String UPDATE_CHANNEL_ELEMENT = "UpdateChannel";
 	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
 	private static final String VOLUME_ELEMENT = "Volume";
 	private static final String KEY_ATTRIBUTE = "key";
@@ -379,6 +388,10 @@ public class ProfileSettings implements SettingsSerializable {
 			if (root.element(AUTO_UPDATE_ELEMENT) != null) {
 				profileSettings.setAutoUpdate(Boolean.valueOf(root.element(AUTO_UPDATE_ELEMENT).getStringValue()));
 			}
+
+			if (root.element(UPDATE_CHANNEL_ELEMENT) != null) {
+				profileSettings.setUpdateChannel(UpdateChannel.valueOf(root.element(UPDATE_CHANNEL_ELEMENT).getStringValue()));
+			}
 		}
 		return profileSettings;
 	}
@@ -425,7 +438,10 @@ public class ProfileSettings implements SettingsSerializable {
 
 		// Paths
 		root.addElement(CACHE_PATH_ELEMENT).addText(cachePath.toString());
+		
+		// Update
 		root.addElement(AUTO_UPDATE_ELEMENT).addText(String.valueOf(autoUpdate));
+		root.addElement(UPDATE_CHANNEL_ELEMENT).addText(updateChannel.name());
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
 		writer.write(document);

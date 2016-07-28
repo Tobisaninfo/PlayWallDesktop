@@ -42,16 +42,10 @@ public class ModernLayoutCartViewController extends CartLayoutViewController {
 	private void setLayout() {
 		backgroundColorButton.setStyle(getLinearGradientCss(cartLayout.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(cartLayout.getPlayColor()));
-
-		warnAnimationCheckBox.setSelected(cartLayout.isWarnAnimation());
 	}
 
 	@Override
 	public void init() {
-		warnAnimationCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			cartLayout.setWarnAnimation(c);
-		});
 	}
 
 	@FXML

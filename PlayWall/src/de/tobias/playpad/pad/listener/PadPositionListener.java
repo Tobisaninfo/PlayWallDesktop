@@ -2,11 +2,11 @@ package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.Warning;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Fadeable;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.pad.PadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -88,7 +88,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		Warning warning = pad.getWarning();
 
 		if (pad.isCustomLayout()) {
-			pad.getLayout().handleWarning(controller, warning);
+			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}

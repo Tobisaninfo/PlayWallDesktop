@@ -7,8 +7,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
@@ -160,68 +158,6 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		getActions().forEach(action -> action.clearFeedback());
 	}
 
-	private static final String NAME = "name";
-	private static final String UUID_NAME = "uuid";
-	private static final String ACTION = "Action";
-	private static final String ACTION_TYPE = "type";
-	private static final String MAPPER = "Mapper";
-	private static final String MAPPER_TYPE = "type";
-
-	public void load(Element element, Profile profile) {
-		name = element.attributeValue(NAME);
-		if (element.attributeValue(UUID_NAME) != null)
-			uuid = UUID.fromString(element.attributeValue(UUID_NAME));
-		else
-			uuid = UUID.randomUUID();
-
-		for (Object obj : element.elements(ACTION)) {
-			if (obj instanceof Element) {
-				Element actionElement = (Element) obj;
-				String tpye = actionElement.attributeValue(ACTION_TYPE);
-
-				Action action = ActionRegistery.getActionConnect(tpye).newInstance();
-				action.load(actionElement);
-
-				boolean added = addActionIfNotContains(action);
-
-				if (added) {
-					for (Object mapperObj : actionElement.elements(MAPPER)) {
-						if (mapperObj instanceof Element) {
-							Element mapperElement = (Element) mapperObj;
-							String mapperType = mapperElement.attributeValue(MAPPER_TYPE);
-
-							Mapper mapper = MapperRegistry.getMapperConnect(mapperType).createNewMapper();
-							mapper.load(mapperElement, action);
-							action.addMapper(mapper);
-						}
-					}
-				}
-			}
-		}
-
-		initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine gelöscht wurde auf der Datei)
-		updateDisplayProperty();
-	}
-
-	public void save(Element element) {
-		element.addAttribute(NAME, name);
-		element.addAttribute(UUID_NAME, uuid.toString());
-
-		for (Action action : mapping.keySet()) {
-			Element actionElement = element.addElement(ACTION);
-			actionElement.addAttribute(ACTION_TYPE, action.getType());
-
-			action.save(actionElement);
-
-			for (Mapper mapper : mapping.get(action)) {
-				Element mapperElement = actionElement.addElement(MAPPER);
-				mapperElement.addAttribute(MAPPER_TYPE, mapper.getType());
-
-				mapper.save(mapperElement, action);
-			}
-		}
-	}
-
 	@Override
 	public Mapping clone() throws CloneNotSupportedException {
 		Mapping clone = (Mapping) super.clone();
@@ -256,7 +192,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		return displayProperty;
 	}
 
-	private void updateDisplayProperty() {
+	void updateDisplayProperty() {
 		displayProperty.set(toString());
 	}
 }

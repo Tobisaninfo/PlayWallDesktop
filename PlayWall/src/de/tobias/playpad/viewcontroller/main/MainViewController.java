@@ -69,10 +69,9 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import net.xeoh.plugins.base.PluginManager;
 
-public class MainViewController extends ViewController
-		implements IMainViewController, NotificationHandler, ProfileListener {
+// TODO Extract Color Adjust methodes
+public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
 	private static final String CURRENT_PAGE_BUTTON = "current-page-button";
 
@@ -103,14 +102,12 @@ public class MainViewController extends ViewController
 	// Style
 	private Color gridColor;
 
-	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener,
-			PluginManager manager) {
+	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener) {
 		super("mainView", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 
 		// Include FXML Setup
 		toolbarController.setMainViewController(this);
 		menuBarController.setMainViewController(this);
-		menuBarController.setPluginManager(manager);
 
 		padGridPane.setGridLinesVisible(true);
 
@@ -164,7 +161,7 @@ public class MainViewController extends ViewController
 	public void init() {
 		padGridPane.getStyleClass().add("pad-grid");
 
-		menuBarController.extensionMenu.setVisible(false);
+		menuBarController.getExtensionMenu().setVisible(false);
 
 		liveLabel.setVisible(false);
 		liveLabel.getStyleClass().add("live-label");
@@ -177,7 +174,7 @@ public class MainViewController extends ViewController
 
 		getStage().fullScreenProperty().addListener((a, b, c) ->
 		{
-			menuBarController.fullScreenMenuItem.setSelected(c);
+			menuBarController.getFullScreenMenuItem().setSelected(c);
 		});
 
 		// Lautstärke Veränderung
@@ -194,7 +191,7 @@ public class MainViewController extends ViewController
 		}
 	}
 
-	private void setTitle() {
+	void setTitle() {
 		if (project != null && Profile.currentProfile() != null) {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, project.getRef().getName(),
 					Profile.currentProfile().getRef().getName()));
@@ -219,8 +216,8 @@ public class MainViewController extends ViewController
 
 	@Override
 	protected void loadSettings(BasicControllerSettings settings) {
-		List<Screen> screens = Screen.getScreensForRectangle(settings.getUserInfoAsDouble("x"),
-				settings.getUserInfoAsDouble("y"), settings.width, settings.height);
+		List<Screen> screens = Screen.getScreensForRectangle(settings.getUserInfoAsDouble("x"), settings.getUserInfoAsDouble("y"),
+				settings.width, settings.height);
 		if (!screens.isEmpty()) {
 			getStage().setX(settings.getUserInfoAsDouble("x"));
 			getStage().setY(settings.getUserInfoAsDouble("y"));
@@ -270,8 +267,7 @@ public class MainViewController extends ViewController
 
 	public void applyColorsToMappers() {
 		// Apply Layout to Mapper
-		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping()
-				.getActions(CartActionConnect.TYPE);
+		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions(CartActionConnect.TYPE);
 		for (CartAction cartAction : actions) {
 			if (cartAction.isAutoFeedbackColors()) {
 				for (Mapper mapper : cartAction.getMappers()) {
@@ -309,14 +305,12 @@ public class MainViewController extends ViewController
 			}
 
 			if (layoutStdColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD,
-						layoutStdColor);
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
 				colorAssociator.setColor(FeedbackMessage.STANDARD, associator.midiVelocity());
 			}
 
 			if (layoutEvColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT,
-						layoutEvColor);
+				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
 				colorAssociator.setColor(FeedbackMessage.EVENT, associator.midiVelocity());
 			}
 		}
@@ -553,8 +547,7 @@ public class MainViewController extends ViewController
 	private void loadMidiDevice(String name) {
 		try {
 			midi.lookupMidiDevice(name);
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name),
-					PlayPadMain.displayTimeMillis);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
 		} catch (NullPointerException e) {
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
@@ -615,8 +608,7 @@ public class MainViewController extends ViewController
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
 					toolbarController.getToolbarHBox().setOpacity(1);
@@ -669,7 +661,7 @@ public class MainViewController extends ViewController
 		}
 
 		// WINDOW Settings
-		menuBarController.alwaysOnTopItem.setSelected(profilSettings.isWindowAlwaysOnTop());
+		menuBarController.getAlwaysOnTopItem().setSelected(profilSettings.isWindowAlwaysOnTop());
 		getStage().setAlwaysOnTop(profilSettings.isWindowAlwaysOnTop());
 
 		setTitle();
@@ -698,9 +690,9 @@ public class MainViewController extends ViewController
 	 * @since 2.0.0
 	 */
 	public void addMenuItem(MenuItem item) {
-		menuBarController.extensionMenu.getItems().add(item);
-		if (!menuBarController.extensionMenu.isVisible()) {
-			menuBarController.extensionMenu.setVisible(true);
+		menuBarController.getExtensionMenu().getItems().add(item);
+		if (!menuBarController.getExtensionMenu().isVisible()) {
+			menuBarController.getExtensionMenu().setVisible(true);
 		}
 	}
 

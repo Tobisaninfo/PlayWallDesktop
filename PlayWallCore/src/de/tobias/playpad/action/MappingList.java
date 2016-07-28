@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.dom4j.Document;
@@ -16,6 +17,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.xml.XMLHandler;
 
 public class MappingList extends ArrayList<Mapping> {
 
@@ -62,16 +64,16 @@ public class MappingList extends ArrayList<Mapping> {
 				mappings.activeMapping = UUID.fromString(rootElement.attributeValue(ACTIVE_ATTR));
 			}
 
-			for (Object mappingObj : rootElement.elements(MAPPING)) {
-				if (mappingObj instanceof Element) {
-					Element mappingElement = (Element) mappingObj;
-
-					Mapping mapping = new Mapping(false, profile);
-					mapping.load(mappingElement, profile);
-
-					mappings.add(mapping);
-				}
-			}
+			// Load Mappings
+			XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
+			List<Mapping> loadMappings = handler.loadElements(MAPPING, new MappingSerializer(profile));
+			loadMappings.forEach(mapping ->
+			{
+				mapping.initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine
+													// gelöscht wurde auf der Datei)
+				mapping.updateDisplayProperty();
+				mappings.add(mapping);
+			});
 		}
 
 		// Init mappings, if non exists
@@ -89,14 +91,9 @@ public class MappingList extends ArrayList<Mapping> {
 		if (activeMapping != null)
 			rootElement.addAttribute(ACTIVE_ATTR, activeMapping.toString());
 
-		for (Mapping mapping : this) {
-			Element mappingElement = rootElement.addElement(MAPPING);
-			mapping.save(mappingElement);
-		}
-
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
-		writer.write(document);
-		writer.close();
+		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
+		handler.saveElements(MAPPING, this, new MappingSerializer());
+		XMLHandler.save(path, document);
 	}
 
 	public static Mapping importMappingPreset(Path path, Profile profile) throws DocumentException, IOException {
@@ -106,7 +103,8 @@ public class MappingList extends ArrayList<Mapping> {
 		Document document = reader.read(Files.newInputStream(path));
 		Element rootElement = document.getRootElement();
 
-		mapping.load(rootElement, profile);
+		MappingSerializer mappingSerializer = new MappingSerializer(profile);
+		mapping = mappingSerializer.loadElement(rootElement);		
 		mapping.setUuid(UUID.randomUUID());
 
 		return mapping;
@@ -115,7 +113,9 @@ public class MappingList extends ArrayList<Mapping> {
 	public static void exportMidiPreset(Path path, Mapping preset) throws IOException {
 		Document docoment = DocumentHelper.createDocument();
 		Element rootElement = docoment.addElement(MAPPING);
-		preset.save(rootElement);
+
+		MappingSerializer mappingSerializer = new MappingSerializer();
+		mappingSerializer.saveElement(rootElement, preset);
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
 		writer.write(docoment);

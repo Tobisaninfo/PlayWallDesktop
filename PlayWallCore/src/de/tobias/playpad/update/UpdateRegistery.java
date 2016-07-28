@@ -1,9 +1,12 @@
-package de.tobias.playpad;
+package de.tobias.playpad.update;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobias.utils.util.OS;
 import de.tobias.utils.util.SystemUtils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
@@ -22,11 +25,16 @@ public class UpdateRegistery {
 		return availableUpdates;
 	}
 
-	public static List<Updatable> lookupUpdates() {
+	public static List<Updatable> lookupUpdates(UpdateChannel channel) {
 		availableUpdates.clear();
 		for (Updatable updatable : UpdateRegistery.updatables) {
-			if (updatable.checkUpdate()) {
-				availableUpdates.add(updatable);
+			try {
+				updatable.loadInformation(channel);
+				if (updatable.isUpdateAvailable()) {
+					availableUpdates.add(updatable);
+				}
+			} catch (IOException | URISyntaxException e) {
+
 			}
 		}
 		return availableUpdates;
@@ -58,5 +66,21 @@ public class UpdateRegistery {
 
 		String json = data.toJSONString(JSONStyle.MAX_COMPRESS);
 		return json;
+	}
+
+	public static boolean needsAdminPermission() {
+		for (Updatable updatable : availableUpdates) {
+			if (!Files.isWritable(updatable.getLocalPath())) {
+				return true;
+			}
+			if (OS.isWindows()) {
+				try {
+					if (Files.getOwner(updatable.getLocalPath()).getName().toLowerCase().contains("admin")) {
+						return true;
+					}
+				} catch (IOException e) {}
+			}
+		}
+		return false;
 	}
 }

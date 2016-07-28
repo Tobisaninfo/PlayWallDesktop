@@ -1,20 +1,12 @@
 package de.tobias.playpad;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.UUID;
 
 import org.dom4j.DocumentException;
@@ -38,9 +30,6 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.content.AudioContentConnect;
-import de.tobias.playpad.plugin.PadListener;
-import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -50,14 +39,12 @@ import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.tigger.TriggerRegistry;
 import de.tobias.playpad.trigger.CartTriggerItemConnect;
 import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
+import de.tobias.playpad.update.PlayPadUpdater;
+import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.view.MapperOverviewViewController;
-import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
-import de.tobias.playpad.viewcontroller.ISettingsViewController;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.main.MainViewController;
-import de.tobias.playpad.viewcontroller.option.UpdateTabViewController;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -65,6 +52,8 @@ import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.ConsoleUtils;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
+import de.tobias.utils.util.OS;
+import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -73,8 +62,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
 /*
  * TODOS
@@ -101,37 +88,32 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 // FEATURE lnk für Windows mit Dateiparameter
 // FEATURE Backups irgendwann löschen
 
-public class PlayPadMain extends Application implements LocalizationDelegate, PlayPad, ProfileListener {
+public class PlayPadMain extends Application implements LocalizationDelegate, ProfileListener {
 
-	private static final String PLUGIN_INFO_TXT = "pluginInfo.txt";
 	private static final String iconPath = "icon_small.png";
 	public static Optional<Image> stageIcon = Optional.empty();
 
 	public static final long displayTimeMillis = 1500;
 
-	public static final String[] projectType = { "*.xml" };
-	public static final String[] projectZIPType = { "*.zip" };
-	public static final String[] midiPresetType = { "*.pre" };
+	public static final String projectType = "*.xml";
+	public static final String projectZIPType = "*.zip";
+	public static final String midiPresetType = "*.pre";
 
 	private static ResourceBundle uiResourceBundle;
-	private static MainViewController mainViewController;
 
+	private static PlayPadImpl impl;
 	private static PlayPadUpdater updater;
-	private static Set<Path> deletedPlugins = new HashSet<>();
-
-	public static void addDeletedPlugin(Path path) {
-		deletedPlugins.add(path);
-	}
-
-	/*
-	 * 
-	 */
 
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
 
 	public static void main(String[] args) throws Exception {
+		// Verhindert einen Bug unter Windows 10 mit comboboxen
+		if (OS.getType() == OSType.Windows) {
+			System.setProperty("glass.accessible.force", "false");
+		}
+
 		// Debug
 		System.setOut(ConsoleUtils.convertStream(System.out, "[PlayWall] "));
 		System.setErr(ConsoleUtils.convertStream(System.err, "[PlayWall] "));
@@ -141,11 +123,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		app.start(args);
 	}
 
-	private static PluginManager pluginManager;
-
 	@Override
 	public void init() throws Exception {
-		PlayPadPlugin.setImplementation(this);
+		impl = new PlayPadImpl();
+		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 
 		// Localization
@@ -172,7 +153,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		updater = new PlayPadUpdater();
 		UpdateRegistery.registerUpdateable(updater);
 		registerComponents();
-		setupPlugins();
+
+		// Load Plugin Path
+		Path pluginFolder;
+		if (getParameters().getNamed().containsKey("plugin")) {
+			pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
+		} else {
+			pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
+		}
+		setupPlugins(pluginFolder);
 
 		/*
 		 * Load Data
@@ -191,7 +180,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		if (getParameters().getRaw().size() > 0) {
 			try {
 				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-				launchProject(Project.load(ProjectReference.getProject(uuid), true, null));
+				impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
 				return;
 			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
 				e.printStackTrace();
@@ -199,7 +188,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		}
 
 		ViewController.create(LaunchDialog.class, stage);
-
 	}
 
 	@Override
@@ -211,27 +199,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 			e.printStackTrace(); // Speichern Fehler
 		}
 
+		// Shutdown components
+		// TODO use AutoCloseable
 		TinyAudioHandler.shutdown();
 		ClipAudioHandler.shutdown();
 
-		pluginManager.shutdown();
+		impl.shutdown();
 
-		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, PLUGIN_INFO_TXT);
-		try {
-			if (Files.notExists(pluginInfoPath)) {
-				Files.createDirectories(pluginInfoPath.getParent());
-				Files.createFile(pluginInfoPath);
-			}
-			PrintWriter deleteWriter = new PrintWriter(Files.newOutputStream(pluginInfoPath));
-			for (Path path : deletedPlugins) {
-				deleteWriter.println(path.toString());
-			}
-			deleteWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Worker.shutdown();
 		Platform.exit();
 		System.exit(0);
 	}
@@ -285,31 +259,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		}
 	}
 
-	private void setupPlugins() throws IOException, MalformedURLException {
-		/*
-		 * Plugins
-		 */
-		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, PLUGIN_INFO_TXT);
-
-		// Delete Plugin
-		if (Files.exists(pluginInfoPath)) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(pluginInfoPath)));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				Path plugin = Paths.get(line);
-				Files.deleteIfExists(plugin);
-			}
-			reader.close();
-			Files.delete(pluginInfoPath);
-		}
+	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {
+		// Delete old plugins
+		impl.deletePlugins();
 
 		// Load Plugins
-		pluginManager = PluginManagerFactory.createPluginManager();
-		if (ApplicationUtils.getApplication().isDebug())
-			// DEBUG PLUGINS EINBINDEN
-			pluginManager.addPluginsFrom(Paths.get("/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPlugins/bin/").toUri());
-		else
-			pluginManager.addPluginsFrom(ApplicationUtils.getApplication().getPath(PathType.LIBRARY).toUri());
+		impl.loadPlugin(pluginPath.toUri());
 	}
 
 	private void setupLocalization() {
@@ -319,17 +274,16 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		uiResourceBundle = Localization.loadBundle("de/tobias/playpad/assets/lang/ui", getClass().getClassLoader());
 	}
 
-	public static void launchProject(Project project) {
-		mainViewController = new MainViewController(project, mainViewListeners, pluginManager);
-	}
-
+	/**
+	 * Handle Auto Update on profile reload
+	 */
 	@Override
-	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
+	public void reloadSettings(Profile oldProfile, Profile newProfile) {
 		// Update PlayWall
-		if (currentProfile.getProfileSettings().isAutoUpdate()) {
+		if (newProfile.getProfileSettings().isAutoUpdate()) {
 			Worker.runLater(() ->
 			{
-				UpdateRegistery.lookupUpdates();
+				UpdateRegistery.lookupUpdates(newProfile.getProfileSettings().getUpdateChannel());
 				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
 					Platform.runLater(() ->
 					{
@@ -338,7 +292,11 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
 						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 						{
-							UpdateTabViewController.update(null);
+							try {
+								Updates.startUpdate();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 						});
 					});
 				}
@@ -356,107 +314,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pl
 		return Locale.getDefault();
 	}
 
-	/*
-	 * Plugins
+	/**
+	 * Gibt die Implementierung des Peers für Plugins zurück.
+	 * 
+	 * @return Schnittstelle
+	 * 
+	 * @see PlayPad
 	 */
-	protected static List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
-	protected static List<WindowListener<ISettingsViewController>> settingsViewListeners = new ArrayList<>();
-	protected static List<WindowListener<IPadSettingsViewController>> padSettingsViewListeners = new ArrayList<>();
-	protected static List<SettingsListener> settingsListeners = new ArrayList<>();
-	protected static List<PadListener> padListeners = new ArrayList<>();
-
-	@Override
-	public void addMainViewListener(WindowListener<IMainViewController> listener) {
-		mainViewListeners.add(listener);
-	}
-
-	@Override
-	public void removeMainViewListener(WindowListener<IMainViewController> listener) {
-		mainViewListeners.remove(listener);
-	}
-
-	@Override
-	public void addSettingsViewListener(WindowListener<ISettingsViewController> listener) {
-		settingsViewListeners.add(listener);
-	}
-
-	@Override
-	public void removeSettingsViewListener(WindowListener<ISettingsViewController> listener) {
-		settingsViewListeners.remove(listener);
-	}
-
-	@Override
-	public List<WindowListener<ISettingsViewController>> getSettingsViewListener() {
-		return settingsViewListeners;
-	}
-
-	@Override
-	public void addPadSettingsViewListener(WindowListener<IPadSettingsViewController> listener) {
-		padSettingsViewListeners.add(listener);
-	}
-
-	@Override
-	public void removePadSettingsViewListener(WindowListener<IPadSettingsViewController> listener) {
-		padSettingsViewListeners.remove(listener);
-	}
-
-	@Override
-	public List<WindowListener<IPadSettingsViewController>> getPadSettingsViewListener() {
-		return padSettingsViewListeners;
-	}
-
-	@Override
-	public void addSettingsListener(SettingsListener listener) {
-		settingsListeners.add(listener);
-	}
-
-	@Override
-	public void removeSettingsListener(SettingsListener listener) {
-		settingsListeners.remove(listener);
-	}
-
-	@Override
-	public List<SettingsListener> getSettingsListener() {
-		return settingsListeners;
-	}
-
-	@Override
-	public void addPadListener(PadListener listener) {
-		padListeners.add(listener);
-	}
-
-	@Override
-	public void removePadListener(PadListener listener) {
-		padListeners.remove(listener);
-	}
-
-	@Override
-	public List<PadListener> getPadListener() {
-		return padListeners;
-	}
-
-	@Override
-	public IMainViewController getMainViewController() {
-		return mainViewController;
-	}
-
-	@Override
-	public PluginManager getPluginManager() {
-		return pluginManager;
-	}
-
-	@Override
-	public String[] getProjectFiles() {
-		return projectType;
-	}
-
-	@Override
-	public Optional<Image> getIcon() {
-		return stageIcon;
-	}
-
-	public static Updatable getUpdater() {
-		return updater;
+	public static PlayPadImpl getProgramInstance() {
+		return impl;
 	}
 
 }

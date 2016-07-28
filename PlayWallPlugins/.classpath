@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="de/tobias/playpad/launchpadplugin/midi/device/s/LaunchPadSOld.java|de/tobias/playpad/launchpadplugin/midi/device/mk2/LaunchPadMK2Old.java|de/tobias/playpad/launchpadplugin/midi/device/s/MultipleFeedbackSViewController.java|de/tobias/playpad/launchpadplugin/midi/device/s/SimpleFeedbackSViewController.java|de/tobias/playpad/launchpadplugin/midi/device/mk2/MultipleFeedbackMK2ViewController.java|de/tobias/playpad/launchpadplugin/midi/device/mk2/SimpleFeedbackMK2ViewController.java|de/tobias/playpad/launchpadplugin/impl/FeedbackMessageTypeCell.java|de/tobias/playpad/launchpadplugin/midi/device/mk2/WarningFeedbackViewControllerMK2.java|de/tobias/playpad/launchpadplugin/midi/device/s/WarningFeedbackViewControllerS.java" kind="src" path="launchpadplugin"/>
+	<classpathentry kind="src" path="awakeplugin"/>
+	<classpathentry excluding="de/tobias/playpad/midiactions/muteaction/MuteActionSettingsViewController.java|de/tobias/playpad/midiactions/muteaction/MuteActionType.java|de/tobias/playpad/midiactions/muteaction/MuteEvent.java|de/tobias/playpad/midiactions/muteaction/MuteListener.java" kind="src" path="actionsplugin"/>
+	<classpathentry kind="src" path="mediaplugin"/>
+	<classpathentry kind="src" path="equalizerplugin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Plugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/XML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/libUtils"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ControlFx"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PlayWallCore"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/YML"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
@@ -56,8 +56,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		if (pad.getContent() != null) {
 			try {
 				// Get Pad Type specific tab
-				PadContentConnect padContentConnect = PadContentRegistry
-						.getPadContentConnect(pad.getContent().getType());
+				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
@@ -68,16 +67,6 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 		setupPathLookupButton();
 
-		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l ->
-		{
-			try {
-				l.onInit(this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-
 		getStage().initOwner(owner);
 
 		// Show Current Settings
@@ -87,7 +76,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 	private void setupPathLookupButton() {
 		pathLookupListener = new PathLookupListener();
-		
+
 		if (pad.getContent() != null) {
 			PadContent content = pad.getContent();
 			// nur EIN Path
@@ -133,8 +122,11 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	}
 
 	private void setTitle(Pad pad) {
-		getStage().setTitle(
-				Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+		if (pad.getStatus() != PadStatus.EMPTY) {
+			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+		} else {
+			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable()));
+		}
 	}
 
 	@Override
@@ -173,25 +165,23 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 	@Override
 	public boolean closeRequest() {
-		saveChanges();
-
-		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> l.onClose(this));
+		onFinish();
 		return true;
-	}
-
-	private void saveChanges() {
-		for (PadSettingsTabViewController controller : tabs) {
-			controller.saveSettings(pad);
-		}
 	}
 
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		saveChanges();
-		// Listener
-		PlayPadPlugin.getImplementation().getPadSettingsViewListener().forEach(l -> l.onClose(this));
-		getStage().close();
+		onFinish();
 	}
 
+	/**
+	 * Diese Methode wird aufgerufen, wenn das Fenster geschlossen wird (Per X oder Finish Button). Hier geschehen alle Aktionen zum
+	 * manuellen Speichern.
+	 */
+	private void onFinish() {
+		// Speichern der einzelen Tabs
+		for (PadSettingsTabViewController controller : tabs) {
+			controller.saveSettings(pad);
+		}
+	}
 }

@@ -29,8 +29,8 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		setResultConverter(button ->
 		{
 			String param = getEditor().getText();
-			if (!param.endsWith(PlayPadMain.projectType[0].substring(1))) {
-				param += PlayPadMain.projectType[0].substring(1);
+			if (!param.endsWith(PlayPadMain.projectType.substring(1))) {
+				param += PlayPadMain.projectType.substring(1);
 			}
 
 			ButtonData data = button == null ? null : button.getButtonData();
@@ -40,7 +40,7 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.projectNameEx)) {
+			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);

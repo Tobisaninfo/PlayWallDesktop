@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller;
+package de.tobias.playpad.viewcontroller.dialog;
 
 import com.hp.gagawa.java.elements.Body;
 import com.hp.gagawa.java.elements.Div;
