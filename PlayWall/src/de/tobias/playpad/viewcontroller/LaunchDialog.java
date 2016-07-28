@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProfileChooseable;
 import de.tobias.playpad.project.Project;
@@ -107,9 +106,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-
-		PlayPadPlugin.getImplementation().shutdown();
-
+		
 		stage.setResizable(false);
 		stage.setWidth(650);
 		stage.show();
