@@ -3,14 +3,10 @@ package de.tobias.playpad.pad;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.layout.CartLayout;
 import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.Pauseable;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerDurationListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerStatusListener;
@@ -21,7 +17,6 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.utils.settings.UserDefaults;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -75,9 +70,8 @@ public class Pad {
 	private transient IPadViewController controller;
 	private transient Project project;
 
-	public Pad(Project project, Element element) {
+	public Pad(Project project) {
 		this.project = project;
-		load(element);
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
@@ -375,7 +369,7 @@ public class Pad {
 		this.ignoreTrigger = ignoreTrigger;
 	}
 
-	private void updateTrigger() {
+	void updateTrigger() {
 		for (TriggerPoint point : TriggerPoint.values()) {
 			if (!triggers.containsKey(point)) {
 				Trigger trigger = new Trigger(point);
@@ -420,163 +414,6 @@ public class Pad {
 		}
 	}
 
-	// Storage
-	private static final String INDEX_ATTR = "index";
-	private static final String NAME_ATTR = "name";
-	private static final String STATUS_ATTR = "status";
-
-	private static final String SETTINGS_ELEMENT = "Settings";
-	private static final String VOLUME_ELEMENT = "Volume";
-	private static final String LOOP_ELEMENT = "Loop";
-	private static final String TIMEMODE_ELEMENT = "TimeMode";
-	private static final String FADE_ELEMENT = "Fade";
-	private static final String WARNING_ELEMENT = "Warning";
-
-	private static final String LAYOUTS_ELEMENT = "Layouts";
-	private static final String LAYOUT_ACTIVE_ATTR = "active";
-	private static final String LAYOUT_TYPE_ATTR = "type";
-	private static final String LAYOUT_ELEMENT = "Layout";
-
-	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
-	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
-	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
-
-	public static final String CONTENT_ELEMENT = "Content";
-	private static final String CONTENT_TYPE_ATTR = "type";
-
-	public void load(Element element) {
-		indexProperty.set(Integer.valueOf(element.attributeValue(INDEX_ATTR)));
-		nameProperty.set(element.attributeValue(NAME_ATTR));
-		PadStatus status = PadStatus.valueOf(element.attributeValue(STATUS_ATTR));
-		if (status == PadStatus.EMPTY || status == PadStatus.READY)
-			statusProperty.set(status);
-
-		// Settings
-		Element settingsElement = element.element(SETTINGS_ELEMENT);
-		if (settingsElement.element(VOLUME_ELEMENT) != null)
-			volumeProperty.set(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
-		if (settingsElement.element(LOOP_ELEMENT) != null)
-			loopProperty.set(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
-		if (settingsElement.element(TIMEMODE_ELEMENT) != null)
-			timeModeProperty.set(TimeMode.valueOf(settingsElement.element(TIMEMODE_ELEMENT).getStringValue()));
-		if (settingsElement.element(FADE_ELEMENT) != null)
-			fadeProperty.set(Fade.load(settingsElement.element(FADE_ELEMENT)));
-		if (settingsElement.element(WARNING_ELEMENT) != null)
-			warningProperty.set(Warning.load(settingsElement.element(WARNING_ELEMENT)));
-
-		// Laoyut
-		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
-		if (layoutsElement != null) {
-			if (layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR) != null) {
-				customLayoutProperty.set(Boolean.valueOf(layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR)));
-			}
-
-			for (Object layoutObj : layoutsElement.elements(LAYOUT_ELEMENT)) {
-				if (layoutObj instanceof Element) {
-					Element layoutElement = (Element) layoutObj;
-					String type = layoutElement.attributeValue(LAYOUT_TYPE_ATTR);
-					CartLayout layout = LayoutRegistry.getLayout(type).newCartLayout();
-					layout.load(layoutElement);
-
-					layouts.put(type, layout);
-				}
-			}
-		}
-
-		Element userInfoElement = settingsElement.element(CUSTOM_SETTINGS_ELEMENT);
-		if (userInfoElement != null) {
-			for (Object object : userInfoElement.elements()) {
-				if (object instanceof Element) {
-					Element item = (Element) object;
-					String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
-					Object data = UserDefaults.loadElement(item);
-					customSettings.put(key, data);
-				}
-			}
-		}
-
-		// Trigger
-		Element triggersElement = element.element("Triggers");			// TODO Externalize
-		if (triggersElement != null) {
-			for (Object triggerObj : triggersElement.elements("Trigger")) {
-				if (triggerObj instanceof Element) {
-					Element triggerElement = (Element) triggerObj;
-					Trigger trigger = new Trigger();
-					trigger.load(triggerElement);
-					triggers.put(trigger.getTriggerPoint(), trigger);
-				}
-			}
-		}
-		updateTrigger(); // Damit alle Points da sind
-
-		// Content
-		Element contentElement = element.element(CONTENT_ELEMENT);
-		if (contentElement != null) {
-			String contentType = contentElement.attributeValue(CONTENT_TYPE_ATTR);
-			try {
-				PadContent content = PadContentRegistry.getPadContentConnect(contentType).newInstance(this);
-				content.load(contentElement);
-				setContent(content);
-			} catch (UnkownPadContentException e) {
-				e.printStackTrace();
-				throwException(null, e);
-			}
-		}
-	}
-
-	public void save(Element element) {
-		element.addAttribute(INDEX_ATTR, String.valueOf(indexProperty.get()));
-		element.addAttribute(NAME_ATTR, nameProperty.get());
-		if (statusProperty.get() == PadStatus.EMPTY || statusProperty.get() == PadStatus.ERROR) {
-			element.addAttribute(STATUS_ATTR, PadStatus.EMPTY.name());
-		} else {
-			element.addAttribute(STATUS_ATTR, PadStatus.READY.name());
-		}
-
-		// Settings
-		Element settingsElement = element.addElement(SETTINGS_ELEMENT);
-		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(volumeProperty.get()));
-		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(loopProperty.get()));
-		if (timeModeProperty.isNotNull().get())
-			settingsElement.addElement(TIMEMODE_ELEMENT).addText(String.valueOf(timeModeProperty.get()));
-		if (warningProperty.isNotNull().get())
-			warningProperty.get().save(settingsElement.addElement(WARNING_ELEMENT));
-		if (fadeProperty.isNotNull().get())
-			fadeProperty.get().save(settingsElement.addElement(FADE_ELEMENT));
-
-		// Layout
-		Element layoutsElement = settingsElement.addElement(LAYOUTS_ELEMENT);
-		layoutsElement.addAttribute(LAYOUT_ACTIVE_ATTR, String.valueOf(customLayoutProperty.get()));
-		for (String layoutType : layouts.keySet()) {
-			Element layoutElement = layoutsElement.addElement(LAYOUT_ELEMENT);
-			layoutElement.addAttribute(LAYOUT_TYPE_ATTR, layoutType);
-
-			CartLayout cartLayout = layouts.get(layoutType);
-			cartLayout.save(layoutElement);
-		}
-
-		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
-		for (String key : customSettings.keySet()) {
-			Element itemElement = userInfoElement.addElement(CUSTOM_SETTINGS_ITEM_ELEMENT);
-			UserDefaults.save(itemElement, customSettings.get(key), key);
-		}
-
-		// Trigger
-		Element triggersElement = element.addElement("Triggers");
-		for (TriggerPoint point : triggers.keySet()) {
-			Trigger trigger = triggers.get(point);
-			Element triggerElement = triggersElement.addElement("Trigger");
-			trigger.save(triggerElement);
-		}
-
-		// Content
-		if (contentProperty.get() != null) {
-			Element contentElement = element.addElement(CONTENT_ELEMENT);
-			contentElement.addAttribute(CONTENT_TYPE_ATTR, contentProperty.get().getType());
-			contentProperty.get().save(contentElement);
-		}
-	}
-
 	@Override
 	public String toString() {
 		return "Pad: " + indexProperty.get() + " - " + nameProperty.get();
@@ -597,5 +434,9 @@ public class Pad {
 
 	public DoubleProperty customVolumeProperty() {
 		return customVolumeProperty;
+	}
+
+	HashMap<String, CartLayout> getLayouts() {
+		return layouts;
 	}
 }

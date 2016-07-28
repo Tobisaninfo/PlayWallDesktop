@@ -5,20 +5,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
+import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.xml.XMLHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -133,25 +133,13 @@ public class Project {
 
 			Project project = new Project(ref);
 
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(projectPath));
-			
-			Element rootElement = document.getRootElement();
+			XMLHandler<Pad> handler = new XMLHandler<>(projectPath);
+			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(project));
 
-			for (Object padObj : rootElement.elements(PAD_ELEMENT)) {
-				if (padObj instanceof Element) {
-					Element padElement = (Element) padObj;
-
-					// Load Pad Settings
-					Pad pad = new Pad(project, padElement);
-
-					// Load Media
-					if (loadMedia) {
-						pad.loadContent();
-					}
-
-					project.pads.put(pad.getIndex(), pad);
-				}
+			for (Pad pad : pads) {
+				if (loadMedia)
+					pad.loadContent();
+				project.pads.put(pad.getIndex(), pad);
 			}
 
 			return project;
@@ -165,21 +153,15 @@ public class Project {
 		Document document = DocumentHelper.createDocument();
 
 		Element rootElement = document.addElement(ROOT_ELEMENT);
-		for (int index : pads.keySet()) {
-			Pad pad = pads.get(index);
 
-			Element padElement = rootElement.addElement(PAD_ELEMENT);
-			pad.save(padElement);
-		}
+		XMLHandler<Pad> handler = new XMLHandler<>(rootElement);
+		handler.saveElements(PAD_ELEMENT, pads.values(), new PadSerializer());
 
 		if (Files.notExists(projectPath)) {
 			Files.createDirectories(projectPath.getParent());
 			Files.createFile(projectPath);
 		}
-
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(projectPath), OutputFormat.createPrettyPrint());
-		writer.write(document);
-		writer.close();
+		XMLHandler.save(projectPath, document);
 	}
 
 	public HashMap<Integer, Pad> getPads() {
