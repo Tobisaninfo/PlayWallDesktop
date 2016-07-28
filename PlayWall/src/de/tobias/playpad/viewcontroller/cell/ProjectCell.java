@@ -5,8 +5,6 @@ import java.nio.file.Path;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.project.ProjectReference;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.scene.control.ContentDisplay;
@@ -15,14 +13,14 @@ import javafx.scene.paint.Color;
 
 public class ProjectCell extends ListCell<ProjectReference> {
 
-	private Displayable action;
+	private Displayable ref;
 
 	@Override
-	protected void updateItem(ProjectReference action, boolean empty) {
-		super.updateItem(action, empty);
+	protected void updateItem(ProjectReference ref, boolean empty) {
+		super.updateItem(ref, empty);
 		if (!empty) {
-			if (this.action == null || this.action != action) {
-				Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, action.getFileName());
+			if (this.ref == null || this.ref != ref) {
+				Path path = ref.getProjectPath();
 				if (Files.notExists(path)) {
 					FontIcon graphics = new FontIcon(FontAwesomeType.WARNING);
 					graphics.setColor(Color.RED);
@@ -30,11 +28,11 @@ public class ProjectCell extends ListCell<ProjectReference> {
 				}
 				setContentDisplay(ContentDisplay.RIGHT);
 
-				textProperty().bind(action.displayProperty());
-				this.action = action;
+				textProperty().bind(ref.displayProperty());
+				this.ref = ref;
 			}
 		} else {
-			this.action = null;
+			this.ref = null;
 			textProperty().unbind();
 
 			setGraphic(null);

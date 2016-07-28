@@ -22,6 +22,7 @@ public class Strings {
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
+	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
 	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
@@ -155,10 +156,7 @@ public class Strings {
 
 	// Error - Plugins
 	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
-
-	/*
-	 * NEU
-	 */
+	public static final String Error_Plugins_Available = "Error.Plugins.Available";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";
@@ -197,16 +195,18 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 
+	// Update Channel - Basename
+	public static final String Update_Channel_BaseName = "UpdateChannel.";
+
 	// Error - Layout
 	public static final String Error_Layout_Load = "Error.Layout.Load";
 
 	// UI - Dialog - Update
 	public static final String UI_Dialog_Update_Cell = "UI.Dialog.Update.Cell";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
-	public static final String UI_Window_Settings_Updates_NewVersion = "UI.Window.Settings.Updates.NewVersion";
 
 	// Error - Update - Downlaod
-	public static final String Error_Update_Download = "Error.Update.Download";
+	@Deprecated public static final String Error_Update_Download = "Error.Update.Download";
 
 	// Layout
 	public static final String Layout_Modern_Name = "Layout.Modern.Name";
@@ -219,7 +219,7 @@ public class Strings {
 
 	// TriggerPoint - Enum
 	public static final String TriggerPoint_BaseName = "TriggerPoint.";
-	
+
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
 	public static final String DnDMode_Replace = "DnDMode.Replace";

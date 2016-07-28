@@ -1,0 +1,7 @@
+.equalizer-box {
+	-fx-padding: 5px;
+}
+
+.equalizer-bandbox {
+	-fx-spacing: 10px;
+}

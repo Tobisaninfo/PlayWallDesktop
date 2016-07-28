@@ -9,9 +9,9 @@ import de.tobias.playpad.layout.GlobalLayout;
 import de.tobias.playpad.layout.Layout;
 import de.tobias.playpad.layout.LayoutColorAssociator;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.Warning;
 import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.settings.Warning;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
@@ -24,8 +24,6 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;
-
-	private boolean isWarnAnimation = true;
 
 	public ModernColor getBackgroundColor() {
 		return backgroundColor;
@@ -43,19 +41,9 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 		this.playColor = playColor;
 	}
 
-	public boolean isWarnAnimation() {
-		return isWarnAnimation;
-	}
-
-	public void setWarnAnimation(boolean isWarnAnimation) {
-		this.isWarnAnimation = isWarnAnimation;
-	}
-
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;
-
-		isWarnAnimation = true;
 	}
 
 	@Override
@@ -77,28 +65,18 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 				e.printStackTrace();
 			}
 		}
-
-		Element animationElement = rootElement.element("Animation");
-		if (animationElement != null) {
-			Element warnAnimationElement = animationElement.element("Warn");
-			if (warnAnimationElement != null) {
-				isWarnAnimation = Boolean.valueOf(warnAnimationElement.getStringValue());
-			}
-		}
 	}
 
 	@Override
 	public void save(Element rootElement) {
 		rootElement.addElement("BackgroundColor").addText(backgroundColor.name());
 		rootElement.addElement("PlayColor").addText(playColor.name());
-		Element animationElement = rootElement.addElement("Animation");
-		animationElement.addElement("Warn").addText(String.valueOf(isWarnAnimation));
 	}
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
-		if (isWarnAnimation) {
+	public void handleWarning(IPadViewController controller, Warning warning, GlobalLayout layout) {
+		if (layout instanceof ModernLayoutGlobal && ((ModernLayoutGlobal) layout).isWarnAnimation()) {
 			warnAnimation(controller, warning);
 		} else {
 			ModernLayoutAnimator.warnFlash(controller);
@@ -204,7 +182,6 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 			ModernLayoutGlobal modernLayoutGlobal = (ModernLayoutGlobal) globalLayout;
 			backgroundColor = modernLayoutGlobal.getBackgroundColor();
 			playColor = modernLayoutGlobal.getPlayColor();
-			isWarnAnimation = modernLayoutGlobal.isWarnAnimation();
 		}
 	}
 }

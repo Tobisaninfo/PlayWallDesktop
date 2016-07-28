@@ -57,7 +57,7 @@ public class NewProjectDialog extends ViewController {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProjectReference.getProjects().contains(c) || !c.matches(Project.projectNameEx)) {
+				if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 					finishButton.setDisable(true);
 					return;
 				}

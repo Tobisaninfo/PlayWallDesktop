@@ -15,6 +15,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -115,9 +116,11 @@ public class ProjectExporter {
 			if (padObj instanceof Element) {
 				Element padElement = (Element) padObj;
 
-				Pad pad = new Pad(null, padElement); // Null für Project, da das pad nicht weiter verwendet wird
+				PadSerializer serializer = new PadSerializer();
+				Pad pad = serializer.loadElement(padElement);
+
 				if (pad.getContent() != null) {
-					pad.getContent().exportMedia(zip, padElement.element(Pad.CONTENT_ELEMENT));
+					pad.getContent().exportMedia(zip, padElement.element(PadSerializer.CONTENT_ELEMENT));
 				}
 			}
 

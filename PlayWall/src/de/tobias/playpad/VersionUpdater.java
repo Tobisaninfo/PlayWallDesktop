@@ -19,6 +19,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.MappingSerializer;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
 import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
@@ -188,7 +189,9 @@ public class VersionUpdater implements UpdateService {
 
 		for (Mapping mapping : mappings) {
 			Element mappingElement = rootElement.addElement("Mapping");
-			mapping.save(mappingElement);
+
+			MappingSerializer mappingSerializer = new MappingSerializer();
+			mappingSerializer.saveElement(mappingElement, mapping);
 		}
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(configPath.resolve("Mapping.xml")), OutputFormat.createPrettyPrint());
@@ -223,7 +226,8 @@ public class VersionUpdater implements UpdateService {
 				newSettingsElement.addElement("Loop").addText(oldPadElement.element("Loop").getStringValue());
 				if (oldPadElement.element("TimeMode") != null)
 					newSettingsElement.addElement("TimeMode").addText(oldPadElement.element("TimeMode").getStringValue());
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 		}
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());

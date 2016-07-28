@@ -20,6 +20,10 @@ import de.tobias.utils.application.container.PathType;
 
 public class Profile {
 
+	private static final String PROFILE_SETTINGS_XML = "ProfileSettings.xml";
+	private static final String MAPPING_XML = "Mapping.xml";
+	private static final String LAYOUT_XML = "Layout.xml";
+
 	public static final String profileNameEx = "\\w{1}[\\w\\s-_]{0,}";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();
@@ -97,10 +101,9 @@ public class Profile {
 
 		if (Files.exists(app.getPath(PathType.CONFIGURATION, ref.getFileName()))) {
 
-			ProfileSettings profileSettings = ProfileSettings
-					.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), "ProfileSettings.xml"));
+			ProfileSettings profileSettings = ProfileSettings.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), PROFILE_SETTINGS_XML));
 			HashMap<String, GlobalLayout> layouts = GlobalLayout
-					.loadGlobalLayout(app.getPath(PathType.CONFIGURATION, ref.getFileName(), "Layout.xml"));
+					.loadGlobalLayout(app.getPath(PathType.CONFIGURATION, ref.getFileName(), LAYOUT_XML));
 
 			profile.profileSettings = profileSettings;
 			profile.layouts = layouts;
@@ -116,7 +119,7 @@ public class Profile {
 			});
 
 			// Mapping erst danach, weil das auf current Profile zugreifen muss
-			MappingList mappings = MappingList.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), "Mapping.xml"), profile);
+			MappingList mappings = MappingList.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_XML), profile);
 			profile.mappings = mappings;
 
 			setCurrentProfile(profile);
@@ -141,9 +144,14 @@ public class Profile {
 		if (Files.notExists(root))
 			Files.createDirectories(root);
 
-		profileSettings.save(app.getPath(PathType.CONFIGURATION, ref.getFileName(), "ProfileSettings.xml"));
-		mappings.save(app.getPath(PathType.CONFIGURATION, ref.getFileName(), "Mapping.xml"));
-		GlobalLayout.saveGlobal(layouts, app.getPath(PathType.CONFIGURATION, ref.getFileName(), "Layout.xml"));
+		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
+		mappings.save(getProfilePath(MAPPING_XML));
+		GlobalLayout.saveGlobal(layouts, getProfilePath(LAYOUT_XML));
+	}
+
+	private Path getProfilePath(String fileName) {
+		App app = ApplicationUtils.getApplication();
+		return app.getPath(PathType.CONFIGURATION, ref.getFileName(), fileName);
 	}
 
 	@Override

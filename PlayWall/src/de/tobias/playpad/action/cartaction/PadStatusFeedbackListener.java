@@ -4,7 +4,7 @@ import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.Durationable;
-import de.tobias.playpad.pad.Warning;
+import de.tobias.playpad.settings.Warning;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;

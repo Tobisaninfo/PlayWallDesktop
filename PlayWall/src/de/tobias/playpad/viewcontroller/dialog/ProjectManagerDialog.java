@@ -201,7 +201,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 		try {
 			String newProjectName = (String) nameTextField.getText();
-			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.projectNameEx)) {
+			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
 			}

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
@@ -36,18 +35,18 @@ public class SettingsViewController extends ViewController implements ISettingsV
 
 	protected List<SettingsTabViewController> tabs = new ArrayList<>();
 
-	public SettingsViewController(Midi midiHandler, Screen screen, Window owner, Project project) {
+	public SettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project) {
 		super("settingsView", "de/tobias/playpad/assets/view/option/", null, PlayPadMain.getUiResourceBundle());
 
-		boolean activePlayer = project.getPlayedPlayers() > 0;
+		boolean activePlayer = project.hasPlayedPlayers();
 
-		addTab(new GeneralTabViewController(screen, this, activePlayer));
+		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 		addTab(new MappingTabViewController());
 		addTab(new MidiTabViewController());
 		addTab(new LayoutTabViewController());
 		addTab(new PlayerTabViewController());
 
-		// Content Types
+		// Custom Tabs - Content Types
 		for (String type : PadContentRegistry.getTypes()) {
 			try {
 				SettingsTabViewController controller = PadContentRegistry.getPadContentConnect(type).getSettingsTabViewController(activePlayer);
@@ -59,21 +58,12 @@ public class SettingsViewController extends ViewController implements ISettingsV
 			}
 		}
 
-		// Listener
-		PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l ->
-		{
-			try {
-				l.onInit(this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
 		addTab(new UpdateTabViewController());
 
 		getStage().initOwner(owner);
 
 		// Show Current Settings
-		showCurrentSettings();
+		loadTabs();
 	}
 
 	@Override
@@ -83,21 +73,19 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		// KeyCode
 		addCloseKeyShortcut(() -> finishButton.fire());
 
+		// Look Button Listener
 		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
 		lockedButton.setOnAction(e ->
 		{
 			boolean isLocked = lockedButton.isSelected();
-			// Model
 			profileSettings.setLocked(isLocked);
-
-			// SettingsUI
-			tabPane.setDisable(isLocked);
+			setLookEnable(isLocked);
 		});
 
+		// Übernimmt die aktuellen Einstellungen des Look Button
 		if (profileSettings.isLocked()) {
-			// SettingsUI
 			lockedButton.setSelected(true);
-			tabPane.setDisable(true);
+			setLookEnable(true);
 		}
 
 		finishButton.defaultButtonProperty().bind(finishButton.focusedProperty());
@@ -114,37 +102,20 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		Profile.currentProfile().currentLayout().applyCss(getStage());
 	}
 
-	// Copy Of Settings
-	public boolean closeRequest() {
-		boolean valid = true;
-		for (SettingsTabViewController controller : tabs) {
-			if (controller.validSettings() == false) {
-				valid = false;
-			}
-		}
-
-		if (valid) { // Einstellungen sind Valide
-			// Listener
-			PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l -> l.onClose(this));
-
-			saveChanges();
-			getStage().close();
-			updateData();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	// Settings aus AppSettings
-	private void showCurrentSettings() {
+	/**
+	 * Zeigt die aktuellen Einstellungen für die Tabs an.
+	 */
+	private void loadTabs() {
 		Profile profile = Profile.currentProfile();
 		for (SettingsTabViewController controller : tabs) {
 			controller.loadSettings(profile);
 		}
 	}
 
-	private void saveChanges() {
+	/**
+	 * Speichert die Einstellungen der Tabs.
+	 */
+	private void saveTabs() {
 		Profile profile = Profile.currentProfile();
 		for (SettingsTabViewController controller : tabs) {
 			controller.saveSettings(profile);
@@ -158,33 +129,42 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		}
 	}
 
-	public boolean needUpdate() {
-		boolean change = false;
-		for (SettingsTabViewController controller : tabs) {
-			if (controller.needReload()) {
-				change = true;
-			}
-		}
-		return change;
+	public boolean closeRequest() {
+		return onFinish();
 	}
 
+	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		boolean valid = true;
+		onFinish();
+		getStage().close();
+	}
+
+	/**
+	 * Speichert alle Informationen.
+	 * 
+	 * @return <code>true</code>Alle Einstellungen sind Valid.
+	 */
+	private boolean onFinish() {
 		for (SettingsTabViewController controller : tabs) {
 			if (controller.validSettings() == false) {
-				valid = false;
+				return false;
 			}
 		}
 
-		if (valid) { // Einstellungen sind Valide
-			// Listener
-			PlayPadPlugin.getImplementation().getSettingsViewListener().forEach(l -> l.onClose(this));
+		saveTabs();
+		updateData(); // Reload MainViewController Settings // TODO Rewrite
+		return true;
+	}
 
-			saveChanges();
-			getStage().close();
-			updateData();
-		}
+	/**
+	 * Aktiviert/Deaktiviert den Look Button.
+	 * 
+	 * @param isLocked
+	 *            isLooked
+	 */
+	private void setLookEnable(boolean isLocked) {
+		tabPane.setDisable(isLocked);
 	}
 
 	public void addTab(SettingsTabViewController controller) {

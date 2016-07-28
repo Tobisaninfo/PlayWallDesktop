@@ -67,9 +67,9 @@ public class GeneralTabViewController extends SettingsTabViewController {
 
 	private boolean changeSettings;
 
-	public GeneralTabViewController(Screen screen, ViewController parentController, boolean activePlayer) {
+	public GeneralTabViewController(Screen currentScreen, ViewController parentController, boolean activePlayer) {
 		super("generalTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
-		this.mainWindowScreen = screen;
+		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;
 
 		if (activePlayer) {

@@ -11,11 +11,7 @@
    <children>
       <VBox alignment="CENTER" layoutX="24.0" layoutY="5.0" spacing="7.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="14.0">
          <children>
-            <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <effect>
-                  <DropShadow />
-               </effect>
-            </ImageView>
+            <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0" prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="212.0">
                <font>
                   <Font size="25.0" />
