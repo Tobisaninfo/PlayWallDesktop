@@ -17,9 +17,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.layout.LayoutRegistry;
-import de.tobias.playpad.pad.Fade;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.Warning;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;

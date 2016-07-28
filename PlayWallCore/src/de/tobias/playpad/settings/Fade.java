@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad;
+package de.tobias.playpad.settings;
 
 import org.dom4j.Element;
 

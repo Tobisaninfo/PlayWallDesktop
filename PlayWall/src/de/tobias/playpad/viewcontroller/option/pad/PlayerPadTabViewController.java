@@ -2,9 +2,9 @@ package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.pad.Fade;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.Warning;
+import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;

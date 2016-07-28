@@ -124,9 +124,6 @@ public class Project {
 		Path projectPath = ref.getProjectPath();
 
 		if (Files.exists(projectPath)) {
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(projectPath));
-
 			if (ref.getProfileReference() != null) {
 				Profile.load(ref.getProfileReference()); // Lädt das entsprechende Profile und aktiviert es
 			} else {
@@ -136,6 +133,9 @@ public class Project {
 
 			Project project = new Project(ref);
 
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(Files.newInputStream(projectPath));
+			
 			Element rootElement = document.getRootElement();
 
 			for (Object padObj : rootElement.elements(PAD_ELEMENT)) {
