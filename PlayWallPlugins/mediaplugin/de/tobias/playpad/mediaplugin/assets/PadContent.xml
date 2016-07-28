@@ -1,0 +1,4 @@
+<Actions>
+	<Component id="video">de.tobias.playpad.mediaplugin.video.VideoContentConntect</Component>
+	<Component id="image">de.tobias.playpad.mediaplugin.image.ImageContentConntect</Component>
+</Actions>

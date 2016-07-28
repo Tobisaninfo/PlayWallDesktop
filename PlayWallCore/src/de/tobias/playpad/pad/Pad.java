@@ -3,8 +3,9 @@ package de.tobias.playpad.pad;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutRegistry;
+import de.tobias.playpad.layout.LayoutConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
@@ -12,6 +13,7 @@ import de.tobias.playpad.pad.triggerlistener.PadTriggerDurationListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerStatusListener;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Profile;
@@ -307,7 +309,13 @@ public class Pad {
 
 	public CartLayout getLayout(String type) {
 		if (!layouts.containsKey(type)) {
-			layouts.put(type, LayoutRegistry.getLayout(type).newCartLayout());
+			DefaultRegistry<LayoutConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getLayouts();
+			try {
+				layouts.put(type, layouts2.getComponent(type).newCartLayout());
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return layouts.get(type);
 	}

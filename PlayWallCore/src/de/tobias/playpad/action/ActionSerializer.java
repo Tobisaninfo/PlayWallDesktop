@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.xml.XMLDeserializer;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.playpad.xml.XMLSerializer;
@@ -24,18 +26,24 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 	public Action loadElement(Element element) {
 		String tpye = element.attributeValue(ACTION_TYPE);
 
-		Action action = ActionRegistery.getActionConnect(tpye).newInstance();
-		action.load(element);
+		try {
+			Action action = PlayPadPlugin.getRegistryCollection().getActions().getComponent(tpye).newInstance();
+			action.load(element);
 
-		boolean added = mapping.addActionIfNotContains(action);
+			boolean added = mapping.addActionIfNotContains(action);
 
-		if (added) {
-			XMLHandler<Mapper> handler = new XMLHandler<>(element);
-			List<Mapper> mappers = handler.loadElements(MAPPER, new MapperSerializer(action));
-			mappers.forEach(action::addMapper);
+			if (added) {
+				XMLHandler<Mapper> handler = new XMLHandler<>(element);
+				List<Mapper> mappers = handler.loadElements(MAPPER, new MapperSerializer(action));
+				mappers.forEach(action::addMapper);
+			}
+
+			return action;
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		return action;
+		return null;
 	}
 
 	@Override

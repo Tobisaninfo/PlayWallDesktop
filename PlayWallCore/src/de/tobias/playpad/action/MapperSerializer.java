@@ -2,8 +2,10 @@ package de.tobias.playpad.action;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperRegistry;
+import de.tobias.playpad.action.mapper.MapperConnect;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.xml.XMLDeserializer;
 import de.tobias.playpad.xml.XMLSerializer;
 
@@ -21,9 +23,17 @@ public class MapperSerializer implements XMLSerializer<Mapper>, XMLDeserializer<
 	public Mapper loadElement(Element element) {
 		String mapperType = element.attributeValue(MAPPER_TYPE);
 
-		Mapper mapper = MapperRegistry.getMapperConnect(mapperType).createNewMapper();
-		mapper.load(element, action);
-		return mapper;
+		try {
+			MapperConnect component = PlayPadPlugin.getRegistryCollection().getMappers().getComponent(mapperType);
+
+			Mapper mapper = component.createNewMapper();
+			mapper.load(element, action);
+			return mapper;
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

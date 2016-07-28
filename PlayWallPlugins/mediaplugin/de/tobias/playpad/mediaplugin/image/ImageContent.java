@@ -1,4 +1,4 @@
-package de.tobias.playpad.plugin.image;
+package de.tobias.playpad.mediaplugin.image;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Files;

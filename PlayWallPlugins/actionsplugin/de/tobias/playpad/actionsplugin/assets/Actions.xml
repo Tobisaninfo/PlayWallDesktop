@@ -1,0 +1,4 @@
+<Actions>
+	<Component id="MUTE">de.tobias.playpad.actionsplugin.muteaction.MuteActionConnect</Component>
+	<Component id="STOP">de.tobias.playpad.actionsplugin.stopaction.StopActionConnect</Component>
+</Actions>

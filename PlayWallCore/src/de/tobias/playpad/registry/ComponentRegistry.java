@@ -59,7 +59,7 @@ public class ComponentRegistry<C> implements Registry<C> {
 	}
 
 	@Override
-	public void loadComponentsFromFile(URL url)
+	public void loadComponentsFromFile(URL url, ClassLoader loader)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (url == null) {
 			throw new IOException("URL not found: " + url);
@@ -74,7 +74,7 @@ public class ComponentRegistry<C> implements Registry<C> {
 				String type = element.attributeValue("id");
 
 				// Find the class of the type
-				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) Class.forName(element.getStringValue());
+				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
 				C component = clazz.newInstance();
 
 				registerComponent(component, type);

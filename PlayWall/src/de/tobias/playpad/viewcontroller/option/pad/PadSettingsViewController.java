@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.conntent.path.MultiPathContent;
 import de.tobias.playpad.pad.conntent.path.SinglePathContent;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -56,11 +56,14 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		if (pad.getContent() != null) {
 			try {
 				// Get Pad Type specific tab
-				PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(pad.getContent().getType());
+				String type = pad.getContent().getType();
+				PadContentConnect padContentConnect = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(type);
+
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
 				if (contentTab != null)
 					addTab(contentTab);
-			} catch (UnkownPadContentException e) {
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

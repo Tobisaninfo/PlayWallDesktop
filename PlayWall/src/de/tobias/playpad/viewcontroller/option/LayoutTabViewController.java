@@ -1,11 +1,12 @@
 package de.tobias.playpad.viewcontroller.option;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.GlobalLayout;
 import de.tobias.playpad.layout.LayoutConnect;
-import de.tobias.playpad.layout.LayoutRegistry;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.GlobalLayoutViewController;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
@@ -26,13 +27,18 @@ public class LayoutTabViewController extends SettingsTabViewController {
 		super("layoutTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
 
 		String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-		layoutTypeComboBox.setValue(LayoutRegistry.getLayout(layoutType));
+		try {
+			layoutTypeComboBox.setValue(PlayPadPlugin.getRegistryCollection().getLayouts().getComponent(layoutType));
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void init() {
 		// Layout
-		layoutTypeComboBox.getItems().setAll(LayoutRegistry.getValues());
+		layoutTypeComboBox.getItems().setAll(PlayPadPlugin.getRegistryCollection().getLayouts().getComponents());
 		layoutTypeComboBox.valueProperty().addListener((a, b, c) ->
 		{
 			String type = c.getType();

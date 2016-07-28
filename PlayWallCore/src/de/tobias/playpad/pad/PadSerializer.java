@@ -2,12 +2,15 @@ package de.tobias.playpad.pad;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutRegistry;
+import de.tobias.playpad.layout.LayoutConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
@@ -84,10 +87,17 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 				if (layoutObj instanceof Element) {
 					Element layoutElement = (Element) layoutObj;
 					String type = layoutElement.attributeValue(LAYOUT_TYPE_ATTR);
-					CartLayout layout = LayoutRegistry.getLayout(type).newCartLayout();
-					layout.load(layoutElement);
 
-					pad.setLayout(layout, type);
+					try {
+						DefaultRegistry<LayoutConnect> layouts = PlayPadPlugin.getRegistryCollection().getLayouts();
+						CartLayout layout = layouts.getComponent(type).newCartLayout();
+						layout.load(layoutElement);
+
+						pad.setLayout(layout, type);
+					} catch (NoSuchComponentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -123,10 +133,13 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		if (contentElement != null) {
 			String contentType = contentElement.attributeValue(CONTENT_TYPE_ATTR);
 			try {
-				PadContent content = PadContentRegistry.getPadContentConnect(contentType).newInstance(pad);
+				Registry<PadContentConnect> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+				PadContent content = padContents.getComponent(contentType).newInstance(pad);
+
 				content.load(contentElement);
 				pad.setContent(content);
-			} catch (UnkownPadContentException e) {
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 				pad.throwException(null, e);
 			}

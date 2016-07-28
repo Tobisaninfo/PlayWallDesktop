@@ -3,12 +3,12 @@ package de.tobias.playpad.viewcontroller.cell.errordialog;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.control.Button;
@@ -46,7 +46,8 @@ public class FixCell extends TableCell<PadException, PadException> {
 						Pad pad = item.getPad();
 						PadContent content = item.getPad().getContent();
 						try {
-							PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(content.getType());
+							PadContentConnect padContentConnect = PlayPadPlugin.getRegistryCollection().getPadContents()
+									.getComponent(content.getType());
 
 							if (Files.exists(path) && PadContentConnect.isFileSupported(path, padContentConnect)) {
 								try {
@@ -58,7 +59,8 @@ public class FixCell extends TableCell<PadException, PadException> {
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 								pad.removeException(item);
 							}
-						} catch (UnkownPadContentException e) {
+						} catch (NoSuchComponentException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -78,7 +80,8 @@ public class FixCell extends TableCell<PadException, PadException> {
 						Pad pad = item.getPad();
 						PadContent content = item.getPad().getContent();
 						try {
-							PadContentConnect padContentConnect = PadContentRegistry.getPadContentConnect(content.getType());
+							PadContentConnect padContentConnect = PlayPadPlugin.getRegistryCollection().getPadContents()
+									.getComponent(content.getType());
 
 							if (Files.exists(path) && PadContentConnect.isFileSupported(path, padContentConnect)) {
 								try {
@@ -90,7 +93,8 @@ public class FixCell extends TableCell<PadException, PadException> {
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 								pad.removeException(item);
 							}
-						} catch (UnkownPadContentException e) {
+						} catch (NoSuchComponentException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

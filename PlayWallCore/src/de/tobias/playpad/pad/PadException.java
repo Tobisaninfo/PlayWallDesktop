@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.scene.media.MediaException;
 import javazoom.jl.decoder.JavaLayerException;
 
@@ -41,7 +41,7 @@ public class PadException extends Exception {
 			type = PadExceptionType.CONVERT_NOT_SUPPORTED;
 		} else if (ex instanceof IOException) {
 			type = PadExceptionType.UNKOWN;
-		} else if (ex instanceof UnkownPadContentException) {
+		} else if (ex instanceof NoSuchComponentException) {
 			type = PadExceptionType.UNKOWN_CONTENT_TYPE;
 		} else if (ex instanceof Exception) {
 			type = PadExceptionType.UNKOWN;

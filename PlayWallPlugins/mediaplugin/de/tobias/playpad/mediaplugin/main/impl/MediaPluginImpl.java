@@ -8,14 +8,17 @@ import java.util.ResourceBundle;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.ActionRegistery;
 import de.tobias.playpad.mediaplugin.blindaction.BlindActionConnect;
+import de.tobias.playpad.mediaplugin.image.ImageContentConntect;
 import de.tobias.playpad.mediaplugin.main.VideoPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.mediaplugin.video.VideoContentConntect;
+import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.image.ImageContentConntect;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.utils.ui.HUD;
@@ -55,6 +58,13 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 		bundle = Localization.loadBundle("de/tobias/playpad/mediaplugin/assets/video", getClass().getClassLoader());
 		videoViewController = new MediaViewController(settings);
 
+		// Load Content Types
+		try {
+			Registry<PadContentConnect> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			e.printStackTrace();
+		}
 		PadContentRegistry.registerActionConnect(new VideoContentConntect());
 		PadContentRegistry.registerActionConnect(new ImageContentConntect());
 
@@ -81,6 +91,13 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 		}
 
 		UpdateRegistery.registerUpdateable(new MediaPluginUpdater());
+		
+		try {
+			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			e.printStackTrace();
+		}
 		ActionRegistery.registerActionConnect(new BlindActionConnect());
 
 		blindProperty.addListener(this);

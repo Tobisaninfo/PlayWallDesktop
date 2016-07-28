@@ -3,9 +3,10 @@ package de.tobias.playpad.viewcontroller.option.pad.trigger;
 import java.util.Set;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemConnect;
-import de.tobias.playpad.tigger.TriggerRegistry;
 import de.tobias.playpad.trigger.TriggerUIWrapper;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -34,51 +35,59 @@ public class TriggerPointViewController extends ContentViewController {
 
 	@Override
 	public void init() {
-		Set<String> types = TriggerRegistry.getTypes();
+		Set<String> types = PlayPadPlugin.getRegistryCollection().getTriggerItems().getTypes();
 		types.stream().sorted().forEach(item ->
 		{
-			Button button = new Button(TriggerRegistry.getTriggerConnect(item).toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
-			button.setContentDisplay(ContentDisplay.TOP);
-			button.setPrefWidth(150);
+			try {
+				TriggerItemConnect conntect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getComponent(item);
+				Button button = new Button(conntect.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
+				button.setContentDisplay(ContentDisplay.TOP);
+				button.setPrefWidth(150);
 
-			button.setOnAction(e ->
-			{
-				TriggerItemConnect connect = TriggerRegistry.getTriggerConnect(item);
-				TriggerItem triggerItem = connect.newInstance(triggerWrapper.getTrigger());
+				button.setOnAction(e ->
+				{
+					TriggerItem triggerItem = conntect.newInstance(triggerWrapper.getTrigger());
 
-				triggerWrapper.addItem(triggerItem);
-				showTriggerItem(triggerItem);
-			});
-			buttonBox.getChildren().add(button);
+					triggerWrapper.addItem(triggerItem);
+					showTriggerItem(triggerItem);
+				});
+				buttonBox.getChildren().add(button);
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 	}
 
 	private void showTriggerItem(TriggerItem item) {
-		TriggerItemConnect connect = TriggerRegistry.getTriggerConnect(item.getType());
+		try {
+			TriggerItemConnect connect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getComponent(item.getType());
 
-		VBox itemBox = new VBox(14);
-		ContentViewController contentViewController = connect.getSettingsController(item);
-		if (contentViewController != null) {
-			itemBox.getChildren().add(contentViewController.getParent());
+			VBox itemBox = new VBox(14);
+			ContentViewController contentViewController = connect.getSettingsController(item);
+			if (contentViewController != null) {
+				itemBox.getChildren().add(contentViewController.getParent());
 
-			ContentViewController timeViewController = new TriggerTimeViewController(item);
-			itemBox.getChildren().add(timeViewController.getParent());
+				ContentViewController timeViewController = new TriggerTimeViewController(item);
+				itemBox.getChildren().add(timeViewController.getParent());
 
-			Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
-			HBox hbox = new HBox(itemBox, deleteButton);
-			hbox.setSpacing(14);
+				Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+				HBox hbox = new HBox(itemBox, deleteButton);
+				hbox.setSpacing(14);
 
-			VBox rootBox = new VBox(14.0, hbox, new Separator());
+				VBox rootBox = new VBox(14.0, hbox, new Separator());
 
-			itemView.getChildren().addAll(rootBox);
+				itemView.getChildren().addAll(rootBox);
 
-			deleteButton.setOnAction((e) ->
-			{
-				triggerWrapper.removeItem(item);
-				itemView.getChildren().removeAll(rootBox);
-			});
-
-//			HBox.setHgrow(itemBox, Priority.ALWAYS);
+				deleteButton.setOnAction((e) ->
+				{
+					triggerWrapper.removeItem(item);
+					itemView.getChildren().removeAll(rootBox);
+				});
+			}
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

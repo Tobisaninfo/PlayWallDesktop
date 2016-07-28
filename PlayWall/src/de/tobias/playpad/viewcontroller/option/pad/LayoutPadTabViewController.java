@@ -9,8 +9,9 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutRegistry;
+import de.tobias.playpad.layout.LayoutConnect;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.CartLayoutViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -85,8 +86,12 @@ public class LayoutPadTabViewController extends PadSettingsTabViewController {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 			CartLayout layout = pad.getLayout(layoutType);
 
-			CartLayoutViewController controller = LayoutRegistry.getLayout(layoutType).getCartLayoutViewController(layout);
+			LayoutConnect component = PlayPadPlugin.getRegistryCollection().getLayouts().getComponent(layoutType);
+			CartLayoutViewController controller = component.getCartLayoutViewController(layout);
 			setLayoutController(controller);
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 			showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));

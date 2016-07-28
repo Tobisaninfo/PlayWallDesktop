@@ -14,8 +14,11 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.stage.Stage;
@@ -81,12 +84,20 @@ public interface GlobalLayout {
 			Document document = reader.read(Files.newInputStream(path));
 			Element root = document.getRootElement();
 
+			DefaultRegistry<LayoutConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getLayouts();
+
 			for (Object layoutObj : root.elements("Layout")) {
 				Element layoutElement = (Element) layoutObj;
 				String type = layoutElement.attributeValue("type");
-				GlobalLayout layout = LayoutRegistry.getLayout(type).newGlobalLayout();
-				layout.load(layoutElement);
-				layouts.put(type, layout);
+
+				try {
+					GlobalLayout layout = layouts2.getComponent(type).newGlobalLayout();
+					layout.load(layoutElement);
+					layouts.put(type, layout);
+				} catch (NoSuchComponentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 

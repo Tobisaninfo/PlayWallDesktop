@@ -5,11 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.mediaplugin.image.ImageContent;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.mediaplugin.video.VideoContent;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.plugin.image.ImageContent;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.utils.application.ApplicationUtils;

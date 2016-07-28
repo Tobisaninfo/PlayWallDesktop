@@ -72,7 +72,9 @@ public class XMLHandler<T> {
 			if (object instanceof Element) {
 				Element element = (Element) object;
 				T data = deserializer.loadElement(element);
-				list.add(data);
+				if (data != null) {
+					list.add(data);
+				}
 			}
 		}
 

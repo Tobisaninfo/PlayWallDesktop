@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.RegistryCollectionImpl;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.project.Project;

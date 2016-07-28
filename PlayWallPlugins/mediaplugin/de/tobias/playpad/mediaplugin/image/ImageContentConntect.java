@@ -1,4 +1,4 @@
-package de.tobias.playpad.plugin.image;
+package de.tobias.playpad.mediaplugin.image;
 
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.mediaplugin.main.impl.Strings;

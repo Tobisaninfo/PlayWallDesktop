@@ -11,8 +11,9 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
-import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
@@ -109,8 +110,14 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initActionType(Profile profile) {
-		for (String type : ActionRegistery.getTypes()) {
-			ActionRegistery.getActionConnect(type).initActionType(this, profile);
+		Registry<ActionConnect> actions = PlayPadPlugin.getRegistryCollection().getActions();
+		for (String type : actions.getTypes()) {
+			try {
+				actions.getComponent(type).initActionType(this, profile);
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -123,10 +130,16 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initFeedback() {
-		for (String mapperType : MapperRegistry.getTypes()) {
-			MapperConnect mapper = MapperRegistry.getMapperConnect(mapperType);
-			if (mapper instanceof MapperConnectFeedbackable) {
-				((MapperConnectFeedbackable) mapper).initFeedbackType();
+		Registry<MapperConnect> mappers = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (String mapperType : mappers.getTypes()) {
+			try {
+				MapperConnect mapper = mappers.getComponent(mapperType);
+				if (mapper instanceof MapperConnectFeedbackable) {
+					((MapperConnectFeedbackable) mapper).initFeedbackType();
+				}
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -149,10 +162,16 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void clearFeedback() {
-		for (String mapperType : MapperRegistry.getTypes()) {
-			MapperConnect mapper = MapperRegistry.getMapperConnect(mapperType);
-			if (mapper instanceof MapperConnectFeedbackable) {
-				((MapperConnectFeedbackable) mapper).clearFeedbackType();
+		Registry<MapperConnect> mappers = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (String mapperType : mappers.getTypes()) {
+			try {
+				MapperConnect mapper = mappers.getComponent(mapperType);
+				if (mapper instanceof MapperConnectFeedbackable) {
+					((MapperConnectFeedbackable) mapper).clearFeedbackType();
+				}
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		getActions().forEach(action -> action.clearFeedback());

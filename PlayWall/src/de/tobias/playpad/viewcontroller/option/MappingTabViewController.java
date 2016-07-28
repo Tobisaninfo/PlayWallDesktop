@@ -5,15 +5,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.ActionDisplayable;
-import de.tobias.playpad.action.ActionRegistery;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
@@ -83,7 +84,7 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 
 	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
-		Set<String> types = ActionRegistery.getTypes();
+		Set<String> types = PlayPadPlugin.getRegistryCollection().getActions().getTypes();
 		List<String> sortedTypes = types.stream().sorted().collect(Collectors.toList());
 
 		// Sort the tpyes for the treeview
@@ -95,12 +96,17 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 	}
 
 	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<String> sortedTypes, ActionType type) {
-		for (String tpye : sortedTypes) {
-			List<Action> actions = mapping.getActionsOfType(tpye);
-			ActionConnect actionConnect = ActionRegistery.getActionConnect(tpye);
-			if (actionConnect.geActionType() == type) {
-				TreeItem<ActionDisplayable> item = actionConnect.getTreeViewForActions(actions, mapping);
-				rootItem.getChildren().add(item);
+		for (String id : sortedTypes) {
+			List<Action> actions = mapping.getActionsOfType(id);
+			try {
+				ActionConnect actionConnect = PlayPadPlugin.getRegistryCollection().getActions().getComponent(id);
+				if (actionConnect.geActionType() == type) {
+					TreeItem<ActionDisplayable> item = actionConnect.getTreeViewForActions(actions, mapping);
+					rootItem.getChildren().add(item);
+				}
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

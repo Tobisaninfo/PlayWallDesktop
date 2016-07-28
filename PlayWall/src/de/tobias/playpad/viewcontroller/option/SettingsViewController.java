@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
@@ -47,13 +48,15 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		addTab(new PlayerTabViewController());
 
 		// Custom Tabs - Content Types
-		for (String type : PadContentRegistry.getTypes()) {
+		for (String type : PlayPadPlugin.getRegistryCollection().getPadContents().getTypes()) {
 			try {
-				SettingsTabViewController controller = PadContentRegistry.getPadContentConnect(type).getSettingsTabViewController(activePlayer);
+				PadContentConnect component = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(type);
+				SettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
 				if (controller != null) {
 					addTab(controller);
 				}
-			} catch (UnkownPadContentException e) {
+			} catch (NoSuchComponentException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

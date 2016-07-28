@@ -45,11 +45,16 @@ public interface WriteOnlyRegistry<C> {
 	 * @throws InstantiationException
 	 *             Die Klasse konnte nicht instanziert werden
 	 */
-	public void loadComponentsFromFile(URL url) throws IOException, DocumentException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException;
+	public void loadComponentsFromFile(URL url, ClassLoader loader)
+			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 
-	public default void loadComponentsFromFile(String name) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, IOException, DocumentException {
-		loadComponentsFromFile(getClass().getClassLoader().getResource(name));
+	public default void loadComponentsFromFile(String name)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
+		loadComponentsFromFile(getClass().getClassLoader().getResource(name), getClass().getClassLoader());
+	}
+
+	public default void loadComponentsFromFile(String name, ClassLoader loader)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
+		loadComponentsFromFile(loader.getResource(name), loader);
 	}
 }
