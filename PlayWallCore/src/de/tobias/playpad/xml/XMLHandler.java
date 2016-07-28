@@ -89,7 +89,7 @@ public class XMLHandler<T> {
 	 * @param serializer
 	 *            Serializer
 	 */
-	public void saveElements(String listElementTag, List<T> list, XMLSerializer<T> serializer) {
+	public void saveElements(String listElementTag, Iterable<T> list, XMLSerializer<T> serializer) {
 		for (T data : list) {
 			Element element = rootElement.addElement(listElementTag);
 			serializer.saveElement(element, data);
