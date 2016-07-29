@@ -20,7 +20,6 @@ public interface IMainViewController {
 
 	public int getPage();
 
-	@Deprecated
 	public Parent getParent();
 	
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener);
