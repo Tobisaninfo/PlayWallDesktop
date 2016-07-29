@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.cell;
 
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.layout.classic.Theme;
+import de.tobias.playpad.design.classic.Theme;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.ListCell;
 

@@ -4,8 +4,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
@@ -49,7 +49,7 @@ public class Pad {
 	private ObjectProperty<Warning> warningProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customLayoutProperty = new SimpleBooleanProperty(false);
-	private HashMap<String, CartLayout> layouts = new HashMap<>();
+	private HashMap<String, CartDesign> layouts = new HashMap<>();
 
 	private HashMap<String, Object> customSettings = new HashMap<>();
 
@@ -303,15 +303,15 @@ public class Pad {
 		return customLayoutProperty;
 	}
 
-	public CartLayout getLayout() {
+	public CartDesign getLayout() {
 		return getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
 	}
 
-	public CartLayout getLayout(String type) {
+	public CartDesign getLayout(String type) {
 		if (!layouts.containsKey(type)) {
-			DefaultRegistry<LayoutConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getLayouts();
+			DefaultRegistry<DesignConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
 			try {
-				layouts.put(type, layouts2.getComponent(type).newCartLayout());
+				layouts.put(type, layouts2.getComponent(type).newCartDesign());
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -320,7 +320,7 @@ public class Pad {
 		return layouts.get(type);
 	}
 
-	public void setLayout(CartLayout layout, String type) {
+	public void setLayout(CartDesign layout, String type) {
 		this.layouts.put(type, layout);
 	}
 
@@ -445,7 +445,7 @@ public class Pad {
 		return customVolumeProperty;
 	}
 
-	HashMap<String, CartLayout> getLayouts() {
+	HashMap<String, CartDesign> getLayouts() {
 		return layouts;
 	}
 }

@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
 import java.util.ArrayList;
 import java.util.List;

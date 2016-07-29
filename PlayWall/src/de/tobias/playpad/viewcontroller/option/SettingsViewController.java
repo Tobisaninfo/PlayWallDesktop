@@ -44,7 +44,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 		addTab(new MappingTabViewController());
 		addTab(new MidiTabViewController());
-		addTab(new LayoutTabViewController());
+		addTab(new DesignTabViewController());
 		addTab(new PlayerTabViewController());
 
 		// Custom Tabs - Content Types

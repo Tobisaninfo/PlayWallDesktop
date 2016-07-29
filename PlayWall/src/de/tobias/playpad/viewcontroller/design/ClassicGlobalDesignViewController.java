@@ -1,12 +1,12 @@
-package de.tobias.playpad.viewcontroller.layout;
+package de.tobias.playpad.viewcontroller.design;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.LayoutConnect;
-import de.tobias.playpad.layout.classic.ClassicGlobalLayout;
-import de.tobias.playpad.layout.classic.Theme;
-import de.tobias.playpad.viewcontroller.GlobalLayoutViewController;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.classic.ClassicGlobalDesign;
+import de.tobias.playpad.design.classic.Theme;
+import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.cell.ThemeCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,11 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.converter.IntegerStringConverter;
 
-public class ClassicLayoutGlobalViewController extends GlobalLayoutViewController {
+public class ClassicGlobalDesignViewController extends GlobalDesignViewController {
 
-	private ClassicGlobalLayout layout;
+	private ClassicGlobalDesign layout;
 
-	@FXML private ComboBox<LayoutConnect> layoutTypeComboBox;
+	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
 
 	@FXML private ComboBox<Theme> programLayoutComboBox;
 	@FXML private ColorPicker accentColorChooser;
@@ -43,11 +43,11 @@ public class ClassicLayoutGlobalViewController extends GlobalLayoutViewControlle
 
 	@FXML private Button resetButton;
 
-	public ClassicLayoutGlobalViewController(GlobalLayout layout) {
+	public ClassicGlobalDesignViewController(GlobalDesign layout) {
 		super("classicLayoutGlobal", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
-		setLayout((ClassicGlobalLayout) layout);
+		setLayout((ClassicGlobalDesign) layout);
 
-		ClassicGlobalLayout cl = (ClassicGlobalLayout) layout;
+		ClassicGlobalDesign cl = (ClassicGlobalDesign) layout;
 		programLayoutComboBox.valueProperty().bindBidirectional(cl.themeProperty());
 		accentColorChooser.setValue(cl.getAccentColor());
 		customLayoutCheckBox.setSelected(cl.isCustomLayout());
@@ -141,7 +141,7 @@ public class ClassicLayoutGlobalViewController extends GlobalLayoutViewControlle
 		});
 	}
 
-	public void setLayout(ClassicGlobalLayout defaultLayout) {
+	public void setLayout(ClassicGlobalDesign defaultLayout) {
 		this.layout = defaultLayout;
 
 		backgroundColorPicker.setValue(layout.getBackgroundColor());

@@ -20,9 +20,9 @@ import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.LayoutColorAssociator;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewController;
@@ -289,16 +289,16 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Color layoutEvColor = null;
 
 			if (pad.isCustomLayout()) {
-				CartLayout layout = pad.getLayout();
-				if (layout instanceof LayoutColorAssociator) {
-					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
+				CartDesign layout = pad.getLayout();
+				if (layout instanceof DesignColorAssociator) {
+					DesignColorAssociator associator = (DesignColorAssociator) layout;
 					layoutStdColor = associator.getAssociatedStandardColor();
 					layoutEvColor = associator.getAssociatedEventColor();
 				}
 			} else {
-				GlobalLayout layout = Profile.currentProfile().currentLayout();
-				if (layout instanceof LayoutColorAssociator) {
-					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
+				GlobalDesign layout = Profile.currentProfile().currentLayout();
+				if (layout instanceof DesignColorAssociator) {
+					DesignColorAssociator associator = (DesignColorAssociator) layout;
 					layoutStdColor = associator.getAssociatedStandardColor();
 					layoutEvColor = associator.getAssociatedEventColor();
 				}
@@ -364,7 +364,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		// Min Size of window
-		GlobalLayout currentLayout = Profile.currentProfile().currentLayout();
+		GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
 		double minWidth = currentLayout.getMinWidth(profileSettings.getColumns());
 		double minHeight = currentLayout.getMinHeight(profileSettings.getRows());
 

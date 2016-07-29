@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.classic;
+package de.tobias.playpad.design.classic;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,9 +12,9 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.Layout;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.Design;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.IPadView;
@@ -22,7 +22,7 @@ import de.tobias.utils.util.ColorXMLUtils;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 
-public class ClassicCartLayout extends Layout implements CartLayout {
+public class ClassicCartDesign extends Design implements CartDesign {
 
 	public static final String TYPE = "classic";
 
@@ -145,8 +145,8 @@ public class ClassicCartLayout extends Layout implements CartLayout {
 	}
 
 	@Override
-	public CartLayout clone() throws CloneNotSupportedException {
-		ClassicCartLayout layout = (ClassicCartLayout) super.clone();
+	public CartDesign clone() throws CloneNotSupportedException {
+		ClassicCartDesign layout = (ClassicCartDesign) super.clone();
 
 		layout.backgroundColor = Color.color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 				backgroundColor.getOpacity());
@@ -210,7 +210,7 @@ public class ClassicCartLayout extends Layout implements CartLayout {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalLayout layout) {
+	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
 		final IPadView view = controller.getParent();
 
 		try {
@@ -238,9 +238,9 @@ public class ClassicCartLayout extends Layout implements CartLayout {
 	}
 
 	@Override
-	public void copyGlobalLayout(GlobalLayout globalLayout) {
-		if (globalLayout instanceof ClassicGlobalLayout) {
-			ClassicGlobalLayout classicGlobalLayout = (ClassicGlobalLayout) globalLayout;
+	public void copyGlobalLayout(GlobalDesign globalLayout) {
+		if (globalLayout instanceof ClassicGlobalDesign) {
+			ClassicGlobalDesign classicGlobalLayout = (ClassicGlobalDesign) globalLayout;
 			backgroundColor = classicGlobalLayout.getBackgroundColor();
 			playbackColor = classicGlobalLayout.getPlaybackColor();
 			warnColor = classicGlobalLayout.getWarnColor();

@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,7 +23,7 @@ import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.stage.Stage;
 
-public interface GlobalLayout {
+public interface GlobalDesign {
 
 	public void applyCss(Stage stage);
 
@@ -60,14 +60,14 @@ public interface GlobalLayout {
 	public void reset();
 
 	// Utils
-	public static void saveGlobal(HashMap<String, GlobalLayout> layouts, Path path) throws UnsupportedEncodingException, IOException {
+	public static void saveGlobal(HashMap<String, GlobalDesign> layouts, Path path) throws UnsupportedEncodingException, IOException {
 		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement("Layouts");
 		for (String key : layouts.keySet()) {
 			Element layoutElement = rootElement.addElement("Layout");
 			layoutElement.addAttribute("type", key);
 
-			GlobalLayout layout = layouts.get(key);
+			GlobalDesign layout = layouts.get(key);
 			layout.save(layoutElement);
 		}
 
@@ -76,22 +76,22 @@ public interface GlobalLayout {
 		writer.close();
 	}
 
-	public static HashMap<String, GlobalLayout> loadGlobalLayout(Path path) throws DocumentException, IOException {
-		HashMap<String, GlobalLayout> layouts = new HashMap<>();
+	public static HashMap<String, GlobalDesign> loadGlobalLayout(Path path) throws DocumentException, IOException {
+		HashMap<String, GlobalDesign> layouts = new HashMap<>();
 
 		if (Files.exists(path)) {
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(Files.newInputStream(path));
 			Element root = document.getRootElement();
 
-			DefaultRegistry<LayoutConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getLayouts();
+			DefaultRegistry<DesignConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
 
 			for (Object layoutObj : root.elements("Layout")) {
 				Element layoutElement = (Element) layoutObj;
 				String type = layoutElement.attributeValue("type");
 
 				try {
-					GlobalLayout layout = layouts2.getComponent(type).newGlobalLayout();
+					GlobalDesign layout = layouts2.getComponent(type).newGlobalDesign();
 					layout.load(layoutElement);
 					layouts.put(type, layout);
 				} catch (NoSuchComponentException e) {

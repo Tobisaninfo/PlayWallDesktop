@@ -1,11 +1,11 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.settings.Warning;
 
-public interface CartLayout {
+public interface CartDesign {
 
 	public String convertToCss(String classSufix, boolean fullCss);
 
@@ -25,11 +25,11 @@ public interface CartLayout {
 	 * @param controller
 	 * @param warning
 	 */
-	public abstract void handleWarning(IPadViewController controller, Warning warning, GlobalLayout animate);
+	public abstract void handleWarning(IPadViewController controller, Warning warning, GlobalDesign animate);
 
 	public default void stopWarning(IPadViewController controller) {}
 
 	public void reset();
 
-	public void copyGlobalLayout(GlobalLayout globalLayout);
+	public void copyGlobalLayout(GlobalDesign globalLayout);
 }

@@ -3,12 +3,12 @@ package de.tobias.playpad.viewcontroller.option;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.viewcontroller.GlobalLayoutViewController;
+import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -17,18 +17,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
-public class LayoutTabViewController extends SettingsTabViewController {
+public class DesignTabViewController extends SettingsTabViewController {
 
 	@FXML private VBox layoutContainer;
-	@FXML private ComboBox<LayoutConnect> layoutTypeComboBox;
-	private GlobalLayoutViewController globalLayoutViewController;
+	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
+	private GlobalDesignViewController globalLayoutViewController;
 
-	public LayoutTabViewController() {
+	public DesignTabViewController() {
 		super("layoutTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
 
 		String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 		try {
-			layoutTypeComboBox.setValue(PlayPadPlugin.getRegistryCollection().getLayouts().getComponent(layoutType));
+			layoutTypeComboBox.setValue(PlayPadPlugin.getRegistryCollection().getDesigns().getComponent(layoutType));
 		} catch (NoSuchComponentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,15 +38,15 @@ public class LayoutTabViewController extends SettingsTabViewController {
 	@Override
 	public void init() {
 		// Layout
-		layoutTypeComboBox.getItems().setAll(PlayPadPlugin.getRegistryCollection().getLayouts().getComponents());
+		layoutTypeComboBox.getItems().setAll(PlayPadPlugin.getRegistryCollection().getDesigns().getComponents());
 		layoutTypeComboBox.valueProperty().addListener((a, b, c) ->
 		{
 			String type = c.getType();
 
 			Profile.currentProfile().getProfileSettings().setLayoutType(type);
-			GlobalLayout layout = Profile.currentProfile().getLayout(type);
+			GlobalDesign layout = Profile.currentProfile().getLayout(type);
 			try {
-				setLayoutController(c.getGlobalLayoutViewController(layout));
+				setLayoutController(c.getGlobalDesignViewController(layout));
 			} catch (Exception e) {
 				e.printStackTrace();
 				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
@@ -57,7 +57,7 @@ public class LayoutTabViewController extends SettingsTabViewController {
 		layoutTypeComboBox.setButtonCell(new DisplayableCell<>());
 	}
 
-	private void setLayoutController(GlobalLayoutViewController globalLayoutViewController) {
+	private void setLayoutController(GlobalDesignViewController globalLayoutViewController) {
 		if (this.globalLayoutViewController != null)
 			layoutContainer.getChildren().remove(this.globalLayoutViewController.getParent());
 

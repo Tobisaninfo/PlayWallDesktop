@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.layout;
+package de.tobias.playpad.viewcontroller.design;
 
 import java.util.function.Consumer;
 
@@ -7,11 +7,11 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.modern.ModernColor;
-import de.tobias.playpad.layout.modern.ModernLayoutGlobal;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorView;
-import de.tobias.playpad.viewcontroller.GlobalLayoutViewController;
+import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,7 +19,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.util.converter.IntegerStringConverter;
 
-public class ModernLayoutGlobalViewController extends GlobalLayoutViewController {
+public class ModernGlobalDesignViewController extends GlobalDesignViewController {
 
 	@FXML private Button backgroundColorButton;
 	@FXML private Button playColorButton;
@@ -31,15 +31,15 @@ public class ModernLayoutGlobalViewController extends GlobalLayoutViewController
 
 	@FXML private Button resetButton;
 
-	private ModernLayoutGlobal globalLayout;
+	private ModernGlobalDesign globalLayout;
 
 	private PopOver colorChooser;
 
-	public ModernLayoutGlobalViewController(GlobalLayout layout) {
+	public ModernGlobalDesignViewController(GlobalDesign layout) {
 		super("modernLayoutGlobal", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
 
-		if (layout instanceof GlobalLayout) {
-			this.globalLayout = (ModernLayoutGlobal) layout;
+		if (layout instanceof GlobalDesign) {
+			this.globalLayout = (ModernGlobalDesign) layout;
 
 			setLayout();
 		}

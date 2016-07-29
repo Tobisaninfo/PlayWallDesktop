@@ -1,13 +1,13 @@
-package de.tobias.playpad.layout.modern;
+package de.tobias.playpad.design.modern;
 
 import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.FadeableColor;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.Layout;
-import de.tobias.playpad.layout.LayoutColorAssociator;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.Design;
+import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.view.IPadViewController;
@@ -15,7 +15,7 @@ import de.tobias.playpad.settings.Warning;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorAssociator {
+public class ModernCartDesign extends Design implements CartDesign, DesignColorAssociator {
 
 	public static final String TYPE = "modern";
 
@@ -75,17 +75,17 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalLayout layout) {
-		if (layout instanceof ModernLayoutGlobal && ((ModernLayoutGlobal) layout).isWarnAnimation()) {
+	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
+		if (layout instanceof ModernGlobalDesign && ((ModernGlobalDesign) layout).isWarnAnimation()) {
 			warnAnimation(controller, warning);
 		} else {
-			ModernLayoutAnimator.warnFlash(controller);
+			ModernDesignAnimator.warnFlash(controller);
 		}
 	}
 
 	@Override
 	public void stopWarning(IPadViewController controller) {
-		ModernLayoutAnimator.stopAnimation(controller);
+		ModernDesignAnimator.stopAnimation(controller);
 	}
 
 	private void warnAnimation(IPadViewController controller, Warning warning) {
@@ -101,7 +101,7 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 			}
 		}
 
-		ModernLayoutAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
 	}
 
 	// Cart Layout
@@ -177,9 +177,9 @@ public class ModernLayoutCart extends Layout implements CartLayout, LayoutColorA
 	}
 
 	@Override
-	public void copyGlobalLayout(GlobalLayout globalLayout) {
-		if (globalLayout instanceof ModernLayoutGlobal) {
-			ModernLayoutGlobal modernLayoutGlobal = (ModernLayoutGlobal) globalLayout;
+	public void copyGlobalLayout(GlobalDesign globalLayout) {
+		if (globalLayout instanceof ModernGlobalDesign) {
+			ModernGlobalDesign modernLayoutGlobal = (ModernGlobalDesign) globalLayout;
 			backgroundColor = modernLayoutGlobal.getBackgroundColor();
 			playColor = modernLayoutGlobal.getPlayColor();
 		}

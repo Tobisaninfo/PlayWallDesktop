@@ -1,18 +1,18 @@
-package de.tobias.playpad.viewcontroller.layout;
+package de.tobias.playpad.viewcontroller.design;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.classic.ClassicCartLayout;
-import de.tobias.playpad.viewcontroller.CartLayoutViewController;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.classic.ClassicCartDesign;
+import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 
-public class ClassicLayoutCartViewController extends CartLayoutViewController {
+public class ClassicCartDesignViewController extends CartDesignViewController {
 
-	private ClassicCartLayout layout;
+	private ClassicCartDesign layout;
 
 	@FXML private ColorPicker playgroundColorPicker;
 	@FXML private ColorPicker backgroundColorPicker;
@@ -24,9 +24,9 @@ public class ClassicLayoutCartViewController extends CartLayoutViewController {
 
 	@FXML private Button resetButton;
 
-	public ClassicLayoutCartViewController(CartLayout layout) {
+	public ClassicCartDesignViewController(CartDesign layout) {
 		super("classicLayoutCart", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
-		setLayout((ClassicCartLayout) layout);
+		setLayout((ClassicCartDesign) layout);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ClassicLayoutCartViewController extends CartLayoutViewController {
 		titleLabelColorPicker.valueProperty().addListener((a, b, c) -> layout.setTitleLabelColor(c));
 	}
 
-	public void setLayout(ClassicCartLayout defaultLayout) {
+	public void setLayout(ClassicCartDesign defaultLayout) {
 		this.layout = defaultLayout;
 
 		backgroundColorPicker.setValue(layout.getBackgroundColor());

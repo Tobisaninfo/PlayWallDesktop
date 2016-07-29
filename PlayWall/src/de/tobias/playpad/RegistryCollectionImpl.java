@@ -3,7 +3,7 @@ package de.tobias.playpad;
 import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.ComponentRegistry;
@@ -17,7 +17,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	private Registry<ActionConnect> actionRegistry;
 	private AudioRegistry audioHandlerRegistry;
 	private Registry<PadDragMode> dragModeRegistry;
-	private DefaultRegistry<LayoutConnect> layoutRegistry;
+	private DefaultRegistry<DesignConnect> layoutRegistry;
 	private Registry<MapperConnect> mapperRegistry;
 	private Registry<PadContentConnect> padContentRegistry;
 	private Registry<TriggerItemConnect> triggerItemRegistry;
@@ -60,7 +60,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	 * @see de.tobias.playpad.RegistryCollection#getLayoutRegistry()
 	 */
 	@Override
-	public DefaultRegistry<LayoutConnect> getLayouts() {
+	public DefaultRegistry<DesignConnect> getDesigns() {
 		return layoutRegistry;
 	}
 

@@ -1,8 +1,8 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
 import javafx.scene.paint.Color;
 
-public interface LayoutColorAssociator {
+public interface DesignColorAssociator {
 
 	public Color getAssociatedStandardColor();
 

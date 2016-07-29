@@ -21,11 +21,11 @@ import de.tobias.playpad.action.mapper.MidiMapperConnect;
 import de.tobias.playpad.audio.ClipAudioHandler;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
 import de.tobias.playpad.audio.TinyAudioHandler;
-import de.tobias.playpad.layout.LayoutRegistry;
-import de.tobias.playpad.layout.classic.ClassicGlobalLayout;
-import de.tobias.playpad.layout.classic.ClassicLayoutConnect;
-import de.tobias.playpad.layout.modern.ModernLayoutConnect;
-import de.tobias.playpad.layout.modern.ModernLayoutGlobal;
+import de.tobias.playpad.design.LayoutRegistry;
+import de.tobias.playpad.design.classic.ClassicGlobalDesign;
+import de.tobias.playpad.design.classic.ClassicDesignConnect;
+import de.tobias.playpad.design.modern.ModernDesignConnect;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
@@ -212,9 +212,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 
 	private void registerComponents() {
 		// Layout
-		LayoutRegistry.registerLayout(new ClassicLayoutConnect());
-		LayoutRegistry.registerLayout(new ModernLayoutConnect());
-		LayoutRegistry.setDefaultLayout(ClassicGlobalLayout.TYPE);
+		LayoutRegistry.registerLayout(new ClassicDesignConnect());
+		LayoutRegistry.registerLayout(new ModernDesignConnect());
+		LayoutRegistry.setDefaultLayout(ClassicGlobalDesign.TYPE);
 
 		// Midi
 		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
@@ -245,14 +245,14 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
 			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
 			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
-			registryCollection.getLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
+			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml");
 			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
 			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
 			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
 
 			// Set Default
 			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);
-			registryCollection.getLayouts().setDefaultID(ModernLayoutGlobal.TYPE);
+			registryCollection.getDesigns().setDefaultID(ModernGlobalDesign.TYPE);
 		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
 				| NoSuchComponentException e) {
 			e.printStackTrace();

@@ -1,6 +1,6 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
-public abstract class Layout {
+public abstract class Design {
 
 	protected void startStyleClass(StringBuilder builder, String name) {
 		builder.append("." + name + " {\n");

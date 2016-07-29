@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.modern;
+package de.tobias.playpad.design.modern;
 
 import de.tobias.playpad.DisplayableColor;
 import javafx.scene.paint.Color;

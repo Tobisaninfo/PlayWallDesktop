@@ -16,7 +16,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.layout.LayoutRegistry;
+import de.tobias.playpad.design.LayoutRegistry;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;

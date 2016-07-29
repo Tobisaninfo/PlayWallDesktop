@@ -3,7 +3,7 @@ package de.tobias.playpad;
 import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.DefaultRegistry;
@@ -26,7 +26,7 @@ public interface RegistryCollection {
 
 	public Registry<PadDragMode> getDragModes();
 
-	public DefaultRegistry<LayoutConnect> getLayouts();
+	public DefaultRegistry<DesignConnect> getDesigns();
 
 	public Registry<MapperConnect> getMappers();
 

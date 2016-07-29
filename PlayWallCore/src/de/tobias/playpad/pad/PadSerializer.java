@@ -3,8 +3,8 @@ package de.tobias.playpad.pad;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.project.Project;
@@ -89,8 +89,8 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 					String type = layoutElement.attributeValue(LAYOUT_TYPE_ATTR);
 
 					try {
-						DefaultRegistry<LayoutConnect> layouts = PlayPadPlugin.getRegistryCollection().getLayouts();
-						CartLayout layout = layouts.getComponent(type).newCartLayout();
+						DefaultRegistry<DesignConnect> layouts = PlayPadPlugin.getRegistryCollection().getDesigns();
+						CartDesign layout = layouts.getComponent(type).newCartDesign();
 						layout.load(layoutElement);
 
 						pad.setLayout(layout, type);
@@ -176,7 +176,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			Element layoutElement = layoutsElement.addElement(LAYOUT_ELEMENT);
 			layoutElement.addAttribute(LAYOUT_TYPE_ATTR, layoutType);
 
-			CartLayout cartLayout = data.getLayouts().get(layoutType);
+			CartDesign cartLayout = data.getLayouts().get(layoutType);
 			cartLayout.save(layoutElement);
 		}
 

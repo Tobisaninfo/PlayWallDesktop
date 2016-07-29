@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.modern;
+package de.tobias.playpad.design.modern;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,11 +7,11 @@ import java.nio.file.Path;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.FadeableColor;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.Layout;
-import de.tobias.playpad.layout.LayoutColorAssociator;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.Design;
+import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.view.IPadViewController;
@@ -25,7 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutColorAssociator {
+public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator {
 
 	public static final String TYPE = "modern";
 
@@ -199,7 +199,7 @@ public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutCo
 		// Pad Spezelles Layout immer
 		for (Pad pad : project.getPads().values()) {
 			if (pad.isCustomLayout()) {
-				CartLayout layoutOpt = pad.getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
+				CartDesign layoutOpt = pad.getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
 				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
 			}
 		}
@@ -278,13 +278,13 @@ public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutCo
 		if (isWarnAnimation) {
 			warnAnimation(controller, warning);
 		} else {
-			ModernLayoutAnimator.warnFlash(controller);
+			ModernDesignAnimator.warnFlash(controller);
 		}
 	}
 
 	@Override
 	public void stopWarning(IPadViewController controller) {
-		ModernLayoutAnimator.stopAnimation(controller);
+		ModernDesignAnimator.stopAnimation(controller);
 	}
 
 	private void warnAnimation(IPadViewController controller, Warning warning) {
@@ -300,7 +300,7 @@ public class ModernLayoutGlobal extends Layout implements GlobalLayout, LayoutCo
 			}
 		}
 
-		ModernLayoutAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
 	}
 
 	// Color Associator

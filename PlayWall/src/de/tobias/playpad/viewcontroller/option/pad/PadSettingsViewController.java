@@ -49,7 +49,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
-		addTab(new LayoutPadTabViewController(pad));
+		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));
 		addTab(new TriggerPadTabViewController(pad));
 

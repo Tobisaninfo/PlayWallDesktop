@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.layout;
+package de.tobias.playpad.viewcontroller.design;
 
 import java.util.function.Consumer;
 
@@ -7,17 +7,17 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.modern.ModernColor;
-import de.tobias.playpad.layout.modern.ModernLayoutCart;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.view.ColorView;
-import de.tobias.playpad.viewcontroller.CartLayoutViewController;
+import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 
-public class ModernLayoutCartViewController extends CartLayoutViewController {
+public class ModernCartDesignViewController extends CartDesignViewController {
 
 	@FXML private Button backgroundColorButton;
 	@FXML private Button playColorButton;
@@ -25,15 +25,15 @@ public class ModernLayoutCartViewController extends CartLayoutViewController {
 
 	@FXML private Button resetButton;
 
-	private ModernLayoutCart cartLayout;
+	private ModernCartDesign cartLayout;
 
 	private PopOver colorChooser;
 
-	public ModernLayoutCartViewController(CartLayout layout) {
+	public ModernCartDesignViewController(CartDesign layout) {
 		super("modernLayoutCart", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
 
-		if (layout instanceof CartLayout) {
-			this.cartLayout = (ModernLayoutCart) layout;
+		if (layout instanceof CartDesign) {
+			this.cartLayout = (ModernCartDesign) layout;
 
 			setLayout();
 		}

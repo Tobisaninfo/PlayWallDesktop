@@ -1,9 +1,9 @@
-package de.tobias.playpad.layout.modern;
+package de.tobias.playpad.design.modern;
 
 import java.util.HashMap;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.FadeableColor;
+import de.tobias.playpad.design.FadeableColor;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.viewcontroller.IPadView;
 import javafx.animation.KeyFrame;
@@ -16,10 +16,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
-public class ModernLayoutAnimator {
+public class ModernDesignAnimator {
 
 	// alles nur static, neine objecte von der Klasse
-	private ModernLayoutAnimator() {}
+	private ModernDesignAnimator() {}
 
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 

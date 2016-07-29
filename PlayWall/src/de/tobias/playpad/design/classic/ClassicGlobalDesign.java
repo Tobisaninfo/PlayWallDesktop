@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.classic;
+package de.tobias.playpad.design.classic;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,9 +7,9 @@ import java.nio.file.Path;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.Layout;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.Design;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewController;
 import de.tobias.playpad.project.Project;
@@ -25,7 +25,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ClassicGlobalLayout extends Layout implements GlobalLayout {
+public class ClassicGlobalDesign extends Design implements GlobalDesign {
 
 	public static final double minWidth = 180;
 	public static final double minHeight = 100;
@@ -230,8 +230,8 @@ public class ClassicGlobalLayout extends Layout implements GlobalLayout {
 	}
 
 	@Override
-	public GlobalLayout clone() throws CloneNotSupportedException {
-		ClassicGlobalLayout layout = (ClassicGlobalLayout) super.clone();
+	public GlobalDesign clone() throws CloneNotSupportedException {
+		ClassicGlobalDesign layout = (ClassicGlobalDesign) super.clone();
 
 		layout.backgroundColor = Color.color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),
 				backgroundColor.getOpacity());
@@ -328,7 +328,7 @@ public class ClassicGlobalLayout extends Layout implements GlobalLayout {
 		// Pad Spezelles Layout immer
 		for (Pad pad : project.getPads().values()) {
 			if (pad.isCustomLayout()) {
-				CartLayout layoutOpt = pad.getLayout();
+				CartDesign layoutOpt = pad.getLayout();
 				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
 			}
 		}

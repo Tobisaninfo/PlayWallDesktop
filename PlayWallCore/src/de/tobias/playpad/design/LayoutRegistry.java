@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout;
+package de.tobias.playpad.design;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,9 +12,9 @@ public class LayoutRegistry {
 	}
 
 	private static String defaultLayout;
-	private static HashMap<String, LayoutConnect> layouts;
+	private static HashMap<String, DesignConnect> layouts;
 
-	public static void registerLayout(LayoutConnect layoutConnect) {
+	public static void registerLayout(DesignConnect layoutConnect) {
 		layouts.put(layoutConnect.getType(), layoutConnect);
 	}
 
@@ -22,11 +22,11 @@ public class LayoutRegistry {
 		return layouts.keySet();
 	}
 
-	public static LayoutConnect getLayout(String type) {
+	public static DesignConnect getLayout(String type) {
 		return layouts.get(type);
 	}
 
-	public static Collection<LayoutConnect> getValues() {
+	public static Collection<DesignConnect> getValues() {
 		return layouts.values();
 	}
 

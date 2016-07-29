@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.layout.GlobalLayout;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -209,7 +209,7 @@ public class GeneralTabViewController extends SettingsTabViewController {
 		double width = mainWindowScreen.getVisualBounds().getMaxX() - mainWindowScreen.getVisualBounds().getMinX();
 		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
 
-		GlobalLayout layout = Profile.currentProfile().currentLayout();
+		GlobalDesign layout = Profile.currentProfile().currentLayout();
 
 		try {
 			double neededWidth = layout.getMinWidth(Integer.valueOf(columnTextField.getText()));
@@ -329,7 +329,7 @@ public class GeneralTabViewController extends SettingsTabViewController {
 			double width = mainWindowScreen.getVisualBounds().getMaxX() - mainWindowScreen.getVisualBounds().getMinX();
 			double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
 
-			GlobalLayout globalLayout = Profile.currentProfile().currentLayout();
+			GlobalDesign globalLayout = Profile.currentProfile().currentLayout();
 
 			int maxCartsX = (int) (width / globalLayout.getPadWidth());
 			int maxCartsY = (int) ((height - 100) / globalLayout.getPadHeight());

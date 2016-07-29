@@ -8,12 +8,12 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.LayoutConnect;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.viewcontroller.CartLayoutViewController;
+import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
@@ -21,20 +21,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
-public class LayoutPadTabViewController extends PadSettingsTabViewController {
+public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML private VBox layoutContainer;
 	@FXML private CheckBox enableLayoutCheckBox;
-	private CartLayoutViewController layoutViewController;
+	private CartDesignViewController layoutViewController;
 
 	private Pad pad;
 
-	public LayoutPadTabViewController(Pad pad) {
+	public DesignPadTabViewController(Pad pad) {
 		super("layoutTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 	}
 
-	private void setLayoutController(CartLayoutViewController cartLayoutViewController) {
+	private void setLayoutController(CartDesignViewController cartLayoutViewController) {
 		if (layoutViewController != null)
 			layoutContainer.getChildren().remove(layoutViewController.getParent());
 
@@ -53,7 +53,7 @@ public class LayoutPadTabViewController extends PadSettingsTabViewController {
 					pad.setCustomLayout(true);
 
 					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartLayout layout = pad.getLayout(layoutType);
+					CartDesign layout = pad.getLayout(layoutType);
 					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
 
 					setLayoutViewController(pad);
@@ -84,10 +84,10 @@ public class LayoutPadTabViewController extends PadSettingsTabViewController {
 	private void setLayoutViewController(Pad pad) {
 		try {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartLayout layout = pad.getLayout(layoutType);
+			CartDesign layout = pad.getLayout(layoutType);
 
-			LayoutConnect component = PlayPadPlugin.getRegistryCollection().getLayouts().getComponent(layoutType);
-			CartLayoutViewController controller = component.getCartLayoutViewController(layout);
+			DesignConnect component = PlayPadPlugin.getRegistryCollection().getDesigns().getComponent(layoutType);
+			CartDesignViewController controller = component.getCartDesignViewController(layout);
 			setLayoutController(controller);
 		} catch (NoSuchComponentException e) {
 			// TODO Auto-generated catch block
