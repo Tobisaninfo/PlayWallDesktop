@@ -1,0 +1,30 @@
+package de.tobias.playpad.layout.desktop;
+
+import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+
+public class DesktopMainLayoutConnect implements MainLayoutConnect {
+
+	@Override
+	public String getType() {
+		return "desktop";
+	}
+
+	@Override
+	public String name() {
+		return null;
+	}
+
+	@Override
+	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
+		return new DesktopMenuToolbarViewController();
+	}
+
+	@Override
+	public IPadViewV2 createPadView() {
+		return new DesktopPadView();
+	}
+
+}

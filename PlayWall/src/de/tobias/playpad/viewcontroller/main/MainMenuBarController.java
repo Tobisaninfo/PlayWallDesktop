@@ -54,6 +54,7 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+@Deprecated
 public class MainMenuBarController implements EventHandler<ActionEvent>, Initializable, ProfileListener {
 
 	@FXML private MenuBar menuBar;

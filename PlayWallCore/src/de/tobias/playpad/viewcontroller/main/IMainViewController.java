@@ -16,22 +16,28 @@ public interface IMainViewController {
 
 	public Stage getStage();
 
-	public void addMenuItem(MenuItem item);
+	public default void addMenuItem(MenuItem item) {}
 
 	public int getPage();
 
 	public Parent getParent();
-	
+
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener);
 
 	@Deprecated
-	public Project getProject();
+	public default Project getProject() {
+		return null;
+	}
 
 	@Deprecated
-	public Slider getVolumeSlider();
+	public default Slider getVolumeSlider() {
+		return null;
+	}
 
 	@Deprecated
-	public IMainToolbarViewController getToolbarController();
+	public default IMainToolbarViewController getToolbarController() {
+		return null;
+	}
 
 	public void createPadViews();
 
@@ -40,6 +46,6 @@ public interface IMainViewController {
 	public void loadUserCss();
 
 	public void applyColorsToMappers();
-	
-	public void showLiveInfo();
+
+	public default void showLiveInfo() {}
 }

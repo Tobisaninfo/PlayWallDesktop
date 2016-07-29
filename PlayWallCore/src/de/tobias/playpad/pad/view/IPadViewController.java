@@ -3,6 +3,7 @@ package de.tobias.playpad.pad.view;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.viewcontroller.IPadView;
 
+@Deprecated
 public interface IPadViewController {
 
 	public IPadView getParent();

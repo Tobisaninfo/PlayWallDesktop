@@ -23,6 +23,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 
+@Deprecated
 public class MainToolbarController implements IMainToolbarViewController, Initializable, EventHandler<ActionEvent>, ProfileListener {
 
 	@FXML private ToolBar toolbar;

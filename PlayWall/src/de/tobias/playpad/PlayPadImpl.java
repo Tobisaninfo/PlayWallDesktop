@@ -21,7 +21,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.ISettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.main.MainViewController;
+import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Worker;
@@ -42,7 +42,7 @@ public class PlayPadImpl implements PlayPad {
 	private PluginManager pluginManager;
 	private Set<Path> deletedPlugins;
 
-	private MainViewController mainViewController;
+	private MainViewControllerV2 mainViewController;
 
 	public PlayPadImpl() {
 		pluginManager = PluginManagerFactory.createPluginManager();
@@ -156,11 +156,11 @@ public class PlayPadImpl implements PlayPad {
 		pluginManager.addPluginsFrom(uri);
 	}
 
+	@Deprecated
 	public void openProject(Project project) {
 		if (mainViewController == null) {
-			mainViewController = new MainViewController(project, mainViewListeners);
-		} else {
-			mainViewController.setProject(project);
+			mainViewController = new MainViewControllerV2(mainViewListeners);
 		}
+		mainViewController.openProject(project);
 	}
 }
