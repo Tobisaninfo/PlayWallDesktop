@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.view;
 
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import javafx.scene.Node;
 
 /**
  * Zugriff auf eine PadView. Hier sind alle Methoden um mit der GUI für ein Pad zu agieren.
@@ -35,10 +36,25 @@ public interface IPadViewV2 {
 	public IPadViewControllerV2 getViewController();
 
 	/**
+	 * Gibt das oberste GUI Element zurück, welche im MainView verwendet wird.
+	 * 
+	 * @return root node
+	 */
+	public Node getRootNode();
+
+	/**
 	 * Schaltet den Design Modus für Drag And Drop ein.
 	 * 
 	 * @param enable
 	 *            true eingeschaltet
 	 */
 	public void enableDragAndDropDesignMode(boolean enable);
+
+	/**
+	 * Zeigt ein BusyView über dem Padview an.
+	 * 
+	 * @param enable
+	 *            true, wird angezeigt
+	 */
+	public void showBusyView(boolean enable);
 }
