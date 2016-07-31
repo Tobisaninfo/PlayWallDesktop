@@ -5,9 +5,9 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
@@ -15,9 +15,9 @@ import javafx.util.Duration;
 public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 
 	private Pad pad;
-	private PadViewController controller;
+	private IPadViewControllerV2 controller;
 
-	public PadPositionListener(PadViewController controller) {
+	public PadPositionListener(IPadViewControllerV2 controller) {
 		this.controller = controller;
 	}
 
@@ -56,7 +56,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 
 	private void updateDuration(Duration newValue, Durationable durationable, Duration totalDuration) {
 		double value = newValue.toMillis() / totalDuration.toMillis();
-		controller.getParent().getPlayBar().setProgress(value);
+		controller.getView().getPlayBar().setProgress(value);
 
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();
@@ -88,9 +88,9 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		Warning warning = pad.getWarning();
 
 		if (pad.isCustomLayout()) {
-			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+//			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout()); TODO StartWarning
 		} else {
-			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
+//			Profile.currentProfile().currentLayout().handleWarning(controller, warning); TODO Start Wanring
 		}
 	}
 
@@ -109,10 +109,10 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		}
 
 		if (pad.isCustomLayout()) {
-			pad.getLayout().stopWarning(controller);
+//			pad.getLayout().stopWarning(controller); TODO Stop Warning
 		} else {
-			Profile.currentProfile().currentLayout().stopWarning(controller);
+//			Profile.currentProfile().currentLayout().stopWarning(controller); TODO Stop Warning
 		}
-		controller.getParent().setStyle("");
+		controller.getView().setStyle("");
 	}
 }

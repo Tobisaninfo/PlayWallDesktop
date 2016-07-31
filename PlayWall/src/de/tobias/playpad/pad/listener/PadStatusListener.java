@@ -2,15 +2,15 @@ package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadStatusListener implements ChangeListener<PadStatus> {
 
-	private PadViewController controller;
+	private IPadViewControllerV2 controller;
 
-	public PadStatusListener(PadViewController controller) {
+	public PadStatusListener(IPadViewControllerV2 controller) {
 		this.controller = controller;
 	}
 
@@ -18,55 +18,55 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
-		controller.getParent().setErrorLabelActive(false);
+		controller.getView().setErrorLabelActive(false);
 
 		switch (newValue) {
 		case PLAY:
 			// Reset Warning Feedback for UI
-			controller.getPadPositionListener().setSend(false);
+			// controller.getPadPositionListener().setSend(false); TODO Warning
 
 			// UI Styling
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, true);
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, true);
 			break;
 
 		case PAUSE:
-			controller.getPadPositionListener().stopWaning();
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+			// controller.getPadPositionListener().stopWaning(); TODO Warning
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 			break;
 
 		case STOP:
-			controller.getPadPositionListener().stopWaning();
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getParent().setStyle("");
+			// controller.getPadPositionListener().stopWaning(); TODO Warning
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+			controller.getView().setStyle("");
 			break;
 
 		case READY:
-			controller.getPadPositionListener().stopWaning();
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getParent().setStyle(""); // Cleanup from warning UI
+			// controller.getPadPositionListener().stopWaning(); TODO Warning
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+			controller.getView().setStyle(""); // Cleanup from warning UI
 			break;
 		case ERROR:
-			controller.getParent().setErrorLabelActive(true);
+			controller.getView().setErrorLabelActive(true);
 
-			controller.getPadPositionListener().stopWaning();
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getParent().setStyle(""); // Cleanup from warning UI
+			// controller.getPadPositionListener().stopWaning(); TODO Warning
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+			controller.getView().setStyle(""); // Cleanup from warning UI
 			break;
 
 		case EMPTY:
-			controller.getPadPositionListener().stopWaning();
-			controller.getParent().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getParent().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getParent().setStyle(""); // Cleanup from warning UI
+			// controller.getPadPositionListener().stopWaning(); TODO Warning
+			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+			controller.getView().setStyle(""); // Cleanup from warning UI
 			break;
 		default:
 			break;

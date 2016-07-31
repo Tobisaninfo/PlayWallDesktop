@@ -154,7 +154,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			Platform.runLater(() ->
 			{
 				if (getPad().isPadVisible()) {
-					getPad().getController().getParent().setBusy(true);
+					getPad().getController().getView().showBusyView(false);
 				}
 			});
 			media = new Media(path.toUri().toString());
@@ -174,7 +174,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 				Platform.runLater(() ->
 				{
 					if (getPad().isPadVisible()) {
-						getPad().getController().getParent().setBusy(false);
+						getPad().getController().getView().showBusyView(false);
 					}
 				});
 			});
@@ -184,7 +184,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 				Platform.runLater(() ->
 				{
 					if (getPad().isPadVisible()) {
-						getPad().getController().getParent().setBusy(false);
+						getPad().getController().getView().showBusyView(false);
 					}
 				});
 				getPad().throwException(path, player.getError());

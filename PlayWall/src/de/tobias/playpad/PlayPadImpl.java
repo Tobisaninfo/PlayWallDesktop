@@ -156,7 +156,6 @@ public class PlayPadImpl implements PlayPad {
 		pluginManager.addPluginsFrom(uri);
 	}
 
-	@Deprecated
 	public void openProject(Project project) {
 		if (mainViewController == null) {
 			mainViewController = new MainViewControllerV2(mainViewListeners);

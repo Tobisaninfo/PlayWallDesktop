@@ -22,8 +22,8 @@ import de.tobias.playpad.audio.ClipAudioHandler;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
 import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.design.LayoutRegistry;
-import de.tobias.playpad.design.classic.ClassicGlobalDesign;
 import de.tobias.playpad.design.classic.ClassicDesignConnect;
+import de.tobias.playpad.design.classic.ClassicGlobalDesign;
 import de.tobias.playpad.design.modern.ModernDesignConnect;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
@@ -140,54 +140,58 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
-		// Assets
+	public void start(Stage stage) {
 		try {
-			Image stageIcon = new Image(iconPath);
-			PlayPadMain.stageIcon = Optional.of(stageIcon);
-		} catch (Exception e) {}
+			// Assets
+			try {
+				Image stageIcon = new Image(iconPath);
+				PlayPadMain.stageIcon = Optional.of(stageIcon);
+			} catch (Exception e) {}
 
-		/*
-		 * Setup
-		 */
-		updater = new PlayPadUpdater();
-		UpdateRegistery.registerUpdateable(updater);
-		registerComponents();
+			/*
+			 * Setup
+			 */
+			updater = new PlayPadUpdater();
+			UpdateRegistery.registerUpdateable(updater);
+			registerComponents();
 
-		// Load Plugin Path
-		Path pluginFolder;
-		if (getParameters().getNamed().containsKey("plugin")) {
-			pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
-		} else {
-			pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
-		}
-		setupPlugins(pluginFolder);
+			// Load Plugin Path
+			Path pluginFolder;
+			if (getParameters().getNamed().containsKey("plugin")) {
+				pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
+			} else {
+				pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
+			}
+			setupPlugins(pluginFolder);
 
-		/*
-		 * Load Data
-		 */
-		ProfileReference.loadProfiles();
-		ProjectReference.loadProjects();
+			/*
+			 * Load Data
+			 */
+			ProfileReference.loadProfiles();
+			ProjectReference.loadProjects();
 
-		// Changelog nach Update anzeigen
-		try {
-			ViewController.create(ChangelogDialog.class);
+			// Changelog nach Update anzeigen
+			try {
+				ViewController.create(ChangelogDialog.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Auto Open Project
+			if (getParameters().getRaw().size() > 0) {
+				try {
+					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+					impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
+					return;
+				} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			ViewController.create(LaunchDialog.class, stage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// Auto Open Project
-		if (getParameters().getRaw().size() > 0) {
-			try {
-				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-				impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
-				return;
-			} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		ViewController.create(LaunchDialog.class, stage);
 	}
 
 	@Override
@@ -241,7 +245,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		try {
 			// Load Components
 			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
-			
+
 			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
 			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
 			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");

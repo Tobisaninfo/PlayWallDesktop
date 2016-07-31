@@ -1,11 +1,13 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
@@ -36,17 +38,23 @@ import javafx.stage.Stage;
 public class MainViewControllerV2 extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
 	private static final String CURRENT_PAGE_BUTTON = "current-page-button";
+	private static final int FIRST_PAGE = 0;
 
 	@FXML private VBox headerBox;
 	@FXML private GridPane padGridPane;
+	private List<IPadViewV2> padViews;
 
 	private MenuToolbarViewController menuToolbarViewController;
-
 	private MainLayoutConnect mainLayout;
+
+	private Project openProject;
+	private int currentPageShowing = -1;
 
 	public MainViewControllerV2(List<WindowListener<IMainViewController>> listener) {
 		super("mainViewV2", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
-		setMainLayout(new DesktopMainLayoutConnect());
+		padViews = new ArrayList<>();
+
+		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
 
 		Profile.registerListener(this);
 	}
@@ -69,6 +77,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		headerBox.getChildren().clear();
 		menuToolbarViewController = mainLayout.createMenuToolbar(this);
 		headerBox.getChildren().add(menuToolbarViewController.getParent());
+
+		loadUserCss();
 	}
 
 	// Stage Handling
@@ -117,7 +127,13 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	 *            neues Project
 	 */
 	public void openProject(Project project) {
+		if (project != null)
+			removePadsFromView();
 		createPadViews(); // TODO Weg hier, nur wenn sich profile ändert
+
+		openProject = project;
+		showPage(FIRST_PAGE);
+		loadUserCss();
 	}
 
 	// Pad, Pages
@@ -143,23 +159,15 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 
 		// Pads - Remove Old PadViews
-		padGridPane.getChildren().removeIf(t ->
-		{
-			// TODO Remove
-			return false;
-		});
+		padViews.forEach(view -> padGridPane.getChildren().remove(view.getRootNode()));
+		padViews.clear();
 
 		// Neue PadViews
 		for (int y = 0; y < profileSettings.getRows(); y++) {
 			for (int x = 0; x < profileSettings.getColumns(); x++) {
 				IPadViewV2 padView = mainLayout.createPadView();
 				padGridPane.add(padView.getRootNode(), x, y);
-				// IPadViewController controller = new PadViewController();
-				// IPadView node = controller.getParent();
-				// if (node instanceof PadView) {
-				// padGridPane.add((Node) node, x, y);
-				// padViewList.add(controller);
-				// }
+				padViews.add(padView);
 			}
 		}
 
@@ -174,11 +182,50 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		} else {
 			getStage().setMinHeight(minHeight + 150);
 		}
+
+		menuToolbarViewController.initPages();
+	}
+
+	/**
+	 * Zeigt die aktuellen Pads von einem Profil zu einer Seite in den entsprechenden Views an.
+	 */
+	private void addPadsToView() {
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+
+		int index = currentPageShowing * settings.getRows() * settings.getColumns();
+		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
+			if (padViews.size() > i) {
+				IPadViewV2 view = padViews.get(i);
+				Pad pad = openProject.getPad(index);
+
+				view.getViewController().setupPad(pad);
+			}
+			index++;
+		}
+	}
+
+	/**
+	 * Entfernt alle Pads auf den Views.
+	 */
+	private void removePadsFromView() {
+		// Clean old pads
+		for (IPadViewV2 padView : padViews) {
+			padView.getViewController().removePad();
+		}
 	}
 
 	@Override
 	public void showPage(int page) {
+		if (page != currentPageShowing) {
+			// Clean
+			removePadsFromView();
+			// Page Button Remove highlight
 
+			this.currentPageShowing = page;
+
+			// New
+			addPadsToView();
+		}
 	}
 
 	@Override
@@ -226,7 +273,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public void loadUserCss() {
-
+		if (openProject != null)
+			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
+		applyColorsToMappers();
 	}
 
 	@Override

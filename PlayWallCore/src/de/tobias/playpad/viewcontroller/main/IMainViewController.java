@@ -41,6 +41,12 @@ public interface IMainViewController {
 
 	public void createPadViews();
 
+	/**
+	 * Zeigt eine Seite. Sollte die Seite bereits offen sien, passiert nichts.
+	 * 
+	 * @param page
+	 *            Page Number
+	 */
 	public void showPage(int page);
 
 	public void loadUserCss();

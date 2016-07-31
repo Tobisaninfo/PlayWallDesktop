@@ -2,17 +2,16 @@ package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadContentListener implements ChangeListener<PadContent> {
 
 	private Pad pad;
-	private PadViewController controller;
+	private IPadViewControllerV2 controller;
 
-	public PadContentListener(PadViewController controller) {
+	public PadContentListener(IPadViewControllerV2 controller) {
 		this.controller = controller;
 	}
 
@@ -23,31 +22,32 @@ public class PadContentListener implements ChangeListener<PadContent> {
 	@Override
 	public void changed(ObservableValue<? extends PadContent> observable, PadContent oldValue, PadContent newValue) {
 		// wenn Content change, update preview & buttons
-		controller.getParent().setPreviewContent(pad);
-		controller.getParent().addDefaultButton(pad);
+//		controller.getView().setPreviewContent(pad);
+		controller.getView().addDefaultButton(pad);
 
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
 
-		// Remove old listener
-		if (oldValue != null && oldValue instanceof Durationable) {
-			Durationable oldDurationable = (Durationable) oldValue;
-			oldDurationable.durationProperty().removeListener(controller.getPadDurationListener());
-			oldDurationable.positionProperty().removeListener(controller.getPadPositionListener());
-		}
-
-		// set new content listener / bindings
-		if (newValue instanceof Durationable) {
-			controller.getParent().showPlaybar(true);
-
-			Durationable durationable = (Durationable) newValue;
-			durationable.durationProperty().addListener(controller.getPadDurationListener());
-			durationable.positionProperty().addListener(controller.getPadPositionListener());
-
-			// Init Duration
-			controller.getPadDurationListener().changed(null, null, durationable.getDuration());
-		} else {
-			controller.getParent().showPlaybar(false);
-		}
+		// TODO PadContentListener
+//		// Remove old listener
+//		if (oldValue != null && oldValue instanceof Durationable) {
+//			Durationable oldDurationable = (Durationable) oldValue;
+//			oldDurationable.durationProperty().removeListener(controller.getPadDurationListener());
+//			oldDurationable.positionProperty().removeListener(controller.getPadPositionListener());
+//		}
+//
+//		// set new content listener / bindings
+//		if (newValue instanceof Durationable) {
+//			controller.getView().showPlaybar(true);
+//
+//			Durationable durationable = (Durationable) newValue;
+//			durationable.durationProperty().addListener(controller.getPadDurationListener());
+//			durationable.positionProperty().addListener(controller.getPadPositionListener());
+//
+//			// Init Duration
+//			controller.getPadDurationListener().changed(null, null, durationable.getDuration());
+//		} else {
+//			controller.getParent().showPlaybar(false);
+//		}
 	}
 }

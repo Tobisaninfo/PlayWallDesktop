@@ -38,4 +38,9 @@ public interface IPadViewControllerV2 {
 	 * Entfertn des Verbundene Pad von der View.
 	 */
 	public void removePad();
+
+	public void updateTimeLabel();
+
+	public void updateButtonDisable();
+
 }

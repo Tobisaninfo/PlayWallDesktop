@@ -1,7 +1,10 @@
 package de.tobias.playpad.pad.view;
 
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import javafx.scene.Node;
+import javafx.css.PseudoClass;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.Pane;
 
 /**
  * Zugriff auf eine PadView. Hier sind alle Methoden um mit der GUI für ein Pad zu agieren.
@@ -23,10 +26,10 @@ public interface IPadViewV2 {
 	/**
 	 * Setzt die Preview für den PadContent.
 	 * 
-	 * @param contentView
-	 *            Vorschau
+	 * @param pad
+	 *            Pad
 	 */
-	public void setContentView(IPadContentView contentView);
+	public void setContentView(Pad pad);
 
 	/**
 	 * Gibt den zugehörigen ViewController zu einem Pad zurück.
@@ -40,7 +43,7 @@ public interface IPadViewV2 {
 	 * 
 	 * @return root node
 	 */
-	public Node getRootNode();
+	public Pane getRootNode();
 
 	/**
 	 * Schaltet den Design Modus für Drag And Drop ein.
@@ -57,4 +60,20 @@ public interface IPadViewV2 {
 	 *            true, wird angezeigt
 	 */
 	public void showBusyView(boolean enable);
+
+	public void pseudoClassState(PseudoClass playCalss, boolean b);
+
+	public void setStyle(String string);
+
+	public void setErrorLabelActive(boolean b);
+
+	// GUI Elemente
+	@Deprecated
+	public ProgressBar getPlayBar();
+
+	public void addDefaultButton(Pad pad);
+
+	public void applyStyleClasses();
+
+	public void removeStyleClasses();
 }

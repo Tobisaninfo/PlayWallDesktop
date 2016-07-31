@@ -214,7 +214,7 @@ public class TinyAudioHandler extends AudioHandler {
 		Platform.runLater(() ->
 		{
 			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getParent().setBusy(true);
+				getContent().getPad().getController().getView().showBusyView(false);
 			}
 		});
 
@@ -247,7 +247,7 @@ public class TinyAudioHandler extends AudioHandler {
 				Platform.runLater(() ->
 				{
 					if (getContent().getPad().isPadVisible()) {
-						getContent().getPad().getController().getParent().setBusy(false);
+						getContent().getPad().getController().getView().showBusyView(false);
 					}
 				});
 			}

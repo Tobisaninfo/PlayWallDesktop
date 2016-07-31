@@ -19,7 +19,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
-		return new DesktopMenuToolbarViewController();
+		return new DesktopMenuToolbarViewController(mainViewRef);
 	}
 
 	@Override

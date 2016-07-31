@@ -60,11 +60,12 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	public PadViewController() {
 		view = new PadView(this);
 
-		padLockedListener = new PadLockedListener(this);
+		// TODO Disable this
+		/*padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
 		padContentListener = new PadContentListener(this);
 		padDurationListener = new PadDurationListener(this);
-		padPositionListener = new PadPositionListener(this);
+		padPositionListener = new PadPositionListener(this);*/
 
 		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
@@ -250,7 +251,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 
 	@Override
 	public void connectPad() {
-		pad.setController(this);
+//		pad.setController(this); TODO
 
 		try {
 			// Settings
@@ -272,7 +273,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
-			padDragListener = new PadDragListener(pad, view);
+//			padDragListener = new PadDragListener(pad, view); TODO
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

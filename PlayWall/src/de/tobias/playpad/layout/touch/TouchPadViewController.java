@@ -26,4 +26,16 @@ public class TouchPadViewController implements IPadViewControllerV2 {
 		
 	}
 
+	@Override
+	public void updateTimeLabel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateButtonDisable() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

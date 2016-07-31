@@ -11,13 +11,13 @@ import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.drag.PadDragMode;
+import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
-import de.tobias.playpad.view.PadView;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -26,13 +26,14 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class PadDragListener {
 
 	private static final String REGEX = "[0-9]+";
 	private Pad pad;
-	final private PadView view;
+	final private Pane view;
 
 	private static boolean dndMode;
 	private static Project project;
@@ -40,15 +41,15 @@ public class PadDragListener {
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	public PadDragListener(Pad pad, PadView view) {
+	public PadDragListener(Pad pad, IPadViewV2 view) {
 		this.pad = pad;
-		this.view = view;
+		this.view = view.getRootNode();
 
 		// Drag and Drop
-		view.setOnDragOver(event -> dragOver(event));
-		view.setOnDragExited(event -> dragExited());
-		view.setOnDragDropped(event -> dragDropped(event));
-		view.setOnDragDetected(event -> dragDetacted(event));
+		this.view.setOnDragOver(event -> dragOver(event));
+		this.view.setOnDragExited(event -> dragExited());
+		this.view.setOnDragDropped(event -> dragDropped(event));
+		this.view.setOnDragDetected(event -> dragDetacted(event));
 	}
 
 	private void dragOver(DragEvent event) {
@@ -90,19 +91,20 @@ public class PadDragListener {
 		// Drag and Drop von Pads
 		if (event.getDragboard().hasString() && event.getDragboard().getString().trim().matches(REGEX)) {
 			int padID = Integer.valueOf(event.getDragboard().getString());
-			if (padID != view.getController().getPad().getIndex()) {
-
-				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
-
-				if (!connects.isEmpty()) {
-					if (padHud == null) {
-						padHud = new PadDragOptionView(view);
-					}
-					padHud.showDropOptions(connects);
-
-					event.acceptTransferModes(TransferMode.MOVE);
-				}
-			}
+			// TODO Pad Drag and Drop
+//			if (padID != view.getController().getPad().getIndex()) {
+//
+//				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
+//
+//				if (!connects.isEmpty()) {
+//					if (padHud == null) {
+//						padHud = new PadDragOptionView(view);
+//					}
+//					padHud.showDropOptions(connects);
+//
+//					event.acceptTransferModes(TransferMode.MOVE);
+//				}
+//			}
 		}
 		event.consume();
 	}
@@ -139,8 +141,9 @@ public class PadDragListener {
 				this.pad.setContent(content);
 				this.pad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
-				view.setPreviewContent(pad);
-				view.addDefaultButton(pad);
+				// TODO Drag Listener
+//				view.setPreviewContent(pad);
+//				view.addDefaultButton(pad);
 			}
 		}
 

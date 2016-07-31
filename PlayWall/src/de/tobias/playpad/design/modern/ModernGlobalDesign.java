@@ -8,10 +8,10 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.FadeableColor;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.view.IPadViewController;
