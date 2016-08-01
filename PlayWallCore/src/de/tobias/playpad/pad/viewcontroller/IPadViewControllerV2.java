@@ -1,7 +1,10 @@
 package de.tobias.playpad.pad.viewcontroller;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.listener.IPadPositionListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
+import javafx.beans.value.ChangeListener;
+import javafx.util.Duration;
 
 /**
  * Schnittstellen um mit einem PadViewController zu kommunizieren.
@@ -43,4 +46,7 @@ public interface IPadViewControllerV2 {
 
 	public void updateButtonDisable();
 
+	public IPadPositionListener getPadPositionListener();
+
+	public ChangeListener<Duration> getPadDurationListener();
 }

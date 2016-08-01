@@ -19,7 +19,7 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
-		return new TouchMenuToolbarViewController();
+		return new TouchMenuToolbarViewController(mainViewRef);
 	}
 
 	@Override

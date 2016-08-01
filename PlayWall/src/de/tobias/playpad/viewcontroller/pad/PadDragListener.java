@@ -6,10 +6,9 @@ import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
@@ -32,7 +31,7 @@ import javafx.scene.paint.Color;
 public class PadDragListener {
 
 	private static final String REGEX = "[0-9]+";
-	private Pad pad;
+	private Pad sourcePad;
 	final private Pane view;
 
 	private static boolean dndMode;
@@ -42,7 +41,7 @@ public class PadDragListener {
 	private FileDragOptionView fileHud;
 
 	public PadDragListener(Pad pad, IPadViewV2 view) {
-		this.pad = pad;
+		this.sourcePad = pad;
 		this.view = view.getRootNode();
 
 		// Drag and Drop
@@ -60,8 +59,8 @@ public class PadDragListener {
 		if (event.getGestureSource() != this && event.getDragboard().hasFiles()) {
 			if (event.getDragboard().getFiles().get(0).isFile()) {
 				ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-				if (pad.getProject() != null) {
-					if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
+				if (sourcePad.getProject() != null) {
+					if (settings.isLiveMode() && settings.isLiveModeFile() && sourcePad.getProject().getPlayedPlayers() > 0) {
 						PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
 						return;
 					}
@@ -71,7 +70,8 @@ public class PadDragListener {
 
 				// Build In Filesupport
 				try {
-					Set<PadContentConnect> connects = PadContentRegistry.getPadContentConnectsForFile(file.toPath());
+					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+					Set<PadContentConnect> connects = registry.getPadContentConnectsForFile(file.toPath());
 
 					if (!connects.isEmpty()) {
 						if (fileHud == null) {
@@ -82,7 +82,7 @@ public class PadDragListener {
 						event.acceptTransferModes(TransferMode.LINK);
 						return;
 					}
-				} catch (UnkownPadContentException e) {
+				} catch (NoSuchComponentException e) {
 					e.printStackTrace();
 				}
 			}
@@ -92,19 +92,19 @@ public class PadDragListener {
 		if (event.getDragboard().hasString() && event.getDragboard().getString().trim().matches(REGEX)) {
 			int padID = Integer.valueOf(event.getDragboard().getString());
 			// TODO Pad Drag and Drop
-//			if (padID != view.getController().getPad().getIndex()) {
-//
-//				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
-//
-//				if (!connects.isEmpty()) {
-//					if (padHud == null) {
-//						padHud = new PadDragOptionView(view);
-//					}
-//					padHud.showDropOptions(connects);
-//
-//					event.acceptTransferModes(TransferMode.MOVE);
-//				}
-//			}
+			if (padID != sourcePad.getIndex()) {
+
+				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
+
+				if (!connects.isEmpty()) {
+					if (padHud == null) {
+						padHud = new PadDragOptionView(view);
+					}
+					padHud.showDropOptions(connects);
+
+					event.acceptTransferModes(TransferMode.MOVE);
+				}
+			}
 		}
 		event.consume();
 	}
@@ -127,9 +127,9 @@ public class PadDragListener {
 
 			PadContentConnect connect = fileHud.getSelectedConnect();
 			if (connect != null) {
-				PadContent content = pad.getContent();
-				if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
-					content = connect.newInstance(pad);
+				PadContent content = sourcePad.getContent();
+				if (sourcePad.getContent() == null || !sourcePad.getContent().getType().equals(connect.getType())) {
+					content = connect.newInstance(sourcePad);
 				}
 
 				try {
@@ -138,12 +138,14 @@ public class PadDragListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				this.pad.setContent(content);
-				this.pad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
+				this.sourcePad.setContent(content);
+				this.sourcePad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
-				// TODO Drag Listener
-//				view.setPreviewContent(pad);
-//				view.addDefaultButton(pad);
+				if (sourcePad.getController() != null) {
+					IPadViewV2 padView = sourcePad.getController().getView();
+					padView.setContentView(sourcePad);
+					padView.addDefaultButton(sourcePad);
+				}
 			}
 		}
 
@@ -151,7 +153,7 @@ public class PadDragListener {
 			int padID = Integer.valueOf(db.getString());
 
 			PadDragMode mode = padHud.getSelectedPadDragMode();
-			mode.handle(padID, pad.getIndex(), project);
+			mode.handle(padID, sourcePad.getIndex(), project);
 			padHud.hide();
 
 			PlayPadPlugin.getImplementation().getMainViewController()
@@ -165,8 +167,8 @@ public class PadDragListener {
 	private void dragDetacted(MouseEvent event) {
 		if (dndMode) {
 			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeDrag() && pad.getProject().getPlayedPlayers() > 0) {
+			if (sourcePad.getProject() != null) {
+				if (settings.isLiveMode() && settings.isLiveModeDrag() && sourcePad.getProject().getPlayedPlayers() > 0) {
 					PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
 					return;
 				}
@@ -188,19 +190,26 @@ public class PadDragListener {
 			dragboard.setDragView(snapshot);
 
 			ClipboardContent content = new ClipboardContent();
-			content.putString(String.valueOf(pad.getIndex()));
+			content.putString(String.valueOf(sourcePad.getIndex()));
 			dragboard.setContent(content);
 
 			event.consume();
 		}
 	}
 
+	/**
+	 * Aktiviert den Drag And Drop Modus für Kacheln. Diese Methode muss vom Menu / KeyShortcut aufgerufen werden.
+	 * 
+	 * @param dndMode
+	 *            <code>true</code> Aktiv
+	 */
 	public static void setDndMode(boolean dndMode) {
 		PadDragListener.dndMode = dndMode;
 	}
 
+	@Deprecated
 	public void setPad(Pad pad) {
-		this.pad = pad;
+		this.sourcePad = pad;
 	}
 
 	public static void setProject(Project project) {

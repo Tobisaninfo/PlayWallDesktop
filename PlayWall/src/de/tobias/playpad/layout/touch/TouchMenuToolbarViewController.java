@@ -3,17 +3,19 @@ package de.tobias.playpad.layout.touch;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.layout.desktop.BasicMenuToolbarViewController;
 import de.tobias.playpad.view.main.MenuType;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import javafx.event.ActionEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
 
-	public TouchMenuToolbarViewController() {
-		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle());
+	public TouchMenuToolbarViewController(IMainViewController mainViewController) {
+		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle(), mainViewController);
 	}
 
 	@Override
-	public void initPages() {
+	public void initPageButtons() {
 
 	}
 
@@ -55,6 +57,12 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	@Override
 	public void deinit() {
 
+	}
+
+	@Override
+	public void handle(ActionEvent event) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

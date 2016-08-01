@@ -8,13 +8,13 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.Design;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Warning;
-import de.tobias.playpad.viewcontroller.IPadView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -345,8 +345,8 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
-		final IPadView view = controller.getParent();
+	public void handleWarning(IPadViewControllerV2 controller, Warning warning) {
+		final IPadViewV2 view = controller.getView();
 
 		try {
 			while (true) {

@@ -26,6 +26,7 @@ import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
@@ -191,7 +192,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 	}
 
-	void setTitle() {
+	public void setTitle() {
 		if (project != null && Profile.currentProfile() != null) {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, project.getRef().getName(),
 					Profile.currentProfile().getRef().getName()));
@@ -717,5 +718,17 @@ public class MainViewController extends ViewController implements IMainViewContr
 	@Override
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
 		getParent().getScene().addEventHandler(eventType, listener);
+	}
+
+	@Override
+	public List<IPadViewV2> getPadViews() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MenuToolbarViewController getMenuToolbarController() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

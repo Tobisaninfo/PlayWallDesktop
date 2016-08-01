@@ -11,8 +11,12 @@
       <VBox layoutX="-0.7071067690849304" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox fx:id="headerBox" />
-            <GridPane fx:id="padGridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+            <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">
+               <children>
+                  <GridPane fx:id="padGridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
       </GridPane>
+               </children>
+            </AnchorPane>
          </children>
       </VBox>
    </children>

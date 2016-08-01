@@ -15,6 +15,7 @@ import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.UnkownPadContentException;
 import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.listener.IPadPositionListener;
 import de.tobias.playpad.pad.listener.PadContentListener;
 import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
@@ -394,7 +395,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 		return padStatusListener;
 	}
 
-	public PadPositionListener getPadPositionListener() {
+	public IPadPositionListener getPadPositionListener() {
 		return padPositionListener;
 	}
 

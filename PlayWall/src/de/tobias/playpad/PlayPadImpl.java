@@ -43,7 +43,8 @@ public class PlayPadImpl implements PlayPad {
 	private Set<Path> deletedPlugins;
 
 	private MainViewControllerV2 mainViewController;
-
+	private Project currentProject;
+	
 	public PlayPadImpl() {
 		pluginManager = PluginManagerFactory.createPluginManager();
 		deletedPlugins = new HashSet<>();
@@ -160,6 +161,11 @@ public class PlayPadImpl implements PlayPad {
 		if (mainViewController == null) {
 			mainViewController = new MainViewControllerV2(mainViewListeners);
 		}
+		currentProject = project;
 		mainViewController.openProject(project);
+	}
+
+	public Project getCurrentProject() {
+		return currentProject;
 	}
 }

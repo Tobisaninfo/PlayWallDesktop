@@ -181,7 +181,7 @@ public class MainMenuBarController implements EventHandler<ActionEvent>, Initial
 		}
 
 		if (settingsViewController == null) {
-			settingsViewController = new SettingsViewController(midi, mvc.getScreen(), mvc.getStage(), project) {
+			settingsViewController = new SettingsViewController(midi, mvc.getScreen(), mvc.getStage(), project, null) {
 
 				@Override
 				public void updateData() {

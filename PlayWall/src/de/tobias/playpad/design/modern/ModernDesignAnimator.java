@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.FadeableColor;
-import de.tobias.playpad.pad.view.IPadViewController;
-import de.tobias.playpad.viewcontroller.IPadView;
+import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -23,7 +23,7 @@ public class ModernDesignAnimator {
 
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
-	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateFade(IPadViewControllerV2 padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		int index = padViewController.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -34,7 +34,7 @@ public class ModernDesignAnimator {
 
 			@Override
 			public void changed(ObservableValue<? extends FadeableColor> observable, FadeableColor oldValue, FadeableColor newValue) {
-				padViewController.getParent().setStyle("-fx-background-color: " + newValue.toString() + ";");
+				padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
 			}
 		};
 
@@ -48,7 +48,7 @@ public class ModernDesignAnimator {
 		timeline.setOnFinished(event ->
 		{
 			backgroundColor.removeListener(fadeListener);
-			padViewController.getParent().setStyle("");
+			padViewController.getView().setStyle("");
 			timelines.remove(index);
 		});
 
@@ -57,7 +57,7 @@ public class ModernDesignAnimator {
 
 	}
 
-	public static void animateWarn(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateWarn(IPadViewControllerV2 padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		int index = padViewController.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -68,7 +68,7 @@ public class ModernDesignAnimator {
 
 			@Override
 			public void changed(ObservableValue<? extends FadeableColor> observable, FadeableColor oldValue, FadeableColor newValue) {
-				padViewController.getParent().setStyle("-fx-background-color: " + newValue.toString() + ";");
+				padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
 			}
 		};
 
@@ -87,7 +87,7 @@ public class ModernDesignAnimator {
 		timeline.setOnFinished(event ->
 		{
 			backgroundColor.removeListener(fadeListener);
-			padViewController.getParent().setStyle("");
+			padViewController.getView().setStyle("");
 			timelines.remove(index);
 		});
 
@@ -95,7 +95,7 @@ public class ModernDesignAnimator {
 		timelines.put(index, timeline);
 	}
 
-	public static void stopAnimation(IPadViewController controller) {
+	public static void stopAnimation(IPadViewControllerV2 controller) {
 		int index = controller.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -103,8 +103,8 @@ public class ModernDesignAnimator {
 		}
 	}
 
-	public static void warnFlash(IPadViewController controller) {
-		final IPadView view = controller.getParent();
+	public static void warnFlash(IPadViewControllerV2 controller) {
+		final IPadViewV2 view = controller.getView();
 		try {
 			while (true) {
 				Platform.runLater(() ->

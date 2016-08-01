@@ -4,7 +4,7 @@ import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.design.DesignConnect;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.DefaultComponentRegistry;
@@ -19,7 +19,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	private Registry<PadDragMode> dragModeRegistry;
 	private DefaultRegistry<DesignConnect> layoutRegistry;
 	private Registry<MapperConnect> mapperRegistry;
-	private Registry<PadContentConnect> padContentRegistry;
+	private PadContentRegistry padContentRegistry;
 	private Registry<TriggerItemConnect> triggerItemRegistry;
 
 	public RegistryCollectionImpl() {
@@ -28,7 +28,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 		dragModeRegistry = new ComponentRegistry<>("DragMode");
 		layoutRegistry = new DefaultComponentRegistry<>("Layout");
 		mapperRegistry = new ComponentRegistry<>("Mapper");
-		padContentRegistry = new ComponentRegistry<>("PadContent");
+		padContentRegistry = new PadContentRegistry("PadContent");
 		triggerItemRegistry = new ComponentRegistry<>("Trigger");
 	}
 
@@ -76,7 +76,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	 * @see de.tobias.playpad.RegistryCollection#getPadContentRegistry()
 	 */
 	@Override
-	public Registry<PadContentConnect> getPadContents() {
+	public PadContentRegistry getPadContents() {
 		return padContentRegistry;
 	}
 

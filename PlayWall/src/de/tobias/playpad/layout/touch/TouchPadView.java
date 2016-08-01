@@ -81,4 +81,10 @@ public class TouchPadView implements IPadViewV2 {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void setPlaybarVisible(boolean visible) {
+		// TODO Auto-generated method stub
+		
+	}
 }

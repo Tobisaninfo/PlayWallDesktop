@@ -312,7 +312,7 @@ public class GeneralTabViewController extends SettingsTabViewController {
 		{
 			Platform.runLater(() ->
 			{
-				controller.getToolbarController().createPageButtons();
+				controller.getMenuToolbarController().initPageButtons();
 				controller.createPadViews();
 				controller.showPage(controller.getPage());
 				stage.close();

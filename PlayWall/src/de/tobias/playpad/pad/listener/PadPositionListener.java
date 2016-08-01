@@ -8,11 +8,10 @@ import de.tobias.playpad.pad.conntent.play.Fadeable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
-public class PadPositionListener implements ChangeListener<Duration>, Runnable {
+public class PadPositionListener implements Runnable, IPadPositionListener {
 
 	private Pad pad;
 	private IPadViewControllerV2 controller;
@@ -21,6 +20,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		this.controller = controller;
 	}
 
+	@Override
 	public void setPad(Pad pad) {
 		this.pad = pad;
 	}
@@ -76,6 +76,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		}
 	}
 
+	@Override
 	public void setSend(boolean send) {
 		this.send = send;
 	}
@@ -88,9 +89,9 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		Warning warning = pad.getWarning();
 
 		if (pad.isCustomLayout()) {
-//			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout()); TODO StartWarning
+			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
-//			Profile.currentProfile().currentLayout().handleWarning(controller, warning); TODO Start Wanring
+			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}
 	}
 
@@ -102,6 +103,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		warningThread.start();
 	}
 
+	@Override
 	public void stopWaning() {
 		if (warningThread != null) {
 			warningThread.interrupt();
@@ -109,9 +111,9 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		}
 
 		if (pad.isCustomLayout()) {
-//			pad.getLayout().stopWarning(controller); TODO Stop Warning
+			pad.getLayout().stopWarning(controller);
 		} else {
-//			Profile.currentProfile().currentLayout().stopWarning(controller); TODO Stop Warning
+			Profile.currentProfile().currentLayout().stopWarning(controller);
 		}
 		controller.getView().setStyle("");
 	}

@@ -4,13 +4,13 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.FadeableColor;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.settings.Warning;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -75,7 +75,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
+	public void handleWarning(IPadViewControllerV2 controller, Warning warning, GlobalDesign layout) {
 		if (layout instanceof ModernGlobalDesign && ((ModernGlobalDesign) layout).isWarnAnimation()) {
 			warnAnimation(controller, warning);
 		} else {
@@ -84,11 +84,11 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 	}
 
 	@Override
-	public void stopWarning(IPadViewController controller) {
+	public void stopWarning(IPadViewControllerV2 controller) {
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(IPadViewController controller, Warning warning) {
+	private void warnAnimation(IPadViewControllerV2 controller, Warning warning) {
 		FadeableColor stopColor = new FadeableColor(this.backgroundColor.getColorHi(), this.backgroundColor.getColorLow());
 		FadeableColor playColor = new FadeableColor(this.playColor.getColorHi(), this.playColor.getColorLow());
 

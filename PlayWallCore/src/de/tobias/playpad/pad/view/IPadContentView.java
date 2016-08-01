@@ -27,5 +27,6 @@ public interface IPadContentView {
 	 */
 	public default void deinit() {
 		// TODO Remove the default after remove unconnect from interface
+		unconnect();
 	}
 }

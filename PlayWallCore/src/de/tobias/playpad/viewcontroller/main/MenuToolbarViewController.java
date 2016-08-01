@@ -47,7 +47,7 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim
 	 * laden eines Projektes und bei Änderungen an den Einstellungen.
 	 */
-	public abstract void initPages();
+	public abstract void initPageButtons();
 
 	/*
 	 * 

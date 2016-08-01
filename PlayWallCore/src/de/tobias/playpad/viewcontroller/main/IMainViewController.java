@@ -1,6 +1,11 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import java.util.List;
+
+import de.tobias.playpad.midi.MidiListener;
+import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
+import de.tobias.utils.ui.NotificationHandler;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -8,9 +13,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public interface IMainViewController {
+public interface IMainViewController extends NotificationHandler {
 
 	public void setGridColor(Color color);
 
@@ -53,5 +59,16 @@ public interface IMainViewController {
 
 	public void applyColorsToMappers();
 
+	@Deprecated
 	public default void showLiveInfo() {}
+
+	public void setTitle();
+
+	List<IPadViewV2> getPadViews();
+
+	public Screen getScreen();
+
+	public MidiListener getMidiHandler();
+	
+	public MenuToolbarViewController getMenuToolbarController();
 }

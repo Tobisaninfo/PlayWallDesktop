@@ -1,6 +1,7 @@
 package de.tobias.playpad.layout.desktop;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
@@ -123,7 +124,6 @@ public class DesktopPadView implements IPadViewV2 {
 	@Override
 	public void setContentView(Pad pad) {
 		if (previewContent != null) {
-			previewContent.unconnect(); // TODO
 			previewContent.deinit();
 		}
 
@@ -165,7 +165,7 @@ public class DesktopPadView implements IPadViewV2 {
 
 	@Override
 	public void enableDragAndDropDesignMode(boolean enable) {
-
+		pseudoClassState(PseudoClasses.DRAG_CLASS, enable);
 	}
 
 	@Override
@@ -187,14 +187,30 @@ public class DesktopPadView implements IPadViewV2 {
 	}
 
 	@Override
-	public void pseudoClassState(PseudoClass playCalss, boolean b) {
-		// TODO Auto-generated method stub
+	public void pseudoClassState(PseudoClass pseudoClass, boolean active) {
+		superRoot.pseudoClassStateChanged(pseudoClass, active);
+		indexLabel.pseudoClassStateChanged(pseudoClass, active);
+		timeLabel.pseudoClassStateChanged(pseudoClass, active);
+		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		triggerLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		errorLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 
+		if (preview != null) {
+			preview.getChildren().forEach(i -> i.pseudoClassStateChanged(pseudoClass, active));
+		}
+
+		playBar.pseudoClassStateChanged(pseudoClass, active);
+
+		playButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		pauseButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		stopButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		newButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		settingsButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 	}
 
 	@Override
 	public void setStyle(String string) {
-		// TODO Auto-generated method stub
+		superRoot.setStyle(string);
 
 	}
 
@@ -233,6 +249,14 @@ public class DesktopPadView implements IPadViewV2 {
 
 	public void setTriggerLabelActive(boolean hasTriggerItems) {
 		triggerLabel.setVisible(hasTriggerItems);
+	}
+
+	public void setTime(String time) {
+		if (time == null) {
+			timeLabel.setText("");
+		} else {
+			timeLabel.setText(time);
+		}
 	}
 
 	@Override
@@ -329,5 +353,25 @@ public class DesktopPadView implements IPadViewV2 {
 
 		buttonBox.getStyleClass().add("pad-button-box");
 		root.getStyleClass().add("pad-root");
+	}
+
+	public void clearIndex() {
+		indexLabel.setText("");
+	}
+
+	public void clearTime() {
+		timeLabel.setText("");
+	}
+
+	public void clearPreviewContent() {
+		if (previewContent != null) {
+			previewContent.deinit();
+		}
+		setContentView(null);
+	}
+
+	@Override
+	public void setPlaybarVisible(boolean visible) {
+		playBar.setVisible(visible);
 	}
 }

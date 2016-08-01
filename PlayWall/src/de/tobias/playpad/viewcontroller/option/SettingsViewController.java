@@ -36,8 +36,11 @@ public class SettingsViewController extends ViewController implements ISettingsV
 
 	protected List<SettingsTabViewController> tabs = new ArrayList<>();
 
-	public SettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project) {
+	private Runnable onFinish;
+
+	public SettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
 		super("settingsView", "de/tobias/playpad/assets/view/option/", null, PlayPadMain.getUiResourceBundle());
+		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasPlayedPlayers();
 
@@ -156,7 +159,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		}
 
 		saveTabs();
-		updateData(); // Reload MainViewController Settings // TODO Rewrite
+		onFinish.run(); // Reload MainViewController Settings
 		return true;
 	}
 
@@ -173,5 +176,9 @@ public class SettingsViewController extends ViewController implements ISettingsV
 	public void addTab(SettingsTabViewController controller) {
 		tabs.add(controller);
 		tabPane.getTabs().add(new Tab(controller.name(), controller.getParent()));
+	}
+
+	public List<SettingsTabViewController> getTabs() {
+		return tabs;
 	}
 }

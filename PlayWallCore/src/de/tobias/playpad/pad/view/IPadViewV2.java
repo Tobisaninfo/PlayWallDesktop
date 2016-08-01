@@ -71,6 +71,14 @@ public interface IPadViewV2 {
 	@Deprecated
 	public ProgressBar getPlayBar();
 
+	/**
+	 * Setzt die Playbar sichtbar.
+	 * 
+	 * @param visible
+	 *            <code>true</code> Sichtbar, <code>false</code> nicht sichtbar
+	 */
+	public void setPlaybarVisible(boolean visible);
+
 	public void addDefaultButton(Pad pad);
 
 	public void applyStyleClasses();
