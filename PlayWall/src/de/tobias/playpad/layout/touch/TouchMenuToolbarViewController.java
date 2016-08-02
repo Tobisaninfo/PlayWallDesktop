@@ -6,6 +6,7 @@ import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.ActionEvent;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
@@ -60,9 +61,13 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
+	public Slider getVolumeSlider() {
+		return null;
+	}
+
+	@Override
 	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 }

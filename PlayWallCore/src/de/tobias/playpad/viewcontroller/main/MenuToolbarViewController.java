@@ -6,6 +6,7 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 
 /**
@@ -122,4 +123,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 * Deinitialisiert den Controller.
 	 */
 	public abstract void deinit();
+
+	public abstract Slider getVolumeSlider();
 }

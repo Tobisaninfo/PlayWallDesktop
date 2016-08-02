@@ -120,6 +120,11 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() - ev.getDeltaY() * 0.001);
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
+		
+		volumeSlider.valueProperty().addListener((a, b, c) ->
+		{
+			mainViewController.setPadVolume(c.doubleValue());
+		});
 	}
 
 	// Profile Listener

@@ -9,6 +9,7 @@ import javax.sound.midi.MidiUnavailableException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
@@ -31,7 +32,9 @@ import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
+import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -88,6 +91,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
 
 		Profile.registerListener(this);
+		reloadSettings(null, Profile.currentProfile());
 
 		/*
 		 * Gridline Color
@@ -297,9 +301,11 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	 *            neues Project
 	 */
 	public void openProject(Project project) {
+		removePadsFromView();
+
 		if (project != null)
 			removePadsFromView();
-		createPadViews(); // TODO Weg hier, nur wenn sich profile ändert
+		// createPadViews(); // TODO Weg hier, nur wenn sich profile ändert
 
 		openProject = project;
 
@@ -409,10 +415,60 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		return currentPageShowing;
 	}
 
+	@Override
+	public void setPadVolume(double volume) {
+		if (openProject != null) {
+			for (Pad pad : openProject.getPads().values()) {
+				if (pad != null)
+					pad.setMasterVolume(volume);
+			}
+		}
+	}
+
 	// Settings
 	@Override
-	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
+	public void reloadSettings(Profile old, Profile currentProfile) {
 		createPadViews();
+
+		final DoubleProperty valueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
+
+		if (old != null) {
+			// Unbind Volume Slider
+			valueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			// Clear Feedback on Devie (LaunchPad Light off)
+			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
+		}
+
+		// Volume
+		valueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+
+		final ProfileSettings profilSettings = currentProfile.getProfileSettings();
+		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+
+		// MIDI
+		if (profilSettings.isMidiActive() && profilSettings.getMidiDevice() != null) {
+			// Load known MIDI Device
+			Worker.runLater(() ->
+			{
+				loadMidiDevice(profilSettings.getMidiDevice());
+
+				applyColorsToMappers();
+
+				Platform.runLater(() ->
+				{
+					// Handle Mapper
+					if (Profile.currentProfile() != null) {
+						activeMapping.initFeedback();
+						activeMapping.showFeedback(openProject);
+					}
+				});
+			});
+		}
+		
+		loadUserCss();
+		if (old != null && currentProfile != null) {
+			showPage(currentPageShowing);
+		}
 	}
 
 	@Override
@@ -484,6 +540,26 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		applyColorsToMappers();
 	}
 
+	/**
+	 * Init MIDI Device by using the Midi Class and show some feedback the user.
+	 * 
+	 * @param name
+	 *            Device Name
+	 * 
+	 * @see Midi#lookupMidiDevice(String)
+	 */
+	private void loadMidiDevice(String name) {
+		try {
+			midi.lookupMidiDevice(name);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
+		} catch (NullPointerException e) {
+			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
+		} catch (IllegalArgumentException | MidiUnavailableException e) {
+			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void applyColorsToMappers() {
 
@@ -507,7 +583,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public MidiListener getMidiHandler() {
 		return midiHandler;
 	}
-	
+
 	@Override
 	public MenuToolbarViewController getMenuToolbarController() {
 		return menuToolbarViewController;

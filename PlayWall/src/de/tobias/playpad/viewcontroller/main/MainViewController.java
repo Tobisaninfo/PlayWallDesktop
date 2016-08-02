@@ -185,7 +185,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		});
 	}
 
-	private void setPadVolume(double volume) {
+	public void setPadVolume(double volume) {
 		for (Pad pad : project.getPads().values()) {
 			if (pad != null)
 				pad.setMasterVolume(volume);

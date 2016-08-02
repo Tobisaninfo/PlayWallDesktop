@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 
 public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController implements EventHandler<ActionEvent> {
@@ -39,6 +40,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		for (int i = 0; i < settings.getPageCount(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
+			button.setFocusTraversable(false);
 			button.setOnAction(this);
 			pageHBox.getChildren().add(button);
 		}
@@ -84,6 +86,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void deinit() {
 		// TODO Implement
+	}
+	
+	@Override
+	public Slider getVolumeSlider() {
+		return volumeSlider;
 	}
 
 	@Override

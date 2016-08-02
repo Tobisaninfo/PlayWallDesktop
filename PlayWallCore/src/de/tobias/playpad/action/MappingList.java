@@ -93,6 +93,12 @@ public class MappingList extends ArrayList<Mapping> {
 
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(MAPPING, this, new MappingSerializer());
+		
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+			Files.createFile(path);
+		}
+		
 		XMLHandler.save(path, document);
 	}
 

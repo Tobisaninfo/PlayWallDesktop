@@ -71,4 +71,6 @@ public interface IMainViewController extends NotificationHandler {
 	public MidiListener getMidiHandler();
 	
 	public MenuToolbarViewController getMenuToolbarController();
+
+	public void setPadVolume(double doubleValue);
 }
