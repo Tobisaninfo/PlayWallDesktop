@@ -473,9 +473,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	@Override
 	public void showLiveInfo() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	// Settings
 	@Override
 	public void reloadSettings(Profile old, Profile currentProfile) {
@@ -643,7 +643,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public void applyColorsToMappers() {
-
+		if (openProject != null) {
+			ColorAdjuster.applyColorsToMappers(openProject);
+		}
 	}
 
 	public void setTitle() {

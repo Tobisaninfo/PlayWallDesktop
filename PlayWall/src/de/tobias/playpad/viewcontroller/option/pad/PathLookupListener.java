@@ -4,6 +4,10 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.Strings;
+import de.tobias.utils.ui.Alertable;
+import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,8 +15,13 @@ import javafx.scene.control.MenuItem;
 
 public class PathLookupListener implements EventHandler<ActionEvent> {
 
+	private Alertable alertable;
+
+	public PathLookupListener(Alertable alertable) {
+		this.alertable = alertable;
+	}
+
 	public void handle(ActionEvent event) {
-		System.out.println(event);
 		Object source = event.getSource();
 		if (source instanceof Button) {
 			// single path
@@ -30,11 +39,10 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 	}
 
 	private void showPath(Path path) {
-		System.out.println(path);
 		try {
 			Desktop.getDesktop().browse(path.getParent().toUri());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			alertable.showErrorMessage(Localization.getString(Strings.Error_Standard_Gen), PlayPadPlugin.getImplementation().getIcon());
 			e.printStackTrace();
 		}
 	}

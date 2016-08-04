@@ -8,6 +8,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
@@ -57,13 +58,14 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 			try {
 				// Get Pad Type specific tab
 				String type = pad.getContent().getType();
-				PadContentConnect padContentConnect = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(type);
+				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
 
+				PadContentConnect padContentConnect = registry.getComponent(type);
 				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
+
 				if (contentTab != null)
 					addTab(contentTab);
 			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -78,7 +80,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	}
 
 	private void setupPathLookupButton() {
-		pathLookupListener = new PathLookupListener();
+		pathLookupListener = new PathLookupListener(this);
 
 		if (pad.getContent() != null) {
 			PadContent content = pad.getContent();
