@@ -12,8 +12,10 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
+import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.design.GlobalDesign;
-import de.tobias.playpad.design.LayoutRegistry;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -71,10 +73,17 @@ public class Profile {
 		if (layouts.containsKey(type)) {
 			return layouts.get(type);
 		} else {
-			GlobalDesign layout = LayoutRegistry.getLayout(type).newGlobalDesign();
-			layouts.put(type, layout);
-			return layout;
+			try {
+				DefaultRegistry<DesignConnect> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
+				GlobalDesign layout = registry.getComponent(type).newGlobalDesign();
+				layouts.put(type, layout);
+				return layout;
+			} catch (NoSuchComponentException e) { // -> Throw exception
+				// TODO Error Handling
+				e.printStackTrace();
+			}
 		}
+		return null;
 	}
 
 	public GlobalDesign currentLayout() {

@@ -3,7 +3,6 @@ package de.tobias.playpad.pad.view;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import javafx.css.PseudoClass;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 
 /**
@@ -67,9 +66,13 @@ public interface IPadViewV2 {
 
 	public void setErrorLabelActive(boolean b);
 
-	// GUI Elemente
-	@Deprecated
-	public ProgressBar getPlayBar();
+	/**
+	 * Setzt den Fortschritt auf der PlayBar
+	 * 
+	 * @param value
+	 *            [0, 1]
+	 */
+	public void setPlayBarProgress(double value);
 
 	/**
 	 * Setzt die Playbar sichtbar.

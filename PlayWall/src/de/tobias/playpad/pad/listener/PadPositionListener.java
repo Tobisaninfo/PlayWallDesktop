@@ -56,7 +56,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 	private void updateDuration(Duration newValue, Durationable durationable, Duration totalDuration) {
 		double value = newValue.toMillis() / totalDuration.toMillis();
-		controller.getView().getPlayBar().setProgress(value);
+		controller.getView().setPlayBarProgress(value);
 
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();

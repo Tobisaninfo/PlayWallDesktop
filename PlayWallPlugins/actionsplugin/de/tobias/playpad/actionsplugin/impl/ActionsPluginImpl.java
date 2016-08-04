@@ -8,10 +8,7 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionConnect;
-import de.tobias.playpad.action.ActionRegistery;
 import de.tobias.playpad.actionsplugin.ActionsPlugin;
-import de.tobias.playpad.actionsplugin.muteaction.MuteActionConnect;
-import de.tobias.playpad.actionsplugin.stopaction.StopActionConnect;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
@@ -72,20 +69,17 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 
 				@Override
 				public void onInit(IMainViewController t) {
-					// TODO NullPointer
-					/*
-					t.getMenuToolbarController().getVolumeSlider().valueChangingProperty().addListener(new ChangeListener<Boolean>() {
-
-						@Override
-						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-							if (newValue && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
+					t.performLayoutDependendAction(() ->
+					{
+						t.getMenuToolbarController().getVolumeSlider().valueChangingProperty().addListener((a, b, c) ->
+						{
+							if (c && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
 								volume = Profile.currentProfile().getProfileSettings().getVolume();
 							} else {
 								volume = -1;
 							}
-						}
+						});
 					});
-					*/
 				}
 			});
 
@@ -111,9 +105,6 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
 			e.printStackTrace();
 		}
-		ActionRegistery.registerActionConnect(new MuteActionConnect());
-		ActionRegistery.registerActionConnect(new StopActionConnect());
-
 		muteProperty.addListener(this);
 
 		System.out.println("Enable Action Plugin");

@@ -186,5 +186,6 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		for (PadSettingsTabViewController controller : tabs) {
 			controller.saveSettings(pad);
 		}
+		getStage().close();
 	}
 }

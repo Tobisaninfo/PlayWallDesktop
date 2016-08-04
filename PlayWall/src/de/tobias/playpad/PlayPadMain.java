@@ -11,34 +11,21 @@ import java.util.UUID;
 
 import org.dom4j.DocumentException;
 
-import de.tobias.playpad.action.ActionRegistery;
-import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.action.connect.NavigateActionConnect;
-import de.tobias.playpad.action.connect.PageActionConnect;
 import de.tobias.playpad.action.mapper.KeyboardMapperConnect;
 import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.action.mapper.MidiMapperConnect;
 import de.tobias.playpad.audio.ClipAudioHandler;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
 import de.tobias.playpad.audio.TinyAudioHandler;
-import de.tobias.playpad.design.LayoutRegistry;
-import de.tobias.playpad.design.classic.ClassicDesignConnect;
-import de.tobias.playpad.design.classic.ClassicGlobalDesign;
-import de.tobias.playpad.design.modern.ModernDesignConnect;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.content.AudioContentConnect;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileReference;
-import de.tobias.playpad.tigger.TriggerRegistry;
-import de.tobias.playpad.trigger.CartTriggerItemConnect;
-import de.tobias.playpad.trigger.VolumeTriggerItemConnect;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.update.Updates;
@@ -207,30 +194,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 	}
 
 	private void registerComponents() {
-		// Layout
-		LayoutRegistry.registerLayout(new ClassicDesignConnect());
-		LayoutRegistry.registerLayout(new ModernDesignConnect());
-		LayoutRegistry.setDefaultLayout(ClassicGlobalDesign.TYPE);
-
 		// Midi
 		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
-
-		// Trigger
-		TriggerRegistry.register(new CartTriggerItemConnect());
-		TriggerRegistry.register(new VolumeTriggerItemConnect());
-
-		// Actions
-		ActionRegistery.registerActionConnect(new CartActionConnect());
-		ActionRegistery.registerActionConnect(new PageActionConnect());
-		ActionRegistery.registerActionConnect(new NavigateActionConnect());
 
 		// Mapper
 		MapperRegistry.registerMapperConnect(new MidiMapperConnect());
 		MapperRegistry.registerMapperConnect(new KeyboardMapperConnect());
 		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
-
-		// Pad Content
-		PadContentRegistry.registerActionConnect(new AudioContentConnect());
 
 		Profile.registerListener(this);
 

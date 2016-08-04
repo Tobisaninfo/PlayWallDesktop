@@ -85,7 +85,7 @@ public class TouchPadView implements IPadViewV2 {
 
 		root.getChildren().addAll(infoBox, preview, playBar);
 		superRoot.getChildren().addAll(root);
-		
+
 		superRoot.setOnTouchPressed(controller);
 		superRoot.setOnMouseClicked(controller);
 	}
@@ -155,7 +155,6 @@ public class TouchPadView implements IPadViewV2 {
 		this.playBar.setProgress(progress);
 	}
 
-	@Override
 	public ProgressBar getPlayBar() {
 		return playBar;
 	}
@@ -274,5 +273,10 @@ public class TouchPadView implements IPadViewV2 {
 	@Override
 	public void setPlaybarVisible(boolean visible) {
 		playBar.setVisible(visible);
+	}
+
+	@Override
+	public void setPlayBarProgress(double value) {
+		playBar.setProgress(value);
 	}
 }

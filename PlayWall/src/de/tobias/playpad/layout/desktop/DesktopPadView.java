@@ -181,7 +181,6 @@ public class DesktopPadView implements IPadViewV2 {
 		this.playBar.setProgress(progress);
 	}
 
-	@Override
 	public ProgressBar getPlayBar() {
 		return playBar;
 	}
@@ -373,5 +372,10 @@ public class DesktopPadView implements IPadViewV2 {
 	@Override
 	public void setPlaybarVisible(boolean visible) {
 		playBar.setVisible(visible);
+	}
+
+	@Override
+	public void setPlayBarProgress(double value) {
+		playBar.setProgress(value);
 	}
 }

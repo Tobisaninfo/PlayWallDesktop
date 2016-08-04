@@ -108,7 +108,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 	@Override
 	public Slider getVolumeSlider() {
-		return null;
+		return volumeSlider;
 	}
 
 	@Override

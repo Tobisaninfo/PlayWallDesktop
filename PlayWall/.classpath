@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="**/.DS_Store|**/.gitignore|icon.icns|icon.ico" kind="src" path="src"/>
+	<classpathentry excluding="**/.DS_Store|**/.gitignore|icon.icns|icon.ico|de/tobias/playpad/viewcontroller/main/MainMenuBarController.java|de/tobias/playpad/viewcontroller/main/MainToolbarController.java|de/tobias/playpad/viewcontroller/main/MainViewController.java|de/tobias/playpad/viewcontroller/pad/PadViewController.java|de/tobias/playpad/view/PadView.java" kind="src" path="src"/>
 	<classpathentry excluding="**/.gitignor|de/tobias/playpad/assets/files/dialogDnD.pxm" kind="src" path="assets"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>

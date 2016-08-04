@@ -4,13 +4,11 @@ import java.util.List;
 
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.utils.ui.NotificationHandler;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
-import javafx.scene.control.Slider;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -42,8 +40,7 @@ public interface IMainViewController extends NotificationHandler {
 
 	public void applyColorsToMappers();
 
-	@Deprecated
-	public default void showLiveInfo() {}
+	public void showLiveInfo();
 
 	public void setTitle();
 
@@ -58,6 +55,6 @@ public interface IMainViewController extends NotificationHandler {
 	public void setPadVolume(double doubleValue);
 
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect);
-	
+
 	public void performLayoutDependendAction(Runnable runnable);
 }
