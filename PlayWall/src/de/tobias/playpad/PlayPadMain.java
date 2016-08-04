@@ -171,21 +171,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			ProjectReference.loadProjects();
 
 			// Changelog nach Update anzeigen
-			try {
-				ViewController.create(ChangelogDialog.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ViewController.create(ChangelogDialog.class);
 
 			// Auto Open Project
 			if (getParameters().getRaw().size() > 0) {
-				try {
-					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
-					return;
-				} catch (IllegalArgumentException | NullPointerException e) {} catch (Exception e) {
-					e.printStackTrace();
-				}
+				UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+				impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
+				return;
 			}
 
 			ViewController.create(LaunchDialog.class, stage);

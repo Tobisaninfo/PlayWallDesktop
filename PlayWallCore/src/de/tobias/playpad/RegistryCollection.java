@@ -35,5 +35,5 @@ public interface RegistryCollection {
 
 	public Registry<TriggerItemConnect> getTriggerItems();
 
-	public Registry<MainLayoutConnect> getMainLayouts();
+	public DefaultRegistry<MainLayoutConnect> getMainLayouts();
 }

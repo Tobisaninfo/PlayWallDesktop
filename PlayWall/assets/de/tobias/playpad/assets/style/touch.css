@@ -1,0 +1,12 @@
+.menu .label {
+	-fx-font-size: 25px;
+	-fx-padding: 10px;
+}
+
+.label {
+	-fx-font-size: 17px;
+}
+
+.button {
+	-fx-font-size : 20px;
+}

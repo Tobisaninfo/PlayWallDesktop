@@ -9,7 +9,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public String getType() {
-		return "desktop";
+		return "Desktop";
 	}
 
 	@Override
@@ -25,6 +25,11 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	@Override
 	public IPadViewV2 createPadView() {
 		return new DesktopPadView();
+	}
+	
+	@Override
+	public String getStylesheet() {
+		return null;
 	}
 
 }

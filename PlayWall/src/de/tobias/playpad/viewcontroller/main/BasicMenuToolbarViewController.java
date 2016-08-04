@@ -55,6 +55,7 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -101,9 +102,11 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
 
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		Registry<MainLayoutConnect> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
 		ToggleGroup group = new ToggleGroup();
 
+		int index = 1; // Für Tastenkombination
 		for (String layoutType : mainLayouts.getTypes()) {
 			try {
 				MainLayoutConnect connect = mainLayouts.getComponent(layoutType);
@@ -113,17 +116,28 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 				item.setOnAction((e) ->
 				{
 					mainViewController.setMainLayout(connect);
+					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
 				});
+
+				// Key Combi
+				if (index < 10) {
+					item.setAccelerator(KeyCombination.keyCombination("Shortcut+" + index));
+				}
+
+				if (connect.getType().equals(profileSettings.getMainLayoutType())) {
+					item.setSelected(true);
+				}
+
 				layoutMenu.getItems().add(item);
 			} catch (NoSuchComponentException e) {
 				e.printStackTrace();
 			}
+			index++;
 		}
 	}
 
 	@Override
-	public void deinit() {
-	}
+	public void deinit() {}
 
 	// Basic Event Handler
 	@FXML

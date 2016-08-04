@@ -21,8 +21,8 @@ import de.tobias.playpad.action.mapper.MapperFeedbackable;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewController;
@@ -610,8 +610,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
 					toolbarController.getToolbarHBox().setOpacity(1);
@@ -671,7 +670,6 @@ public class MainViewController extends ViewController implements IMainViewContr
 		showPage(pageNumber); // Show Mapper Feedback und apply css und zeigt pads
 	}
 
-	@Override
 	public Project getProject() {
 		return project;
 	}
@@ -736,6 +734,11 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void performLayoutDependendAction(Runnable runnable) {
 		// TODO Auto-generated method stub
 
 	}

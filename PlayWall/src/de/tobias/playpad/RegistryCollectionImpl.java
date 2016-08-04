@@ -22,7 +22,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	private Registry<MapperConnect> mapperRegistry;
 	private PadContentRegistry padContentRegistry;
 	private Registry<TriggerItemConnect> triggerItemRegistry;
-	private Registry<MainLayoutConnect> mainLayoutRegistry;
+	private DefaultRegistry<MainLayoutConnect> mainLayoutRegistry;
 
 	public RegistryCollectionImpl() {
 		actionRegistry = new ComponentRegistry<>("Action");
@@ -32,7 +32,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 		mapperRegistry = new ComponentRegistry<>("Mapper");
 		padContentRegistry = new PadContentRegistry("PadContent");
 		triggerItemRegistry = new ComponentRegistry<>("Trigger");
-		mainLayoutRegistry = new ComponentRegistry<>("MainLayout");
+		mainLayoutRegistry = new DefaultComponentRegistry<>("MainLayout");
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	}
 	
 	@Override
-	public Registry<MainLayoutConnect> getMainLayouts() {
+	public DefaultRegistry<MainLayoutConnect> getMainLayouts() {
 		return mainLayoutRegistry;
 	}
 

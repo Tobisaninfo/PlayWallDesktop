@@ -44,7 +44,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private MainViewControllerV2 mainViewController;
 	private Project currentProject;
-	
+
 	public PlayPadImpl() {
 		pluginManager = PluginManagerFactory.createPluginManager();
 		deletedPlugins = new HashSet<>();
@@ -53,6 +53,10 @@ public class PlayPadImpl implements PlayPad {
 	@Override
 	public void addMainViewListener(WindowListener<IMainViewController> listener) {
 		mainViewListeners.add(listener);
+	}
+
+	public List<WindowListener<IMainViewController>> getMainViewListeners() {
+		return mainViewListeners;
 	}
 
 	@Override

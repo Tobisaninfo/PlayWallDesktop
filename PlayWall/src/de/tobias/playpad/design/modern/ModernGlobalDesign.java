@@ -173,9 +173,6 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 
 	@Override
 	public void applyCss(Stage stage) {
-		// Clear Old
-		stage.getScene().getStylesheets().clear();
-
 		// Add Build in Default
 		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style.css");
 		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/modern_style.css");

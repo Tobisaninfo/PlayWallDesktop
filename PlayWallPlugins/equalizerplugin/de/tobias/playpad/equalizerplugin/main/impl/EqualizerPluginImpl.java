@@ -14,6 +14,7 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -68,10 +69,13 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	public void onInit(IMainViewController t) {
 		mainStage = t.getStage();
 
-		eqMenuItem = new MenuItem();
-		eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
-		eqMenuItem.setOnAction(this);
-		t.addMenuItem(eqMenuItem);
+		t.performLayoutDependendAction(() ->
+		{
+			eqMenuItem = new MenuItem();
+			eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
+			eqMenuItem.setOnAction(this);
+			t.getMenuToolbarController().addMenuItem(eqMenuItem, MenuType.EXTENSION);
+		});
 	}
 
 	@Override

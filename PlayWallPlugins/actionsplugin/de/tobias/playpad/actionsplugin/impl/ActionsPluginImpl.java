@@ -72,7 +72,9 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 
 				@Override
 				public void onInit(IMainViewController t) {
-					t.getVolumeSlider().valueChangingProperty().addListener(new ChangeListener<Boolean>() {
+					// TODO NullPointer
+					/*
+					t.getMenuToolbarController().getVolumeSlider().valueChangingProperty().addListener(new ChangeListener<Boolean>() {
 
 						@Override
 						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -83,6 +85,7 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 							}
 						}
 					});
+					*/
 				}
 			});
 

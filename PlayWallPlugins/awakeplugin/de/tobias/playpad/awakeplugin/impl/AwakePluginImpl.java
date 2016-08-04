@@ -16,8 +16,9 @@ import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.update.UpdateRegistery;
-import de.tobias.playpad.viewcontroller.main.IMainToolbarViewController;
+import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -146,7 +147,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		activeMenu.setOnAction(this);
 		activeMenu.setText(bundle.getString("menutitle"));
 		activeMenu.setSelected(settings.active);
-		t.addMenuItem(activeMenu);
+		t.getMenuToolbarController().addMenuItem(activeMenu, MenuType.EXTENSION);
 
 		iconLabel = new Label();
 		iconLabel.setGraphic(new FontIcon(FontAwesomeType.MOON_ALT));
@@ -157,11 +158,11 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		activeSleep(activeMenu.isSelected());
 		settings.active = activeMenu.isSelected();
 
-		IMainToolbarViewController toolbarController = PlayPadPlugin.getImplementation().getMainViewController().getToolbarController();
+		MenuToolbarViewController toolbarController = PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
 		if (settings.active) {
-			toolbarController.showIcon(iconLabel);
+			toolbarController.addToolbarItem(iconLabel);
 		} else {
-			toolbarController.hideIcon(iconLabel);
+			toolbarController.removeToolbarItem(iconLabel);
 		}
 	}
 

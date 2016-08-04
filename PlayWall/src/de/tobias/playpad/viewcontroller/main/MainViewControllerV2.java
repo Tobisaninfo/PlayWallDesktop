@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.sound.midi.MidiUnavailableException;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
@@ -20,6 +21,8 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -40,6 +43,7 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -84,22 +88,38 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	// Style
 	private Color gridColor;
 
+	// Layout
+	private List<Runnable> layoutActions;
+
 	// Listener
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
+	private LayoutChangedListener layoutChangedListener;
 
 	public MainViewControllerV2(List<WindowListener<IMainViewController>> listener) {
 		super("mainViewV2", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 		padViews = new ArrayList<>();
 
-		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
+		// Layout Init
+		layoutActions = new ArrayList<>();
 
 		// Init Listener
 		volumeChangeListener = new VolumeChangeListener(this);
 		lockedListener = new LockedListener(this);
+		layoutChangedListener = new LayoutChangedListener();
+
+		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
 
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
+
+		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da sein muss. Die
+		// Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
+		performLayoutDependendAction(() ->
+		{
+			if (menuToolbarViewController != null)
+				menuToolbarViewController.initPageButtons();
+		});
 
 		/*
 		 * Gridline Color
@@ -121,6 +141,16 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// Plugin Listener
+		listener.forEach(l ->
+		{
+			try {
+				l.onInit(this);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private void initMapper(Project project) {
@@ -153,6 +183,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
 		this.mainLayout = mainLayoutConnect;
 		initMainLayout();
+		layoutChangedListener.handle(layoutActions);
 	}
 
 	private void initMainLayout() {
@@ -160,9 +191,14 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			menuToolbarViewController.deinit();
 		}
 
+		removePadsFromView();
+
 		headerBox.getChildren().clear();
 		menuToolbarViewController = mainLayout.createMenuToolbar(this);
 		headerBox.getChildren().add(menuToolbarViewController.getParent());
+
+		createPadViews();
+		showPage(currentPageShowing);
 
 		loadUserCss();
 	}
@@ -313,7 +349,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		if (project != null)
 			removePadsFromView();
-		// createPadViews(); // TODO Weg hier, nur wenn sich profile ändert
 
 		openProject = project;
 
@@ -414,8 +449,10 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		this.currentPageShowing = page;
 
-		// New
-		addPadsToView();
+		if (openProject != null) {
+			// New
+			addPadsToView();
+		}
 	}
 
 	@Override
@@ -447,7 +484,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 			// Clear Feedback on Devie (LaunchPad Light off)
 			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
-			
+
 			// LockedListener
 			old.getProfileSettings().lockedProperty().removeListener(lockedListener);
 		}
@@ -458,7 +495,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		final ProfileSettings profileSettings = currentProfile.getProfileSettings();
 		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
-		
+
 		// LockedListener
 		profileSettings.lockedProperty().addListener(lockedListener);
 
@@ -480,6 +517,15 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 					}
 				});
 			});
+		}
+
+		try {
+			DefaultRegistry<MainLayoutConnect> registry = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+			MainLayoutConnect connect = registry.getComponent(currentProfile.getProfileSettings().getMainLayoutType());
+			setMainLayout(connect);
+		} catch (NoSuchComponentException e) {
+			// TODO Error Handling
+			e.printStackTrace();
 		}
 
 		loadUserCss();
@@ -552,8 +598,20 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public void loadUserCss() {
-		if (openProject != null)
+		Scene scene = getStage().getScene();
+
+		// Clear Old
+		scene.getStylesheets().clear();
+
+		// Layout Spezifisches CSS (Base)
+		if (mainLayout.getStylesheet() != null) {
+			scene.getStylesheets().add(mainLayout.getStylesheet());
+		}
+
+		// design spezific css
+		if (openProject != null) {
 			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
+		}
 		applyColorsToMappers();
 	}
 
@@ -604,5 +662,11 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	@Override
 	public MenuToolbarViewController getMenuToolbarController() {
 		return menuToolbarViewController;
+	}
+
+	@Override
+	public void performLayoutDependendAction(Runnable runnable) {
+		runnable.run();
+		layoutActions.add(runnable);
 	}
 }

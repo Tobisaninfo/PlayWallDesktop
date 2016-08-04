@@ -44,5 +44,12 @@ public interface MainLayoutConnect {
 	 * @see IPadViewControllerV2 ViewController zum Pad
 	 */
 	public IPadViewV2 createPadView();
-	
+
+	/**
+	 * Gibt das Layout sepzifische Stylesheet zurück.
+	 * 
+	 * @return path in jar
+	 */
+	public String getStylesheet();
+
 }

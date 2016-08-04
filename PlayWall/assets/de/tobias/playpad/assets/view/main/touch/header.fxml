@@ -8,7 +8,7 @@
 
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-<MenuBar fx:id="menuBar" maxHeight="1.7976931348623157E308" prefWidth="600.0" HBox.hgrow="ALWAYS">
+<MenuBar fx:id="menuBar" maxHeight="1.7976931348623157E308">
    <menus>
       <Menu mnemonicParsing="false" text="%main.menu.file">
          <items>
@@ -81,7 +81,7 @@
       </Menu>
    </menus>
 </MenuBar>
-<ToolBar fx:id="toolbar" VBox.vgrow="ALWAYS">
+<ToolBar fx:id="toolbar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
    <items>
       <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="586.0" spacing="14.0">
          <children>

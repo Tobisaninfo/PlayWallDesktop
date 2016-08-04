@@ -16,7 +16,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.LayoutRegistry;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
@@ -52,7 +51,8 @@ public class ProfileSettings implements SettingsSerializable {
 	@Storable private HashMap<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
-	@Storable private String layoutType = LayoutRegistry.getDefaultLayout();
+	@Storable private String layoutType = PlayPadPlugin.getRegistryCollection().getDesigns().getDefaultID(); // Rather DesignType
+	@Storable private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
 
 	// Cart Settings
 	@Storable private Warning warningFeedback = new Warning(Duration.seconds(5));
@@ -122,6 +122,10 @@ public class ProfileSettings implements SettingsSerializable {
 
 	public String getLayoutType() {
 		return layoutType;
+	}
+
+	public String getMainLayoutType() {
+		return mainLayoutType;
 	}
 
 	public Warning getWarningFeedback() {
@@ -211,6 +215,10 @@ public class ProfileSettings implements SettingsSerializable {
 		this.layoutType = layoutType;
 	}
 
+	public void setMainLayoutType(String mainLayoutType) {
+		this.mainLayoutType = mainLayoutType;
+	}
+
 	public void setWarningFeedback(Warning warningFeedback) {
 		this.warningFeedback = warningFeedback;
 	}
@@ -291,6 +299,7 @@ public class ProfileSettings implements SettingsSerializable {
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
 	private static final String LAYOUT_TYPE_ELEMENT = "LayoutType";
+	private static final String MAIN_LAYOUT_TYPE_ELEMENT = "MainLayoutType";
 	private static final String ROWS_ELEMENT = "Rows";
 	private static final String COLUMNS_ELEMENT = "Columns";
 	private static final String PAGE_COUNT_ELEMENT = "PageCount";
@@ -322,6 +331,9 @@ public class ProfileSettings implements SettingsSerializable {
 
 			if (root.element(LAYOUT_TYPE_ELEMENT) != null) {
 				profileSettings.setLayoutType(root.element(LAYOUT_TYPE_ELEMENT).getStringValue());
+			}
+			if (root.element(MAIN_LAYOUT_TYPE_ELEMENT) != null) {
+				profileSettings.setMainLayoutType(root.element(MAIN_LAYOUT_TYPE_ELEMENT).getStringValue());
 			}
 
 			if (root.element(WARNING_ELEMENT) != null) {
@@ -413,6 +425,7 @@ public class ProfileSettings implements SettingsSerializable {
 		root.addElement(ROWS_ELEMENT).addText(String.valueOf(rows));
 
 		root.addElement(LAYOUT_TYPE_ELEMENT).addText(layoutType);
+		root.addElement(MAIN_LAYOUT_TYPE_ELEMENT).addText(mainLayoutType);
 
 		warningFeedback.save(root.addElement(WARNING_ELEMENT));
 		fade.save(root.addElement(FADE_ELEMENT));
@@ -438,7 +451,7 @@ public class ProfileSettings implements SettingsSerializable {
 
 		// Paths
 		root.addElement(CACHE_PATH_ELEMENT).addText(cachePath.toString());
-		
+
 		// Update
 		root.addElement(AUTO_UPDATE_ELEMENT).addText(String.valueOf(autoUpdate));
 		root.addElement(UPDATE_CHANNEL_ELEMENT).addText(updateChannel.name());

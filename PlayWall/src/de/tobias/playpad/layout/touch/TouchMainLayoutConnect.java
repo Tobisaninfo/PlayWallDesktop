@@ -9,7 +9,7 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public String getType() {
-		return "touch";
+		return "Touch";
 	}
 
 	@Override
@@ -27,5 +27,9 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 		return new TouchPadView();
 	}
 
-	
+	@Override
+	public String getStylesheet() {
+		return "de/tobias/playpad/assets/style/touch.css";
+	}
+
 }
