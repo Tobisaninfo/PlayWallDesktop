@@ -9,6 +9,7 @@ import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.tigger.TriggerItemConnect;
+import de.tobias.playpad.view.main.MainLayoutConnect;
 
 /**
  * Schnittstelle für die einzelen Registry. Hier sind alle Registries gesammelt, damit Komponenten registriert werden können. Die
@@ -34,4 +35,5 @@ public interface RegistryCollection {
 
 	public Registry<TriggerItemConnect> getTriggerItems();
 
+	public Registry<MainLayoutConnect> getMainLayouts();
 }

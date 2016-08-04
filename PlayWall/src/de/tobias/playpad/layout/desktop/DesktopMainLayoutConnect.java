@@ -14,7 +14,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public String name() {
-		return null;
+		return "Desktop Modus"; // TODO Localize
 	}
 
 	@Override

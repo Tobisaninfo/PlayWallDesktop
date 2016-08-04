@@ -1,10 +1,11 @@
 package de.tobias.playpad.layout.touch;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.layout.desktop.BasicMenuToolbarViewController;
 import de.tobias.playpad.view.main.MenuType;
+import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -32,6 +33,18 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 	@Override
 	public void removeToolbarIcon(Image icon) {
+
+	}
+
+	@Override
+	public void addToolbarItem(Node node) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeToolbarItem(Node node) {
+		// TODO Auto-generated method stub
 
 	}
 

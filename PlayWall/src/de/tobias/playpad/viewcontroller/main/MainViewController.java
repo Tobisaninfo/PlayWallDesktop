@@ -33,6 +33,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.PadView;
+import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.IPadView;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
@@ -609,7 +610,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					toolbarController.getToolbarHBox().setOpacity(1);
@@ -730,5 +732,11 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public MenuToolbarViewController getMenuToolbarController() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
+		// TODO Auto-generated method stub
+
 	}
 }

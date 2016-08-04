@@ -6,7 +6,6 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.text.*?>
 
-
 <HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
 <MenuBar fx:id="menuBar" maxHeight="1.7976931348623157E308" prefWidth="600.0" HBox.hgrow="ALWAYS">
@@ -63,6 +62,7 @@
       </Menu>
       <Menu mnemonicParsing="false" text="%main.menu.view">
          <items>
+                  <Menu fx:id="layoutMenu" mnemonicParsing="false" text="%main.menuitem.layout" />
             <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false" onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop" />
             <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
                <accelerator>

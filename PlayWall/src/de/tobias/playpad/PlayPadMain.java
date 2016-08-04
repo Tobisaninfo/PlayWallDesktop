@@ -253,6 +253,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
 			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
 			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
+			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
 
 			// Set Default
 			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);

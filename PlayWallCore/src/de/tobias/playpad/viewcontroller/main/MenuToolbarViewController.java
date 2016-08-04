@@ -5,12 +5,14 @@ import java.util.ResourceBundle;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.utils.ui.ContentViewController;
+import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 
 /**
- * Abstrakter ViewController für das Menu und die Toolbar des Hauptfenster. Jede Implementierung kann die GUI selbst bestimmen.
+ * Abstrakter ViewController für das Menu und die Toolbar des Hauptfenster. Jede Implementierung kann die GUI selbst
+ * bestimmen.
  * 
  * @author tobias
  *
@@ -45,8 +47,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	}
 
 	/**
-	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim
-	 * laden eines Projektes und bei Änderungen an den Einstellungen.
+	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das
+	 * ist der Fall beim laden eines Projektes und bei Änderungen an den Einstellungen.
 	 */
 	public abstract void initPageButtons();
 
@@ -55,8 +57,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 */
 
 	/**
-	 * Mit dieser Methode werden mögliche Eingaben vom Nutzer geblocked (Beispiel: GUI Element disable). Diese Methode wird bei Änderung der
-	 * Einstellung aufgerufen.
+	 * Mit dieser Methode werden mögliche Eingaben vom Nutzer geblocked (Beispiel: GUI Element disable). Diese Methode
+	 * wird bei Änderung der Einstellung aufgerufen.
 	 * 
 	 * @param looked
 	 *            true locked, false unlocked
@@ -75,12 +77,29 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	public abstract void addToolbarIcon(Image icon);
 
 	/**
+	 * Fügt ein Node zur Toolbar hinzu.
+	 * 
+	 * @param node
+	 *            node
+	 */
+	public abstract void addToolbarItem(Node node);
+
+	/**
 	 * Entfernt ein spezielles Icon von der GUI.
 	 * 
 	 * @param icon
 	 *            Remove Icon
 	 */
 	public abstract void removeToolbarIcon(Image icon);
+
+	/**
+	 * Entfernt das Toolbar Item.
+	 * 
+	 * @param node
+	 *            node
+	 * @see MenuToolbarViewController#addToolbarItem(Node)
+	 */
+	public abstract void removeToolbarItem(Node node);
 
 	// Menu Item
 	/**

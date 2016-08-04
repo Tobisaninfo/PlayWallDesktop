@@ -11,6 +11,7 @@ import de.tobias.playpad.registry.DefaultComponentRegistry;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.tigger.TriggerItemConnect;
+import de.tobias.playpad.view.main.MainLayoutConnect;
 
 public class RegistryCollectionImpl implements RegistryCollection {
 
@@ -21,6 +22,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	private Registry<MapperConnect> mapperRegistry;
 	private PadContentRegistry padContentRegistry;
 	private Registry<TriggerItemConnect> triggerItemRegistry;
+	private Registry<MainLayoutConnect> mainLayoutRegistry;
 
 	public RegistryCollectionImpl() {
 		actionRegistry = new ComponentRegistry<>("Action");
@@ -30,62 +32,47 @@ public class RegistryCollectionImpl implements RegistryCollection {
 		mapperRegistry = new ComponentRegistry<>("Mapper");
 		padContentRegistry = new PadContentRegistry("PadContent");
 		triggerItemRegistry = new ComponentRegistry<>("Trigger");
+		mainLayoutRegistry = new ComponentRegistry<>("MainLayout");
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getActionRegistry()
-	 */
 	@Override
 	public Registry<ActionConnect> getActions() {
 		return actionRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getAudioHandlerRegistry()
-	 */
 	@Override
 	public AudioRegistry getAudioHandlers() {
 		return audioHandlerRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getDragModeRegistry()
-	 */
 	@Override
 	public Registry<PadDragMode> getDragModes() {
 		return dragModeRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getLayoutRegistry()
-	 */
 	@Override
 	public DefaultRegistry<DesignConnect> getDesigns() {
 		return layoutRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getMapperRegistry()
-	 */
 	@Override
 	public Registry<MapperConnect> getMappers() {
 		return mapperRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getPadContentRegistry()
-	 */
 	@Override
 	public PadContentRegistry getPadContents() {
 		return padContentRegistry;
 	}
 
-	/* (non-Javadoc)
-	 * @see de.tobias.playpad.RegistryCollection#getTriggerItemRegistry()
-	 */
 	@Override
 	public Registry<TriggerItemConnect> getTriggerItems() {
 		return triggerItemRegistry;
+	}
+	
+	@Override
+	public Registry<MainLayoutConnect> getMainLayouts() {
+		return mainLayoutRegistry;
 	}
 
 }

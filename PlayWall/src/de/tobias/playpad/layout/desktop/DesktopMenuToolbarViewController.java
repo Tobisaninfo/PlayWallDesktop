@@ -10,10 +10,12 @@ import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
+import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
@@ -48,7 +50,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void setLocked(boolean looked) {
-		// TODO Implement
+		dndModeMenuItem.setDisable(looked);
 	}
 
 	@Override
@@ -60,32 +62,49 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void removeToolbarIcon(Image icon) {
 		// TODO Implement
 	}
+	
+	@Override
+	public void addToolbarItem(Node node) {
+		iconHbox.getChildren().add(node);
+	}
+	
+	@Override
+	public void removeToolbarItem(Node node) {
+		iconHbox.getChildren().remove(node);
+	}
 
 	@Override
 	public void addMenuItem(MenuItem item, MenuType type) {
-		// TODO Implement
+		if (type == MenuType.EXTENSION) {
+			extensionMenu.getItems().add(item);
+		} else if (type == MenuType.SETTINGS) {			
+			// TODO Implement
+		}
 	}
 
 	@Override
 	public void removeMenuItem(MenuItem item) {
+		if (extensionMenu.getItems().contains(item))
+			extensionMenu.getItems().remove(item);
+		
 		// TODO Implement
 	}
 
 	@Override
 	public boolean isAlwaysOnTopActive() {
-		// TODO Imeplement
-		return false;
+		return alwaysOnTopItem.isSelected();
 	}
 
 	@Override
 	public boolean isFullscreenActive() {
-		//TODO Implement
-		return false;
+		return fullScreenMenuItem.isSelected();
 	}
 
 	@Override
 	public void deinit() {
-		// TODO Implement
+		super.deinit();
+		toolbarHBox.prefWidthProperty().unbind();
+		toolbarHBox.prefHeightProperty().unbind();
 	}
 	
 	@Override

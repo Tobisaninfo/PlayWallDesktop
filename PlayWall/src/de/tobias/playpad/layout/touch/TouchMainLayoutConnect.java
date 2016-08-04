@@ -14,7 +14,7 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public String name() {
-		return null;
+		return "Touch Modus"; // TODO Localize
 	}
 
 	@Override

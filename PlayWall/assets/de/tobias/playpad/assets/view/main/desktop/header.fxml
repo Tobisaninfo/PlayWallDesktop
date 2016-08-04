@@ -61,6 +61,7 @@
       </Menu>
       <Menu mnemonicParsing="false" text="%main.menu.view">
          <items>
+                  <Menu fx:id="layoutMenu" mnemonicParsing="false" text="%main.menuitem.layout" />
             <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false" onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop" />
             <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
                <accelerator>

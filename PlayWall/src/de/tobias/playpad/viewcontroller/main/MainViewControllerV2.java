@@ -84,11 +84,19 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	// Style
 	private Color gridColor;
 
+	// Listener
+	private VolumeChangeListener volumeChangeListener;
+	private LockedListener lockedListener;
+
 	public MainViewControllerV2(List<WindowListener<IMainViewController>> listener) {
 		super("mainViewV2", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 		padViews = new ArrayList<>();
 
 		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
+
+		// Init Listener
+		volumeChangeListener = new VolumeChangeListener(this);
+		lockedListener = new LockedListener(this);
 
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
@@ -430,27 +438,36 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void reloadSettings(Profile old, Profile currentProfile) {
 		createPadViews();
 
-		final DoubleProperty valueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
+		final DoubleProperty volumeFaderValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
 
 		if (old != null) {
 			// Unbind Volume Slider
-			valueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			volumeFaderValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			volumeFaderValueProperty.removeListener(volumeChangeListener);
+
 			// Clear Feedback on Devie (LaunchPad Light off)
 			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
+			
+			// LockedListener
+			old.getProfileSettings().lockedProperty().removeListener(lockedListener);
 		}
 
 		// Volume
-		valueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		volumeFaderValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		volumeFaderValueProperty.addListener(volumeChangeListener);
 
-		final ProfileSettings profilSettings = currentProfile.getProfileSettings();
+		final ProfileSettings profileSettings = currentProfile.getProfileSettings();
 		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+		
+		// LockedListener
+		profileSettings.lockedProperty().addListener(lockedListener);
 
 		// MIDI
-		if (profilSettings.isMidiActive() && profilSettings.getMidiDevice() != null) {
+		if (profileSettings.isMidiActive() && profileSettings.getMidiDevice() != null) {
 			// Load known MIDI Device
 			Worker.runLater(() ->
 			{
-				loadMidiDevice(profilSettings.getMidiDevice());
+				loadMidiDevice(profileSettings.getMidiDevice());
 
 				applyColorsToMappers();
 
@@ -464,7 +481,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 				});
 			});
 		}
-		
+
 		loadUserCss();
 		if (old != null && currentProfile != null) {
 			showPage(currentPageShowing);

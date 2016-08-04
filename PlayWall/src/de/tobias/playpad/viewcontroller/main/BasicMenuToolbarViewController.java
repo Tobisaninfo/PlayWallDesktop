@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.viewcontroller.main;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -9,16 +9,19 @@ import java.util.ResourceBundle;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
@@ -26,8 +29,6 @@ import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.option.SettingsViewController;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
@@ -40,8 +41,6 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -52,13 +51,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public abstract class BasicMenuToolbarViewController extends MenuToolbarViewController implements ProfileListener, EventHandler<ActionEvent> {
+public abstract class BasicMenuToolbarViewController extends MenuToolbarViewController implements EventHandler<ActionEvent> {
 
 	// Menu
 	@FXML protected Label volumeUpLabel;
@@ -78,11 +79,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	@FXML protected Label volumeDownLabel;
 	@FXML protected CheckMenuItem dndModeMenuItem;
 	@FXML protected CheckMenuItem alwaysOnTopItem;
-
-	// Toolbar
-	private Label lockedLabel;
-
-	private ChangeListener<Boolean> lockedListener;
+	@FXML protected Menu layoutMenu;
 
 	// window references
 	private IMainViewController mainViewController;
@@ -91,27 +88,10 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	public BasicMenuToolbarViewController(String name, String path, ResourceBundle localization, IMainViewController mainViewController) {
 		super(name, path, localization);
 		this.mainViewController = mainViewController;
+	}
 
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-		Profile.registerListener(this); // Update, wenn sich das Profil ändert (remove Listener & add Listener)
-
-		// Listener
-		lockedListener = new ChangeListener<Boolean>() {
-
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				dndModeMenuItem.setDisable(newValue);
-			}
-		};
-		profileSettings.lockedProperty().addListener(lockedListener);
-		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
-
-		// Info Icons
-		lockedLabel = new Label();
-		lockedLabel.setGraphic(new FontIcon(FontAwesomeType.LOCK));
-		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
-
-		// Icons Volume
+	@Override
+	public void init() {
 		volumeDownLabel.setGraphic(new FontIcon("volume-item", FontAwesomeType.VOLUME_DOWN));
 		volumeUpLabel.setGraphic(new FontIcon("volume-item", FontAwesomeType.VOLUME_UP));
 
@@ -120,22 +100,29 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() - ev.getDeltaY() * 0.001);
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
-		
-		volumeSlider.valueProperty().addListener((a, b, c) ->
-		{
-			mainViewController.setPadVolume(c.doubleValue());
-		});
+
+		Registry<MainLayoutConnect> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+		ToggleGroup group = new ToggleGroup();
+
+		for (String layoutType : mainLayouts.getTypes()) {
+			try {
+				MainLayoutConnect connect = mainLayouts.getComponent(layoutType);
+
+				RadioMenuItem item = new RadioMenuItem(connect.name());
+				group.getToggles().add(item);
+				item.setOnAction((e) ->
+				{
+					mainViewController.setMainLayout(connect);
+				});
+				layoutMenu.getItems().add(item);
+			} catch (NoSuchComponentException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
-	// Profile Listener
 	@Override
-	public void reloadSettings(Profile oldProfile, Profile currentProfile) {
-		if (oldProfile != null) {
-			oldProfile.getProfileSettings().lockedProperty().removeListener(lockedListener);
-		}
-		ProfileSettings profileSettings = currentProfile.getProfileSettings();
-		profileSettings.lockedProperty().addListener(lockedListener);
-		lockedListener.changed(profileSettings.lockedProperty(), null, profileSettings.isLocked());
+	public void deinit() {
 	}
 
 	// Basic Event Handler

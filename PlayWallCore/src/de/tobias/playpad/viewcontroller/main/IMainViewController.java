@@ -5,6 +5,7 @@ import java.util.List;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.utils.ui.NotificationHandler;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -73,4 +74,6 @@ public interface IMainViewController extends NotificationHandler {
 	public MenuToolbarViewController getMenuToolbarController();
 
 	public void setPadVolume(double doubleValue);
+	
+	public void setMainLayout(MainLayoutConnect mainLayoutConnect);
 }
