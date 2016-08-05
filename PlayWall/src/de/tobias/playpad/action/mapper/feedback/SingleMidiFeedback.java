@@ -1,18 +1,29 @@
-package de.tobias.playpad.action.feedback;
+package de.tobias.playpad.action.mapper.feedback;
 
 import org.dom4j.Element;
 
-public class SingleSimpleFeedback extends Feedback {
+import de.tobias.playpad.action.feedback.Feedback;
+import de.tobias.playpad.action.feedback.FeedbackMessage;
+
+/**
+ * Implementierung eines 1 State Feedbacks für MIDI Geräte.
+ * 
+ * @author tobias
+ * 
+ * @since 5.0.0
+ *
+ */
+public class SingleMidiFeedback extends Feedback {
 
 	private static final int INIT_FEEDBACK_VALUE = 0;
 
 	private int feedbackValue; // e.g. Color on an LaunchPad
 
-	public SingleSimpleFeedback() {
+	public SingleMidiFeedback() {
 		this.feedbackValue = INIT_FEEDBACK_VALUE;
 	}
 
-	public SingleSimpleFeedback(int feedbackValue) {
+	public SingleMidiFeedback(int feedbackValue) {
 		this.feedbackValue = feedbackValue;
 	}
 
@@ -63,7 +74,7 @@ public class SingleSimpleFeedback extends Feedback {
 
 	@Override
 	public Feedback cloneFeedback() throws CloneNotSupportedException {
-		SingleSimpleFeedback feedback = (SingleSimpleFeedback) super.clone();
+		SingleMidiFeedback feedback = (SingleMidiFeedback) super.clone();
 
 		feedback.feedbackValue = feedbackValue;
 

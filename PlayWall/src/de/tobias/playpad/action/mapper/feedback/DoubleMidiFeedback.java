@@ -1,20 +1,31 @@
-package de.tobias.playpad.action.feedback;
+package de.tobias.playpad.action.mapper.feedback;
 
 import org.dom4j.Element;
 
-public class DoubleSimpleFeedback extends Feedback {
+import de.tobias.playpad.action.feedback.Feedback;
+import de.tobias.playpad.action.feedback.FeedbackMessage;
+
+/**
+ * Implementierung eines 2 State Feedbacks für MIDI Geräte.
+ * 
+ * @author tobias
+ * 
+ * @since 5.0.0
+ *
+ */
+public class DoubleMidiFeedback extends Feedback {
 
 	private static final int INIT_FEEDBACK_VALUE = 0;
 
 	private int feedbackDefaultValue; // e.g. Color on an LaunchPad
 	private int feedbackEventValue; // e.g. Color on an LaunchPad
 
-	public DoubleSimpleFeedback() {
+	public DoubleMidiFeedback() {
 		this.feedbackDefaultValue = INIT_FEEDBACK_VALUE;
 		this.feedbackEventValue = INIT_FEEDBACK_VALUE;
 	}
 
-	public DoubleSimpleFeedback(int feedbackDefaultValue, int feedbackEventValue) {
+	public DoubleMidiFeedback(int feedbackDefaultValue, int feedbackEventValue) {
 		this.feedbackDefaultValue = feedbackDefaultValue;
 		this.feedbackEventValue = feedbackEventValue;
 	}
@@ -80,7 +91,7 @@ public class DoubleSimpleFeedback extends Feedback {
 
 	@Override
 	public Feedback cloneFeedback() throws CloneNotSupportedException {
-		DoubleSimpleFeedback feedback = (DoubleSimpleFeedback) super.clone();
+		DoubleMidiFeedback feedback = (DoubleMidiFeedback) super.clone();
 
 		feedback.feedbackDefaultValue = feedbackDefaultValue;
 		feedback.feedbackEventValue = feedbackEventValue;

@@ -34,6 +34,8 @@ public interface WriteOnlyRegistry<C> {
 	 * 
 	 * @param url
 	 *            URL zur Deklaration
+	 * @param loader
+	 *            ClassLoader
 	 * @throws IOException
 	 *             Fehler beim Laden der Datei.
 	 * @throws DocumentException

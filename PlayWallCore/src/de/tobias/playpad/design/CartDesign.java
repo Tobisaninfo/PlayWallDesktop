@@ -19,11 +19,8 @@ public interface CartDesign {
 	 */
 	public void save(Element rootElement);
 
-	/**
+	/*
 	 * Wird in einem neuen Thread aufgerufen
-	 * 
-	 * @param controller
-	 * @param warning
 	 */
 	public abstract void handleWarning(IPadViewControllerV2 controller, Warning warning, GlobalDesign animate);
 

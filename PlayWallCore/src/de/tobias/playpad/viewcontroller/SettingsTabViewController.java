@@ -77,7 +77,7 @@ public abstract class SettingsTabViewController extends ContentViewController {
 	/**
 	 * Gibt den Namen für den Tab zurück.
 	 * 
-	 * @return
+	 * @return Display Name des Tabs.
 	 */
 	public abstract String name();
 }

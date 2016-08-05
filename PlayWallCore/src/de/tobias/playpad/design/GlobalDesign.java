@@ -47,11 +47,8 @@ public interface GlobalDesign {
 
 	public double getPadHeight();
 
-	/**
+	/*
 	 * Wird in einem neuen Thread aufgerufen
-	 * 
-	 * @param controller
-	 * @param warning
 	 */
 	public void handleWarning(IPadViewControllerV2 controller, Warning warning);
 

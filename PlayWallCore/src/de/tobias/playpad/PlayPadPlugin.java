@@ -6,7 +6,7 @@ public final class PlayPadPlugin {
 
 	private static PlayPad implementation;
 	private static RegistryCollection registryCollection;
-	
+
 	private Project currentProject;
 
 	public static PlayPad getImplementation() {
@@ -20,7 +20,7 @@ public final class PlayPadPlugin {
 	/**
 	 * Gibt die Implementierung für die Registries
 	 * 
-	 * @return
+	 * @return Registry Collection Impl
 	 */
 	public static RegistryCollection getRegistryCollection() {
 		return registryCollection;
@@ -29,7 +29,7 @@ public final class PlayPadPlugin {
 	protected static void setRegistryCollection(RegistryCollection registryCollection) {
 		PlayPadPlugin.registryCollection = registryCollection;
 	}
-	
+
 	public Project getCurrentproject() {
 		return currentProject;
 	}

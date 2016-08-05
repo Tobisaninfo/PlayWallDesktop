@@ -5,7 +5,7 @@ package de.tobias.playpad.registry;
  * 
  * @author tobias - s0553746
  *
- * @param <C>
+ * @param <C> Type der Daten
  */
 public interface DefaultRegistry<C> extends Registry<C> {
 

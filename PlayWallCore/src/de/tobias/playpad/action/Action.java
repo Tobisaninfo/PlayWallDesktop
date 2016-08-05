@@ -13,12 +13,13 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
 /**
- * This class is the base of all program actions, that can be triggered by a mapper. This class handle all input form an mapper.
+ * Diese Klasse ist die Basis für alle Actions, die durch Mapper auftreten. Die Klasse verarbeitet dabei allen Input und führt die Listener
+ * aus.
  * 
  * @author tobias
  * @version 5.0.0
  * 
- * @see Mapper
+ * @see Mapper Mapper sind die Schnittstelle zur Hardware und bestandteil einer Action.
  */
 public abstract class Action implements ActionDisplayable, Cloneable {
 
@@ -30,7 +31,7 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 * @param mapping
 	 *            mapping
 	 */
-	protected void setMapping(Mapping mapping) {
+	protected void setMappingRef(Mapping mapping) {
 		this.mapping = mapping;
 	}
 
@@ -81,6 +82,9 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 */
 	public abstract void initFeedback(Project project, IMainViewController controller);
 
+	/**
+	 * Cleared das Feedback auf dem Mapper für diese Action.
+	 */
 	public abstract void clearFeedback();
 
 	/**
@@ -146,5 +150,12 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 */
 	public abstract void save(Element root);
 
+	/**
+	 * Dupliziert das Objekt.
+	 * 
+	 * @return Cloned Object
+	 * @throws CloneNotSupportedException
+	 *             Clone Fehlgeschlagen
+	 */
 	public abstract Action cloneAction() throws CloneNotSupportedException;
 }

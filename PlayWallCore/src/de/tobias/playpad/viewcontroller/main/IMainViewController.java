@@ -135,6 +135,7 @@ public interface IMainViewController extends NotificationHandler {
 	 * Setzt das MainLayout des Hauptfensters.
 	 * 
 	 * @param mainLayoutConnect
+	 *            Neues Layout
 	 */
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect);
 

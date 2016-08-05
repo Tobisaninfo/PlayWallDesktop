@@ -143,7 +143,7 @@ public class PadDragListener {
 				if (sourcePad.getController() != null) {
 					IPadViewV2 padView = sourcePad.getController().getView();
 					padView.setContentView(sourcePad);
-					padView.addDefaultButton(sourcePad);
+					padView.addDefaultElement(sourcePad);
 				}
 			}
 		}

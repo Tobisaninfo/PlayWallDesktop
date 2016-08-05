@@ -50,6 +50,7 @@ public abstract class TriggerItem {
 	 * You must call super.load
 	 * 
 	 * @param element
+	 *            XML Element
 	 */
 	public void load(Element element) {
 		if (element.attributeValue(DURATION_ATTR) != null) {
@@ -61,6 +62,7 @@ public abstract class TriggerItem {
 	 * You must call super.save
 	 * 
 	 * @param element
+	 *            XMl Element
 	 */
 	public void save(Element element) {
 		element.addAttribute(DURATION_ATTR, String.valueOf(durationFromPoint.toMillis()));

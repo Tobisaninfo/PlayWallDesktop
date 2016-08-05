@@ -206,7 +206,7 @@ public class TouchPadView implements IPadViewV2 {
 	}
 
 	@Override
-	public void addDefaultButton(Pad pad) {
+	public void addDefaultElement(Pad pad) {
 		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
 
 		// alle Labels in der InfoBox sollen die gleiche Höhe haben, damit die Icons auf gleicher höhe sind
@@ -218,20 +218,18 @@ public class TouchPadView implements IPadViewV2 {
 	}
 
 	@Override
-	public void applyStyleClasses() {
-		Pad pad = getViewController().getPad();
+	public void applyStyleClasses(int index) {
+		superRoot.getStyleClass().addAll("pad", "pad" + index);
 
-		superRoot.getStyleClass().addAll("pad", "pad" + pad.getIndex());
+		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
+		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
+		loopLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
+		triggerLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
+		errorLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
 
-		indexLabel.getStyleClass().addAll("pad-index", "pad" + pad.getIndex() + "-index", "pad-info", "pad" + pad.getIndex() + "-info");
-		timeLabel.getStyleClass().addAll("pad-time", "pad" + pad.getIndex() + "-time", "pad-info", "pad" + pad.getIndex() + "-info");
-		loopLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
-		triggerLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
-		errorLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		preview.getChildren().forEach(i -> i.getStyleClass().addAll("pad-title", "pad" + index + "-title"));
 
-		preview.getChildren().forEach(i -> i.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title"));
-
-		playBar.getStyleClass().addAll("pad-playbar", "pad" + pad.getIndex() + "-playbar");
+		playBar.getStyleClass().addAll("pad-playbar", "pad" + index + "-playbar");
 
 		root.getStyleClass().add("pad-root");
 	}
@@ -239,18 +237,19 @@ public class TouchPadView implements IPadViewV2 {
 	@Override
 	public void removeStyleClasses() {
 		Pad pad = getViewController().getPad();
+		int index = pad.getIndex();
 
-		superRoot.getStyleClass().removeAll("pad", "pad" + pad.getIndex());
+		superRoot.getStyleClass().removeAll("pad", "pad" + index);
 
-		indexLabel.getStyleClass().removeAll("pad-index", "pad" + pad.getIndex() + "-index", "pad-info", "pad" + pad.getIndex() + "-info");
-		timeLabel.getStyleClass().removeAll("pad-time", "pad" + pad.getIndex() + "-time", "pad-info", "pad" + pad.getIndex() + "-info");
-		loopLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
-		triggerLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
-		errorLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + pad.getIndex() + "-icon");
+		indexLabel.getStyleClass().removeAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
+		timeLabel.getStyleClass().removeAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
+		loopLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
+		triggerLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
+		errorLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
 
-		preview.getChildren().forEach(i -> i.getStyleClass().removeAll("pad-title", "pad" + pad.getIndex() + "-title"));
+		preview.getChildren().forEach(i -> i.getStyleClass().removeAll("pad-title", "pad" + index + "-title"));
 
-		playBar.getStyleClass().removeAll("pad-playbar", "pad" + pad.getIndex() + "-playbar");
+		playBar.getStyleClass().removeAll("pad-playbar", "pad" + index + "-playbar");
 
 		root.getStyleClass().add("pad-root");
 	}

@@ -4,12 +4,12 @@ import javax.sound.midi.MidiMessage;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.action.feedback.SingleSimpleFeedback;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.action.mapper.MidiMapper;
+import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
+import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
@@ -135,9 +135,9 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				}
 				// add new Elements
 				if (mapper.getFeedbackType() == FeedbackType.SINGLE) {
-					feedbackController = new SingleFeedbackViewController((SingleSimpleFeedback) mapper.getFeedback(), device.getColors());
+					feedbackController = new SingleFeedbackViewController((SingleMidiFeedback) mapper.getFeedback(), device.getColors());
 				} else if (mapper.getFeedbackType() == FeedbackType.DOUBLE) {
-					feedbackController = new DoubleFeedbackViewController((DoubleSimpleFeedback) mapper.getFeedback(), device.getColors());
+					feedbackController = new DoubleFeedbackViewController((DoubleMidiFeedback) mapper.getFeedback(), device.getColors());
 				}
 				showFeedback();
 			}

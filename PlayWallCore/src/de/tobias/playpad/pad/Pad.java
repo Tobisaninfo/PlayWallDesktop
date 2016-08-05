@@ -247,7 +247,7 @@ public class Pad {
 	/**
 	 * Returns either the fade settings of this pad or the global settings
 	 * 
-	 * @return
+	 * @return Fade
 	 */
 	public Fade getFade() {
 		if (fadeProperty.isNull().get()) {

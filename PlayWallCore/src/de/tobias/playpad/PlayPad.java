@@ -76,7 +76,6 @@ public interface PlayPad {
 	 * 
 	 * @return PadListener
 	 * 
-	 * @see 5.0.0
 	 */
 	public List<PadListener> getPadListener();
 

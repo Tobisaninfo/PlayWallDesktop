@@ -7,9 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.sun.scenario.effect.ColorAdjust;
-
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
@@ -21,6 +20,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+// COMMENT Mapping
 public class Mapping implements Cloneable, ActionDisplayable {
 
 	private String name;
@@ -92,7 +92,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 			}
 		}
 		mapping.put(newAction, new ArrayList<>());
-		newAction.setMapping(this);
+		newAction.setMappingRef(this);
 		return true;
 	}
 
@@ -180,7 +180,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 	
 	public void adjustPadColorToMapper(Project project) {
-		
+		ColorAdjuster.applyColorsToMappers(project);
 	}
 
 	@Override

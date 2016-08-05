@@ -60,10 +60,6 @@ public class KeyboardMapper extends Mapper {
 		}
 	}
 
-	// Not Used for Keyboards
-	@Override
-	protected void initFeedback() {}
-
 	private static final String KEY = "key";
 	private static final String CODE = "code";
 
@@ -74,7 +70,7 @@ public class KeyboardMapper extends Mapper {
 	}
 
 	@Override
-	public void save(Element element, Action action) {
+	public void save(Element element) {
 		element.addAttribute(KEY, key);
 		element.addAttribute(CODE, code.name());
 	}

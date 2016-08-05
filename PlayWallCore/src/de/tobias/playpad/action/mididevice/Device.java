@@ -17,7 +17,8 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
  * Erstellen automatisch auf Implementierung. Mögliche Interfaces: DeviceColorAssociatorConnector
  * 
  * @author tobias
- *
+ * 
+ * @since 5.0.0
  */
 public abstract class Device extends EventDispatcher implements Listener {
 

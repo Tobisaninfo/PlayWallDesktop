@@ -22,8 +22,8 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.MappingSerializer;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
-import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
 import de.tobias.playpad.action.mapper.MidiMapper;
+import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.settings.ProfileReference;
@@ -175,7 +175,7 @@ public class VersionUpdater implements UpdateService {
 							int feedbackEvent = Integer.valueOf(feedbackEventElement.element("MidiVelocity").getStringValue());
 							int feedbackDefault = Integer.valueOf(feedbackDefaultElement.element("MidiVelocity").getStringValue());
 
-							DoubleSimpleFeedback doubleSimpleFeedback = new DoubleSimpleFeedback(feedbackDefault, feedbackEvent);
+							DoubleMidiFeedback doubleSimpleFeedback = new DoubleMidiFeedback(feedbackDefault, feedbackEvent);
 							mapper.setFeedback(doubleSimpleFeedback);
 						}
 					}

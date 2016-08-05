@@ -60,6 +60,7 @@ public interface IPadViewV2 {
 	 */
 	public void showBusyView(boolean enable);
 
+	// COMMENT IPadViewV2
 	public void pseudoClassState(PseudoClass playCalss, boolean b);
 
 	public void setStyle(String string);
@@ -82,9 +83,21 @@ public interface IPadViewV2 {
 	 */
 	public void setPlaybarVisible(boolean visible);
 
-	public void addDefaultButton(Pad pad);
+	/**
+	 * Fügt die Standart Elemente der PadView hinzu. Die GUI Element sind Abhängig vom Pad, und welchen Content es hat.
+	 * 
+	 * @param pad
+	 *            Pad
+	 */
+	public void addDefaultElement(Pad pad);
 
-	public void applyStyleClasses();
+	/**
+	 * Fügt die StyleClasses der PadView hinzu. Die Methode wird vom Controller aufgerufen.
+	 */
+	public void applyStyleClasses(int index);
 
+	/**
+	 * Entfernt die StyleClasses vom PadView. Die Methode wird vom Controller aufgerufen.
+	 */
 	public void removeStyleClasses();
 }

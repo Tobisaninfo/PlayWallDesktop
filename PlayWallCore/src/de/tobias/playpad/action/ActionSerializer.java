@@ -6,6 +6,7 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
+import de.tobias.playpad.action.mapper.MapperSerializer;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.xml.XMLDeserializer;
 import de.tobias.playpad.xml.XMLHandler;

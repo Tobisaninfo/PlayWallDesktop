@@ -31,6 +31,9 @@ public interface MainLayoutConnect {
 	/**
 	 * Erstellt einen ViewController für die Menu/Toolbar Fläche.
 	 * 
+	 * @param mainViewRef
+	 *            Refernz auf den Main View
+	 * 
 	 * @return Neuer ViewController mit View
 	 */
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef);

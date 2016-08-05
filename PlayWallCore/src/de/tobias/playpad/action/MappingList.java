@@ -19,6 +19,7 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.xml.XMLHandler;
 
+// COMMENT MappingList
 public class MappingList extends ArrayList<Mapping> {
 
 	private static final long serialVersionUID = 1L;
@@ -93,12 +94,12 @@ public class MappingList extends ArrayList<Mapping> {
 
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(MAPPING, this, new MappingSerializer());
-		
+
 		if (Files.notExists(path)) {
 			Files.createDirectories(path.getParent());
 			Files.createFile(path);
 		}
-		
+
 		XMLHandler.save(path, document);
 	}
 
@@ -110,7 +111,7 @@ public class MappingList extends ArrayList<Mapping> {
 		Element rootElement = document.getRootElement();
 
 		MappingSerializer mappingSerializer = new MappingSerializer(profile);
-		mapping = mappingSerializer.loadElement(rootElement);		
+		mapping = mappingSerializer.loadElement(rootElement);
 		mapping.setUuid(UUID.randomUUID());
 
 		return mapping;

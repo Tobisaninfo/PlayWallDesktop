@@ -16,7 +16,8 @@ public interface XMLDeserializer<T> {
 	 * Lädt ein Object auf XML Daten.
 	 * 
 	 * @param element
-	 * @return
+	 *            XML Objekt
+	 * @return Daten aus dem XML
 	 */
 	public T loadElement(Element element);
 
