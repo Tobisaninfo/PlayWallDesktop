@@ -94,7 +94,7 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 			e.printStackTrace();
 		}
 
-		padView.applyStyleClasses();
+		padView.applyStyleClasses(pad.getIndex());
 		padView.setContentView(pad);
 	}
 

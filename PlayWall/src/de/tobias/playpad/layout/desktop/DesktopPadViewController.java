@@ -113,7 +113,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 			e.printStackTrace();
 		}
 
-		padView.applyStyleClasses();
+		padView.applyStyleClasses(pad.getIndex());
 		padView.setContentView(pad);
 	}
 
