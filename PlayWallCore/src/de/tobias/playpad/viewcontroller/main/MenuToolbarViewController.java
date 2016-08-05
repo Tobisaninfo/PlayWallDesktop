@@ -144,4 +144,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	public abstract void deinit();
 
 	public abstract Slider getVolumeSlider();
+
+	public abstract void setAlwaysOnTopActive(boolean alwaysOnTopActive);
+	
+	public abstract void setFullScreenActive(boolean fullScreenActive);
 }

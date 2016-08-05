@@ -194,8 +194,16 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		removePadsFromView();
 
 		headerBox.getChildren().clear();
-		menuToolbarViewController = mainLayout.createMenuToolbar(this);
-		headerBox.getChildren().add(menuToolbarViewController.getParent());
+		MenuToolbarViewController newMenuToolbarViewController = mainLayout.createMenuToolbar(this);
+		headerBox.getChildren().add(newMenuToolbarViewController.getParent());
+
+		// Kopiert alte Einstellungen
+		if (menuToolbarViewController != null) {
+			newMenuToolbarViewController.setAlwaysOnTopActive(this.menuToolbarViewController.isAlwaysOnTopActive());
+			newMenuToolbarViewController.setFullScreenActive(this.menuToolbarViewController.isFullscreenActive());
+		}
+
+		this.menuToolbarViewController = newMenuToolbarViewController;
 
 		createPadViews();
 		showPage(currentPageShowing);

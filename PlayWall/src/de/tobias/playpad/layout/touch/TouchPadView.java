@@ -86,8 +86,8 @@ public class TouchPadView implements IPadViewV2 {
 		root.getChildren().addAll(infoBox, preview, playBar);
 		superRoot.getChildren().addAll(root);
 
-		superRoot.setOnTouchPressed(controller);
 		superRoot.setOnMouseClicked(controller);
+		playBar.setOnMouseClicked(controller);
 	}
 
 	@Override

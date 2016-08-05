@@ -7,6 +7,8 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 
 public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
+	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
+
 	@Override
 	public String getType() {
 		return "Desktop";
@@ -19,14 +21,17 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
-		return new DesktopMenuToolbarViewController(mainViewRef);
+		if (desktopMenuToolbarViewController == null) {
+			desktopMenuToolbarViewController = new DesktopMenuToolbarViewController(mainViewRef);
+		}
+		return desktopMenuToolbarViewController;
 	}
 
 	@Override
 	public IPadViewV2 createPadView() {
 		return new DesktopPadView();
 	}
-	
+
 	@Override
 	public String getStylesheet() {
 		return null;

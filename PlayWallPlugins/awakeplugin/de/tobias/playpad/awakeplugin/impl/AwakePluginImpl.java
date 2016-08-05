@@ -143,12 +143,22 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 	@Override
 	public void onInit(IMainViewController t) {
-		activeMenu = new CheckMenuItem();
-		activeMenu.setOnAction(this);
-		activeMenu.setText(bundle.getString("menutitle"));
-		activeMenu.setSelected(settings.active);
-		t.getMenuToolbarController().addMenuItem(activeMenu, MenuType.EXTENSION);
+		t.performLayoutDependendAction(() ->
+		{
+			activeMenu = new CheckMenuItem();
+			activeMenu.setOnAction(this);
+			activeMenu.setText(bundle.getString("menutitle"));
+			activeMenu.setSelected(settings.active);
+			t.getMenuToolbarController().addMenuItem(activeMenu, MenuType.EXTENSION);
 
+			if (iconLabel != null) {
+				if (settings.active) {
+					t.getMenuToolbarController().addToolbarItem(iconLabel);
+				} else {
+					t.getMenuToolbarController().removeToolbarItem(iconLabel);
+				}
+			}
+		});
 		iconLabel = new Label();
 		iconLabel.setGraphic(new FontIcon(FontAwesomeType.MOON_ALT));
 	}

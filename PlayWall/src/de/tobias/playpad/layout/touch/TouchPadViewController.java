@@ -37,7 +37,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -154,14 +153,7 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 
 	@Override
 	public void handle(Event event) {
-		if (event instanceof TouchEvent) {
-			TouchEvent touchEvent = (TouchEvent) event;
-			if (event.getEventType() == TouchEvent.TOUCH_PRESSED) {
-				if (touchEvent.getTouchCount() == 1 || touchEvent.getTouchCount() == 2) {
-					handleAction(touchEvent.getTouchCount() == 1, event);
-				}
-			}
-		} else if (event instanceof MouseEvent) {
+		if (event instanceof MouseEvent) {
 			if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
 				MouseEvent mouseEvent = (MouseEvent) event;
 				if (mouseEvent.getButton() == MouseButton.PRIMARY || mouseEvent.getButton() == MouseButton.SECONDARY) {

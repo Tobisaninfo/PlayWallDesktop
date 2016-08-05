@@ -1,5 +1,13 @@
 package de.tobias.playpad.registry;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
 public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements DefaultRegistry<C> {
 
 	private C defaultValue;
@@ -35,6 +43,37 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 	@Override
 	public void setDefaultID(String id) throws NoSuchComponentException {
 		setDefault(getComponent(id));
+	}
+
+	@Override
+	public void loadComponentsFromFile(URL url, ClassLoader loader)
+			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		if (url == null) {
+			throw new IOException("URL not found: " + url);
+		}
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(url);
+
+		Element rootElement = document.getRootElement();
+		for (Object obj : rootElement.elements("Component")) {
+			if (obj instanceof Element) {
+				Element element = (Element) obj;
+				String type = element.attributeValue("id");
+
+				// Find the class of the type
+				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
+				C component = clazz.newInstance();
+
+				registerComponent(component, type);
+
+				if (element.attributeValue("default") != null) {
+					String defaultValue = element.attributeValue("default");
+					if (defaultValue.equals("true")) {
+						setDefault(component);
+					}
+				}
+			}
+		}
 	}
 
 }

@@ -7,6 +7,8 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 
 public class TouchMainLayoutConnect implements MainLayoutConnect {
 
+	private TouchMenuToolbarViewController touchMainLayoutConnect;
+
 	@Override
 	public String getType() {
 		return "Touch";
@@ -19,7 +21,11 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
-		return new TouchMenuToolbarViewController(mainViewRef);
+		if (touchMainLayoutConnect == null) {
+			touchMainLayoutConnect = new TouchMenuToolbarViewController(mainViewRef);
+		}
+
+		return touchMainLayoutConnect;
 	}
 
 	@Override
