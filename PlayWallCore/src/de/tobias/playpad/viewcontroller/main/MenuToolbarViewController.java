@@ -20,6 +20,8 @@ import javafx.scene.image.Image;
  */
 public abstract class MenuToolbarViewController extends ContentViewController {
 
+	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
+	
 	/**
 	 * Erstellt einen neuen ViewController ohne Localization
 	 * 
@@ -148,4 +150,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	public abstract void setAlwaysOnTopActive(boolean alwaysOnTopActive);
 	
 	public abstract void setFullScreenActive(boolean fullScreenActive);
+	
+	public abstract void showLiveLabel(boolean show);
+	
+	public abstract void hilightPageButton(int index);
 }

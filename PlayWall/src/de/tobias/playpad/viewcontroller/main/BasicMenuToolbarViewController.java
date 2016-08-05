@@ -58,5 +58,4 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			run.run();
 		}
 	}
-
 }

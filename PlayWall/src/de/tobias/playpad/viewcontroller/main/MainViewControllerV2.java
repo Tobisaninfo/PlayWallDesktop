@@ -113,7 +113,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
 
-		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da sein muss. Die
+		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
+		// sein muss. Die
 		// Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
 		performLayoutDependendAction(() ->
 		{
@@ -183,7 +184,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
 		this.mainLayout = mainLayoutConnect;
 		initMainLayout();
-		layoutChangedListener.handle(layoutActions);
 	}
 
 	private void initMainLayout() {
@@ -205,6 +205,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		this.menuToolbarViewController = newMenuToolbarViewController;
 
+		layoutChangedListener.handle(layoutActions);
 		createPadViews();
 		showPage(currentPageShowing);
 
@@ -461,6 +462,10 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			// New
 			addPadsToView();
 		}
+		
+		if (menuToolbarViewController != null) {
+			menuToolbarViewController.hilightPageButton(page);
+		}
 	}
 
 	@Override
@@ -478,9 +483,29 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 	}
 
+	private boolean shown = false;
+
 	@Override
 	public void showLiveInfo() {
-		// TODO Auto-generated method stub
+		if (!shown) {
+			if (menuToolbarViewController != null) {
+				menuToolbarViewController.showLiveLabel(true);
+				shown = true;
+				Worker.runLater(() ->
+				{
+					try {
+						Thread.sleep(PlayPadMain.displayTimeMillis * 2);
+					} catch (Exception e) {
+					}
+					Platform.runLater(() ->
+					{
+						if (menuToolbarViewController != null)
+							menuToolbarViewController.showLiveLabel(false);
+						shown = false;
+					});
+				});
+			}
+		}
 
 	}
 

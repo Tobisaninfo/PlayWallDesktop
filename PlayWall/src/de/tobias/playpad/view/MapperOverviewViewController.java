@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperRegistry;
+import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperViewController;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -55,26 +58,34 @@ public class MapperOverviewViewController implements IMapperOverviewViewControll
 		headline.setUnderline(true);
 		root.getChildren().addAll(headline, mappingView, addMappingBox);
 
-		Set<String> types = MapperRegistry.getTypes();
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Set<String> types = registry.getTypes();
 		types.stream().sorted().forEach(item ->
 		{
-			Button button = new Button(MapperRegistry.getMapperConnect(item).toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
+			Button button = new Button(registry.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 			button.setContentDisplay(ContentDisplay.TOP);
 			button.setPrefWidth(150);
 
 			button.setOnAction(e ->
 			{
 				// Adds a mapper to the action
-				MapperViewController controller = onAddMapper(item);
-				controller.showInputMapperUI();
+				try {
+					MapperViewController controller = onAddMapper(item);
+					controller.showInputMapperUI();
+				} catch (NoSuchComponentException ex) {
+					// TODO Error Handling
+					ex.printStackTrace();
+				}
 
 			});
 			addMappingBox.getChildren().add(button);
 		});
 	}
 
-	private MapperViewController onAddMapper(String type) {
-		Mapper mapper = MapperRegistry.getMapperConnect(type).createNewMapper();
+	private MapperViewController onAddMapper(String type) throws NoSuchComponentException {
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+
+		Mapper mapper = registry.getComponent(type).createNewMapper();
 		action.addMapper(mapper);
 		return addMapperView(type, mapper);
 	}

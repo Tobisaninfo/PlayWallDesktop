@@ -11,9 +11,7 @@ import java.util.UUID;
 
 import org.dom4j.DocumentException;
 
-import de.tobias.playpad.action.mapper.KeyboardMapperConnect;
 import de.tobias.playpad.action.mapper.MapperRegistry;
-import de.tobias.playpad.action.mapper.MidiMapperConnect;
 import de.tobias.playpad.audio.ClipAudioHandler;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
 import de.tobias.playpad.audio.TinyAudioHandler;
@@ -198,8 +196,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
 
 		// Mapper
-		MapperRegistry.registerMapperConnect(new MidiMapperConnect());
-		MapperRegistry.registerMapperConnect(new KeyboardMapperConnect());
 		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 
 		Profile.registerListener(this);

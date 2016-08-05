@@ -49,6 +49,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -77,6 +78,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML protected Menu extensionMenu;
 
+	@FXML protected Label liveLabel;
+
 	private IMainViewController mainViewController;
 	private SettingsViewController settingsViewController;
 
@@ -87,6 +90,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
+		showLiveLabel(false);
 		initLayoutMenu();
 	}
 
@@ -152,12 +156,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void setLocked(boolean looked) {
 		dndModeMenuItem.setDisable(looked);
 	}
-	
+
 	@Override
 	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {
 		alwaysOnTopItem.setSelected(alwaysOnTopActive);
 	}
-	
+
 	@Override
 	public void setFullScreenActive(boolean fullScreenActive) {
 		fullScreenMenuItem.setSelected(fullScreenActive);
@@ -214,11 +218,42 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void deinit() {
 		toolbarHBox.prefWidthProperty().unbind();
 		toolbarHBox.prefHeightProperty().unbind();
+
+		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
+		if (dndModeMenuItem.isSelected()) {
+			PadDragListener.setDndMode(false);
+			for (IPadViewV2 view : mainViewController.getPadViews()) {
+				view.enableDragAndDropDesignMode(false);
+			}
+		}
+	}
+
+	@Override
+	public void showLiveLabel(boolean show) {
+		liveLabel.setVisible(show);
 	}
 
 	@Override
 	public Slider getVolumeSlider() {
 		return volumeSlider;
+	}
+
+	private int currentPage = 0;
+
+	@Override
+	public void hilightPageButton(int index) {
+		if (index >= 0) {
+			if (pageHBox.getChildren().size() > currentPage) {
+				Node removeNode = pageHBox.getChildren().get(currentPage);
+				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
+			}
+
+			if (pageHBox.getChildren().size() > index) {
+				Node newNode = pageHBox.getChildren().get(index);
+				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
+				currentPage = index;
+			}
+		}
 	}
 
 	// EventHandler

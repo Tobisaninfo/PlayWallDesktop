@@ -1,17 +1,8 @@
 package de.tobias.playpad.layout.touch;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Set;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.listener.IPadPositionListener;
 import de.tobias.playpad.pad.listener.PadContentListener;
@@ -21,31 +12,19 @@ import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.view.FileDragOptionView;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.util.FileUtils;
-import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class TouchPadViewController implements IPadViewControllerV2, EventHandler<Event> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
-	private static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
 	private TouchPadView padView;
@@ -58,7 +37,6 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 	private IPadPositionListener padPositionListener;
 
 	private PadDragListener padDragListener;
-	private transient PadSettingsViewController padSettingsViewController;
 
 	public TouchPadViewController(TouchPadView padView) {
 		this.padView = padView;
@@ -69,7 +47,8 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
 
-		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController
+		// erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		profileSettings.lockedProperty().addListener(padLockedListener);
 	}
@@ -156,38 +135,15 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 		if (event instanceof MouseEvent) {
 			if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
 				MouseEvent mouseEvent = (MouseEvent) event;
-				if (mouseEvent.getButton() == MouseButton.PRIMARY || mouseEvent.getButton() == MouseButton.SECONDARY) {
-					handleAction(mouseEvent.getButton() == MouseButton.PRIMARY, event);
+				if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+					if (pad.getStatus() == PadStatus.PLAY) {
+						onStop();
+					} else {
+						onPlay();
+					}
 				}
 			}
 
-		}
-	}
-
-	/**
-	 * Diese Methode handlet die Eingabe für Touch oder Mouse
-	 * 
-	 * @param primaryAction
-	 *            <code>true</code> Touch einfacher Click, Mause Primary Button
-	 * @param event
-	 *            event
-	 */
-	private void handleAction(boolean primaryAction, Event event) {
-		if (primaryAction) {
-			if (pad.getStatus() == PadStatus.EMPTY) {
-				try {
-					onNew(event);
-				} catch (NoSuchComponentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else if (pad.getStatus() == PadStatus.PLAY) {
-				onStop();
-			} else {
-				onPlay();
-			}
-		} else {
-			onSettings();
 		}
 	}
 
@@ -200,96 +156,6 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 	private void onStop() {
 		if (pad.getContent() != null) {
 			pad.setStatus(PadStatus.STOP);
-		}
-	}
-
-	private void onNew(Event event) throws NoSuchComponentException {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-		if (pad.getProject() != null) {
-			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
-				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
-				return;
-			}
-		}
-
-		FileChooser chooser = new FileChooser();
-		PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
-
-		// File Extension
-		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
-				registry.getSupportedFileTypes());
-		chooser.getExtensionFilters().add(extensionFilter);
-
-		// Last Folder
-		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
-		if (openFolder != null) {
-			File folder = new File(openFolder.toString());
-			chooser.setInitialDirectory(folder);
-		}
-
-		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-		if (file != null) {
-			Path path = file.toPath();
-
-			Set<PadContentConnect> connects = registry.getPadContentConnectsForFile(file.toPath());
-			if (!connects.isEmpty()) {
-				if (connects.size() > 1) {
-					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
-					hud.showDropOptions(connects, connect ->
-					{
-						if (connect != null) {
-							setNewPadContent(file, path, connect);
-							hud.hide();
-						}
-					});
-				} else {
-					PadContentConnect connect = connects.iterator().next();
-					setNewPadContent(file, path, connect);
-				}
-			}
-
-			ApplicationUtils.getApplication().getUserDefaults().setData(OPEN_FOLDER, path.getParent().toString());
-		}
-	}
-
-	private void setNewPadContent(File file, Path path, PadContentConnect connect) {
-		PadContent content = pad.getContent();
-		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
-			content = connect.newInstance(pad);
-			this.pad.setContent(content);
-		}
-
-		try {
-			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
-	}
-
-	private void onSettings() {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-		IMainViewController mvc = PlayPadPlugin.getImplementation().getMainViewController();
-
-		if (mvc != null) {
-			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getPlayedPlayers() > 0) {
-					mvc.showLiveInfo();
-					return;
-				}
-			}
-
-			Stage owner = mvc.getStage();
-			if (padSettingsViewController == null) {
-				padSettingsViewController = new PadSettingsViewController(pad, owner);
-				padSettingsViewController.getStage().setOnHiding(ev ->
-				{
-					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.hasTriggerItems());
-				});
-			}
-			padSettingsViewController.getStage().show();
 		}
 	}
 
