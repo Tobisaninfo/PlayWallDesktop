@@ -1,12 +1,8 @@
-package de.tobias.playpad.viewcontroller.main;
+package de.tobias.playpad.action.feedback;
 
-import java.util.List;
+import java.util.Set;
 
-import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.action.feedback.ColorAssociator;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
+import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
 import de.tobias.playpad.design.CartDesign;
@@ -21,19 +17,22 @@ public class ColorAdjuster {
 
 	public static void applyColorsToMappers(Project project) {
 		// Apply Layout to Mapper
-		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions(CartActionConnect.TYPE);
-		for (CartAction cartAction : actions) {
-			if (cartAction.isAutoFeedbackColors()) {
-				for (Mapper mapper : cartAction.getMappers()) {
-					if (mapper instanceof MapperFeedbackable) {
-						mapColorForMapper(cartAction, mapper, project);
+		Set<Action> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions();
+		for (Action action : actions) {
+			if (action instanceof ColorAdjustable) {
+				ColorAdjustable adjustable = (ColorAdjustable) action;
+				if (adjustable.isAutoFeedbackColors()) {
+					for (Mapper mapper : action.getMappers()) {
+						if (mapper instanceof MapperFeedbackable) {
+							mapColorForMapper(adjustable, mapper, project);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	private static void mapColorForMapper(CartAction cartAction, Mapper mapper, Project project) {
+	private static void mapColorForMapper(ColorAdjustable cartAction, Mapper mapper, Project project) {
 		MapperFeedbackable feedbackable = (MapperFeedbackable) mapper;
 		if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
 			ColorAssociator colorAssociator = (ColorAssociator) mapper;

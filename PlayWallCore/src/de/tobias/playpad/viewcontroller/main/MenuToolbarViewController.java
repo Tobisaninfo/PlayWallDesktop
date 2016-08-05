@@ -8,11 +8,9 @@ import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
 
 /**
- * Abstrakter ViewController für das Menu und die Toolbar des Hauptfenster. Jede Implementierung kann die GUI selbst
- * bestimmen.
+ * Abstrakter ViewController für das Menu und die Toolbar des Hauptfenster. Jede Implementierung kann die GUI selbst bestimmen.
  * 
  * @author tobias
  *
@@ -21,7 +19,7 @@ import javafx.scene.image.Image;
 public abstract class MenuToolbarViewController extends ContentViewController {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
-	
+
 	/**
 	 * Erstellt einen neuen ViewController ohne Localization
 	 * 
@@ -49,18 +47,18 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	}
 
 	/**
-	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das
-	 * ist der Fall beim laden eines Projektes und bei Änderungen an den Einstellungen.
+	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim
+	 * laden eines Projektes und bei Änderungen an den Einstellungen.
 	 */
 	public abstract void initPageButtons();
 
 	/*
-	 * 
+	 * Handling Actions from MainViewController
 	 */
 
 	/**
-	 * Mit dieser Methode werden mögliche Eingaben vom Nutzer geblocked (Beispiel: GUI Element disable). Diese Methode
-	 * wird bei Änderung der Einstellung aufgerufen.
+	 * Mit dieser Methode werden mögliche Eingaben vom Nutzer geblocked (Beispiel: GUI Element disable). Diese Methode wird bei Änderung der
+	 * Einstellung aufgerufen.
 	 * 
 	 * @param looked
 	 *            true locked, false unlocked
@@ -69,15 +67,23 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 */
 	public abstract void setLocked(boolean looked);
 
-	// Icons
 	/**
-	 * Fügt ein Info Icon zur GUI hinzu.
+	 * Setzt das Menü für die Einstellung Always On Top.
 	 * 
-	 * @param icon
-	 *            icon
+	 * @param alwaysOnTopActive
+	 *            <code>true</code> Menu Aktiv
 	 */
-	public abstract void addToolbarIcon(Image icon);
+	public abstract void setAlwaysOnTopActive(boolean alwaysOnTopActive);
 
+	/**
+	 * Setzt das Menü für die Einstellung FullScreen.
+	 * 
+	 * @param fullScreenActive
+	 *            <code>true</code> FullScreen
+	 */
+	public abstract void setFullScreenActive(boolean fullScreenActive);
+
+	// Icons
 	/**
 	 * Fügt ein Node zur Toolbar hinzu.
 	 * 
@@ -85,14 +91,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 *            node
 	 */
 	public abstract void addToolbarItem(Node node);
-
-	/**
-	 * Entfernt ein spezielles Icon von der GUI.
-	 * 
-	 * @param icon
-	 *            Remove Icon
-	 */
-	public abstract void removeToolbarIcon(Image icon);
 
 	/**
 	 * Entfernt das Toolbar Item.
@@ -145,13 +143,30 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 */
 	public abstract void deinit();
 
+	/**
+	 * Gibt den Global Volume Slider zurück. Jede Toolbar muss einen solchen für das Global Layout enthalten.
+	 * 
+	 * @return Slider
+	 */
 	public abstract Slider getVolumeSlider();
 
-	public abstract void setAlwaysOnTopActive(boolean alwaysOnTopActive);
-	
-	public abstract void setFullScreenActive(boolean fullScreenActive);
-	
-	public abstract void showLiveLabel(boolean show);
-	
-	public abstract void hilightPageButton(int index);
+	// Utils
+
+	/**
+	 * Zeigt den Hinweis LiveModus, und signalisiert dem Nutzer, das eine Aktion blokciert ist.
+	 * 
+	 * @param show
+	 *            <code>true</code> Hinweis Aktiv
+	 */
+	public abstract void showLiveInfo(boolean show);
+
+	/**
+	 * Hebt dem Page Button der Aktiv ist hervor. Gleichzeitig wird der vorherige Button nicht mehr Hervorgehebt.
+	 * 
+	 * @param page
+	 *            Neue Seite
+	 * 
+	 * @see IMainViewController#showPage(int)
+	 */
+	public abstract void hilightPageButton(int page);
 }

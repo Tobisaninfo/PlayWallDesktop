@@ -160,7 +160,8 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 
 	@Override
 	public void reload(Profile profile, Project project, IMainViewController controller) {
-		controller.applyColorsToMappers();
+		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(currentProject);
 
 		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 

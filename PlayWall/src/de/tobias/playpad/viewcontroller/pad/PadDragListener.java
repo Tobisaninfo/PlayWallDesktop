@@ -91,7 +91,6 @@ public class PadDragListener {
 		// Drag and Drop von Pads
 		if (event.getDragboard().hasString() && event.getDragboard().getString().trim().matches(REGEX)) {
 			int padID = Integer.valueOf(event.getDragboard().getString());
-			// TODO Pad Drag and Drop
 			if (padID != sourcePad.getIndex()) {
 
 				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();

@@ -56,7 +56,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -90,7 +89,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
-		showLiveLabel(false);
+		showLiveInfo(false);
 		initLayoutMenu();
 	}
 
@@ -168,16 +167,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@Override
-	public void addToolbarIcon(Image icon) {
-		// TODO Implement
-	}
-
-	@Override
-	public void removeToolbarIcon(Image icon) {
-		// TODO Implement
-	}
-
-	@Override
 	public void addToolbarItem(Node node) {
 		iconHbox.getChildren().add(node);
 	}
@@ -229,7 +218,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@Override
-	public void showLiveLabel(boolean show) {
+	public void showLiveInfo(boolean show) {
 		liveLabel.setVisible(show);
 	}
 
@@ -333,7 +322,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), currentProject);
 			controller.getStage().showAndWait();
-			mainViewController.setTitle();
+			mainViewController.updateWindowTitle();
 		});
 	}
 

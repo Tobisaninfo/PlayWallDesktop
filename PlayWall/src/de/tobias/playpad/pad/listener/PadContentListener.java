@@ -29,15 +29,14 @@ public class PadContentListener implements ChangeListener<PadContent> {
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
 
-		// TODO PadContentListener
-		// // Remove old listener
+		// Remove old listener
 		if (oldValue != null && oldValue instanceof Durationable) {
 			Durationable oldDurationable = (Durationable) oldValue;
 			oldDurationable.durationProperty().removeListener(controller.getPadDurationListener());
 			oldDurationable.positionProperty().removeListener(controller.getPadPositionListener());
 		}
-		//
-		// // set new content listener / bindings
+
+		// set new content listener / bindings
 		if (newValue instanceof Durationable) {
 			controller.getView().setPlaybarVisible(true);
 
@@ -45,7 +44,7 @@ public class PadContentListener implements ChangeListener<PadContent> {
 			durationable.durationProperty().addListener(controller.getPadDurationListener());
 			durationable.positionProperty().addListener(controller.getPadPositionListener());
 
-			// // Init Duration
+			// Init Duration
 			controller.getPadDurationListener().changed(null, null, durationable.getDuration());
 		} else {
 			controller.getView().setPlaybarVisible(false);

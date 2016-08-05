@@ -6,6 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.connect.CartActionConnect;
+import de.tobias.playpad.action.feedback.ColorAdjustable;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -18,7 +19,7 @@ import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CartAction extends Action {
+public class CartAction extends Action implements ColorAdjustable {
 
 	public enum ControlMode {
 		PLAY_PAUSE,
@@ -63,6 +64,7 @@ public class CartAction extends Action {
 		this.mode = mode;
 	}
 
+	@Override
 	public boolean isAutoFeedbackColors() {
 		return autoFeedbackColors;
 	}

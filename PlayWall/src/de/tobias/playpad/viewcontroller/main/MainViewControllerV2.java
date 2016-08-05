@@ -75,7 +75,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	private List<IPadViewV2> padViews;
 
 	private MenuToolbarViewController menuToolbarViewController;
-	private MainLayoutConnect mainLayout;
 
 	private Project openProject;
 	private int currentPageShowing = -1;
@@ -89,6 +88,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	private Color gridColor;
 
 	// Layout
+	private MainLayoutConnect mainLayout;
 	private List<MainLayoutHandler> layoutActions;
 
 	// Listener
@@ -197,6 +197,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 
 		removePadsFromView();
+		removePadViews();
 
 		headerBox.getChildren().clear();
 		MenuToolbarViewController newMenuToolbarViewController = mainLayout.createMenuToolbar(this);
@@ -377,7 +378,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		showPage(FIRST_PAGE);
 		loadUserCss();
-		setTitle();
+		updateWindowTitle();
 	}
 
 	// Pad, Pages
@@ -402,9 +403,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			padGridPane.getRowConstraints().add(c);
 		}
 
-		// Pads - Remove Old PadViews
-		padViews.forEach(view -> padGridPane.getChildren().remove(view.getRootNode()));
-		padViews.clear();
+		// Pads - Remove alte PadViews, falls noch welche vorhanden
+		if (!padViews.isEmpty())
+			removePadViews();
 
 		// Neue PadViews
 		for (int y = 0; y < profileSettings.getRows(); y++) {
@@ -428,6 +429,15 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 
 		menuToolbarViewController.initPageButtons();
+	}
+
+	private void removePadViews() {
+		padViews.forEach(view ->
+		{
+			padGridPane.getChildren().remove(view.getRootNode());
+			mainLayout.recyclePadView(view);
+		});
+		padViews.clear();
 	}
 
 	/**
@@ -482,7 +492,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	}
 
 	@Override
-	public void setPadVolume(double volume) {
+	public void setGlobalVolume(double volume) {
 		if (openProject != null) {
 			for (Pad pad : openProject.getPads().values()) {
 				if (pad != null)
@@ -496,18 +506,17 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	@Override
 	public void showLiveInfo() {
 		if (!shown && menuToolbarViewController != null) {
-			menuToolbarViewController.showLiveLabel(true);
+			menuToolbarViewController.showLiveInfo(true);
 			shown = true;
 			Worker.runLater(() ->
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)
-						menuToolbarViewController.showLiveLabel(false);
+						menuToolbarViewController.showLiveInfo(false);
 					shown = false;
 				});
 			});
@@ -549,8 +558,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
-
-				applyColorsToMappers();
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
 
 				Platform.runLater(() ->
 				{
@@ -656,7 +664,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		if (openProject != null) {
 			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
 		}
-		applyColorsToMappers();
+
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
 	}
 
 	/**
@@ -679,14 +688,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 	}
 
-	@Override
-	public void applyColorsToMappers() {
-		if (openProject != null) {
-			ColorAdjuster.applyColorsToMappers(openProject);
-		}
-	}
-
-	public void setTitle() {
+	public void updateWindowTitle() {
 		if (openProject != null && Profile.currentProfile() != null) {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getRef().getName(),
 					Profile.currentProfile().getRef().getName()));

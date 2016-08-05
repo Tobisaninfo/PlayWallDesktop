@@ -37,7 +37,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
-		showLiveLabel(false);
+		showLiveInfo(false);
 	}
 
 	@Override
@@ -71,16 +71,6 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void addToolbarIcon(Image icon) {
-		// TODO Implement
-	}
-
-	@Override
-	public void removeToolbarIcon(Image icon) {
-		// TODO Implement
-	}
-
-	@Override
 	public void addToolbarItem(Node node) {
 		iconHbox.getChildren().add(node);
 	}
@@ -91,21 +81,19 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void addMenuItem(MenuItem item, MenuType type) {
-	}
+	public void addMenuItem(MenuItem item, MenuType type) {}
 
 	@Override
-	public void removeMenuItem(MenuItem item) {
-	}
+	public void removeMenuItem(MenuItem item) {}
 
 	@Override
 	public boolean isAlwaysOnTopActive() {
-		return false; // TODO
+		return alwaysOnTopItem.isSelected();
 	}
 
 	@Override
 	public boolean isFullscreenActive() {
-		return false; // TODO
+		return fullScreenMenuItem.isSelected();
 	}
 
 	@Override
@@ -115,7 +103,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void showLiveLabel(boolean show) {
+	public void showLiveInfo(boolean show) {
 		liveLabel.setVisible(show);
 	}
 

@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.sun.scenario.effect.ColorAdjust;
+
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
@@ -175,6 +177,10 @@ public class Mapping implements Cloneable, ActionDisplayable {
 			}
 		}
 		getActions().forEach(action -> action.clearFeedback());
+	}
+	
+	public void adjustPadColorToMapper(Project project) {
+		
 	}
 
 	@Override

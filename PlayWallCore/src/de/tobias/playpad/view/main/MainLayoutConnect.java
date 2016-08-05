@@ -46,6 +46,14 @@ public interface MainLayoutConnect {
 	public IPadViewV2 createPadView();
 
 	/**
+	 * Recycelt eine PadView, damit nicht immer neue erstellt werden müssen.
+	 * 
+	 * @param padView
+	 *            alte PadView
+	 */
+	public void recyclePadView(IPadViewV2 padView);
+
+	/**
 	 * Gibt das Layout sepzifische Stylesheet zurück.
 	 * 
 	 * @return path in jar

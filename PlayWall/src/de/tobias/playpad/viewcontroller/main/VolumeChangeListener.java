@@ -13,6 +13,6 @@ public class VolumeChangeListener implements ChangeListener<Number> {
 
 	@Override
 	public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-		mainViewController.setPadVolume(newValue.doubleValue());
+		mainViewController.setGlobalVolume(newValue.doubleValue());
 	}
 }

@@ -1,5 +1,7 @@
 package de.tobias.playpad.layout.touch;
 
+import java.util.Stack;
+
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -9,6 +11,12 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	private TouchMenuToolbarViewController touchMainLayoutConnect;
 
+	private Stack<IPadViewV2> recyclingStack;
+
+	public TouchMainLayoutConnect() {
+		recyclingStack = new Stack<>();
+	}
+	
 	@Override
 	public String getType() {
 		return "Touch";
@@ -30,7 +38,15 @@ public class TouchMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public IPadViewV2 createPadView() {
+		if (!recyclingStack.isEmpty()) {
+			return recyclingStack.pop();
+		}
 		return new TouchPadView();
+	}
+
+	@Override
+	public void recyclePadView(IPadViewV2 padView) {
+		recyclingStack.push(padView);
 	}
 
 	@Override
