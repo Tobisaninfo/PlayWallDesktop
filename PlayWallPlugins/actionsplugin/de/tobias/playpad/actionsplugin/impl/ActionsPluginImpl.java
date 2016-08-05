@@ -65,20 +65,24 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 				muteHUD.setMinHeight(100);
 			});
 
+			ChangeListener<Boolean> listener = (a, b, c) ->
+			{
+				if (c && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
+					volume = Profile.currentProfile().getProfileSettings().getVolume();
+				} else {
+					volume = -1;
+				}
+			};
+
 			PlayPadPlugin.getImplementation().addMainViewListener(new WindowListener<IMainViewController>() {
 
 				@Override
 				public void onInit(IMainViewController t) {
-					t.performLayoutDependendAction(() ->
+					t.performLayoutDependendAction((oldToolbar, newToolbar) ->
 					{
-						t.getMenuToolbarController().getVolumeSlider().valueChangingProperty().addListener((a, b, c) ->
-						{
-							if (c && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
-								volume = Profile.currentProfile().getProfileSettings().getVolume();
-							} else {
-								volume = -1;
-							}
-						});
+						if (oldToolbar != null)
+							oldToolbar.getVolumeSlider().valueChangingProperty().removeListener(listener);
+						newToolbar.getVolumeSlider().valueChangingProperty().addListener(listener);
 					});
 				}
 			});

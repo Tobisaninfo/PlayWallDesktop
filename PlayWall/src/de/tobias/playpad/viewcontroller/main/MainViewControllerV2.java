@@ -27,6 +27,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.ui.BasicControllerSettings;
 import de.tobias.utils.ui.NotificationHandler;
@@ -61,7 +62,6 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-// TODO Extract Color Adjust methodes
 public class MainViewControllerV2 extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
 	private static final int FIRST_PAGE = 0;
@@ -89,7 +89,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	private Color gridColor;
 
 	// Layout
-	private List<Runnable> layoutActions;
+	private List<MainLayoutHandler> layoutActions;
 
 	// Listener
 	private VolumeChangeListener volumeChangeListener;
@@ -116,7 +116,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
 		// sein muss. Die
 		// Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
-		performLayoutDependendAction(() ->
+		performLayoutDependendAction((oldToolbar, newToolbar) ->
 		{
 			if (menuToolbarViewController != null)
 				menuToolbarViewController.initPageButtons();
@@ -187,8 +187,13 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	}
 
 	private void initMainLayout() {
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.deinit();
+
+			menuToolbarViewController.getVolumeSlider().valueProperty().unbindBidirectional(settings.volumeProperty());
+			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
 		}
 
 		removePadsFromView();
@@ -203,9 +208,12 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			newMenuToolbarViewController.setFullScreenActive(this.menuToolbarViewController.isFullscreenActive());
 		}
 
+		layoutChangedListener.handle(layoutActions, this.menuToolbarViewController, newMenuToolbarViewController);
 		this.menuToolbarViewController = newMenuToolbarViewController;
 
-		layoutChangedListener.handle(layoutActions);
+		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
+		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
+
 		createPadViews();
 		showPage(currentPageShowing);
 
@@ -462,7 +470,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			// New
 			addPadsToView();
 		}
-		
+
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.hilightPageButton(page);
 		}
@@ -487,26 +495,23 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public void showLiveInfo() {
-		if (!shown) {
-			if (menuToolbarViewController != null) {
-				menuToolbarViewController.showLiveLabel(true);
-				shown = true;
-				Worker.runLater(() ->
+		if (!shown && menuToolbarViewController != null) {
+			menuToolbarViewController.showLiveLabel(true);
+			shown = true;
+			Worker.runLater(() ->
+			{
+				try {
+					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
+				} catch (Exception e) {
+				}
+				Platform.runLater(() ->
 				{
-					try {
-						Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-					} catch (Exception e) {
-					}
-					Platform.runLater(() ->
-					{
-						if (menuToolbarViewController != null)
-							menuToolbarViewController.showLiveLabel(false);
-						shown = false;
-					});
+					if (menuToolbarViewController != null)
+						menuToolbarViewController.showLiveLabel(false);
+					shown = false;
 				});
-			}
+			});
 		}
-
 	}
 
 	// Settings
@@ -706,8 +711,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	}
 
 	@Override
-	public void performLayoutDependendAction(Runnable runnable) {
-		runnable.run();
+	public void performLayoutDependendAction(MainLayoutHandler runnable) {
+		runnable.handle(null, menuToolbarViewController);
 		layoutActions.add(runnable);
 	}
 }

@@ -69,12 +69,15 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	public void onInit(IMainViewController t) {
 		mainStage = t.getStage();
 
-		t.performLayoutDependendAction(() ->
+		eqMenuItem = new MenuItem();
+		eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
+		eqMenuItem.setOnAction(this);
+
+		t.performLayoutDependendAction((oldToolbar, newToolbar) ->
 		{
-			eqMenuItem = new MenuItem();
-			eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
-			eqMenuItem.setOnAction(this);
-			t.getMenuToolbarController().addMenuItem(eqMenuItem, MenuType.EXTENSION);
+			if (oldToolbar != null)
+				oldToolbar.removeMenuItem(eqMenuItem);
+			newToolbar.addMenuItem(eqMenuItem, MenuType.EXTENSION);
 		});
 	}
 

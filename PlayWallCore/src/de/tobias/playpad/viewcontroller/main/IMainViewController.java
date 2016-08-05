@@ -5,6 +5,7 @@ import java.util.List;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.utils.ui.NotificationHandler;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -56,5 +57,5 @@ public interface IMainViewController extends NotificationHandler {
 
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect);
 
-	public void performLayoutDependendAction(Runnable runnable);
+	public void performLayoutDependendAction(MainLayoutHandler runnable);
 }
