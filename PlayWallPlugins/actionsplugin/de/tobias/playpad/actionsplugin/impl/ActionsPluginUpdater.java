@@ -24,12 +24,12 @@ public class ActionsPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 3;
+		return 4;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "3.0";
+		return "3.1";
 	}
 
 	@Override

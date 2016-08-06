@@ -24,12 +24,12 @@ public class EqualizerPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 4;
+		return 5;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "4.0";
+		return "4.1";
 	}
 
 	@Override
