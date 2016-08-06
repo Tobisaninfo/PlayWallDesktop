@@ -24,12 +24,12 @@ public class AwakePluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 2;
+		return 3;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "2.0";
+		return "2.1";
 	}
 
 	@Override
