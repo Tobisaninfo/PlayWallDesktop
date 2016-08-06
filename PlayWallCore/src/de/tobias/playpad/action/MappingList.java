@@ -91,6 +91,11 @@ public class MappingList extends ArrayList<Mapping> {
 		if (activeMapping != null)
 			rootElement.addAttribute(ACTIVE_ATTR, activeMapping.toString());
 
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+			Files.createFile(path);
+		}
+		
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(MAPPING, this, new MappingSerializer());
 		XMLHandler.save(path, document);
