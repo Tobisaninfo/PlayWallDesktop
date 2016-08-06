@@ -110,6 +110,12 @@ public class TouchPadView implements IPadViewV2 {
 					Node node = previewContent.getNode();
 
 					node.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title");
+
+					// Copy Pseudoclasses
+					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
+						node.pseudoClassStateChanged(pseudoClass, true);
+					}
+
 					preview.getChildren().setAll(node);
 					return;
 				} catch (NoSuchComponentException e) {

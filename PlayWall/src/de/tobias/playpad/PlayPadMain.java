@@ -131,7 +131,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 
 			/*
 			 * Setup
@@ -195,9 +196,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		// Midi
 		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
 
-		// Mapper
-		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
-
 		Profile.registerListener(this);
 
 		try {
@@ -220,6 +218,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 				| NoSuchComponentException e) {
 			e.printStackTrace();
 		}
+
+		// Mapper
+		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 	}
 
 	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {

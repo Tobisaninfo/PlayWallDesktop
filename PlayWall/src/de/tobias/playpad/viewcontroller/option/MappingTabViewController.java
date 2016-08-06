@@ -139,7 +139,9 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 			} else {
 				detailView.getChildren().remove(mapperOverviewViewController.getParent());
 			}
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Tab Utils
@@ -151,7 +153,8 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 	}
 
 	@Override
-	public void saveSettings(Profile profile) {}
+	public void saveSettings(Profile profile) {
+	}
 
 	@Override
 	public boolean needReload() {

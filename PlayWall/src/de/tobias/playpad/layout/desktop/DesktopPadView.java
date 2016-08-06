@@ -3,6 +3,7 @@ package de.tobias.playpad.layout.desktop;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
@@ -131,11 +132,19 @@ public class DesktopPadView implements IPadViewV2 {
 			PadContent content = pad.getContent();
 			if (content != null) {
 				try {
-					PadContentConnect connect = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(content.getType());
+					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+					PadContentConnect connect = registry.getComponent(content.getType());
+
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
 					node.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title");
+
+					// Copy Pseudoclasses
+					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
+						node.pseudoClassStateChanged(pseudoClass, true);
+					}
+
 					preview.getChildren().setAll(node);
 					return;
 				} catch (NoSuchComponentException e) {

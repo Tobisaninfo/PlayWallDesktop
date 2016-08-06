@@ -10,6 +10,7 @@ import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
 
+// COMMENT PadContentConnect
 public abstract class PadContentConnect implements Comparable<PadContentConnect>, Displayable {
 
 	public abstract String getType();

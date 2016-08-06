@@ -182,6 +182,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	}
 
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
+		removePadsFromView();
+		removePadViews();
+
 		this.mainLayout = mainLayoutConnect;
 		initMainLayout();
 	}
@@ -195,9 +198,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			menuToolbarViewController.getVolumeSlider().valueProperty().unbindBidirectional(settings.volumeProperty());
 			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
 		}
-
-		removePadsFromView();
-		removePadViews();
 
 		headerBox.getChildren().clear();
 		MenuToolbarViewController newMenuToolbarViewController = mainLayout.createMenuToolbar(this);
@@ -512,7 +512,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)

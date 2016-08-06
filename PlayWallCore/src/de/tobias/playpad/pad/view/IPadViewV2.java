@@ -60,11 +60,30 @@ public interface IPadViewV2 {
 	 */
 	public void showBusyView(boolean enable);
 
-	// COMMENT IPadViewV2
+	/**
+	 * Aktiviert eine Pseudoclass für die View
+	 * 
+	 * @param playCalss
+	 *            Pseudoclass
+	 * @param b
+	 *            <code>true</code> Aktiv
+	 */
 	public void pseudoClassState(PseudoClass playCalss, boolean b);
 
+	/**
+	 * Setzt den Style für den Root Node der PadView.
+	 * 
+	 * @param string
+	 *            Style
+	 */
 	public void setStyle(String string);
 
+	/**
+	 * Aktiviert des Error Labels, damit es angezeigt wird.
+	 * 
+	 * @param b
+	 *            <code>true</code> Sichtbar
+	 */
 	public void setErrorLabelActive(boolean b);
 
 	/**
