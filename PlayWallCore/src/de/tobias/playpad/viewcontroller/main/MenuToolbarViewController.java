@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.main;
 import java.util.ResourceBundle;
 
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.Node;
@@ -169,4 +170,11 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 * @see IMainViewController#showPage(int)
 	 */
 	public abstract void hilightPageButton(int page);
+
+	/**
+	 * Lädt das Keyboard Binding.
+	 * 
+	 * @param keys Einstellungen der Keybinding
+	 */
+	public abstract void loadKeybinding(KeyCollection keys);
 }

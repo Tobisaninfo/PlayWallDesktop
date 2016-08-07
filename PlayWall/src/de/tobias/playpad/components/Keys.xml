@@ -1,0 +1,32 @@
+<Keys>
+	<Windows>
+		<Key id="new_proj" name="main.menuitem.new" key="N" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="open_proj" name="main.menuitem.project" key="O" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="save_proj" name="main.menuitem.save" key="S" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="print_proj" name="main.menuitem.print" key="P" ctrl="true" alt="false" meta="false" shift="false"/>
+		
+		<Key id="dnd" name="main.menuitem.dnd" key="M" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="plugins" name="main.menuitem.plugins"/>
+		<Key id="profile_settings" name="main.menuitem.settings" key="," ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="global_settings" name="main.menuitem.globalsettings" key="," ctrl="true" alt="false" meta="false" shift="true"/>
+
+		<Key id="window_top" name="main.menuitem.onTop"/>
+		<Key id="window_fullscreen" name="main.menuitem.fullScreen" key="F" ctrl="true" alt="false" meta="false" shift="true"/>
+	</Windows>
+	<Mac>
+		<Key id="new_proj" name="main.menuitem.new" key="N" ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="open_proj" name="main.menuitem.project" key="O" ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="save_proj" name="main.menuitem.save" key="S" ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="print_proj" name="main.menuitem.print" key="P" ctrl="false" alt="false" meta="true" shift="false"/>
+		
+		<Key id="dnd" name="main.menuitem.dnd" key="M" ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="plugins" name="main.menuitem.plugins"/>
+		<Key id="profile_settings" name="main.menuitem.settings" key="," ctrl="false" alt="false" meta="true" shift="false"/>
+		<Key id="global_settings" name="main.menuitem.globalsettings" key="," ctrl="false" alt="false" meta="true" shift="true"/>
+
+		<Key id="window_top" name="main.menuitem.onTop"/>
+		<Key id="window_fullscreen" name="main.menuitem.fullScreen" key="F" ctrl="false" alt="false" meta="true" shift="true"/>
+	</Mac>
+</Keys>

@@ -18,10 +18,11 @@ import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
-import de.tobias.playpad.viewcontroller.ISettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
+import de.tobias.playpad.viewcontroller.option.ISettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Worker;
@@ -44,10 +45,13 @@ public class PlayPadImpl implements PlayPad {
 
 	private MainViewControllerV2 mainViewController;
 	private Project currentProject;
+	protected GlobalSettings globalSettings;
 
-	public PlayPadImpl() {
+	public PlayPadImpl(GlobalSettings globalSettings) {
 		pluginManager = PluginManagerFactory.createPluginManager();
 		deletedPlugins = new HashSet<>();
+		
+		this.globalSettings = globalSettings;
 	}
 
 	@Override
@@ -159,6 +163,11 @@ public class PlayPadImpl implements PlayPad {
 
 	public void loadPlugin(URI uri) {
 		pluginManager.addPluginsFrom(uri);
+	}
+
+	@Override
+	public GlobalSettings getGlobalSettings() {
+		return globalSettings;
 	}
 
 	public void openProject(Project project) {

@@ -12,18 +12,18 @@
    <menus>
       <Menu mnemonicParsing="false" text="%main.menu.file">
          <items>
-            <MenuItem mnemonicParsing="false" onAction="#newDocumentHandler" text="%main.menuitem.new">
+            <MenuItem fx:id="newProjectMenuItem" mnemonicParsing="false" onAction="#newDocumentHandler" text="%main.menuitem.new">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
             </MenuItem>
             <Menu fx:id="recentOpenMenu" mnemonicParsing="false" text="%main.menuitem.recentFiles" />
-            <MenuItem mnemonicParsing="false" onAction="#openDocumentHandler" text="%main.menuitem.project">
+            <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openDocumentHandler" text="%main.menuitem.project">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
             </MenuItem>
-            <MenuItem fx:id="saveMenuItem" mnemonicParsing="false" onAction="#saveMenuHandler" text="%main.menuitem.save">
+            <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveMenuHandler" text="%main.menuitem.save">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
@@ -31,7 +31,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="profileMenu" mnemonicParsing="false" onAction="#profileMenuHandler" text="%main.menuitem.profile" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#printMenuHandler" text="%main.menuitem.print">
+            <MenuItem fx:id="printProjectMenuItem" mnemonicParsing="false" onAction="#printMenuHandler" text="%main.menuitem.print">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator></MenuItem>
@@ -50,13 +50,18 @@
                </accelerator>
             </MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#pluginMenuItemHandler" text="%main.menuitem.plugins" />
+            <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler" text="%main.menuitem.plugins" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#settingsHandler" text="%main.menuitem.settings">
                <accelerator>
                   <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                </accelerator>
             </MenuItem>
+                  <MenuItem fx:id="globalSettingsMenuItem" mnemonicParsing="false" onAction="#globalSettingsHandler" text="%main.menuitem.globalsettings">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="%main.menu.view">

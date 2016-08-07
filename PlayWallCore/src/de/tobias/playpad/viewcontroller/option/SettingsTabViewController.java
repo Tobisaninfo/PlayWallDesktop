@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller;
+package de.tobias.playpad.viewcontroller.option;
 
 import java.util.ResourceBundle;
 

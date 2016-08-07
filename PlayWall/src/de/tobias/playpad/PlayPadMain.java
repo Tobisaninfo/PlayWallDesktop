@@ -21,8 +21,7 @@ import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileListener;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.UpdateRegistery;
@@ -73,7 +72,7 @@ import javafx.stage.Stage;
 // FEATURE lnk für Windows mit Dateiparameter
 // FEATURE Backups irgendwann löschen
 
-public class PlayPadMain extends Application implements LocalizationDelegate, ProfileListener {
+public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private static final String iconPath = "icon_small.png";
 	public static Optional<Image> stageIcon = Optional.empty();
@@ -110,7 +109,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 
 	@Override
 	public void init() throws Exception {
-		impl = new PlayPadImpl();
+		App app = ApplicationUtils.getApplication();
+
+		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.yml");
+		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
+
+		impl = new PlayPadImpl(globalSettings);
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 
@@ -118,9 +122,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		setupLocalization();
 
 		// Console
-		if (!ApplicationUtils.getApplication().isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log")));
+		if (!app.isDebug()) {
+			System.setOut(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "out.log")));
+			System.setErr(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "err.log")));
 		}
 	}
 
@@ -131,8 +135,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 
 			/*
 			 * Setup
@@ -167,8 +170,37 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			}
 
 			ViewController.create(LaunchDialog.class, stage);
+
+			// Check Updates
+			checkUpdates(impl.globalSettings);
+
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void checkUpdates(GlobalSettings globalSettings) {
+		if (globalSettings.isAutoUpdate()) {
+			Worker.runLater(() ->
+			{
+				UpdateRegistery.lookupUpdates(globalSettings.getUpdateChannel());
+				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
+					Platform.runLater(() ->
+					{
+						Alert alert = new Alert(AlertType.CONFIRMATION);
+						alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
+						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
+						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
+						{
+							try {
+								Updates.startUpdate();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						});
+					});
+				}
+			});
 		}
 	}
 
@@ -177,6 +209,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		try {
 			ProfileReference.saveProfiles();
 			ProjectReference.saveProjects();
+			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler
 		}
@@ -195,8 +228,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 	private void registerComponents() {
 		// Midi
 		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
-
-		Profile.registerListener(this);
 
 		try {
 			// Load Components
@@ -219,6 +250,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 			e.printStackTrace();
 		}
 
+		// Key Bindings
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
+
 		// Mapper
 		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 	}
@@ -236,36 +271,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate, Pr
 		Localization.load();
 
 		uiResourceBundle = Localization.loadBundle("de/tobias/playpad/assets/lang/ui", getClass().getClassLoader());
-	}
-
-	/**
-	 * Handle Auto Update on profile reload
-	 */
-	@Override
-	public void reloadSettings(Profile oldProfile, Profile newProfile) {
-		// Update PlayWall
-		if (newProfile.getProfileSettings().isAutoUpdate()) {
-			Worker.runLater(() ->
-			{
-				UpdateRegistery.lookupUpdates(newProfile.getProfileSettings().getUpdateChannel());
-				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
-					Platform.runLater(() ->
-					{
-						Alert alert = new Alert(AlertType.CONFIRMATION);
-						alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
-						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
-						{
-							try {
-								Updates.startUpdate();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						});
-					});
-				}
-			});
-		}
 	}
 
 	@Override

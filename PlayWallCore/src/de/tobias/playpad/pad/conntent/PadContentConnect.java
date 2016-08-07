@@ -6,7 +6,7 @@ import de.tobias.playpad.Displayable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.SettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
 

@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller;
+package de.tobias.playpad.viewcontroller.option;
 
 /**
  * Schnittstelle um die ProfileSettingsView zu ändern.
@@ -12,9 +12,9 @@ public interface ISettingsViewController {
 	/**
 	 * Fügt en Tab hinzu.
 	 * 
-	 * @param videoSettingsTabViewController
+	 * @param profileSettingsTabViewController
 	 *            tab
 	 */
-	public void addTab(SettingsTabViewController videoSettingsTabViewController);
+	public void addTab(SettingsTabViewController profileSettingsTabViewController);
 
 }

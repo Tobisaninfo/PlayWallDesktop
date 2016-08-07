@@ -17,12 +17,13 @@ import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
@@ -31,7 +32,10 @@ import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.SettingsViewController;
+import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
@@ -65,14 +69,21 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	// meuBar
 	@FXML protected MenuBar menuBar;
 
-	@FXML protected MenuItem saveMenuItem;
+	@FXML protected MenuItem newProjectMenuItem;
+	@FXML protected MenuItem openProjectMenuItem;
+	@FXML protected MenuItem saveProjectMenuItem;
 	@FXML protected MenuItem profileMenu;
+	@FXML protected MenuItem printProjectMenuItem;
 
-	@FXML protected MenuItem errorMenu;
-	@FXML protected MenuItem settingsMenuItem;
 	@FXML protected CheckMenuItem dndModeMenuItem;
+	@FXML protected MenuItem errorMenu;
+	@FXML protected MenuItem pluginMenu;
+	@FXML protected MenuItem settingsMenuItem;
+	@FXML protected MenuItem globalSettingsMenuItem;
+
 	@FXML protected CheckMenuItem fullScreenMenuItem;
 	@FXML protected CheckMenuItem alwaysOnTopItem;
+
 	@FXML protected Menu layoutMenu;
 
 	@FXML protected Menu extensionMenu;
@@ -81,6 +92,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	private IMainViewController mainViewController;
 	private SettingsViewController settingsViewController;
+	private GlobalSettingsViewController globalSettingsViewController;
 
 	public DesktopMenuToolbarViewController(IMainViewController controller) {
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle(), controller);
@@ -149,6 +161,23 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			button.setOnAction(this);
 			pageHBox.getChildren().add(button);
 		}
+	}
+
+	@Override
+	public void loadKeybinding(KeyCollection keys) {
+		newProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("new_proj").getKeyCode()));
+		openProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("open_proj").getKeyCode()));
+		saveProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("save_proj").getKeyCode()));
+		printProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("print_proj").getKeyCode()));
+
+		dndModeMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("dnd").getKeyCode()));
+		errorMenu.setAccelerator(KeyCombination.valueOf(keys.getKey("errors").getKeyCode()));
+		pluginMenu.setAccelerator(KeyCombination.valueOf(keys.getKey("plugins").getKeyCode()));
+		settingsMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("profile_settings").getKeyCode()));
+		globalSettingsMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("global_settings").getKeyCode()));
+
+		fullScreenMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_fullscreen").getKeyCode()));
+		alwaysOnTopItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_top").getKeyCode()));
 	}
 
 	@Override
@@ -246,7 +275,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	// EventHandler
-	// Basic Event Handler
 	@FXML
 	void newDocumentHandler(ActionEvent event) {
 		doAction(() ->
@@ -385,7 +413,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (settingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
-			settingsViewController = new SettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject, () ->
+			Runnable onFinish = () ->
 			{
 				midi.setListener(mainViewController.getMidiHandler());
 
@@ -403,13 +431,41 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				settingsViewController = null;
 				mainStage.toFront();
-			});
+			};
+
+			settingsViewController = new SettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject, onFinish);
 
 			settingsViewController.getStage().show();
 		} else if (settingsViewController.getStage().isShowing()) {
 			settingsViewController.getStage().toFront();
 		}
+	}
 
+	@FXML
+	void globalSettingsHandler(ActionEvent event) {
+		if (globalSettingsViewController == null) {
+
+			Stage mainStage = mainViewController.getStage();
+			Runnable onFinish = () ->
+			{
+				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+
+				for (GlobalSettingsTabViewController controller : globalSettingsViewController.getTabs()) {
+					if (controller.needReload()) {
+						controller.reload(globalSettings, currentProject, mainViewController);
+					}
+				}
+
+				globalSettingsViewController = null;
+				mainStage.toFront();
+			};
+
+			globalSettingsViewController = new GlobalSettingsViewController(mainStage, onFinish);
+			globalSettingsViewController.getStage().show();
+		} else {
+			globalSettingsViewController.getStage().toFront();
+		}
 	}
 
 	@FXML

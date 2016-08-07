@@ -21,6 +21,7 @@ public class Strings {
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
+	public static final String UI_Window_GlobalSettings_Title = "UI.Window.GlobalSettings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
@@ -167,6 +168,10 @@ public class Strings {
 	// Info - Mapper
 	public static final String Info_Mapper_PressKey = "Info.Mapper.PressKey";
 
+	// UI - Settings - Aler
+	
+	public static final String UI_Settings_Alert_NewKeyShortcut_Text = "UI.Settings.Alert.NewKeyShortcut.Text";
+	
 	// UI - Window - PadSettings
 	public static final String UI_Window_PadSettings_General_Title = "UI.Window.PadSettings.General.Title";
 	public static final String UI_Window_PadSettings_Player_Title = "UI.Window.PadSettings.Player.Title";

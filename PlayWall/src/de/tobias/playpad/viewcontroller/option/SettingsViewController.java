@@ -12,8 +12,6 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.ISettingsViewController;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -63,8 +61,6 @@ public class SettingsViewController extends ViewController implements ISettingsV
 				e.printStackTrace();
 			}
 		}
-
-		addTab(new UpdateTabViewController());
 
 		getStage().initOwner(owner);
 
@@ -159,7 +155,8 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		}
 
 		saveTabs();
-		onFinish.run(); // Reload MainViewController Settings
+		if (onFinish != null)
+			onFinish.run(); // Reload MainViewController Settings
 		return true;
 	}
 
@@ -173,6 +170,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		tabPane.setDisable(isLocked);
 	}
 
+	@Override
 	public void addTab(SettingsTabViewController controller) {
 		tabs.add(controller);
 		tabPane.getTabs().add(new Tab(controller.name(), controller.getParent()));

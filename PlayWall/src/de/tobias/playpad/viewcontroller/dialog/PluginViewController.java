@@ -8,9 +8,11 @@ import org.bukkit.configuration.MemorySection;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.plugin.Plugin;
 import de.tobias.playpad.plugin.Plugins;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.playpad.viewcontroller.cell.PluginCell;
@@ -44,9 +46,10 @@ public class PluginViewController extends ViewController {
 			try {
 				String pluginInfoURL = null;
 
-				MemorySection userInfo = ApplicationUtils.getApplication().getInfo().getUserInfo();
-				UpdateChannel updateChannel = Profile.currentProfile().getProfileSettings().getUpdateChannel();
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				UpdateChannel updateChannel = globalSettings.getUpdateChannel();
 
+				MemorySection userInfo = ApplicationUtils.getApplication().getInfo().getUserInfo();
 				if (updateChannel == UpdateChannel.STABLE) {
 					pluginInfoURL = userInfo.getString(AppUserInfoStrings.PLUGINS_URL_STABLE);
 				} else if (updateChannel == UpdateChannel.BETA) {

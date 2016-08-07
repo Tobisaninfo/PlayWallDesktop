@@ -5,10 +5,12 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +20,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
 
@@ -38,8 +39,14 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
 		showLiveInfo(false);
+		
+		// Schriftgröße Icons
+		FontIcon icon = (FontIcon) volumeDownLabel.getGraphic();
+		icon.setSize(35);
+		icon = (FontIcon) volumeUpLabel.getGraphic();
+		icon.setSize(35);
 	}
-
+	
 	@Override
 	public void initPageButtons() {
 		pageHBox.getChildren().clear();
@@ -56,9 +63,12 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void setLocked(boolean looked) {
-
+	public void loadKeybinding(KeyCollection keys) {
+		
 	}
+	
+	@Override
+	public void setLocked(boolean looked) {}
 
 	@Override
 	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {

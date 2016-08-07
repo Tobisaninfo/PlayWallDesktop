@@ -23,9 +23,11 @@ import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
@@ -193,7 +195,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
 
 		if (menuToolbarViewController != null) {
-			menuToolbarViewController.deinit();
+			// menuToolbarViewController.deinit();
 
 			menuToolbarViewController.getVolumeSlider().valueProperty().unbindBidirectional(settings.volumeProperty());
 			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
@@ -214,6 +216,10 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
+
+		// Keyboard Shortcuts
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
 
 		createPadViews();
 		showPage(currentPageShowing);
@@ -512,8 +518,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)
@@ -584,6 +589,13 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		loadUserCss();
 		if (old != null && currentProfile != null) {
 			showPage(currentPageShowing);
+		}
+	}
+
+	@Override
+	public void loadKeybinding(KeyCollection keys) {
+		if (menuToolbarViewController != null) {
+			menuToolbarViewController.loadKeybinding(keys);
 		}
 	}
 

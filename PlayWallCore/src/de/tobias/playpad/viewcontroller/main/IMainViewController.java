@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.utils.ui.NotificationHandler;
@@ -147,4 +148,12 @@ public interface IMainViewController extends NotificationHandler {
 	 *            Funktion
 	 */
 	public void performLayoutDependendAction(MainLayoutHandler runnable);
+
+	/**
+	 * Lädt die Tastenkombinationen für das Menü und co neu.
+	 * 
+	 * @param keys
+	 *            Einstellungen der Key Bindings
+	 */
+	public void loadKeybinding(KeyCollection keys);
 }

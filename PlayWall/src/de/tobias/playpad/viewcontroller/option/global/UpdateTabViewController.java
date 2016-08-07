@@ -1,19 +1,20 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.global;
 
 import java.io.IOException;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.update.UpdateChannel;
 import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.update.Updates;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
 import de.tobias.playpad.viewcontroller.dialog.UpdaterDialog;
+import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.Localization;
@@ -29,7 +30,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.ImageView;
 
-public class UpdateTabViewController extends SettingsTabViewController {
+public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML private Label currentVersionLabel;
 
@@ -49,10 +50,11 @@ public class UpdateTabViewController extends SettingsTabViewController {
 	private Label placeholderLabel;
 
 	public UpdateTabViewController() {
-		super("updateTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
+		super("updateTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
 
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-		updateChannelComboBox.setValue(profileSettings.getUpdateChannel());
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+
+		updateChannelComboBox.setValue(globalSettings.getUpdateChannel());
 		openUpdateList.getItems().setAll(UpdateRegistery.getAvailableUpdates());
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
 
@@ -71,7 +73,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 
 		updateChannelComboBox.valueProperty().addListener((a, b, c) ->
 		{
-			Profile.currentProfile().getProfileSettings().setUpdateChannel(c);
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			globalSettings.setUpdateChannel(c);
 		});
 
 		infoCLabel.setGraphic(new ImageView("de/tobias/playpad/assets/files/class_obj.png"));
@@ -98,7 +101,8 @@ public class UpdateTabViewController extends SettingsTabViewController {
 			Worker.runLater(() ->
 			{
 				// Search for updates
-				UpdateRegistery.lookupUpdates(profile.getProfileSettings().getUpdateChannel());
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				UpdateRegistery.lookupUpdates(globalSettings.getUpdateChannel());
 
 				Platform.runLater(() ->
 				{
@@ -128,13 +132,13 @@ public class UpdateTabViewController extends SettingsTabViewController {
 
 	// Settings Tab Methods
 	@Override
-	public void loadSettings(Profile profile) {
-		automaticSearchCheckBox.setSelected(profile.getProfileSettings().isAutoUpdate());
+	public void loadSettings(GlobalSettings profile) {
+		automaticSearchCheckBox.setSelected(profile.isAutoUpdate());
 	}
 
 	@Override
-	public void saveSettings(Profile profile) {
-		profile.getProfileSettings().setAutoUpdate(automaticSearchCheckBox.isSelected());
+	public void saveSettings(GlobalSettings profile) {
+		profile.setAutoUpdate(automaticSearchCheckBox.isSelected());
 	}
 
 	@Override
