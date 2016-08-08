@@ -165,19 +165,19 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void loadKeybinding(KeyCollection keys) {
-		newProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("new_proj").getKeyCode()));
-		openProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("open_proj").getKeyCode()));
-		saveProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("save_proj").getKeyCode()));
-		printProjectMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("print_proj").getKeyCode()));
+		setKeyBindinfForMenu(newProjectMenuItem, keys.getKey("new_proj"));
+		setKeyBindinfForMenu(openProjectMenuItem, keys.getKey("open_proj"));
+		setKeyBindinfForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
+		setKeyBindinfForMenu(printProjectMenuItem, keys.getKey("print_proj"));
 
-		dndModeMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("dnd").getKeyCode()));
-		errorMenu.setAccelerator(KeyCombination.valueOf(keys.getKey("errors").getKeyCode()));
-		pluginMenu.setAccelerator(KeyCombination.valueOf(keys.getKey("plugins").getKeyCode()));
-		settingsMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("profile_settings").getKeyCode()));
-		globalSettingsMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("global_settings").getKeyCode()));
+		setKeyBindinfForMenu(dndModeMenuItem, keys.getKey("dnd"));
+		setKeyBindinfForMenu(errorMenu, keys.getKey("errors"));
+		setKeyBindinfForMenu(pluginMenu, keys.getKey("plugins"));
+		setKeyBindinfForMenu(settingsMenuItem, keys.getKey("profile_settings"));
+		setKeyBindinfForMenu(globalSettingsMenuItem, keys.getKey("global_settings"));
 
-		fullScreenMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_fullscreen").getKeyCode()));
-		alwaysOnTopItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_top").getKeyCode()));
+		setKeyBindinfForMenu(fullScreenMenuItem, keys.getKey("window_fullscreen"));
+		setKeyBindinfForMenu(alwaysOnTopItem, keys.getKey("window_top"));
 
 		newProjectMenuItem.setDisable(false);
 		openProjectMenuItem.setDisable(false);

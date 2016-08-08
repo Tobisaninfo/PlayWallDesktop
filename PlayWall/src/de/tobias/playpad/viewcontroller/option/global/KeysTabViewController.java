@@ -93,6 +93,10 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 
 		scene.setOnKeyPressed(ev ->
 		{
+			if (ev.getCode().isModifierKey()) {
+				return;
+			}
+			
 			boolean macCondition = ev.getCode().isLetterKey() || ev.getCode().isKeypadKey() || ev.getCode().isDigitKey()
 					|| ev.getCode().isFunctionKey() || ev.getCode() == KeyCode.PERIOD || ev.getCode() == KeyCode.COMMA;
 

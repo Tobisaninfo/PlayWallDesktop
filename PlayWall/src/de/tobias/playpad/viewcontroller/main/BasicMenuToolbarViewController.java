@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.keys.Key;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
@@ -12,8 +13,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.ToolBar;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 
 public abstract class BasicMenuToolbarViewController extends MenuToolbarViewController implements EventHandler<ActionEvent> {
@@ -56,6 +59,17 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			mainViewController.showLiveInfo();
 		} else {
 			run.run();
+		}
+	}
+
+	protected void setKeyBindinfForMenu(MenuItem menuItem, Key key) {
+		if (key != null) {
+			if (!key.getKeyCode().isEmpty()) {
+				KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
+				if (keyCode != null) {
+					menuItem.setAccelerator(keyCode);
+				}
+			}
 		}
 	}
 }
