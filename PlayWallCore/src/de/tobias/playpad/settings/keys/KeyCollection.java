@@ -46,7 +46,7 @@ public class KeyCollection {
 
 	public boolean keysConflict(Key key) {
 		for (Key k : keys.values()) {
-			if (k.getKeyCode().equals(key)) {
+			if (k.getKeyCode().equals(key.getKeyCode())) {
 				return true;
 			}
 		}
@@ -92,9 +92,7 @@ public class KeyCollection {
 
 						String name = loadName(keyElement, bundle);
 						Key key = keySerializer.loadElement(keyElement);
-						
-						System.out.println(key);
-						
+
 						names.put(key.getId(), name);
 						register(key);
 					}
@@ -111,5 +109,15 @@ public class KeyCollection {
 			return bundle.getString(name);
 		}
 		return null;
+	}
+
+	public void editKey(Key newKey) {
+		Key savedKey = getKey(newKey.getId());
+
+		savedKey.setAlt(newKey.isAlt());
+		savedKey.setCtrl(newKey.isCtrl());
+		savedKey.setMeta(newKey.isMeta());
+		savedKey.setShift(newKey.isShift());
+		savedKey.setKey(newKey.getKey());
 	}
 }

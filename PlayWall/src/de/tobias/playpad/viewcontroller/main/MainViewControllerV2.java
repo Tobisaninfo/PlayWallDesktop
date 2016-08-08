@@ -195,7 +195,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
 
 		if (menuToolbarViewController != null) {
-			// menuToolbarViewController.deinit();
+			menuToolbarViewController.deinit();
 
 			menuToolbarViewController.getVolumeSlider().valueProperty().unbindBidirectional(settings.volumeProperty());
 			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
@@ -220,6 +220,10 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		// Keyboard Shortcuts
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
+
+		// Update Locked Listener
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+		lockedListener.changed(profileSettings.lockedProperty(), !profileSettings.isLocked(), profileSettings.isLocked());
 
 		createPadViews();
 		showPage(currentPageShowing);

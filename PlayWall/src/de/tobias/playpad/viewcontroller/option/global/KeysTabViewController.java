@@ -12,18 +12,21 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class KeysTabViewController extends GlobalSettingsTabViewController {
@@ -39,6 +42,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 	@FXML private Button newShortcutButton;
 
 	private Key currentKey;
+	private ObservableList<Key> keys = FXCollections.observableArrayList();
 
 	public KeysTabViewController() {
 		super("keysTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
@@ -60,6 +64,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 		{
 			setDetailView(c);
 		});
+		searchTextField.textProperty().addListener((a, b, c) -> search());
 	}
 
 	private void setDetailView(Key key) {
@@ -93,16 +98,19 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 
 			if (OS.isWindows() || macCondition) {
 				String key = ev.getCode().getName();
-				currentKey.setKey(key);
 
-				currentKey.setAlt(ev.isAltDown());
-				currentKey.setMeta(ev.isMetaDown());
-				currentKey.setCtrl(ev.isControlDown());
-				currentKey.setShift(ev.isShiftDown());
+				Key newKey = new Key(currentKey.getId(), key, ev.isControlDown(), ev.isAltDown(), ev.isMetaDown(), ev.isShiftDown());
 
-				shortcutLabel.setText(currentKey.toString());
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				boolean conflict = globalSettings.getKeyCollection().keysConflict(newKey);
+				if (!conflict) {
+					globalSettings.getKeyCollection().editKey(newKey);
 
-				Platform.runLater(() -> ((Stage) scene.getWindow()).close());
+					shortcutLabel.setText(currentKey.toString());
+					Platform.runLater(() -> ((Stage) scene.getWindow()).close());
+				} else {
+					showErrorMessage("Konflikt"); // TODO Localize
+				}
 			}
 		});
 
@@ -113,7 +121,8 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public void loadSettings(GlobalSettings settings) {
-		table.getItems().setAll(settings.getKeyCollection().getKeys());
+		keys.setAll(settings.getKeyCollection().getKeys());
+		table.setItems(keys);
 	}
 
 	@Override
@@ -125,7 +134,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 	public boolean needReload() {
 		return true;
 	}
-	
+
 	@Override
 	public void reload(GlobalSettings settings, Project project, IMainViewController controller) {
 		controller.loadKeybinding(settings.getKeyCollection());
@@ -142,4 +151,15 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 		return "Keyboard (I18N)";
 	}
 
+	private void search() {
+		FilteredList<Key> filteredData = new FilteredList<>(keys, s -> true);
+		String search = searchTextField.getText();
+		if (search == null || search.length() == 0) {
+			filteredData.setPredicate(s -> true);
+		} else {
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			filteredData.setPredicate(s -> globalSettings.getKeyCollection().getName(s.getId()).toLowerCase().startsWith(search.toLowerCase()));
+		}
+		table.setItems(filteredData);
+	}
 }

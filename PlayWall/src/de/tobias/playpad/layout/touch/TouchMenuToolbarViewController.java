@@ -39,14 +39,14 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
 		showLiveInfo(false);
-		
+
 		// Schriftgröße Icons
 		FontIcon icon = (FontIcon) volumeDownLabel.getGraphic();
 		icon.setSize(35);
 		icon = (FontIcon) volumeUpLabel.getGraphic();
 		icon.setSize(35);
 	}
-	
+
 	@Override
 	public void initPageButtons() {
 		pageHBox.getChildren().clear();
@@ -64,9 +64,9 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 	@Override
 	public void loadKeybinding(KeyCollection keys) {
-		
+
 	}
-	
+
 	@Override
 	public void setLocked(boolean looked) {}
 
@@ -107,10 +107,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void deinit() {
-		toolbarHBox.prefWidthProperty().unbind();
-		toolbarHBox.prefHeightProperty().unbind();
-	}
+	public void deinit() {}
 
 	@Override
 	public void showLiveInfo(boolean show) {

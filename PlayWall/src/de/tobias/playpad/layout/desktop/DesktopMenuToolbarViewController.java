@@ -178,6 +178,20 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		fullScreenMenuItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_fullscreen").getKeyCode()));
 		alwaysOnTopItem.setAccelerator(KeyCombination.valueOf(keys.getKey("window_top").getKeyCode()));
+
+		newProjectMenuItem.setDisable(false);
+		openProjectMenuItem.setDisable(false);
+		saveProjectMenuItem.setDisable(false);
+		printProjectMenuItem.setDisable(false);
+
+		dndModeMenuItem.setDisable(false);
+		errorMenu.setDisable(false);
+		pluginMenu.setDisable(false);
+		settingsMenuItem.setDisable(false);
+		globalSettingsMenuItem.setDisable(false);
+
+		fullScreenMenuItem.setDisable(false);
+		alwaysOnTopItem.setDisable(false);
 	}
 
 	@Override
@@ -234,8 +248,19 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void deinit() {
-		toolbarHBox.prefWidthProperty().unbind();
-		toolbarHBox.prefHeightProperty().unbind();
+		newProjectMenuItem.setDisable(true);
+		openProjectMenuItem.setDisable(true);
+		saveProjectMenuItem.setDisable(true);
+		printProjectMenuItem.setDisable(true);
+
+		dndModeMenuItem.setDisable(true);
+		errorMenu.setDisable(true);
+		pluginMenu.setDisable(true);
+		settingsMenuItem.setDisable(true);
+		globalSettingsMenuItem.setDisable(true);
+
+		fullScreenMenuItem.setDisable(true);
+		alwaysOnTopItem.setDisable(true);
 
 		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
 		if (dndModeMenuItem.isSelected()) {
