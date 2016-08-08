@@ -93,7 +93,7 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 		Platform.runLater(() ->
 		{
 			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(false);
+				getContent().getPad().getController().getView().showBusyView(true);
 			}
 		});
 

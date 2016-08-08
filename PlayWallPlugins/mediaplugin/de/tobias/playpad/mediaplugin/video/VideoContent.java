@@ -154,7 +154,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			Platform.runLater(() ->
 			{
 				if (getPad().isPadVisible()) {
-					getPad().getController().getView().showBusyView(false);
+					getPad().getController().getView().showBusyView(true);
 				}
 			});
 			media = new Media(path.toUri().toString());
