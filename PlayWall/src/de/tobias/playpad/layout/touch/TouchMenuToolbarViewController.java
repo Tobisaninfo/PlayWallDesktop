@@ -4,7 +4,6 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
@@ -51,9 +50,11 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	public void initPageButtons() {
 		pageHBox.getChildren().clear();
 
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		if (openProject == null) {
+			return;
+		}
 
-		for (int i = 0; i < settings.getPageCount(); i++) {
+		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
 			button.setFocusTraversable(false);

@@ -8,7 +8,7 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.SettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.beans.property.SimpleStringProperty;
@@ -49,7 +49,7 @@ public class VideoContentConntect extends PadContentConnect {
 	}
 
 	@Override
-	public SettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
+	public ProfileSettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
 		MediaPluginImpl instance = MediaPluginImpl.getInstance();
 		return new MediaSettingsTabViewController(instance.getCurrentSettings());
 	}

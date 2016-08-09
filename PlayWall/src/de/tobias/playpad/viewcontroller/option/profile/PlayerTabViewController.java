@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
@@ -8,6 +8,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import de.tobias.utils.util.Localization;
@@ -15,7 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
-public class PlayerTabViewController extends SettingsTabViewController {
+public class PlayerTabViewController extends ProfileSettingsTabViewController {
 
 	// Player
 	@FXML private VBox warningFeedbackContainer;
@@ -23,7 +24,7 @@ public class PlayerTabViewController extends SettingsTabViewController {
 	@FXML private ComboBox<TimeMode> timeDisplayComboBox;
 
 	public PlayerTabViewController() {
-		super("playerTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
+		super("playerTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();

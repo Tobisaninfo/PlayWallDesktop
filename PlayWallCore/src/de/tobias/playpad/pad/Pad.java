@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
-import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
-import de.tobias.playpad.pad.triggerlistener.PadTriggerDurationListener;
-import de.tobias.playpad.pad.triggerlistener.PadTriggerStatusListener;
+import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
+import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
+import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;

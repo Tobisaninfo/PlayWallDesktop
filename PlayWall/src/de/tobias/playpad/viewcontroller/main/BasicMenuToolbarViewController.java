@@ -32,6 +32,8 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	@FXML protected Slider volumeSlider;
 	@FXML protected Label volumeDownLabel;
 
+	protected Project openProject; // REFERENCE zu MainViewController
+
 	// window references
 	private IMainViewController mainViewController;
 
@@ -71,5 +73,10 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 				}
 			}
 		}
+	}
+
+	@Override
+	public void setOpenProject(Project project) {
+		this.openProject = project;
 	}
 }

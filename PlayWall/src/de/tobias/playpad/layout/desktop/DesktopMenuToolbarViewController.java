@@ -40,9 +40,9 @@ import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.SettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.SettingsViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
+import de.tobias.playpad.viewcontroller.option.profile.SettingsViewController;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
@@ -170,12 +170,21 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@Override
+	public void setOpenProject(Project project) {
+		super.setOpenProject(project);
+		if (project != null)
+			createRecentDocumentMenuItems();
+	}
+
+	@Override
 	public void initPageButtons() {
 		pageHBox.getChildren().clear();
 
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		if (openProject == null) {
+			return;
+		}
 
-		for (int i = 0; i < settings.getPageCount(); i++) {
+		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
 			button.setFocusTraversable(false);
@@ -467,7 +476,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				midi.setListener(mainViewController.getMidiHandler());
 
 				boolean change = false;
-				for (SettingsTabViewController controller : settingsViewController.getTabs()) {
+				for (ProfileSettingsTabViewController controller : settingsViewController.getTabs()) {
 					if (controller.needReload()) {
 						change = true;
 						controller.reload(Profile.currentProfile(), currentProject, mainViewController);
@@ -599,8 +608,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void createRecentDocumentMenuItems() {
 		recentOpenMenu.getItems().clear();
 
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		String project = currentProject.getRef().getName();
+		String project = openProject.getRef().getName();
 
 		ProjectReference.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
 		{

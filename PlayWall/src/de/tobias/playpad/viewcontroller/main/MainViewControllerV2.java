@@ -21,6 +21,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -386,6 +387,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		keyboardHandler.setProject(project);
 		PadDragListener.setProject(project);
 
+		menuToolbarViewController.setOpenProject(openProject);
+
+		createPadViews();
 		showPage(FIRST_PAGE);
 		loadUserCss();
 		updateWindowTitle();
@@ -394,20 +398,23 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	// Pad, Pages
 	@Override
 	public void createPadViews() {
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+		if (openProject == null) {
+			return;
+		}
+		ProjectSettings projectSettings = openProject.getSettings();
 
 		// Table
 		padGridPane.getColumnConstraints().clear();
-		double xPercentage = 1.0 / (double) profileSettings.getColumns();
-		for (int i = 0; i < profileSettings.getColumns(); i++) {
+		double xPercentage = 1.0 / (double) projectSettings.getColumns();
+		for (int i = 0; i < projectSettings.getColumns(); i++) {
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);
 			padGridPane.getColumnConstraints().add(c);
 		}
 
 		padGridPane.getRowConstraints().clear();
-		double yPercentage = 1.0 / (double) profileSettings.getRows();
-		for (int i = 0; i < profileSettings.getRows(); i++) {
+		double yPercentage = 1.0 / (double) projectSettings.getRows();
+		for (int i = 0; i < projectSettings.getRows(); i++) {
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);
 			padGridPane.getRowConstraints().add(c);
@@ -418,8 +425,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			removePadViews();
 
 		// Neue PadViews
-		for (int y = 0; y < profileSettings.getRows(); y++) {
-			for (int x = 0; x < profileSettings.getColumns(); x++) {
+		for (int y = 0; y < projectSettings.getRows(); y++) {
+			for (int x = 0; x < projectSettings.getColumns(); x++) {
 				IPadViewV2 padView = mainLayout.createPadView();
 				padGridPane.add(padView.getRootNode(), x, y);
 				padViews.add(padView);
@@ -428,8 +435,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		// Min Size of window
 		GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
-		double minWidth = currentLayout.getMinWidth(profileSettings.getColumns());
-		double minHeight = currentLayout.getMinHeight(profileSettings.getRows());
+		double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
+		double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
 
 		getStage().setMinWidth(minWidth);
 		if (OS.getType() == OSType.MacOSX) {
@@ -454,7 +461,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	 * Zeigt die aktuellen Pads von einem Profil zu einer Seite in den entsprechenden Views an.
 	 */
 	private void addPadsToView() {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		ProjectSettings settings = openProject.getSettings();
 
 		int index = currentPageShowing * settings.getRows() * settings.getColumns();
 		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
@@ -480,20 +487,19 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public boolean showPage(int page) {
-		Profile profile = Profile.currentProfile();
-		if (page < 0 || page >= profile.getProfileSettings().getPageCount()) {
+		if (openProject == null) {
+			return false;
+		}
+		ProjectSettings projectSettings = openProject.getSettings();
+
+		if (page < 0 || page >= projectSettings.getPageCount()) {
 			return false;
 		}
 
 		// Clean
 		removePadsFromView();
-
 		this.currentPageShowing = page;
-
-		if (openProject != null) {
-			// New
-			addPadsToView();
-		}
+		addPadsToView();
 
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.highlightPageButton(page);

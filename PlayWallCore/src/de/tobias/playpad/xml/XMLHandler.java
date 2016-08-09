@@ -119,4 +119,13 @@ public class XMLHandler<T> {
 			throw new FileNotFoundException(path.toString());
 		}
 	}
+
+	/**
+	 * Gibt das RootElement zurück.
+	 * 
+	 * @return Root Element
+	 */
+	public Element getRootElement() {
+		return rootElement;
+	}
 }

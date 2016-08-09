@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -11,19 +11,20 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
-public class DesignTabViewController extends SettingsTabViewController {
+public class DesignTabViewController extends ProfileSettingsTabViewController {
 
 	@FXML private VBox layoutContainer;
 	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
 	private GlobalDesignViewController globalLayoutViewController;
 
 	public DesignTabViewController() {
-		super("layoutTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
+		super("layoutTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
 
 		String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 		try {

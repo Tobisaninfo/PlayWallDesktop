@@ -10,8 +10,8 @@ import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.PageAction;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -50,9 +50,7 @@ public class PageActionConnect extends ActionConnect implements ActionDisplayabl
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		ProfileSettings profileSettings = profile.getProfileSettings();
-		int pages = profileSettings.getPageCount();
-		for (int i = 0; i < pages; i++) {
+		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
 			PageAction action = new PageAction(i);
 			mapping.addActionIfNotContains(action);
 		}

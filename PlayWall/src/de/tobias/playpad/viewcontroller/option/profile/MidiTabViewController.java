@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.profile;
 
 import javax.sound.midi.MidiDevice.Info;
 import javax.sound.midi.MidiUnavailableException;
@@ -10,6 +10,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 
-public class MidiTabViewController extends SettingsTabViewController {
+public class MidiTabViewController extends ProfileSettingsTabViewController {
 
 	@FXML private AnchorPane rootPane;
 
@@ -25,7 +26,7 @@ public class MidiTabViewController extends SettingsTabViewController {
 	@FXML private ComboBox<String> deviceComboBox;
 
 	public MidiTabViewController() {
-		super("midiTab", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
+		super("midiTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
 
 		Info[] data = Midi.getMidiDevices();
 		// Gerät anzeigen - Doppelte weg

@@ -7,7 +7,7 @@ package de.tobias.playpad.viewcontroller.option;
  *
  * @since 5.0.0
  */
-public interface ISettingsViewController {
+public interface IProfileSettingsViewController {
 
 	/**
 	 * Fügt en Tab hinzu.
@@ -15,6 +15,6 @@ public interface ISettingsViewController {
 	 * @param profileSettingsTabViewController
 	 *            tab
 	 */
-	public void addTab(SettingsTabViewController profileSettingsTabViewController);
+	public void addTab(ProfileSettingsTabViewController profileSettingsTabViewController);
 
 }

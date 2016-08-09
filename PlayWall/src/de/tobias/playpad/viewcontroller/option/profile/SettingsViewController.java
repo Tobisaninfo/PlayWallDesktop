@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,8 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -26,23 +28,23 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class SettingsViewController extends ViewController implements ISettingsViewController {
+public class SettingsViewController extends ViewController implements IProfileSettingsViewController {
 
 	@FXML private TabPane tabPane;
 	@FXML private ToggleButton lockedButton;
 	@FXML private Button finishButton;
 
-	protected List<SettingsTabViewController> tabs = new ArrayList<>();
+	protected List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Runnable onFinish;
 
 	public SettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		super("settingsView", "de/tobias/playpad/assets/view/option/", null, PlayPadMain.getUiResourceBundle());
+		super("settingsView", "de/tobias/playpad/assets/view/option/profile/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasPlayedPlayers();
 
-		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
+		addTab(new GeneralTabViewController(this));
 		addTab(new MappingTabViewController());
 		addTab(new MidiTabViewController());
 		addTab(new DesignTabViewController());
@@ -52,7 +54,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 		for (String type : PlayPadPlugin.getRegistryCollection().getPadContents().getTypes()) {
 			try {
 				PadContentConnect component = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(type);
-				SettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
+				ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
 				if (controller != null) {
 					addTab(controller);
 				}
@@ -109,7 +111,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 	 */
 	private void loadTabs() {
 		Profile profile = Profile.currentProfile();
-		for (SettingsTabViewController controller : tabs) {
+		for (ProfileSettingsTabViewController controller : tabs) {
 			controller.loadSettings(profile);
 		}
 	}
@@ -119,7 +121,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 	 */
 	private void saveTabs() {
 		Profile profile = Profile.currentProfile();
-		for (SettingsTabViewController controller : tabs) {
+		for (ProfileSettingsTabViewController controller : tabs) {
 			controller.saveSettings(profile);
 		}
 
@@ -148,7 +150,7 @@ public class SettingsViewController extends ViewController implements ISettingsV
 	 * @return <code>true</code>Alle Einstellungen sind Valid.
 	 */
 	private boolean onFinish() {
-		for (SettingsTabViewController controller : tabs) {
+		for (ProfileSettingsTabViewController controller : tabs) {
 			if (controller.validSettings() == false) {
 				return false;
 			}
@@ -171,12 +173,12 @@ public class SettingsViewController extends ViewController implements ISettingsV
 	}
 
 	@Override
-	public void addTab(SettingsTabViewController controller) {
+	public void addTab(ProfileSettingsTabViewController controller) {
 		tabs.add(controller);
 		tabPane.getTabs().add(new Tab(controller.name(), controller.getParent()));
 	}
 
-	public List<SettingsTabViewController> getTabs() {
+	public List<ProfileSettingsTabViewController> getTabs() {
 		return tabs;
 	}
 }

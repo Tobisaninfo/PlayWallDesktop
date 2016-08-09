@@ -49,10 +49,13 @@ public class Project {
 	 * Liste mit allen Pads.
 	 */
 	private HashMap<Integer, Pad> pads;
+
+	private ProjectSettings settings;
+
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
-	private ObservableList<PadException> exceptions;
+	private transient ObservableList<PadException> exceptions;
 
 	/**
 	 * Erstellt ein neues leeres Projekt mit einer Referenz.
@@ -63,6 +66,8 @@ public class Project {
 	public Project(ProjectReference ref) {
 		this.ref = ref;
 		this.pads = new HashMap<>();
+		this.settings = new ProjectSettings();
+
 		this.exceptions = FXCollections.observableArrayList();
 	}
 
@@ -88,6 +93,23 @@ public class Project {
 			addPadForIndex(index);
 		}
 		return pads.get(index);
+	}
+
+	public Pad getPad(int x, int y, int page) {
+		if (x < settings.getColumns() && y < settings.getRows() && page < settings.getPageCount()) {
+			int id = (y * settings.getColumns() + x) + page * settings.getColumns() * settings.getRows();
+			return getPad(id);
+		}
+		return null;
+	}
+
+	/**
+	 * Gibt die Settings des Projectes zurück
+	 * 
+	 * @return
+	 */
+	public ProjectSettings getSettings() {
+		return settings;
 	}
 
 	/**
@@ -119,6 +141,7 @@ public class Project {
 
 	private static final String ROOT_ELEMENT = "Project";
 	protected static final String PAD_ELEMENT = "Pad";
+	private static final String SETTINGS_ELEMENT = "Settings";
 
 	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
 			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException, NoSuchComponentException {
@@ -134,6 +157,7 @@ public class Project {
 
 			Project project = new Project(ref);
 
+			// Lädt Pads
 			XMLHandler<Pad> handler = new XMLHandler<>(projectPath);
 			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(project));
 
@@ -142,6 +166,11 @@ public class Project {
 					pad.loadContent();
 				project.pads.put(pad.getIndex(), pad);
 			}
+
+			// Lädt die Einstellungen
+			Element settingsElement = handler.getRootElement().element(SETTINGS_ELEMENT);
+			if (settingsElement != null)
+				project.settings = ProjectSettings.load(settingsElement);
 
 			return project;
 		} else {
@@ -155,8 +184,13 @@ public class Project {
 
 		Element rootElement = document.addElement(ROOT_ELEMENT);
 
+		// Speichern der Pads
 		XMLHandler<Pad> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(PAD_ELEMENT, pads.values(), new PadSerializer());
+
+		// Speichern der Settings
+		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);
+		settings.save(settingsElement);
 
 		if (Files.notExists(projectPath)) {
 			Files.createDirectories(projectPath.getParent());

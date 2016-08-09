@@ -70,8 +70,8 @@ public class MappingList extends ArrayList<Mapping> {
 			List<Mapping> loadMappings = handler.loadElements(MAPPING, new MappingSerializer(profile));
 			loadMappings.forEach(mapping ->
 			{
-				mapping.initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine
-													// gelöscht wurde auf der Datei)
+				mapping.initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine gelöscht wurde
+													// auf der Datei)
 				mapping.updateDisplayProperty();
 				mappings.add(mapping);
 			});
@@ -96,7 +96,7 @@ public class MappingList extends ArrayList<Mapping> {
 			Files.createDirectories(path.getParent());
 			Files.createFile(path);
 		}
-		
+
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(MAPPING, this, new MappingSerializer());
 

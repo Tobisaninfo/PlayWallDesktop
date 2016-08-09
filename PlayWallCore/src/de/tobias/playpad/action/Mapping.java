@@ -30,7 +30,6 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	public Mapping(boolean init, Profile profile) {
 		mapping = new HashMap<>();
 		if (init) {
-			initActionType(profile);
 			name = "Default";
 			uuid = UUID.randomUUID();
 		}
@@ -115,7 +114,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		Registry<ActionConnect> actions = PlayPadPlugin.getRegistryCollection().getActions();
 		for (String type : actions.getTypes()) {
 			try {
-				actions.getComponent(type).initActionType(this, profile);
+				actions.getComponent(type).initActionType(this, profile); // TODO
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -178,7 +177,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		}
 		getActions().forEach(action -> action.clearFeedback());
 	}
-	
+
 	public void adjustPadColorToMapper(Project project) {
 		ColorAdjuster.applyColorsToMappers(project);
 	}

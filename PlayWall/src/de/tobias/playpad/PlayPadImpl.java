@@ -22,7 +22,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
-import de.tobias.playpad.viewcontroller.option.ISettingsViewController;
+import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Worker;
@@ -35,7 +35,7 @@ public class PlayPadImpl implements PlayPad {
 	private static final String PLUGIN_INFO_TXT = "pluginInfo.txt";
 
 	protected List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
-	protected List<WindowListener<ISettingsViewController>> settingsViewListeners = new ArrayList<>();
+	protected List<WindowListener<IProfileSettingsViewController>> settingsViewListeners = new ArrayList<>();
 	protected List<WindowListener<IPadSettingsViewController>> padSettingsViewListeners = new ArrayList<>();
 	protected List<SettingsListener> settingsListeners = new ArrayList<>();
 	protected List<PadListener> padListeners = new ArrayList<>();

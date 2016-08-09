@@ -8,7 +8,7 @@ import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.option.SettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
-public class MediaSettingsTabViewController extends SettingsTabViewController {
+public class MediaSettingsTabViewController extends ProfileSettingsTabViewController {
 
 	@FXML private Pane screenViewPane;
 	@FXML private ComboBox<Integer> screenComboBox;

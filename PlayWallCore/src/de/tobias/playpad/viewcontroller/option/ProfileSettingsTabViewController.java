@@ -15,7 +15,7 @@ import de.tobias.utils.ui.ContentViewController;
  * @since 5.0.0
  *
  */
-public abstract class SettingsTabViewController extends ContentViewController {
+public abstract class ProfileSettingsTabViewController extends ContentViewController {
 
 	/**
 	 * Erstellt einen neuen Tab.
@@ -27,7 +27,7 @@ public abstract class SettingsTabViewController extends ContentViewController {
 	 * @param localization
 	 *            ResourceBundle oder null
 	 */
-	public SettingsTabViewController(String name, String path, ResourceBundle localization) {
+	public ProfileSettingsTabViewController(String name, String path, ResourceBundle localization) {
 		super(name, path, localization);
 	}
 

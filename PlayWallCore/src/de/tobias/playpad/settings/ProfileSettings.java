@@ -32,17 +32,10 @@ public class ProfileSettings implements SettingsSerializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int MAX_PAGES = 8;
-
 	@Storable private BooleanProperty lockedProperty = new SimpleBooleanProperty(false);
 
 	// MIDI
 	@Storable private String midiDevice;
-
-	// GridPane
-	@Storable private int pageCount = 2;
-	@Storable private int columns = 6;
-	@Storable private int rows = 5;
 
 	// Audio Output
 	// TODO Rewrite
@@ -87,28 +80,6 @@ public class ProfileSettings implements SettingsSerializable {
 	// Getter
 	public String getMidiDevice() {
 		return midiDevice;
-	}
-
-	public int getPageCount() {
-		return pageCount;
-	}
-
-	/**
-	 * Returns the value of colums (Number of cells form left to right)
-	 * 
-	 * @return columns
-	 */
-	public int getColumns() {
-		return columns;
-	}
-
-	/**
-	 * Returns the value of rows (Number of cells from top to bottom
-	 * 
-	 * @return rows
-	 */
-	public int getRows() {
-		return rows;
 	}
 
 	public Path getCachePath() {
@@ -178,20 +149,6 @@ public class ProfileSettings implements SettingsSerializable {
 	// Setter
 	public void setMidiDeviceName(String midiDevice) {
 		this.midiDevice = midiDevice;
-	}
-
-	public void setPageCount(int pageCount) {
-		if (pageCount > MAX_PAGES)
-			pageCount = MAX_PAGES;
-		this.pageCount = pageCount;
-	}
-
-	public void setColumns(int columns) {
-		this.columns = columns;
-	}
-
-	public void setRows(int rows) {
-		this.rows = rows;
 	}
 
 	public void setCachePath(Path cachePath) {
@@ -277,9 +234,6 @@ public class ProfileSettings implements SettingsSerializable {
 	private static final String WARNING_ELEMENT = "Warning";
 	private static final String LAYOUT_TYPE_ELEMENT = "LayoutType";
 	private static final String MAIN_LAYOUT_TYPE_ELEMENT = "MainLayoutType";
-	private static final String ROWS_ELEMENT = "Rows";
-	private static final String COLUMNS_ELEMENT = "Columns";
-	private static final String PAGE_COUNT_ELEMENT = "PageCount";
 	private static final String MIDI_ACTIVE_ELEMENT = "MidiActive";
 	private static final String MIDI_DEVICE_ELEMENT = "MidiDevice";
 
@@ -298,13 +252,6 @@ public class ProfileSettings implements SettingsSerializable {
 				profileSettings.setMidiDeviceName(root.element(MIDI_DEVICE_ELEMENT).getStringValue());
 			if (root.element(MIDI_ACTIVE_ELEMENT) != null)
 				profileSettings.setMidiActive(Boolean.valueOf(root.element(MIDI_ACTIVE_ELEMENT).getStringValue()));
-
-			if (root.element(PAGE_COUNT_ELEMENT) != null)
-				profileSettings.setPageCount(Integer.valueOf(root.element(PAGE_COUNT_ELEMENT).getStringValue()));
-			if (root.element(COLUMNS_ELEMENT) != null)
-				profileSettings.setColumns(Integer.valueOf(root.element(COLUMNS_ELEMENT).getStringValue()));
-			if (root.element(ROWS_ELEMENT) != null)
-				profileSettings.setRows(Integer.valueOf(root.element(ROWS_ELEMENT).getStringValue()));
 
 			if (root.element(LAYOUT_TYPE_ELEMENT) != null) {
 				profileSettings.setLayoutType(root.element(LAYOUT_TYPE_ELEMENT).getStringValue());
@@ -387,11 +334,6 @@ public class ProfileSettings implements SettingsSerializable {
 		if (midiDevice != null)
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
 		root.addElement(MIDI_ACTIVE_ELEMENT).addText(String.valueOf(midiActive));
-
-		// GirdPane
-		root.addElement(PAGE_COUNT_ELEMENT).addText(String.valueOf(pageCount));
-		root.addElement(COLUMNS_ELEMENT).addText(String.valueOf(columns));
-		root.addElement(ROWS_ELEMENT).addText(String.valueOf(rows));
 
 		root.addElement(LAYOUT_TYPE_ELEMENT).addText(layoutType);
 		root.addElement(MAIN_LAYOUT_TYPE_ELEMENT).addText(mainLayoutType);

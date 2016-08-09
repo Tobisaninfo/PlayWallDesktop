@@ -35,6 +35,8 @@ public abstract class ActionConnect {
 	 *            Mapping
 	 * @param profile
 	 *            Profile für Einstellungen
+	 * @param projectSettings
+	 *            Project Einstellungen
 	 */
 	public abstract void initActionType(Mapping mapping, Profile profile);
 

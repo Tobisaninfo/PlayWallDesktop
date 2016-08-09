@@ -2,6 +2,7 @@ package de.tobias.playpad.viewcontroller.main;
 
 import java.util.ResourceBundle;
 
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
@@ -174,7 +175,15 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	/**
 	 * Lädt das Keyboard Binding.
 	 * 
-	 * @param keys Einstellungen der Keybinding
+	 * @param keys
+	 *            Einstellungen der Keybinding
 	 */
 	public abstract void loadKeybinding(KeyCollection keys);
+
+	/**
+	 * Setzt eine Refernce des aktuellen Projectes auf den ViewController.
+	 * 
+	 * @param project neues Project
+	 */
+	public abstract void setOpenProject(Project project);
 }

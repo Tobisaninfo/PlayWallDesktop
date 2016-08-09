@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad.triggerlistener;
+package de.tobias.playpad.pad.listener.trigger;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;

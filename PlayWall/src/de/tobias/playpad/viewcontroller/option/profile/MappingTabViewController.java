@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.option;
+package de.tobias.playpad.viewcontroller.option.profile;
 
 import java.util.List;
 import java.util.Set;
@@ -22,6 +22,7 @@ import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.dialog.MappingListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -32,7 +33,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 
-public class MappingTabViewController extends SettingsTabViewController implements IMappingTabViewController {
+public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController {
 
 	@FXML private ComboBox<Mapping> mappingComboBox;
 	@FXML private Button editMappingsButton;
@@ -46,7 +47,7 @@ public class MappingTabViewController extends SettingsTabViewController implemen
 	private Mapping mapping;
 
 	public MappingTabViewController() {
-		super("mapping", "de/tobias/playpad/assets/view/option/", PlayPadMain.getUiResourceBundle());
+		super("mapping", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

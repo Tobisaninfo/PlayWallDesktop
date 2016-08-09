@@ -57,7 +57,7 @@ public class ColorAdjuster {
 		if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
 			ColorAssociator colorAssociator = (ColorAssociator) mapper;
 
-			Pad pad = project.getPad(cartAction.getCart());
+			Pad pad = cartAction.getPad();
 			Color layoutStdColor = null;
 			Color layoutEvColor = null;
 
