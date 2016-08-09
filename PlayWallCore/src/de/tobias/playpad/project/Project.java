@@ -236,4 +236,8 @@ public class Project {
 	public String toString() {
 		return ref.getName() + " (" + ref.getUuid() + ")";
 	}
+
+	public int getPadCount() {
+		return pads.size();
+	}
 }

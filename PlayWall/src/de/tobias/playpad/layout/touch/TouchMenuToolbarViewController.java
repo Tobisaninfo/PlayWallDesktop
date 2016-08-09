@@ -117,7 +117,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	private int currentPage = 0;
 
 	@Override
-	public void hilightPageButton(int index) {
+	public void highlightPageButton(int index) {
 		if (index >= 0) {
 			if (pageHBox.getChildren().size() > currentPage) {
 				Node removeNode = pageHBox.getChildren().get(currentPage);

@@ -5,12 +5,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.controlsfx.control.textfield.TextFields;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -22,6 +27,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
+import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
@@ -41,6 +47,7 @@ import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.Alertable;
+import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
@@ -48,6 +55,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -59,8 +67,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -83,10 +93,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML protected CheckMenuItem fullScreenMenuItem;
 	@FXML protected CheckMenuItem alwaysOnTopItem;
+	@FXML protected MenuItem searchPadMenuItem;
 
 	@FXML protected Menu layoutMenu;
 
 	@FXML protected Menu extensionMenu;
+	@FXML protected Menu infoMenu;
+	@FXML protected Menu helpMenu;
 
 	@FXML protected Label liveLabel;
 
@@ -98,11 +111,17 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle(), controller);
 		this.mainViewController = controller;
 
+		initLayoutMenu();
+	}
+
+	@Override
+	public void init() {
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
 		showLiveInfo(false);
-		initLayoutMenu();
+
+		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 	}
 
 	private void initLayoutMenu() {
@@ -178,6 +197,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		setKeyBindinfForMenu(fullScreenMenuItem, keys.getKey("window_fullscreen"));
 		setKeyBindinfForMenu(alwaysOnTopItem, keys.getKey("window_top"));
+		setKeyBindinfForMenu(searchPadMenuItem, keys.getKey("search_pad"));
 
 		newProjectMenuItem.setDisable(false);
 		openProjectMenuItem.setDisable(false);
@@ -192,6 +212,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		fullScreenMenuItem.setDisable(false);
 		alwaysOnTopItem.setDisable(false);
+		searchPadMenuItem.setDisable(false);
 	}
 
 	@Override
@@ -261,6 +282,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		fullScreenMenuItem.setDisable(true);
 		alwaysOnTopItem.setDisable(true);
+		searchPadMenuItem.setDisable(true);
 
 		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
 		if (dndModeMenuItem.isSelected()) {
@@ -284,7 +306,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private int currentPage = 0;
 
 	@Override
-	public void hilightPageButton(int index) {
+	public void highlightPageButton(int index) {
 		if (index >= 0) {
 			if (pageHBox.getChildren().size() > currentPage) {
 				Node removeNode = pageHBox.getChildren().get(currentPage);
@@ -504,6 +526,27 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void fullScreenMenuItemHandler(ActionEvent event) {
 		mainViewController.getStage().setFullScreen(fullScreenMenuItem.isSelected());
+	}
+
+	@FXML
+	void searchPadHandler(ActionEvent event) {
+		TextField field = TextFields.createClearableTextField();
+		field.setPromptText("Suche"); // TODO i18n
+
+		Button button = new Button("Suchen"); // TODO i18n
+		button.setOnAction(new DesktopSearchController(field, this));
+
+		HBox box = new HBox(14, field, button);
+		box.setAlignment(Pos.CENTER_LEFT);
+
+		NotificationPane pane = mainViewController.getNotificationPane();
+		pane.show("", box);
+
+		// Auto Complete
+		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+		Set<String> names = currentProject.getPads().values().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(p -> p.getName())
+				.collect(Collectors.toSet());
+		TextFields.bindAutoCompletion(field, names);
 	}
 
 	@FXML

@@ -260,6 +260,11 @@ public class TouchPadView implements IPadViewV2 {
 		root.getStyleClass().add("pad-root");
 	}
 
+	@Override
+	public void highlightView(int milliSecounds) {
+		
+	}
+	
 	public void clearIndex() {
 		indexLabel.setText("");
 	}

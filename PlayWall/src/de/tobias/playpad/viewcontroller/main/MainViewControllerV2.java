@@ -479,10 +479,14 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	}
 
 	@Override
-	public void showPage(int page) {
+	public boolean showPage(int page) {
+		Profile profile = Profile.currentProfile();
+		if (page < 0 || page >= profile.getProfileSettings().getPageCount()) {
+			return false;
+		}
+
 		// Clean
 		removePadsFromView();
-		// Page Button Remove highlight
 
 		this.currentPageShowing = page;
 
@@ -492,8 +496,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		}
 
 		if (menuToolbarViewController != null) {
-			menuToolbarViewController.hilightPageButton(page);
+			menuToolbarViewController.highlightPageButton(page);
 		}
+		return true;
 	}
 
 	@Override
@@ -733,5 +738,10 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void performLayoutDependendAction(MainLayoutHandler runnable) {
 		runnable.handle(null, menuToolbarViewController);
 		layoutActions.add(runnable);
+	}
+
+	@Override
+	public NotificationPane getNotificationPane() {
+		return notificationPane;
 	}
 }

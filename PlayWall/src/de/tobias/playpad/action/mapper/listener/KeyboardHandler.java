@@ -9,6 +9,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -28,26 +29,27 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 	// KeyType ist nicht unterstützt.
 	@Override
 	public void handle(KeyEvent event) {
-		if (!event.isShortcutDown()) {
-			KeyCode code = null;
-			InputType type = null;
+		if (event.getTarget() instanceof Scene) { // TEST Ob Probleme da sind, wegen Fokus und so
+			if (!event.isShortcutDown()) {
+				KeyCode code = null;
+				InputType type = null;
 
-			if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-				code = event.getCode();
-				type = InputType.PRESSED;
+				if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+					code = event.getCode();
+					type = InputType.PRESSED;
 
-			} else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
-				code = event.getCode();
-				type = InputType.RELEASED;
+				} else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
+					code = event.getCode();
+					type = InputType.RELEASED;
 
-			}
+				}
 
-			// Only execute this, then the right event is triggered and this var is set
-			if (code != null) {
-				List<Action> actions = MappingUtils.getActionsForKey(code,
-						Profile.currentProfile().getMappings().getActiveMapping());
+				// Only execute this, then the right event is triggered and this var is set
+				if (code != null) {
+					List<Action> actions = MappingUtils.getActionsForKey(code, Profile.currentProfile().getMappings().getActiveMapping());
 
-				executeActions(type, actions);
+					executeActions(type, actions);
+				}
 			}
 		}
 	}

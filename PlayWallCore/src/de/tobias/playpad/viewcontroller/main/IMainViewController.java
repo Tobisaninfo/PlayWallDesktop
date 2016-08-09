@@ -8,6 +8,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.utils.ui.NotificationHandler;
+import de.tobias.utils.ui.scene.NotificationPane;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -94,8 +95,9 @@ public interface IMainViewController extends NotificationHandler {
 	 * 
 	 * @param page
 	 *            Page Number
+	 * @return <code>false</code> Seite gibt es nicht.
 	 */
-	public void showPage(int page);
+	public boolean showPage(int page);
 
 	/**
 	 * Lädt die CSS Files neu.
@@ -156,4 +158,11 @@ public interface IMainViewController extends NotificationHandler {
 	 *            Einstellungen der Key Bindings
 	 */
 	public void loadKeybinding(KeyCollection keys);
+
+	/**
+	 * Gibt das NotificationPane zurück.
+	 * 
+	 * @return NotificationPane
+	 */
+	public NotificationPane getNotificationPane();
 }

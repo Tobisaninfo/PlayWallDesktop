@@ -169,7 +169,7 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 * 
 	 * @see IMainViewController#showPage(int)
 	 */
-	public abstract void hilightPageButton(int page);
+	public abstract void highlightPageButton(int page);
 
 	/**
 	 * Lädt das Keyboard Binding.

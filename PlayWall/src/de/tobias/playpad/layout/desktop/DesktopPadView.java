@@ -2,6 +2,9 @@ package de.tobias.playpad.layout.desktop;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.ModernDesignAnimator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
@@ -28,6 +31,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class DesktopPadView implements IPadViewV2 {
 
@@ -360,6 +364,14 @@ public class DesktopPadView implements IPadViewV2 {
 
 		buttonBox.getStyleClass().add("pad-button-box");
 		root.getStyleClass().add("pad-root");
+	}
+
+	@Override
+	public void highlightView(int milliSecounds) {
+		FadeableColor stopColor = new FadeableColor(ModernColor.GRAY1.getColorHi(), ModernColor.GRAY1.getColorLow());
+		FadeableColor playColor = new FadeableColor(ModernColor.BLUE1.getColorHi(), ModernColor.BLUE1.getColorLow());
+
+		ModernDesignAnimator.animateWarn(controller, stopColor, playColor, Duration.seconds(2));
 	}
 
 	public void clearIndex() {

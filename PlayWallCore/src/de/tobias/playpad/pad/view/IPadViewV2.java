@@ -79,6 +79,14 @@ public interface IPadViewV2 {
 	public void setStyle(String string);
 
 	/**
+	 * Hebt eine Kachel hervor (Beispiel mit einer Animation.
+	 * 
+	 * @param milliSecounds
+	 *            Dauer in Millisekunden
+	 */
+	public void highlightView(int milliSecounds);
+
+	/**
 	 * Aktiviert des Error Labels, damit es angezeigt wird.
 	 * 
 	 * @param b

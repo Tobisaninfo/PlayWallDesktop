@@ -13,6 +13,7 @@
 
 		<Key id="window_top" name="main.menuitem.onTop"/>
 		<Key id="window_fullscreen" name="main.menuitem.fullScreen" key="F" ctrl="true" alt="false" meta="false" shift="true"/>
+		<Key id="search_pad" name="main.menuitem.searchPad" key="F" ctrl="true" alt="false" meta="false" shift="false"/>
 	</Windows>
 	<Mac>
 		<Key id="new_proj" name="main.menuitem.new" key="N" ctrl="false" alt="false" meta="true" shift="false"/>
@@ -28,5 +29,6 @@
 
 		<Key id="window_top" name="main.menuitem.onTop"/>
 		<Key id="window_fullscreen" name="main.menuitem.fullScreen" key="F" ctrl="false" alt="false" meta="true" shift="true"/>
+		<Key id="search_pad" name="main.menuitem.searchPad" key="F" ctrl="false" alt="false" meta="true" shift="false"/>
 	</Mac>
 </Keys>
