@@ -1,11 +1,7 @@
 package de.tobias.playpad.pad;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerContentListener;
@@ -13,20 +9,11 @@ import de.tobias.playpad.pad.triggerlistener.PadTriggerDurationListener;
 import de.tobias.playpad.pad.triggerlistener.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.Warning;
-import de.tobias.playpad.tigger.Trigger;
-import de.tobias.playpad.tigger.TriggerPoint;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -35,26 +22,16 @@ import javafx.beans.property.StringProperty;
 
 public class Pad {
 
+	// Verwaltung
 	private IntegerProperty indexProperty = new SimpleIntegerProperty();
 	private StringProperty nameProperty = new SimpleStringProperty();
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
+	// Content
 	private ObjectProperty<PadContent> contentProperty = new SimpleObjectProperty<>();
 
 	// Settings
-	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
-	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
-	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
-	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
-	private ObjectProperty<Warning> warningProperty = new SimpleObjectProperty<>();
-
-	private BooleanProperty customLayoutProperty = new SimpleBooleanProperty(false);
-	private HashMap<String, CartDesign> layouts = new HashMap<>();
-
-	private HashMap<String, Object> customSettings = new HashMap<>();
-
-	// Trigger
-	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
+	private PadSettings padSettings;
 
 	// Custom Volume
 	private transient DoubleProperty customVolumeProperty = new SimpleDoubleProperty(1.0);
@@ -75,6 +52,7 @@ public class Pad {
 
 	public Pad(Project project) {
 		this.project = project;
+		padSettings = new PadSettings();
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
@@ -82,11 +60,13 @@ public class Pad {
 
 	public Pad(Project project, int index) {
 		this.project = project;
+		padSettings = new PadSettings();
+
 		setIndex(index);
 		setStatus(PadStatus.EMPTY);
 
 		initPadListener();
-		updateTrigger();
+		padSettings.updateTrigger();
 	}
 
 	public Pad(Project project, int index, String name, PadContent content) {
@@ -106,6 +86,7 @@ public class Pad {
 
 		// Das ist für die Position Listener notwendig, wenn sich der Content ändert
 		padTriggerContentListener = new PadTriggerContentListener(this);
+		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
 	}
 
@@ -181,12 +162,8 @@ public class Pad {
 		return contentProperty;
 	}
 
-	public double getVolume() {
-		return volumeProperty.get();
-	}
-
-	public void setVolume(double volume) {
-		volumeProperty.set(volume);
+	public PadSettings getPadSettings() {
+		return padSettings;
 	}
 
 	public void setMasterVolume(double volume) {
@@ -195,153 +172,12 @@ public class Pad {
 		}
 	}
 
-	public DoubleProperty volumeProperty() {
-		return volumeProperty;
-	}
-
-	public boolean isLoop() {
-		return loopProperty.get();
-	}
-
-	public void setLoop(boolean loop) {
-		this.loopProperty.set(loop);
-	}
-
-	public BooleanProperty loopProperty() {
-		return loopProperty;
-	}
-
-	public boolean isCustomTimeMode() {
-		return timeModeProperty.isNotNull().get();
-	}
-
-	public BooleanBinding customTimeModeProperty() {
-		return timeModeProperty.isNotNull();
-	}
-
-	public TimeMode getTimeMode() {
-		if (timeModeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getPlayerTimeDisplayMode();
-			}
-		}
-		return timeModeProperty.get();
-	}
-
-	public void setTimeMode(TimeMode timeMode) {
-		this.timeModeProperty.set(timeMode);
-	}
-
-	public ObjectProperty<TimeMode> timeModeProperty() {
-		return timeModeProperty;
-	}
-
-	public boolean isCustomFade() {
-		return fadeProperty.isNotNull().get();
-	}
-
-	public BooleanBinding customFadeProperty() {
-		return fadeProperty.isNotNull();
-	}
-
-	/**
-	 * Returns either the fade settings of this pad or the global settings
-	 * 
-	 * @return Fade
-	 */
-	public Fade getFade() {
-		if (fadeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getFade();
-			}
-		}
-		return fadeProperty.get();
-	}
-
-	public void setFade(Fade fade) {
-		this.fadeProperty.set(fade);
-	}
-
-	public ObjectProperty<Fade> fadeProperty() {
-		return fadeProperty;
-	}
-
-	public boolean isCustomWarning() {
-		return warningProperty.isNotNull().get();
-	}
-
-	public BooleanBinding customWarningProperty() {
-		return warningProperty.isNotNull();
-	}
-
-	public Warning getWarning() {
-		if (warningProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getWarningFeedback();
-			}
-		}
-		return warningProperty.get();
-	}
-
-	public void setWarning(Warning warning) {
-		this.warningProperty.set(warning);
-	}
-
-	public ObjectProperty<Warning> warningProperty() {
-		return warningProperty;
-	}
-
-	public boolean isCustomLayout() {
-		return customLayoutProperty.get();
-	}
-
-	public void setCustomLayout(boolean customLayout) {
-		this.customLayoutProperty.set(customLayout);
-	}
-
-	public BooleanProperty customLayoutProperty() {
-		return customLayoutProperty;
-	}
-
-	public CartDesign getLayout() {
-		return getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
-	}
-
-	public CartDesign getLayout(String type) {
-		if (!layouts.containsKey(type)) {
-			DefaultRegistry<DesignConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
-			try {
-				layouts.put(type, layouts2.getComponent(type).newCartDesign());
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return layouts.get(type);
-	}
-
-	public void setLayout(CartDesign layout, String type) {
-		this.layouts.put(type, layout);
-	}
-
 	public boolean isEof() {
 		return eof;
 	}
 
 	public void setEof(boolean eof) {
 		this.eof = eof;
-	}
-
-	public HashMap<String, Object> getCustomSettings() {
-		return customSettings;
-	}
-
-	public HashMap<TriggerPoint, Trigger> getTriggers() {
-		return triggers;
-	}
-
-	public Trigger getTrigger(TriggerPoint point) {
-		return triggers.get(point);
 	}
 
 	// Helper Methodes
@@ -376,23 +212,6 @@ public class Pad {
 
 	public void setIgnoreTrigger(boolean ignoreTrigger) {
 		this.ignoreTrigger = ignoreTrigger;
-	}
-
-	void updateTrigger() {
-		for (TriggerPoint point : TriggerPoint.values()) {
-			if (!triggers.containsKey(point)) {
-				Trigger trigger = new Trigger(point);
-				triggers.put(point, trigger);
-			}
-		}
-	}
-
-	public boolean hasTriggerItems() {
-		for (Trigger trigger : triggers.values()) {
-			if (!trigger.getItems().isEmpty())
-				return true;
-		}
-		return false;
 	}
 
 	public Project getProject() {
@@ -443,9 +262,5 @@ public class Pad {
 
 	public DoubleProperty customVolumeProperty() {
 		return customVolumeProperty;
-	}
-
-	HashMap<String, CartDesign> getLayouts() {
-		return layouts;
 	}
 }

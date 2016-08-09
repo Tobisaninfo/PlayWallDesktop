@@ -12,6 +12,7 @@ import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.audio.Equalizable;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.path.SinglePathContent;
@@ -21,6 +22,7 @@ import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.utils.util.ZipFile;
 import javafx.animation.Transition;
 import javafx.application.Platform;
@@ -51,11 +53,13 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		super(pad);
 		volumeListener = (a, b, c) ->
 		{
-			audioHandler.setVolume(c.doubleValue(), Profile.currentProfile().getProfileSettings().getVolume(), pad.getCustomVolume());
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+			audioHandler.setVolume(c.doubleValue(), profileSettings.getVolume(), pad.getCustomVolume());
 		};
 		customVolumeListener = (a, b, c) ->
 		{
-			audioHandler.setVolume(pad.getVolume(), Profile.currentProfile().getProfileSettings().getVolume(), c.doubleValue());
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+			audioHandler.setVolume(pad.getPadSettings().getVolume(), profileSettings.getVolume(), c.doubleValue());
 		};
 	}
 
@@ -78,7 +82,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	@Override
 	public void setMasterVolume(double masterVolume) {
 		if (audioHandler != null) {
-			audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+			audioHandler.setVolume(getPad().getPadSettings().getVolume(), masterVolume, getPad().getCustomVolume());
 		}
 	}
 
@@ -113,18 +117,18 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 		Pad pad = getPad();
 
-		if (pad.getFade().getFadeIn().toMillis() > 0) {
+		if (pad.getPadSettings().getFade().getFadeIn().toMillis() > 0) {
 			double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
 			audioHandler.setVolume(0, masterVolume, pad.getCustomVolume());
 			transition = new Transition() {
 
 				{
-					setCycleDuration(pad.getFade().getFadeIn());
+					setCycleDuration(pad.getPadSettings().getFade().getFadeIn());
 				}
 
 				@Override
 				protected void interpolate(double frac) {
-					audioHandler.setVolume(frac * pad.getVolume(), masterVolume, pad.getCustomVolume());
+					audioHandler.setVolume(frac * pad.getPadSettings().getVolume(), masterVolume, pad.getCustomVolume());
 				}
 			};
 			transition.setOnFinished(e ->
@@ -141,17 +145,19 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			transition.stop();
 		}
 
-		if (getPad().getFade().getFadeOut().toMillis() > 0) {
+		if (getPad().getPadSettings().getFade().getFadeOut().toMillis() > 0) {
 			transition = new Transition() {
 
 				{
-					setCycleDuration(getPad().getFade().getFadeOut());
+					setCycleDuration(getPad().getPadSettings().getFade().getFadeOut());
 				}
 
 				@Override
 				protected void interpolate(double frac) {
 					double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-					audioHandler.setVolume(getPad().getVolume() - frac * getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+					PadSettings padSettings = getPad().getPadSettings();
+
+					audioHandler.setVolume(padSettings.getVolume() - frac * padSettings.getVolume(), masterVolume, getPad().getCustomVolume());
 				}
 			};
 			transition.setOnFinished(event ->
@@ -159,7 +165,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 				onFinish.run();
 
 				double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-				audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+				PadSettings padSettings = getPad().getPadSettings();
+
+				audioHandler.setVolume(padSettings.getVolume(), masterVolume, getPad().getCustomVolume());
 				transition = null;
 			});
 			transition.play();
@@ -221,7 +229,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			durationProperty.bind(audioHandler.durationProperty());
 			positionProperty.bind(audioHandler.positionProperty());
 
-			getPad().volumeProperty().addListener(volumeListener);
+			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
 			getPad().customVolumeProperty().addListener(customVolumeListener);
 		} else {
 			getPad().throwException(path, new FileNotFoundException());
@@ -233,7 +241,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		durationProperty.unbind();
 		positionProperty.unbind();
 
-		getPad().volumeProperty().removeListener(volumeListener);
+		getPad().getPadSettings().volumeProperty().removeListener(volumeListener);
 		getPad().customVolumeProperty().removeListener(customVolumeListener);
 
 		if (audioHandler != null)

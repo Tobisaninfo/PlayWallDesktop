@@ -21,13 +21,13 @@ public class VideoPadSettingsTabViewController extends PadSettingsTabViewControl
 
 	@Override
 	public void loadSettings(Pad pad) {
-		if (pad.getCustomSettings().containsKey(VideoContent.VIDEO_LAST_FRAME))
-			lastFrameCheckBox.setSelected((boolean) pad.getCustomSettings().get(VideoContent.VIDEO_LAST_FRAME));
+		if (pad.getPadSettings().getCustomSettings().containsKey(VideoContent.VIDEO_LAST_FRAME))
+			lastFrameCheckBox.setSelected((boolean) pad.getPadSettings().getCustomSettings().get(VideoContent.VIDEO_LAST_FRAME));
 	}
 
 	@Override
 	public void saveSettings(Pad pad) {
-		pad.getCustomSettings().put(VideoContent.VIDEO_LAST_FRAME, lastFrameCheckBox.isSelected());
+		pad.getPadSettings().getCustomSettings().put(VideoContent.VIDEO_LAST_FRAME, lastFrameCheckBox.isSelected());
 	}
 
 }

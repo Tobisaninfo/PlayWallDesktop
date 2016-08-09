@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
@@ -63,9 +64,9 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 		// Warning nur wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig Reseted
 		// wird
-		if (!pad.isLoop() && pad.getStatus() == PadStatus.PLAY) {
+		if (!pad.getPadSettings().isLoop() && pad.getStatus() == PadStatus.PLAY) {
 			// Warning
-			Warning warning = pad.getWarning();
+			Warning warning = pad.getPadSettings().getWarning();
 			Duration rest = durationable.getDuration().subtract(newValue);
 			double seconds = rest.toSeconds();
 
@@ -86,10 +87,11 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 	 */
 	@Override
 	public void run() {
-		Warning warning = pad.getWarning();
+		PadSettings padSettings = pad.getPadSettings();
+		Warning warning = padSettings.getWarning();
 
-		if (pad.isCustomLayout()) {
-			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+		if (padSettings.isCustomLayout()) {
+			padSettings.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}
@@ -110,8 +112,10 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 			warningThread = null;
 		}
 
-		if (pad.isCustomLayout()) {
-			pad.getLayout().stopWarning(controller);
+		PadSettings padSettings = pad.getPadSettings();
+
+		if (padSettings.isCustomLayout()) {
+			padSettings.getLayout().stopWarning(controller);
 		} else {
 			Profile.currentProfile().currentLayout().stopWarning(controller);
 		}

@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.option.pad;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -42,22 +43,26 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 		customFadeCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
 			fadeContainer.setDisable(!c);
-			if (c && !pad.isCustomFade())
-				pad.setFade(new Fade());
-			else if (!c && pad.isCustomFade())
-				pad.setFade(null);
+			PadSettings padSettings = pad.getPadSettings();
+
+			if (c && !padSettings.isCustomFade())
+				padSettings.setFade(new Fade());
+			else if (!c && padSettings.isCustomFade())
+				padSettings.setFade(null);
 
 			if (c)
-				fadeViewController.setFade(pad.getFade());
+				fadeViewController.setFade(padSettings.getFade());
 		});
 
 		warningEnableCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
 			warningFeedbackContainer.setDisable(!c);
-			if (c && !pad.isCustomWarning())
-				pad.setWarning(new Warning());
-			else if (!c && pad.isCustomWarning())
-				pad.setWarning(null);
+			PadSettings padSettings = pad.getPadSettings();
+
+			if (c && !padSettings.isCustomWarning())
+				padSettings.setWarning(new Warning());
+			else if (!c && padSettings.isCustomWarning())
+				padSettings.setWarning(null);
 
 			if (c)
 				warningFeedbackViewController.setPadWarning(pad);
@@ -71,16 +76,18 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
-		if (pad.isCustomFade())
-			fadeViewController.setFade(pad.getFade());
+		PadSettings padSettings = pad.getPadSettings();
 
-		customFadeCheckBox.setSelected(pad.isCustomFade());
-		if (!pad.isCustomFade()) {
+		if (padSettings.isCustomFade())
+			fadeViewController.setFade(padSettings.getFade());
+
+		customFadeCheckBox.setSelected(padSettings.isCustomFade());
+		if (!padSettings.isCustomFade()) {
 			fadeContainer.setDisable(true);
 		}
 
-		warningEnableCheckBox.setSelected(pad.isCustomWarning());
-		if (!pad.isCustomWarning()) {
+		warningEnableCheckBox.setSelected(padSettings.isCustomWarning());
+		if (!padSettings.isCustomWarning()) {
 			warningFeedbackContainer.setDisable(true);
 		}
 	}

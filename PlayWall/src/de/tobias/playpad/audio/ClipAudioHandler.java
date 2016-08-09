@@ -69,7 +69,7 @@ public class ClipAudioHandler extends AudioHandler {
 
 						if (handler.clip != null) {
 							if (handler.clip.getMicrosecondLength() == handler.clip.getMicrosecondPosition() || !handler.pause || handler.stop) {
-								if (!pad.isLoop()) {
+								if (!pad.getPadSettings().isLoop()) {
 									pad.setEof(true);
 
 									// Remove from Loop and Stop
@@ -107,7 +107,7 @@ public class ClipAudioHandler extends AudioHandler {
 		}
 		stop = false;
 
-		if (getContent().getPad().isLoop())
+		if (getContent().getPad().getPadSettings().isLoop())
 			clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop
 		else
 			clip.start(); // Einfach Play

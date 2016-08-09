@@ -66,7 +66,7 @@ public class TinyAudioHandler extends AudioHandler {
 
 						if (handler.music != null) {
 							if (!handler.music.playing()) {
-								if (!pad.isLoop()) {
+								if (!pad.getPadSettings().isLoop()) {
 									pad.setEof(true);
 
 									// Remove from Loop and Stop
@@ -126,7 +126,7 @@ public class TinyAudioHandler extends AudioHandler {
 	public void play() {
 		if (music != null) {
 			if (!pause) {
-				if (!getContent().getPad().isLoop()) {
+				if (!getContent().getPad().getPadSettings().isLoop()) {
 					music.play(false); // Kein Loop
 				} else {
 					music.play(true); // Mit Loop

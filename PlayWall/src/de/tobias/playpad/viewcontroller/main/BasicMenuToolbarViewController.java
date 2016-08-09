@@ -62,7 +62,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		}
 	}
 
-	protected void setKeyBindinfForMenu(MenuItem menuItem, Key key) {
+	protected void setKeyBindingForMenu(MenuItem menuItem, Key key) {
 		if (key != null) {
 			if (!key.getKeyCode().isEmpty()) {
 				KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());

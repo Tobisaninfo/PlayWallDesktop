@@ -16,14 +16,16 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 
 	@Override
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
+		PadSettings padSettings = pad.getPadSettings();
+
 		if (newValue == PadStatus.PLAY) {
 			if (pad.getContent() != null) {
 				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onPlay(pad));
 
 				if (pad.getContent() instanceof Fadeable) {
-					if (oldValue == PadStatus.PAUSE && pad.getFade().isFadeInPause()) {
+					if (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause()) {
 						((Fadeable) pad.getContent()).fadeIn();
-					} else if (pad.getFade().isFadeInStart()) {
+					} else if (padSettings.getFade().isFadeInStart()) {
 						((Fadeable) pad.getContent()).fadeIn();
 					}
 				}
@@ -31,7 +33,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 			}
 		} else if (newValue == PadStatus.PAUSE) {
 			if (pad.getContent() instanceof Pauseable) {
-				if (pad.getContent() instanceof Fadeable && pad.getFade().isFadeOutPause()) {
+				if (pad.getContent() instanceof Fadeable && padSettings.getFade().isFadeOutPause()) {
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						((Pauseable) pad.getContent()).pause();
@@ -44,8 +46,8 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 			if (pad.getContent() != null) {
 				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onStop(pad));
 
-				if (pad.getContent() instanceof Fadeable && !pad.isEof() && pad.getFade().isFadeOutStop()) { // Fade nur wenn pad nicht am
-																												// ende ist
+				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad
+																														// nicht am ende ist
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						pad.getContent().stop();

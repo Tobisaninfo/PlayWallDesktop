@@ -96,8 +96,9 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		Pad pad = controller.getPad();
 
 		if (pad.getContent() instanceof Durationable) {
-			if (warnDuration.greaterThan(((Durationable) pad.getContent()).getDuration())) {
-				warnDuration = ((Durationable) pad.getContent()).getDuration();
+			Duration padDuration = ((Durationable) pad.getContent()).getDuration();
+			if (warnDuration.greaterThan(padDuration)) {
+				warnDuration = padDuration;
 			}
 		}
 

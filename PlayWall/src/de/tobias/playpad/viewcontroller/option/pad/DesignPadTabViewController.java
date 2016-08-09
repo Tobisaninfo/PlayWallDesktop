@@ -11,6 +11,7 @@ import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
@@ -48,12 +49,13 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	public void init() {
 		enableLayoutCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
-			if (c && !pad.isCustomLayout()) {
+			PadSettings padSettings = pad.getPadSettings();
+			if (c && !padSettings.isCustomLayout()) {
 				try {
-					pad.setCustomLayout(true);
+					padSettings.setCustomLayout(true);
 
 					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartDesign layout = pad.getLayout(layoutType);
+					CartDesign layout = padSettings.getLayout(layoutType);
 					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
 
 					setLayoutViewController(pad);
@@ -61,8 +63,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
 					e.printStackTrace();
 				}
-			} else if (!c && pad.isCustomLayout()) {
-				pad.setCustomLayout(false);
+			} else if (!c && padSettings.isCustomLayout()) {
+				padSettings.setCustomLayout(false);
 				setLayoutController(null);
 			}
 		});
@@ -75,8 +77,10 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
-		enableLayoutCheckBox.setSelected(pad.isCustomLayout());
-		if (pad.isCustomLayout()) {
+		PadSettings padSettings = pad.getPadSettings();
+
+		enableLayoutCheckBox.setSelected(padSettings.isCustomLayout());
+		if (padSettings.isCustomLayout()) {
 			setLayoutViewController(pad);
 		}
 	}
@@ -84,7 +88,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	private void setLayoutViewController(Pad pad) {
 		try {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartDesign layout = pad.getLayout(layoutType);
+			CartDesign layout = pad.getPadSettings().getLayout(layoutType);
 
 			DesignConnect component = PlayPadPlugin.getRegistryCollection().getDesigns().getComponent(layoutType);
 			CartDesignViewController controller = component.getCartDesignViewController(layout);

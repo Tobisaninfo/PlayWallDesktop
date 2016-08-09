@@ -8,6 +8,7 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
@@ -50,7 +51,8 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 		};
 		customVolumeListener = (a, b, c) ->
 		{
-			player.setVolume(getPad().getVolume() * Profile.currentProfile().getProfileSettings().getVolume() * c.doubleValue());
+			player.setVolume(
+					getPad().getPadSettings().getVolume() * Profile.currentProfile().getProfileSettings().getVolume() * c.doubleValue());
 		};
 	}
 
@@ -77,7 +79,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	@Override
 	public void setMasterVolume(double masterVolume) {
 		if (player != null) {
-			player.setVolume(getPad().getVolume() * masterVolume * getPad().getCustomVolume());
+			player.setVolume(getPad().getPadSettings().getVolume() * masterVolume * getPad().getCustomVolume());
 		}
 	}
 
@@ -107,8 +109,10 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	@Override
 	public boolean stop() {
-		if (getPad().getCustomSettings().containsKey(VIDEO_LAST_FRAME) && !holdLastFrame && getPad().isEof()) {
-			if ((boolean) getPad().getCustomSettings().get(VIDEO_LAST_FRAME)) {
+		PadSettings padSettings = getPad().getPadSettings();
+
+		if (padSettings.getCustomSettings().containsKey(VIDEO_LAST_FRAME) && !holdLastFrame && getPad().isEof()) {
+			if ((boolean) padSettings.getCustomSettings().get(VIDEO_LAST_FRAME)) {
 				getPad().setStatus(PadStatus.PAUSE);
 				holdLastFrame = true;
 				return false;
@@ -191,7 +195,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			});
 			player.setOnEndOfMedia(() ->
 			{
-				if (!getPad().isLoop()) {
+				if (!getPad().getPadSettings().isLoop()) {
 					getPad().setEof(true);
 					getPad().setStatus(PadStatus.STOP);
 				} else {
@@ -203,7 +207,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			durationProperty.bind(player.totalDurationProperty());
 			positionProperty.bind(player.currentTimeProperty());
 
-			getPad().volumeProperty().addListener(padVolumeListener);
+			getPad().getPadSettings().volumeProperty().addListener(padVolumeListener);
 			getPad().customVolumeProperty().addListener(customVolumeListener);
 		}
 	}
@@ -213,7 +217,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 		durationProperty.unbind();
 		positionProperty.unbind();
 
-		getPad().volumeProperty().removeListener(padVolumeListener);
+		getPad().getPadSettings().volumeProperty().removeListener(padVolumeListener);
 		getPad().customVolumeProperty().removeListener(customVolumeListener);
 
 		player = null;

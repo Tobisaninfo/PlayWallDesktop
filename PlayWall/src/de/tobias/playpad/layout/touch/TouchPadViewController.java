@@ -72,9 +72,8 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 		try {
 			// Settings
 			padView.setIndex(pad.getIndexReadable());
-			padView.loopLabelVisibleProperty().bind(pad.loopProperty());
-
-			padView.setTriggerLabelActive(pad.hasTriggerItems());
+			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
+			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
 			// Update Listener
 			padContentListener.setPad(pad);
@@ -176,7 +175,7 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 						padView.getPlayBar().setProgress(0);
 					} else {
 						// Play/Gesamtzeit anzeigen
-						TimeMode timeMode = pad.getTimeMode();
+						TimeMode timeMode = pad.getPadSettings().getTimeMode();
 
 						if (timeMode == TimeMode.REST) {
 							Duration leftTime = duration.subtract(position);

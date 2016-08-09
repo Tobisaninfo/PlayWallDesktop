@@ -15,6 +15,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
@@ -116,6 +117,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void init() {
+		super.init();
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
@@ -184,20 +186,20 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void loadKeybinding(KeyCollection keys) {
-		setKeyBindinfForMenu(newProjectMenuItem, keys.getKey("new_proj"));
-		setKeyBindinfForMenu(openProjectMenuItem, keys.getKey("open_proj"));
-		setKeyBindinfForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
-		setKeyBindinfForMenu(printProjectMenuItem, keys.getKey("print_proj"));
+		setKeyBindingForMenu(newProjectMenuItem, keys.getKey("new_proj"));
+		setKeyBindingForMenu(openProjectMenuItem, keys.getKey("open_proj"));
+		setKeyBindingForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
+		setKeyBindingForMenu(printProjectMenuItem, keys.getKey("print_proj"));
 
-		setKeyBindinfForMenu(dndModeMenuItem, keys.getKey("dnd"));
-		setKeyBindinfForMenu(errorMenu, keys.getKey("errors"));
-		setKeyBindinfForMenu(pluginMenu, keys.getKey("plugins"));
-		setKeyBindinfForMenu(settingsMenuItem, keys.getKey("profile_settings"));
-		setKeyBindinfForMenu(globalSettingsMenuItem, keys.getKey("global_settings"));
+		setKeyBindingForMenu(dndModeMenuItem, keys.getKey("dnd"));
+		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
+		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
+		setKeyBindingForMenu(settingsMenuItem, keys.getKey("profile_settings"));
+		setKeyBindingForMenu(globalSettingsMenuItem, keys.getKey("global_settings"));
 
-		setKeyBindinfForMenu(fullScreenMenuItem, keys.getKey("window_fullscreen"));
-		setKeyBindinfForMenu(alwaysOnTopItem, keys.getKey("window_top"));
-		setKeyBindinfForMenu(searchPadMenuItem, keys.getKey("search_pad"));
+		setKeyBindingForMenu(fullScreenMenuItem, keys.getKey("window_fullscreen"));
+		setKeyBindingForMenu(alwaysOnTopItem, keys.getKey("window_top"));
+		setKeyBindingForMenu(searchPadMenuItem, keys.getKey("search_pad"));
 
 		newProjectMenuItem.setDisable(false);
 		openProjectMenuItem.setDisable(false);
@@ -544,7 +546,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		// Auto Complete
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		Set<String> names = currentProject.getPads().values().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(p -> p.getName())
+		Set<String> names = currentProject.getPads().values().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
 				.collect(Collectors.toSet());
 		TextFields.bindAutoCompletion(field, names);
 	}

@@ -39,7 +39,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	}
 
 	private void createTreeView() {
-		HashMap<TriggerPoint, Trigger> triggers = pad.getTriggers();
+		HashMap<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
 		TreeItem<TriggerUIWrapper> rootItem = new TreeItem<>();
 
 		// Sort the tpyes for the treeview

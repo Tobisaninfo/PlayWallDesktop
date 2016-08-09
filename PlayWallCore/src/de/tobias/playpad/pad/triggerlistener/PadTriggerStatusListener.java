@@ -2,6 +2,7 @@ package de.tobias.playpad.pad.triggerlistener;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.Trigger;
@@ -22,12 +23,15 @@ public class PadTriggerStatusListener implements ChangeListener<PadStatus> {
 	@Override
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
 		if (!pad.isIgnoreTrigger()) {
+			PadSettings padSettings = pad.getPadSettings();
+			
+			// Execute Trigger
 			if (newValue == PadStatus.PLAY) { // TRIGGER FÜR START
-				executeTrigger(pad.getTriggers().get(TriggerPoint.START));
+				executeTrigger(padSettings.getTriggers().get(TriggerPoint.START));
 			} else if (newValue == PadStatus.STOP) { // TRIGGER FÜR STOP
-				executeTrigger(pad.getTriggers().get(TriggerPoint.EOF_STOP));
+				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF_STOP));
 			} else if (oldValue == PadStatus.PLAY && newValue == PadStatus.READY && pad.isEof()) { // TRIGGER FÜR EOF
-				executeTrigger(pad.getTriggers().get(TriggerPoint.EOF_STOP));
+				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF_STOP));
 			}
 		} else {
 			pad.setIgnoreTrigger(false);

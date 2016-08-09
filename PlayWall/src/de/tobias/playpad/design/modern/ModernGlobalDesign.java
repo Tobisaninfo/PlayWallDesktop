@@ -13,6 +13,7 @@ import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.FadeableColor;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.project.Project;
@@ -105,7 +106,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		playColor = ModernColor.RED1;
 
 		isWarnAnimation = true;
-		
+
 		infoFontSize = 14;
 		titleFontSize = 16;
 	}
@@ -195,8 +196,10 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 
 		// Pad Spezelles Layout immer
 		for (Pad pad : project.getPads().values()) {
-			if (pad.isCustomLayout()) {
-				CartDesign layoutOpt = pad.getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
+			PadSettings padSettings = pad.getPadSettings();
+
+			if (padSettings.isCustomLayout()) {
+				CartDesign layoutOpt = padSettings.getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
 				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
 			}
 		}

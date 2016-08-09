@@ -91,9 +91,8 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 		try {
 			// Settings
 			padView.setIndex(pad.getIndexReadable());
-			padView.loopLabelVisibleProperty().bind(pad.loopProperty());
-
-			padView.setTriggerLabelActive(pad.hasTriggerItems());
+			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
+			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
 			// Update Listener
 			padContentListener.setPad(pad);
@@ -270,7 +269,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 				padSettingsViewController.getStage().setOnHiding(ev ->
 				{
 					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.hasTriggerItems());
+						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 				});
 			}
 			padSettingsViewController.getStage().show();
@@ -294,7 +293,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 						padView.getPlayBar().setProgress(0);
 					} else {
 						// Play/Gesamtzeit anzeigen
-						TimeMode timeMode = pad.getTimeMode();
+						TimeMode timeMode = pad.getPadSettings().getTimeMode();
 
 						if (timeMode == TimeMode.REST) {
 							Duration leftTime = duration.subtract(position);

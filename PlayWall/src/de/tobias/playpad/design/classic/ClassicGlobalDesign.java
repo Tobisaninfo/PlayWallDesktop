@@ -11,6 +11,7 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.project.Project;
@@ -324,8 +325,10 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 
 		// Pad Spezelles Layout immer
 		for (Pad pad : project.getPads().values()) {
-			if (pad.isCustomLayout()) {
-				CartDesign layoutOpt = pad.getLayout();
+			PadSettings padSettings = pad.getPadSettings();
+
+			if (padSettings.isCustomLayout()) {
+				CartDesign layoutOpt = padSettings.getLayout();
 				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
 			}
 		}

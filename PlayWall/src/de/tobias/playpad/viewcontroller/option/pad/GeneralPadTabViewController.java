@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.option.pad;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -36,7 +37,7 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	public GeneralPadTabViewController(Pad pad) {
 		super("generalTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
-		
+
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
 			deleteButton.setDisable(true);
 		}
@@ -45,17 +46,19 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void init() {
 		// Init Listener
-		volumeListener = (a, b, c) -> pad.setVolume(c.doubleValue() / 100.0);
+		volumeListener = (a, b, c) -> pad.getPadSettings().setVolume(c.doubleValue() / 100.0);
 
 		volumeSlider.valueProperty().addListener(volumeListener);
 
 		customTimeDisplayCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
+			PadSettings padSettings = pad.getPadSettings();
+
 			timeDisplayComboBox.setDisable(!c);
-			if (c && !pad.isCustomTimeMode())
-				pad.setTimeMode(TimeMode.REST);
-			else if (b && pad.isCustomTimeMode())
-				pad.setTimeMode(null);
+			if (c && !padSettings.isCustomTimeMode())
+				padSettings.setTimeMode(TimeMode.REST);
+			else if (b && padSettings.isCustomTimeMode())
+				padSettings.setTimeMode(null);
 
 		});
 		timeDisplayComboBox.getItems().addAll(TimeMode.values());
@@ -70,25 +73,29 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
+		PadSettings padSettings = pad.getPadSettings();
+
 		// Bindings
 		titleTextField.textProperty().bindBidirectional(pad.nameProperty());
-		repeatCheckBox.selectedProperty().bindBidirectional(pad.loopProperty());
-		timeDisplayComboBox.valueProperty().bindBidirectional(pad.timeModeProperty());
+		repeatCheckBox.selectedProperty().bindBidirectional(padSettings.loopProperty());
+		timeDisplayComboBox.valueProperty().bindBidirectional(padSettings.timeModeProperty());
 
-		volumeSlider.setValue(pad.getVolume() * 100);
+		volumeSlider.setValue(padSettings.getVolume() * 100);
 
 		// is Custom TimeMode Actvie
-		customTimeDisplayCheckBox.setSelected(pad.isCustomTimeMode());
-		if (!pad.isCustomTimeMode()) {
+		customTimeDisplayCheckBox.setSelected(padSettings.isCustomTimeMode());
+		if (!padSettings.isCustomTimeMode()) {
 			timeDisplayComboBox.setDisable(true);
 		}
 	}
 
 	@Override
 	public void saveSettings(Pad pad) {
+		PadSettings padSettings = pad.getPadSettings();
+
 		titleTextField.textProperty().unbindBidirectional(pad.nameProperty());
-		repeatCheckBox.selectedProperty().unbindBidirectional(pad.loopProperty());
-		timeDisplayComboBox.valueProperty().unbindBidirectional(pad.timeModeProperty());
+		repeatCheckBox.selectedProperty().unbindBidirectional(padSettings.loopProperty());
+		timeDisplayComboBox.valueProperty().unbindBidirectional(padSettings.timeModeProperty());
 	}
 
 	// Listener

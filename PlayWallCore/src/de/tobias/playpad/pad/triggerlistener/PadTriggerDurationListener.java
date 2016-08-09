@@ -2,6 +2,7 @@ package de.tobias.playpad.pad.triggerlistener;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.settings.Profile;
@@ -30,11 +31,13 @@ public class PadTriggerDurationListener implements ChangeListener<Duration> {
 
 				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 				Profile currentProfile = Profile.currentProfile();
+				PadSettings padSettings = pad.getPadSettings();
 
-				Trigger startTrigger = pad.getTrigger(TriggerPoint.START);
+				// Execute Triggers
+				Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
 				startTrigger.handle(pad, newValue, pad.getProject(), mainViewController, currentProfile);
 
-				Trigger endTrigger = pad.getTrigger(TriggerPoint.EOF_STOP);
+				Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF_STOP);
 				endTrigger.handle(pad, leftTime, pad.getProject(), mainViewController, currentProfile);
 			}
 		}
