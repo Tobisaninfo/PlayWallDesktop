@@ -1,9 +1,9 @@
 package de.tobias.playpad.settings.keys;
 
 import de.tobias.playpad.Displayable;
-import de.tobias.utils.util.OS;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.input.KeyCombination;
 
 public class Key implements Displayable {
 
@@ -105,12 +105,10 @@ public class Key implements Displayable {
 
 	@Override
 	public String toString() {
-		if (OS.isMacOS()) {
-			return getKeyCode().replace("meta", String.valueOf((char) 8984)).replace("shift", String.valueOf((char) 8679))
-					.replace("ctrl", String.valueOf((char) 8963)).replace("alt", String.valueOf((char) 8997));
-		} else {
-			return getKeyCode();
-		}
+		if (!getKeyCode().isEmpty())
+			return KeyCombination.valueOf(getKeyCode()).getDisplayText();
+		else
+			return "";
 	}
 
 	private StringProperty displayProperty = new SimpleStringProperty();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;
@@ -17,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -31,12 +33,15 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 
 	private Runnable onFinish;
 
-	public ProjectSettingsViewController(Window owner, ProjectSettings settings, Runnable onFinish) {
+	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
 		super("projectSettingsView", "de/tobias/playpad/assets/view/option/project/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
-		this.settings = settings;
+		this.settings = project.getSettings();
 
 		getStage().initOwner(owner);
+		boolean activePlayer = project.hasPlayedPlayers();
+
+		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 
 		// Show Current Settings
 		loadTabs(settings);

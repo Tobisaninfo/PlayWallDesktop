@@ -28,7 +28,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class SettingsViewController extends ViewController implements IProfileSettingsViewController {
+public class ProfileSettingsViewController extends ViewController implements IProfileSettingsViewController {
 
 	@FXML private TabPane tabPane;
 	@FXML private ToggleButton lockedButton;
@@ -38,7 +38,7 @@ public class SettingsViewController extends ViewController implements IProfileSe
 
 	private Runnable onFinish;
 
-	public SettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
+	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
 		super("settingsView", "de/tobias/playpad/assets/view/option/profile/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 

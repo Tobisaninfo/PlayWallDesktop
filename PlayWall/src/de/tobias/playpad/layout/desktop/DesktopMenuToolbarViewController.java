@@ -41,8 +41,10 @@ import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
-import de.tobias.playpad.viewcontroller.option.profile.SettingsViewController;
+import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
+import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
@@ -89,7 +91,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML protected CheckMenuItem dndModeMenuItem;
 	@FXML protected MenuItem errorMenu;
 	@FXML protected MenuItem pluginMenu;
-	@FXML protected MenuItem settingsMenuItem;
+
+	@FXML protected MenuItem projectSettingsMenuItem;
+	@FXML protected MenuItem profileSettingsMenuItem;
 	@FXML protected MenuItem globalSettingsMenuItem;
 
 	@FXML protected CheckMenuItem fullScreenMenuItem;
@@ -105,7 +109,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML protected Label liveLabel;
 
 	private IMainViewController mainViewController;
-	private SettingsViewController settingsViewController;
+
+	private ProjectSettingsViewController projectSettingsViewController;
+	private ProfileSettingsViewController profileSettingsViewController;
 	private GlobalSettingsViewController globalSettingsViewController;
 
 	public DesktopMenuToolbarViewController(IMainViewController controller) {
@@ -203,7 +209,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		setKeyBindingForMenu(dndModeMenuItem, keys.getKey("dnd"));
 		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
 		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
-		setKeyBindingForMenu(settingsMenuItem, keys.getKey("profile_settings"));
+		setKeyBindingForMenu(projectSettingsMenuItem, keys.getKey("project_settings"));
+		setKeyBindingForMenu(profileSettingsMenuItem, keys.getKey("profile_settings"));
 		setKeyBindingForMenu(globalSettingsMenuItem, keys.getKey("global_settings"));
 
 		setKeyBindingForMenu(fullScreenMenuItem, keys.getKey("window_fullscreen"));
@@ -218,7 +225,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		dndModeMenuItem.setDisable(false);
 		errorMenu.setDisable(false);
 		pluginMenu.setDisable(false);
-		settingsMenuItem.setDisable(false);
+		projectSettingsMenuItem.setDisable(false);
+		profileSettingsMenuItem.setDisable(false);
 		globalSettingsMenuItem.setDisable(false);
 
 		fullScreenMenuItem.setDisable(false);
@@ -288,7 +296,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		dndModeMenuItem.setDisable(true);
 		errorMenu.setDisable(true);
 		pluginMenu.setDisable(true);
-		settingsMenuItem.setDisable(true);
+		projectSettingsMenuItem.setDisable(true);
+		profileSettingsMenuItem.setDisable(true);
 		globalSettingsMenuItem.setDisable(true);
 
 		fullScreenMenuItem.setDisable(true);
@@ -457,7 +466,38 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@FXML
-	void settingsHandler(ActionEvent event) {
+	void projectSettingsHandler(ActionEvent event) {
+		Midi midi = Midi.getInstance();
+		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+
+		if (projectSettingsViewController == null) {
+			Stage mainStage = mainViewController.getStage();
+
+			Runnable onFinish = () ->
+			{
+				midi.setListener(mainViewController.getMidiHandler());
+
+				for (ProjectSettingsTabViewController controller : projectSettingsViewController.getTabs()) {
+					if (controller.needReload()) {
+						controller.reload(currentProject.getSettings(), currentProject, mainViewController);
+					}
+				}
+
+				profileSettingsViewController = null;
+				mainStage.toFront();
+			};
+
+			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, currentProject,
+					onFinish);
+
+			projectSettingsViewController.getStage().show();
+		} else if (projectSettingsViewController.getStage().isShowing()) {
+			projectSettingsViewController.getStage().toFront();
+		}
+	}
+
+	@FXML
+	void profileSettingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
@@ -468,7 +508,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			return;
 		}
 
-		if (settingsViewController == null) {
+		if (profileSettingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
 			Runnable onFinish = () ->
@@ -476,7 +516,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				midi.setListener(mainViewController.getMidiHandler());
 
 				boolean change = false;
-				for (ProfileSettingsTabViewController controller : settingsViewController.getTabs()) {
+				for (ProfileSettingsTabViewController controller : profileSettingsViewController.getTabs()) {
 					if (controller.needReload()) {
 						change = true;
 						controller.reload(Profile.currentProfile(), currentProject, mainViewController);
@@ -487,15 +527,16 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					PlayPadMain.getProgramInstance().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
 				}
 
-				settingsViewController = null;
+				profileSettingsViewController = null;
 				mainStage.toFront();
 			};
 
-			settingsViewController = new SettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject, onFinish);
+			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject,
+					onFinish);
 
-			settingsViewController.getStage().show();
-		} else if (settingsViewController.getStage().isShowing()) {
-			settingsViewController.getStage().toFront();
+			profileSettingsViewController.getStage().show();
+		} else if (profileSettingsViewController.getStage().isShowing()) {
+			profileSettingsViewController.getStage().toFront();
 		}
 	}
 

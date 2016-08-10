@@ -43,10 +43,14 @@ public class ProjectSettings {
 	}
 
 	public void setColumns(int columns) {
+		if (columns > MAX_COLUMNS)
+			columns = MAX_COLUMNS;
 		this.columns = columns;
 	}
 
 	public void setRows(int rows) {
+		if (rows > MAX_ROWS)
+			rows = MAX_ROWS;
 		this.rows = rows;
 	}
 

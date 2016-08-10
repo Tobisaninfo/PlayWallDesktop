@@ -5,7 +5,6 @@ import java.util.List;
 import org.controlsfx.control.SegmentedButton;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
@@ -13,13 +12,11 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.utils.ui.ContentViewController;
-import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -36,7 +33,6 @@ import javafx.scene.layout.VBox;
 public class CartActionsViewController extends ContentViewController {
 
 	@FXML private VBox buttonVbox;
-	@FXML private HBox pageHbox;
 
 	private ToggleGroup cartsToggle;
 	@FXML private GridPane gridPane;
@@ -56,21 +52,6 @@ public class CartActionsViewController extends ContentViewController {
 
 		showCartButtons(settings, 0);
 		VBox.setVgrow(gridPane, Priority.ALWAYS);
-
-		SegmentedButton segmentedButton = new SegmentedButton();
-		for (int i = 0; i < settings.getPageCount(); i++) {
-			ToggleButton button = new ToggleButton(Localization.getString(Strings.UI_Window_Main_PageButton, i + 1));
-			button.setOnAction(e ->
-			{
-				int page = Integer.valueOf(((ToggleButton) e.getSource()).getUserData().toString());
-				showCartButtons(settings, page);
-			});
-			button.setUserData(i);
-			segmentedButton.getButtons().add(button);
-		}
-		segmentedButton.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
-		pageHbox.getChildren().add(segmentedButton);
-		segmentedButton.getButtons().get(0).setSelected(true); // Select First Toggle
 	}
 
 	@Override
