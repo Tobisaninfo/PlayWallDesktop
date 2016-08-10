@@ -7,6 +7,13 @@
 
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <HBox spacing="14.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.player.label.modus" />
+            <CheckBox fx:id="playerModus" layoutX="150.0" mnemonicParsing="false" text="%settings.player.checkbox.modus" />
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0" />
       <Label text="%settings.player.label.fade" underline="true" />
       <VBox fx:id="fadeContainer" minHeight="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
       <Separator prefWidth="200.0" />

@@ -138,6 +138,7 @@ public class Pad {
 		if (status == PadStatus.STOP && getStatus() == PadStatus.READY) {
 			return;
 		}
+
 		this.statusProperty.set(status);
 	}
 

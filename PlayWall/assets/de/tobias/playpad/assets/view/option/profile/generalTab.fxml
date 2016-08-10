@@ -5,10 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefWidth="800.0" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label text="%settings.gen.label.additional" underline="true" />
       <HBox spacing="14.0">
          <children>
             <Label alignment="BASELINE_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.liveMode" />

@@ -47,6 +47,7 @@ public class ProfileSettings implements SettingsSerializable {
 	@Storable private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
 
 	// Cart Settings
+	@Storable private boolean multiplePlayer = true;
 	@Storable private Warning warningFeedback = new Warning(Duration.seconds(5));
 
 	@Storable private boolean midiActive = false;
@@ -146,6 +147,10 @@ public class ProfileSettings implements SettingsSerializable {
 		return audioUserInfo;
 	}
 
+	public boolean isMultiplePlayer() {
+		return multiplePlayer;
+	}
+
 	// Setter
 	public void setMidiDeviceName(String midiDevice) {
 		this.midiDevice = midiDevice;
@@ -211,6 +216,10 @@ public class ProfileSettings implements SettingsSerializable {
 		this.audioClass = audioClass;
 	}
 
+	public void setMultiplePlayer(boolean multiplePlayer) {
+		this.multiplePlayer = multiplePlayer;
+	}
+
 	// Properties
 	public DoubleProperty volumeProperty() {
 		return volumeProperty;
@@ -224,6 +233,7 @@ public class ProfileSettings implements SettingsSerializable {
 	private static final String AUDIO_USER_INFO_ELEMENT = "AudioUserInfo";
 	private static final String AUDIO_CLASS_ELEMENT = "AudioClass";
 	private static final String WINDOW_ALWAYS_ON_TOP_ELEMENT = "WindowAlwaysOnTop";
+	private static final String MULTIPLE_PLAYER_ELEMENT = "MultiplePlayer";
 	private static final String LIVE_MODE_ELEMENT = "LiveMode";
 	private static final String LIVE_MODE_PAGE_ATTR = "page";
 	private static final String LIVE_MODE_DRAG_ATTR = "drag";
@@ -258,6 +268,10 @@ public class ProfileSettings implements SettingsSerializable {
 			}
 			if (root.element(MAIN_LAYOUT_TYPE_ELEMENT) != null) {
 				profileSettings.setMainLayoutType(root.element(MAIN_LAYOUT_TYPE_ELEMENT).getStringValue());
+			}
+
+			if (root.element(MULTIPLE_PLAYER_ELEMENT) != null) {
+				profileSettings.setMultiplePlayer(Boolean.valueOf(root.element(MULTIPLE_PLAYER_ELEMENT).getStringValue()));
 			}
 
 			if (root.element(WARNING_ELEMENT) != null) {
@@ -341,6 +355,8 @@ public class ProfileSettings implements SettingsSerializable {
 		warningFeedback.save(root.addElement(WARNING_ELEMENT));
 		fade.save(root.addElement(FADE_ELEMENT));
 		root.addElement(TIME_DISPLAY_ELEMENT).addText(player_timeDisplayMode.name());
+
+		root.addElement(MULTIPLE_PLAYER_ELEMENT).addText(String.valueOf(multiplePlayer));
 
 		Element liveElement = root.addElement(LIVE_MODE_ELEMENT);
 		liveElement.addText(String.valueOf(liveMode));

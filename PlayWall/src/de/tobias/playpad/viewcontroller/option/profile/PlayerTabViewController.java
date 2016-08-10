@@ -13,10 +13,14 @@ import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
 public class PlayerTabViewController extends ProfileSettingsTabViewController {
+
+	// Modus
+	@FXML private CheckBox playerModus;
 
 	// Player
 	@FXML private VBox warningFeedbackContainer;
@@ -52,6 +56,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	public void loadSettings(Profile profile) {
 		ProfileSettings profileSettings = profile.getProfileSettings();
 
+		playerModus.setSelected(profile.getProfileSettings().isMultiplePlayer());
 		timeDisplayComboBox.setValue(profileSettings.getPlayerTimeDisplayMode());
 	}
 
@@ -60,6 +65,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 		ProfileSettings profileSettings = profile.getProfileSettings();
 
 		// Player
+		profileSettings.setMultiplePlayer(playerModus.isSelected());
 		profileSettings.setPlayerTimeDisplayMode(timeDisplayComboBox.getValue());
 	}
 
