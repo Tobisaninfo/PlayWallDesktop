@@ -27,6 +27,7 @@
             <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.keys.label.shortcut" />
             <Label fx:id="shortcutLabel" prefWidth="100.0" />
             <Button fx:id="newShortcutButton" mnemonicParsing="false" onAction="#newShortcutButtonHandler" text="%settings.keys.button.change" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteHandler" text="%settings.keys.button.delete" />
          </children>
       </HBox>
    </children>

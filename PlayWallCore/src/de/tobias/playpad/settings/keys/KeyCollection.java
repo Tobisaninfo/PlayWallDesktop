@@ -13,6 +13,13 @@ import org.dom4j.io.SAXReader;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.util.OS;
 
+/**
+ * Verwaltung der Tastenkombinationen für das Menu.
+ * 
+ * @author tobias
+ *
+ * @since 5.1.0
+ */
 public class KeyCollection {
 
 	// Schlüssel: ID, Value: Key
@@ -42,6 +49,20 @@ public class KeyCollection {
 
 	public Collection<Key> getKeys() {
 		return keys.values();
+	}
+
+	/**
+	 * Löscht eine Tastenkombination.
+	 * 
+	 * @param key
+	 *            Key
+	 */
+	public void removeKeyBinding(Key key) {
+		key.setAlt(false);
+		key.setCtrl(false);
+		key.setMeta(false);
+		key.setShift(false);
+		key.setKey("");
 	}
 
 	public boolean keysConflict(Key key) {

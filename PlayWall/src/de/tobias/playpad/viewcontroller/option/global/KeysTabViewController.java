@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -40,6 +41,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 	@FXML private Label nameLabel;
 	@FXML private Label shortcutLabel;
 	@FXML private Button newShortcutButton;
+	@FXML private Button deleteButton;
 
 	private Key currentKey;
 	private ObservableList<Key> keys = FXCollections.observableArrayList();
@@ -65,6 +67,20 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 			setDetailView(c);
 		});
 		searchTextField.textProperty().addListener((a, b, c) -> search());
+
+		table.setRowFactory(tv ->
+		{
+			TableRow<Key> row = new TableRow<>();
+			row.setOnMouseClicked(event ->
+			{
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					setDetailView(row.getItem());
+					showNewKeyBindingDialog();
+				}
+			});
+			return row;
+		});
+
 	}
 
 	private void setDetailView(Key key) {
@@ -87,6 +103,18 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	void newShortcutButtonHandler(ActionEvent event) {
+		showNewKeyBindingDialog();
+	}
+
+	@FXML
+	void deleteHandler(ActionEvent event) {
+		if (currentKey != null) {
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			globalSettings.getKeyCollection().removeKeyBinding(currentKey);
+		}
+	}
+
+	private void showNewKeyBindingDialog() {
 		Alert alert = new Alert(AlertType.NONE);
 		alert.setContentText(Localization.getString(Strings.UI_Settings_Alert_NewKeyShortcut_Text));
 		Scene scene = alert.getDialogPane().getScene();
@@ -96,7 +124,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 			if (ev.getCode().isModifierKey()) {
 				return;
 			}
-			
+
 			boolean macCondition = ev.getCode().isLetterKey() || ev.getCode().isKeypadKey() || ev.getCode().isDigitKey()
 					|| ev.getCode().isFunctionKey() || ev.getCode() == KeyCode.PERIOD || ev.getCode() == KeyCode.COMMA;
 

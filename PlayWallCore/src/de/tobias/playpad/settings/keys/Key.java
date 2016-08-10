@@ -106,7 +106,11 @@ public class Key implements Displayable {
 	@Override
 	public String toString() {
 		if (!getKeyCode().isEmpty())
-			return KeyCombination.valueOf(getKeyCode()).getDisplayText();
+			try {
+				return KeyCombination.valueOf(getKeyCode()).getDisplayText();
+			} catch (IllegalArgumentException e) {
+				return "";
+			}
 		else
 			return "";
 	}
