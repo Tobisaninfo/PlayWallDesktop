@@ -71,7 +71,13 @@ public class MapperOverviewViewController implements IMapperOverviewViewControll
 				// Adds a mapper to the action
 				try {
 					MapperViewController controller = onAddMapper(item);
-					controller.showInputMapperUI();
+					boolean result = controller.showInputMapperUI();
+
+					// Delete Mapper wenn Eingabe abgebrochen wurde
+					if (!result) {
+						mappingView.getChildren().removeAll(controller.getParent().getParent());
+						action.removeMapper(controller.getMapper());
+					}
 				} catch (NoSuchComponentException ex) {
 					// TODO Error Handling
 					ex.printStackTrace();

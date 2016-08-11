@@ -74,9 +74,13 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	 * Current Alert for mapping.
 	 */
 	private Alert alert;
+	// Hilfsvariable um zu speichern, ob der Input Dialog abgebrochen wurde
+	private boolean canceled = false;
 
 	@FXML
 	private void midiInputRecordButtonHandler(ActionEvent event) {
+		canceled = false;
+		
 		currentListener = Midi.getInstance().getListener();
 		Midi.getInstance().setListener(this);
 
@@ -91,6 +95,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				Midi.getInstance().setListener(currentListener);
 				currentListener = null;
 				alert = null;
+				canceled = true;
 			}
 		});
 	}
@@ -117,8 +122,9 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	}
 
 	@Override
-	public void showInputMapperUI() {
-		midiInputRecordButton.fire();
+	public boolean showInputMapperUI() {
+		midiInputRecordButtonHandler(null);
+		return canceled; // TEST Ob das funktioniert mit dem Return
 	}
 
 	public void setMapper(MidiMapper midiMapper) {

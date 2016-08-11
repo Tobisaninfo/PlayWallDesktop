@@ -6,16 +6,11 @@ import de.tobias.playpad.action.mapper.KeyboardMapper;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 public class KeyboardMapperViewController extends MapperViewController {
 
@@ -34,10 +29,12 @@ public class KeyboardMapperViewController extends MapperViewController {
 	}
 
 	@Override
-	public void hideFeedback() {}
+	public void hideFeedback() {
+	}
 
 	@Override
-	public void showFeedback() {}
+	public void showFeedback() {
+	}
 
 	private void setLabel() {
 		keyLabel.setText(mapper.getReadableName());
@@ -45,38 +42,22 @@ public class KeyboardMapperViewController extends MapperViewController {
 
 	@FXML
 	private void mappingButtonHandler(ActionEvent event) {
-		Alert alert = new Alert(AlertType.NONE);
+		inputDialog();
+	}
+
+	private boolean inputDialog() {
+		KeyboardMapperInputDialog alert = new KeyboardMapperInputDialog(mapper);
 		alert.setTitle(Localization.getString(Strings.Mapper_Keyboard_Name));
 		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
-		Scene scene = alert.getDialogPane().getScene();
-
-		scene.setOnKeyPressed(ev ->
-		{
-			mapper.setKey(ev.getCode().getName());
-			mapper.setCode(ev.getCode());
-			setLabel();
-		});
-		scene.setOnKeyReleased(ev ->
-		{
-			// Close on Finish (alert.close() does not work)
-			((Stage) scene.getWindow()).close();
-		});
-		scene.setOnKeyTyped(ev ->
-		{
-			if (!StringUtils.isStringNotVisable(ev.getCharacter())) {
-				mapper.setKey(ev.getCharacter().toUpperCase());
-				setLabel();
-			}
-		});
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getWindow());
-		alert.showAndWait();
+		return alert.showInputDialog();
 	}
 
 	@Override
-	public void showInputMapperUI() {
-		mappingButton.fire();
+	public boolean showInputMapperUI() {
+		return inputDialog();
 	}
 
 	public void setMapper(KeyboardMapper keyboardMapper) {
