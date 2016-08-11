@@ -52,7 +52,9 @@ public class KeyboardMapperViewController extends MapperViewController {
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getWindow());
-		return alert.showInputDialog();
+		boolean result =  alert.showInputDialog();
+		setLabel();
+		return result;
 	}
 
 	@Override
