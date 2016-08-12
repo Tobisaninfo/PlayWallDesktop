@@ -16,6 +16,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -30,6 +31,7 @@ import javafx.collections.ObservableList;
  * @author tobias
  *
  */
+@Deprecated
 public class Project {
 
 	/**

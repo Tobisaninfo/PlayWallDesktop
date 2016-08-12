@@ -16,6 +16,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;

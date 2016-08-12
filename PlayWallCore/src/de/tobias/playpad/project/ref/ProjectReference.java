@@ -1,4 +1,4 @@
-package de.tobias.playpad.project;
+package de.tobias.playpad.project.ref;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,6 +15,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.App;

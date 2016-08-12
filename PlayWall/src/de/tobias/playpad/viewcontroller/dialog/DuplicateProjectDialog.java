@@ -5,7 +5,7 @@ import java.util.Optional;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
