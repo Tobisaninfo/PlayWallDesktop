@@ -1,6 +1,7 @@
 package de.tobias.playpad.layout.desktop;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -67,7 +68,8 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
 
-		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController
+		// erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		profileSettings.lockedProperty().addListener(padLockedListener);
 	}
@@ -244,7 +246,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		try {
 			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException e) {
+		} catch (NoSuchComponentException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -483,7 +483,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				projectSettingsViewController = null;
 				mainStage.toFront();
-				System.out.println("Done");
 			};
 
 			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, currentProject,

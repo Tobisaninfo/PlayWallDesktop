@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.pad;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -133,7 +134,7 @@ public class PadDragListener {
 
 				try {
 					content.handlePath(file.toPath());
-				} catch (NoSuchComponentException e) {
+				} catch (NoSuchComponentException | IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

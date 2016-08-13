@@ -32,6 +32,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController {
 		File folder = chooser.showDialog(getStage());
 		if (folder != null) {
 			Path path = folder.toPath();
+			mediaPathTextField.setText(path.toString());
 		}
 	}
 
