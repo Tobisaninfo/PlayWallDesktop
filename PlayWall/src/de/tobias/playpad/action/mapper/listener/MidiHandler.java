@@ -9,7 +9,7 @@ import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.MappingUtils;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.application.Platform;
@@ -25,9 +25,9 @@ public class MidiHandler implements MidiListener {
 	private final Midi midi;
 
 	private IMainViewController mainView;
-	private Project project;
+	private ProjectV2 project;
 
-	public MidiHandler(Midi midi, IMainViewController mainView, Project project) {
+	public MidiHandler(Midi midi, IMainViewController mainView, ProjectV2 project) {
 		this.midi = midi;
 		this.mainView = mainView;
 		this.project = project;
@@ -60,7 +60,7 @@ public class MidiHandler implements MidiListener {
 		});
 	}
 
-	public void setProject(Project project) {
+	public void setProject(ProjectV2 project) {
 		this.project = project;
 	}
 }

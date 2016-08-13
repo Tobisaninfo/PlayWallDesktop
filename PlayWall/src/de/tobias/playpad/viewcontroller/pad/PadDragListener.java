@@ -11,7 +11,8 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -21,6 +22,7 @@ import de.tobias.utils.util.FileUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -30,15 +32,16 @@ import javafx.scene.paint.Color;
 
 public class PadDragListener {
 
-	private static final String REGEX = "[0-9]+";
 	private Pad sourcePad;
 	final private Pane view;
 
 	private static boolean dndMode;
-	private static Project project;
+	private static ProjectV2 project;
 
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
+
+	private static DataFormat dataFormat = new DataFormat("de.tobias.playpad.padindex");
 
 	public PadDragListener(Pad pad, IPadViewV2 view) {
 		this.sourcePad = pad;
@@ -89,9 +92,9 @@ public class PadDragListener {
 		}
 
 		// Drag and Drop von Pads
-		if (event.getDragboard().hasString() && event.getDragboard().getString().trim().matches(REGEX)) {
-			int padID = Integer.valueOf(event.getDragboard().getString());
-			if (padID != sourcePad.getIndex()) {
+		if (event.getDragboard().hasContent(dataFormat)) {
+			PadIndex index = (PadIndex) event.getDragboard().getContent(dataFormat); // TODO Check cast
+			if (!sourcePad.getPadIndex().equals(index)) {
 
 				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
 
@@ -148,11 +151,11 @@ public class PadDragListener {
 			}
 		}
 
-		if (db.hasString() && db.getString().matches(REGEX)) {
-			int padID = Integer.valueOf(db.getString());
+		if (db.hasContent(dataFormat)) {
+			PadIndex padID = (PadIndex) db.getContent(dataFormat); // TODO Check Cast
 
 			PadDragMode mode = padHud.getSelectedPadDragMode();
-			mode.handle(padID, sourcePad.getIndex(), project);
+			mode.handle(padID, sourcePad.getPadIndex(), project);
 			padHud.hide();
 
 			PlayPadPlugin.getImplementation().getMainViewController()
@@ -189,7 +192,7 @@ public class PadDragListener {
 			dragboard.setDragView(snapshot);
 
 			ClipboardContent content = new ClipboardContent();
-			content.putString(String.valueOf(sourcePad.getIndex()));
+			content.put(dataFormat, sourcePad.getPadIndex());
 			dragboard.setContent(content);
 
 			event.consume();
@@ -211,7 +214,7 @@ public class PadDragListener {
 		this.sourcePad = pad;
 	}
 
-	public static void setProject(Project project) {
+	public static void setProject(ProjectV2 project) {
 		PadDragListener.project = project;
 	}
 

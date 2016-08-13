@@ -9,7 +9,6 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,7 +20,8 @@ import javafx.scene.paint.Paint;
  * 
  * @since 5.1.0
  * 
- * @see ColorAdjustable Action muss dieses Interface dafür Implementieren, damit die Farbe Automatisch zum pad gemacht wird.
+ * @see ColorAdjustable Action muss dieses Interface dafür Implementieren, damit die Farbe Automatisch zum pad gemacht
+ *      wird.
  * @see ColorAssociator Mapper muss dieses Interface implemetieren, damit die entsprechenden Farbe gefunden werden kann
  *
  */
@@ -29,11 +29,8 @@ public class ColorAdjuster {
 
 	/**
 	 * Übernimmt die Farben des Pads und den verknüpften Aktionen zu einem Pad auf die Mapper.
-	 * 
-	 * @param project
-	 *            Aktuelles Projekt.
 	 */
-	public static void applyColorsToMappers(Project project) {
+	public static void applyColorsToMappers() {
 		// Apply Layout to Mapper
 		Set<Action> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions();
 		for (Action action : actions) {
@@ -42,7 +39,7 @@ public class ColorAdjuster {
 				if (adjustable.isAutoFeedbackColors()) {
 					for (Mapper mapper : action.getMappers()) {
 						if (mapper instanceof MapperFeedbackable) {
-							mapColorForMapper(adjustable, mapper, project);
+							mapColorForMapper(adjustable, mapper);
 						}
 					}
 				}
@@ -52,7 +49,7 @@ public class ColorAdjuster {
 
 	// COMMENT ColorAdjuster
 
-	private static void mapColorForMapper(ColorAdjustable cartAction, Mapper mapper, Project project) {
+	private static void mapColorForMapper(ColorAdjustable cartAction, Mapper mapper) {
 		MapperFeedbackable feedbackable = (MapperFeedbackable) mapper;
 		if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
 			ColorAssociator colorAssociator = (ColorAssociator) mapper;

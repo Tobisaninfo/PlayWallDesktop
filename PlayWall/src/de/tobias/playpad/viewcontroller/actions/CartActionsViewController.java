@@ -8,8 +8,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
@@ -47,7 +47,7 @@ public class CartActionsViewController extends ContentViewController {
 		this.mapping = mapping;
 		this.parentController = parentController;
 
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+		ProjectV2 currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		ProjectSettings settings = currentProject.getSettings();
 
 		showCartButtons(settings, 0);

@@ -7,7 +7,7 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileReference;
@@ -40,9 +40,9 @@ public class ProfileViewController extends ViewController implements ChangeListe
 
 	@FXML private Button chooseButton;
 
-	private Project project;
+	private ProjectV2 project;
 
-	public ProfileViewController(Window owner, Project project) {
+	public ProfileViewController(Window owner, ProjectV2 project) {
 		super("profileSettingsView", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
 		profileList.getSelectionModel().select(Profile.currentProfile().getRef());
 		this.project = project;
@@ -98,7 +98,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 	@FXML
 	private void chooseButtonHandler(ActionEvent event) {
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
-		project.getRef().setProfileReference(ref);
+		project.getProjectReference().setProfileReference(ref);
 
 		try {
 			Profile.load(ref);

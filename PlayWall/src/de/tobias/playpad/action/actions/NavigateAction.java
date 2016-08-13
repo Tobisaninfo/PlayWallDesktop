@@ -8,7 +8,7 @@ import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.connect.NavigateActionConnect;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
@@ -50,7 +50,7 @@ public class NavigateAction extends Action {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		handleFeedback(FeedbackMessage.STANDARD);
 	}
 
@@ -60,7 +60,7 @@ public class NavigateAction extends Action {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
 		if (type == InputType.PRESSED) {
 			switch (this.action) {
 			case PREVIOUS:

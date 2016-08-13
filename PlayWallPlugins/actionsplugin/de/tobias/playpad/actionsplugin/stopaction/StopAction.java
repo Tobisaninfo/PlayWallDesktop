@@ -9,7 +9,7 @@ import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.actionsplugin.impl.ActionsPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -26,15 +26,15 @@ public class StopAction extends Action {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
-		for (Pad pad : project.getPads().values()) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
+		for (Pad pad : project.getPads()) {
 			if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE)
 				pad.setStatus(PadStatus.STOP, true);
 		}
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		handleFeedback(FeedbackMessage.STANDARD);
 	}
 

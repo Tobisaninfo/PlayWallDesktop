@@ -12,7 +12,7 @@ import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
@@ -145,12 +145,12 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		}
 	}
 
-	public void showFeedback(Project project) {
+	public void showFeedback(ProjectV2 project) {
 		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
 		showFeedback(project, controller);
 	}
 
-	public void showFeedback(Project project, IMainViewController controller) {
+	public void showFeedback(ProjectV2 project, IMainViewController controller) {
 		clearFeedback();
 
 		for (Action action : mapping.keySet()) {
@@ -178,8 +178,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		getActions().forEach(action -> action.clearFeedback());
 	}
 
-	public void adjustPadColorToMapper(Project project) {
-		ColorAdjuster.applyColorsToMappers(project);
+	public void adjustPadColorToMapper() {
+		ColorAdjuster.applyColorsToMappers();
 	}
 
 	@Override

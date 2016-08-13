@@ -11,8 +11,9 @@ import com.hp.gagawa.java.elements.Tr;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
@@ -39,9 +40,9 @@ public class PrintDialog extends ViewController {
 	@FXML private Button printButton;
 	@FXML private Button cancelButton;
 
-	private Project project;
+	private ProjectV2 project;
 
-	public PrintDialog(Project project, Window owner) {
+	public PrintDialog(ProjectV2 project, Window owner) {
 		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
@@ -83,7 +84,7 @@ public class PrintDialog extends ViewController {
 
 		H1 header = new H1();
 
-		String headerString = Localization.getString(Strings.Info_Print_Header, project.getRef().getName(), page + 1);
+		String headerString = Localization.getString(Strings.Info_Print_Header, project.getProjectReference().getName(), page + 1);
 		header.appendText(headerString);
 		header.setStyle("text-align: center;");
 		body.appendChild(header);
@@ -92,7 +93,7 @@ public class PrintDialog extends ViewController {
 		table.setStyle("border:1px solid black;border-collapse:collapse;");
 
 		ProjectSettings settings = project.getSettings();
-		int i = page * settings.getRows() * settings.getColumns();
+		int i = 0;
 
 		for (int y = 0; y < settings.getRows(); y++) {
 			Tr tr = new Tr();
@@ -103,7 +104,7 @@ public class PrintDialog extends ViewController {
 						+ "px; padding: 5px; vertical-align: center; text-align: center; min-height: 30px; min-width: 100px;");
 				Div div = new Div();
 				div.setStyle("word-break: break-all; white-space: normal;");
-				Pad pad = this.project.getPad(i);
+				Pad pad = this.project.getPad(new PadIndex(i, page));
 
 				if (pad.getContent() != null && pad.getContent().isPadLoaded())
 					div.appendText(pad.getName());

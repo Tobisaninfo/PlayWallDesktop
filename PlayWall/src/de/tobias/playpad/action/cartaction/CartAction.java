@@ -11,7 +11,7 @@ import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.actions.CartActionViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.ContentViewController;
@@ -22,9 +22,7 @@ import javafx.beans.property.StringProperty;
 public class CartAction extends Action implements ColorAdjustable {
 
 	public enum ControlMode {
-		PLAY_PAUSE,
-		PLAY_STOP,
-		PLAY_HOLD;
+		PLAY_PAUSE, PLAY_STOP, PLAY_HOLD;
 	}
 
 	private int x;
@@ -86,7 +84,7 @@ public class CartAction extends Action implements ColorAdjustable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		Pad pad = project.getPad(x, y, controller.getPage());
 
 		if (pad != null) {
@@ -118,7 +116,7 @@ public class CartAction extends Action implements ColorAdjustable {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
 		setPad(project.getPad(x, y, mainViewController.getPage()));
 
 		// wird nur ausgeführt, wenn das Pad ein Content hat und sichtbar in der GUI (Gilt für MIDI und Keyboard)

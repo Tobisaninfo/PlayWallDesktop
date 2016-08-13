@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadException.PadExceptionType;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.errordialog.ErrorCell;
 import de.tobias.playpad.viewcontroller.cell.errordialog.FixCell;
@@ -72,7 +72,8 @@ public class ErrorSummaryDialog extends ViewController {
 					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
 							padException.getPad().getIndexReadable());
 				else
-					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(), padException.getPath().toString());
+					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
+							padException.getPath().toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -93,8 +94,8 @@ public class ErrorSummaryDialog extends ViewController {
 				() -> Platform.runLater(() -> getStage().close()));
 	}
 
-	public void setProject(Project project) {
-		errorTable.setItems(project.getExceptions());
+	public void setProject(ProjectV2 project) {
+		// errorTable.setItems(project.getExceptions()); TODO Error Handling User
 		errorTable.getItems().addListener(new ListChangeListener<PadException>() {
 
 			@Override

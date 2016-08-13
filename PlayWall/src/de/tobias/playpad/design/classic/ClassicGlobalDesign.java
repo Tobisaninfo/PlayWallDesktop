@@ -14,7 +14,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
@@ -312,7 +312,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 	}
 
 	@Override
-	public void applyCssMainView(IMainViewController controller, Stage stage, Project project) {
+	public void applyCssMainView(IMainViewController controller, Stage stage, ProjectV2 project) {
 		applyCss(stage);
 
 		// Hard Settings
@@ -324,7 +324,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 		String css = convertToCSS("", isCustomLayout());
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {

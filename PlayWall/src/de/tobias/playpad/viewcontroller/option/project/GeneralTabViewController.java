@@ -4,8 +4,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.GlobalDesign;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
@@ -146,7 +146,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController {
 	}
 
 	@Override
-	public void reload(ProjectSettings settings, Project project, IMainViewController controller) {
+	public void reload(ProjectSettings settings, ProjectV2 project, IMainViewController controller) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
 

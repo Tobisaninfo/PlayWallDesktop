@@ -9,7 +9,7 @@ import org.dom4j.Element;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
@@ -95,7 +95,7 @@ public class Trigger {
 		return triggerPoint.name() + " (" + items.size() + ")";
 	}
 
-	public void handle(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile) {
+	public void handle(Pad pad, Duration duration, ProjectV2 project, IMainViewController mainViewController, Profile currentProfile) {
 		for (TriggerItem item : items) {
 			if (triggerPoint == TriggerPoint.START) {
 				if (pad.getStatus() == PadStatus.PLAY) {

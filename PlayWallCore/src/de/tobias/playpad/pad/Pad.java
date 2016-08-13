@@ -1,14 +1,13 @@
 package de.tobias.playpad.pad;
 
-import java.nio.file.Path;
-
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -24,6 +23,8 @@ public class Pad {
 
 	// Verwaltung
 	private IntegerProperty indexProperty = new SimpleIntegerProperty();
+	private IntegerProperty pageProperty = new SimpleIntegerProperty();
+
 	private StringProperty nameProperty = new SimpleStringProperty();
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
@@ -48,9 +49,9 @@ public class Pad {
 	// Utils
 	private transient boolean eof;
 	private transient IPadViewControllerV2 controller;
-	private transient Project project;
+	private transient ProjectV2 project;
 
-	public Pad(Project project) {
+	public Pad(ProjectV2 project) {
 		this.project = project;
 		padSettings = new PadSettings();
 
@@ -58,7 +59,7 @@ public class Pad {
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
 	}
 
-	public Pad(Project project, int index) {
+	public Pad(ProjectV2 project, int index, int page) {
 		this.project = project;
 		padSettings = new PadSettings();
 
@@ -69,8 +70,12 @@ public class Pad {
 		padSettings.updateTrigger();
 	}
 
-	public Pad(Project project, int index, String name, PadContent content) {
-		this(project, index);
+	public Pad(ProjectV2 project, PadIndex index) {
+		this(project, index.getId(), index.getPage());
+	}
+
+	public Pad(ProjectV2 project, int index, int page, String name, PadContent content) {
+		this(project, index, page);
 		setName(name);
 		setContent(content);
 	}
@@ -95,6 +100,10 @@ public class Pad {
 		return indexProperty.get();
 	}
 
+	public int getPage() {
+		return pageProperty.get();
+	}
+
 	public int getIndexReadable() {
 		return indexProperty.get() + 1;
 	}
@@ -105,6 +114,14 @@ public class Pad {
 
 	public ReadOnlyIntegerProperty indexProperty() {
 		return indexProperty;
+	}
+
+	public void setPage(int page) {
+		pageProperty.set(page);
+	}
+
+	public PadIndex getPadIndex() {
+		return new PadIndex(getIndex(), getPage());
 	}
 
 	public String getName() {
@@ -187,22 +204,6 @@ public class Pad {
 			contentProperty.get().loadMedia();
 	}
 
-	public void throwException(Path path, Exception exception) {
-		if (project != null)
-			project.addException(this, path, exception);
-		setStatus(PadStatus.ERROR);
-	}
-
-	public void removeExceptionsForPad() {
-		if (project != null)
-			project.removeExceptions(this);
-	}
-
-	public void removeException(PadException exception) {
-		if (project != null)
-			project.removeException(exception);
-	}
-
 	public PadTriggerDurationListener getPadTriggerDurationListener() {
 		return padTriggerDurationListener;
 	}
@@ -215,7 +216,7 @@ public class Pad {
 		this.ignoreTrigger = ignoreTrigger;
 	}
 
-	public Project getProject() {
+	public ProjectV2 getProject() {
 		return project;
 	}
 
@@ -239,7 +240,7 @@ public class Pad {
 		setStatus(PadStatus.EMPTY);
 
 		if (project != null) {
-			project.removeExceptions(this);
+			// TODO Remove Exceptions refer to pad
 		}
 	}
 

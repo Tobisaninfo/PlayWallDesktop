@@ -121,7 +121,7 @@ public class Project {
 	 *            Index i
 	 */
 	private void addPadForIndex(int index) {
-		pads.put(index, new Pad(this, index));
+		// pads.put(index, new Pad(this, index)); TODO Old
 	}
 
 	/**
@@ -153,7 +153,8 @@ public class Project {
 			if (ref.getProfileReference() != null) {
 				Profile.load(ref.getProfileReference()); // Lädt das entsprechende Profile und aktiviert es
 			} else {
-				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es gleich im Speicher
+				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es
+																		// gleich im Speicher
 				ref.setProfileReference(profile.getRef());
 			}
 
@@ -161,7 +162,7 @@ public class Project {
 
 			// Lädt Pads
 			XMLHandler<Pad> handler = new XMLHandler<>(projectPath);
-			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(project));
+			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(null)); // TODO Old null war project
 
 			for (Pad pad : pads) {
 				if (loadMedia)

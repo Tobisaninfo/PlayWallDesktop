@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
@@ -118,7 +118,7 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
+	public void reload(Profile profile, ProjectV2 project, IMainViewController controller) {
 		MediaPluginImpl.getInstance().getVideoViewController().reloadSettings();
 	}
 

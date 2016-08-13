@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
@@ -33,7 +33,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 
 	private Runnable onFinish;
 
-	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
+	public ProjectSettingsViewController(Screen currentScreen, Window owner, ProjectV2 project, Runnable onFinish) {
 		super("projectSettingsView", "de/tobias/playpad/assets/view/option/project/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 		this.settings = project.getSettings();

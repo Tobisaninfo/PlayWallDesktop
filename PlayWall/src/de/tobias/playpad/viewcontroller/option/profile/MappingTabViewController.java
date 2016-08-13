@@ -13,7 +13,7 @@ import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.MapperRegistry;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
@@ -162,9 +162,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(currentProject);
+	public void reload(Profile profile, ProjectV2 project, IMainViewController controller) {
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
 		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 

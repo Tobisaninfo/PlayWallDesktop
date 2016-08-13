@@ -9,9 +9,9 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
@@ -58,14 +58,14 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	@FXML private Label dateLabel;
 	@FXML private Label sizeLabel;
 
-	private Project currentProject;
+	private ProjectV2 currentProject;
 
 	private NotificationPane notificationPane;
 	@FXML private AnchorPane rootNode;
 
 	private boolean cancel = false;
 
-	public ProjectManagerDialog(Window owner, Project currentProject) {
+	public ProjectManagerDialog(Window owner, ProjectV2 currentProject) {
 		super("openDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.currentProject = currentProject;
 
@@ -117,7 +117,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 					e.printStackTrace();
 				}
 
-				if (currentProject.getRef().equals(c)) {
+				if (currentProject.getProjectReference().equals(c)) {
 					deleteButton.setDisable(true);
 				} else {
 					deleteButton.setDisable(false);
@@ -201,7 +201,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 		try {
 			String newProjectName = (String) nameTextField.getText();
-			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(ProjectV2.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
 			}
@@ -221,8 +221,8 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		NewProjectDialog dialog = new NewProjectDialog(getStage());
 		dialog.getStage().showAndWait();
 
-		Project project = dialog.getProject();
-		projectList.getItems().add(project.getRef());
+		ProjectV2 project = dialog.getProject();
+		projectList.getItems().add(project.getProjectReference());
 	}
 
 	@FXML
@@ -266,10 +266,11 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		ProjectReference selectedProject = getSelectedProject();
 
 		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
-		if (currentProject.getRef().equals(selectedProject)) {
+		if (currentProject.getProjectReference().equals(selectedProject)) {
 			try {
 				currentProject.save();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -282,7 +283,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		getStage().showAndWait();
 		if (!cancel) {
 			if (getSelecteItem() != null) {
-				if (currentProject.getRef() != getSelecteItem()) {
+				if (currentProject.getProjectReference() != getSelecteItem()) {
 					return Optional.of(getSelecteItem());
 				}
 			}

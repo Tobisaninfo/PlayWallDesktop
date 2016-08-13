@@ -16,7 +16,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -185,7 +185,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	}
 
 	@Override
-	public void applyCssMainView(IMainViewController controller, Stage stage, Project project) {
+	public void applyCssMainView(IMainViewController controller, Stage stage, ProjectV2 project) {
 		applyCss(stage);
 
 		controller.setGridColor(Color.TRANSPARENT);
@@ -195,7 +195,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		String css = convertToCSS();
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {

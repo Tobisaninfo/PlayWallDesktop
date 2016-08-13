@@ -8,7 +8,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -38,7 +38,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 
 	private Runnable onFinish;
 
-	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
+	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, ProjectV2 project, Runnable onFinish) {
 		super("settingsView", "de/tobias/playpad/assets/view/option/profile/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 

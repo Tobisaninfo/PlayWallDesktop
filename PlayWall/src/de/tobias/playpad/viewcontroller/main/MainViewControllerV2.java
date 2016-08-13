@@ -20,8 +20,9 @@ import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.plugin.WindowListener;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -79,7 +80,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	private MenuToolbarViewController menuToolbarViewController;
 
-	private Project openProject;
+	private ProjectV2 openProject;
 	private int currentPageShowing = -1;
 
 	// Mapper
@@ -157,7 +158,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		});
 	}
 
-	private void initMapper(Project project) {
+	private void initMapper(ProjectV2 project) {
 		/*
 		 * Mapper Setup & Listener
 		 */
@@ -318,7 +319,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 				if (buttonType == ButtonType.YES) {
 					// Projekt Speichern
 					try {
-						if (openProject.getRef() != null) {
+						if (openProject.getProjectReference() != null) {
 							openProject.save();
 							System.out.println("Saved Project: " + openProject);
 						}
@@ -373,7 +374,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	 * @param project
 	 *            neues Project
 	 */
-	public void openProject(Project project) {
+	public void openProject(ProjectV2 project) {
 		removePadsFromView();
 
 		if (project != null)
@@ -462,16 +463,15 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	 */
 	private void addPadsToView() {
 		ProjectSettings settings = openProject.getSettings();
+		Page page = openProject.getPage(currentPageShowing);
 
-		int index = currentPageShowing * settings.getRows() * settings.getColumns();
 		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
 			if (padViews.size() > i) {
 				IPadViewV2 view = padViews.get(i);
-				Pad pad = openProject.getPad(index);
+				Pad pad = page.getPad(i);
 
 				view.getViewController().setupPad(pad);
 			}
-			index++;
 		}
 	}
 
@@ -515,7 +515,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	@Override
 	public void setGlobalVolume(double volume) {
 		if (openProject != null) {
-			for (Pad pad : openProject.getPads().values()) {
+			for (Pad pad : openProject.getPads()) {
 				if (pad != null)
 					pad.setMasterVolume(volume);
 			}
@@ -533,7 +533,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)
@@ -579,7 +580,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
 				Platform.runLater(() ->
 				{
@@ -693,7 +694,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
 		}
 
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 	}
 
 	/**
@@ -718,7 +719,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	public void updateWindowTitle() {
 		if (openProject != null && Profile.currentProfile() != null) {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getRef().getName(),
+			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
 					Profile.currentProfile().getRef().getName()));
 		} else {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));

@@ -17,7 +17,7 @@ import java.util.Set;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -44,7 +44,7 @@ public class PlayPadImpl implements PlayPad {
 	private Set<Path> deletedPlugins;
 
 	private MainViewControllerV2 mainViewController;
-	private Project currentProject;
+	private ProjectV2 currentProject;
 	protected GlobalSettings globalSettings;
 
 	public PlayPadImpl(GlobalSettings globalSettings) {
@@ -170,7 +170,7 @@ public class PlayPadImpl implements PlayPad {
 		return globalSettings;
 	}
 
-	public void openProject(Project project) {
+	public void openProject(ProjectV2 project) {
 		if (mainViewController == null) {
 			mainViewController = new MainViewControllerV2(mainViewListeners);
 		}
@@ -178,7 +178,7 @@ public class PlayPadImpl implements PlayPad {
 		mainViewController.openProject(project);
 	}
 
-	public Project getCurrentProject() {
+	public ProjectV2 getCurrentProject() {
 		return currentProject;
 	}
 }

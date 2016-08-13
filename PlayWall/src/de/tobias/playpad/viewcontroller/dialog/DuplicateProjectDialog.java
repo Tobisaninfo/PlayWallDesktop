@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
@@ -40,7 +40,7 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReference.getProjects().contains(c) || !c.matches(ProjectV2.PROJECT_NAME_PATTERN)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);

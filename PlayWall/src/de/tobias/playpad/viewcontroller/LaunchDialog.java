@@ -11,10 +11,10 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProfileChooseable;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
@@ -117,7 +117,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 		NewProjectDialog dialog = new NewProjectDialog(getStage());
 		dialog.getStage().showAndWait();
 
-		Project project = dialog.getProject();
+		ProjectV2 project = dialog.getProject();
 		if (project != null) {
 			PlayPadMain.getProgramInstance().openProject(project);
 			getStage().close();
@@ -191,7 +191,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	 */
 	private void launchProject(ProjectReference ref) {
 		try {
-			Project project = Project.load(ref, true, this);
+			ProjectV2 project = ProjectV2.load(ref, true, this);
 			PlayPadMain.getProgramInstance().openProject(project);
 			getStage().close();
 		} catch (ProfileNotFoundException e) {

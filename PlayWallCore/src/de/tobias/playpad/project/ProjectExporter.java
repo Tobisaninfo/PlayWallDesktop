@@ -17,6 +17,7 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -109,7 +110,7 @@ public class ProjectExporter {
 		Document document = reader.read(Files.newInputStream(projectPath));
 
 		Element rootElement = document.getRootElement();
-		List<?> elements = rootElement.elements(Project.PAD_ELEMENT);
+		List<?> elements = rootElement.elements(ProjectV2.PAD_ELEMENT);
 
 		view.setTasks(elements.size());
 

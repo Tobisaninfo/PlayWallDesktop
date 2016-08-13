@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.option;
 
 import java.util.ResourceBundle;
 
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -41,8 +41,8 @@ public abstract class GlobalSettingsTabViewController extends ContentViewControl
 	public abstract void saveSettings(GlobalSettings settings);
 
 	/**
-	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss. Der eigentliche Reload wird in
-	 * {@link #reload(Profile, Project, IMainViewController)} ausgeführt.
+	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss. Der eigentliche Reload wird
+	 * in {@link #reload(Profile, Project, IMainViewController)} ausgeführt.
 	 * 
 	 * @return <code>true</code> Benötigt Reload
 	 */
@@ -58,10 +58,12 @@ public abstract class GlobalSettingsTabViewController extends ContentViewControl
 	 * @param controller
 	 *            Main View Controller
 	 */
-	public void reload(GlobalSettings settings, Project project, IMainViewController controller) {}
+	public void reload(GlobalSettings settings, ProjectV2 project, IMainViewController controller) {
+	}
 
 	/**
-	 * Prüft ob die eingetragen Einstellungen erlaubt sind. Bei falschen Eingaben können die Einstellungen nicht geschlossen werden.
+	 * Prüft ob die eingetragen Einstellungen erlaubt sind. Bei falschen Eingaben können die Einstellungen nicht
+	 * geschlossen werden.
 	 * 
 	 * @return <code>true</code> Einstellungen erlaubt. <code>false</code> Einstellungen fehlerhaft.
 	 */

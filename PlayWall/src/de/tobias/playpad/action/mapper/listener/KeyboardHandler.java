@@ -5,7 +5,7 @@ import java.util.List;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.MappingUtils;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;
@@ -15,10 +15,10 @@ import javafx.scene.input.KeyEvent;
 
 public class KeyboardHandler implements EventHandler<KeyEvent> {
 
-	private Project project;
+	private ProjectV2 project;
 	private IMainViewController mainViewController;
 
-	public KeyboardHandler(Project project, IMainViewController mainViewController) {
+	public KeyboardHandler(ProjectV2 project, IMainViewController mainViewController) {
 		this.project = project;
 		this.mainViewController = mainViewController;
 
@@ -65,7 +65,7 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 		}
 	}
 
-	public void setProject(Project project) {
+	public void setProject(ProjectV2 project) {
 		this.project = project;
 	}
 }

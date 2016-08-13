@@ -8,7 +8,7 @@ import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -35,7 +35,7 @@ public class BlindAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
 		if (type == InputType.PRESSED) {
 			MediaPluginImpl.blindProperty().set(!MediaPluginImpl.blindProperty().get());
 		}
@@ -47,7 +47,7 @@ public class BlindAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		// Listener für Eingaben
 		BooleanProperty blindProperty = MediaPluginImpl.blindProperty();
 		blindProperty.removeListener(blindFeedbackListener);

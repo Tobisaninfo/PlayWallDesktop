@@ -3,9 +3,9 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.DesignConnect;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
@@ -79,7 +79,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController {
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
+	public void reload(Profile profile, ProjectV2 project, IMainViewController controller) {
 		controller.loadUserCss();
 	}
 

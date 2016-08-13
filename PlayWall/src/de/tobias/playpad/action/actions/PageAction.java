@@ -8,7 +8,7 @@ import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.connect.PageActionConnect;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
@@ -42,7 +42,7 @@ public class PageAction extends Action {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		int page = controller.getPage();
 		if (page == this.page) {
 			handleFeedback(FeedbackMessage.EVENT);
@@ -57,7 +57,7 @@ public class PageAction extends Action {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
 		if (type == InputType.PRESSED) {
 			Platform.runLater(() -> mainViewController.showPage(page));
 		}

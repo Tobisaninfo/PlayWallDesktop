@@ -15,7 +15,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.App;
@@ -108,7 +108,7 @@ public class ProjectReference implements Displayable {
 	}
 
 	public static void removeDocument(ProjectReference projectReference) throws DocumentException, IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + Project.FILE_EXTENSION);
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + ProjectV2.FILE_EXTENSION);
 
 		Files.deleteIfExists(path); // DIRVE
 		projects.remove(projectReference); // MODEL
@@ -188,7 +188,7 @@ public class ProjectReference implements Displayable {
 	}
 
 	public String getFileName() {
-		return uuid + Project.FILE_EXTENSION;
+		return uuid + ProjectV2.FILE_EXTENSION;
 	}
 
 	public Path getProjectPath() {

@@ -57,7 +57,7 @@ public class FixCell extends TableCell<PadException, PadException> {
 									e.printStackTrace();
 								}
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
-								pad.removeException(item);
+								// pad.removeException(item); TODO Error Handling User
 							}
 						} catch (NoSuchComponentException e) {
 							// TODO Auto-generated catch block
@@ -91,7 +91,7 @@ public class FixCell extends TableCell<PadException, PadException> {
 									e.printStackTrace();
 								}
 								pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
-								pad.removeException(item);
+								// pad.removeException(item); TODO Error Handling User
 							}
 						} catch (NoSuchComponentException e) {
 							// TODO Auto-generated catch block
@@ -111,7 +111,7 @@ public class FixCell extends TableCell<PadException, PadException> {
 			deleteButton.setOnAction(a ->
 			{
 				deleteExButton.getHandler().handle(item.getPad(), stage);
-				item.getPad().getProject().removeException(item);
+				// item.getPad().getProject().removeException(item);TODO Error Handling User
 			});
 			vbox.getChildren().add(deleteButton);
 

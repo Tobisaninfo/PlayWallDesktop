@@ -1,10 +1,11 @@
 package de.tobias.playpad.project.page;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.v2.ProjectV2;
 
 /**
  * 
@@ -18,9 +19,9 @@ public class Page {
 	private String name;
 	private HashMap<Integer, Pad> pads;
 
-	private transient Project projectReference;
+	private transient ProjectV2 projectReference;
 
-	public Page(int id, Project reference) {
+	public Page(int id, ProjectV2 reference) {
 		this.id = id;
 		this.name = "";
 		this.pads = new HashMap<>();
@@ -28,7 +29,7 @@ public class Page {
 		this.projectReference = reference;
 	}
 
-	public Page(int id, String name, Project reference) {
+	public Page(int id, String name, ProjectV2 reference) {
 		this.id = id;
 		this.name = name;
 		this.pads = new HashMap<>();
@@ -55,7 +56,7 @@ public class Page {
 	public Pad getPad(int id) {
 		if (!pads.containsKey(id)) {
 			// Create new pad for id
-			setPad(id, new Pad(projectReference, id));
+			setPad(id, new Pad(projectReference, id, this.id));
 		}
 		return pads.get(id);
 	}
@@ -71,5 +72,9 @@ public class Page {
 
 	public void setPad(int id, Pad pad) {
 		pads.put(id, pad);
+	}
+
+	public Collection<Pad> getPads() {
+		return pads.values();
 	}
 }

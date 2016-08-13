@@ -7,8 +7,8 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileReference;
@@ -38,7 +38,7 @@ public class NewProjectDialog extends ViewController {
 	@FXML private Button finishButton;
 	@FXML private Button cancelButton;
 
-	private Project project;
+	private ProjectV2 project;
 
 	public NewProjectDialog(Window owner) {
 		super("newProjectDialog", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
@@ -57,7 +57,7 @@ public class NewProjectDialog extends ViewController {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+				if (ProjectReference.getProjects().contains(c) || !c.matches(ProjectV2.PROJECT_NAME_PATTERN)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -97,7 +97,7 @@ public class NewProjectDialog extends ViewController {
 
 			ProjectReference projectReference = new ProjectReference(uuid, name, profile.getRef());
 
-			project = new Project(projectReference);
+			project = new ProjectV2(projectReference);
 			project.save();
 
 			ProjectReference.addProject(projectReference);
@@ -128,7 +128,7 @@ public class NewProjectDialog extends ViewController {
 		}
 	}
 
-	public Project getProject() {
+	public ProjectV2 getProject() {
 		return project;
 	}
 

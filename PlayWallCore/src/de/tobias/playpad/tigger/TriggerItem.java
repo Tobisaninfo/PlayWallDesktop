@@ -3,7 +3,7 @@ package de.tobias.playpad.tigger;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
@@ -42,7 +42,7 @@ public abstract class TriggerItem {
 	 */
 	public abstract String getType();
 
-	public abstract void performAction(Pad pad, Project project, IMainViewController controller, Profile profile);
+	public abstract void performAction(Pad pad, ProjectV2 project, IMainViewController controller, Profile profile);
 
 	private static final String DURATION_ATTR = "duration";
 

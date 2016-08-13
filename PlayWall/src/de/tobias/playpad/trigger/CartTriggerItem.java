@@ -7,7 +7,7 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -62,17 +62,18 @@ public class CartTriggerItem extends TriggerItem {
 	}
 
 	@Override
-	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
+	public void performAction(Pad pad, ProjectV2 project, IMainViewController controller, Profile profile) {
 		if (allCarts) {
-			for (Pad cart : project.getPads().values()) {
+			for (Pad cart : project.getPads()) {
 				if (cart.getIndex() != pad.getIndex())
 					cart.setStatus(newStatus);
 			}
 		} else {
-			for (int cart : carts) {
-				if (cart != pad.getIndex())
-					project.getPad(cart).setStatus(newStatus);
-			}
+			// TODO Cart Trigger mit Pages und Index --> PadIndex
+//			for (int cart : carts) {
+//				if (cart != pad.getIndex())
+//					project.getPad(cart).setStatus(newStatus);
+//			}
 		}
 	}
 

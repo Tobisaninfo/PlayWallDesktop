@@ -18,8 +18,8 @@ import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.ProfileReference;
@@ -166,7 +166,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
+					impl.openProject(ProjectV2.load(ProjectReference.getProject(uuid), true, null));
 					return;
 				}
 			}

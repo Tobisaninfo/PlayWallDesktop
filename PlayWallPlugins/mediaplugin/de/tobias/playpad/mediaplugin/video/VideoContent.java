@@ -191,7 +191,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 						getPad().getController().getView().showBusyView(false);
 					}
 				});
-				getPad().throwException(path, player.getError());
+//				getPad().throwException(path, player.getError()); TODO Error Handling User
 			});
 			player.setOnEndOfMedia(() ->
 			{

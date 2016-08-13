@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.main;
 
 import java.util.ResourceBundle;
 
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
@@ -185,5 +185,5 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 * 
 	 * @param project neues Project
 	 */
-	public abstract void setOpenProject(Project project);
+	public abstract void setOpenProject(ProjectV2 project);
 }

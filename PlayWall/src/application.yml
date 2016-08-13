@@ -1,7 +1,7 @@
 name: PlayWall
 version: 5.0.1
 build: 33
-identifier: de.tobias.playpad
+identifier: de.tobias.playpad.v6
 main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
 backup: false

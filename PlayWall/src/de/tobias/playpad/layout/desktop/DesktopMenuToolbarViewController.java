@@ -18,9 +18,9 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -176,7 +176,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@Override
-	public void setOpenProject(Project project) {
+	public void setOpenProject(ProjectV2 project) {
 		super.setOpenProject(project);
 		if (project != null)
 			createRecentDocumentMenuItems();
@@ -349,7 +349,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			NewProjectDialog dialog = new NewProjectDialog(mainViewController.getStage());
 			dialog.getStage().showAndWait();
 
-			Project project = dialog.getProject();
+			ProjectV2 project = dialog.getProject();
 			if (project != null) {
 				PlayPadMain.getProgramInstance().openProject(project);
 			}
@@ -361,16 +361,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		doAction(() ->
 		{
 			Stage stage = mainViewController.getStage();
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-			ProjectManagerDialog view = new ProjectManagerDialog(stage, currentProject);
+			ProjectManagerDialog view = new ProjectManagerDialog(stage, openProject);
 			Optional<ProjectReference> result = view.showAndWait();
 
 			if (result.isPresent()) {
 				ProjectReference ref = result.get();
 
 				try {
-					Project project = Project.load(result.get(), true, ImportDialog.getInstance(stage));
+					ProjectV2 project = ProjectV2.load(result.get(), true, ImportDialog.getInstance(stage));
 					PlayPadMain.getProgramInstance().openProject(project);
 
 					createRecentDocumentMenuItems();
@@ -398,10 +397,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		try {
-			currentProject.save();
+			openProject.save();
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
@@ -413,9 +410,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void profileMenuHandler(ActionEvent event) {
 		doAction(() ->
 		{
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
-			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), currentProject);
+			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), openProject);
 			controller.getStage().showAndWait();
 			mainViewController.updateWindowTitle();
 		});
@@ -423,8 +418,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void printMenuHandler(ActionEvent event) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		PrintDialog dialog = new PrintDialog(currentProject, mainViewController.getStage());
+		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
 		dialog.getStage().show();
 	}
 
@@ -432,9 +426,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void dndModeHandler(ActionEvent event) {
 		if (dndModeMenuItem.isSelected()) {
 			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
-			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getPlayedPlayers() > 0) {
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && openProject.getPlayedPlayers() > 0) {
 				mainViewController.showLiveInfo();
 			} else {
 				PadDragListener.setDndMode(true);
@@ -468,8 +460,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void projectSettingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		if (projectSettingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
@@ -479,7 +469,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				for (ProjectSettingsTabViewController controller : projectSettingsViewController.getTabs()) {
 					if (controller.needReload()) {
-						controller.reload(currentProject.getSettings(), currentProject, mainViewController);
+						controller.reload(openProject.getSettings(), openProject, mainViewController);
 					}
 				}
 
@@ -487,8 +477,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				mainStage.toFront();
 			};
 
-			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, currentProject,
-					onFinish);
+			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, openProject, onFinish);
 
 			projectSettingsViewController.getStage().show();
 		} else if (projectSettingsViewController.getStage().isShowing()) {
@@ -499,11 +488,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void profileSettingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
 
-		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getPlayedPlayers() > 0) {
+		if (settings.isLiveMode() && settings.isLiveModeSettings() && openProject.getPlayedPlayers() > 0) {
 			mainViewController.showLiveInfo();
 			return;
 		}
@@ -519,7 +506,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				for (ProfileSettingsTabViewController controller : profileSettingsViewController.getTabs()) {
 					if (controller.needReload()) {
 						change = true;
-						controller.reload(Profile.currentProfile(), currentProject, mainViewController);
+						controller.reload(Profile.currentProfile(), openProject, mainViewController);
 					}
 				}
 
@@ -531,7 +518,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				mainStage.toFront();
 			};
 
-			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject,
+			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, openProject,
 					onFinish);
 
 			profileSettingsViewController.getStage().show();
@@ -547,12 +534,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Stage mainStage = mainViewController.getStage();
 			Runnable onFinish = () ->
 			{
-				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 				for (GlobalSettingsTabViewController controller : globalSettingsViewController.getTabs()) {
 					if (controller.needReload()) {
-						controller.reload(globalSettings, currentProject, mainViewController);
+						controller.reload(globalSettings, openProject, mainViewController);
 					}
 				}
 
@@ -595,8 +581,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		pane.show("", box);
 
 		// Auto Complete
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		Set<String> names = currentProject.getPads().values().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
+		Set<String> names = openProject.getPads().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
 				.collect(Collectors.toSet());
 		TextFields.bindAutoCompletion(field, names);
 	}
@@ -649,7 +634,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void createRecentDocumentMenuItems() {
 		recentOpenMenu.getItems().clear();
 
-		String project = openProject.getRef().getName();
+		String project = openProject.getProjectReference().getName();
 
 		ProjectReference.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
 		{
@@ -675,7 +660,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = (ProjectReference) item.getUserData();
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
-					Project project = Project.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
+					ProjectV2 project = ProjectV2.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
 					PlayPadMain.getProgramInstance().openProject(project);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();

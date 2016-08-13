@@ -9,7 +9,7 @@ import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
 /**
@@ -53,7 +53,7 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 * @param mainViewController
 	 *            MainViewController Implementation
 	 */
-	public abstract void performAction(InputType type, Project project, IMainViewController mainViewController);
+	public abstract void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController);
 
 	/**
 	 * Handle Output to Mapper (Feedback)
@@ -80,7 +80,7 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 * @param controller
 	 *            reference to the main view controller
 	 */
-	public abstract void initFeedback(Project project, IMainViewController controller);
+	public abstract void initFeedback(ProjectV2 project, IMainViewController controller);
 
 	/**
 	 * Cleared das Feedback auf dem Mapper für diese Action.

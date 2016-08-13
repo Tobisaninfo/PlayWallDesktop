@@ -16,7 +16,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Warning;
@@ -27,7 +27,7 @@ public interface GlobalDesign {
 
 	public void applyCss(Stage stage);
 
-	public void applyCssMainView(IMainViewController controller, Stage stage, Project project);
+	public void applyCssMainView(IMainViewController controller, Stage stage, ProjectV2 project);
 
 	/*
 	 * Root: <CartLayout type=Classic>

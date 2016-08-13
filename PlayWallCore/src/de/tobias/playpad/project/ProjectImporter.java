@@ -17,6 +17,7 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
@@ -116,8 +117,8 @@ public class ProjectImporter {
 			if (projectUUID != null) {
 				UUID localProjectUUID = UUID.randomUUID();
 
-				Path projectFile = Paths.get(projectUUID.toString() + Project.FILE_EXTENSION);
-				Path localFile = app.getPath(PathType.DOCUMENTS, localProjectUUID + Project.FILE_EXTENSION);
+				Path projectFile = Paths.get(projectUUID.toString() + ProjectV2.FILE_EXTENSION);
+				Path localFile = app.getPath(PathType.DOCUMENTS, localProjectUUID + ProjectV2.FILE_EXTENSION);
 
 				zip.getFile(projectFile, localFile);
 
@@ -159,7 +160,7 @@ public class ProjectImporter {
 		Document document = reader.read(Files.newInputStream(projectPath));
 
 		Element rootElement = document.getRootElement();
-		for (Object padObj : rootElement.elements(Project.PAD_ELEMENT)) {
+		for (Object padObj : rootElement.elements(ProjectV2.PAD_ELEMENT)) {
 			if (padObj instanceof Element) {
 				Element padElement = (Element) padObj;
 

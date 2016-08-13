@@ -8,7 +8,7 @@ import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.actionsplugin.impl.ActionsPluginImpl;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.icon.MaterialDesignIcon;
@@ -35,7 +35,7 @@ public class MuteAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+	public void performAction(InputType type, ProjectV2 project, IMainViewController mainViewController) {
 		if (type == InputType.PRESSED) {
 			ActionsPluginImpl.muteProperty().set(!ActionsPluginImpl.muteProperty().get());
 		}
@@ -47,7 +47,7 @@ public class MuteAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void initFeedback(ProjectV2 project, IMainViewController controller) {
 		// Listener für Eingaben
 		BooleanProperty muteProperty = ActionsPluginImpl.muteProperty();
 		muteProperty.removeListener(muteListener);

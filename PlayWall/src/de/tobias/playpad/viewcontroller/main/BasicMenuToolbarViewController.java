@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.main;
 import java.util.ResourceBundle;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.keys.Key;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -32,7 +32,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	@FXML protected Slider volumeSlider;
 	@FXML protected Label volumeDownLabel;
 
-	protected Project openProject; // REFERENCE zu MainViewController
+	protected ProjectV2 openProject; // REFERENCE zu MainViewController
 
 	// window references
 	private IMainViewController mainViewController;
@@ -56,7 +56,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 
 	// Utils
 	protected void doAction(Runnable run) {
-		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
+		ProjectV2 project = PlayPadMain.getProgramInstance().getCurrentProject();
 		if (project.getPlayedPlayers() > 0 && Profile.currentProfile().getProfileSettings().isLiveMode()) {
 			mainViewController.showLiveInfo();
 		} else {
@@ -76,7 +76,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	}
 
 	@Override
-	public void setOpenProject(Project project) {
+	public void setOpenProject(ProjectV2 project) {
 		this.openProject = project;
 	}
 }

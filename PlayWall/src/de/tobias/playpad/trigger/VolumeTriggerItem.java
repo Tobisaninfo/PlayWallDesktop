@@ -3,7 +3,7 @@ package de.tobias.playpad.trigger;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -41,7 +41,7 @@ public class VolumeTriggerItem extends TriggerItem {
 	}
 
 	@Override
-	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
+	public void performAction(Pad pad, ProjectV2 project, IMainViewController controller, Profile profile) {
 		if (transition != null) {
 			currentValue = currentRunningTrigger.volume;
 			currentRunningTrigger = null;
@@ -54,7 +54,7 @@ public class VolumeTriggerItem extends TriggerItem {
 
 			@Override
 			protected void interpolate(double frac) {
-				for (Pad p : project.getPads().values()) {
+				for (Pad p : project.getPads()) {
 					if (p.getIndex() != pad.getIndex()) {
 						if (p.getCustomVolume() > volume) {
 							p.setCustomVolume(currentValue - frac * (currentValue - volume));
