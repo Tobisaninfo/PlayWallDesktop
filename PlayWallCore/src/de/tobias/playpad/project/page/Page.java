@@ -72,9 +72,14 @@ public class Page {
 
 	public void setPad(int id, Pad pad) {
 		pads.put(id, pad);
+		pad.setIndex(id);
 	}
 
 	public Collection<Pad> getPads() {
 		return pads.values();
+	}
+
+	public void removePade(int id) {
+		pads.remove(id);
 	}
 }

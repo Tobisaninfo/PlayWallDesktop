@@ -83,6 +83,10 @@ public class ProjectV2 {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
+		if (pad.getPage() != index.getPage()) {
+			Page oldPage = getPage(pad.getPage());
+			oldPage.removePade(index.getId());
+		}
 		Page page = pages.get(index.getPage());
 		page.setPad(index.getId(), pad);
 	}

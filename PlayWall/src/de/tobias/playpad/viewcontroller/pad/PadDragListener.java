@@ -155,6 +155,7 @@ public class PadDragListener {
 			PadIndex padID = (PadIndex) db.getContent(dataFormat); // TODO Check Cast
 
 			PadDragMode mode = padHud.getSelectedPadDragMode();
+			
 			mode.handle(padID, sourcePad.getPadIndex(), project);
 			padHud.hide();
 
