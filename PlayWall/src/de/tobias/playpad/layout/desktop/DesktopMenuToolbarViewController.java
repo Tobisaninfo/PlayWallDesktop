@@ -31,6 +31,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
+import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
@@ -453,7 +454,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void errorMenuHandler(ActionEvent event) {
-		// TODO Implement
+		ErrorSummaryDialog.getInstance().getStage().show();
 	}
 
 	@FXML

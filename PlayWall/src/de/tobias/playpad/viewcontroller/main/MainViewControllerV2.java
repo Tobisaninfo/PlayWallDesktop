@@ -31,6 +31,7 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
+import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.ui.BasicControllerSettings;
 import de.tobias.utils.ui.NotificationHandler;
@@ -103,6 +104,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		super("mainViewV2", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
 		padViews = new ArrayList<>();
 
+		// Init ErrorSummaryViewController
+		new ErrorSummaryDialog(getStage()); // Instance in ErrorSummaryViewController.getInstance()
+
 		// Layout Init
 		layoutActions = new ArrayList<>();
 
@@ -117,8 +121,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		reloadSettings(null, Profile.currentProfile());
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
-		// sein muss. Die
-		// Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
+		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
 		performLayoutDependendAction((oldToolbar, newToolbar) ->
 		{
 			if (menuToolbarViewController != null)
@@ -272,7 +275,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 	@Override
 	public boolean closeRequest() {
-		// TODO Close Error Window
+		ErrorSummaryDialog.getInstance().getStage().close();
 
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
@@ -386,6 +389,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		PadDragListener.setProject(project);
+		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -533,7 +537,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)
