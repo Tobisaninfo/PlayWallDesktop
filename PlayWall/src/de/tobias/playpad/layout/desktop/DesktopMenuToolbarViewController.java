@@ -468,7 +468,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void projectSettingsHandler(ActionEvent event) {
-		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
 		if (projectSettingsViewController == null) {
@@ -476,16 +475,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Runnable onFinish = () ->
 			{
-				midi.setListener(mainViewController.getMidiHandler());
-
 				for (ProjectSettingsTabViewController controller : projectSettingsViewController.getTabs()) {
 					if (controller.needReload()) {
 						controller.reload(currentProject.getSettings(), currentProject, mainViewController);
 					}
 				}
 
-				profileSettingsViewController = null;
+				projectSettingsViewController = null;
 				mainStage.toFront();
+				System.out.println("Done");
 			};
 
 			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, currentProject,

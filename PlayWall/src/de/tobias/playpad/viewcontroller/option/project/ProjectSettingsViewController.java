@@ -42,6 +42,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		boolean activePlayer = project.hasPlayedPlayers();
 
 		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
+		addTab(new PathsTabViewController());
 
 		// Show Current Settings
 		loadTabs(settings);
@@ -60,7 +61,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(715);
-		stage.setMinHeight(700);
+		stage.setMinHeight(500);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
 		Profile.currentProfile().currentLayout().applyCss(getStage());
@@ -70,7 +71,6 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 	 * Zeigt die aktuellen Einstellungen für die Tabs an.
 	 */
 	private void loadTabs(ProjectSettings settings) {
-
 		for (ProjectSettingsTabViewController controller : tabs) {
 			controller.loadSettings(settings);
 		}
@@ -85,6 +85,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		}
 	}
 
+	@Override
 	public boolean closeRequest() {
 		return onFinish();
 	}
