@@ -3,11 +3,9 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
@@ -73,9 +71,6 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	public boolean needReload() {
 		return false;
 	}
-
-	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {}
 
 	@Override
 	public boolean validSettings() {

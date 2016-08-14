@@ -23,7 +23,6 @@ import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -40,9 +39,6 @@ import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
@@ -475,12 +471,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Runnable onFinish = () ->
 			{
-				for (ProjectSettingsTabViewController controller : projectSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						controller.reload(currentProject.getSettings(), currentProject, mainViewController);
-					}
-				}
-
 				projectSettingsViewController = null;
 				mainStage.toFront();
 			};
@@ -513,18 +503,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			{
 				midi.setListener(mainViewController.getMidiHandler());
 
-				boolean change = false;
-				for (ProfileSettingsTabViewController controller : profileSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						change = true;
-						controller.reload(Profile.currentProfile(), currentProject, mainViewController);
-					}
-				}
-
-				if (change) {
-					PlayPadMain.getProgramInstance().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
-				}
-
 				profileSettingsViewController = null;
 				mainStage.toFront();
 			};
@@ -545,15 +523,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Stage mainStage = mainViewController.getStage();
 			Runnable onFinish = () ->
 			{
-				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-
-				for (GlobalSettingsTabViewController controller : globalSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						controller.reload(globalSettings, currentProject, mainViewController);
-					}
-				}
-
 				globalSettingsViewController = null;
 				mainStage.toFront();
 			};

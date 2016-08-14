@@ -3,17 +3,26 @@ package de.tobias.playpad.viewcontroller.option.global;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.controlsfx.control.TaskProgressView;
+
+import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.IGlobalReloadTask;
 import de.tobias.playpad.viewcontroller.option.IGlobalSettingsViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
+import de.tobias.utils.util.Worker;
+import javafx.beans.Observable;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -118,7 +127,40 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 		saveTabs();
 		if (onFinish != null)
 			onFinish.run(); // Reload MainViewController Settings
+
+		PlayPadImpl programInstance = PlayPadMain.getProgramInstance();
+		IMainViewController mainController = programInstance.getMainViewController();
+		GlobalSettings settings = programInstance.getGlobalSettings();
+		showProgressDialog(settings, mainController);
+
 		return true;
+	}
+
+	private void showProgressDialog(GlobalSettings settings, IMainViewController mainController) {
+		TaskProgressView<Task<Void>> taskView = new TaskProgressView<>();
+
+		for (GlobalSettingsTabViewController controller : tabs) {
+			if (controller instanceof IGlobalReloadTask) {
+				if (controller.needReload()) {
+					Task<Void> task = ((IGlobalReloadTask) controller).getTask(settings, mainController);
+					taskView.getTasks().add(task);
+					Worker.runLater(task);
+				}
+			}
+		}
+
+		if (!taskView.getTasks().isEmpty()) {
+			Scene scene = new Scene(taskView);
+			Stage stage = new Stage();
+			taskView.getTasks().addListener((Observable observable) ->
+			{
+				if (taskView.getTasks().isEmpty()) {
+					stage.close();
+				}
+			});
+			stage.setScene(scene);
+			stage.showAndWait();
+		}
 	}
 
 	@Override

@@ -3,17 +3,25 @@ package de.tobias.playpad.viewcontroller.option.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.controlsfx.control.TaskProgressView;
+
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;
+import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
+import de.tobias.utils.util.Worker;
+import javafx.beans.Observable;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -29,23 +37,24 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 	@FXML private Button finishButton;
 
 	protected List<ProjectSettingsTabViewController> tabs = new ArrayList<>();
-	private ProjectSettings settings;
+	private Project project;
 
 	private Runnable onFinish;
 
 	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
 		super("projectSettingsView", "de/tobias/playpad/assets/view/option/project/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
-		this.settings = project.getSettings();
+		this.project = project;
 
-		getStage().initOwner(owner);
 		boolean activePlayer = project.hasPlayedPlayers();
 
 		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 		addTab(new PathsTabViewController());
 
+		getStage().initOwner(owner);
+
 		// Show Current Settings
-		loadTabs(settings);
+		loadTabs(project.getSettings());
 	}
 
 	@Override
@@ -109,10 +118,41 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 			}
 		}
 
-		saveTabs(settings);
+		saveTabs(project.getSettings());
 		if (onFinish != null)
 			onFinish.run(); // Reload MainViewController Settings
+
+		IMainViewController mainController = PlayPadMain.getProgramInstance().getMainViewController();
+		showProgressDialog(project.getSettings(), project, mainController);
+
 		return true;
+	}
+
+	private void showProgressDialog(ProjectSettings settings, Project project, IMainViewController mainController) {
+		TaskProgressView<Task<Void>> taskView = new TaskProgressView<>();
+
+		for (ProjectSettingsTabViewController controller : tabs) {
+			if (controller instanceof IProjectReloadTask) {
+				if (controller.needReload()) {
+					Task<Void> task = ((IProjectReloadTask) controller).getTask(settings, project, mainController);
+					taskView.getTasks().add(task);
+					Worker.runLater(task);
+				}
+			}
+		}
+
+		if (!taskView.getTasks().isEmpty()) {
+			Scene scene = new Scene(taskView);
+			Stage stage = new Stage();
+			taskView.getTasks().addListener((Observable observable) ->
+			{
+				if (taskView.getTasks().isEmpty()) {
+					stage.close();
+				}
+			});
+			stage.setScene(scene);
+			stage.showAndWait();
+		}
 	}
 
 	@Override

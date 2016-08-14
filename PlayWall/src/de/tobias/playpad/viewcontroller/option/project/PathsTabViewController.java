@@ -5,8 +5,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,16 +18,17 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 
-public class PathsTabViewController extends ProjectSettingsTabViewController {
+public class PathsTabViewController extends ProjectSettingsTabViewController implements IProjectReloadTask {
 
 	// Media Path
 	@FXML private TextField mediaPathTextField;
 	@FXML private Button mediaPathChooseButton;
 	@FXML private CheckBox useMediaPath;
 
+	private transient boolean changedMediaPath = false;
+
 	public PathsTabViewController() {
 		super("pathTab.fxml", "de/tobias/playpad/assets/view/option/project/", PlayPadMain.getUiResourceBundle());
-		// TODO Auto-generated constructor stub
 	}
 
 	@FXML
@@ -46,16 +51,16 @@ public class PathsTabViewController extends ProjectSettingsTabViewController {
 
 	@Override
 	public void saveSettings(ProjectSettings settings) {
+		Path newPath = Paths.get(mediaPathTextField.getText());
+		if (!settings.getMediaPath().equals(newPath)) {
+			changedMediaPath = true;
+		}
+
 		if (useMediaPath.isSelected()) {
-			settings.setMediaPath(Paths.get(mediaPathTextField.getText()));
+			settings.setMediaPath(newPath);
 		}
 		settings.setUseMediaPath(useMediaPath.isSelected());
 
-	}
-
-	@Override
-	public boolean needReload() {
-		return false;
 	}
 
 	@Override
@@ -68,4 +73,25 @@ public class PathsTabViewController extends ProjectSettingsTabViewController {
 		return "Pfade (i18n)"; // TODO
 	}
 
+	// Reload Data
+
+	@Override
+	public boolean needReload() {
+		return changedMediaPath;
+	}
+
+	@Override
+	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				for (int i = 0; i < 100; i++) {
+					Thread.sleep(10);
+					updateProgress(i, 100);
+				}
+				return null;
+			}
+		};
+	}
 }
