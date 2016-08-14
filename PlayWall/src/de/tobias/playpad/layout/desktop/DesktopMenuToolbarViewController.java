@@ -583,9 +583,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void searchPadHandler(ActionEvent event) {
 		TextField field = TextFields.createClearableTextField();
-		field.setPromptText("Suche"); // TODO i18n
+		field.setPromptText(Localization.getString(Strings.Search_Placeholder));
 
-		Button button = new Button("Suchen"); // TODO i18n
+		Button button = new Button(Localization.getString(Strings.Search_Button));
 		button.setOnAction(new DesktopSearchController(field, this));
 
 		HBox box = new HBox(14, field, button);

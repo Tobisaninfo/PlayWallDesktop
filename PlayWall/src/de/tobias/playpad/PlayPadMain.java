@@ -12,9 +12,7 @@ import java.util.UUID;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.action.mapper.MapperRegistry;
-import de.tobias.playpad.audio.ClipAudioHandler;
 import de.tobias.playpad.audio.JavaFXAudioHandler;
-import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
@@ -135,14 +133,16 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 
 			/*
 			 * Setup
 			 */
 			updater = new PlayPadUpdater();
 			UpdateRegistery.registerUpdateable(updater);
-			registerComponents();
+
+			impl.startup(uiResourceBundle);
 
 			// Load Plugin Path
 			Path pluginFolder;
@@ -216,48 +216,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			e.printStackTrace(); // Speichern Fehler
 		}
 
-		// Shutdown components
-		// TODO use AutoCloseable
-		TinyAudioHandler.shutdown();
-		ClipAudioHandler.shutdown();
-
 		impl.shutdown();
 
 		Platform.exit();
 		System.exit(0);
-	}
-
-	private void registerComponents() {
-		// Midi
-		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
-
-		try {
-			// Load Components
-			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
-
-			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
-			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
-			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
-			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml");
-			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
-			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
-			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
-			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
-
-			// Set Default
-			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);
-			registryCollection.getDesigns().setDefaultID(ModernGlobalDesign.TYPE);
-		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
-				| NoSuchComponentException e) {
-			e.printStackTrace();
-		}
-
-		// Key Bindings
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
-
-		// Mapper
-		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 	}
 
 	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {

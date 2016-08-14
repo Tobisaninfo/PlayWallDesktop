@@ -40,8 +40,10 @@ public class TinyAudioHandler extends AudioHandler {
 
 	public static final String SOUND_CARD = "SoundCard";
 
+	public static final String TYPE = "TinyAudio"; 
 	public static final String NAME = "Java Audiostream";
 	private static final String MP3 = "mp3";
+	
 	private static final int SLEEP_TIME_POSITION = 50;
 
 	private static ExecutorService executorService;

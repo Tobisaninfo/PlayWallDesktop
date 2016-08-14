@@ -1,8 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.Strings;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -13,7 +11,6 @@ import javafx.stage.Window;
 public class UpdaterDialog extends Dialog<Void> {
 
 	public UpdaterDialog(Window owner) {
-		setHeaderText(Localization.getString(Strings.UI_Dialog_DragAndDrop_Header));
 		setGraphic(new ImageView("org/controlsfx/dialog/dialog-information.png"));
 
 		Label textLabel = new Label(

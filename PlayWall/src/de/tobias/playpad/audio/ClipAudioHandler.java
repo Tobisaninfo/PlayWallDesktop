@@ -34,7 +34,7 @@ import javazoom.jl.decoder.JavaLayerException;
 
 public class ClipAudioHandler extends AudioHandler {
 
-	// TODO Change names
+	public static final String TYPE = "clip";
 	public static final String NAME = "Clip (Experimental)";
 	private static final String MP3 = "mp3";
 
@@ -84,7 +84,9 @@ public class ClipAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException e) {
+				} catch (ConcurrentModificationException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}

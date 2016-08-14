@@ -6,6 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.utils.util.Localization;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class KeysTabViewController extends GlobalSettingsTabViewController {
@@ -134,20 +136,27 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 				Key newKey = new Key(currentKey.getId(), key, ev.isControlDown(), ev.isAltDown(), ev.isMetaDown(), ev.isShiftDown());
 
 				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-				boolean conflict = globalSettings.getKeyCollection().keysConflict(newKey);
+				KeyCollection keyCollection = globalSettings.getKeyCollection();
+
+				boolean conflict = keyCollection.keysConflict(newKey);
 				if (!conflict) {
-					globalSettings.getKeyCollection().editKey(newKey);
+					keyCollection.editKey(newKey);
 
 					shortcutLabel.setText(currentKey.toString());
 					Platform.runLater(() -> ((Stage) scene.getWindow()).close());
 				} else {
-					showErrorMessage("Konflikt"); // TODO Localize
+					KeysConflictDialog dialog = new KeysConflictDialog(keyCollection.getConflicts(newKey), keyCollection);
+					dialog.initOwner(getStage());
+					dialog.showAndWait();
 				}
 			}
 		});
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getWindow());
+		alert.initModality(Modality.WINDOW_MODAL);
+		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+		PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
 		alert.showAndWait();
 	}
 
@@ -179,8 +188,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
-		return "Keyboard (I18N)";
+		return Localization.getString(Strings.UI_Window_Settings_Keys_Title);
 	}
 
 	private void search() {

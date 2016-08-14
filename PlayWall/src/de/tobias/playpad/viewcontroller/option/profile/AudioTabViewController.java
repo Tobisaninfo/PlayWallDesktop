@@ -8,7 +8,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.AudioTypeViewController;
+import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
@@ -22,7 +22,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController {
 	// Audio
 	@FXML private ComboBox<String> audioTypeComboBox;
 	@FXML private AnchorPane audioUserInfoSettings;
-	private AudioTypeViewController audioViewController;
+	private AudioHandlerViewController audioViewController;
 	private boolean changeAudioSettings;
 
 	public AudioTabViewController(boolean playerActive) {
@@ -63,7 +63,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController {
 
 		try {
 			AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-			audioViewController = audioHandlerRegistry.getComponent(classID).getAudioViewController();
+			audioViewController = audioHandlerRegistry.getComponent(classID).getAudioHandlerSettingsViewController();
 
 			if (audioViewController != null) {
 				audioUserInfoSettings.getChildren().add(audioViewController.getParent());

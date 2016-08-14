@@ -61,11 +61,11 @@ public class Strings {
 	public static final String UI_Window_Settings_Player_Title = "UI.Window.Settings.Player.Title";
 	public static final String UI_Window_Settings_Audio_Title = "UI.Window.Settings.Audio.Title";
 	public static final String UI_Window_Settings_Updates_Title = "UI.Window.Settings.Updates.Title";
+	public static final String UI_Window_Settings_Keys_Title = "UI.Window.Settings.Keys.Title";
 
-	// UI - Dialogs - DragAndDrop
-	public static final String UI_Dialog_DragAndDrop_Header = "UI.Dialog.DragAndDrop.Header";
-	public static final String UI_Dialog_DragAndDrop_Content = "UI.Dialog.DragAndDrop.Content";
-	public static final String UI_Dialog_DragAndDrop_Button = "UI.Dialog.DragAndDrop.Button";
+	// UI - Settings - Keys
+	public static final String UI_Settings_Keys_Conflict_Header = "UI.Settings.Keys.Conflict.Header";
+	public static final String UI_Settings_Keys_Conflict_Content = "UI.Settings.Keys.Conflict.Content";
 
 	// UI - Dialog - NewProfile
 	public static final String UI_Dialog_NewProfile_Content = "UI.Dialog.NewProfile.Content";
@@ -169,9 +169,9 @@ public class Strings {
 	public static final String Info_Mapper_PressKey = "Info.Mapper.PressKey";
 
 	// UI - Settings - Aler
-	
+
 	public static final String UI_Settings_Alert_NewKeyShortcut_Text = "UI.Settings.Alert.NewKeyShortcut.Text";
-	
+
 	// UI - Window - PadSettings
 	public static final String UI_Window_PadSettings_General_Title = "UI.Window.PadSettings.General.Title";
 	public static final String UI_Window_PadSettings_Player_Title = "UI.Window.PadSettings.Player.Title";
@@ -228,4 +228,13 @@ public class Strings {
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
+	
+	// Main Layout
+	public static final String MainLayout_Desktop = "MainLayout.Desktop";
+	public static final String MainLayout_Touch = "MainLayout.Touch";
+	
+	// Search
+	public static final String Search_Button="Search.Button";
+	public static final String Search_Placeholder="Search.Placeholder";
+	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches"; 
 }

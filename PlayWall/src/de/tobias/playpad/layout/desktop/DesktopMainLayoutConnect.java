@@ -2,12 +2,23 @@ package de.tobias.playpad.layout.desktop;
 
 import java.util.Stack;
 
+import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.utils.util.Localization;
 
+/**
+ * Desktop Implmentierung des Main Layouts.
+ * 
+ * @author tobias
+ *
+ * @since 5.1.0
+ */
 public class DesktopMainLayoutConnect implements MainLayoutConnect {
+
+	private static final String TYPE = "Desktop";
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
 
@@ -19,12 +30,12 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	@Override
 	public String getType() {
-		return "Desktop";
+		return TYPE;
 	}
 
 	@Override
 	public String name() {
-		return "Desktop Modus"; // TODO Localize
+		return Localization.getString(Strings.MainLayout_Desktop);
 	}
 
 	@Override
