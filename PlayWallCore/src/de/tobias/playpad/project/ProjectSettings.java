@@ -91,9 +91,11 @@ public class ProjectSettings {
 			settings.setColumns(Integer.valueOf(element.element(COLUMNS_ELEMENT).getStringValue()));
 		if (element.element(ROWS_ELEMENT) != null)
 			settings.setRows(Integer.valueOf(element.element(ROWS_ELEMENT).getStringValue()));
-		if (element.element(MEDIA_PATH_ELEMENT) != null) {
-			settings.setMediaPath(Paths.get(element.element(MEDIA_PATH_ELEMENT).getStringValue()));
-			settings.setUseMediaPath(Boolean.valueOf(element.attributeValue(MEDIA_PATH_ACTIVE_ATTR)));
+
+		Element mediaElement = element.element(MEDIA_PATH_ELEMENT);
+		if (mediaElement != null) {
+			settings.setMediaPath(Paths.get(mediaElement.getStringValue()));
+			settings.setUseMediaPath(Boolean.valueOf(mediaElement.attributeValue(MEDIA_PATH_ACTIVE_ATTR)));
 		}
 
 		return settings;

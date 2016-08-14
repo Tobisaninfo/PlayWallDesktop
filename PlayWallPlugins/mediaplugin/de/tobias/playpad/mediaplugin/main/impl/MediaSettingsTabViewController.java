@@ -7,8 +7,11 @@ import java.util.ResourceBundle;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -19,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
-public class MediaSettingsTabViewController extends ProfileSettingsTabViewController {
+public class MediaSettingsTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	@FXML private Pane screenViewPane;
 	@FXML private ComboBox<Integer> screenComboBox;
@@ -118,13 +121,22 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-		MediaPluginImpl.getInstance().getVideoViewController().reloadSettings();
+	public boolean validSettings() {
+		return true;
 	}
 
 	@Override
-	public boolean validSettings() {
-		return true;
+	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateProgress(-1, -1);
+				updateTitle(name());
+
+				MediaPluginImpl.getInstance().getVideoViewController().reloadSettings();
+				return null;
+			}
+		};
 	}
 
 	@Override

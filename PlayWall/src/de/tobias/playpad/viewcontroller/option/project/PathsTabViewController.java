@@ -1,8 +1,11 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.project.Project;
@@ -26,6 +29,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	@FXML private CheckBox useMediaPath;
 
 	private transient boolean changedMediaPath = false;
+	private transient Optional<Path> oldMediaPath = Optional.empty();
 
 	public PathsTabViewController() {
 		super("pathTab.fxml", "de/tobias/playpad/assets/view/option/project/", PlayPadMain.getUiResourceBundle());
@@ -54,6 +58,9 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 		Path newPath = Paths.get(mediaPathTextField.getText());
 		if (!settings.getMediaPath().equals(newPath)) {
 			changedMediaPath = true;
+			if (settings.getMediaPath() != null && !settings.getMediaPath().toString().isEmpty()) {
+				oldMediaPath = Optional.of(settings.getMediaPath());
+			}
 		}
 
 		if (useMediaPath.isSelected()) {
@@ -86,10 +93,26 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 			@Override
 			protected Void call() throws Exception {
 				updateTitle(name());
-				for (int i = 0; i < 100; i++) {
-					Thread.sleep(10);
-					updateProgress(i, 100);
-				}
+				Path newMediaPath = settings.getMediaPath();
+
+				project.closeFile();
+
+				int i = 0;
+				Stream<Path> files = Files.list(oldMediaPath.get());
+				files.forEach(file ->
+				{
+					// BUG Copy not work as expected
+					try {
+						Files.copy(file, newMediaPath.resolve(file.getFileName()));
+						Thread.sleep(500);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					updateProgress(i, files.count());
+				});
+				files.close();
+
+				project.loadPadsContent();
 				return null;
 			}
 		};
