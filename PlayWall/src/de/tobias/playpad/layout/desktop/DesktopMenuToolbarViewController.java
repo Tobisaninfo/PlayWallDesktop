@@ -19,6 +19,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.v2.ProjectV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -191,7 +192,14 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		}
 
 		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
-			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
+			Page page = openProject.getPage(i);
+
+			String name = page.getName();
+			if (name.isEmpty()) {
+				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
+			}
+
+			Button button = new Button(name);
 			button.setUserData(i);
 			button.setFocusTraversable(false);
 			button.setOnAction(this);
@@ -331,12 +339,22 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			if (pageHBox.getChildren().size() > currentPage) {
 				Node removeNode = pageHBox.getChildren().get(currentPage);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
+
+				if (removeNode instanceof Button) {
+					((Button) removeNode).setGraphic(null);
+				}
 			}
 
 			if (pageHBox.getChildren().size() > index) {
 				Node newNode = pageHBox.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentPage = index;
+
+				if (newNode instanceof Button && dndModeMenuItem.isSelected()) { // Nur bei Drag And Drop mode
+					Button button = (Button) newNode;
+					DesktopButtonEditView editBox = new DesktopButtonEditView(openProject.getPage(index), button);
+					button.setGraphic(editBox);
+				}
 			}
 		}
 	}
