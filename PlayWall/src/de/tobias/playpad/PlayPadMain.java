@@ -9,23 +9,15 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-import org.dom4j.DocumentException;
-
-import de.tobias.playpad.action.mapper.MapperRegistry;
-import de.tobias.playpad.audio.JavaFXAudioHandler;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.midi.device.DeviceRegistry;
-import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.update.Updates;
-import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
+import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -39,8 +31,6 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -182,17 +172,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	}
 
 	private void checkUpdates(GlobalSettings globalSettings) {
-		if (globalSettings.isAutoUpdate()) {
+		if (globalSettings.isAutoUpdate() && !globalSettings.isIgnoreUpdate()) {
 			Worker.runLater(() ->
 			{
 				UpdateRegistery.lookupUpdates(globalSettings.getUpdateChannel());
 				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
 					Platform.runLater(() ->
 					{
-						Alert alert = new Alert(AlertType.CONFIRMATION);
-						alert.setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-						alert.setContentText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content));
-						alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
+						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog();
+						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 						{
 							try {
 								Updates.startUpdate();
@@ -200,6 +188,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 								e.printStackTrace();
 							}
 						});
+						if (autoUpdateDialog.isIgnoreUpdate()) {
+							globalSettings.setIgnoreUpdate(true);
+						}
 					});
 				}
 			});

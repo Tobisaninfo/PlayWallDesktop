@@ -34,6 +34,7 @@ public class GlobalSettings {
 	private KeyCollection keyCollection = new KeyCollection();
 
 	private boolean autoUpdate = true;
+	private boolean ignoreUpdate = false;
 	private UpdateChannel updateChannel = UpdateChannel.STABLE;
 
 	// Getter
@@ -43,6 +44,10 @@ public class GlobalSettings {
 
 	public UpdateChannel getUpdateChannel() {
 		return updateChannel;
+	}
+
+	public boolean isIgnoreUpdate() {
+		return ignoreUpdate;
 	}
 
 	public KeyCollection getKeyCollection() {
@@ -58,8 +63,13 @@ public class GlobalSettings {
 		this.updateChannel = updateChannel;
 	}
 
+	public void setIgnoreUpdate(boolean ignoreUpdate) {
+		this.ignoreUpdate = ignoreUpdate;
+	}
+
 	private static final String KEYS_ELEMENT = "Keys";
 	private static final String AUTO_UPDATE_ELEMENT = "AutoUpdate";
+	private static final String IGNORE_UPDATE_ELEMENT = "IgnoreUpdate";
 	private static final String UPDATE_CHANNEL_ELEMENT = "UpdateChannel";
 
 	/**
@@ -87,6 +97,10 @@ public class GlobalSettings {
 				settings.setAutoUpdate(Boolean.valueOf(root.element(AUTO_UPDATE_ELEMENT).getStringValue()));
 			}
 
+			if (root.element(IGNORE_UPDATE_ELEMENT) != null) {
+				settings.setIgnoreUpdate(Boolean.valueOf(root.element(IGNORE_UPDATE_ELEMENT).getStringValue()));
+			}
+
 			if (root.element(UPDATE_CHANNEL_ELEMENT) != null) {
 				settings.setUpdateChannel(UpdateChannel.valueOf(root.element(UPDATE_CHANNEL_ELEMENT).getStringValue()));
 			}
@@ -112,6 +126,7 @@ public class GlobalSettings {
 
 		// Update
 		root.addElement(AUTO_UPDATE_ELEMENT).addText(String.valueOf(autoUpdate));
+		root.addElement(IGNORE_UPDATE_ELEMENT).addText(String.valueOf(ignoreUpdate));
 		root.addElement(UPDATE_CHANNEL_ELEMENT).addText(updateChannel.name());
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());

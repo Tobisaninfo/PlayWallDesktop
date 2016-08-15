@@ -11,6 +11,8 @@ import java.nio.file.Path;
  *
  * @since 5.0.0
  */
+
+@Deprecated
 public interface Updatable {
 
 	/**
