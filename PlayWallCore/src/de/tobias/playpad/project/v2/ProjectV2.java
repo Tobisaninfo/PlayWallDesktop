@@ -97,6 +97,8 @@ public class ProjectV2 {
 		return pads;
 	}
 
+	// Pages
+
 	public Page getPage(int index) {
 		if (!pages.containsKey(index) && index < settings.getPageCount()) {
 			pages.put(index, new Page(index, this));
@@ -106,6 +108,11 @@ public class ProjectV2 {
 
 	public Collection<Page> getPages() {
 		return pages.values();
+	}
+
+	public void setPage(int index, Page page) {
+		pages.put(index, page);
+		page.setId(index);
 	}
 
 	private static final String ROOT_ELEMENT = "Project";

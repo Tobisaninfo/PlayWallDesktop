@@ -53,6 +53,10 @@ public class Page {
 		this.name = name;
 	}
 
+	public ProjectV2 getProjectReference() {
+		return projectReference;
+	}
+
 	public Pad getPad(int id) {
 		if (!pads.containsKey(id)) {
 			// Create new pad for id

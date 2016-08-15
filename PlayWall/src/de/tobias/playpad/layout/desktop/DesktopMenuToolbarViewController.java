@@ -185,6 +185,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void initPageButtons() {
+		currentPage = -1;
 		pageHBox.getChildren().clear();
 
 		if (openProject == null) {
@@ -336,7 +337,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void highlightPageButton(int index) {
 		if (index >= 0) {
-			if (pageHBox.getChildren().size() > currentPage) {
+			if (pageHBox.getChildren().size() > currentPage && currentPage >= 0) {
 				Node removeNode = pageHBox.getChildren().get(currentPage);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
 
@@ -459,6 +460,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			}
 		}
 
+		// Damit werden Page Buttons editierbar (die 3 Button vom DesktopButtonEditView)
+		highlightPageButton(currentPage);
 	}
 
 	@FXML
