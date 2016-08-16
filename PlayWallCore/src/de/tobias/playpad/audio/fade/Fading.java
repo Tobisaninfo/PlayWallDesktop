@@ -16,8 +16,18 @@ public class Fading {
 	private IVolume iVolume;
 	private Transition currentFadeTransition;
 
+	private double velocity = 1;
+
 	public Fading(IVolume iVolume) {
 		this.iVolume = iVolume;
+	}
+
+	public double getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(double velocity) {
+		this.velocity = velocity;
 	}
 
 	public void fadeIn(Duration duration) {
@@ -55,10 +65,10 @@ public class Fading {
 			protected void interpolate(double frac) {
 				double diff = Math.abs(to - from);
 				if (from < to) { // Fade In
-					 double fade = fadeInVolumeMultiplier(frac, 2);
+					double fade = fadeInVolumeMultiplier(frac, velocity);
 					iVolume.setFadeLevel(from + fade * diff);
 				} else { // Fade Out
-					double fade = fadeOutVolumeMultiplier(frac, 2);
+					double fade = fadeOutVolumeMultiplier(frac, velocity);
 					double newValue = to + fade * diff;
 					iVolume.setFadeLevel(newValue);
 				}
