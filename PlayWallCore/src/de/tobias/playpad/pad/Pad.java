@@ -1,5 +1,7 @@
 package de.tobias.playpad.pad;
 
+import java.util.UUID;
+
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
@@ -22,6 +24,7 @@ import javafx.beans.property.StringProperty;
 public class Pad {
 
 	// Verwaltung
+	private UUID uuid;
 	private IntegerProperty indexProperty = new SimpleIntegerProperty();
 	private IntegerProperty pageProperty = new SimpleIntegerProperty();
 
@@ -53,7 +56,8 @@ public class Pad {
 
 	public Pad(ProjectV2 project) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
@@ -61,7 +65,8 @@ public class Pad {
 
 	public Pad(ProjectV2 project, int index, int page) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		setIndex(index);
 		setStatus(PadStatus.EMPTY);
@@ -98,6 +103,14 @@ public class Pad {
 	// Accessor Methods
 	public int getIndex() {
 		return indexProperty.get();
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 
 	public int getPage() {

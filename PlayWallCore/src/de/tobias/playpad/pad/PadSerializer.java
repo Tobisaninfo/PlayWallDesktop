@@ -1,5 +1,7 @@
 package de.tobias.playpad.pad;
 
+import java.util.UUID;
+
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -21,6 +23,7 @@ import de.tobias.utils.settings.UserDefaults;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
+	private static final String UUID_ATTR = "uuid";
 	private static final String INDEX_ATTR = "index";
 	private static final String NAME_ATTR = "name";
 	private static final String STATUS_ATTR = "status";
@@ -57,6 +60,8 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 	public Pad loadElement(Element element) {
 		Pad pad = new Pad(project);
 
+		if (element.attributeValue(UUID_ATTR) != null)
+			pad.setUuid(UUID.fromString(element.attributeValue(UUID_ATTR)));
 		pad.setIndex(Integer.valueOf(element.attributeValue(INDEX_ATTR)));
 		pad.setName(element.attributeValue(NAME_ATTR));
 		PadStatus status = PadStatus.valueOf(element.attributeValue(STATUS_ATTR));
@@ -152,6 +157,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 	@Override
 	public void saveElement(Element element, Pad data) {
+		element.addAttribute(UUID_ATTR, data.getUuid().toString());
 		element.addAttribute(INDEX_ATTR, String.valueOf(data.getIndex()));
 		element.addAttribute(NAME_ATTR, data.getName());
 		if (data.getStatus() == PadStatus.EMPTY || data.getStatus() == PadStatus.ERROR) {

@@ -36,12 +36,11 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 
 	@Override
 	public Page loadElement(Element element) {
-
 		int id = Integer.valueOf(element.attributeValue(ID_ATTR));
 		String name = element.attributeValue(NAME_ATTR);
 
 		XMLHandler<Pad> handler = new XMLHandler<>(element);
-		List<Pad> pads = handler.loadElements(ProjectV2.PAD_ELEMENT, new PadSerializer());
+		List<Pad> pads = handler.loadElements(ProjectV2.PAD_ELEMENT, new PadSerializer(project));
 
 		Page page = new Page(id, name, project);
 		for (Pad pad : pads) {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -80,6 +81,17 @@ public class ProjectV2 {
 	public Pad getPad(PadIndex index) {
 		Page page = pages.get(index.getPage());
 		return page.getPad(index.getId());
+	}
+
+	public Pad getPad(UUID uuid) {
+		for (Page page : pages.values()) {
+			for (Pad pad : page.getPads()) {
+				if (pad.getUuid().equals(uuid)) {
+					return pad;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
