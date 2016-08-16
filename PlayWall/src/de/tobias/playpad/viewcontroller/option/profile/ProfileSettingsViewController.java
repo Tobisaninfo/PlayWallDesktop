@@ -44,7 +44,6 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 
 		boolean activePlayer = project.hasPlayedPlayers();
 
-		addTab(new GeneralTabViewController(this));
 		addTab(new MappingTabViewController());
 		addTab(new MidiTabViewController());
 		addTab(new DesignTabViewController());

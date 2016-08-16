@@ -18,10 +18,12 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer.Info;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.util.FileUtils;
 import javafx.application.Platform;
@@ -40,10 +42,10 @@ public class TinyAudioHandler extends AudioHandler {
 
 	public static final String SOUND_CARD = "SoundCard";
 
-	public static final String TYPE = "TinyAudio"; 
+	public static final String TYPE = "TinyAudio";
 	public static final String NAME = "Java Audiostream";
 	private static final String MP3 = "mp3";
-	
+
 	private static final int SLEEP_TIME_POSITION = 50;
 
 	private static ExecutorService executorService;
@@ -96,7 +98,9 @@ public class TinyAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException e) {
+				} catch (ConcurrentModificationException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -228,7 +232,8 @@ public class TinyAudioHandler extends AudioHandler {
 
 				// Convert wenn mp3
 				if (FileUtils.getFileExtention(url.getFile()).toLowerCase().endsWith(MP3)) {
-					Path wavPath = Profile.currentProfile().getProfileSettings().getCachePath().resolve(path.getFileName().toString() + ".wav");
+					GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+					Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 					url = convertMp3ToWav(path, wavPath, getContent().getPad());
 				}
 

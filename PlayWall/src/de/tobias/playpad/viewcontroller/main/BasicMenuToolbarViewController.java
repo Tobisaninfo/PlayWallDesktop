@@ -3,8 +3,9 @@ package de.tobias.playpad.viewcontroller.main;
 import java.util.ResourceBundle;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -57,7 +58,8 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	// Utils
 	protected void doAction(Runnable run) {
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-		if (project.getPlayedPlayers() > 0 && Profile.currentProfile().getProfileSettings().isLiveMode()) {
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		if (project.getPlayedPlayers() > 0 && globalSettings.isLiveMode()) {
 			mainViewController.showLiveInfo();
 		} else {
 			run.run();

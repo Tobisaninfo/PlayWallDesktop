@@ -431,7 +431,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void dndModeHandler(ActionEvent event) {
 		if (dndModeMenuItem.isSelected()) {
-			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
 			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getPlayedPlayers() > 0) {
@@ -501,7 +501,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getPlayedPlayers() > 0) {
 			mainViewController.showLiveInfo();

@@ -22,6 +22,7 @@ import de.tobias.playpad.pad.listener.PadStatusListener;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
@@ -67,7 +68,8 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
 
-		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController
+		// erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		profileSettings.lockedProperty().addListener(padLockedListener);
 	}
@@ -187,7 +189,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	private void onNew(ActionEvent event) throws NoSuchComponentException {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		if (pad.getProject() != null) {
 			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
 				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
@@ -252,7 +254,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	private void onSettings() {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		IMainViewController mvc = PlayPadPlugin.getImplementation().getMainViewController();
 
 		if (mvc != null) {

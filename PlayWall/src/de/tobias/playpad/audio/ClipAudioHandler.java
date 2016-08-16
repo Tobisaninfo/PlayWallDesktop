@@ -18,11 +18,12 @@ import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Mixer;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.utils.util.FileUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -210,7 +211,8 @@ public class ClipAudioHandler extends AudioHandler {
 
 			// Convert wenn mp3
 			if (FileUtils.getFileExtention(url.getFile()).toLowerCase().endsWith(MP3)) {
-				Path wavPath = Profile.currentProfile().getProfileSettings().getCachePath().resolve(path.getFileName().toString() + ".wav");
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 				url = convertMp3ToWav(path, wavPath, getContent().getPad());
 			}
 

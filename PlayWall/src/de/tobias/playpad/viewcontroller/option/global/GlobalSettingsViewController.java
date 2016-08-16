@@ -10,6 +10,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.IGlobalSettingsViewController;
+import de.tobias.playpad.viewcontroller.option.profile.GeneralTabViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -37,6 +38,7 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 
 		getStage().initOwner(owner);
 
+		addTab(new GeneralTabViewController(this));
 		addTab(new KeysTabViewController());
 		addTab(new UpdateTabViewController());
 

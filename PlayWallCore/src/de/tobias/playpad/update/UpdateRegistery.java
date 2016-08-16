@@ -22,7 +22,7 @@ public class UpdateRegistery {
 	}
 
 	public static List<Updatable> getAvailableUpdates() {
-		return updatables;
+		return availableUpdates;
 	}
 
 	public static List<Updatable> lookupUpdates(UpdateChannel channel) {

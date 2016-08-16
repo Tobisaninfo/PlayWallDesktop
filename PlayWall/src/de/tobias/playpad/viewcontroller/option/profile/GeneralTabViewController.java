@@ -2,15 +2,16 @@ package de.tobias.playpad.viewcontroller.option.profile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.Alertable;
@@ -25,7 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.DirectoryChooser;
 
-public class GeneralTabViewController extends ProfileSettingsTabViewController {
+public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML private CheckBox liveModeCheckBox;
 
@@ -50,7 +51,7 @@ public class GeneralTabViewController extends ProfileSettingsTabViewController {
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
-		super("generalTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+		super("generalTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
 		this.alertable = alertable;
 
 		calcCacheSize();
@@ -90,7 +91,8 @@ public class GeneralTabViewController extends ProfileSettingsTabViewController {
 		File folder = chooser.showDialog(getStage());
 		if (folder != null) {
 			Path folderPath = folder.toPath();
-			Profile.currentProfile().getProfileSettings().setCachePath(folderPath);
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			globalSettings.setCachePath(folderPath);
 			cacheTextField.setText(folderPath.toString());
 		}
 	}
@@ -126,13 +128,16 @@ public class GeneralTabViewController extends ProfileSettingsTabViewController {
 	private void calcCacheSize() {
 		try {
 			double size = 0;
-			Path path = Profile.currentProfile().getProfileSettings().getCachePath();
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			Path path = globalSettings.getCachePath();
 			if (Files.notExists(path))
 				Files.createDirectories(path);
 
-			for (Path item : Files.newDirectoryStream(Profile.currentProfile().getProfileSettings().getCachePath())) {
+			DirectoryStream<Path> directoryStream = Files.newDirectoryStream(globalSettings.getCachePath());
+			for (Path item : directoryStream) {
 				size += Files.size(item);
 			}
+			directoryStream.close();
 			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.numberToString(size)));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -141,46 +146,43 @@ public class GeneralTabViewController extends ProfileSettingsTabViewController {
 	}
 
 	@Override
-	public void loadSettings(Profile profile) {
-		ProfileSettings profileSettings = profile.getProfileSettings();
+	public void loadSettings(GlobalSettings settings) {
 
-		liveModeCheckBox.setSelected(profileSettings.isLiveMode());
-		cacheTextField.setText(profileSettings.getCachePath().toString());
+		liveModeCheckBox.setSelected(settings.isLiveMode());
+		cacheTextField.setText(settings.getCachePath().toString());
 
-		if (profileSettings.isLiveModePage() == true)
+		if (settings.isLiveModePage() == true)
 			pageEnable.setSelected(true);
 		else
 			pageDisable.setSelected(true);
 
-		if (profileSettings.isLiveModeDrag() == true)
+		if (settings.isLiveModeDrag() == true)
 			dragEnable.setSelected(true);
 		else
 			dragDisable.setSelected(true);
 
-		if (profileSettings.isLiveModeFile() == true)
+		if (settings.isLiveModeFile() == true)
 			fileEnable.setSelected(true);
 		else
 			fileDisable.setSelected(true);
 
-		if (profileSettings.isLiveModeSettings() == true)
+		if (settings.isLiveModeSettings() == true)
 			settingsEnable.setSelected(true);
 		else
 			settingsDisable.setSelected(true);
 
-		disableLiveSettings(profileSettings.isLiveMode());
+		disableLiveSettings(settings.isLiveMode());
 	}
 
 	@Override
-	public void saveSettings(Profile profile) {
-		ProfileSettings profileSettings = profile.getProfileSettings();
+	public void saveSettings(GlobalSettings settings) {
+		settings.setLiveMode(liveModeCheckBox.isSelected());
+		settings.setCachePath(Paths.get(cacheTextField.getText()));
 
-		profileSettings.setLiveMode(liveModeCheckBox.isSelected());
-		profileSettings.setCachePath(Paths.get(cacheTextField.getText()));
-
-		profileSettings.setLiveModePage(pageEnable.isSelected());
-		profileSettings.setLiveModeDrag(dragEnable.isSelected());
-		profileSettings.setLiveModeFile(fileEnable.isSelected());
-		profileSettings.setLiveModeSettings(settingsEnable.isSelected());
+		settings.setLiveModePage(pageEnable.isSelected());
+		settings.setLiveModeDrag(dragEnable.isSelected());
+		settings.setLiveModeFile(fileEnable.isSelected());
+		settings.setLiveModeSettings(settingsEnable.isSelected());
 	}
 
 	@Override

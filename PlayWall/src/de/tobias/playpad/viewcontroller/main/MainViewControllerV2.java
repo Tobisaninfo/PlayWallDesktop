@@ -276,10 +276,11 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
 			// wenn ein Pad noch im Status Play ist
-			if (openProject.getPlayedPlayers() > 0 && profilSettings.isLiveMode()) {
+			if (openProject.getPlayedPlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
 

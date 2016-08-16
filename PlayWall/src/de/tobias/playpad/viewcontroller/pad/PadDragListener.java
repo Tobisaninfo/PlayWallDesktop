@@ -13,8 +13,8 @@ import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.utils.util.FileUtils;
@@ -58,9 +58,11 @@ public class PadDragListener {
 
 		if (event.getGestureSource() != this && event.getDragboard().hasFiles()) {
 			if (event.getDragboard().getFiles().get(0).isFile()) {
-				ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+
 				if (sourcePad.getProject() != null) {
-					if (settings.isLiveMode() && settings.isLiveModeFile() && sourcePad.getProject().getPlayedPlayers() > 0) {
+					if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && sourcePad.getProject().getPlayedPlayers() > 0) {
 						PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
 						return;
 					}
@@ -165,9 +167,10 @@ public class PadDragListener {
 
 	private void dragDetacted(MouseEvent event) {
 		if (dndMode) {
-			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+
 			if (sourcePad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeDrag() && sourcePad.getProject().getPlayedPlayers() > 0) {
+				if (globalSettings.isLiveMode() && globalSettings.isLiveModeDrag() && sourcePad.getProject().getPlayedPlayers() > 0) {
 					PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
 					return;
 				}
