@@ -17,7 +17,6 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
-import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -182,7 +181,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		TaskProgressView<Task<Void>> taskView = new TaskProgressView<>();
 
 		for (ProfileSettingsTabViewController controller : tabs) {
-			if (controller instanceof IProjectReloadTask) {
+			if (controller instanceof IProfileReloadTask) {
 				if (controller.needReload()) {
 					Task<Void> task = ((IProfileReloadTask) controller).getTask(settings, project, mainController);
 					taskView.getTasks().add(task);
