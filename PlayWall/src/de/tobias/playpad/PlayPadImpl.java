@@ -35,6 +35,8 @@ import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.util.SystemUtils;
 import de.tobias.utils.util.Worker;
 import javafx.scene.image.Image;
 import net.xeoh.plugins.base.PluginManager;
@@ -180,6 +182,13 @@ public class PlayPadImpl implements PlayPad {
 			e.printStackTrace();
 		}
 
+		try {
+			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		pluginManager.shutdown();
 		Worker.shutdown();
 	}
