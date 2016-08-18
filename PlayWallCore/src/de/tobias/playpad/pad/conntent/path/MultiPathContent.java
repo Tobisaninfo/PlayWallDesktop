@@ -6,4 +6,6 @@ import java.util.List;
 public interface MultiPathContent {
 
 	public List<Path> getPaths();
+	
+	public void clearPaths();
 }

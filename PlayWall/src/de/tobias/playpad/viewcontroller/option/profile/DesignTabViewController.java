@@ -15,6 +15,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -91,7 +92,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 				updateTitle(name());
 				updateProgress(-1, -1);
 
-				controller.loadUserCss();
+				Platform.runLater(() -> controller.loadUserCss());
 				return null;
 			}
 		};
