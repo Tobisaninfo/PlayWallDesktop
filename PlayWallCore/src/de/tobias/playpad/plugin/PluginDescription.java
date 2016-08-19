@@ -2,7 +2,7 @@ package de.tobias.playpad.plugin;
 
 import java.util.List;
 
-public class Plugin implements Comparable<Plugin> {
+public class PluginDescription implements Comparable<PluginDescription> {
 
 	private String name;
 	private String fileName;
@@ -14,8 +14,7 @@ public class Plugin implements Comparable<Plugin> {
 	private boolean active;
 	private List<String> dependencies;
 
-	public Plugin(String name, String fileName, String url, String version, long build, boolean active,
-			List<String> dependencies) {
+	public PluginDescription(String name, String fileName, String url, String version, long build, boolean active, List<String> dependencies) {
 		this.name = name;
 		this.fileName = fileName;
 		this.url = url;
@@ -55,8 +54,8 @@ public class Plugin implements Comparable<Plugin> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof Plugin) {
-			Plugin p2 = (Plugin) obj;
+		if (obj instanceof PluginDescription) {
+			PluginDescription p2 = (PluginDescription) obj;
 			return p2.active == active && p2.fileName.equals(fileName) && p2.name.equals(name) && p2.url.equals(url);
 		} else {
 			return super.equals(obj);
@@ -64,7 +63,7 @@ public class Plugin implements Comparable<Plugin> {
 	}
 
 	@Override
-	public int compareTo(Plugin o) {
+	public int compareTo(PluginDescription o) {
 		return getName().compareTo(o.getName());
 	}
 

@@ -3,8 +3,8 @@ package de.tobias.playpad.update;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.SystemUtils;
@@ -14,18 +14,18 @@ import net.minidev.json.JSONStyle;
 
 public class UpdateRegistery {
 
-	private static List<Updatable> updatables = new ArrayList<>();
-	private static List<Updatable> availableUpdates = new ArrayList<>();
+	private static Set<Updatable> updatables = new HashSet<>();
+	private static Set<Updatable> availableUpdates = new HashSet<>();
 
 	public static void registerUpdateable(Updatable updatable) {
 		updatables.add(updatable);
 	}
 
-	public static List<Updatable> getAvailableUpdates() {
+	public static Set<Updatable> getAvailableUpdates() {
 		return availableUpdates;
 	}
 
-	public static List<Updatable> lookupUpdates(UpdateChannel channel) {
+	public static Set<Updatable> lookupUpdates(UpdateChannel channel) {
 		availableUpdates.clear();
 		for (Updatable updatable : UpdateRegistery.updatables) {
 			try {

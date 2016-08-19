@@ -15,15 +15,15 @@ import de.tobias.utils.application.container.PathType;
 
 public class Plugins {
 
-	private static List<Plugin> plugins;
+	private static List<PluginDescription> availablePlugins;
 
 	static {
-		plugins = new ArrayList<>();
+		availablePlugins = new ArrayList<>();
 	}
 
-	public static List<Plugin> load(String pluginInfoURL, boolean fetch) throws IOException {
-		if (plugins.isEmpty() || fetch) {
-			plugins.clear();
+	public static List<PluginDescription> loadDescriptionFromServer(String pluginInfoURL, boolean fetch) throws IOException {
+		if (availablePlugins.isEmpty() || fetch) {
+			availablePlugins.clear();
 			URL url = new URL(pluginInfoURL);
 
 			FileConfiguration cfg = YamlConfiguration.loadConfiguration(url.openStream());
@@ -44,14 +44,14 @@ public class Plugins {
 				if (Files.exists(path))
 					active = true;
 
-				Plugin plugin = new Plugin(name, fileName, pluginUrl, version, build, active, dependencies);
-				plugins.add(plugin);
+				PluginDescription plugin = new PluginDescription(name, fileName, pluginUrl, version, build, active, dependencies);
+				availablePlugins.add(plugin);
 			}
 		}
-		return plugins;
+		return availablePlugins;
 	}
 
-	public static List<Plugin> getPlugins() {
-		return plugins;
+	public static List<PluginDescription> getAvailablePlugins() {
+		return availablePlugins;
 	}
 }

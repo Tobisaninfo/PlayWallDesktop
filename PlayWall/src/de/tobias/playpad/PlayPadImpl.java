@@ -9,16 +9,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import de.tobias.playpad.plugin.AdvancedPlugin;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.update.Updatable;
+import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
@@ -27,8 +32,10 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Worker;
 import javafx.scene.image.Image;
+import net.xeoh.plugins.base.Plugin;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 public class PlayPadImpl implements PlayPad {
 
@@ -47,10 +54,13 @@ public class PlayPadImpl implements PlayPad {
 	private Project currentProject;
 	protected GlobalSettings globalSettings;
 
+	private Set<Module> modules;
+
 	public PlayPadImpl(GlobalSettings globalSettings) {
 		pluginManager = PluginManagerFactory.createPluginManager();
 		deletedPlugins = new HashSet<>();
-		
+		modules = new HashSet<>();
+
 		this.globalSettings = globalSettings;
 	}
 
@@ -163,6 +173,20 @@ public class PlayPadImpl implements PlayPad {
 
 	public void loadPlugin(URI uri) {
 		pluginManager.addPluginsFrom(uri);
+
+		// Registriert Funktionen aus Plugin (Module und Update, ...)
+		PluginManagerUtil util = new PluginManagerUtil(pluginManager);
+		Collection<Plugin> plugins = util.getPlugins();
+		for (Plugin plugin : plugins) {
+			if (plugin instanceof AdvancedPlugin) {
+				AdvancedPlugin advancedPlugin = (AdvancedPlugin) plugin;
+				Module module = advancedPlugin.getModule();
+				Updatable updatable = advancedPlugin.getUpdatable();
+
+				modules.add(module);
+				UpdateRegistery.registerUpdateable(updatable);
+			}
+		}
 	}
 
 	@Override
@@ -180,5 +204,9 @@ public class PlayPadImpl implements PlayPad {
 
 	public Project getCurrentProject() {
 		return currentProject;
+	}
+
+	public Set<Module> getModules() {
+		return modules;
 	}
 }

@@ -10,7 +10,7 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.plugin.Plugin;
+import de.tobias.playpad.plugin.PluginDescription;
 import de.tobias.playpad.plugin.Plugins;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -32,7 +32,7 @@ import javafx.stage.Window;
 
 public class PluginViewController extends ViewController {
 
-	@FXML private ListView<Plugin> pluginListView;
+	@FXML private ListView<PluginDescription> pluginListView;
 	@FXML private Button finishButton;
 
 	public PluginViewController(Window owner) {
@@ -60,7 +60,7 @@ public class PluginViewController extends ViewController {
 					return;
 				}
 
-				List<Plugin> plugins = Plugins.load(pluginInfoURL, true);
+				List<PluginDescription> plugins = Plugins.loadDescriptionFromServer(pluginInfoURL, true);
 
 				Collections.sort(plugins);
 				Platform.runLater(() ->

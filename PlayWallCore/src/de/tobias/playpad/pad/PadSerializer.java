@@ -7,6 +7,7 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -44,14 +45,11 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 	public static final String CONTENT_ELEMENT = "Content";
 	private static final String CONTENT_TYPE_ATTR = "type";
 
-	// TODO Remove project var
 	private Project project;
 
 	public PadSerializer(Project project) {
 		this.project = project;
 	}
-
-	public PadSerializer() {}
 
 	@Override
 	public Pad loadElement(Element element) {
@@ -199,10 +197,14 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		}
 
 		// Content
-		if (data.getContent() != null) {
+		PadContent content = data.getContent();
+		if (content != null) {
 			Element contentElement = element.addElement(CONTENT_ELEMENT);
-			contentElement.addAttribute(CONTENT_TYPE_ATTR, data.getContent().getType());
-			data.getContent().save(contentElement);
+			contentElement.addAttribute(CONTENT_TYPE_ATTR, content.getType());
+			content.save(contentElement);
+
+			Module module = PlayPadPlugin.getRegistryCollection().getPadContents().getModule(content.getType());
+			project.getRef().addRequestedModule(module);
 		}
 	}
 }

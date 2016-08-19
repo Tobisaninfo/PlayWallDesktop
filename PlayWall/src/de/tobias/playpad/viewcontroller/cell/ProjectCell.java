@@ -21,7 +21,7 @@ public class ProjectCell extends ListCell<ProjectReference> {
 		if (!empty) {
 			if (this.ref == null || this.ref != ref) {
 				Path path = ref.getProjectPath();
-				if (Files.notExists(path)) {
+				if (Files.notExists(path) || !ref.getMissedModules().isEmpty()) {
 					FontIcon graphics = new FontIcon(FontAwesomeType.WARNING);
 					graphics.setColor(Color.RED);
 					setGraphic(graphics);

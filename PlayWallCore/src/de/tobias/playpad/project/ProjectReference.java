@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.dom4j.Document;
@@ -15,6 +17,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.App;
@@ -25,17 +29,18 @@ import javafx.beans.property.StringProperty;
 
 public class ProjectReference implements Displayable {
 
+	// Verwaltung
 	private static List<ProjectReference> projects = new ProjectReferenceList();
 	private static boolean loadedProjectOverview = false;
 
-	/**
-	 * Name + XML
-	 */
+	// Eigentliche ProjectReference
 	private UUID uuid;
 	private String name;
 
+	private Set<Module> requestedModules;
 	private ProfileReference profileReference;
 
+	// Temp
 	private long size;
 	private long lastMofied;
 
@@ -48,12 +53,17 @@ public class ProjectReference implements Displayable {
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long size, long lastMofied, ProfileReference profileReference) {
-		this.uuid = uuid;
-		this.name = name;
+	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, Set<Module> requestedModules) {
+		this(uuid, name, profileReference);
+		this.requestedModules = requestedModules;
+		updateDisplayProperty();
+	}
+
+	public ProjectReference(UUID uuid, String name, long size, long lastMofied, ProfileReference profileReference,
+			Set<Module> requestedModules) {
+		this(uuid, name, profileReference, requestedModules);
 		this.size = size;
 		this.lastMofied = lastMofied;
-		this.profileReference = profileReference;
 		updateDisplayProperty();
 	}
 
@@ -67,6 +77,14 @@ public class ProjectReference implements Displayable {
 
 	public long getSize() {
 		return size;
+	}
+
+	public Set<Module> getRequestedModules() {
+		return requestedModules;
+	}
+	
+	public void addRequestedModule(Module module) {
+		this.requestedModules.add(module);
 	}
 
 	public void setSize(long size) {
@@ -92,6 +110,17 @@ public class ProjectReference implements Displayable {
 
 	public void setProfileReference(ProfileReference profileReference) {
 		this.profileReference = profileReference;
+	}
+
+	public List<Module> getMissedModules() {
+		List<Module> missedModules = new ArrayList<>();
+		Collection<Module> activeModules = PlayPadPlugin.getImplementation().getModules();
+		for (Module requested : requestedModules) {
+			if (!activeModules.contains(requested)) {
+				missedModules.add(requested);
+			}
+		}
+		return missedModules;
 	}
 
 	@Override
@@ -130,16 +159,6 @@ public class ProjectReference implements Displayable {
 		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 
-	public static List<ProjectReference> getProjects() {
-		if (!loadedProjectOverview)
-			try {
-				loadProjects();
-			} catch (DocumentException | IOException e) {
-				e.printStackTrace();
-			}
-		return projects;
-	}
-
 	// Load and Save
 	private static final String FILE_NAME = "Projects.xml";
 	private static final String PROJECT_ELEMENT = "Project";
@@ -169,6 +188,26 @@ public class ProjectReference implements Displayable {
 		XMLHandler.save(path, document);
 	}
 
+	/**
+	 * Gibt alle Referencen zurück.
+	 * 
+	 * @return Projectreferenzen
+	 */
+	public static List<ProjectReference> getProjects() {
+		if (!loadedProjectOverview)
+			try {
+				loadProjects();
+			} catch (DocumentException | IOException e) {
+				e.printStackTrace();
+			}
+		return projects;
+	}
+
+	/**
+	 * Gibt alle Referncen von {@link ProjectReference#getProjects()} aufsteigend nach {@link ProjectReference#getLastMofied()} zurück.
+	 * 
+	 * @return Projectreferencen
+	 */
 	public static List<ProjectReference> getProjectsSorted() {
 		if (!loadedProjectOverview)
 			try {
@@ -205,6 +244,7 @@ public class ProjectReference implements Displayable {
 		return null;
 	}
 
+	// Displayable
 	private StringProperty displayProperty = new SimpleStringProperty(toString());
 
 	@Override

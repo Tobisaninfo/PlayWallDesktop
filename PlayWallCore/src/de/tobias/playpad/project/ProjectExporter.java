@@ -116,7 +116,7 @@ public class ProjectExporter {
 			if (padObj instanceof Element) {
 				Element padElement = (Element) padObj;
 
-				PadSerializer serializer = new PadSerializer();
+				PadSerializer serializer = new PadSerializer(null);
 				Pad pad = serializer.loadElement(padElement);
 
 				if (pad.getContent() != null) {

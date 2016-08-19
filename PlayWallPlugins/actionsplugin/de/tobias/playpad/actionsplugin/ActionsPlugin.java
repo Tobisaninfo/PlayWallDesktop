@@ -1,7 +1,7 @@
 package de.tobias.playpad.actionsplugin;
 
-import net.xeoh.plugins.base.Plugin;
+import de.tobias.playpad.plugin.AdvancedPlugin;
 
-public interface ActionsPlugin extends Plugin {
+public interface ActionsPlugin extends AdvancedPlugin {
 
 }

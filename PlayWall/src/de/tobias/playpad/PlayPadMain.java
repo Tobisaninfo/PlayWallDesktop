@@ -18,6 +18,7 @@ import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -88,6 +89,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	private static PlayPadImpl impl;
 	private static PlayPadUpdater updater;
 
+	private static Module module;
+
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
@@ -110,6 +113,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
+		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
 
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.yml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
@@ -235,14 +239,14 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			// Load Components
 			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
 
-			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
-			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
-			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
-			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml");
-			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
-			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
-			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
-			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
+			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml", module);
+			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml", module);
+			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml", module);
+			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml", module);
+			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml", module);
+			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml", module);
+			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml", module);
+			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml", module);
 
 			// Set Default
 			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);
@@ -264,6 +268,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Delete old plugins
 		impl.deletePlugins();
 
+		impl.getModules().add(module); // Add Main Module
 		// Load Plugins
 		impl.loadPlugin(pluginPath.toUri());
 	}
