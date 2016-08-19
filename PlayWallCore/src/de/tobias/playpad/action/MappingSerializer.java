@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.dom4j.Element;
 
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLHandler;
-import de.tobias.playpad.xml.XMLSerializer;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLHandler;
+import de.tobias.utils.xml.XMLSerializer;
 
 public class MappingSerializer implements XMLSerializer<Mapping>, XMLDeserializer<Mapping> {
 

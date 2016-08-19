@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.dom4j.Element;
 
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLSerializer;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLSerializer;
 
 /**
  * Util zum arbeiten mit XML und ProfileReference

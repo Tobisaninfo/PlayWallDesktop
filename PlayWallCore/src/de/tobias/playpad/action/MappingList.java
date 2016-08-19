@@ -17,7 +17,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.xml.XMLHandler;
+import de.tobias.utils.xml.XMLHandler;
 
 // COMMENT MappingList
 public class MappingList extends ArrayList<Mapping> {

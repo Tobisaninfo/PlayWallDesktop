@@ -10,8 +10,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.util.OS;
+import de.tobias.utils.xml.XMLHandler;
 
 /**
  * Verwaltung der Tastenkombinationen für das Menu.

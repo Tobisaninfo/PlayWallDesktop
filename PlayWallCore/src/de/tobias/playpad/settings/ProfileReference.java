@@ -14,11 +14,11 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
-import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.FileUtils.FileActionAdapter;
+import de.tobias.utils.xml.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

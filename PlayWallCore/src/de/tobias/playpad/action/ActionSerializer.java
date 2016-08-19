@@ -8,9 +8,9 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperSerializer;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLHandler;
-import de.tobias.playpad.xml.XMLSerializer;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLHandler;
+import de.tobias.utils.xml.XMLSerializer;
 
 public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<Action> {
 

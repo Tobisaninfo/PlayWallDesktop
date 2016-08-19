@@ -15,9 +15,9 @@ import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLSerializer;
 import de.tobias.utils.settings.UserDefaults;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLSerializer;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 

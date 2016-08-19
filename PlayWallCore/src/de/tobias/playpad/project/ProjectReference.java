@@ -16,10 +16,10 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.settings.ProfileReference;
-import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.xml.XMLHandler;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

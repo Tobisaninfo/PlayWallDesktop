@@ -19,7 +19,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.playpad.xml.XMLHandler;
+import de.tobias.utils.xml.XMLHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
