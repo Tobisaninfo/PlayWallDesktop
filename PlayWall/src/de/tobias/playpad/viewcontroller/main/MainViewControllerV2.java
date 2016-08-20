@@ -112,7 +112,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		layoutChangedListener = new LayoutChangedListener();
 
 		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
-
+		initMapper(openProject);
+		
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
 
@@ -382,7 +383,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		openProject = project;
 
-		initMapper(project);
+		midiHandler.setProject(project);
+		keyboardHandler.setProject(project);
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
@@ -710,6 +712,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			midi.lookupMidiDevice(name);
 			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
 		} catch (NullPointerException e) {
+			e.printStackTrace();
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
 			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
