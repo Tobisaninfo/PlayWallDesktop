@@ -85,6 +85,7 @@ public class NewProjectDialog extends ViewController {
 				newMediaPath = null;
 			}
 		});
+		mediaButtonChoose.setDisable(true);
 
 		addCloseKeyShortcut(() -> getStage().close());
 	}
