@@ -1,6 +1,8 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.UUID;
 
 import org.dom4j.DocumentException;
@@ -17,8 +19,11 @@ import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -35,10 +40,16 @@ public class NewProjectDialog extends ViewController {
 	@FXML private ComboBox<ProfileReference> profileComboBox;
 	@FXML private Button newProfileButton;
 
+	// Media Path
+	@FXML private CheckBox mediaPathCheckbox;
+	@FXML private Button mediaButtonChoose;
+	@FXML private Label mediaPathLabel;
+
 	@FXML private Button finishButton;
 	@FXML private Button cancelButton;
 
 	private Project project;
+	private Path newMediaPath; // Ausgewählter Ordner (temp)
 
 	public NewProjectDialog(Window owner) {
 		super("newProjectDialog", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
@@ -66,6 +77,15 @@ public class NewProjectDialog extends ViewController {
 		});
 		finishButton.setDisable(true);
 
+		mediaPathCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			mediaButtonChoose.setDisable(!c);
+			if (!c) {
+				mediaPathLabel.setText("");
+				newMediaPath = null;
+			}
+		});
+
 		addCloseKeyShortcut(() -> getStage().close());
 	}
 
@@ -75,10 +95,10 @@ public class NewProjectDialog extends ViewController {
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProject_Title));
 		stage.setWidth(560);
-		stage.setHeight(250);
+		stage.setHeight(380);
 
 		stage.setMinWidth(560);
-		stage.setMinHeight(250);
+		stage.setMinHeight(380);
 
 		stage.setMaxWidth(560);
 
@@ -88,16 +108,33 @@ public class NewProjectDialog extends ViewController {
 	}
 
 	@FXML
+	private void mediaButtonHandler(ActionEvent event) {
+		if (mediaPathCheckbox.isSelected()) {
+			DirectoryChooser chooser = new DirectoryChooser();
+			File file = chooser.showDialog(getStage());
+			if (file != null) {
+				newMediaPath = file.toPath();
+				mediaPathLabel.setText(newMediaPath.toString());
+			}
+		}
+	}
+
+	@FXML
 	private void finishButtonHandler(ActionEvent evenet) {
+		if (mediaPathCheckbox.isSelected() && newMediaPath == null) {
+			showInfoMessage(Localization.getString(Strings.UI_Dialog_NewProject_Content));
+			return;
+		}
+
 		try {
 			Profile profile = Profile.load(profileComboBox.getSelectionModel().getSelectedItem());
-
 			String name = nameTextField.getText();
 			UUID uuid = UUID.randomUUID();
 
 			ProjectReference projectReference = new ProjectReference(uuid, name, profile.getRef());
-
 			project = new Project(projectReference);
+			project.getSettings().setUseMediaPath(mediaPathCheckbox.isSelected());
+			project.getSettings().setMediaPath(newMediaPath);
 			project.save();
 
 			ProjectReference.addProject(projectReference);
