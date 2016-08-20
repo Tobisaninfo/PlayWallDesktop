@@ -158,6 +158,7 @@ public class Strings {
 	// Error - Plugins
 	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
 	public static final String Error_Plugins_Available = "Error.Plugins.Available";
+	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";
@@ -169,9 +170,9 @@ public class Strings {
 	public static final String Info_Mapper_PressKey = "Info.Mapper.PressKey";
 
 	// UI - Settings - Aler
-	
+
 	public static final String UI_Settings_Alert_NewKeyShortcut_Text = "UI.Settings.Alert.NewKeyShortcut.Text";
-	
+
 	// UI - Window - PadSettings
 	public static final String UI_Window_PadSettings_General_Title = "UI.Window.PadSettings.General.Title";
 	public static final String UI_Window_PadSettings_Player_Title = "UI.Window.PadSettings.Player.Title";
