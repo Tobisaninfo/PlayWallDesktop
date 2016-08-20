@@ -27,7 +27,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	private UUID uuid;
 	private HashMap<Action, List<Mapper>> mapping;
 
-	public Mapping(boolean init, Profile profile) {
+	public Mapping(boolean init) {
 		mapping = new HashMap<>();
 		if (init) {
 			name = "Default";

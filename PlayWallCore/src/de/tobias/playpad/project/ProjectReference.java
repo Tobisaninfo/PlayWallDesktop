@@ -82,7 +82,7 @@ public class ProjectReference implements Displayable {
 	public Set<Module> getRequestedModules() {
 		return requestedModules;
 	}
-	
+
 	public void addRequestedModule(Module module) {
 		this.requestedModules.add(module);
 	}
@@ -115,7 +115,14 @@ public class ProjectReference implements Displayable {
 	public List<Module> getMissedModules() {
 		List<Module> missedModules = new ArrayList<>();
 		Collection<Module> activeModules = PlayPadPlugin.getImplementation().getModules();
+		// Project Modules
 		for (Module requested : requestedModules) {
+			if (!activeModules.contains(requested)) {
+				missedModules.add(requested);
+			}
+		}
+		// Profile Modules
+		for (Module requested : profileReference.getRequestedModules()) {
 			if (!activeModules.contains(requested)) {
 				missedModules.add(requested);
 			}

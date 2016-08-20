@@ -17,17 +17,13 @@ public class MappingSerializer implements XMLSerializer<Mapping>, XMLDeserialize
 
 	private Profile profile;
 
-	public MappingSerializer() {
-
-	}
-
 	public MappingSerializer(Profile profile) {
 		this.profile = profile;
 	}
 
 	@Override
 	public Mapping loadElement(Element element) {
-		Mapping mapping = new Mapping(false, profile);
+		Mapping mapping = new Mapping(false);
 
 		mapping.setName(element.attributeValue(NAME));
 
@@ -50,6 +46,6 @@ public class MappingSerializer implements XMLSerializer<Mapping>, XMLDeserialize
 		newElement.addAttribute(UUID_NAME, data.getUuid().toString());
 
 		XMLHandler<Action> handler = new XMLHandler<>(newElement);
-		handler.saveElements(ACTION, data.getActions(), new ActionSerializer(data));
+		handler.saveElements(ACTION, data.getActions(), new ActionSerializer(data, profile));
 	}
 }

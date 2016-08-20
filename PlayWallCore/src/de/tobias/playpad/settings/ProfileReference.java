@@ -5,7 +5,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.dom4j.Document;
@@ -14,6 +16,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.xml.XMLHandler;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -36,6 +39,7 @@ public class ProfileReference implements Displayable {
 
 	private final UUID uuid;
 	private String name;
+	private Set<Module> requestedModules;
 
 	/**
 	 * Erstellt eine neue Referenz mit einer Random UUID.
@@ -46,6 +50,7 @@ public class ProfileReference implements Displayable {
 	public ProfileReference(String name) {
 		this.name = name;
 		this.uuid = UUID.randomUUID();
+		requestedModules = new HashSet<>();
 		updateDisplayProperty();
 	}
 
@@ -61,6 +66,19 @@ public class ProfileReference implements Displayable {
 		this.uuid = uuid;
 		this.name = name;
 		updateDisplayProperty();
+	}
+
+	/**
+	 * Erstellt eine neue Referenz mit Namen und UUID.
+	 * 
+	 * @param uuid
+	 *            UUID
+	 * @param name
+	 *            Name
+	 */
+	public ProfileReference(UUID uuid, String name, Set<Module> requestedModules) {
+		this(uuid, name);
+		this.requestedModules = requestedModules;
 	}
 
 	/**
@@ -90,6 +108,15 @@ public class ProfileReference implements Displayable {
 	public void setName(String name) {
 		this.name = name;
 		updateDisplayProperty();
+	}
+	
+	
+	public Set<Module> getRequestedModules() {
+		return requestedModules;
+	}
+	
+	public void addRequestedModule(Module module) {
+		requestedModules.add(module);
 	}
 
 	// Verwaltungsmethoden für Profile Referenzen // TODO Extract in Extra Class
