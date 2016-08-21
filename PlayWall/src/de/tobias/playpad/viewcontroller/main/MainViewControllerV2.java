@@ -216,6 +216,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		layoutChangedListener.handle(layoutActions, this.menuToolbarViewController, newMenuToolbarViewController);
 		this.menuToolbarViewController = newMenuToolbarViewController;
 
+		menuToolbarViewController.setOpenProject(openProject);
 		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
 
