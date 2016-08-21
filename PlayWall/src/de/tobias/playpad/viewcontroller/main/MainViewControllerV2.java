@@ -113,7 +113,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
 		initMapper(openProject);
-		
+
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
 
@@ -196,6 +196,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	private void initMainLayout() {
 		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
 
+		// Entfernt Volume listener
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.deinit();
 
@@ -203,20 +204,17 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
 		}
 
+		// Erstellt Neue Toolbar
 		headerBox.getChildren().clear();
 		MenuToolbarViewController newMenuToolbarViewController = mainLayout.createMenuToolbar(this);
 		headerBox.getChildren().add(newMenuToolbarViewController.getParent());
 
-		// Kopiert alte Einstellungen
-		if (menuToolbarViewController != null) {
-			newMenuToolbarViewController.setAlwaysOnTopActive(this.menuToolbarViewController.isAlwaysOnTopActive());
-			newMenuToolbarViewController.setFullScreenActive(this.menuToolbarViewController.isFullscreenActive());
-		}
-
+		// Führt alle Listener für diesen neuen Controller aus, damit Buttons und co wieder erstellt werden können
 		layoutChangedListener.handle(layoutActions, this.menuToolbarViewController, newMenuToolbarViewController);
 		this.menuToolbarViewController = newMenuToolbarViewController;
 
 		menuToolbarViewController.setOpenProject(openProject);
+		// Neue Volume listener
 		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
 
@@ -228,9 +226,9 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		lockedListener.changed(profileSettings.lockedProperty(), !profileSettings.isLocked(), profileSettings.isLocked());
 
+		// Zeigt aktuelle Daten an
 		createPadViews();
 		showPage(currentPageShowing);
-
 		loadUserCss();
 	}
 
@@ -537,7 +535,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)

@@ -15,16 +15,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
 
-	@FXML protected CheckMenuItem fullScreenMenuItem;
-	@FXML protected CheckMenuItem alwaysOnTopItem;
-	@FXML protected MenuItem closeMenuItem;
+	@FXML protected Button closeButton;
 
 	@FXML protected Label liveLabel;
 
@@ -69,16 +66,15 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void setLocked(boolean looked) {}
+	public void setLocked(boolean looked) {
+	}
 
 	@Override
 	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {
-		alwaysOnTopItem.setSelected(alwaysOnTopActive);
 	}
 
 	@Override
 	public void setFullScreenActive(boolean fullScreenActive) {
-		fullScreenMenuItem.setSelected(fullScreenActive);
 	}
 
 	@Override
@@ -92,23 +88,16 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void addMenuItem(MenuItem item, MenuType type) {}
-
-	@Override
-	public void removeMenuItem(MenuItem item) {}
-
-	@Override
-	public boolean isAlwaysOnTopActive() {
-		return alwaysOnTopItem.isSelected();
+	public void addMenuItem(MenuItem item, MenuType type) {
 	}
 
 	@Override
-	public boolean isFullscreenActive() {
-		return fullScreenMenuItem.isSelected();
+	public void removeMenuItem(MenuItem item) {
 	}
 
 	@Override
-	public void deinit() {}
+	public void deinit() {
+	}
 
 	@Override
 	public void showLiveInfo(boolean show) {
@@ -139,19 +128,6 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	// Event Handler
-	@FXML
-	void alwaysOnTopItemHandler(ActionEvent event) {
-		boolean selected = alwaysOnTopItem.isSelected();
-
-		mainViewController.getStage().setAlwaysOnTop(selected);
-		Profile.currentProfile().getProfileSettings().setWindowAlwaysOnTop(selected);
-	}
-
-	@FXML
-	void fullScreenMenuItemHandler(ActionEvent event) {
-		mainViewController.getStage().setFullScreen(fullScreenMenuItem.isSelected());
-	}
-
 	@FXML
 	void closeMenuItemHandler(ActionEvent event) {
 		MainLayoutConnect defaultLayout = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault();

@@ -277,16 +277,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@Override
-	public boolean isAlwaysOnTopActive() {
-		return alwaysOnTopItem.isSelected();
-	}
-
-	@Override
-	public boolean isFullscreenActive() {
-		return fullScreenMenuItem.isSelected();
-	}
-
-	@Override
 	public void deinit() {
 		newProjectMenuItem.setDisable(true);
 		openProjectMenuItem.setDisable(true);

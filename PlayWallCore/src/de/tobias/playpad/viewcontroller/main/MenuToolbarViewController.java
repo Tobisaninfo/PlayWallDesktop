@@ -49,8 +49,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	}
 
 	/**
-	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim
-	 * laden eines Projektes und bei Änderungen an den Einstellungen.
+	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim laden
+	 * eines Projektes und bei Änderungen an den Einstellungen.
 	 */
 	public abstract void initPageButtons();
 
@@ -127,20 +127,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 */
 
 	/**
-	 * Gibt die Einstellung zurück, ob AlwaysOnTop Aktiv ist.
-	 * 
-	 * @return <code>true</code> Aktiv
-	 */
-	public abstract boolean isAlwaysOnTopActive();
-
-	/**
-	 * Gibt die Einstellung zurück, ob Fullscreen Aktiv ist.
-	 * 
-	 * @return <code>true</code> Aktiv
-	 */
-	public abstract boolean isFullscreenActive();
-
-	/**
 	 * Deinitialisiert den Controller.
 	 */
 	public abstract void deinit();
@@ -183,7 +169,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	/**
 	 * Setzt eine Refernce des aktuellen Projectes auf den ViewController.
 	 * 
-	 * @param project neues Project
+	 * @param project
+	 *            neues Project
 	 */
 	public abstract void setOpenProject(Project project);
 }
