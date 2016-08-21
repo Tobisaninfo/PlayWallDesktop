@@ -1,6 +1,8 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.Strings;
+import de.tobias.utils.util.Localization;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -13,8 +15,7 @@ public class UpdaterDialog extends Dialog<Void> {
 	public UpdaterDialog(Window owner) {
 		setGraphic(new ImageView("org/controlsfx/dialog/dialog-information.png"));
 
-		Label textLabel = new Label(
-				"Die Aktualisierung wird vorbereitet. Bitte schließen Sie nicht das Programm. \nDieser Vorgang kann wenige Minuten dauern.");
+		Label textLabel = new Label(Localization.getString(Strings.UI_Dialog_Update_Info));
 		textLabel.setWrapText(true);
 		textLabel.setMaxWidth(450);
 		getDialogPane().setContent(textLabel);

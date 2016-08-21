@@ -34,6 +34,7 @@ import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /*
  * TODOS
@@ -161,17 +162,18 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				}
 			}
 
+			// Zeigt Launch Stage
 			ViewController.create(LaunchDialog.class, stage);
 
 			// Check Updates
-			checkUpdates(impl.globalSettings);
+			checkUpdates(impl.globalSettings, stage);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void checkUpdates(GlobalSettings globalSettings) {
+	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
 		if (globalSettings.isAutoUpdate() && !globalSettings.isIgnoreUpdate()) {
 			Worker.runLater(() ->
 			{
@@ -179,7 +181,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
 					Platform.runLater(() ->
 					{
-						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog();
+						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(owner);
 						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
 						{
 							try {

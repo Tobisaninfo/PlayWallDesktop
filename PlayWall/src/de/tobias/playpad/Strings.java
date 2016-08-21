@@ -200,6 +200,9 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 	public static final String UI_Dialog_AutoUpdate_Checkbox = "UI.Dialog.AutoUpdate.Checkbox";
+	public static final String UI_Dialog_AutoUpdate_Title= "UI.Dialog.AutoUpdate.Title";
+	public static final String UI_Dialog_AutoUpdate_Butto_Update = "UI.Dialog.AutoUpdate.Butto.Update";
+	public static final String UI_Dialog_AutoUpdate_Butto_Cancel = "UI.Dialog.AutoUpdate.Butto.Cancel";
 
 	// Update Channel - Basename
 	public static final String Update_Channel_BaseName = "UpdateChannel.";
@@ -209,6 +212,7 @@ public class Strings {
 
 	// UI - Dialog - Update
 	public static final String UI_Dialog_Update_Cell = "UI.Dialog.Update.Cell";
+	public static final String UI_Dialog_Update_Info = "UI.Dialog.Update.Info";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
 
 	// Error - Update - Downlaod
@@ -229,13 +233,13 @@ public class Strings {
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
-	
+
 	// Main Layout
 	public static final String MainLayout_Desktop = "MainLayout.Desktop";
 	public static final String MainLayout_Touch = "MainLayout.Touch";
-	
+
 	// Search
-	public static final String Search_Button="Search.Button";
-	public static final String Search_Placeholder="Search.Placeholder";
-	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches"; 
+	public static final String Search_Button = "Search.Button";
+	public static final String Search_Placeholder = "Search.Placeholder";
+	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches";
 }
