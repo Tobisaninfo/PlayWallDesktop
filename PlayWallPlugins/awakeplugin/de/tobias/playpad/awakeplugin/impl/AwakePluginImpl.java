@@ -12,10 +12,11 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.awakeplugin.AwakePlugin;
 import de.tobias.playpad.awakeplugin.AwakeSettings;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -40,6 +41,12 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 @PluginImplementation
 public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
+	private static final String NAME = "AwakePlugin";
+	private static final String IDENTIFIER = "de.tobias.playpad.awakeplugin.impl.AwakePluginImpl";
+
+	private Module module;
+	private Updatable updatable;
+
 	private static final String SETTINGS_FILENAME = "Awake.xml";
 
 	private CheckMenuItem activeMenu;
@@ -53,7 +60,8 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	public void onLoad(AwakePlugin plugin) {
 		bundle = Localization.loadBundle("de/tobias/playpad/awakeplugin/assets/awake", getClass().getClassLoader());
 
-		UpdateRegistery.registerUpdateable(new AwakePluginUpdater());
+		module = new Module(NAME, IDENTIFIER);
+		updatable = new AwakePluginUpdater();
 
 		if (OS.getType() == OSType.Windows) {
 			try {
@@ -120,7 +128,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		try {
 			settings = AwakeSettings.load(path);
 		} catch (NoSuchFileException e) {
-			System.out.println("No Awake.xml config on folder");
+			System.out.println("No Awake.xml config in folder");
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 		}
@@ -181,7 +189,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		}
 	}
 
-	public void activeSleep(boolean activate) {
+	private void activeSleep(boolean activate) {
 		if (activate) {
 			if (OS.getType() == OSType.Windows) {
 				Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED | Kernel32.ES_SYSTEM_REQUIRED);
@@ -195,5 +203,15 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 				AwakeUtils.getInstance().unlock();
 			}
 		}
+	}
+
+	@Override
+	public Module getModule() {
+		return module;
+	}
+
+	@Override
+	public Updatable getUpdatable() {
+		return updatable;
 	}
 }
