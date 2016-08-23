@@ -62,6 +62,7 @@ public class Strings {
 	public static final String UI_Window_Settings_Audio_Title = "UI.Window.Settings.Audio.Title";
 	public static final String UI_Window_Settings_Updates_Title = "UI.Window.Settings.Updates.Title";
 	public static final String UI_Window_Settings_Keys_Title = "UI.Window.Settings.Keys.Title";
+	public static final String UI_Window_Settings_Paths_Title = "UI.Window.Settings.Paths.Title";
 
 	// UI - Settings - Keys
 	public static final String UI_Settings_Keys_Conflict_Header = "UI.Settings.Keys.Conflict.Header";
@@ -71,7 +72,8 @@ public class Strings {
 	public static final String UI_Dialog_NewProfile_Content = "UI.Dialog.NewProfile.Content";
 
 	// UI - Dialog - NewProject
-	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content";
+	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content"; // Duplicate Project
+	public static final String UI_Dialog_NewProject_Media = "UI.Dialog.NewProject.MediaPath"; // Create Project
 
 	// UI - Dialog - Import
 	public static final String UI_Dialog_Import_ReplaceProfile_Content = "UI.Dialog.Import.ReplaceProfile.Content";
@@ -140,6 +142,7 @@ public class Strings {
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
@@ -200,7 +203,7 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 	public static final String UI_Dialog_AutoUpdate_Checkbox = "UI.Dialog.AutoUpdate.Checkbox";
-	public static final String UI_Dialog_AutoUpdate_Title= "UI.Dialog.AutoUpdate.Title";
+	public static final String UI_Dialog_AutoUpdate_Title = "UI.Dialog.AutoUpdate.Title";
 	public static final String UI_Dialog_AutoUpdate_Butto_Update = "UI.Dialog.AutoUpdate.Butto.Update";
 	public static final String UI_Dialog_AutoUpdate_Butto_Cancel = "UI.Dialog.AutoUpdate.Butto.Cancel";
 

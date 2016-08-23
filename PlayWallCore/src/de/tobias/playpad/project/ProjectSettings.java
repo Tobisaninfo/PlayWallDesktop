@@ -1,5 +1,8 @@
 package de.tobias.playpad.project;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.dom4j.Element;
 
 import de.tobias.utils.settings.Storable;
@@ -13,6 +16,9 @@ public class ProjectSettings {
 	@Storable private int pageCount = 2;
 	@Storable private int columns = 6;
 	@Storable private int rows = 5;
+
+	private boolean useMediaPath = false;
+	private Path mediaPath = null;
 
 	public int getPageCount() {
 		return pageCount;
@@ -36,6 +42,14 @@ public class ProjectSettings {
 		return rows;
 	}
 
+	public Path getMediaPath() {
+		return mediaPath;
+	}
+
+	public boolean isUseMediaPath() {
+		return useMediaPath;
+	}
+
 	public void setPageCount(int pageCount) {
 		if (pageCount > MAX_PAGES)
 			pageCount = MAX_PAGES;
@@ -54,9 +68,20 @@ public class ProjectSettings {
 		this.rows = rows;
 	}
 
+	public void setMediaPath(Path mediaPath) {
+		this.mediaPath = mediaPath;
+	}
+
+	public void setUseMediaPath(boolean useMediaPath) {
+		this.useMediaPath = useMediaPath;
+	}
+
 	private static final String ROWS_ELEMENT = "Rows";
 	private static final String COLUMNS_ELEMENT = "Columns";
 	private static final String PAGE_COUNT_ELEMENT = "PageCount";
+
+	private static final String MEDIA_PATH_ELEMENT = "MediaPath";
+	private static final String MEDIA_PATH_ACTIVE_ATTR = "active";
 
 	public static ProjectSettings load(Element element) {
 		ProjectSettings settings = new ProjectSettings();
@@ -67,6 +92,12 @@ public class ProjectSettings {
 		if (element.element(ROWS_ELEMENT) != null)
 			settings.setRows(Integer.valueOf(element.element(ROWS_ELEMENT).getStringValue()));
 
+		Element mediaElement = element.element(MEDIA_PATH_ELEMENT);
+		if (mediaElement != null) {
+			settings.setMediaPath(Paths.get(mediaElement.getStringValue()));
+			settings.setUseMediaPath(Boolean.valueOf(mediaElement.attributeValue(MEDIA_PATH_ACTIVE_ATTR)));
+		}
+
 		return settings;
 	}
 
@@ -74,5 +105,10 @@ public class ProjectSettings {
 		element.addElement(PAGE_COUNT_ELEMENT).addText(String.valueOf(pageCount));
 		element.addElement(COLUMNS_ELEMENT).addText(String.valueOf(columns));
 		element.addElement(ROWS_ELEMENT).addText(String.valueOf(rows));
+
+		Element mediaPath = element.addElement(MEDIA_PATH_ELEMENT);
+		if (this.mediaPath != null)
+			mediaPath.addText(this.mediaPath.toString());
+		mediaPath.addAttribute(MEDIA_PATH_ACTIVE_ATTR, String.valueOf(useMediaPath));
 	}
 }

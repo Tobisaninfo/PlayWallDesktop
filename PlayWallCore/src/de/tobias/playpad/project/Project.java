@@ -151,7 +151,8 @@ public class Project {
 			if (ref.getProfileReference() != null) {
 				Profile.load(ref.getProfileReference()); // Lädt das entsprechende Profile und aktiviert es
 			} else {
-				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es gleich im Speicher
+				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es
+																		// gleich im Speicher
 				ref.setProfileReference(profile.getRef());
 			}
 
@@ -273,5 +274,13 @@ public class Project {
 
 	public int getPadCount() {
 		return pads.size();
+	}
+
+	public void closeFile() {
+		pads.values().forEach(pad ->
+		{
+			if (pad.getContent() != null)
+				pad.getContent().unloadMedia();
+		});
 	}
 }

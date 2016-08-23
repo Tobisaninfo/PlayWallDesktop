@@ -6,10 +6,8 @@ import javax.sound.midi.MidiUnavailableException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -110,11 +108,6 @@ public class MidiTabViewController extends ProfileSettingsTabViewController {
 	@Override
 	public boolean needReload() {
 		return true;
-	}
-
-	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-
 	}
 
 	@Override

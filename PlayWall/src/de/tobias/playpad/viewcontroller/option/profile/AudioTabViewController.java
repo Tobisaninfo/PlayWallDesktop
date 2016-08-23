@@ -10,14 +10,15 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.Worker;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 
-public class AudioTabViewController extends ProfileSettingsTabViewController {
+public class AudioTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	// Audio
 	@FXML private ComboBox<String> audioTypeComboBox;
@@ -101,11 +102,17 @@ public class AudioTabViewController extends ProfileSettingsTabViewController {
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-		Worker.runLater(() ->
-		{
-			project.loadPadsContent();
-		});
+	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				updateProgress(-1, -1);
+
+				project.loadPadsContent();
+				return null;
+			}
+		};
 	}
 
 	@Override

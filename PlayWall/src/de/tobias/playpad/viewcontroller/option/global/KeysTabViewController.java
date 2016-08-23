@@ -3,12 +3,12 @@ package de.tobias.playpad.viewcontroller.option.global;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.IGlobalReloadTask;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import javafx.application.Platform;
@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -32,7 +33,7 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class KeysTabViewController extends GlobalSettingsTabViewController {
+public class KeysTabViewController extends GlobalSettingsTabViewController implements IGlobalReloadTask {
 
 	@FXML private TextField searchTextField;
 
@@ -177,8 +178,17 @@ public class KeysTabViewController extends GlobalSettingsTabViewController {
 	}
 
 	@Override
-	public void reload(GlobalSettings settings, Project project, IMainViewController controller) {
-		controller.loadKeybinding(settings.getKeyCollection());
+	public Task<Void> getTask(GlobalSettings settings, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				updateProgress(-1, -1);
+
+				controller.loadKeybinding(settings.getKeyCollection());
+				return null;
+			}
+		};
 	}
 
 	@Override

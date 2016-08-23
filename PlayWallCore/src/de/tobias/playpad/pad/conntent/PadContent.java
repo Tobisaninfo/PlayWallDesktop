@@ -1,10 +1,14 @@
 package de.tobias.playpad.pad.conntent;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.util.ZipFile;
 
@@ -43,15 +47,19 @@ public abstract class PadContent {
 	 * @param path
 	 *            path
 	 * @throws NoSuchComponentException
-	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige
+	 *             Soundsystem
+	 * @throws IOException
+	 *             IO Fehler
 	 */
-	public abstract void handlePath(Path path) throws NoSuchComponentException;
+	public abstract void handlePath(Path path) throws NoSuchComponentException, IOException;
 
 	/**
 	 * Lädt die Medien, sodass sie auf abruf verfügbar sind.
 	 * 
 	 * @throws NoSuchComponentException
-	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige
+	 *             Soundsystem
 	 */
 	public abstract void loadMedia() throws NoSuchComponentException;
 
@@ -85,5 +93,31 @@ public abstract class PadContent {
 	public abstract void importMedia(Path mediaFolder, ZipFile zipfs, Element element);
 
 	public abstract void exportMedia(ZipFile zip, Element element);
+
+	/**
+	 * Gibt den richtigen Pfad einer Datei zurück, basierend auf den Einstellungen.
+	 * 
+	 * @param orrginal
+	 *            orginal path
+	 * @return new path
+	 * @throws IOException
+	 *             IO Fehler
+	 * @since 5.1.0
+	 */
+	public Path getRealPath(Path orginal) throws IOException {
+		ProjectSettings settings = getPad().getProject().getSettings();
+		if (settings.isUseMediaPath()) {
+			Path mediaFolder = settings.getMediaPath();
+			Path newPath = mediaFolder.resolve(orginal.getFileName());
+
+			if (Files.notExists(mediaFolder)) {
+				Files.createDirectories(mediaFolder);
+			}
+			
+			Files.copy(orginal, newPath, StandardCopyOption.REPLACE_EXISTING);
+			return newPath;
+		}
+		return orginal;
+	}
 
 }

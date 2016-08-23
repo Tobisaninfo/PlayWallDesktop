@@ -1,5 +1,6 @@
 package de.tobias.playpad.mediaplugin.video;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -70,9 +71,9 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	}
 
 	@Override
-	public void handlePath(Path path) {
+	public void handlePath(Path path) throws IOException {
 		unloadMedia();
-		setPath(path);
+		setPath(getRealPath(path));
 		loadMedia();
 	}
 

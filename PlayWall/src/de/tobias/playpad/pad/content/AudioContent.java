@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.content;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,11 +70,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void handlePath(Path path) throws NoSuchComponentException {
+	public void handlePath(Path path) throws NoSuchComponentException, IOException {
 		// handle old media
 		unloadMedia();
 
-		this.path = path;
+		this.path = getRealPath(path);
 
 		// handle new media
 		loadMedia();

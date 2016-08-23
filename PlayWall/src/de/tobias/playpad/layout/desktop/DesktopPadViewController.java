@@ -1,6 +1,7 @@
 package de.tobias.playpad.layout.desktop;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -246,7 +247,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		try {
 			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException e) {
+		} catch (NoSuchComponentException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
