@@ -13,7 +13,6 @@ import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -112,13 +111,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 
 	public void initActionType(Profile profile) {
 		Registry<ActionConnect> actions = PlayPadPlugin.getRegistryCollection().getActions();
-		for (String type : actions.getTypes()) {
-			try {
-				actions.getComponent(type).initActionType(this, profile); // TODO
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for (ActionConnect component : actions.getComponents()) {
+			component.initActionType(this, profile);
 		}
 	}
 
@@ -131,16 +125,10 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initFeedback() {
-		Registry<MapperConnect> mappers = PlayPadPlugin.getRegistryCollection().getMappers();
-		for (String mapperType : mappers.getTypes()) {
-			try {
-				MapperConnect mapper = mappers.getComponent(mapperType);
-				if (mapper instanceof MapperConnectFeedbackable) {
-					((MapperConnectFeedbackable) mapper).initFeedbackType();
-				}
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperConnect mapper : registry.getComponents()) {
+			if (mapper instanceof MapperConnectFeedbackable) {
+				((MapperConnectFeedbackable) mapper).initFeedbackType();
 			}
 		}
 	}
@@ -163,18 +151,13 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void clearFeedback() {
-		Registry<MapperConnect> mappers = PlayPadPlugin.getRegistryCollection().getMappers();
-		for (String mapperType : mappers.getTypes()) {
-			try {
-				MapperConnect mapper = mappers.getComponent(mapperType);
-				if (mapper instanceof MapperConnectFeedbackable) {
-					((MapperConnectFeedbackable) mapper).clearFeedbackType();
-				}
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperConnect mapper : registry.getComponents()) {
+			if (mapper instanceof MapperConnectFeedbackable) {
+				((MapperConnectFeedbackable) mapper).clearFeedbackType();
 			}
 		}
+
 		getActions().forEach(action -> action.clearFeedback());
 	}
 

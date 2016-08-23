@@ -136,10 +136,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 								{
 									try {
 										content.handlePath(copiedFile);
-									} catch (NoSuchComponentException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									} catch (IOException e) {
+									} catch (NoSuchComponentException | IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}

@@ -16,19 +16,22 @@ final class ProjectReferenceList extends UniqList<ProjectReference> {
 
 	public boolean contains(Object o) {
 		if (o instanceof String) {
-			for (ProjectReference reference : this) {
-				if (reference.getName().equals(o)) {
+			for (ProjectReference item : this) {
+				if (item.getName().equals(o)) {
 					return true;
-				} else if (reference.toString().equals(o)) {
+				} else if (item.toString().equals(o)) {
 					return true;
 				}
 			}
 		} else if (o instanceof ProjectReference) {
-			for (ProjectReference reference : this) {
-				if (reference.getName() == o) {
+			for (ProjectReference item : this) {
+				if (item.getName() == o) {
 					return true;
-				} else if (reference.getName().equals(((ProjectReference) o).getName())) { // TODO Check
-					return true;
+				} else {
+					ProjectReference projectRef = (ProjectReference) o;
+					if (item.getName().equals(projectRef.getName())) {
+						return true;
+					}
 				}
 			}
 		}

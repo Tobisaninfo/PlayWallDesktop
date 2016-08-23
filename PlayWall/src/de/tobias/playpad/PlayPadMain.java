@@ -39,23 +39,7 @@ import javafx.stage.Window;
 /*
  * TODOS
  */
-// PlayWall 5.0.0
-// FIXME XML Tags in String Konstanten
-
-// Common Updater für Plugins & Programme
-// Changelog OK Button
-// Keine Schriftgröße bei Cart Layout
-
-// Profile mit UUID
-
-// Pad System neu machen
-// Neue PadViewController für jedes pad
-// Midi Modell Überarbeiten
-// Bei Seitenwechsel Pad auf Play lassen
-
-// TEST Trigger
-
-// PlayWall 5.1
+// Idden
 // FEATURE Global Volume Trigger mit x% und 100%
 // FEATURE Option bei Import Media auch Copy Media in Library
 // FEATURE lnk für Windows mit Dateiparameter
@@ -124,8 +108,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 
 			/*
 			 * Setup

@@ -114,10 +114,11 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		volumeChangeListener = new VolumeChangeListener(this);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
-
-		setMainLayout(new DesktopMainLayoutConnect()); // DEBUG
 		initMapper(openProject);
 
+		// Default Layout
+		setMainLayout(new DesktopMainLayoutConnect());
+		
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
 
@@ -539,8 +540,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)
