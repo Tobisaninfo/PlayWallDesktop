@@ -61,6 +61,7 @@ public class Strings {
 	public static final String UI_Window_Settings_Player_Title = "UI.Window.Settings.Player.Title";
 	public static final String UI_Window_Settings_Audio_Title = "UI.Window.Settings.Audio.Title";
 	public static final String UI_Window_Settings_Updates_Title = "UI.Window.Settings.Updates.Title";
+	public static final String UI_Window_Settings_Paths_Title = "UI.Window.Settings.Paths.Title";
 
 	// UI - Dialogs - DragAndDrop
 	public static final String UI_Dialog_DragAndDrop_Header = "UI.Dialog.DragAndDrop.Header";
@@ -141,6 +142,7 @@ public class Strings {
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";

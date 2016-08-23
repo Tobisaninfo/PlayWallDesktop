@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
@@ -22,6 +23,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -39,6 +41,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	@FXML private CheckBox useMediaPath;
 
 	private transient boolean changedMediaPath = false;
+	private transient Optional<Path> currentMediaPath = Optional.empty();
 	private transient Optional<Path> oldMediaPath = Optional.empty();
 
 	public PathsTabViewController() {
@@ -51,14 +54,25 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 		File folder = chooser.showDialog(getStage());
 		if (folder != null) {
 			Path path = folder.toPath();
+
+			if (currentMediaPath.isPresent()) {
+				boolean subDirectory = FileUtils.isSubDirectory(currentMediaPath.get(), path);
+				if (subDirectory) {
+					showErrorMessage(Localization.getString(Strings.Error_Project_MediaPath));
+					return;
+				}
+			}
+
 			mediaPathTextField.setText(path.toString());
 		}
 	}
 
 	@Override
 	public void loadSettings(ProjectSettings settings) {
-		if (settings.isUseMediaPath())
+		if (settings.isUseMediaPath()) {
 			mediaPathTextField.setText(settings.getMediaPath().toString());
+			currentMediaPath = Optional.of(settings.getMediaPath());
+		}
 		useMediaPath.setSelected(settings.isUseMediaPath());
 
 	}
@@ -68,8 +82,8 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 		Path newPath = Paths.get(mediaPathTextField.getText());
 		if (settings.getMediaPath() != null) {
 			if (!settings.getMediaPath().equals(newPath)) {
-				changedMediaPath = true;
 				if (settings.getMediaPath() != null && !settings.getMediaPath().toString().isEmpty()) {
+					changedMediaPath = true;
 					oldMediaPath = Optional.of(settings.getMediaPath());
 				}
 			}
@@ -78,7 +92,6 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 			settings.setMediaPath(newPath);
 		}
 		settings.setUseMediaPath(useMediaPath.isSelected());
-
 	}
 
 	@Override
@@ -88,7 +101,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 	@Override
 	public String name() {
-		return "Pfade (i18n)"; // TODO
+		return Localization.getString(Strings.UI_Window_Settings_Paths_Title);
 	}
 
 	// Reload Data
@@ -119,7 +132,8 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 								Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
 
-								Platform.runLater(() -> {
+								Platform.runLater(() ->
+								{
 									try {
 										content.handlePath(copiedFile);
 									} catch (NoSuchComponentException e) {
@@ -150,7 +164,6 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 					}
 				}
 
-				// TODO Clear old media folder
 				if (oldMediaPath.isPresent())
 					try {
 						FileUtils.deleteDirectory(oldMediaPath.get());
