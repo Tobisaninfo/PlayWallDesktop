@@ -107,7 +107,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		layoutActions = new ArrayList<>();
 
 		// Init Listener
-		volumeChangeListener = new VolumeChangeListener(this);
+		volumeChangeListener = new VolumeChangeListener(null);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
 
@@ -117,8 +117,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		reloadSettings(null, Profile.currentProfile());
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
-		// sein muss. Die
-		// Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
+		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
 		performLayoutDependendAction((oldToolbar, newToolbar) ->
 		{
 			if (menuToolbarViewController != null)
@@ -383,6 +382,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		initMapper(project);
 
+		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		PadDragListener.setProject(project);
@@ -512,16 +512,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 		return currentPageShowing;
 	}
 
-	@Override
-	public void setGlobalVolume(double volume) {
-		if (openProject != null) {
-			for (Pad pad : openProject.getPads().values()) {
-				if (pad != null)
-					pad.setMasterVolume(volume);
-			}
-		}
-	}
-
 	private boolean shown = false;
 
 	@Override
@@ -533,7 +523,8 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 			{
 				try {
 					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
 				Platform.runLater(() ->
 				{
 					if (menuToolbarViewController != null)

@@ -84,7 +84,9 @@ public class ClipAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException e) {
+				} catch (ConcurrentModificationException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -174,7 +176,7 @@ public class ClipAudioHandler extends AudioHandler {
 	 * @param volume
 	 *            [0, 1]
 	 */
-	private void setVolume(double volume) {
+	public void setVolume(double volume) {
 		if (volumeControl != null) {
 			if (volume == 1.0) {
 				volumeControl.setValue(0);

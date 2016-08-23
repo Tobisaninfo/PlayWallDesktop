@@ -18,6 +18,7 @@ import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -29,6 +30,9 @@ import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
+import de.tobias.playpad.volume.GlobalVolume;
+import de.tobias.playpad.volume.PadVolume;
+import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -135,7 +139,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 
 			/*
 			 * Setup
@@ -255,6 +260,11 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Key Bindings
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
+
+		// Volume filter
+		VolumeManager volumeManager = Pad.getVolumeManager();
+		volumeManager.addFilter(new GlobalVolume());
+		volumeManager.addFilter(new PadVolume());
 
 		// Mapper
 		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
