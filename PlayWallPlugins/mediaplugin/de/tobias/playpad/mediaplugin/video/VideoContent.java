@@ -14,7 +14,7 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -39,7 +39,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	private transient ObjectProperty<Duration> positionProperty = new SimpleObjectProperty<>();
 
 	private transient ChangeListener<Number> padVolumeListener;
-	private transient ChangeListener<Number> customVolumeListener;
 
 	private transient boolean holdLastFrame = false;
 
@@ -47,12 +46,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 		super(pad);
 		padVolumeListener = (a, b, c) ->
 		{
-			player.setVolume(c.doubleValue() * Profile.currentProfile().getProfileSettings().getVolume() * getPad().getCustomVolume());
-		};
-		customVolumeListener = (a, b, c) ->
-		{
-			player.setVolume(
-					getPad().getPadSettings().getVolume() * Profile.currentProfile().getProfileSettings().getVolume() * c.doubleValue());
+			updateVolume();
 		};
 	}
 
@@ -77,9 +71,11 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	}
 
 	@Override
-	public void setMasterVolume(double masterVolume) {
+	public void updateVolume() {
 		if (player != null) {
-			player.setVolume(getPad().getPadSettings().getVolume() * masterVolume * getPad().getCustomVolume());
+			VolumeManager manager = Pad.getVolumeManager();
+			double volume = manager.computeVolume(getPad());
+			player.setVolume(volume);
 		}
 	}
 
@@ -90,7 +86,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	@Override
 	public void play() {
-		getPad().setCustomVolume(1.0);
 		getPad().setEof(false);
 		MediaPluginImpl.getInstance().getVideoViewController().setMediaPlayer(player, getPad());
 		if (holdLastFrame) {
@@ -208,7 +203,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			positionProperty.bind(player.currentTimeProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(padVolumeListener);
-			getPad().customVolumeProperty().addListener(customVolumeListener);
 		}
 	}
 
@@ -218,7 +212,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 		positionProperty.unbind();
 
 		getPad().getPadSettings().volumeProperty().removeListener(padVolumeListener);
-		getPad().customVolumeProperty().removeListener(customVolumeListener);
 
 		player = null;
 		media = null;

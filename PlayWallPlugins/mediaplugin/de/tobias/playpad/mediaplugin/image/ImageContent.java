@@ -44,7 +44,8 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public void setMasterVolume(double masterVolume) {}
+	public void updateVolume() {
+	}
 
 	@Override
 	public String getType() {
