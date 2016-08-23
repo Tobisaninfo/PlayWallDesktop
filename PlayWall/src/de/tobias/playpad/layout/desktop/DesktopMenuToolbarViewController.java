@@ -193,6 +193,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
+			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
 			button.setFocusTraversable(false);
 			button.setOnAction(this);
 			pageHBox.getChildren().add(button);
