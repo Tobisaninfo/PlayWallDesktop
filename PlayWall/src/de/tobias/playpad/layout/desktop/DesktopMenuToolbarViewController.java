@@ -127,7 +127,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		showLiveInfo(false);
 
-		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
+		// helpMenu.getItems().add(new HelpMenuItem(helpMenu)); BETA
 	}
 
 	private void initLayoutMenu() {

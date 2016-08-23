@@ -34,7 +34,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-// TODO Extract Fade in / Fade Out
 public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent {
 
 	private static final String TYPE = "audio";
