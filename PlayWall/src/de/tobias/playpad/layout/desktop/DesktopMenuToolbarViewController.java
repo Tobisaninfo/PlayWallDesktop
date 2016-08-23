@@ -21,14 +21,12 @@ import de.tobias.playpad.pad.view.IPadViewV2;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
@@ -66,10 +64,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -133,44 +129,27 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private void initLayoutMenu() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		Registry<MainLayoutConnect> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
-		ToggleGroup group = new ToggleGroup();
 
 		int index = 1; // Für Tastenkombination
-		for (String layoutType : mainLayouts.getTypes()) {
-			try {
-				MainLayoutConnect connect = mainLayouts.getComponent(layoutType);
+		for (MainLayoutConnect connect : mainLayouts.getComponents()) {
+			if (!connect.getType().equals(profileSettings.getMainLayoutType())) {
+				MenuItem item = new MenuItem(connect.name());
 
-				RadioMenuItem item = new RadioMenuItem(connect.name());
-				item.setUserData(connect);
-				group.getToggles().add(item);
+				item.setOnAction(e ->
+				{
+					mainViewController.setMainLayout(connect);
+					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
+				});
 
 				// Key Combi
 				if (index < 10) {
 					item.setAccelerator(KeyCombination.keyCombination("Shortcut+" + index));
 				}
 
-				if (connect.getType().equals(profileSettings.getMainLayoutType())) {
-					item.setSelected(true);
-				}
-
 				layoutMenu.getItems().add(item);
-			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
+				index++;
 			}
-			index++;
 		}
-
-		group.selectedToggleProperty().addListener((a, b, c) ->
-		{
-			if (c instanceof RadioMenuItem) {
-				RadioMenuItem menuItem = (RadioMenuItem) c;
-				if (menuItem.getUserData() instanceof MainLayoutConnect) {
-					MainLayoutConnect connect = (MainLayoutConnect) menuItem.getUserData();
-					mainViewController.setMainLayout(connect);
-					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
-				}
-			}
-		});
 	}
 
 	@Override
