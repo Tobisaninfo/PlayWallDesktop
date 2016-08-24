@@ -8,6 +8,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/XML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/YML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/HTML Builder"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JNA"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUtils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Plugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TinySound"/>

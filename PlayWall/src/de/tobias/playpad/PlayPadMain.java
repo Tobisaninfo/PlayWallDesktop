@@ -29,6 +29,7 @@ import de.tobias.utils.util.Localization.LocalizationDelegate;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
+import de.tobias.utils.util.win.User32X;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
@@ -60,7 +61,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private static PlayPadImpl impl;
 	private static PlayPadUpdater updater;
-
+	
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}

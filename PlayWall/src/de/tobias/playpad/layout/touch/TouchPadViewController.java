@@ -20,6 +20,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.util.Duration;
 
 public class TouchPadViewController implements IPadViewControllerV2, EventHandler<Event> {
@@ -47,7 +48,8 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
 
-		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem
+		// neuen Profile, werden neue PadViewController
 		// erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		profileSettings.lockedProperty().addListener(padLockedListener);
@@ -85,7 +87,9 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 			pad.statusProperty().addListener(padStatusListener);
 
 			// First Listener call with new data
-			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
+			padContentListener.changed(null, null, pad.getContent()); // Add
+																		// Duration
+																		// listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
 			padDragListener = new PadDragListener(pad, padView);
@@ -142,7 +146,12 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 					}
 				}
 			}
-
+		} else if (event instanceof TouchEvent) {
+			if (pad.getStatus() == PadStatus.PLAY) {
+				onStop();
+			} else {
+				onPlay();
+			}
 		}
 	}
 

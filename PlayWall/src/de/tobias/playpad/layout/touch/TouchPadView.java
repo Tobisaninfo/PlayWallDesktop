@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.touch;
 
+import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;
@@ -13,6 +14,8 @@ import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.BusyView;
+import de.tobias.utils.util.OS;
+import de.tobias.utils.util.win.User32X;
 import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -86,8 +89,13 @@ public class TouchPadView implements IPadViewV2 {
 		root.getChildren().addAll(infoBox, preview, playBar);
 		superRoot.getChildren().addAll(root);
 
-		superRoot.setOnMouseClicked(controller);
-		playBar.setOnMouseClicked(controller);
+		if (OS.isWindows() && User32X.isTouchAvailable()) {
+			superRoot.setOnTouchPressed(controller);
+			playBar.setOnTouchPressed(controller);
+		} else {
+			superRoot.setOnMouseClicked(controller);
+			playBar.setOnMouseClicked(controller);
+		}
 	}
 
 	@Override
