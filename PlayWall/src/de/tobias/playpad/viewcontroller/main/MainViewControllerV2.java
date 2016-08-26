@@ -41,6 +41,7 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
+import de.tobias.utils.util.win.User32X;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
@@ -177,6 +178,12 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void init() {
 		padGridPane.getStyleClass().add("pad-grid");
 
+		// TODO TOUCH
+		if (OS.isWindows() && User32X.isTouchAvailable()) {
+			padGridPane.setOnSwipeLeft(e -> showPage(currentPageShowing - 1));
+			padGridPane.setOnSwipeRight(e -> showPage(currentPageShowing + 1));
+		}
+		
 		notificationPane = new NotificationPane(padGridPane);
 		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
 
