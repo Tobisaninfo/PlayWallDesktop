@@ -71,7 +71,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(500);
-		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
+		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
 
 		Profile.currentProfile().currentLayout().applyCss(getStage());
 	}

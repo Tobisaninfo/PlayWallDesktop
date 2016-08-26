@@ -21,6 +21,7 @@ public class Strings {
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
+	public static final String UI_Window_ProjectSettings_Title = "UI.Window.ProjectSettings.Title";
 	public static final String UI_Window_GlobalSettings_Title = "UI.Window.GlobalSettings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
