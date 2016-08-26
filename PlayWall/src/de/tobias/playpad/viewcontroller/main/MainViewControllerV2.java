@@ -119,7 +119,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 		// Default Layout
 		setMainLayout(new DesktopMainLayoutConnect());
-		
+
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
 
@@ -178,12 +178,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 	public void init() {
 		padGridPane.getStyleClass().add("pad-grid");
 
-		// TODO TOUCH
-		if (OS.isWindows() && User32X.isTouchAvailable()) {
-			padGridPane.setOnSwipeLeft(e -> showPage(currentPageShowing - 1));
-			padGridPane.setOnSwipeRight(e -> showPage(currentPageShowing + 1));
-		}
-		
 		notificationPane = new NotificationPane(padGridPane);
 		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
 
