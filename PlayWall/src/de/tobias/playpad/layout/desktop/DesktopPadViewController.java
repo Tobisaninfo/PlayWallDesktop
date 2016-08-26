@@ -149,6 +149,17 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		this.padDragListener = null;
 		this.pad = null;
+
+		// Remove SettingsView Reference
+		if (padSettingsViewController != null) {
+			padSettingsViewController.getStage().close();
+			padSettingsViewController = null;
+		}
+
+		// Hide Loading Animation
+		if (getView() != null)
+			getView().showBusyView(false);
+
 	}
 
 	@Override
