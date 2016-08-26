@@ -58,7 +58,6 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	private IPadPositionListener padPositionListener;
 
 	private PadDragListener padDragListener;
-	private transient PadSettingsViewController padSettingsViewController;
 
 	public DesktopPadViewController(DesktopPadView padView) {
 		this.padView = padView;
@@ -149,12 +148,6 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		this.padDragListener = null;
 		this.pad = null;
-
-		// Remove SettingsView Reference
-		if (padSettingsViewController != null) {
-			padSettingsViewController.getStage().close();
-			padSettingsViewController = null;
-		}
 
 		// Hide Loading Animation
 		if (getView() != null)
@@ -278,14 +271,13 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 			}
 
 			Stage owner = mvc.getStage();
-			if (padSettingsViewController == null) {
-				padSettingsViewController = new PadSettingsViewController(pad, owner);
-				padSettingsViewController.getStage().setOnHiding(ev ->
-				{
-					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
-				});
-			}
+			
+			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
+			padSettingsViewController.getStage().setOnHiding(ev ->
+			{
+				if (padView != null && pad != null)
+					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+			});
 			padSettingsViewController.getStage().show();
 		}
 	}

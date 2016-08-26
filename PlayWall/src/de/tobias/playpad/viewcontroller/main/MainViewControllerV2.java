@@ -41,7 +41,6 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
-import de.tobias.utils.util.win.User32X;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
