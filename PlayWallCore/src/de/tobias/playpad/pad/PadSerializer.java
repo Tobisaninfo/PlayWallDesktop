@@ -166,11 +166,11 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(padSettings.getVolume()));
 		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(padSettings.isLoop()));
-		if (padSettings.getTimeMode() != null)
+		if (padSettings.isCustomTimeMode())
 			settingsElement.addElement(TIMEMODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
-		if (padSettings.isCustomWarning() != false)
+		if (padSettings.isCustomWarning())
 			padSettings.getWarning().save(settingsElement.addElement(WARNING_ELEMENT));
-		if (padSettings.getFade() != null)
+		if (padSettings.isCustomFade())
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
 
 		// Layout
