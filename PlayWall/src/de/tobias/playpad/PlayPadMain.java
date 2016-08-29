@@ -174,7 +174,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 								e.printStackTrace();
 							}
 						});
-						if (autoUpdateDialog.isIgnoreUpdate()) {
+						if (autoUpdateDialog.isSelected()) {
 							globalSettings.setIgnoreUpdate(true);
 						}
 					});

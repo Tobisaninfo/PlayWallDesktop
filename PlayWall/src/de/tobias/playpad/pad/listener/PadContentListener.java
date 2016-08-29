@@ -3,16 +3,16 @@ package de.tobias.playpad.pad.listener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadContentListener implements ChangeListener<PadContent> {
 
 	private Pad pad;
-	private IPadViewControllerV2 controller;
+	private IPadViewController controller;
 
-	public PadContentListener(IPadViewControllerV2 controller) {
+	public PadContentListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 

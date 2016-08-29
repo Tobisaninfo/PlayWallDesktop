@@ -10,20 +10,14 @@
    <children>
       <VBox layoutX="-0.7071067690849304" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <fx:include fx:id="menuBar" source="mainMenu.fxml" />
-            <fx:include fx:id="toolbar" source="mainToolbarView.fxml" />
-            <AnchorPane fx:id="gridContainer" layoutX="-0.7071067690849304" layoutY="68.29289245605469" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="69.0" VBox.vgrow="ALWAYS">
+            <VBox fx:id="headerBox" />
+            <AnchorPane fx:id="gridContainer" VBox.vgrow="ALWAYS">
                <children>
-                  <GridPane fx:id="padGridPane" layoutX="0.7071067690849304" layoutY="0.7071075439453125" prefHeight="331.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="padGridPane" gridLinesVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
       </GridPane>
                </children>
             </AnchorPane>
          </children>
       </VBox>
-      <Label fx:id="liveLabel" alignment="CENTER" mouseTransparent="true" prefHeight="40.0" prefWidth="600.0" text="%main.label.live" textFill="RED" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
-         <font>
-            <Font name="System Bold" size="26.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.FadeableColor;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -23,7 +23,7 @@ public class ModernDesignAnimator {
 
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
-	public static void animateFade(IPadViewControllerV2 padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		int index = padViewController.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -57,7 +57,7 @@ public class ModernDesignAnimator {
 
 	}
 
-	public static void animateWarn(IPadViewControllerV2 padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateWarn(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		int index = padViewController.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -95,7 +95,7 @@ public class ModernDesignAnimator {
 		timelines.put(index, timeline);
 	}
 
-	public static void stopAnimation(IPadViewControllerV2 controller) {
+	public static void stopAnimation(IPadViewController controller) {
 		int index = controller.getPad().getIndex();
 
 		if (timelines.containsKey(index)) {
@@ -103,8 +103,8 @@ public class ModernDesignAnimator {
 		}
 	}
 
-	public static void warnFlash(IPadViewControllerV2 controller) {
-		final IPadViewV2 view = controller.getView();
+	public static void warnFlash(IPadViewController controller) {
+		final IPadView view = controller.getView();
 		try {
 			while (true) {
 				Platform.runLater(() ->

@@ -46,6 +46,7 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
+	@Deprecated
 	public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
@@ -205,8 +206,17 @@ public class Strings {
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
 	public static final String UI_Dialog_AutoUpdate_Checkbox = "UI.Dialog.AutoUpdate.Checkbox";
 	public static final String UI_Dialog_AutoUpdate_Title = "UI.Dialog.AutoUpdate.Title";
-	public static final String UI_Dialog_AutoUpdate_Butto_Update = "UI.Dialog.AutoUpdate.Butto.Update";
-	public static final String UI_Dialog_AutoUpdate_Butto_Cancel = "UI.Dialog.AutoUpdate.Butto.Cancel";
+	public static final String UI_Dialog_AutoUpdate_Button_Update = "UI.Dialog.AutoUpdate.Button.Update";
+	public static final String UI_Dialog_AutoUpdate_Button_Cancel = "UI.Dialog.AutoUpdate.Button.Cancel";
+
+	// UI - Dialog - Save
+	public static final String UI_Dialog_Save_Header = "UI.Dialog.Save.Header";
+	public static final String UI_Dialog_Save_Content = "UI.Dialog.Save.Content";
+	public static final String UI_Dialog_Save_Checkbox = "UI.Dialog.Save.Checkbox";
+	public static final String UI_Dialog_Save_Title = "UI.Dialog.Save.Title";
+	public static final String UI_Dialog_Save_Button_Yes = "UI.Dialog.Save.Button.Yes";
+	public static final String UI_Dialog_Save_Button_No = "UI.Dialog.Save.Button.No";
+	public static final String UI_Dialog_Save_Button_Cancel = "UI.Dialog.Save.Button.Cancel";
 
 	// Update Channel - Basename
 	public static final String Update_Channel_BaseName = "UpdateChannel.";

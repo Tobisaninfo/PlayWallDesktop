@@ -2,7 +2,7 @@ package de.tobias.playpad.pad.viewcontroller;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.listener.IPadPositionListener;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import javafx.beans.value.ChangeListener;
 import javafx.util.Duration;
 
@@ -13,7 +13,7 @@ import javafx.util.Duration;
  *
  * @since 5.1.0
  */
-public interface IPadViewControllerV2 {
+public interface IPadViewController {
 
 	/**
 	 * Gibt das Pad zurück, welches er verwaltet. (Das Datenmodel)
@@ -27,7 +27,7 @@ public interface IPadViewControllerV2 {
 	 * 
 	 * @return View
 	 */
-	public IPadViewV2 getView();
+	public IPadView getView();
 
 	/**
 	 * Setzt ein Pad für ein View. Hier werden die Datein mittels ViewController der View bekannt gemacht.

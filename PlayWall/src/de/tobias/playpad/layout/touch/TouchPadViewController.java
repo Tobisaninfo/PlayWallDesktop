@@ -10,8 +10,8 @@ import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
@@ -23,7 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.util.Duration;
 
-public class TouchPadViewController implements IPadViewControllerV2, EventHandler<Event> {
+public class TouchPadViewController implements IPadViewController, EventHandler<Event> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String DURATION_FORMAT = "%d:%02d";
@@ -61,7 +61,7 @@ public class TouchPadViewController implements IPadViewControllerV2, EventHandle
 	}
 
 	@Override
-	public IPadViewV2 getView() {
+	public IPadView getView() {
 		return padView;
 	}
 

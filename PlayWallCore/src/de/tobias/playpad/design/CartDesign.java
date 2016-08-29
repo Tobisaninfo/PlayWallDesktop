@@ -2,7 +2,7 @@ package de.tobias.playpad.design;
 
 import org.dom4j.Element;
 
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Warning;
 
 public interface CartDesign {
@@ -22,9 +22,9 @@ public interface CartDesign {
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	public abstract void handleWarning(IPadViewControllerV2 controller, Warning warning, GlobalDesign animate);
+	public abstract void handleWarning(IPadViewController controller, Warning warning, GlobalDesign animate);
 
-	public default void stopWarning(IPadViewControllerV2 controller) {}
+	public default void stopWarning(IPadViewController controller) {}
 
 	public void reset();
 

@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.main;
 import java.util.List;
 
 import de.tobias.playpad.midi.MidiListener;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
@@ -109,7 +109,7 @@ public interface IMainViewController extends NotificationHandler {
 	 * 
 	 * @return Liste der PadViews
 	 */
-	List<IPadViewV2> getPadViews();
+	List<IPadView> getPadViews();
 
 	/**
 	 * Gibt den MIDI Handler des Hauptfensters für die Kacheln zurück.

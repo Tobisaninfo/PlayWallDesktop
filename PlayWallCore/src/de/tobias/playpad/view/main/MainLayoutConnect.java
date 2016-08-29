@@ -1,7 +1,7 @@
 package de.tobias.playpad.view.main;
 
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 
@@ -43,10 +43,10 @@ public interface MainLayoutConnect {
 	 * 
 	 * @return Pad
 	 * 
-	 * @see IPadViewV2 notwendige Methoden für ein Pad
-	 * @see IPadViewControllerV2 ViewController zum Pad
+	 * @see IPadView notwendige Methoden für ein Pad
+	 * @see IPadViewController ViewController zum Pad
 	 */
-	public IPadViewV2 createPadView();
+	public IPadView createPadView();
 
 	/**
 	 * Recycelt eine PadView, damit nicht immer neue erstellt werden müssen.
@@ -54,7 +54,7 @@ public interface MainLayoutConnect {
 	 * @param padView
 	 *            alte PadView
 	 */
-	public void recyclePadView(IPadViewV2 padView);
+	public void recyclePadView(IPadView padView);
 
 	/**
 	 * Gibt das Layout sepzifische Stylesheet zurück.

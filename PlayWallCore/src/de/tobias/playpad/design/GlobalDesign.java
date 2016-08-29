@@ -15,7 +15,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -50,9 +50,9 @@ public interface GlobalDesign {
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	public void handleWarning(IPadViewControllerV2 controller, Warning warning);
+	public void handleWarning(IPadViewController controller, Warning warning);
 
-	public default void stopWarning(IPadViewControllerV2 controller) {}
+	public default void stopWarning(IPadViewController controller) {}
 
 	public void reset();
 

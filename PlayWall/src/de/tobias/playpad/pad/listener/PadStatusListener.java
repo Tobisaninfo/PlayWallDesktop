@@ -2,15 +2,15 @@ package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadStatusListener implements ChangeListener<PadStatus> {
 
-	private IPadViewControllerV2 controller;
+	private IPadViewController controller;
 
-	public PadStatusListener(IPadViewControllerV2 controller) {
+	public PadStatusListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 

@@ -17,7 +17,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
@@ -281,7 +281,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
 		if (dndModeMenuItem.isSelected()) {
 			PadDragListener.setDndMode(false);
-			for (IPadViewV2 view : mainViewController.getPadViews()) {
+			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
 		}
@@ -405,13 +405,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getActivePlayers() == 0) {
 				PadDragListener.setDndMode(true);
-				for (IPadViewV2 view : mainViewController.getPadViews()) {
+				for (IPadView view : mainViewController.getPadViews()) {
 					view.enableDragAndDropDesignMode(true);
 				}
 			}
 		} else {
 			PadDragListener.setDndMode(false);
-			for (IPadViewV2 view : mainViewController.getPadViews()) {
+			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
 		}

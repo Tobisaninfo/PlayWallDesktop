@@ -31,7 +31,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
+import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -55,7 +55,7 @@ public class PlayPadImpl implements PlayPad {
 	private PluginManager pluginManager;
 	private Set<Path> deletedPlugins;
 
-	private MainViewControllerV2 mainViewController;
+	private MainViewController mainViewController;
 	private Project currentProject;
 	protected GlobalSettings globalSettings;
 
@@ -204,7 +204,7 @@ public class PlayPadImpl implements PlayPad {
 
 	public void openProject(Project project) {
 		if (mainViewController == null) {
-			mainViewController = new MainViewControllerV2(mainViewListeners);
+			mainViewController = new MainViewController(mainViewListeners);
 		}
 		currentProject = project;
 		mainViewController.openProject(project);

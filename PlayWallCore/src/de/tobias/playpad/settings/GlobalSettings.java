@@ -53,6 +53,9 @@ public class GlobalSettings {
 	// Paths
 	@Storable private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
 
+	// Dialogs
+	@Storable private boolean ignoreSaveDialog = false;
+
 	public GlobalSettings() {
 	}
 
@@ -97,6 +100,10 @@ public class GlobalSettings {
 		return cachePath;
 	}
 
+	public boolean isIgnoreSaveDialog() {
+		return ignoreSaveDialog;
+	}
+
 	// Setter
 	public void setAutoUpdate(boolean autoUpdate) {
 		this.autoUpdate = autoUpdate;
@@ -134,6 +141,10 @@ public class GlobalSettings {
 		this.cachePath = cachePath;
 	}
 
+	public void setIgnoreSaveDialog(boolean ignoreSaveDialog) {
+		this.ignoreSaveDialog = ignoreSaveDialog;
+	}
+
 	// Save & Load Data
 
 	private static final String KEYS_ELEMENT = "Keys";
@@ -146,6 +157,7 @@ public class GlobalSettings {
 	private static final String LIVE_MODE_FILE_ATTR = "file";
 	private static final String LIVE_MODE_SETTINGS_ATTR = "settings";
 	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
+	private static final String IGNORE_SAVE_DIALOG_ELEMENT = "IgnoreSaveDialog";
 
 	/**
 	 * Lädt eine neue Instanz der Globalen Einstellungen.
@@ -200,6 +212,11 @@ public class GlobalSettings {
 			if (root.element(CACHE_PATH_ELEMENT) != null) {
 				settings.setCachePath(Paths.get(root.element(CACHE_PATH_ELEMENT).getStringValue()));
 			}
+			
+			// Dialogs
+			if (root.element(IGNORE_SAVE_DIALOG_ELEMENT) != null) {
+				settings.setIgnoreSaveDialog(Boolean.valueOf(root.element(IGNORE_SAVE_DIALOG_ELEMENT).getStringValue()));
+			}
 		}
 		return settings;
 	}
@@ -236,6 +253,9 @@ public class GlobalSettings {
 		// Paths
 		root.addElement(CACHE_PATH_ELEMENT).addText(cachePath.toString());
 
+		// Dialogs
+		root.addElement(IGNORE_SAVE_DIALOG_ELEMENT).addText(String.valueOf(ignoreSaveDialog));
+		
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());
 		writer.write(document);
 		writer.close();

@@ -11,7 +11,7 @@ import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.drag.PadDragMode;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -41,7 +41,7 @@ public class PadDragListener {
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	public PadDragListener(Pad pad, IPadViewV2 view) {
+	public PadDragListener(Pad pad, IPadView view) {
 		this.sourcePad = pad;
 		this.view = view.getRootNode();
 
@@ -143,7 +143,7 @@ public class PadDragListener {
 				this.sourcePad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
 				if (sourcePad.getController() != null) {
-					IPadViewV2 padView = sourcePad.getController().getView();
+					IPadView padView = sourcePad.getController().getView();
 					padView.setContentView(sourcePad);
 					padView.addDefaultElement(sourcePad);
 				}

@@ -3,7 +3,7 @@ package de.tobias.playpad.layout.desktop;
 import java.util.Stack;
 
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -22,7 +22,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
 
-	private Stack<IPadViewV2> recyclingStack;
+	private Stack<IPadView> recyclingStack;
 
 	public DesktopMainLayoutConnect() {
 		recyclingStack = new Stack<>();
@@ -47,7 +47,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	}
 
 	@Override
-	public IPadViewV2 createPadView() {
+	public IPadView createPadView() {
 		if (!recyclingStack.isEmpty()) {
 			return recyclingStack.pop();
 		}
@@ -55,7 +55,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	}
 
 	@Override
-	public void recyclePadView(IPadViewV2 padView) {
+	public void recyclePadView(IPadView padView) {
 		recyclingStack.push(padView);
 	}
 

@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Fadeable;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
 import javafx.beans.value.ObservableValue;
@@ -15,9 +15,9 @@ import javafx.util.Duration;
 public class PadPositionListener implements Runnable, IPadPositionListener {
 
 	private Pad pad;
-	private IPadViewControllerV2 controller;
+	private IPadViewController controller;
 
-	public PadPositionListener(IPadViewControllerV2 controller) {
+	public PadPositionListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 

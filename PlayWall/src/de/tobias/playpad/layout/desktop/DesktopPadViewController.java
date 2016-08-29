@@ -20,8 +20,8 @@ import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -42,7 +42,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class DesktopPadViewController implements IPadViewControllerV2, EventHandler<ActionEvent> {
+public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String OPEN_FOLDER = "openFolder";
@@ -80,7 +80,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	@Override
-	public IPadViewV2 getView() {
+	public IPadView getView() {
 		return padView;
 	}
 
