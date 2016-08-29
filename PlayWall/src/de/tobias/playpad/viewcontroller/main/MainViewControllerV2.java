@@ -284,7 +284,7 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
 			// wenn ein Pad noch im Status Play ist
-			if (openProject.getPlayedPlayers() > 0 && globalSettings.isLiveMode()) {
+			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
 
@@ -526,28 +526,6 @@ public class MainViewControllerV2 extends ViewController implements IMainViewCon
 				if (pad != null)
 					pad.setMasterVolume(volume);
 			}
-		}
-	}
-
-	private boolean shown = false;
-
-	@Override
-	public void showLiveInfo() {
-		if (!shown && menuToolbarViewController != null) {
-			menuToolbarViewController.showLiveInfo(true);
-			shown = true;
-			Worker.runLater(() ->
-			{
-				try {
-					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
-				Platform.runLater(() ->
-				{
-					if (menuToolbarViewController != null)
-						menuToolbarViewController.showLiveInfo(false);
-					shown = false;
-				});
-			});
 		}
 	}
 

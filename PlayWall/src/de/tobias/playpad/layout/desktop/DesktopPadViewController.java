@@ -196,8 +196,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	private void onNew(ActionEvent event) throws NoSuchComponentException {
 		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		if (pad.getProject() != null) {
-			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
-				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
 				return;
 			}
 		}
@@ -264,8 +263,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		if (mvc != null) {
 			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getPlayedPlayers() > 0) {
-					mvc.showLiveInfo();
+				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
 					return;
 				}
 			}

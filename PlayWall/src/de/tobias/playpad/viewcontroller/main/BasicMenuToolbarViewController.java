@@ -35,12 +35,8 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 
 	protected Project openProject; // REFERENCE zu MainViewController
 
-	// window references
-	private IMainViewController mainViewController;
-
-	public BasicMenuToolbarViewController(String name, String path, ResourceBundle localization, IMainViewController mainViewController) {
+	public BasicMenuToolbarViewController(String name, String path, ResourceBundle localization) {
 		super(name, path, localization);
-		this.mainViewController = mainViewController;
 	}
 
 	@Override
@@ -59,9 +55,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	protected void doAction(Runnable run) {
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-		if (project.getPlayedPlayers() > 0 && globalSettings.isLiveMode()) {
-			mainViewController.showLiveInfo();
-		} else {
+		if (!(project.getActivePlayers() > 0 && globalSettings.isLiveMode())) {
 			run.run();
 		}
 	}

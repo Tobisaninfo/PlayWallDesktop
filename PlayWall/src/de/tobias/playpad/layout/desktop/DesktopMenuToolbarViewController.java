@@ -27,6 +27,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
+import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
@@ -51,6 +52,7 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -109,7 +111,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private GlobalSettingsViewController globalSettingsViewController;
 
 	public DesktopMenuToolbarViewController(IMainViewController controller) {
-		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle(), controller);
+		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 
 		initLayoutMenu();
@@ -121,9 +123,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
-		showLiveInfo(false);
+		// Hide Extension menu then no items are in there
+		extensionMenu.visibleProperty().bind(Bindings.size(extensionMenu.getItems()).greaterThan(0));
 
-		// helpMenu.getItems().add(new HelpMenuItem(helpMenu)); BETA
+		// Help Menu --> HIDDEN TODO
+		helpMenu.setVisible(false);
+		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 	}
 
 	private void initLayoutMenu() {
@@ -155,8 +160,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void setOpenProject(Project project) {
 		super.setOpenProject(project);
-		if (project != null)
+
+		liveLabel.visibleProperty().unbind();
+
+		if (project != null) {
 			createRecentDocumentMenuItems();
+			liveLabel.visibleProperty().bind(project.activePlayerProperty().greaterThan(0));
+		}
 	}
 
 	@Override
@@ -241,8 +251,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void addMenuItem(MenuItem item, MenuType type) {
 		if (type == MenuType.EXTENSION) {
 			extensionMenu.getItems().add(item);
-		} else if (type == MenuType.SETTINGS) {
-			// TODO Implement
 		}
 	}
 
@@ -250,8 +258,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void removeMenuItem(MenuItem item) {
 		if (extensionMenu.getItems().contains(item))
 			extensionMenu.getItems().remove(item);
-
-		// TODO Implement
 	}
 
 	@Override
@@ -279,11 +285,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				view.enableDragAndDropDesignMode(false);
 			}
 		}
-	}
-
-	@Override
-	public void showLiveInfo(boolean show) {
-		liveLabel.setVisible(show);
 	}
 
 	@Override
@@ -402,9 +403,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getPlayedPlayers() > 0) {
-				mainViewController.showLiveInfo();
-			} else {
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getActivePlayers() == 0) {
 				PadDragListener.setDndMode(true);
 				for (IPadViewV2 view : mainViewController.getPadViews()) {
 					view.enableDragAndDropDesignMode(true);
@@ -462,8 +461,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
-		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getPlayedPlayers() > 0) {
-			mainViewController.showLiveInfo();
+		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getActivePlayers() > 0) {
 			return;
 		}
 

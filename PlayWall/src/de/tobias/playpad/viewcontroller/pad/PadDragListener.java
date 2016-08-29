@@ -63,8 +63,7 @@ public class PadDragListener {
 				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 				if (sourcePad.getProject() != null) {
-					if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && sourcePad.getProject().getPlayedPlayers() > 0) {
-						PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+					if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && sourcePad.getProject().getActivePlayers() > 0) {
 						return;
 					}
 				}
@@ -171,8 +170,7 @@ public class PadDragListener {
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 			if (sourcePad.getProject() != null) {
-				if (globalSettings.isLiveMode() && globalSettings.isLiveModeDrag() && sourcePad.getProject().getPlayedPlayers() > 0) {
-					PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+				if (globalSettings.isLiveMode() && globalSettings.isLiveModeDrag() && sourcePad.getProject().getActivePlayers() > 0) {
 					return;
 				}
 			}

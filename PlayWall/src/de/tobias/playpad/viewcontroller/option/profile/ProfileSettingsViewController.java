@@ -50,7 +50,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		super("settingsView", "de/tobias/playpad/assets/view/option/profile/", null, PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
-		boolean activePlayer = project.hasPlayedPlayers();
+		boolean activePlayer = project.hasActivePlayers();
 
 		addTab(new MappingTabViewController());
 		addTab(new MidiTabViewController());

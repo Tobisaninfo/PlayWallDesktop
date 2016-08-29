@@ -105,14 +105,6 @@ public interface IMainViewController extends NotificationHandler {
 	public void loadUserCss();
 
 	/**
-	 * Zeigt einen Hinweis, wenn eine Aktion versucht wird zu machen, wie während der Wiedergabe eines Pads nicht erlaubt ist. Die Methode
-	 * delegiert an die Toolbar weiter.
-	 * 
-	 * @see MenuToolbarViewController#showLiveInfo(boolean)
-	 */
-	public void showLiveInfo();
-
-	/**
 	 * Gibt die PadViews zurück.
 	 * 
 	 * @return Liste der PadViews

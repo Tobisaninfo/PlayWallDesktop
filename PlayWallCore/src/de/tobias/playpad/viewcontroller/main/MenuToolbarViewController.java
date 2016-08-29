@@ -49,8 +49,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	}
 
 	/**
-	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim laden
-	 * eines Projektes und bei Änderungen an den Einstellungen.
+	 * Wird von MainViwController aufgerufen, wenn die Buttons für die einzelnen Seiten neu erstellt werden müssen. Das ist der Fall beim
+	 * laden eines Projektes und bei Änderungen an den Einstellungen.
 	 */
 	public abstract void initPageButtons();
 
@@ -139,14 +139,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	public abstract Slider getVolumeSlider();
 
 	// Utils
-
-	/**
-	 * Zeigt den Hinweis LiveModus, und signalisiert dem Nutzer, das eine Aktion blokciert ist.
-	 * 
-	 * @param show
-	 *            <code>true</code> Hinweis Aktiv
-	 */
-	public abstract void showLiveInfo(boolean show);
 
 	/**
 	 * Hebt dem Page Button der Aktiv ist hervor. Gleichzeitig wird der vorherige Button nicht mehr Hervorgehebt.

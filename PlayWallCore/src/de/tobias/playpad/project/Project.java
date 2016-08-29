@@ -15,12 +15,14 @@ import org.dom4j.Element;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadSerializer;
-import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.xml.XMLHandler;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -35,7 +37,7 @@ public class Project {
 	/**
 	 * Pattern für den Namen des Projekts
 	 */
-	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
@@ -57,6 +59,8 @@ public class Project {
 	 */
 	private transient ObservableList<PadException> exceptions;
 
+	private transient IntegerProperty activePlayers;
+
 	/**
 	 * Erstellt ein neues leeres Projekt mit einer Referenz.
 	 * 
@@ -69,6 +73,7 @@ public class Project {
 		this.settings = new ProjectSettings();
 
 		this.exceptions = FXCollections.observableArrayList();
+		this.activePlayers = new SimpleIntegerProperty();
 	}
 
 	/**
@@ -204,18 +209,25 @@ public class Project {
 		return pads;
 	}
 
-	public int getPlayedPlayers() {
-		int count = 0;
-		for (Pad pad : pads.values()) {
-			if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
-				count++;
-			}
-		}
-		return count;
+	public int getActivePlayers() {
+		return activePlayers.get();
 	}
 
-	public boolean hasPlayedPlayers() {
-		return getPlayedPlayers() > 0;
+	public boolean hasActivePlayers() {
+		return getActivePlayers() > 0;
+	}
+
+	public void increaseActivePlayers() {
+		activePlayers.set(getActivePlayers() + 1);
+	}
+
+	public void dereaseActivePlayers() {
+		if (activePlayers.greaterThan(0).get())
+			activePlayers.set(getActivePlayers() - 1);
+	}
+
+	public ReadOnlyIntegerProperty activePlayerProperty() {
+		return activePlayers;
 	}
 
 	// Exceptions

@@ -3,6 +3,7 @@ package de.tobias.playpad.layout.touch;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
@@ -28,13 +29,11 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	private IMainViewController mainViewController;
 
 	public TouchMenuToolbarViewController(IMainViewController mainViewController) {
-		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle(), mainViewController);
+		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = mainViewController;
 
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
-
-		showLiveInfo(false);
 
 		// Schriftgröße Icons
 		FontIcon icon = (FontIcon) volumeDownLabel.getGraphic();
@@ -61,21 +60,26 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void loadKeybinding(KeyCollection keys) {
+	public void setOpenProject(Project project) {
+		super.setOpenProject(project);
 
+		liveLabel.visibleProperty().unbind();
+		if (project != null) {
+			liveLabel.visibleProperty().bind(project.activePlayerProperty().greaterThan(0));
+		}
 	}
 
 	@Override
-	public void setLocked(boolean looked) {
-	}
+	public void loadKeybinding(KeyCollection keys) {}
 
 	@Override
-	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {
-	}
+	public void setLocked(boolean looked) {}
 
 	@Override
-	public void setFullScreenActive(boolean fullScreenActive) {
-	}
+	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {}
+
+	@Override
+	public void setFullScreenActive(boolean fullScreenActive) {}
 
 	@Override
 	public void addToolbarItem(Node node) {
@@ -88,21 +92,13 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void addMenuItem(MenuItem item, MenuType type) {
-	}
+	public void addMenuItem(MenuItem item, MenuType type) {}
 
 	@Override
-	public void removeMenuItem(MenuItem item) {
-	}
+	public void removeMenuItem(MenuItem item) {}
 
 	@Override
-	public void deinit() {
-	}
-
-	@Override
-	public void showLiveInfo(boolean show) {
-		liveLabel.setVisible(show);
-	}
+	public void deinit() {}
 
 	private int currentPage = 0;
 

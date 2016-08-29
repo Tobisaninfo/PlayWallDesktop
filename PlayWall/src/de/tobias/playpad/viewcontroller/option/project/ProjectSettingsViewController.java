@@ -46,7 +46,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		this.onFinish = onFinish;
 		this.project = project;
 
-		boolean activePlayer = project.hasPlayedPlayers();
+		boolean activePlayer = project.hasActivePlayers();
 
 		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 		addTab(new PathsTabViewController());

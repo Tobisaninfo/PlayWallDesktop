@@ -65,9 +65,8 @@
                   </MenuItem>
          </items>
       </Menu>
-      <Menu mnemonicParsing="false" text="%main.menu.view">
+      <Menu fx:id="layoutMenu" mnemonicParsing="false" text="%main.menu.view">
          <items>
-                  <Menu fx:id="layoutMenu" mnemonicParsing="false" text="%main.menuitem.layout" />
             <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false" onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop" />
             <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
                <accelerator>
@@ -75,6 +74,7 @@
                </accelerator></CheckMenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="searchPadMenuItem" mnemonicParsing="false" onAction="#searchPadHandler" text="%main.menuitem.searchPad" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
          </items>
       </Menu>
       <Menu fx:id="extensionMenu" mnemonicParsing="false" text="%main.menu.extension" />
