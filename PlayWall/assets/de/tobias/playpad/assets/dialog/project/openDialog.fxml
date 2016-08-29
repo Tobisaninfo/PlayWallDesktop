@@ -24,13 +24,13 @@
                      <children>
                         <VBox spacing="14.0">
                            <children>
-                              <Label text="%project.label.fileSize" />
+                              <Label text="%project.label.profile" />
                               <Label text="%project.label.lastModified" />
                            </children>
                         </VBox>
                         <VBox spacing="14.0">
                            <children>
-                              <Label fx:id="sizeLabel" text="100 MB" />
+                              <Label fx:id="profileLabel" text="Default" />
                               <Label fx:id="dateLabel" text="20. Dez 2015 19:45" />
                            </children>
                         </VBox>

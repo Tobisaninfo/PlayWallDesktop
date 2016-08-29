@@ -13,12 +13,12 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ProjectReference;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.NumberUtils;
 import de.tobias.utils.util.TimeUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -56,7 +56,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	@FXML private Button exportButton;
 
 	@FXML private Label dateLabel;
-	@FXML private Label sizeLabel;
+	@FXML private Label profileLabel;
 
 	private Project currentProject;
 
@@ -85,7 +85,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		((AnchorPane) getParent()).getChildren().add(notificationPane);
 
 		projectList.setPlaceholder(new Label(Localization.getString(Strings.UI_Placeholder_Project)));
-		projectList.setCellFactory(list -> new ProjectCell());
+		projectList.setCellFactory(list -> new ProjectCell(false));
 
 		projectList.setOnMouseClicked(mouseEvent ->
 		{
@@ -109,10 +109,11 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 				nameTextField.setText(c.toString());
 				try {
-					sizeLabel.setText(NumberUtils.numberToString(ref.getSize()));
+					ProfileReference profileRef = ref.getProfileReference();
+					profileLabel.setText(profileRef.getName());
 					dateLabel.setText(TimeUtils.getDfmLong().format(ref.getLastMofied()));
 				} catch (Exception e) {
-					sizeLabel.setText("-");
+					profileLabel.setText("-");
 					dateLabel.setText("-");
 					e.printStackTrace();
 				}
@@ -130,7 +131,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 				renameButton.setDisable(true);
 
 				nameTextField.setText(null);
-				sizeLabel.setText("-");
+				profileLabel.setText("-");
 				dateLabel.setText("-");
 			}
 		});
@@ -141,7 +142,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		exportButton.setDisable(true);
 		renameButton.setDisable(true);
 
-		sizeLabel.setText("-");
+		profileLabel.setText("-");
 		dateLabel.setText("-");
 
 		addCloseKeyShortcut(() -> getStage().close());

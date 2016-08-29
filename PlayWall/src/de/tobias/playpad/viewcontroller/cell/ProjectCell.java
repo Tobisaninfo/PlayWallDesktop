@@ -18,7 +18,13 @@ import javafx.scene.paint.Color;
 
 public class ProjectCell extends ListCell<ProjectReference> {
 
-	private Displayable ref;
+	private transient Displayable ref;
+
+	private boolean showProfileName;
+
+	public ProjectCell(boolean showProfileName) {
+		this.showProfileName = showProfileName;
+	}
 
 	@Override
 	protected void updateItem(ProjectReference ref, boolean empty) {
@@ -37,14 +43,16 @@ public class ProjectCell extends ListCell<ProjectReference> {
 				projectNameLabel.getStyleClass().add("projectname");
 				nameBox.getChildren().add(projectNameLabel);
 
-				// Profile name
-				ProfileReference profileRef = ref.getProfileReference();
-				if (profileRef != null) {
-					String name = profileRef.getName();
+				if (showProfileName) {
+					// Profile name
+					ProfileReference profileRef = ref.getProfileReference();
+					if (profileRef != null) {
+						String name = profileRef.getName();
 
-					Label label = new Label(name);
-					label.getStyleClass().add("profilename");
-					nameBox.getChildren().add(label);
+						Label label = new Label(name);
+						label.getStyleClass().add("profilename");
+						nameBox.getChildren().add(label);
+					}
 				}
 
 				HBox.setHgrow(nameBox, Priority.ALWAYS);
