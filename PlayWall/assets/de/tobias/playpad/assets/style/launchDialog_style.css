@@ -70,3 +70,11 @@
     -fx-background-color: derive(-fx-hover-base,+50%);
 }
 
+.projectname {
+	-fx-font-size: 13px;
+}
+
+.profilename {
+	-fx-font-size: 10px;
+	-fx-text-fill: gray;
+}

@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.beans.property.DoubleProperty;
@@ -47,7 +47,7 @@ public class Pad {
 
 	// Utils
 	private transient boolean eof;
-	private transient IPadViewControllerV2 controller;
+	private transient IPadViewController controller;
 	private transient Project project;
 
 	public Pad(Project project) {
@@ -223,11 +223,11 @@ public class Pad {
 		return controller != null;
 	}
 
-	public IPadViewControllerV2 getController() {
+	public IPadViewController getController() {
 		return controller;
 	}
 
-	public void setController(IPadViewControllerV2 controller) {
+	public void setController(IPadViewController controller) {
 		this.controller = controller;
 	}
 

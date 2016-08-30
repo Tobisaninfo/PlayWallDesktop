@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.content;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +34,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-// TODO Extract Fade in / Fade Out
 public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent {
 
 	private static final String TYPE = "audio";
@@ -69,11 +69,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void handlePath(Path path) throws NoSuchComponentException {
+	public void handlePath(Path path) throws NoSuchComponentException, IOException {
 		// handle old media
 		unloadMedia();
 
-		this.path = path;
+		this.path = getRealPath(path);
 
 		// handle new media
 		loadMedia();
@@ -218,7 +218,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void loadMedia() throws NoSuchComponentException {
+	public void loadMedia() {
 		// init audio implementation
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);

@@ -12,7 +12,7 @@ import de.tobias.utils.ui.ContentViewController;
  * 
  * @see AudioHandlerConnect
  */
-public abstract class AudioTypeViewController extends ContentViewController {
+public abstract class AudioHandlerViewController extends ContentViewController {
 
 	/**
 	 * Neuer ViewController.
@@ -24,7 +24,7 @@ public abstract class AudioTypeViewController extends ContentViewController {
 	 * @param localization
 	 *            Localization
 	 */
-	public AudioTypeViewController(String name, String path, ResourceBundle localization) {
+	public AudioHandlerViewController(String name, String path, ResourceBundle localization) {
 		super(name, path, localization);
 	}
 

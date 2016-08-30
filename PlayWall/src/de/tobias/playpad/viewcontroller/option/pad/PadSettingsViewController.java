@@ -86,7 +86,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 			PadContent content = pad.getContent();
 			// nur EIN Path
 			if (content instanceof SinglePathContent) {
-				Button button = new Button("Show Path");
+				Button button = new Button(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
 
 				// Referenz auf das Model
 				Path path = ((SinglePathContent) content).getPath();
@@ -97,7 +97,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 				// Setzt globales Feld
 				pathLookupButton = button;
 			} else if (content instanceof MultiPathContent) {
-				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString(""));
+				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
 				List<Path> paths = ((MultiPathContent) content).getPaths();
 
 				for (Path path : paths) {

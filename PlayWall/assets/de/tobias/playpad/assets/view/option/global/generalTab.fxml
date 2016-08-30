@@ -58,6 +58,7 @@
             <Insets left="164.0" />
          </VBox.margin>
       </Label>
+      <Separator prefWidth="200.0" />
       <HBox spacing="14.0">
          <children>
             <Label alignment="BASELINE_RIGHT" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.cache.label" />

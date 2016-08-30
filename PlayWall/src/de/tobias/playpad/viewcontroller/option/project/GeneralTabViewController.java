@@ -8,20 +8,17 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
 
-public class GeneralTabViewController extends ProjectSettingsTabViewController {
+public class GeneralTabViewController extends ProjectSettingsTabViewController implements IProjectReloadTask {
 
 	private static final String DIGIT_POSITIV = "^[1-9]\\d*$";
 
@@ -101,7 +98,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController {
 
 			if (neededHeight <= height && neededWidth <= width)
 				return true;
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException e) {
+		}
 		return false;
 	}
 
@@ -145,30 +143,27 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController {
 		return changeSettings;
 	}
 
-	@Override
-	public void reload(ProjectSettings settings, Project project, IMainViewController controller) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
-
-		alert.getButtonTypes().clear();
-		alert.initOwner(controller.getStage());
-		alert.initModality(Modality.WINDOW_MODAL);
-		Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-
-		alert.show();
-
-		Worker.runLater(() ->
-		{
-			Platform.runLater(() ->
-			{
-				controller.getMenuToolbarController().initPageButtons();
-				controller.createPadViews();
-				controller.showPage(controller.getPage());
-				stage.close();
-			});
-		});
-	}
+	// @Override
+	// public void reload(ProjectSettings settings, Project project, IMainViewController controller) {
+	// Alert alert = new Alert(AlertType.INFORMATION);
+	// alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
+	//
+	// alert.getButtonTypes().clear();
+	// alert.initOwner(controller.getStage());
+	// alert.initModality(Modality.WINDOW_MODAL);
+	// Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+	// PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+	//
+	// alert.show();
+	//
+	// Worker.runLater(() ->
+	// {
+	// Platform.runLater(() ->
+	// {
+	//
+	// });
+	// });
+	// }
 
 	@Override
 	public boolean validSettings() {
@@ -193,4 +188,22 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController {
 		return Localization.getString(Strings.UI_Window_Settings_Gen_Title);
 	}
 
+	@Override
+	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				updateProgress(-1, -1);
+
+				Platform.runLater(() ->
+				{
+					controller.getMenuToolbarController().initPageButtons();
+					controller.createPadViews();
+					controller.showPage(controller.getPage());
+				});
+				return null;
+			}
+		};
+	}
 }

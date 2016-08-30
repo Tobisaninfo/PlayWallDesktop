@@ -42,7 +42,8 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 		try {
 			Desktop.getDesktop().browse(path.getParent().toUri());
 		} catch (IOException e) {
-			alertable.showErrorMessage(Localization.getString(Strings.Error_Standard_Gen), PlayPadPlugin.getImplementation().getIcon());
+			String string = Localization.getString(Strings.Error_Standard_Gen, e.getMessage());
+			alertable.showErrorMessage(string, PlayPadPlugin.getImplementation().getIcon());
 			e.printStackTrace();
 		}
 	}

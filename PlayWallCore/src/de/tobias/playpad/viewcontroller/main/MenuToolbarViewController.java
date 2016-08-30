@@ -127,20 +127,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	 */
 
 	/**
-	 * Gibt die Einstellung zurück, ob AlwaysOnTop Aktiv ist.
-	 * 
-	 * @return <code>true</code> Aktiv
-	 */
-	public abstract boolean isAlwaysOnTopActive();
-
-	/**
-	 * Gibt die Einstellung zurück, ob Fullscreen Aktiv ist.
-	 * 
-	 * @return <code>true</code> Aktiv
-	 */
-	public abstract boolean isFullscreenActive();
-
-	/**
 	 * Deinitialisiert den Controller.
 	 */
 	public abstract void deinit();
@@ -153,14 +139,6 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	public abstract Slider getVolumeSlider();
 
 	// Utils
-
-	/**
-	 * Zeigt den Hinweis LiveModus, und signalisiert dem Nutzer, das eine Aktion blokciert ist.
-	 * 
-	 * @param show
-	 *            <code>true</code> Hinweis Aktiv
-	 */
-	public abstract void showLiveInfo(boolean show);
 
 	/**
 	 * Hebt dem Page Button der Aktiv ist hervor. Gleichzeitig wird der vorherige Button nicht mehr Hervorgehebt.
@@ -183,7 +161,8 @@ public abstract class MenuToolbarViewController extends ContentViewController {
 	/**
 	 * Setzt eine Refernce des aktuellen Projectes auf den ViewController.
 	 * 
-	 * @param project neues Project
+	 * @param project
+	 *            neues Project
 	 */
 	public abstract void setOpenProject(Project project);
 }

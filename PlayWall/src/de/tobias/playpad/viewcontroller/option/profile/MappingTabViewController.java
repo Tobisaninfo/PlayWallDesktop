@@ -16,15 +16,18 @@ import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.dialog.MappingListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,7 +36,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 
-public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController {
+public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
 	@FXML private ComboBox<Mapping> mappingComboBox;
 	@FXML private Button editMappingsButton;
@@ -162,15 +165,24 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(currentProject);
+	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				updateProgress(-1, -1);
+				
+				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(currentProject);
 
-		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+				Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 
-		oldMapping.clearFeedback();
-		activeMapping.showFeedback(project);
-		activeMapping.initFeedback();
+				oldMapping.clearFeedback();
+				activeMapping.showFeedback(project);
+				activeMapping.initFeedback();
+				return null;
+			}
+		};
 	}
 
 	@Override

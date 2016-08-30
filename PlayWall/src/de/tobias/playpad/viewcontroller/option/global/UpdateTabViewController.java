@@ -120,6 +120,9 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		UpdaterDialog dialog = new UpdaterDialog(getStage());
 		dialog.show();
 
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		settings.setIgnoreUpdate(false);
+		
 		Worker.runLater(() ->
 		{
 			try {

@@ -125,8 +125,8 @@ public class ProjectReference implements Displayable {
 	}
 
 	private static void duplicateFiles(ProjectReference currentProject, ProjectReference newProjectReference) throws IOException {
-		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getName());
-		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getName());
+		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getFileName());
+		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getFileName());
 		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 

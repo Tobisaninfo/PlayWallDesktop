@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 import org.dom4j.Document;
@@ -17,8 +16,6 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.settings.SettingsSerializable;
 import de.tobias.utils.settings.Storable;
 import de.tobias.utils.settings.UserDefaults;
@@ -36,35 +33,27 @@ public class ProfileSettings implements SettingsSerializable {
 
 	// MIDI
 	@Storable private String midiDevice;
+	@Storable private boolean midiActive = false;
 
 	// Audio Output
-	// TODO Rewrite
 	@Storable private String audioClass = PlayPadPlugin.getRegistryCollection().getAudioHandlers().getDefaultID();
 	@Storable private HashMap<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
-	@Storable private String layoutType = PlayPadPlugin.getRegistryCollection().getDesigns().getDefaultID(); // Rather DesignType
+	@Storable private String layoutType = PlayPadPlugin.getRegistryCollection().getDesigns().getDefaultID(); // Rather
+																												// DesignType
 	@Storable private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
 
 	// Cart Settings
 	@Storable private boolean multiplePlayer = true;
 	@Storable private Warning warningFeedback = new Warning(Duration.seconds(5));
 
-	@Storable private boolean midiActive = false;
-	@Storable private boolean liveMode = true;
-	@Storable private boolean liveModePage = true;
-	@Storable private boolean liveModeDrag = true;
-	@Storable private boolean liveModeFile = true;
-	@Storable private boolean liveModeSettings = true;
 	@Storable private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 
 	@Storable private boolean windowAlwaysOnTop = false;
 
 	@Storable private Fade fade = new Fade();
 	@Storable private TimeMode player_timeDisplayMode = TimeMode.REST;
-
-	// Folder
-	@Storable private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
 
 	public boolean isLocked() {
 		return lockedProperty.get();
@@ -83,10 +72,6 @@ public class ProfileSettings implements SettingsSerializable {
 		return midiDevice;
 	}
 
-	public Path getCachePath() {
-		return cachePath;
-	}
-
 	public String getLayoutType() {
 		return layoutType;
 	}
@@ -101,26 +86,6 @@ public class ProfileSettings implements SettingsSerializable {
 
 	public boolean isMidiActive() {
 		return midiActive;
-	}
-
-	public boolean isLiveMode() {
-		return liveMode;
-	}
-
-	public boolean isLiveModeDrag() {
-		return liveModeDrag;
-	}
-
-	public boolean isLiveModeFile() {
-		return liveModeFile;
-	}
-
-	public boolean isLiveModePage() {
-		return liveModePage;
-	}
-
-	public boolean isLiveModeSettings() {
-		return liveModeSettings;
 	}
 
 	public double getVolume() {
@@ -156,10 +121,6 @@ public class ProfileSettings implements SettingsSerializable {
 		this.midiDevice = midiDevice;
 	}
 
-	public void setCachePath(Path cachePath) {
-		this.cachePath = cachePath;
-	}
-
 	public void setLayoutType(String layoutType) {
 		this.layoutType = layoutType;
 	}
@@ -174,26 +135,6 @@ public class ProfileSettings implements SettingsSerializable {
 
 	public void setMidiActive(boolean midiActive) {
 		this.midiActive = midiActive;
-	}
-
-	public void setLiveMode(boolean liveMode) {
-		this.liveMode = liveMode;
-	}
-
-	public void setLiveModeDrag(boolean liveModeDrag) {
-		this.liveModeDrag = liveModeDrag;
-	}
-
-	public void setLiveModeFile(boolean liveModeFile) {
-		this.liveModeFile = liveModeFile;
-	}
-
-	public void setLiveModePage(boolean liveModePage) {
-		this.liveModePage = liveModePage;
-	}
-
-	public void setLiveModeSettings(boolean liveModeSettings) {
-		this.liveModeSettings = liveModeSettings;
 	}
 
 	public void setVolume(double volume) {
@@ -227,18 +168,12 @@ public class ProfileSettings implements SettingsSerializable {
 
 	private static final String LOCKED_ELEMENT = "Locked";
 	private static final String ITEM_ELEMENT = "Item";
-	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
 	private static final String VOLUME_ELEMENT = "Volume";
 	private static final String KEY_ATTRIBUTE = "key";
 	private static final String AUDIO_USER_INFO_ELEMENT = "AudioUserInfo";
 	private static final String AUDIO_CLASS_ELEMENT = "AudioClass";
 	private static final String WINDOW_ALWAYS_ON_TOP_ELEMENT = "WindowAlwaysOnTop";
 	private static final String MULTIPLE_PLAYER_ELEMENT = "MultiplePlayer";
-	private static final String LIVE_MODE_ELEMENT = "LiveMode";
-	private static final String LIVE_MODE_PAGE_ATTR = "page";
-	private static final String LIVE_MODE_DRAG_ATTR = "drag";
-	private static final String LIVE_MODE_FILE_ATTR = "file";
-	private static final String LIVE_MODE_SETTINGS_ATTR = "settings";
 	private static final String TIME_DISPLAY_ELEMENT = "TimeDisplay";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
@@ -295,23 +230,6 @@ public class ProfileSettings implements SettingsSerializable {
 				}
 			}
 
-			Element liveElement = root.element(LIVE_MODE_ELEMENT);
-			if (liveElement != null) {
-				profileSettings.setLiveMode(Boolean.valueOf(liveElement.getStringValue()));
-				if (liveElement.attributeValue(LIVE_MODE_PAGE_ATTR) != null) {
-					profileSettings.setLiveModePage(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_PAGE_ATTR)));
-				}
-				if (liveElement.attributeValue(LIVE_MODE_DRAG_ATTR) != null) {
-					profileSettings.setLiveModeDrag(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_DRAG_ATTR)));
-				}
-				if (liveElement.attributeValue(LIVE_MODE_FILE_ATTR) != null) {
-					profileSettings.setLiveModeFile(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_FILE_ATTR)));
-				}
-				if (liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR) != null) {
-					profileSettings.setLiveModeSettings(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR)));
-				}
-			}
-
 			if (root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT) != null)
 				profileSettings.setWindowAlwaysOnTop(Boolean.valueOf(root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT).getStringValue()));
 			if (root.element(AUDIO_CLASS_ELEMENT) != null)
@@ -330,10 +248,6 @@ public class ProfileSettings implements SettingsSerializable {
 			}
 			if (root.element(VOLUME_ELEMENT) != null)
 				profileSettings.setVolume(Double.valueOf(root.element(VOLUME_ELEMENT).getStringValue()));
-
-			if (root.element(CACHE_PATH_ELEMENT) != null) {
-				profileSettings.setCachePath(Paths.get(root.element(CACHE_PATH_ELEMENT).getStringValue()));
-			}
 		}
 		return profileSettings;
 	}
@@ -358,13 +272,6 @@ public class ProfileSettings implements SettingsSerializable {
 
 		root.addElement(MULTIPLE_PLAYER_ELEMENT).addText(String.valueOf(multiplePlayer));
 
-		Element liveElement = root.addElement(LIVE_MODE_ELEMENT);
-		liveElement.addText(String.valueOf(liveMode));
-		liveElement.addAttribute(LIVE_MODE_PAGE_ATTR, String.valueOf(liveModePage));
-		liveElement.addAttribute(LIVE_MODE_DRAG_ATTR, String.valueOf(liveModeDrag));
-		liveElement.addAttribute(LIVE_MODE_FILE_ATTR, String.valueOf(liveModeFile));
-		liveElement.addAttribute(LIVE_MODE_SETTINGS_ATTR, String.valueOf(liveModeSettings));
-
 		root.addElement(WINDOW_ALWAYS_ON_TOP_ELEMENT).addText(String.valueOf(windowAlwaysOnTop));
 
 		// Audio
@@ -375,9 +282,6 @@ public class ProfileSettings implements SettingsSerializable {
 			UserDefaults.save(itemElement, audioUserInfo.get(key), key);
 		}
 		root.addElement(VOLUME_ELEMENT).addText(String.valueOf(volumeProperty.get()));
-
-		// Paths
-		root.addElement(CACHE_PATH_ELEMENT).addText(cachePath.toString());
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
 		writer.write(document);

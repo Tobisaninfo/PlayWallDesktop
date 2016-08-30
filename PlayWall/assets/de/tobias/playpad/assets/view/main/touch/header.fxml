@@ -34,19 +34,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-                        <MenuButton focusTraversable="false" mnemonicParsing="false" text="...">
-                          <items>
-                              <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="F" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
-                                 </accelerator></CheckMenuItem>
-                              <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false" onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop" />
-                              <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeMenuItemHandler" text="%main.menuitem.close">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                                 </accelerator></MenuItem>
-                          </items>
-                        </MenuButton>
+                        <Button fx:id="closeButton" focusTraversable="false" mnemonicParsing="false" onAction="#closeMenuItemHandler" text="X" />
                </children>
             </HBox>
          </children>

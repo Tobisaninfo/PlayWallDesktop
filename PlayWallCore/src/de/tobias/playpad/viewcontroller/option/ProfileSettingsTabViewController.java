@@ -48,27 +48,16 @@ public abstract class ProfileSettingsTabViewController extends ContentViewContro
 	public abstract void saveSettings(Profile profile);
 
 	/**
-	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss. Der eigentliche Reload wird in
-	 * {@link #reload(Profile, Project, IMainViewController)} ausgeführt.
+	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss. Der eigentliche Reload wird
+	 * in {@link #reload(Profile, Project, IMainViewController)} ausgeführt.
 	 * 
 	 * @return <code>true</code> Benötigt Reload
 	 */
 	public abstract boolean needReload();
 
 	/**
-	 * Lädt gestimmte Einstellungen für die GUI neu.
-	 * 
-	 * @param profile
-	 *            Aktuelles Profile
-	 * @param project
-	 *            Aktuelles Projekt
-	 * @param controller
-	 *            Main View Controller
-	 */
-	public void reload(Profile profile, Project project, IMainViewController controller) {}
-
-	/**
-	 * Prüft ob die eingetragen Einstellungen erlaubt sind. Bei falschen Eingaben können die Einstellungen nicht geschlossen werden.
+	 * Prüft ob die eingetragen Einstellungen erlaubt sind. Bei falschen Eingaben können die Einstellungen nicht
+	 * geschlossen werden.
 	 * 
 	 * @return <code>true</code> Einstellungen erlaubt. <code>false</code> Einstellungen fehlerhaft.
 	 */

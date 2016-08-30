@@ -62,7 +62,15 @@ public class MapperOverviewViewController implements IMapperOverviewViewControll
 		Set<String> types = registry.getTypes();
 		types.stream().sorted().forEach(item ->
 		{
-			Button button = new Button(item.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
+			String name = item;
+			try {
+				MapperConnect connect = registry.getComponent(item);
+				name = connect.toString();
+			} catch (NoSuchComponentException e) {
+				// TODO Error Handling
+				e.printStackTrace();
+			}
+			Button button = new Button(name, new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 			button.setContentDisplay(ContentDisplay.TOP);
 			button.setPrefWidth(150);
 

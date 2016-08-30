@@ -26,7 +26,7 @@ public class HelpMenuItem extends CustomMenuItem implements ChangeListener<Strin
 
 		setHideOnClick(false);
 
-		Label label = new Label("Suchen nach (Beta): "); // TODO i18n
+		Label label = new Label("Suchen nach (Beta): "); // BETA i18n
 		TextField textfield = new TextField();
 		textfield.textProperty().addListener(this);
 

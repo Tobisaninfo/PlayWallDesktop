@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings.keys;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,16 @@ public class KeyCollection {
 			}
 		}
 		return false;
+	}
+	
+	public List<Key> getConflicts(Key key) {
+		List<Key> conflicts = new ArrayList<>();
+		for (Key k : keys.values()) {
+			if (k.getKeyCode().equals(key.getKeyCode())) {
+				conflicts.add(k);
+			}
+		}
+		return conflicts;
 	}
 
 	private static final String KEY_ELEMENT = "Key";

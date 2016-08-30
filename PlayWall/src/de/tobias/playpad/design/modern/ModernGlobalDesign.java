@@ -15,7 +15,7 @@ import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
@@ -31,7 +31,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	public static final String TYPE = "modern";
 
 	public static final double minWidth = 205;
-	public static final double minHeight = 110;
+	public static final double minHeight = 115;
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;
@@ -274,7 +274,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewControllerV2 controller, Warning warning) {
+	public void handleWarning(IPadViewController controller, Warning warning) {
 		if (isWarnAnimation) {
 			warnAnimation(controller, warning);
 		} else {
@@ -283,11 +283,11 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	}
 
 	@Override
-	public void stopWarning(IPadViewControllerV2 controller) {
+	public void stopWarning(IPadViewController controller) {
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(IPadViewControllerV2 controller, Warning warning) {
+	private void warnAnimation(IPadViewController controller, Warning warning) {
 		FadeableColor stopColor = new FadeableColor(this.backgroundColor.getColorHi(), this.backgroundColor.getColorLow());
 		FadeableColor playColor = new FadeableColor(this.playColor.getColorHi(), this.playColor.getColorLow());
 

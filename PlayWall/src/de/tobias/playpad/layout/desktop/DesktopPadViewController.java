@@ -1,6 +1,7 @@
 package de.tobias.playpad.layout.desktop;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -19,9 +20,10 @@ import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
@@ -40,7 +42,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class DesktopPadViewController implements IPadViewControllerV2, EventHandler<ActionEvent> {
+public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String OPEN_FOLDER = "openFolder";
@@ -56,7 +58,6 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	private IPadPositionListener padPositionListener;
 
 	private PadDragListener padDragListener;
-	private transient PadSettingsViewController padSettingsViewController;
 
 	public DesktopPadViewController(DesktopPadView padView) {
 		this.padView = padView;
@@ -67,7 +68,8 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 		padDurationListener = new PadDurationListener(this);
 		padPositionListener = new PadPositionListener(this);
 
-		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
+		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController
+		// erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		profileSettings.lockedProperty().addListener(padLockedListener);
 	}
@@ -78,7 +80,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	@Override
-	public IPadViewV2 getView() {
+	public IPadView getView() {
 		return padView;
 	}
 
@@ -146,6 +148,11 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		this.padDragListener = null;
 		this.pad = null;
+
+		// Hide Loading Animation
+		if (getView() != null)
+			getView().showBusyView(false);
+
 	}
 
 	@Override
@@ -187,10 +194,9 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	private void onNew(ActionEvent event) throws NoSuchComponentException {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		if (pad.getProject() != null) {
-			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
-				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
 				return;
 			}
 		}
@@ -244,7 +250,7 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 
 		try {
 			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException e) {
+		} catch (NoSuchComponentException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -252,26 +258,24 @@ public class DesktopPadViewController implements IPadViewControllerV2, EventHand
 	}
 
 	private void onSettings() {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		IMainViewController mvc = PlayPadPlugin.getImplementation().getMainViewController();
 
 		if (mvc != null) {
 			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getPlayedPlayers() > 0) {
-					mvc.showLiveInfo();
+				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
 					return;
 				}
 			}
 
 			Stage owner = mvc.getStage();
-			if (padSettingsViewController == null) {
-				padSettingsViewController = new PadSettingsViewController(pad, owner);
-				padSettingsViewController.getStage().setOnHiding(ev ->
-				{
-					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
-				});
-			}
+			
+			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
+			padSettingsViewController.getStage().setOnHiding(ev ->
+			{
+				if (padView != null && pad != null)
+					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+			});
 			padSettingsViewController.getStage().show();
 		}
 	}

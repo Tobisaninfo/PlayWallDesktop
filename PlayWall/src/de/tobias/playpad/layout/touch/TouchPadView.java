@@ -1,18 +1,21 @@
 package de.tobias.playpad.layout.touch;
 
+import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.BusyView;
+import de.tobias.utils.util.OS;
+import de.tobias.utils.util.win.User32X;
 import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -25,7 +28,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class TouchPadView implements IPadViewV2 {
+public class TouchPadView implements IPadView {
 
 	private Label indexLabel;
 	private Label loopLabel;
@@ -86,8 +89,13 @@ public class TouchPadView implements IPadViewV2 {
 		root.getChildren().addAll(infoBox, preview, playBar);
 		superRoot.getChildren().addAll(root);
 
-		superRoot.setOnMouseClicked(controller);
-		playBar.setOnMouseClicked(controller);
+		if (OS.isWindows() && User32X.isTouchAvailable()) {
+			superRoot.setOnTouchPressed(controller);
+			playBar.setOnTouchPressed(controller);
+		} else {
+			superRoot.setOnMouseClicked(controller);
+			playBar.setOnMouseClicked(controller);
+		}
 	}
 
 	@Override
@@ -134,7 +142,7 @@ public class TouchPadView implements IPadViewV2 {
 	}
 
 	@Override
-	public IPadViewControllerV2 getViewController() {
+	public IPadViewController getViewController() {
 		return controller;
 	}
 

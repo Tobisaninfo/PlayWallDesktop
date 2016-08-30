@@ -3,6 +3,7 @@ package de.tobias.playpad.layout.touch;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
@@ -15,29 +16,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
 
-	@FXML protected CheckMenuItem fullScreenMenuItem;
-	@FXML protected CheckMenuItem alwaysOnTopItem;
-	@FXML protected MenuItem closeMenuItem;
+	@FXML protected Button closeButton;
 
 	@FXML protected Label liveLabel;
 
 	private IMainViewController mainViewController;
 
 	public TouchMenuToolbarViewController(IMainViewController mainViewController) {
-		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle(), mainViewController);
+		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = mainViewController;
 
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
-
-		showLiveInfo(false);
 
 		// Schriftgröße Icons
 		FontIcon icon = (FontIcon) volumeDownLabel.getGraphic();
@@ -64,22 +60,26 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
-	public void loadKeybinding(KeyCollection keys) {
+	public void setOpenProject(Project project) {
+		super.setOpenProject(project);
 
+		liveLabel.visibleProperty().unbind();
+		if (project != null) {
+			liveLabel.visibleProperty().bind(project.activePlayerProperty().greaterThan(0));
+		}
 	}
+
+	@Override
+	public void loadKeybinding(KeyCollection keys) {}
 
 	@Override
 	public void setLocked(boolean looked) {}
 
 	@Override
-	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {
-		alwaysOnTopItem.setSelected(alwaysOnTopActive);
-	}
+	public void setAlwaysOnTopActive(boolean alwaysOnTopActive) {}
 
 	@Override
-	public void setFullScreenActive(boolean fullScreenActive) {
-		fullScreenMenuItem.setSelected(fullScreenActive);
-	}
+	public void setFullScreenActive(boolean fullScreenActive) {}
 
 	@Override
 	public void addToolbarItem(Node node) {
@@ -98,22 +98,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	public void removeMenuItem(MenuItem item) {}
 
 	@Override
-	public boolean isAlwaysOnTopActive() {
-		return alwaysOnTopItem.isSelected();
-	}
-
-	@Override
-	public boolean isFullscreenActive() {
-		return fullScreenMenuItem.isSelected();
-	}
-
-	@Override
 	public void deinit() {}
-
-	@Override
-	public void showLiveInfo(boolean show) {
-		liveLabel.setVisible(show);
-	}
 
 	private int currentPage = 0;
 
@@ -139,19 +124,6 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	// Event Handler
-	@FXML
-	void alwaysOnTopItemHandler(ActionEvent event) {
-		boolean selected = alwaysOnTopItem.isSelected();
-
-		mainViewController.getStage().setAlwaysOnTop(selected);
-		Profile.currentProfile().getProfileSettings().setWindowAlwaysOnTop(selected);
-	}
-
-	@FXML
-	void fullScreenMenuItemHandler(ActionEvent event) {
-		mainViewController.getStage().setFullScreen(fullScreenMenuItem.isSelected());
-	}
-
 	@FXML
 	void closeMenuItemHandler(ActionEvent event) {
 		MainLayoutConnect defaultLayout = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault();

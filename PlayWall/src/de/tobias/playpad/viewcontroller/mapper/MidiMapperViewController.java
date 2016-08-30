@@ -80,7 +80,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	@FXML
 	private void midiInputRecordButtonHandler(ActionEvent event) {
 		canceled = false;
-		
+
 		currentListener = Midi.getInstance().getListener();
 		Midi.getInstance().setListener(this);
 
@@ -124,7 +124,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	@Override
 	public boolean showInputMapperUI() {
 		midiInputRecordButtonHandler(null);
-		return canceled; // TEST Ob das funktioniert mit dem Return
+		return !canceled;
 	}
 
 	public void setMapper(MidiMapper midiMapper) {

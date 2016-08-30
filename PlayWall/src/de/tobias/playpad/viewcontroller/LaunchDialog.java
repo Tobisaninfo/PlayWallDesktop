@@ -77,7 +77,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 		// Load project to list
 		projectListView.setPlaceholder(new Label(getString(Strings.UI_Placeholder_Project)));
 		projectListView.setId("list");
-		projectListView.setCellFactory(list -> new ProjectCell());
+		projectListView.setCellFactory(list -> new ProjectCell(true));
 
 		// List selection listener
 		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->

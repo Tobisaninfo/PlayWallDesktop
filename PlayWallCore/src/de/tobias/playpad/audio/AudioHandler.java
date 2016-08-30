@@ -13,7 +13,6 @@ public abstract class AudioHandler {
 	private PadContent content;
 
 	public AudioHandler(PadContent content) {
-		super();
 		this.content = content;
 	}
 

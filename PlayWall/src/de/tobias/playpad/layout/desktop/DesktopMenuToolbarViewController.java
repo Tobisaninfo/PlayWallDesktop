@@ -17,11 +17,10 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.view.IPadViewV2;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -31,6 +30,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MenuType;
+import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
@@ -39,9 +39,6 @@ import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
@@ -55,6 +52,7 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -68,10 +66,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -115,7 +111,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private GlobalSettingsViewController globalSettingsViewController;
 
 	public DesktopMenuToolbarViewController(IMainViewController controller) {
-		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle(), controller);
+		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 
 		initLayoutMenu();
@@ -127,59 +123,50 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
 		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
-		showLiveInfo(false);
+		// Hide Extension menu then no items are in there
+		extensionMenu.visibleProperty().bind(Bindings.size(extensionMenu.getItems()).greaterThan(0));
 
+		// Help Menu --> HIDDEN TODO
+		helpMenu.setVisible(false);
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 	}
 
 	private void initLayoutMenu() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		Registry<MainLayoutConnect> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
-		ToggleGroup group = new ToggleGroup();
 
 		int index = 1; // Für Tastenkombination
-		for (String layoutType : mainLayouts.getTypes()) {
-			try {
-				MainLayoutConnect connect = mainLayouts.getComponent(layoutType);
+		for (MainLayoutConnect connect : mainLayouts.getComponents()) {
+			if (!connect.getType().equals(profileSettings.getMainLayoutType())) {
+				MenuItem item = new MenuItem(connect.name());
 
-				RadioMenuItem item = new RadioMenuItem(connect.name());
-				item.setUserData(connect);
-				group.getToggles().add(item);
+				item.setOnAction(e ->
+				{
+					mainViewController.setMainLayout(connect);
+					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
+				});
 
 				// Key Combi
 				if (index < 10) {
 					item.setAccelerator(KeyCombination.keyCombination("Shortcut+" + index));
 				}
 
-				if (connect.getType().equals(profileSettings.getMainLayoutType())) {
-					item.setSelected(true);
-				}
-
 				layoutMenu.getItems().add(item);
-			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
+				index++;
 			}
-			index++;
 		}
-
-		group.selectedToggleProperty().addListener((a, b, c) ->
-		{
-			if (c instanceof RadioMenuItem) {
-				RadioMenuItem menuItem = (RadioMenuItem) c;
-				if (menuItem.getUserData() instanceof MainLayoutConnect) {
-					MainLayoutConnect connect = (MainLayoutConnect) menuItem.getUserData();
-					mainViewController.setMainLayout(connect);
-					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
-				}
-			}
-		});
 	}
 
 	@Override
 	public void setOpenProject(Project project) {
 		super.setOpenProject(project);
-		if (project != null)
+
+		liveLabel.visibleProperty().unbind();
+
+		if (project != null) {
 			createRecentDocumentMenuItems();
+			liveLabel.visibleProperty().bind(project.activePlayerProperty().greaterThan(0));
+		}
 	}
 
 	@Override
@@ -193,6 +180,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
+			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
 			button.setFocusTraversable(false);
 			button.setOnAction(this);
 			pageHBox.getChildren().add(button);
@@ -263,8 +251,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void addMenuItem(MenuItem item, MenuType type) {
 		if (type == MenuType.EXTENSION) {
 			extensionMenu.getItems().add(item);
-		} else if (type == MenuType.SETTINGS) {
-			// TODO Implement
 		}
 	}
 
@@ -272,18 +258,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void removeMenuItem(MenuItem item) {
 		if (extensionMenu.getItems().contains(item))
 			extensionMenu.getItems().remove(item);
-
-		// TODO Implement
-	}
-
-	@Override
-	public boolean isAlwaysOnTopActive() {
-		return alwaysOnTopItem.isSelected();
-	}
-
-	@Override
-	public boolean isFullscreenActive() {
-		return fullScreenMenuItem.isSelected();
 	}
 
 	@Override
@@ -307,15 +281,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
 		if (dndModeMenuItem.isSelected()) {
 			PadDragListener.setDndMode(false);
-			for (IPadViewV2 view : mainViewController.getPadViews()) {
+			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
 		}
-	}
-
-	@Override
-	public void showLiveInfo(boolean show) {
-		liveLabel.setVisible(show);
 	}
 
 	@Override
@@ -431,20 +400,18 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void dndModeHandler(ActionEvent event) {
 		if (dndModeMenuItem.isSelected()) {
-			ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getPlayedPlayers() > 0) {
-				mainViewController.showLiveInfo();
-			} else {
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getActivePlayers() == 0) {
 				PadDragListener.setDndMode(true);
-				for (IPadViewV2 view : mainViewController.getPadViews()) {
+				for (IPadView view : mainViewController.getPadViews()) {
 					view.enableDragAndDropDesignMode(true);
 				}
 			}
 		} else {
 			PadDragListener.setDndMode(false);
-			for (IPadViewV2 view : mainViewController.getPadViews()) {
+			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
 		}
@@ -453,7 +420,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void errorMenuHandler(ActionEvent event) {
-		// TODO Implement
+		ErrorSummaryDialog.getInstance().getStage().show();
 	}
 
 	@FXML
@@ -467,7 +434,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void projectSettingsHandler(ActionEvent event) {
-		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
 		if (projectSettingsViewController == null) {
@@ -475,15 +441,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Runnable onFinish = () ->
 			{
-				midi.setListener(mainViewController.getMidiHandler());
-
-				for (ProjectSettingsTabViewController controller : projectSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						controller.reload(currentProject.getSettings(), currentProject, mainViewController);
-					}
-				}
-
-				profileSettingsViewController = null;
+				projectSettingsViewController = null;
 				mainStage.toFront();
 			};
 
@@ -501,10 +459,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
-		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getPlayedPlayers() > 0) {
-			mainViewController.showLiveInfo();
+		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getActivePlayers() > 0) {
 			return;
 		}
 
@@ -514,18 +471,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Runnable onFinish = () ->
 			{
 				midi.setListener(mainViewController.getMidiHandler());
-
-				boolean change = false;
-				for (ProfileSettingsTabViewController controller : profileSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						change = true;
-						controller.reload(Profile.currentProfile(), currentProject, mainViewController);
-					}
-				}
-
-				if (change) {
-					PlayPadMain.getProgramInstance().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
-				}
 
 				profileSettingsViewController = null;
 				mainStage.toFront();
@@ -547,15 +492,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Stage mainStage = mainViewController.getStage();
 			Runnable onFinish = () ->
 			{
-				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-
-				for (GlobalSettingsTabViewController controller : globalSettingsViewController.getTabs()) {
-					if (controller.needReload()) {
-						controller.reload(globalSettings, currentProject, mainViewController);
-					}
-				}
-
 				globalSettingsViewController = null;
 				mainStage.toFront();
 			};
@@ -583,9 +519,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void searchPadHandler(ActionEvent event) {
 		TextField field = TextFields.createClearableTextField();
-		field.setPromptText("Suche"); // TODO i18n
+		field.setPromptText(Localization.getString(Strings.Search_Placeholder));
 
-		Button button = new Button("Suchen"); // TODO i18n
+		Button button = new Button(Localization.getString(Strings.Search_Button));
 		button.setOnAction(new DesktopSearchController(field, this));
 
 		HBox box = new HBox(14, field, button);

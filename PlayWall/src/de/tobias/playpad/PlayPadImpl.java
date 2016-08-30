@@ -12,19 +12,31 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.dom4j.DocumentException;
+
+import de.tobias.playpad.action.mapper.MapperRegistry;
+import de.tobias.playpad.audio.JavaFXAudioHandler;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
+import de.tobias.playpad.midi.device.DeviceRegistry;
+import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.playpad.viewcontroller.main.MainViewControllerV2;
+import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.util.SystemUtils;
 import de.tobias.utils.util.Worker;
 import javafx.scene.image.Image;
 import net.xeoh.plugins.base.PluginManager;
@@ -43,14 +55,14 @@ public class PlayPadImpl implements PlayPad {
 	private PluginManager pluginManager;
 	private Set<Path> deletedPlugins;
 
-	private MainViewControllerV2 mainViewController;
+	private MainViewController mainViewController;
 	private Project currentProject;
 	protected GlobalSettings globalSettings;
 
 	public PlayPadImpl(GlobalSettings globalSettings) {
 		pluginManager = PluginManagerFactory.createPluginManager();
 		deletedPlugins = new HashSet<>();
-		
+
 		this.globalSettings = globalSettings;
 	}
 
@@ -141,6 +153,19 @@ public class PlayPadImpl implements PlayPad {
 
 	@Override
 	public void shutdown() {
+		// Shutdown components
+		PlayPadPlugin.getRegistryCollection().getAudioHandlers().getComponents().forEach(i ->
+		{
+			if (i instanceof AutoCloseable) {
+				try {
+					((AutoCloseable) i).close();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
 		// Delete Plugins Info Textfile --> Löschen dann beim Start.
 		Path pluginInfoPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, PLUGIN_INFO_TXT);
 		try {
@@ -157,6 +182,13 @@ public class PlayPadImpl implements PlayPad {
 			e.printStackTrace();
 		}
 
+		try {
+			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		pluginManager.shutdown();
 		Worker.shutdown();
 	}
@@ -172,7 +204,7 @@ public class PlayPadImpl implements PlayPad {
 
 	public void openProject(Project project) {
 		if (mainViewController == null) {
-			mainViewController = new MainViewControllerV2(mainViewListeners);
+			mainViewController = new MainViewController(mainViewListeners);
 		}
 		currentProject = project;
 		mainViewController.openProject(project);
@@ -180,5 +212,42 @@ public class PlayPadImpl implements PlayPad {
 
 	public Project getCurrentProject() {
 		return currentProject;
+	}
+	
+	public void startup(ResourceBundle resourceBundle) {
+		registerComponents(resourceBundle);
+	}
+	
+	private void registerComponents(ResourceBundle resourceBundle) {
+		// Midi
+		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
+
+		try {
+			// Load Components
+			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
+
+			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml");
+			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml");
+			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml");
+			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml");
+			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml");
+			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml");
+			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml");
+			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
+
+			// Set Default
+			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.TYPE);
+			registryCollection.getDesigns().setDefaultID(ModernGlobalDesign.TYPE);
+		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
+				| NoSuchComponentException e) {
+			e.printStackTrace();
+		}
+
+		// Key Bindings
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", resourceBundle);
+
+		// Mapper
+		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 	}
 }

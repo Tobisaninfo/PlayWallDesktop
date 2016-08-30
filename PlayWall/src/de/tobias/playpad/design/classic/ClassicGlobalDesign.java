@@ -12,8 +12,8 @@ import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
-import de.tobias.playpad.pad.view.IPadViewV2;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -345,8 +345,8 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 	}
 
 	@Override
-	public void handleWarning(IPadViewControllerV2 controller, Warning warning) {
-		final IPadViewV2 view = controller.getView();
+	public void handleWarning(IPadViewController controller, Warning warning) {
+		final IPadView view = controller.getView();
 
 		try {
 			while (true) {

@@ -1,7 +1,7 @@
 package de.tobias.playpad.pad.view;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.css.PseudoClass;
 import javafx.scene.layout.Pane;
 
@@ -13,7 +13,7 @@ import javafx.scene.layout.Pane;
  * @since 5.1.0
  *
  */
-public interface IPadViewV2 {
+public interface IPadView {
 
 	/**
 	 * Gibt die aktuelle Vorschau für den Content eines Pads zurück.
@@ -35,7 +35,7 @@ public interface IPadViewV2 {
 	 * 
 	 * @return ViewController des Pad
 	 */
-	public IPadViewControllerV2 getViewController();
+	public IPadViewController getViewController();
 
 	/**
 	 * Gibt das oberste GUI Element zurück, welche im MainView verwendet wird.

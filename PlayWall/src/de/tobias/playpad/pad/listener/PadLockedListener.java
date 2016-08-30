@@ -1,14 +1,14 @@
 package de.tobias.playpad.pad.listener;
 
-import de.tobias.playpad.pad.viewcontroller.IPadViewControllerV2;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadLockedListener implements ChangeListener<Boolean> {
 
-	private IPadViewControllerV2 controller;
+	private IPadViewController controller;
 
-	public PadLockedListener(IPadViewControllerV2 controller) {
+	public PadLockedListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 

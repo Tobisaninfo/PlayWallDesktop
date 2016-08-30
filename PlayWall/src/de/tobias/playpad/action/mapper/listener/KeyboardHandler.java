@@ -22,14 +22,13 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 		this.project = project;
 		this.mainViewController = mainViewController;
 
-		// TEST
 		mainViewController.registerKeyboardListener(KeyEvent.ANY, this);
 	}
 
 	// KeyType ist nicht unterstützt.
 	@Override
 	public void handle(KeyEvent event) {
-		if (event.getTarget() instanceof Scene) { // TEST Ob Probleme da sind, wegen Fokus und so
+		if (event.getTarget() instanceof Scene) {
 			if (!event.isShortcutDown()) {
 				KeyCode code = null;
 				InputType type = null;

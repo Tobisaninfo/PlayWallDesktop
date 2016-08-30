@@ -10,7 +10,11 @@ public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerConnect>
 		super("Audio Handler");
 	}
 
-	public AudioHandlerConnect getCurrentAudioHandler() throws NoSuchComponentException {
-		return getComponent(Profile.currentProfile().getProfileSettings().getAudioClass());
+	public AudioHandlerConnect getCurrentAudioHandler() {
+		try {
+			return getComponent(Profile.currentProfile().getProfileSettings().getAudioClass());
+		} catch (NoSuchComponentException e) {
+			return getDefault();
+		}
 	}
 }

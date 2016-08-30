@@ -21,6 +21,7 @@ public class Strings {
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
+	public static final String UI_Window_ProjectSettings_Title = "UI.Window.ProjectSettings.Title";
 	public static final String UI_Window_GlobalSettings_Title = "UI.Window.GlobalSettings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
@@ -45,6 +46,7 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
+	@Deprecated
 	public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
@@ -61,17 +63,19 @@ public class Strings {
 	public static final String UI_Window_Settings_Player_Title = "UI.Window.Settings.Player.Title";
 	public static final String UI_Window_Settings_Audio_Title = "UI.Window.Settings.Audio.Title";
 	public static final String UI_Window_Settings_Updates_Title = "UI.Window.Settings.Updates.Title";
+	public static final String UI_Window_Settings_Keys_Title = "UI.Window.Settings.Keys.Title";
+	public static final String UI_Window_Settings_Paths_Title = "UI.Window.Settings.Paths.Title";
 
-	// UI - Dialogs - DragAndDrop
-	public static final String UI_Dialog_DragAndDrop_Header = "UI.Dialog.DragAndDrop.Header";
-	public static final String UI_Dialog_DragAndDrop_Content = "UI.Dialog.DragAndDrop.Content";
-	public static final String UI_Dialog_DragAndDrop_Button = "UI.Dialog.DragAndDrop.Button";
+	// UI - Settings - Keys
+	public static final String UI_Settings_Keys_Conflict_Header = "UI.Settings.Keys.Conflict.Header";
+	public static final String UI_Settings_Keys_Conflict_Content = "UI.Settings.Keys.Conflict.Content";
 
 	// UI - Dialog - NewProfile
 	public static final String UI_Dialog_NewProfile_Content = "UI.Dialog.NewProfile.Content";
 
 	// UI - Dialog - NewProject
-	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content";
+	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content"; // Duplicate Project
+	public static final String UI_Dialog_NewProject_Media = "UI.Dialog.NewProject.MediaPath"; // Create Project
 
 	// UI - Dialog - Import
 	public static final String UI_Dialog_Import_ReplaceProfile_Content = "UI.Dialog.Import.ReplaceProfile.Content";
@@ -140,6 +144,7 @@ public class Strings {
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
@@ -169,9 +174,9 @@ public class Strings {
 	public static final String Info_Mapper_PressKey = "Info.Mapper.PressKey";
 
 	// UI - Settings - Aler
-	
+
 	public static final String UI_Settings_Alert_NewKeyShortcut_Text = "UI.Settings.Alert.NewKeyShortcut.Text";
-	
+
 	// UI - Window - PadSettings
 	public static final String UI_Window_PadSettings_General_Title = "UI.Window.PadSettings.General.Title";
 	public static final String UI_Window_PadSettings_Player_Title = "UI.Window.PadSettings.Player.Title";
@@ -199,6 +204,19 @@ public class Strings {
 	// UI - Dialog - AutoUpdate
 	public static final String UI_Dialog_AutoUpdate_Header = "UI.Dialog.AutoUpdate.Header";
 	public static final String UI_Dialog_AutoUpdate_Content = "UI.Dialog.AutoUpdate.Content";
+	public static final String UI_Dialog_AutoUpdate_Checkbox = "UI.Dialog.AutoUpdate.Checkbox";
+	public static final String UI_Dialog_AutoUpdate_Title = "UI.Dialog.AutoUpdate.Title";
+	public static final String UI_Dialog_AutoUpdate_Button_Update = "UI.Dialog.AutoUpdate.Button.Update";
+	public static final String UI_Dialog_AutoUpdate_Button_Cancel = "UI.Dialog.AutoUpdate.Button.Cancel";
+
+	// UI - Dialog - Save
+	public static final String UI_Dialog_Save_Header = "UI.Dialog.Save.Header";
+	public static final String UI_Dialog_Save_Content = "UI.Dialog.Save.Content";
+	public static final String UI_Dialog_Save_Checkbox = "UI.Dialog.Save.Checkbox";
+	public static final String UI_Dialog_Save_Title = "UI.Dialog.Save.Title";
+	public static final String UI_Dialog_Save_Button_Yes = "UI.Dialog.Save.Button.Yes";
+	public static final String UI_Dialog_Save_Button_No = "UI.Dialog.Save.Button.No";
+	public static final String UI_Dialog_Save_Button_Cancel = "UI.Dialog.Save.Button.Cancel";
 
 	// Update Channel - Basename
 	public static final String Update_Channel_BaseName = "UpdateChannel.";
@@ -208,6 +226,7 @@ public class Strings {
 
 	// UI - Dialog - Update
 	public static final String UI_Dialog_Update_Cell = "UI.Dialog.Update.Cell";
+	public static final String UI_Dialog_Update_Info = "UI.Dialog.Update.Info";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
 
 	// Error - Update - Downlaod
@@ -228,4 +247,13 @@ public class Strings {
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
+
+	// Main Layout
+	public static final String MainLayout_Desktop = "MainLayout.Desktop";
+	public static final String MainLayout_Touch = "MainLayout.Touch";
+
+	// Search
+	public static final String Search_Button = "Search.Button";
+	public static final String Search_Placeholder = "Search.Placeholder";
+	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches";
 }

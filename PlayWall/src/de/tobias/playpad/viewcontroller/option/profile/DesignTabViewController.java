@@ -8,16 +8,20 @@ import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.Localization;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
-public class DesignTabViewController extends ProfileSettingsTabViewController {
+public class DesignTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	@FXML private VBox layoutContainer;
 	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
@@ -68,10 +72,12 @@ public class DesignTabViewController extends ProfileSettingsTabViewController {
 	}
 
 	@Override
-	public void loadSettings(Profile profile) {}
+	public void loadSettings(Profile profile) {
+	}
 
 	@Override
-	public void saveSettings(Profile profile) {}
+	public void saveSettings(Profile profile) {
+	}
 
 	@Override
 	public boolean needReload() {
@@ -79,8 +85,17 @@ public class DesignTabViewController extends ProfileSettingsTabViewController {
 	}
 
 	@Override
-	public void reload(Profile profile, Project project, IMainViewController controller) {
-		controller.loadUserCss();
+	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		return new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateTitle(name());
+				updateProgress(-1, -1);
+
+				Platform.runLater(() -> controller.loadUserCss());
+				return null;
+			}
+		};
 	}
 
 	@Override
