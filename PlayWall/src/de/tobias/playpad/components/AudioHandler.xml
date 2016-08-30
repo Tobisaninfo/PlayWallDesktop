@@ -1,5 +1,5 @@
 <Actions>
-	<Component id="Java FX Media">de.tobias.playpad.audio.JavaFXHandlerConnect</Component>
-	<Component id="Java Audiostream">de.tobias.playpad.audio.TinyAudioHandlerConnect</Component>
-	<Component id="Clip (Experimental)">de.tobias.playpad.audio.ClipAudioHandlerConnect</Component>
+	<Component id="JavaFx">de.tobias.playpad.audio.JavaFXHandlerConnect</Component>
+	<Component id="TinyAudio">de.tobias.playpad.audio.TinyAudioHandlerConnect</Component>
+	<Component id="clip">de.tobias.playpad.audio.ClipAudioHandlerConnect</Component>
 </Actions>

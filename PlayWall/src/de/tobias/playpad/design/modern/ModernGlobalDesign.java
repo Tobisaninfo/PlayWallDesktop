@@ -31,7 +31,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	public static final String TYPE = "modern";
 
 	public static final double minWidth = 205;
-	public static final double minHeight = 110;
+	public static final double minHeight = 115;
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;

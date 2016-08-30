@@ -218,7 +218,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void loadMedia() throws NoSuchComponentException {
+	public void loadMedia() {
 		// init audio implementation
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);

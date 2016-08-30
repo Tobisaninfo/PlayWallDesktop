@@ -47,8 +47,7 @@ public abstract class PadContent {
 	 * @param path
 	 *            path
 	 * @throws NoSuchComponentException
-	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige
-	 *             Soundsystem
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
 	 * @throws IOException
 	 *             IO Fehler
 	 */
@@ -56,12 +55,8 @@ public abstract class PadContent {
 
 	/**
 	 * Lädt die Medien, sodass sie auf abruf verfügbar sind.
-	 * 
-	 * @throws NoSuchComponentException
-	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige
-	 *             Soundsystem
 	 */
-	public abstract void loadMedia() throws NoSuchComponentException;
+	public abstract void loadMedia();
 
 	/**
 	 * Entfernt die Medien aus dem Speicher (lässt diese aber im Pad).
@@ -113,7 +108,7 @@ public abstract class PadContent {
 			if (Files.notExists(mediaFolder)) {
 				Files.createDirectories(mediaFolder);
 			}
-			
+
 			Files.copy(orginal, newPath, StandardCopyOption.REPLACE_EXISTING);
 			return newPath;
 		}

@@ -236,7 +236,7 @@ public class PlayPadImpl implements PlayPad {
 			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml");
 
 			// Set Default
-			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.NAME);
+			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.TYPE);
 			registryCollection.getDesigns().setDefaultID(ModernGlobalDesign.TYPE);
 		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
 				| NoSuchComponentException e) {
