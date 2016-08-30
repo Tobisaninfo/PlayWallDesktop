@@ -31,7 +31,7 @@
 
 		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host">
 			<file type="program" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="/stable" remoteFileName="PlayWall.jar" />
-			<file type="exe" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.exe" remotePath="/stable" remoteFileName="PlayWall.exe" />
+			<file type="exe" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist/PlayWall.exe" remotePath="/stable" remoteFileName="PlayWall.exe" />
 			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/ActionPlugin.jar" remotePath="/stable/plugins" remoteFileName="ActionPlugin.jar" />
 			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/AwakePlugin.jar" remotePath="/stable/plugins" remoteFileName="AwakePlugin.jar" />
 			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/EqualizerPlugin.jar" remotePath="/stable/plugins" remoteFileName="EqualizerPlugin.jar" />

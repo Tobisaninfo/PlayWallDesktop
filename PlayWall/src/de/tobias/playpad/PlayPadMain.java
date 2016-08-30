@@ -29,7 +29,6 @@ import de.tobias.utils.util.Localization.LocalizationDelegate;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
-import de.tobias.utils.util.win.User32X;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
@@ -166,7 +165,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					Platform.runLater(() ->
 					{
 						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(owner);
-						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(result ->
+						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.APPLY).ifPresent(result ->
 						{
 							try {
 								Updates.startUpdate();
