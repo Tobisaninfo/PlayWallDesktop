@@ -18,11 +18,12 @@ import javax.sound.sampled.DataLine.Info;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Mixer;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.utils.util.FileUtils;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -34,6 +35,7 @@ import javazoom.jl.decoder.JavaLayerException;
 
 public class ClipAudioHandler extends AudioHandler {
 
+	public static final String TYPE = "clip";
 	public static final String NAME = "Clip (Experimental)";
 	private static final String MP3 = "mp3";
 
@@ -68,7 +70,7 @@ public class ClipAudioHandler extends AudioHandler {
 
 						if (handler.clip != null) {
 							if (handler.clip.getMicrosecondLength() == handler.clip.getMicrosecondPosition() || !handler.pause || handler.stop) {
-								if (!pad.isLoop()) {
+								if (!pad.getPadSettings().isLoop()) {
 									pad.setEof(true);
 
 									// Remove from Loop and Stop
@@ -83,7 +85,9 @@ public class ClipAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException e) {
+				} catch (ConcurrentModificationException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -106,7 +110,7 @@ public class ClipAudioHandler extends AudioHandler {
 		}
 		stop = false;
 
-		if (getContent().getPad().isLoop())
+		if (getContent().getPad().getPadSettings().isLoop())
 			clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop
 		else
 			clip.start(); // Einfach Play
@@ -207,7 +211,8 @@ public class ClipAudioHandler extends AudioHandler {
 
 			// Convert wenn mp3
 			if (FileUtils.getFileExtention(url.getFile()).toLowerCase().endsWith(MP3)) {
-				Path wavPath = Profile.currentProfile().getProfileSettings().getCachePath().resolve(path.getFileName().toString() + ".wav");
+				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 				url = convertMp3ToWav(path, wavPath, getContent().getPad());
 			}
 

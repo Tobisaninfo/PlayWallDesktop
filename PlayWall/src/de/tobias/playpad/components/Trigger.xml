@@ -1,0 +1,4 @@
+<Actions>
+	<Component id="Cart">de.tobias.playpad.trigger.CartTriggerItemConnect</Component>
+	<Component id="Volume">de.tobias.playpad.trigger.VolumeTriggerItemConnect</Component>
+</Actions>

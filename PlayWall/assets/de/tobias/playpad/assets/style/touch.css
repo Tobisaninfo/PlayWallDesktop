@@ -1,0 +1,25 @@
+.menu .label {
+	-fx-font-size: 25px;
+	-fx-padding: 10px;
+}
+
+.label {
+	-fx-font-size: 20px;
+}
+
+.button {
+	-fx-font-size : 20px;
+}
+
+.slider .track {
+    -fx-pref-height: 15;
+}
+
+.slider:vertical .track {
+    -fx-pref-width: 20;
+}
+
+.slider .thumb {
+    -fx-pref-height: 30;
+    -fx-pref-width: 30;
+}

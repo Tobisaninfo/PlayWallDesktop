@@ -12,8 +12,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
@@ -45,6 +45,10 @@ public class PrintDialog extends ViewController {
 		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
+		int pages = project.getSettings().getPageCount();
+		for (int i = 0; i < pages; i++) {
+			pageComboBox.getItems().add(i + 1);
+		}
 		pageComboBox.getSelectionModel().selectFirst();
 
 		getStage().initOwner(owner);
@@ -52,11 +56,6 @@ public class PrintDialog extends ViewController {
 
 	@Override
 	public void init() {
-		int pages = Profile.currentProfile().getProfileSettings().getPageCount();
-		for (int i = 0; i < pages; i++) {
-			pageComboBox.getItems().add(i + 1);
-		}
-
 		pageComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
 			createPreview(c - 1);
@@ -91,16 +90,16 @@ public class PrintDialog extends ViewController {
 
 		Table table = new Table();
 		table.setStyle("border:1px solid black;border-collapse:collapse;");
-		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 
-		int i = page * profilSettings.getRows() * profilSettings.getColumns();
+		ProjectSettings settings = project.getSettings();
+		int i = page * settings.getRows() * settings.getColumns();
 
-		for (int y = 0; y < profilSettings.getRows(); y++) {
+		for (int y = 0; y < settings.getRows(); y++) {
 			Tr tr = new Tr();
 			table.appendChild(tr);
-			for (int x = 0; x < profilSettings.getColumns(); x++) {
+			for (int x = 0; x < settings.getColumns(); x++) {
 				Td td = new Td();
-				td.setStyle("border:1px solid black; width: " + 1000 / (float) profilSettings.getColumns()
+				td.setStyle("border:1px solid black; width: " + 1000 / (float) settings.getColumns()
 						+ "px; padding: 5px; vertical-align: center; text-align: center; min-height: 30px; min-width: 100px;");
 				Div div = new Div();
 				div.setStyle("word-break: break-all; white-space: normal;");

@@ -16,18 +16,19 @@ import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.update.UpdateRegistery;
-import de.tobias.playpad.viewcontroller.main.IMainToolbarViewController;
+import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.AwakeUtils;
 import de.tobias.utils.util.IOUtils;
-import de.tobias.utils.util.Kernel32;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
+import de.tobias.utils.util.win.Kernel32;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
@@ -146,8 +147,23 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		activeMenu.setOnAction(this);
 		activeMenu.setText(bundle.getString("menutitle"));
 		activeMenu.setSelected(settings.active);
-		t.addMenuItem(activeMenu);
 
+		t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+		{
+			if (oldToolbar != null)
+				oldToolbar.removeMenuItem(activeMenu);
+			newToolbar.addMenuItem(activeMenu, MenuType.EXTENSION);
+
+			if (iconLabel != null) {
+				if (settings.active) {
+					if (oldToolbar != null)
+						oldToolbar.removeToolbarItem(iconLabel);
+					newToolbar.addToolbarItem(iconLabel);
+				} else {
+					newToolbar.removeToolbarItem(iconLabel);
+				}
+			}
+		});
 		iconLabel = new Label();
 		iconLabel.setGraphic(new FontIcon(FontAwesomeType.MOON_ALT));
 	}
@@ -157,11 +173,11 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		activeSleep(activeMenu.isSelected());
 		settings.active = activeMenu.isSelected();
 
-		IMainToolbarViewController toolbarController = PlayPadPlugin.getImplementation().getMainViewController().getToolbarController();
+		MenuToolbarViewController toolbarController = PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
 		if (settings.active) {
-			toolbarController.showIcon(iconLabel);
+			toolbarController.addToolbarItem(iconLabel);
 		} else {
-			toolbarController.hideIcon(iconLabel);
+			toolbarController.removeToolbarItem(iconLabel);
 		}
 	}
 

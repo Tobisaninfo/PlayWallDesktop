@@ -6,9 +6,12 @@ import java.util.List;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
@@ -62,10 +65,17 @@ public class Trigger {
 			if (itemObj instanceof Element) {
 				Element itemElement = (Element) itemObj;
 				String type = itemElement.attributeValue(TYPE_ATTR);
-				TriggerItemConnect connect = TriggerRegistry.getTriggerConnect(type);
-				TriggerItem item = connect.newInstance(this);
-				item.load(itemElement);
-				items.add(item);
+
+				Registry<TriggerItemConnect> registry = PlayPadPlugin.getRegistryCollection().getTriggerItems();
+				try {
+					TriggerItemConnect connect = registry.getComponent(type);
+					TriggerItem item = connect.newInstance(this);
+					item.load(itemElement);
+					items.add(item);
+				} catch (NoSuchComponentException e) {
+					e.printStackTrace();
+					// TODO Error Handling
+				}
 			}
 		}
 	}

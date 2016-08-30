@@ -1,34 +1,19 @@
 package de.tobias.playpad;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.MappingSerializer;
-import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
-import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
-import de.tobias.playpad.action.mapper.MidiMapper;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.application.update.UpdateService;
 
@@ -36,202 +21,56 @@ public class VersionUpdater implements UpdateService {
 
 	@Override
 	public void update(App app, long oldVersion, long newVersion) {
-		update18(oldVersion);
-		update23(app, oldVersion);
-	}
-
-	private void update23(App app, long oldVersion) {
-		if (oldVersion <= 23) {
-			Path configPath = app.getPath(PathType.CONFIGURATION);
-			SAXReader reader = new SAXReader();
-			try {
-				Document document = reader.read(Files.newInputStream(configPath.resolve("Profiles.xml")));
-				for (Object profileObj : document.getRootElement().elements("Profile")) {
-					if (profileObj instanceof Element) {
-						String name = ((Element) profileObj).getStringValue();
-						System.out.println("Start Profile: " + name);
-						UUID uuid = UUID.randomUUID();
-
-						Path profileOldPath = app.getPath(PathType.CONFIGURATION, name);
-						Path profileNewPath = app.getPath(PathType.CONFIGURATION, uuid.toString());
-
-						Files.move(profileOldPath, profileNewPath);
-
-						convertMidiToMapping(profileNewPath);
-
-						ProfileReference profileReference = new ProfileReference(uuid, name);
-						ProfileReference.addProfile(profileReference);
-						System.out.println("Finish Profile: " + name + " (" + uuid + ")");
-					}
-				}
-			} catch (DocumentException | IOException e1) {
-				e1.printStackTrace();
-			}
-
-			try {
-				Document document = reader.read(Files.newInputStream(configPath.resolve("Projects.xml")));
-				for (Object projectObj : document.getRootElement().elements("Project")) {
-					if (projectObj instanceof Element) {
-						try {
-							String name = ((Element) projectObj).getStringValue();
-							Path projectPath = app.getPath(PathType.DOCUMENTS, name);
-							System.out.println("Start Project: " + projectPath);
-
-							UUID uuid = UUID.randomUUID();
-							Path newProjectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, uuid + Project.FILE_EXTENSION);
-
-							Files.move(projectPath, newProjectPath);
-
-							ProjectReference projectReference = new ProjectReference(uuid, projectPath.getFileName().toString(),
-									ProfileReference.getProfiles().get(0));
-							ProjectReference.addProject(projectReference);
-
-							convertProject(newProjectPath);
-							System.out.println("End Project: " + projectPath + " (" + uuid + ")");
-						} catch (DocumentException | URISyntaxException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			} catch (IOException | DocumentException e) {
-				e.printStackTrace();
-			}
-			try {
-				ProfileReference.saveProfiles();
-				ProjectReference.saveProjects();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			if (newVersion >= 33 && oldVersion < 33)
+				update33(app);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void update18(long oldVersion) {
-		if (oldVersion <= 18) {
-			SAXReader reader = new SAXReader();
-			Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "Profiles.xml");
-
-			try {
-				Document document = reader.read(Files.newInputStream(path));
-				Element root = document.getRootElement();
-				for (Object object : root.elements("Document")) {
-					Element element = (Element) object;
-					String name = element.getStringValue();
-
-					UUID uuid = UUID.randomUUID();
-
-					Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, name);
-					Path newProjectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, uuid + Project.FILE_EXTENSION);
-					Files.createDirectories(newProjectPath.getParent());
-
-					Files.move(projectPath, newProjectPath);
-
-					ProjectReference projectReference = new ProjectReference(uuid, name, ProfileReference.getProfiles().get(0));
-					ProjectReference.addProject(projectReference);
-
-					convertProject(newProjectPath);
-				}
-
-				ProjectReference.saveProjects();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public void convertMidiToMapping(Path configPath) throws DocumentException, IOException {
+	private void update33(App app) throws DocumentException, IOException {
 		SAXReader reader = new SAXReader();
-		Document midiDocument = reader.read(Files.newInputStream(configPath.resolve("Midi.xml")));
 
-		List<Mapping> mappings = new ArrayList<>();
+		Document projectsDocument = reader.read(Files.newInputStream(app.getPath(PathType.CONFIGURATION, "Projects.xml")));
+		for (Object obj : projectsDocument.getRootElement().elements("Project")) {
+			if (obj instanceof Element) {
+				Element element = (Element) obj;
 
-		for (Object presetObj : midiDocument.getRootElement().elements("Preset")) {
-			Element presetElement = (Element) presetObj;
-			String name = presetElement.attributeValue("name");
+				UUID profile = UUID.fromString(element.attributeValue("profile"));
+				UUID project = UUID.fromString(element.attributeValue("uuid"));
 
-			Mapping mapping = new Mapping(false, null);
-			mapping.setName(name);
-			mapping.setUuid(UUID.randomUUID());
-
-			for (Object midiObj : presetElement.elements("Midi")) {
-				Element midiElement = (Element) midiObj;
-				int command = Integer.valueOf(midiElement.attributeValue("command"));
-				int key = Integer.valueOf(midiElement.attributeValue("channel"));
-
-				if (midiElement.attributeValue("type") != null) {
-					if (midiElement.attributeValue("type").equals("de.tobias.playpad.model.midi.type.PlayStopActionType")) {
-						Element actionElement = midiElement.element("Action");
-						if (actionElement.attributeValue("class").equals("de.tobias.playpad.model.midi.CartAction")) {
-							int cart = Integer.valueOf(actionElement.element("CartID").getStringValue());
-
-							CartAction action = new CartAction(cart, ControlMode.PLAY_STOP);
-							mapping.addActionIfNotContains(action);
-
-							MidiMapper mapper = new MidiMapper(command, key);
-							action.addMapper(mapper);
-
-							Element feedbackEventElement = actionElement.element("Feedback");
-							Element feedbackDefaultElement = midiElement.element("Feedback");
-
-							int feedbackEvent = Integer.valueOf(feedbackEventElement.element("MidiVelocity").getStringValue());
-							int feedbackDefault = Integer.valueOf(feedbackDefaultElement.element("MidiVelocity").getStringValue());
-
-							DoubleSimpleFeedback doubleSimpleFeedback = new DoubleSimpleFeedback(feedbackDefault, feedbackEvent);
-							mapper.setFeedback(doubleSimpleFeedback);
-						}
-					}
-				}
+				updateProject(profile, project, app);
 			}
-			mappings.add(mapping);
 		}
-
-		Document mappingDocument = DocumentHelper.createDocument();
-		Element rootElement = mappingDocument.addElement("List");
-
-		for (Mapping mapping : mappings) {
-			Element mappingElement = rootElement.addElement("Mapping");
-
-			MappingSerializer mappingSerializer = new MappingSerializer();
-			mappingSerializer.saveElement(mappingElement, mapping);
-		}
-
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(configPath.resolve("Mapping.xml")), OutputFormat.createPrettyPrint());
-		writer.write(mappingDocument);
-		writer.close();
-
-		Files.delete(configPath.resolve("Midi.xml"));
 	}
 
-	public void convertProject(Path path) throws DocumentException, IOException, URISyntaxException {
+	private void updateProject(UUID profile, UUID project, App app) throws DocumentException, IOException {
+		Path profileSettings = app.getPath(PathType.CONFIGURATION, profile.toString(), "ProfileSettings.xml");
 		SAXReader reader = new SAXReader();
-		Document oldDocument = reader.read(Files.newInputStream(path));
-		Document newDocument = DocumentHelper.createDocument();
 
-		Element newRootElement = newDocument.addElement("Project");
+		Document document = reader.read(Files.newInputStream(profileSettings));
+		Element rootElement = document.getRootElement();
 
-		for (Object oldPadObj : oldDocument.getRootElement().elements("Pad")) {
-			try {
-				Element oldPadElement = (Element) oldPadObj;
-				Element newPadElement = newRootElement.addElement("Pad");
+		int pages = Integer.valueOf(rootElement.element("PageCount").getStringValue());
+		int rows = Integer.valueOf(rootElement.element("Rows").getStringValue());
+		int columns = Integer.valueOf(rootElement.element("Columns").getStringValue());
 
-				newPadElement.addAttribute("index", oldPadElement.attributeValue("index"));
-				newPadElement.addAttribute("name", oldPadElement.element("Title").getStringValue());
-				newPadElement.addAttribute("status", oldPadElement.element("State").getStringValue());
+		Path projectSettings = app.getPath(PathType.DOCUMENTS, project.toString() + ".xml");
+		Document projectDocument = reader.read(Files.newInputStream(projectSettings));
+		Element rootProjectElement = projectDocument.getRootElement();
+		Element settingsElement = rootProjectElement.addElement("Settings");
 
-				String file = oldPadElement.element("Path").getStringValue();
-				URI uri = new URI(file);
-				newPadElement.addElement("Content").addAttribute("type", "audio").addText(Paths.get(uri).toString());
+		ProjectSettings projectSettings2 = new ProjectSettings();
+		projectSettings2.setColumns(columns);
+		projectSettings2.setRows(rows);
+		projectSettings2.setPageCount(pages);
 
-				Element newSettingsElement = newPadElement.addElement("Settings");
-				newSettingsElement.addElement("Volume").addText(oldPadElement.element("Volume").getStringValue());
-				newSettingsElement.addElement("Loop").addText(oldPadElement.element("Loop").getStringValue());
-				if (oldPadElement.element("TimeMode") != null)
-					newSettingsElement.addElement("TimeMode").addText(oldPadElement.element("TimeMode").getStringValue());
-			} catch (Exception e) {
-			}
-		}
+		projectSettings2.save(settingsElement);
 
-		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());
-		writer.write(newDocument);
+		XMLWriter writer = new XMLWriter(Files.newOutputStream(projectSettings), OutputFormat.createPrettyPrint());
+		writer.write(projectDocument);
 		writer.close();
 	}
+
 }

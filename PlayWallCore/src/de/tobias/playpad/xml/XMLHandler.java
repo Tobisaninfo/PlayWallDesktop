@@ -72,7 +72,9 @@ public class XMLHandler<T> {
 			if (object instanceof Element) {
 				Element element = (Element) object;
 				T data = deserializer.loadElement(element);
-				list.add(data);
+				if (data != null) {
+					list.add(data);
+				}
 			}
 		}
 
@@ -116,5 +118,14 @@ public class XMLHandler<T> {
 		} else {
 			throw new FileNotFoundException(path.toString());
 		}
+	}
+
+	/**
+	 * Gibt das RootElement zurück.
+	 * 
+	 * @return Root Element
+	 */
+	public Element getRootElement() {
+		return rootElement;
 	}
 }

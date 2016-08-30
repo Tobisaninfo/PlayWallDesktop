@@ -15,7 +15,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.viewcontroller.AudioTypeViewController;
+import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Worker;
@@ -27,7 +27,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
-public class ClipSettingsViewController extends AudioTypeViewController implements Callback<ListView<Info>, ListCell<Info>> {
+public class ClipSettingsViewController extends AudioHandlerViewController implements Callback<ListView<Info>, ListCell<Info>> {
 
 	@FXML private ComboBox<Info> soundCardComboBox;
 	@FXML private Button testButton;

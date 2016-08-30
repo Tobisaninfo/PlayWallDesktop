@@ -8,11 +8,11 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.feedback.ColorAssociator;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.action.feedback.SingleSimpleFeedback;
+import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
+import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
 import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.midi.Midi;
@@ -63,12 +63,12 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	}
 
 	@Override
-	protected void initFeedback() {
+	public void initFeedback() {
 		if (feedback == null || this.feedbackType != super.feedbackType) {
 			if (super.feedbackType == FeedbackType.SINGLE) {
-				feedback = new SingleSimpleFeedback();
+				feedback = new SingleMidiFeedback();
 			} else if (super.feedbackType == FeedbackType.DOUBLE) {
-				feedback = new DoubleSimpleFeedback();
+				feedback = new DoubleMidiFeedback();
 			}
 		}
 		this.feedbackType = super.feedbackType;
@@ -77,7 +77,8 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	public Feedback getFeedback() {
 		return feedback;
 	}
-
+	
+	@Deprecated
 	public void setFeedback(Feedback feedback) {
 		this.feedback = feedback;
 	}
@@ -185,7 +186,7 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	}
 
 	@Override
-	public void save(Element element, Action action) {
+	public void save(Element element) {
 		element.addAttribute(MIDI_COMMAND, String.valueOf(command));
 		element.addAttribute(MIDI_KEY, String.valueOf(key));
 

@@ -1,0 +1,4 @@
+<Actions>
+	<Component id="MIDI">de.tobias.playpad.action.mapper.MidiMapperConnect</Component>
+	<Component id="KEYBOARD">de.tobias.playpad.action.mapper.KeyboardMapperConnect</Component>
+</Actions>

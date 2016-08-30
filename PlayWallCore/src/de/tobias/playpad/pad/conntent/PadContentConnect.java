@@ -6,10 +6,11 @@ import de.tobias.playpad.Displayable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
 
+// COMMENT PadContentConnect
 public abstract class PadContentConnect implements Comparable<PadContentConnect>, Displayable {
 
 	public abstract String getType();
@@ -18,7 +19,7 @@ public abstract class PadContentConnect implements Comparable<PadContentConnect>
 
 	public abstract IPadContentView getPadContentPreview(Pad pad, Pane parentNode);
 
-	public SettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
+	public ProfileSettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
 		return null;
 	}
 

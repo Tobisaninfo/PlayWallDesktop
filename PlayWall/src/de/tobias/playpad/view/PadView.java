@@ -1,12 +1,13 @@
 package de.tobias.playpad.view;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.Pauseable;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadView;
 import de.tobias.playpad.viewcontroller.pad.PadViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -181,13 +182,15 @@ public class PadView extends StackPane implements IPadView {
 			PadContent content = pad.getContent();
 			if (content != null) {
 				try {
-					previewContent = PadContentRegistry.getPadContentConnect(content.getType()).getPadContentPreview(pad, preview);
+					PadContentConnect connect = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(content.getType());
+					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
 					node.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title");
 					preview.getChildren().setAll(node);
 					return;
-				} catch (UnkownPadContentException e) {
+				} catch (NoSuchComponentException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

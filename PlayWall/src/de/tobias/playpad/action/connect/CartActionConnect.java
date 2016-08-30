@@ -10,8 +10,8 @@ import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.actions.CartActionsViewController;
 import de.tobias.utils.ui.ContentViewController;
@@ -35,12 +35,12 @@ public class CartActionConnect extends ActionConnect implements ActionDisplayabl
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		ProfileSettings profileSettings = profile.getProfileSettings();
-		int pads = profileSettings.getColumns() * profileSettings.getRows() * profileSettings.getPageCount();
+		for (int x = 0; x < ProjectSettings.MAX_COLUMNS; x++) {
+			for (int y = 0; y < ProjectSettings.MAX_ROWS; y++) {
+				CartAction action = new CartAction(x, y, ControlMode.PLAY_STOP);
+				mapping.addActionIfNotContains(action);
+			}
 
-		for (int i = 0; i < pads; i++) {
-			CartAction action = new CartAction(i, ControlMode.PLAY_STOP);
-			mapping.addActionIfNotContains(action);
 		}
 	}
 

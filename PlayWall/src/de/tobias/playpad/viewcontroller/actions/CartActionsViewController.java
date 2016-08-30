@@ -5,21 +5,18 @@ import java.util.List;
 import org.controlsfx.control.SegmentedButton;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.utils.ui.ContentViewController;
-import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -36,7 +33,6 @@ import javafx.scene.layout.VBox;
 public class CartActionsViewController extends ContentViewController {
 
 	@FXML private VBox buttonVbox;
-	@FXML private HBox pageHbox;
 
 	private ToggleGroup cartsToggle;
 	@FXML private GridPane gridPane;
@@ -51,25 +47,11 @@ public class CartActionsViewController extends ContentViewController {
 		this.mapping = mapping;
 		this.parentController = parentController;
 
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+		ProjectSettings settings = currentProject.getSettings();
 
 		showCartButtons(settings, 0);
 		VBox.setVgrow(gridPane, Priority.ALWAYS);
-
-		SegmentedButton segmentedButton = new SegmentedButton();
-		for (int i = 0; i < settings.getPageCount(); i++) {
-			ToggleButton button = new ToggleButton(Localization.getString(Strings.UI_Window_Main_PageButton, i + 1));
-			button.setOnAction(e ->
-			{
-				int page = Integer.valueOf(((ToggleButton) e.getSource()).getUserData().toString());
-				showCartButtons(Profile.currentProfile().getProfileSettings(), page);
-			});
-			button.setUserData(i);
-			segmentedButton.getButtons().add(button);
-		}
-		segmentedButton.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
-		pageHbox.getChildren().add(segmentedButton);
-		segmentedButton.getButtons().get(0).setSelected(true); // Select First Toggle
 	}
 
 	@Override
@@ -77,7 +59,7 @@ public class CartActionsViewController extends ContentViewController {
 		buttonVbox.minHeightProperty().bind(buttonVbox.heightProperty());
 	}
 
-	private void showCartButtons(ProfileSettings settings, int page) {
+	private void showCartButtons(ProjectSettings settings, int page) {
 		gridPane.getChildren().clear();
 
 		gridPane.getColumnConstraints().clear();
@@ -98,25 +80,26 @@ public class CartActionsViewController extends ContentViewController {
 
 		cartsToggle = new ToggleGroup();
 
-		int startValue = (page * settings.getColumns() * settings.getRows());
+		int index = 0;
 
-		for (int x = 0; x < settings.getColumns(); x++) {
-			for (int y = 0; y < settings.getRows(); y++) {
-				int index = (settings.getColumns() * y + x) + startValue;
-				ToggleButton button = new ToggleButton(String.valueOf(index + 1));
+		for (int y = 0; y < settings.getRows(); y++) {
+			for (int x = 0; x < settings.getColumns(); x++) {
+				ToggleButton button = new ToggleButton(String.valueOf(index++ + 1));
 				button.setMaxWidth(Double.MAX_VALUE);
-				button.setUserData(index);
+				button.setUserData(new int[] { x, y });
 				button.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
 
 				// Show the right cart settings
 				button.selectedProperty().addListener((a, b, c) ->
 				{
 					if (c) {
-						int id = Integer.valueOf(button.getUserData().toString());
+						int[] data = (int[]) button.getUserData();
+						int currentX = data[0];
+						int currentY = data[1];
 
 						List<CartAction> cartActions = mapping.getActions(CartActionConnect.TYPE);
 						for (CartAction action : cartActions) {
-							if (action.getCart() == id) {
+							if (action.getX() == currentX && action.getY() == currentY) {
 								ContentViewController actionViewController = action.getSettingsViewController();
 								cartActionContainer.getChildren().setAll(actionViewController.getParent());
 								cartActionContainer.setVisible(true);

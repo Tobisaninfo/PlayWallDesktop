@@ -8,16 +8,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
-import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+// COMMENT Mapping
 public class Mapping implements Cloneable, ActionDisplayable {
 
 	private String name;
@@ -27,7 +29,6 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	public Mapping(boolean init, Profile profile) {
 		mapping = new HashMap<>();
 		if (init) {
-			initActionType(profile);
 			name = "Default";
 			uuid = UUID.randomUUID();
 		}
@@ -89,7 +90,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 			}
 		}
 		mapping.put(newAction, new ArrayList<>());
-		newAction.setMapping(this);
+		newAction.setMappingRef(this);
 		return true;
 	}
 
@@ -109,8 +110,9 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initActionType(Profile profile) {
-		for (String type : ActionRegistery.getTypes()) {
-			ActionRegistery.getActionConnect(type).initActionType(this, profile);
+		Registry<ActionConnect> actions = PlayPadPlugin.getRegistryCollection().getActions();
+		for (ActionConnect component : actions.getComponents()) {
+			component.initActionType(this, profile);
 		}
 	}
 
@@ -123,8 +125,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initFeedback() {
-		for (String mapperType : MapperRegistry.getTypes()) {
-			MapperConnect mapper = MapperRegistry.getMapperConnect(mapperType);
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperConnect mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).initFeedbackType();
 			}
@@ -149,13 +151,18 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void clearFeedback() {
-		for (String mapperType : MapperRegistry.getTypes()) {
-			MapperConnect mapper = MapperRegistry.getMapperConnect(mapperType);
+		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperConnect mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).clearFeedbackType();
 			}
 		}
+
 		getActions().forEach(action -> action.clearFeedback());
+	}
+
+	public void adjustPadColorToMapper(Project project) {
+		ColorAdjuster.applyColorsToMappers(project);
 	}
 
 	@Override

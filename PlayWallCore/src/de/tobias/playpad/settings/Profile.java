@@ -12,8 +12,10 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.LayoutRegistry;
+import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -24,7 +26,7 @@ public class Profile {
 	private static final String MAPPING_XML = "Mapping.xml";
 	private static final String LAYOUT_XML = "Layout.xml";
 
-	public static final String profileNameEx = "\\w{1}[\\w\\s-_]{0,}";
+	public static final String profileNameEx = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();
 	private static Profile currentProfile;
@@ -34,7 +36,7 @@ public class Profile {
 
 	private ProfileSettings profileSettings;
 	private MappingList mappings;
-	private HashMap<String, GlobalLayout> layouts;
+	private HashMap<String, GlobalDesign> layouts;
 
 	Profile(ProfileReference ref) {
 		this.ref = ref;
@@ -63,21 +65,28 @@ public class Profile {
 		listeners.forEach(listener -> listener.reloadSettings(old, currentProfile));
 	}
 
-	public HashMap<String, GlobalLayout> getLayouts() {
+	public HashMap<String, GlobalDesign> getLayouts() {
 		return layouts;
 	}
 
-	public GlobalLayout getLayout(String type) {
+	public GlobalDesign getLayout(String type) {
 		if (layouts.containsKey(type)) {
 			return layouts.get(type);
 		} else {
-			GlobalLayout layout = LayoutRegistry.getLayout(type).newGlobalLayout();
-			layouts.put(type, layout);
-			return layout;
+			try {
+				DefaultRegistry<DesignConnect> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
+				GlobalDesign layout = registry.getComponent(type).newGlobalDesign();
+				layouts.put(type, layout);
+				return layout;
+			} catch (NoSuchComponentException e) { // -> Throw exception
+				// TODO Error Handling
+				e.printStackTrace();
+			}
 		}
+		return null;
 	}
 
-	public GlobalLayout currentLayout() {
+	public GlobalDesign currentLayout() {
 		return getLayout(profileSettings.getLayoutType());
 	}
 
@@ -102,7 +111,7 @@ public class Profile {
 		if (Files.exists(app.getPath(PathType.CONFIGURATION, ref.getFileName()))) {
 
 			ProfileSettings profileSettings = ProfileSettings.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), PROFILE_SETTINGS_XML));
-			HashMap<String, GlobalLayout> layouts = GlobalLayout
+			HashMap<String, GlobalDesign> layouts = GlobalDesign
 					.loadGlobalLayout(app.getPath(PathType.CONFIGURATION, ref.getFileName(), LAYOUT_XML));
 
 			profile.profileSettings = profileSettings;
@@ -146,7 +155,7 @@ public class Profile {
 
 		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
 		mappings.save(getProfilePath(MAPPING_XML));
-		GlobalLayout.saveGlobal(layouts, getProfilePath(LAYOUT_XML));
+		GlobalDesign.saveGlobal(layouts, getProfilePath(LAYOUT_XML));
 	}
 
 	private Path getProfilePath(String fileName) {

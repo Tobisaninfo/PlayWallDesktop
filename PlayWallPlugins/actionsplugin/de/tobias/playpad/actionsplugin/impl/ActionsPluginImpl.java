@@ -1,14 +1,16 @@
 package de.tobias.playpad.actionsplugin.impl;
 
+import java.io.IOException;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.dom4j.DocumentException;
+
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionRegistery;
+import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.actionsplugin.ActionsPlugin;
-import de.tobias.playpad.actionsplugin.muteaction.MuteActionConnect;
-import de.tobias.playpad.actionsplugin.stopaction.StopActionConnect;
 import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.update.UpdateRegistery;
@@ -63,20 +65,24 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 				muteHUD.setMinHeight(100);
 			});
 
+			ChangeListener<Boolean> listener = (a, b, c) ->
+			{
+				if (c && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
+					volume = Profile.currentProfile().getProfileSettings().getVolume();
+				} else {
+					volume = -1;
+				}
+			};
+
 			PlayPadPlugin.getImplementation().addMainViewListener(new WindowListener<IMainViewController>() {
 
 				@Override
 				public void onInit(IMainViewController t) {
-					t.getVolumeSlider().valueChangingProperty().addListener(new ChangeListener<Boolean>() {
-
-						@Override
-						public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-							if (newValue && volume == -1 && Profile.currentProfile().getProfileSettings().getVolume() != 0) {
-								volume = Profile.currentProfile().getProfileSettings().getVolume();
-							} else {
-								volume = -1;
-							}
-						}
+					t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+					{
+						if (oldToolbar != null)
+							oldToolbar.getVolumeSlider().valueChangingProperty().removeListener(listener);
+						newToolbar.getVolumeSlider().valueChangingProperty().addListener(listener);
 					});
 				}
 			});
@@ -97,9 +103,12 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 		UpdateRegistery.registerUpdateable(new ActionsPluginUpdater());
 		Profile.registerListener(this);
 
-		ActionRegistery.registerActionConnect(new MuteActionConnect());
-		ActionRegistery.registerActionConnect(new StopActionConnect());
-
+		try {
+			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
+			padContents.loadComponentsFromFile("de/tobias/playpad/actionsplugin/assets/Actions.xml", getClass().getClassLoader());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			e.printStackTrace();
+		}
 		muteProperty.addListener(this);
 
 		System.out.println("Enable Action Plugin");

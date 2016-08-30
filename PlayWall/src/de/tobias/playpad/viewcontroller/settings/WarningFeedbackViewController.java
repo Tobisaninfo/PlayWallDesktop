@@ -48,14 +48,14 @@ public class WarningFeedbackViewController extends ContentViewController {
 	}
 
 	public void setPadWarning(Pad pad) {
-		if (pad.getWarning() != null) {
-			warningFeedbackTimeSlider.setValue(pad.getWarning().getTime().toSeconds());
+		if (pad.getPadSettings().getWarning() != null) {
+			warningFeedbackTimeSlider.setValue(pad.getPadSettings().getWarning().getTime().toSeconds());
 			setTimeLabel();
 		}
 
 		warningFeedbackTimeSlider.valueProperty().addListener((a, b, c) ->
 		{
-			pad.getWarning().setTime(Duration.seconds(c.doubleValue()));
+			pad.getPadSettings().getWarning().setTime(Duration.seconds(c.doubleValue()));
 		});
 	}
 }

@@ -13,11 +13,9 @@ import javafx.stage.Window;
 public class UpdaterDialog extends Dialog<Void> {
 
 	public UpdaterDialog(Window owner) {
-		setHeaderText(Localization.getString(Strings.UI_Dialog_DragAndDrop_Header));
 		setGraphic(new ImageView("org/controlsfx/dialog/dialog-information.png"));
 
-		Label textLabel = new Label(
-				"Die Aktualisierung wird vorbereitet. Bitte schließen Sie nicht das Programm. \nDieser Vorgang kann wenige Minuten dauern.");
+		Label textLabel = new Label(Localization.getString(Strings.UI_Dialog_Update_Info));
 		textLabel.setWrapText(true);
 		textLabel.setMaxWidth(450);
 		getDialogPane().setContent(textLabel);

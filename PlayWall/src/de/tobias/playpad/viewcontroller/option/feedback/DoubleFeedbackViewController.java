@@ -7,8 +7,8 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.DoubleSimpleFeedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
+import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.view.ColorView;
@@ -36,9 +36,9 @@ public class DoubleFeedbackViewController extends ContentViewController {
 
 	private PopOver colorChooser;
 
-	private DoubleSimpleFeedback feedback;
+	private DoubleMidiFeedback feedback;
 
-	public DoubleFeedbackViewController(DoubleSimpleFeedback feedback, DisplayableFeedbackColor[] colors) {
+	public DoubleFeedbackViewController(DoubleMidiFeedback feedback, DisplayableFeedbackColor[] colors) {
 		super("doubleFeedback", "de/tobias/playpad/assets/view/option/feedback/", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
@@ -89,11 +89,11 @@ public class DoubleFeedbackViewController extends ContentViewController {
 					colorChooser.hide();
 					if (item instanceof DisplayableFeedbackColor) {
 						if (event.getSource() == colorChooseDefaultButton) {
-							feedback.setFeedbackDefaultValue(((DisplayableFeedbackColor) item).midiVelocity());
+							feedback.setFeedbackDefaultValue(((DisplayableFeedbackColor) item).mapperFeedbackValue());
 							colorPreviewDefault.setFill(item.getPaint());
 							setColorChooseButtonColor(item.getPaint(), colorChooseDefaultButton);
 						} else if (event.getSource() == colorChooseEventButton) {
-							feedback.setFeedbackEventValue(((DisplayableFeedbackColor) item).midiVelocity());
+							feedback.setFeedbackEventValue(((DisplayableFeedbackColor) item).mapperFeedbackValue());
 							colorPreviewEvent.setFill(item.getPaint());
 							setColorChooseButtonColor(item.getPaint(), colorChooseEventButton);
 						}

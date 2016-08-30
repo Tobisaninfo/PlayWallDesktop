@@ -1,12 +1,25 @@
 package de.tobias.playpad.pad.conntent;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.util.ZipFile;
 
+/**
+ * Verarbeitet den Inhalt eines Pads. Die Einstellungen und der Status ist in Pad ausgelagert.
+ * 
+ * @author tobias
+ *
+ * @version 5.1.0
+ * @see Pad
+ */
 public abstract class PadContent {
 
 	// Refrence
@@ -16,9 +29,11 @@ public abstract class PadContent {
 		this.pad = pad;
 	}
 
-	public abstract String getType();
+	public Pad getPad() {
+		return pad;
+	}
 
-	public abstract void setMasterVolume(double masterVolume);
+	public abstract String getType();
 
 	public abstract void play();
 
@@ -26,15 +41,29 @@ public abstract class PadContent {
 
 	public abstract boolean isPadLoaded();
 
-	public Pad getPad() {
-		return pad;
-	}
+	/**
+	 * Verarbeitet eien neuen Path für das Pad.
+	 * 
+	 * @param path
+	 *            path
+	 * @throws NoSuchComponentException
+	 *             Wird geworfen, wenn ein Pad eine Componenten nicht laden kann. Beispiel bei Audio das richtige Soundsystem
+	 * @throws IOException
+	 *             IO Fehler
+	 */
+	public abstract void handlePath(Path path) throws NoSuchComponentException, IOException;
 
-	public abstract void handlePath(Path path);
-
+	/**
+	 * Lädt die Medien, sodass sie auf abruf verfügbar sind.
+	 */
 	public abstract void loadMedia();
 
+	/**
+	 * Entfernt die Medien aus dem Speicher (lässt diese aber im Pad).
+	 */
 	public abstract void unloadMedia();
+
+	public abstract void setMasterVolume(double masterVolume);
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -59,5 +88,31 @@ public abstract class PadContent {
 	public abstract void importMedia(Path mediaFolder, ZipFile zipfs, Element element);
 
 	public abstract void exportMedia(ZipFile zip, Element element);
+
+	/**
+	 * Gibt den richtigen Pfad einer Datei zurück, basierend auf den Einstellungen.
+	 * 
+	 * @param orrginal
+	 *            orginal path
+	 * @return new path
+	 * @throws IOException
+	 *             IO Fehler
+	 * @since 5.1.0
+	 */
+	public Path getRealPath(Path orginal) throws IOException {
+		ProjectSettings settings = getPad().getProject().getSettings();
+		if (settings.isUseMediaPath()) {
+			Path mediaFolder = settings.getMediaPath();
+			Path newPath = mediaFolder.resolve(orginal.getFileName());
+
+			if (Files.notExists(mediaFolder)) {
+				Files.createDirectories(mediaFolder);
+			}
+
+			Files.copy(orginal, newPath, StandardCopyOption.REPLACE_EXISTING);
+			return newPath;
+		}
+		return orginal;
+	}
 
 }

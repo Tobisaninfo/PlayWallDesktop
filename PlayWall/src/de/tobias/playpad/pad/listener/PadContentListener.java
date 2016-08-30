@@ -1,18 +1,18 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
+import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadContentListener implements ChangeListener<PadContent> {
 
 	private Pad pad;
-	private PadViewController controller;
+	private IPadViewController controller;
 
-	public PadContentListener(PadViewController controller) {
+	public PadContentListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 
@@ -23,8 +23,8 @@ public class PadContentListener implements ChangeListener<PadContent> {
 	@Override
 	public void changed(ObservableValue<? extends PadContent> observable, PadContent oldValue, PadContent newValue) {
 		// wenn Content change, update preview & buttons
-		controller.getParent().setPreviewContent(pad);
-		controller.getParent().addDefaultButton(pad);
+		controller.getView().setContentView(pad);
+		controller.getView().addDefaultElement(pad);
 
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
@@ -38,7 +38,7 @@ public class PadContentListener implements ChangeListener<PadContent> {
 
 		// set new content listener / bindings
 		if (newValue instanceof Durationable) {
-			controller.getParent().showPlaybar(true);
+			controller.getView().setPlaybarVisible(true);
 
 			Durationable durationable = (Durationable) newValue;
 			durationable.durationProperty().addListener(controller.getPadDurationListener());
@@ -47,7 +47,7 @@ public class PadContentListener implements ChangeListener<PadContent> {
 			// Init Duration
 			controller.getPadDurationListener().changed(null, null, durationable.getDuration());
 		} else {
-			controller.getParent().showPlaybar(false);
+			controller.getView().setPlaybarVisible(false);
 		}
 	}
 }

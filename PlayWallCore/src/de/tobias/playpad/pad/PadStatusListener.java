@@ -1,8 +1,10 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.conntent.Fadeable;
-import de.tobias.playpad.pad.conntent.Pauseable;
+import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
+import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -10,20 +12,37 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 
 	private Pad pad;
 
+	// Utils für Single Pad Playing
+	private static Pad currentPlayingPad; // Nur wenn ProfileSettings.isMultiplePlayer == false
+
 	public PadStatusListener(Pad pad) {
 		this.pad = pad;
 	}
 
 	@Override
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
+		PadSettings padSettings = pad.getPadSettings();
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+
 		if (newValue == PadStatus.PLAY) {
 			if (pad.getContent() != null) {
 				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onPlay(pad));
+				pad.getProject().increaseActivePlayers();
+
+				// bei Single Pad Playing wird das alte Pad beendet.
+				if (!profileSettings.isMultiplePlayer()) {
+					if (currentPlayingPad != null && currentPlayingPad != pad) {
+						if (currentPlayingPad.getStatus() == PadStatus.PLAY || currentPlayingPad.getStatus() == PadStatus.PAUSE) {
+							currentPlayingPad.setStatus(PadStatus.STOP);
+						}
+					}
+					currentPlayingPad = pad;
+				}
 
 				if (pad.getContent() instanceof Fadeable) {
-					if (oldValue == PadStatus.PAUSE && pad.getFade().isFadeInPause()) {
+					if (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause()) {
 						((Fadeable) pad.getContent()).fadeIn();
-					} else if (pad.getFade().isFadeInStart()) {
+					} else if (padSettings.getFade().isFadeInStart()) {
 						((Fadeable) pad.getContent()).fadeIn();
 					}
 				}
@@ -31,7 +50,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 			}
 		} else if (newValue == PadStatus.PAUSE) {
 			if (pad.getContent() instanceof Pauseable) {
-				if (pad.getContent() instanceof Fadeable && pad.getFade().isFadeOutPause()) {
+				if (pad.getContent() instanceof Fadeable && padSettings.getFade().isFadeOutPause()) {
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						((Pauseable) pad.getContent()).pause();
@@ -43,9 +62,10 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 		} else if (newValue == PadStatus.STOP) {
 			if (pad.getContent() != null) {
 				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onStop(pad));
+				pad.getProject().dereaseActivePlayers();
 
-				if (pad.getContent() instanceof Fadeable && !pad.isEof() && pad.getFade().isFadeOutStop()) { // Fade nur wenn pad nicht am
-																												// ende ist
+				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad
+																														// nicht am ende ist
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						pad.getContent().stop();

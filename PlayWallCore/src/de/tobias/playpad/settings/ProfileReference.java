@@ -103,7 +103,8 @@ public class ProfileReference implements Displayable {
 	 * Sucht eine Referenz zu einer UUID raus.
 	 * 
 	 * @param profile
-	 * @return
+	 *            UUID des Profiles
+	 * @return ProfileReferenz für die UUID
 	 */
 	public static ProfileReference getReference(UUID profile) {
 		for (ProfileReference ref : profiles) {
@@ -128,8 +129,9 @@ public class ProfileReference implements Displayable {
 	 * 
 	 * @param name
 	 *            Profile Name
-	 * @return
+	 * @return Referenz auf das neue Profile.
 	 * @throws UnsupportedEncodingException
+	 *             Fehler beim Speichern des XML
 	 * @throws IOException
 	 *             IO Fehler
 	 */
@@ -283,7 +285,8 @@ public class ProfileReference implements Displayable {
 	 * Gibt einen Pfad für einen Dateinamen in diesem Profile zurück.
 	 * 
 	 * @param name
-	 * @return
+	 *            Name der Datei
+	 * @return Path für die Datei
 	 */
 	public Path getCustomFilePath(String name) {
 		return ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, getFileName(), name);

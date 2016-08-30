@@ -20,7 +20,7 @@ public enum LaunchPadSColor implements DisplayableFeedbackColor {
 	}
 
 	@Override
-	public int midiVelocity() {
+	public int mapperFeedbackValue() {
 		return midi;
 	}
 
@@ -31,7 +31,7 @@ public enum LaunchPadSColor implements DisplayableFeedbackColor {
 
 	public static DisplayableFeedbackColor valueOf(int id) {
 		for (LaunchPadSColor color : values()) {
-			if (color.midiVelocity() == id) {
+			if (color.mapperFeedbackValue() == id) {
 				return color;
 			}
 		}

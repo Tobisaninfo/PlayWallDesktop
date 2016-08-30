@@ -18,7 +18,7 @@ public class Fade {
 		fadeIn = Duration.ZERO;
 		fadeOut = Duration.ZERO;
 
-		fadeInStart = true;
+		fadeInStart = false;
 		fadeInPause = true;
 		fadeOutPause = true;
 		fadeOutStop = true;

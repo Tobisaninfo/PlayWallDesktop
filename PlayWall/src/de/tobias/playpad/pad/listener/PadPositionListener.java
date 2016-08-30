@@ -1,26 +1,27 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.Durationable;
-import de.tobias.playpad.pad.conntent.Fadeable;
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
-public class PadPositionListener implements ChangeListener<Duration>, Runnable {
+public class PadPositionListener implements Runnable, IPadPositionListener {
 
 	private Pad pad;
-	private PadViewController controller;
+	private IPadViewController controller;
 
-	public PadPositionListener(PadViewController controller) {
+	public PadPositionListener(IPadViewController controller) {
 		this.controller = controller;
 	}
 
+	@Override
 	public void setPad(Pad pad) {
 		this.pad = pad;
 	}
@@ -56,16 +57,16 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 
 	private void updateDuration(Duration newValue, Durationable durationable, Duration totalDuration) {
 		double value = newValue.toMillis() / totalDuration.toMillis();
-		controller.getParent().getPlayBar().setProgress(value);
+		controller.getView().setPlayBarProgress(value);
 
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();
 
 		// Warning nur wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig Reseted
 		// wird
-		if (!pad.isLoop() && pad.getStatus() == PadStatus.PLAY) {
+		if (!pad.getPadSettings().isLoop() && pad.getStatus() == PadStatus.PLAY) {
 			// Warning
-			Warning warning = pad.getWarning();
+			Warning warning = pad.getPadSettings().getWarning();
 			Duration rest = durationable.getDuration().subtract(newValue);
 			double seconds = rest.toSeconds();
 
@@ -76,6 +77,7 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		}
 	}
 
+	@Override
 	public void setSend(boolean send) {
 		this.send = send;
 	}
@@ -85,10 +87,11 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 	 */
 	@Override
 	public void run() {
-		Warning warning = pad.getWarning();
+		PadSettings padSettings = pad.getPadSettings();
+		Warning warning = padSettings.getWarning();
 
-		if (pad.isCustomLayout()) {
-			pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+		if (padSettings.isCustomLayout()) {
+			padSettings.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}
@@ -102,17 +105,20 @@ public class PadPositionListener implements ChangeListener<Duration>, Runnable {
 		warningThread.start();
 	}
 
+	@Override
 	public void stopWaning() {
 		if (warningThread != null) {
 			warningThread.interrupt();
 			warningThread = null;
 		}
 
-		if (pad.isCustomLayout()) {
-			pad.getLayout().stopWarning(controller);
+		PadSettings padSettings = pad.getPadSettings();
+
+		if (padSettings.isCustomLayout()) {
+			padSettings.getLayout().stopWarning(controller);
 		} else {
 			Profile.currentProfile().currentLayout().stopWarning(controller);
 		}
-		controller.getParent().setStyle("");
+		controller.getView().setStyle("");
 	}
 }

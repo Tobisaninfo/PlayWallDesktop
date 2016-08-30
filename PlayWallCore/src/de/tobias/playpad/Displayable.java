@@ -14,6 +14,8 @@ public interface Displayable {
 
 	/**
 	 * Optional Method for a displayable cell
+	 * 
+	 * @return Einstellungen für dieses Objetkt.
 	 */
 	public default ContentViewController getSettingsViewController() {
 		return null;

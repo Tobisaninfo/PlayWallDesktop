@@ -1,36 +1,20 @@
 package de.tobias.playpad.audio;
 
-import java.util.HashMap;
-
+import de.tobias.playpad.registry.DefaultComponentRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 
-public class AudioRegistry {
+public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerConnect> {
 
-	private static String defaultAudioInterface;
-	private static HashMap<String, AudioHandlerConnect> audioSystems = new HashMap<>();
-
-	public static void register(AudioHandlerConnect type, String name) {
-		audioSystems.put(name, type);
+	public AudioRegistry() {
+		super("Audio Handler");
 	}
 
-	public static HashMap<String, AudioHandlerConnect> getAudioSystems() {
-		return audioSystems;
-	}
-
-	public static AudioHandlerConnect geAudioType() {
-		String impl = Profile.currentProfile().getProfileSettings().getAudioClass();
-		if (audioSystems.containsKey(impl)) {
-			return audioSystems.get(impl);			
-		} else {
-			return audioSystems.get(defaultAudioInterface);
+	public AudioHandlerConnect getCurrentAudioHandler() {
+		try {
+			return getComponent(Profile.currentProfile().getProfileSettings().getAudioClass());
+		} catch (NoSuchComponentException e) {
+			return getDefault();
 		}
-	}
-
-	public static String getDefaultAudioInterface() {
-		return defaultAudioInterface;
-	}
-
-	public static void setDefaultAudioInterface(String defaultAudioInterface) {
-		AudioRegistry.defaultAudioInterface = defaultAudioInterface;
 	}
 }

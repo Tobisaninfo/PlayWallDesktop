@@ -1,6 +1,5 @@
 package de.tobias.playpad.viewcontroller.main;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,33 +8,32 @@ import java.util.Optional;
 import javax.sound.midi.MidiUnavailableException;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.action.feedback.ColorAssociator;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperFeedbackable;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
-import de.tobias.playpad.layout.CartLayout;
-import de.tobias.playpad.layout.GlobalLayout;
-import de.tobias.playpad.layout.LayoutColorAssociator;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.registry.DefaultRegistry;
+import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.view.PadView;
-import de.tobias.playpad.viewcontroller.IPadView;
+import de.tobias.playpad.settings.keys.KeyCollection;
+import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
+import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.playpad.viewcontroller.pad.PadDragListener;
-import de.tobias.playpad.viewcontroller.pad.PadViewController;
 import de.tobias.utils.ui.BasicControllerSettings;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -46,50 +44,44 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-// TODO Extract Color Adjust methodes
 public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
 
-	private static final String CURRENT_PAGE_BUTTON = "current-page-button";
+	private static final int FIRST_PAGE = 0;
 
-	// UI
-	@FXML protected MainMenuBarController menuBarController;
-	@FXML protected MainToolbarController toolbarController;
+	@FXML private VBox headerBox;
 	@FXML private GridPane padGridPane;
-
-	@FXML private Label liveLabel;
 
 	@FXML private AnchorPane gridContainer;
 	private NotificationPane notificationPane;
 
-	private ErrorSummaryDialog errorSummaryDialog;
+	private List<IPadView> padViews;
 
-	// Model
-	private Project project;
-	protected List<IPadViewController> padViewList = new ArrayList<>();
+	private MenuToolbarViewController menuToolbarViewController;
 
-	// Current View Items
-	private int pageNumber;
+	private Project openProject;
+	private int currentPageShowing = -1;
 
 	// Mapper
 	private Midi midi;
@@ -99,17 +91,44 @@ public class MainViewController extends ViewController implements IMainViewContr
 	// Style
 	private Color gridColor;
 
-	public MainViewController(Project project, List<WindowListener<IMainViewController>> listener) {
+	// Layout
+	private MainLayoutConnect mainLayout;
+	private List<MainLayoutHandler> layoutActions;
+
+	// Listener
+	private VolumeChangeListener volumeChangeListener;
+	private LockedListener lockedListener;
+	private LayoutChangedListener layoutChangedListener;
+
+	public MainViewController(List<WindowListener<IMainViewController>> listener) {
 		super("mainView", "de/tobias/playpad/assets/view/main/", null, PlayPadMain.getUiResourceBundle());
+		padViews = new ArrayList<>();
 
-		// Include FXML Setup
-		toolbarController.setMainViewController(this);
-		menuBarController.setMainViewController(this);
+		// Init ErrorSummaryViewController
+		new ErrorSummaryDialog(getStage()); // Instance in ErrorSummaryViewController.getInstance()
 
-		padGridPane.setGridLinesVisible(true);
+		// Layout Init
+		layoutActions = new ArrayList<>();
 
-		// Settings Setup
+		// Init Listener
+		volumeChangeListener = new VolumeChangeListener(this);
+		lockedListener = new LockedListener(this);
+		layoutChangedListener = new LayoutChangedListener();
+		initMapper(openProject);
+
+		// Default Layout
+		setMainLayout(new DesktopMainLayoutConnect());
+
 		Profile.registerListener(this);
+		reloadSettings(null, Profile.currentProfile());
+
+		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
+		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
+		performLayoutDependendAction((oldToolbar, newToolbar) ->
+		{
+			if (menuToolbarViewController != null)
+				menuToolbarViewController.initPageButtons();
+		});
 
 		/*
 		 * Gridline Color
@@ -132,6 +151,18 @@ public class MainViewController extends ViewController implements IMainViewContr
 			e.printStackTrace();
 		}
 
+		// Plugin Listener
+		listener.forEach(l ->
+		{
+			try {
+				l.onInit(this);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	private void initMapper(Project project) {
 		/*
 		 * Mapper Setup & Listener
 		 */
@@ -140,63 +171,72 @@ public class MainViewController extends ViewController implements IMainViewContr
 		this.midi.setListener(midiHandler);
 		this.keyboardHandler = new KeyboardHandler(project, this);
 
-		// Setup
-		errorSummaryDialog = new ErrorSummaryDialog(getStage());
-		getStage().toFront();
-
-		// setup project
-		setProject(project);
-
-		// Setup Settings
-		reloadSettings(null, Profile.currentProfile());
-
-		// Listener
-		listener.forEach(l -> l.onInit(this));
 	}
 
 	@Override
 	public void init() {
 		padGridPane.getStyleClass().add("pad-grid");
 
-		menuBarController.getExtensionMenu().setVisible(false);
-
-		liveLabel.setVisible(false);
-		liveLabel.getStyleClass().add("live-label");
-
 		notificationPane = new NotificationPane(padGridPane);
 		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
 
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
-
-		getStage().fullScreenProperty().addListener((a, b, c) ->
-		{
-			menuBarController.getFullScreenMenuItem().setSelected(c);
-		});
-
-		// Lautstärke Veränderung
-		toolbarController.getVolumeSlider().valueProperty().addListener((a, b, c) ->
-		{
-			setPadVolume(c.doubleValue());
-		});
 	}
 
-	private void setPadVolume(double volume) {
-		for (Pad pad : project.getPads().values()) {
-			if (pad != null)
-				pad.setMasterVolume(volume);
+	// main layout
+	public MainLayoutConnect getMainLayout() {
+		return mainLayout;
+	}
+
+	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
+		removePadsFromView();
+		removePadViews();
+
+		this.mainLayout = mainLayoutConnect;
+		initMainLayout();
+	}
+
+	private void initMainLayout() {
+		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+
+		// Entfernt Volume listener
+		if (menuToolbarViewController != null) {
+			menuToolbarViewController.deinit();
+
+			menuToolbarViewController.getVolumeSlider().valueProperty().unbindBidirectional(settings.volumeProperty());
+			menuToolbarViewController.getVolumeSlider().valueProperty().removeListener(volumeChangeListener);
 		}
+
+		// Erstellt Neue Toolbar
+		headerBox.getChildren().clear();
+		MenuToolbarViewController newMenuToolbarViewController = mainLayout.createMenuToolbar(this);
+		headerBox.getChildren().add(newMenuToolbarViewController.getParent());
+
+		// Führt alle Listener für diesen neuen Controller aus, damit Buttons und co wieder erstellt werden können
+		layoutChangedListener.handle(layoutActions, this.menuToolbarViewController, newMenuToolbarViewController);
+		this.menuToolbarViewController = newMenuToolbarViewController;
+
+		menuToolbarViewController.setOpenProject(openProject);
+		// Neue Volume listener
+		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
+		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
+
+		// Keyboard Shortcuts
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
+
+		// Update Locked Listener
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+		lockedListener.changed(profileSettings.lockedProperty(), !profileSettings.isLocked(), profileSettings.isLocked());
+
+		// Zeigt aktuelle Daten an
+		createPadViews();
+		showPage(currentPageShowing);
+		loadUserCss();
 	}
 
-	void setTitle() {
-		if (project != null && Profile.currentProfile() != null) {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, project.getRef().getName(),
-					Profile.currentProfile().getRef().getName()));
-		} else {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));
-		}
-	}
-
+	// Stage Handling
 	@Override
 	public void initStage(Stage stage) {
 		stage.fullScreenProperty().addListener((a, b, c) ->
@@ -213,6 +253,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	protected void loadSettings(BasicControllerSettings settings) {
+		// Lädt die vorherigen Screen Positionen des Fenster
 		List<Screen> screens = Screen.getScreensForRectangle(settings.getUserInfoAsDouble("x"), settings.getUserInfoAsDouble("y"),
 				settings.width, settings.height);
 		if (!screens.isEmpty()) {
@@ -226,218 +267,24 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	@Override
 	protected void save(BasicControllerSettings settings) {
+		// Speichert die aktuelle Position des Fensters
 		settings.addUserInfo("x", getStage().getX());
 		settings.addUserInfo("y", getStage().getY());
 		settings.width = getStage().getWidth();
 		settings.height = getStage().getHeight();
 	}
 
-	public void setProject(Project project) {
-		if (this.project != null) {
-			for (IPadViewController controller : padViewList) {
-				controller.unconnectPad();
-			}
-			// Speichert das alte Projekt, bevor ein neues geladen wird
-			try {
-				this.project.save();
-			} catch (IOException e) {
-				e.printStackTrace();
-				showError(Localization.getString(Strings.Error_Project_Save, e.getLocalizedMessage()));
-			}
-		}
-		this.project = project;
-
-		midiHandler.setProject(project);
-		keyboardHandler.setProject(project);
-		PadDragListener.setProject(project);
-
-		errorSummaryDialog.setProject(project);
-		menuBarController.createRecentDocumentMenuItems();
-		setTitle();
-	}
-
-	// GUI Helping Methoden
-	public void loadUserCss() {
-		Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), project);
-		applyColorsToMappers();
-	}
-
-	public void applyColorsToMappers() {
-		// Apply Layout to Mapper
-		List<CartAction> actions = Profile.currentProfile().getMappings().getActiveMapping().getActions(CartActionConnect.TYPE);
-		for (CartAction cartAction : actions) {
-			if (cartAction.isAutoFeedbackColors()) {
-				for (Mapper mapper : cartAction.getMappers()) {
-					if (mapper instanceof MapperFeedbackable) {
-						mapColorForMapper(cartAction, mapper);
-					}
-				}
-			}
-		}
-	}
-
-	private void mapColorForMapper(CartAction cartAction, Mapper mapper) {
-		MapperFeedbackable feedbackable = (MapperFeedbackable) mapper;
-		if (feedbackable.supportFeedback() && mapper instanceof ColorAssociator) {
-			ColorAssociator colorAssociator = (ColorAssociator) mapper;
-
-			Pad pad = project.getPad(cartAction.getCart());
-			Color layoutStdColor = null;
-			Color layoutEvColor = null;
-
-			if (pad.isCustomLayout()) {
-				CartLayout layout = pad.getLayout();
-				if (layout instanceof LayoutColorAssociator) {
-					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
-					layoutStdColor = associator.getAssociatedStandardColor();
-					layoutEvColor = associator.getAssociatedEventColor();
-				}
-			} else {
-				GlobalLayout layout = Profile.currentProfile().currentLayout();
-				if (layout instanceof LayoutColorAssociator) {
-					LayoutColorAssociator associator = (LayoutColorAssociator) layout;
-					layoutStdColor = associator.getAssociatedStandardColor();
-					layoutEvColor = associator.getAssociatedEventColor();
-				}
-			}
-
-			if (layoutStdColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
-				colorAssociator.setColor(FeedbackMessage.STANDARD, associator.midiVelocity());
-			}
-
-			if (layoutEvColor != null) {
-				DisplayableFeedbackColor associator = Mapper.searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
-				colorAssociator.setColor(FeedbackMessage.EVENT, associator.midiVelocity());
-			}
-		}
-	}
-
-	/**
-	 * Erstellt Constraints von GridView, Erstellt PadViews, Lädt CSS, Set Min Size vom Fendster
-	 */
-	public void createPadViews() {
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-
-		// Table
-		padGridPane.getColumnConstraints().clear();
-		double xPercentage = 1.0 / (double) profileSettings.getColumns();
-		for (int i = 0; i < profileSettings.getColumns(); i++) {
-			ColumnConstraints c = new ColumnConstraints();
-			c.setPercentWidth(xPercentage * 100);
-			padGridPane.getColumnConstraints().add(c);
-		}
-
-		padGridPane.getRowConstraints().clear();
-		double yPercentage = 1.0 / (double) profileSettings.getRows();
-		for (int i = 0; i < profileSettings.getRows(); i++) {
-			RowConstraints c = new RowConstraints();
-			c.setPercentHeight(yPercentage * 100);
-			padGridPane.getRowConstraints().add(c);
-		}
-
-		// Pads - Remove Old PadViews
-		padGridPane.getChildren().removeIf(t ->
-		{
-			if (t instanceof PadView) {
-				((PadView) t).getController().unconnectPad();
-				return true;
-			} else {
-				return false;
-			}
-		});
-		padViewList.clear();
-
-		// Neue PadViews
-		for (int y = 0; y < profileSettings.getRows(); y++) {
-			for (int x = 0; x < profileSettings.getColumns(); x++) {
-				IPadViewController controller = new PadViewController();
-				IPadView node = controller.getParent();
-				if (node instanceof PadView) {
-					padGridPane.add((Node) node, x, y);
-					padViewList.add(controller);
-				}
-			}
-		}
-
-		// Min Size of window
-		GlobalLayout currentLayout = Profile.currentProfile().currentLayout();
-		double minWidth = currentLayout.getMinWidth(profileSettings.getColumns());
-		double minHeight = currentLayout.getMinHeight(profileSettings.getRows());
-
-		getStage().setMinWidth(minWidth);
-		if (OS.getType() == OSType.MacOSX) {
-			getStage().setMinHeight(minHeight + 100);
-		} else {
-			getStage().setMinHeight(minHeight + 150);
-		}
-	}
-
-	/**
-	 * Setzt die Pads in die Views und Cleared die alten Views. Lädt für die neuen Pads das Layout neu.
-	 * 
-	 * @param newPage
-	 */
-	public synchronized void showPage(int newPage) {
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-
-		if (!(newPage >= 0 && newPage < profileSettings.getPageCount())) {
-			return;
-		}
-
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-		if (settings.isLiveMode() && settings.isLiveModePage() && getProject().getPlayedPlayers() > 0) {
-			showLiveInfo();
-			return;
-		}
-
-		// Button in Toolbar
-		Button oldButton = (Button) toolbarController.getPageHBox().getChildren().get(pageNumber); // Der Aktuell andersfarbende Button
-		oldButton.getStyleClass().remove(CURRENT_PAGE_BUTTON);
-
-		this.pageNumber = newPage;
-
-		// alte Pads weg
-		padViewList.forEach(i -> i.unconnectPad());
-
-		// Neue Pads anzeigen
-		int index = pageNumber * profileSettings.getRows() * profileSettings.getColumns();
-		for (int i = 0; i < profileSettings.getRows() * profileSettings.getColumns(); i++) {
-			if (padViewList.size() > i) {
-				IPadViewController view = padViewList.get(i);
-				view.setPad(project.getPad(index));
-			}
-			index++;
-		}
-
-		// Button in Toolbar anders färben
-		Button newButton = (Button) toolbarController.getPageHBox().getChildren().get(pageNumber);
-		newButton.getStyleClass().add(CURRENT_PAGE_BUTTON);
-
-		// Handle Mapper
-		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().getMappings().getActiveMapping().showFeedback(project, this);
-		}
-
-		// GUI Styling
-		loadUserCss();
-	}
-
-	public Slider getVolumeSlider() {
-		return toolbarController.getVolumeSlider();
-	}
-
 	@Override
 	public boolean closeRequest() {
-		if (errorSummaryDialog != null)
-			errorSummaryDialog.getStage().close();
+		ErrorSummaryDialog.getInstance().getStage().close();
 
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
 			// wenn ein Pad noch im Status Play ist
-			if (project.getPlayedPlayers() > 0 && profilSettings.isLiveMode()) {
+			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
 
@@ -452,40 +299,21 @@ public class MainViewController extends ViewController implements IMainViewContr
 						return false;
 			}
 
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setContentText(Localization.getString(Strings.UI_Window_Main_SaveRequest));
-			alert.getButtonTypes().setAll(ButtonType.CANCEL, ButtonType.NO, ButtonType.YES);
-
-			Button yesButton = (Button) alert.getDialogPane().lookupButton(ButtonType.YES);
-			yesButton.defaultButtonProperty().bind(yesButton.focusedProperty());
-
-			Button noButton = (Button) alert.getDialogPane().lookupButton(ButtonType.NO);
-			noButton.defaultButtonProperty().bind(noButton.focusedProperty());
-
-			Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
-			cancelButton.defaultButtonProperty().bind(cancelButton.focusedProperty());
-
-			alert.initOwner(getStage());
-			alert.initModality(Modality.WINDOW_MODAL);
-			Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-			PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
-
-			Optional<ButtonType> result = alert.showAndWait();
-			if (result.isPresent()) {
-				ButtonType buttonType = result.get();
-				if (buttonType == ButtonType.YES) {
-					// Projekt Speichern
-					try {
-						if (project.getRef() != null) {
-							project.save();
-							System.out.println("Saved Project: " + project);
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+			// Save Dialog
+			if (globalSettings.isIgnoreSaveDialog()) {
+				saveProject();
+			} else {
+				SaveDialog alert = new SaveDialog(getStage());
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent()) {
+					globalSettings.setIgnoreSaveDialog(alert.isSelected());
+					ButtonType buttonType = result.get();
+					if (buttonType == ButtonType.YES) {
+						// Projekt Speichern
+						saveProject();
+					} else if (buttonType == ButtonType.CANCEL) {
+						return false;
 					}
-				} else if (buttonType == ButtonType.CANCEL) {
-					return false;
 				}
 			}
 
@@ -512,44 +340,278 @@ public class MainViewController extends ViewController implements IMainViewContr
 			}
 		}
 
-		if (
-
-		getStage().isIconified()) {
+		if (getStage().isIconified()) {
 			getStage().setIconified(false);
 		}
 
 		// Verbindung von Pad und PadView wird getrennt. Zudem wird bei PLAY
 		// oder PAUSE auf STOP gesetzt
-		padViewList.forEach(padView -> padView.unconnectPad());
+		removePadsFromView();
 
 		saveSettings();
 		return true;
 	}
 
-	/*
-	 * MIDI
+	private void saveProject() {
+		try {
+			if (openProject.getRef() != null) {
+				openProject.save();
+				System.out.println("Saved Project: " + openProject);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+		}
+	}
+
+	// project
+	/**
+	 * Öffnet ein Project. Das akutelle project ist in PlayPadImpl gespeichert.
+	 * 
+	 * @param project
+	 *            neues Project
 	 */
+	public void openProject(Project project) {
+		removePadsFromView();
+
+		if (project != null)
+			removePadsFromView();
+
+		openProject = project;
+
+		midiHandler.setProject(project);
+		keyboardHandler.setProject(project);
+
+		midiHandler.setProject(project);
+		keyboardHandler.setProject(project);
+		PadDragListener.setProject(project);
+		ErrorSummaryDialog.getInstance().setProject(openProject);
+
+		menuToolbarViewController.setOpenProject(openProject);
+
+		createPadViews();
+		showPage(FIRST_PAGE);
+		loadUserCss();
+		updateWindowTitle();
+	}
+
+	// Pad, Pages
+	@Override
+	public void createPadViews() {
+		if (openProject == null) {
+			return;
+		}
+		ProjectSettings projectSettings = openProject.getSettings();
+
+		// Table
+		padGridPane.getColumnConstraints().clear();
+		double xPercentage = 1.0 / (double) projectSettings.getColumns();
+		for (int i = 0; i < projectSettings.getColumns(); i++) {
+			ColumnConstraints c = new ColumnConstraints();
+			c.setPercentWidth(xPercentage * 100);
+			padGridPane.getColumnConstraints().add(c);
+		}
+
+		padGridPane.getRowConstraints().clear();
+		double yPercentage = 1.0 / (double) projectSettings.getRows();
+		for (int i = 0; i < projectSettings.getRows(); i++) {
+			RowConstraints c = new RowConstraints();
+			c.setPercentHeight(yPercentage * 100);
+			padGridPane.getRowConstraints().add(c);
+		}
+
+		// Pads - Remove alte PadViews, falls noch welche vorhanden
+		if (!padViews.isEmpty())
+			removePadViews();
+
+		// Neue PadViews
+		for (int y = 0; y < projectSettings.getRows(); y++) {
+			for (int x = 0; x < projectSettings.getColumns(); x++) {
+				IPadView padView = mainLayout.createPadView();
+				padGridPane.add(padView.getRootNode(), x, y);
+				padViews.add(padView);
+			}
+		}
+
+		// Min Size of window
+		GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
+		double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
+		double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
+
+		getStage().setMinWidth(minWidth);
+		if (OS.getType() == OSType.MacOSX) {
+			getStage().setMinHeight(minHeight + 100);
+		} else {
+			getStage().setMinHeight(minHeight + 150);
+		}
+
+		menuToolbarViewController.initPageButtons();
+	}
+
+	private void removePadViews() {
+		padViews.forEach(view ->
+		{
+			padGridPane.getChildren().remove(view.getRootNode());
+			mainLayout.recyclePadView(view);
+		});
+		padViews.clear();
+	}
 
 	/**
-	 * Init MIDI Device by using the Midi Class and show some feedback the user.
-	 * 
-	 * @param name
-	 *            Device Name
-	 * 
-	 * @see Midi#lookupMidiDevice(String)
+	 * Zeigt die aktuellen Pads von einem Profil zu einer Seite in den entsprechenden Views an.
 	 */
-	private void loadMidiDevice(String name) {
+	private void addPadsToView() {
+		ProjectSettings settings = openProject.getSettings();
+
+		int index = currentPageShowing * settings.getRows() * settings.getColumns();
+		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
+			if (padViews.size() > i) {
+				IPadView view = padViews.get(i);
+				Pad pad = openProject.getPad(index);
+
+				view.getViewController().setupPad(pad);
+			}
+			index++;
+		}
+	}
+
+	/**
+	 * Entfernt alle Pads auf den Views.
+	 */
+	private void removePadsFromView() {
+		// Clean old pads
+		for (IPadView padView : padViews) {
+			padView.getViewController().removePad();
+		}
+	}
+
+	@Override
+	public boolean showPage(int page) {
+		if (openProject == null) {
+			return false;
+		}
+		ProjectSettings projectSettings = openProject.getSettings();
+
+		if (page < 0 || page >= projectSettings.getPageCount()) {
+			return false;
+		}
+
+		// Clean
+		removePadsFromView();
+		this.currentPageShowing = page;
+		addPadsToView();
+
+		if (menuToolbarViewController != null) {
+			menuToolbarViewController.highlightPageButton(page);
+		}
+		return true;
+	}
+
+	@Override
+	public int getPage() {
+		return currentPageShowing;
+	}
+
+	@Override
+	public void setGlobalVolume(double volume) {
+		if (openProject != null) {
+			for (Pad pad : openProject.getPads().values()) {
+				if (pad != null)
+					pad.setMasterVolume(volume);
+			}
+		}
+	}
+
+	// Settings
+	@Override
+	public void reloadSettings(Profile old, Profile currentProfile) {
+		createPadViews();
+
+		final DoubleProperty volumeFaderValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
+
+		if (old != null) {
+			// Unbind Volume Slider
+			volumeFaderValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			volumeFaderValueProperty.removeListener(volumeChangeListener);
+
+			// Clear Feedback on Devie (LaunchPad Light off)
+			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
+
+			// LockedListener
+			old.getProfileSettings().lockedProperty().removeListener(lockedListener);
+		}
+
+		// Volume
+		volumeFaderValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		volumeFaderValueProperty.addListener(volumeChangeListener);
+
+		final ProfileSettings profileSettings = currentProfile.getProfileSettings();
+		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+
+		// LockedListener
+		profileSettings.lockedProperty().addListener(lockedListener);
+
+		// MIDI
+		if (profileSettings.isMidiActive() && profileSettings.getMidiDevice() != null) {
+			// Load known MIDI Device
+			Worker.runLater(() ->
+			{
+				loadMidiDevice(profileSettings.getMidiDevice());
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+
+				Platform.runLater(() ->
+				{
+					// Handle Mapper
+					if (Profile.currentProfile() != null) {
+						activeMapping.initFeedback();
+						activeMapping.showFeedback(openProject);
+					}
+				});
+			});
+		}
+
 		try {
-			midi.lookupMidiDevice(name);
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
-		} catch (NullPointerException e) {
-			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
-		} catch (IllegalArgumentException | MidiUnavailableException e) {
-			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+			DefaultRegistry<MainLayoutConnect> registry = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+			MainLayoutConnect connect = registry.getComponent(currentProfile.getProfileSettings().getMainLayoutType());
+			setMainLayout(connect);
+		} catch (NoSuchComponentException e) {
+			// TODO Error Handling
+			e.printStackTrace();
+		}
+
+		loadUserCss();
+		if (old != null && currentProfile != null) {
+			showPage(currentPageShowing);
+		}
+	}
+
+	@Override
+	public void loadKeybinding(KeyCollection keys) {
+		if (menuToolbarViewController != null) {
+			menuToolbarViewController.loadKeybinding(keys);
+		}
+	}
+
+	@Override
+	public void setGridColor(Color color) {
+		this.gridColor = color;
+		try {
+			Field field = padGridPane.getClass().getDeclaredField("gridLines");
+			field.setAccessible(true);
+			Group group = (Group) field.get(padGridPane);
+			if (group != null) {
+				for (Node node : group.getChildren()) {
+					if (node instanceof Line) {
+						((Line) node).setStroke(gridColor);
+					}
+				}
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	// Notification
 	@Override
 	public void notify(String text, long duration) {
 		if (Platform.isFxApplicationThread()) {
@@ -586,125 +648,85 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 	}
 
+	// Utils
 	@Override
-	public int getPage() {
-		return pageNumber;
+	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
+		getParent().getScene().addEventHandler(eventType, listener);
 	}
 
-	private boolean shown = false;
+	@Override
+	public void loadUserCss() {
+		Scene scene = getStage().getScene();
 
-	public void showLiveInfo() {
-		if (!shown) {
-			toolbarController.getToolbarHBox().setOpacity(0.5);
-			liveLabel.setVisible(true);
-			shown = true;
-			Worker.runLater(() ->
-			{
-				try {
-					Thread.sleep(PlayPadMain.displayTimeMillis * 2);
-				} catch (Exception e) {}
-				Platform.runLater(() ->
-				{
-					toolbarController.getToolbarHBox().setOpacity(1);
-					liveLabel.setVisible(false);
-					shown = false;
-				});
-			});
+		// Clear Old
+		scene.getStylesheets().clear();
+
+		// Layout Spezifisches CSS (Base)
+		if (mainLayout.getStylesheet() != null) {
+			scene.getStylesheets().add(mainLayout.getStylesheet());
+		}
+
+		// design spezific css
+		if (openProject != null) {
+			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
+		}
+
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+	}
+
+	/**
+	 * Init MIDI Device by using the Midi Class and show some feedback the user.
+	 * 
+	 * @param name
+	 *            Device Name
+	 * 
+	 * @see Midi#lookupMidiDevice(String)
+	 */
+	private void loadMidiDevice(String name) {
+		try {
+			midi.lookupMidiDevice(name);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
+		} catch (IllegalArgumentException | MidiUnavailableException e) {
+			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+			e.printStackTrace();
+		}
+	}
+
+	public void updateWindowTitle() {
+		if (openProject != null && Profile.currentProfile() != null) {
+			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getRef().getName(),
+					Profile.currentProfile().getRef().getName()));
+		} else {
+			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));
 		}
 	}
 
 	@Override
-	public void reloadSettings(Profile old, Profile currentProfile) {
-		final DoubleProperty valueProperty = toolbarController.getVolumeSlider().valueProperty();
-
-		if (old != null) {
-			// Unbind Volume Slider
-			valueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
-			// Clear Feedback on Devie (LaunchPad Light off)
-			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
-		}
-
-		// Pad iund Page GUI
-		createPadViews();
-		toolbarController.createPageButtons();
-
-		// Volume
-		valueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
-
-		final ProfileSettings profilSettings = currentProfile.getProfileSettings();
-		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
-
-		// MIDI
-		if (profilSettings.isMidiActive() && profilSettings.getMidiDevice() != null) {
-			// Load known MIDI Device
-			Worker.runLater(() ->
-			{
-				loadMidiDevice(profilSettings.getMidiDevice());
-
-				applyColorsToMappers();
-
-				Platform.runLater(() ->
-				{
-					// Handle Mapper
-					if (Profile.currentProfile() != null) {
-						activeMapping.initFeedback();
-						activeMapping.showFeedback(project);
-					}
-				});
-			});
-		}
-
-		// WINDOW Settings
-		menuBarController.getAlwaysOnTopItem().setSelected(profilSettings.isWindowAlwaysOnTop());
-		getStage().setAlwaysOnTop(profilSettings.isWindowAlwaysOnTop());
-
-		setTitle();
-		showPage(pageNumber); // Show Mapper Feedback und apply css und zeigt pads
+	public List<IPadView> getPadViews() {
+		return padViews;
 	}
 
 	@Override
-	public Project getProject() {
-		return project;
-	}
-
-	public MidiHandler getMidiHandler() {
+	public MidiListener getMidiHandler() {
 		return midiHandler;
 	}
 
-	public MainToolbarController getToolbarController() {
-		return toolbarController;
+	@Override
+	public MenuToolbarViewController getMenuToolbarController() {
+		return menuToolbarViewController;
 	}
 
-	// Plugins
-	/**
-	 * Fügt ein MenuItem ins Menu hinzu
-	 * 
-	 * @param item
-	 * 
-	 * @since 2.0.0
-	 */
-	public void addMenuItem(MenuItem item) {
-		menuBarController.getExtensionMenu().getItems().add(item);
-		if (!menuBarController.getExtensionMenu().isVisible()) {
-			menuBarController.getExtensionMenu().setVisible(true);
-		}
+	@Override
+	public void performLayoutDependendAction(MainLayoutHandler runnable) {
+		runnable.handle(null, menuToolbarViewController);
+		layoutActions.add(runnable);
 	}
 
-	public void setGridColor(Color gridColor) {
-		this.gridColor = gridColor;
-		try {
-			Field field = padGridPane.getClass().getDeclaredField("gridLines");
-			field.setAccessible(true);
-			Group group = (Group) field.get(padGridPane);
-			if (group != null) {
-				for (Node node : group.getChildren()) {
-					if (node instanceof Line) {
-						((Line) node).setStroke(gridColor);
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@Override
+	public NotificationPane getNotificationPane() {
+		return notificationPane;
 	}
 }

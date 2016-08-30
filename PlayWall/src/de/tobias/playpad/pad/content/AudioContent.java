@@ -1,23 +1,29 @@
 package de.tobias.playpad.pad.content;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.audio.Equalizable;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.Durationable;
-import de.tobias.playpad.pad.conntent.Fadeable;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.Pauseable;
+import de.tobias.playpad.pad.conntent.path.SinglePathContent;
+import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.conntent.play.Fadeable;
+import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.utils.util.ZipFile;
 import javafx.animation.Transition;
 import javafx.application.Platform;
@@ -28,7 +34,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent {
 
 	private static final String TYPE = "audio";
 
@@ -47,38 +53,36 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		super(pad);
 		volumeListener = (a, b, c) ->
 		{
-			audioHandler.setVolume(c.doubleValue(), Profile.currentProfile().getProfileSettings().getVolume(), pad.getCustomVolume());
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+			audioHandler.setVolume(c.doubleValue(), profileSettings.getVolume(), pad.getCustomVolume());
 		};
 		customVolumeListener = (a, b, c) ->
 		{
-			audioHandler.setVolume(pad.getVolume(), Profile.currentProfile().getProfileSettings().getVolume(), c.doubleValue());
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+			audioHandler.setVolume(pad.getPadSettings().getVolume(), profileSettings.getVolume(), c.doubleValue());
 		};
 	}
 
-	public AudioContent(Pad pad, Path path) {
-		this(pad);
-		this.path = path;
-	}
-
+	@Override
 	public Path getPath() {
 		return path;
 	}
 
-	public void setPath(Path path) {
-		this.path = path;
-	}
-
 	@Override
-	public void handlePath(Path path) {
+	public void handlePath(Path path) throws NoSuchComponentException, IOException {
+		// handle old media
 		unloadMedia();
-		setPath(path);
+
+		this.path = getRealPath(path);
+
+		// handle new media
 		loadMedia();
 	}
 
 	@Override
 	public void setMasterVolume(double masterVolume) {
 		if (audioHandler != null) {
-			audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+			audioHandler.setVolume(getPad().getPadSettings().getVolume(), masterVolume, getPad().getCustomVolume());
 		}
 	}
 
@@ -113,18 +117,18 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 		Pad pad = getPad();
 
-		if (pad.getFade().getFadeIn().toMillis() > 0) {
+		if (pad.getPadSettings().getFade().getFadeIn().toMillis() > 0) {
 			double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
 			audioHandler.setVolume(0, masterVolume, pad.getCustomVolume());
 			transition = new Transition() {
 
 				{
-					setCycleDuration(pad.getFade().getFadeIn());
+					setCycleDuration(pad.getPadSettings().getFade().getFadeIn());
 				}
 
 				@Override
 				protected void interpolate(double frac) {
-					audioHandler.setVolume(frac * pad.getVolume(), masterVolume, pad.getCustomVolume());
+					audioHandler.setVolume(frac * pad.getPadSettings().getVolume(), masterVolume, pad.getCustomVolume());
 				}
 			};
 			transition.setOnFinished(e ->
@@ -141,17 +145,19 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			transition.stop();
 		}
 
-		if (getPad().getFade().getFadeOut().toMillis() > 0) {
+		if (getPad().getPadSettings().getFade().getFadeOut().toMillis() > 0) {
 			transition = new Transition() {
 
 				{
-					setCycleDuration(getPad().getFade().getFadeOut());
+					setCycleDuration(getPad().getPadSettings().getFade().getFadeOut());
 				}
 
 				@Override
 				protected void interpolate(double frac) {
 					double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-					audioHandler.setVolume(getPad().getVolume() - frac * getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+					PadSettings padSettings = getPad().getPadSettings();
+
+					audioHandler.setVolume(padSettings.getVolume() - frac * padSettings.getVolume(), masterVolume, getPad().getCustomVolume());
 				}
 			};
 			transition.setOnFinished(event ->
@@ -159,7 +165,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 				onFinish.run();
 
 				double masterVolume = Profile.currentProfile().getProfileSettings().getVolume();
-				audioHandler.setVolume(getPad().getVolume(), masterVolume, getPad().getCustomVolume());
+				PadSettings padSettings = getPad().getPadSettings();
+
+				audioHandler.setVolume(padSettings.getVolume(), masterVolume, getPad().getCustomVolume());
 				transition = null;
 			});
 			transition.play();
@@ -211,14 +219,17 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public void loadMedia() {
-		audioHandler = AudioRegistry.geAudioType().createAudioHandler(this);
+		// init audio implementation
+		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
+
 		if (Files.exists(path)) {
 			audioHandler.loadMedia(new Path[] { path });
 
 			durationProperty.bind(audioHandler.durationProperty());
 			positionProperty.bind(audioHandler.positionProperty());
 
-			getPad().volumeProperty().addListener(volumeListener);
+			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
 			getPad().customVolumeProperty().addListener(customVolumeListener);
 		} else {
 			getPad().throwException(path, new FileNotFoundException());
@@ -230,7 +241,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		durationProperty.unbind();
 		positionProperty.unbind();
 
-		getPad().volumeProperty().removeListener(volumeListener);
+		getPad().getPadSettings().volumeProperty().removeListener(volumeListener);
 		getPad().customVolumeProperty().removeListener(customVolumeListener);
 
 		if (audioHandler != null)

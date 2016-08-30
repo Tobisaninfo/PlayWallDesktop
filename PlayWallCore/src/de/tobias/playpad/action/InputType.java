@@ -1,5 +1,12 @@
 package de.tobias.playpad.action;
 
+/**
+ * Optionne für die verschiedenen Input Möglichkeiten.
+ * 
+ * @author tobias
+ * 
+ * @since 5.0.0
+ */
 public enum InputType {
 
 	/**

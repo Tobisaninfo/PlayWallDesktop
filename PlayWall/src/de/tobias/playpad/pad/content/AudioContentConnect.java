@@ -5,8 +5,8 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
-import de.tobias.playpad.viewcontroller.SettingsTabViewController;
-import de.tobias.playpad.viewcontroller.option.AudioTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.profile.AudioTabViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
@@ -59,7 +59,7 @@ public class AudioContentConnect extends PadContentConnect {
 	}
 
 	@Override
-	public SettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
+	public ProfileSettingsTabViewController getSettingsTabViewController(boolean activePlayer) {
 		return new AudioTabViewController(activePlayer);
 	}
 

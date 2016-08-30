@@ -6,10 +6,11 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.connect.CartActionConnect;
+import de.tobias.playpad.action.feedback.ColorAdjustable;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.Durationable;
+import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.actions.CartActionViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -18,7 +19,7 @@ import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CartAction extends Action {
+public class CartAction extends Action implements ColorAdjustable {
 
 	public enum ControlMode {
 		PLAY_PAUSE,
@@ -26,7 +27,9 @@ public class CartAction extends Action {
 		PLAY_HOLD;
 	}
 
-	private int cart;
+	private int x;
+	private int y;
+
 	private ControlMode mode;
 	private boolean autoFeedbackColors;
 
@@ -36,23 +39,27 @@ public class CartAction extends Action {
 	private transient PadPositionWarningListener padPositionListener = new PadPositionWarningListener(this);
 
 	public CartAction() {
-		this.cart = 0;
+		this.x = 0;
+		this.y = 0;
+
 		this.mode = ControlMode.PLAY_STOP;
 		this.autoFeedbackColors = true;
 	}
 
-	public CartAction(int cart, ControlMode mode) {
-		this.cart = cart;
+	public CartAction(int x, int y, ControlMode mode) {
+		this.x = x;
+		this.y = y;
+
 		this.mode = mode;
 		this.autoFeedbackColors = true;
 	}
 
-	public int getCart() {
-		return cart;
+	public int getX() {
+		return x;
 	}
 
-	public void setCart(int cart) {
-		this.cart = cart;
+	public int getY() {
+		return y;
 	}
 
 	public ControlMode getMode() {
@@ -63,6 +70,7 @@ public class CartAction extends Action {
 		this.mode = mode;
 	}
 
+	@Override
 	public boolean isAutoFeedbackColors() {
 		return autoFeedbackColors;
 	}
@@ -72,16 +80,20 @@ public class CartAction extends Action {
 	}
 
 	// Helper
+	@Override
 	public Pad getPad() {
 		return pad;
 	}
 
 	@Override
 	public void initFeedback(Project project, IMainViewController controller) {
-		Pad pad = project.getPad(cart);
-		setPad(pad);
-		// init first feedback
-		padStatusFeedbackListener.changed(null, null, pad.getStatus());
+		Pad pad = project.getPad(x, y, controller.getPage());
+
+		if (pad != null) {
+			setPad(pad);
+			// init first feedback
+			padStatusFeedbackListener.changed(null, null, pad.getStatus());
+		}
 	}
 
 	@Override
@@ -93,7 +105,7 @@ public class CartAction extends Action {
 	public boolean equals(Object obj) {
 		if (obj instanceof CartAction) {
 			CartAction action2 = (CartAction) obj;
-			if (action2.cart == cart) {
+			if (action2.x == x && action2.y == y) {
 				return true;
 			}
 		}
@@ -107,7 +119,7 @@ public class CartAction extends Action {
 
 	@Override
 	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
-		setPad(project.getPad(cart));
+		setPad(project.getPad(x, y, mainViewController.getPage()));
 
 		// wird nur ausgeführt, wenn das Pad ein Content hat und sichtbar in der GUI (Gilt für MIDI und Keyboard)
 		if (pad.getContent() != null && pad.getContent().isPadLoaded() && pad.isPadVisible()) {
@@ -161,20 +173,25 @@ public class CartAction extends Action {
 		return FeedbackType.DOUBLE;
 	}
 
-	private static final String CART_ID = "id";
+	private static final String X_ATTR = "x";
+	private static final String Y_ATTR = "y";
 	private static final String CONTROL_MDOE = "mode";
 	private static final String AUTO_FEEDBACK_COLORS = "autoColor";
 
 	@Override
 	public void load(Element root) {
-		cart = Integer.valueOf(root.attributeValue(CART_ID));
+		if (root.attributeValue(X_ATTR) != null)
+			x = Integer.valueOf(root.attributeValue(X_ATTR));
+		if (root.attributeValue(Y_ATTR) != null)
+			y = Integer.valueOf(root.attributeValue(Y_ATTR));
 		mode = ControlMode.valueOf(root.attributeValue(CONTROL_MDOE));
 		autoFeedbackColors = Boolean.valueOf(root.attributeValue(AUTO_FEEDBACK_COLORS));
 	}
 
 	@Override
 	public void save(Element root) {
-		root.addAttribute(CART_ID, String.valueOf(cart));
+		root.addAttribute(X_ATTR, String.valueOf(x));
+		root.addAttribute(Y_ATTR, String.valueOf(y));
 		root.addAttribute(CONTROL_MDOE, mode.name());
 		root.addAttribute(AUTO_FEEDBACK_COLORS, String.valueOf(autoFeedbackColors));
 	}
@@ -225,7 +242,8 @@ public class CartAction extends Action {
 		CartAction action = (CartAction) super.clone();
 
 		action.autoFeedbackColors = autoFeedbackColors;
-		action.cart = cart;
+		action.x = x;
+		action.y = y;
 		action.mode = mode;
 
 		return action;
@@ -234,7 +252,7 @@ public class CartAction extends Action {
 	// UI Helper
 	@Override
 	public String toString() {
-		return Localization.getString(Strings.Action_Cart_toString, String.valueOf(cart + 1));
+		return Localization.getString(Strings.Action_Cart_toString, String.valueOf(x) + ", " + String.valueOf(y));
 	}
 
 	@Override

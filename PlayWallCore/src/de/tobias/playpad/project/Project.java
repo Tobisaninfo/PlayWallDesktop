@@ -15,11 +15,14 @@ import org.dom4j.Element;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadSerializer;
-import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.xml.XMLHandler;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -34,7 +37,7 @@ public class Project {
 	/**
 	 * Pattern für den Namen des Projekts
 	 */
-	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
@@ -48,10 +51,15 @@ public class Project {
 	 * Liste mit allen Pads.
 	 */
 	private HashMap<Integer, Pad> pads;
+
+	private ProjectSettings settings;
+
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
-	private ObservableList<PadException> exceptions;
+	private transient ObservableList<PadException> exceptions;
+
+	private transient IntegerProperty activePlayers;
 
 	/**
 	 * Erstellt ein neues leeres Projekt mit einer Referenz.
@@ -62,7 +70,10 @@ public class Project {
 	public Project(ProjectReference ref) {
 		this.ref = ref;
 		this.pads = new HashMap<>();
+		this.settings = new ProjectSettings();
+
 		this.exceptions = FXCollections.observableArrayList();
+		this.activePlayers = new SimpleIntegerProperty();
 	}
 
 	/**
@@ -87,6 +98,23 @@ public class Project {
 			addPadForIndex(index);
 		}
 		return pads.get(index);
+	}
+
+	public Pad getPad(int x, int y, int page) {
+		if (x < settings.getColumns() && y < settings.getRows() && page < settings.getPageCount()) {
+			int id = (y * settings.getColumns() + x) + page * settings.getColumns() * settings.getRows();
+			return getPad(id);
+		}
+		return null;
+	}
+
+	/**
+	 * Gibt die Settings des Projectes zurück
+	 * 
+	 * @return
+	 */
+	public ProjectSettings getSettings() {
+		return settings;
 	}
 
 	/**
@@ -118,21 +146,24 @@ public class Project {
 
 	private static final String ROOT_ELEMENT = "Project";
 	protected static final String PAD_ELEMENT = "Pad";
+	private static final String SETTINGS_ELEMENT = "Settings";
 
 	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
-			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException {
+			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException, NoSuchComponentException {
 		Path projectPath = ref.getProjectPath();
 
 		if (Files.exists(projectPath)) {
 			if (ref.getProfileReference() != null) {
 				Profile.load(ref.getProfileReference()); // Lädt das entsprechende Profile und aktiviert es
 			} else {
-				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es gleich im Speicher
+				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es
+																		// gleich im Speicher
 				ref.setProfileReference(profile.getRef());
 			}
 
 			Project project = new Project(ref);
 
+			// Lädt Pads
 			XMLHandler<Pad> handler = new XMLHandler<>(projectPath);
 			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(project));
 
@@ -141,6 +172,11 @@ public class Project {
 					pad.loadContent();
 				project.pads.put(pad.getIndex(), pad);
 			}
+
+			// Lädt die Einstellungen
+			Element settingsElement = handler.getRootElement().element(SETTINGS_ELEMENT);
+			if (settingsElement != null)
+				project.settings = ProjectSettings.load(settingsElement);
 
 			return project;
 		} else {
@@ -154,8 +190,13 @@ public class Project {
 
 		Element rootElement = document.addElement(ROOT_ELEMENT);
 
+		// Speichern der Pads
 		XMLHandler<Pad> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(PAD_ELEMENT, pads.values(), new PadSerializer());
+
+		// Speichern der Settings
+		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);
+		settings.save(settingsElement);
 
 		if (Files.notExists(projectPath)) {
 			Files.createDirectories(projectPath.getParent());
@@ -168,18 +209,25 @@ public class Project {
 		return pads;
 	}
 
-	public int getPlayedPlayers() {
-		int count = 0;
-		for (Pad pad : pads.values()) {
-			if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
-				count++;
-			}
-		}
-		return count;
+	public int getActivePlayers() {
+		return activePlayers.get();
 	}
 
-	public boolean hasPlayedPlayers() {
-		return getPlayedPlayers() > 0;
+	public boolean hasActivePlayers() {
+		return getActivePlayers() > 0;
+	}
+
+	public void increaseActivePlayers() {
+		activePlayers.set(getActivePlayers() + 1);
+	}
+
+	public void dereaseActivePlayers() {
+		if (activePlayers.greaterThan(0).get())
+			activePlayers.set(getActivePlayers() - 1);
+	}
+
+	public ReadOnlyIntegerProperty activePlayerProperty() {
+		return activePlayers;
 	}
 
 	// Exceptions
@@ -218,8 +266,33 @@ public class Project {
 		return exceptions;
 	}
 
+	// Load Methods
+	public void loadPadsContent() {
+		getPads().values().forEach(pad ->
+		{
+			try {
+				pad.loadContent();
+			} catch (NoSuchComponentException e) {
+				e.printStackTrace();
+				// TODO handle exception withon project
+			}
+		});
+	}
+
 	@Override
 	public String toString() {
 		return ref.getName() + " (" + ref.getUuid() + ")";
+	}
+
+	public int getPadCount() {
+		return pads.size();
+	}
+
+	public void closeFile() {
+		pads.values().forEach(pad ->
+		{
+			if (pad.getContent() != null)
+				pad.getContent().unloadMedia();
+		});
 	}
 }

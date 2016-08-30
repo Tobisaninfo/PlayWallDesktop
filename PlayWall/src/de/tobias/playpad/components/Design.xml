@@ -1,0 +1,4 @@
+<Actions>
+	<Component id="modern" default="true">de.tobias.playpad.design.modern.ModernDesignConnect</Component>
+	<Component id="classic">de.tobias.playpad.design.classic.ClassicDesignConnect</Component>
+</Actions>

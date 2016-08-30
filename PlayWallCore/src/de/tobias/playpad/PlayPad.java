@@ -7,6 +7,7 @@ import java.util.Optional;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
 
@@ -76,7 +77,6 @@ public interface PlayPad {
 	 * 
 	 * @return PadListener
 	 * 
-	 * @see 5.0.0
 	 */
 	public List<PadListener> getPadListener();
 
@@ -106,4 +106,11 @@ public interface PlayPad {
 	 *            Quelle des Plugin
 	 */
 	public void loadPlugin(URI uri);
+
+	/**
+	 * Gibt die globalen Einstellungen zurück.
+	 * 
+	 * @return Global Settings
+	 */
+	public GlobalSettings getGlobalSettings();
 }

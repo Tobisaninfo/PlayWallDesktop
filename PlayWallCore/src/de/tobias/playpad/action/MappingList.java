@@ -19,6 +19,7 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.xml.XMLHandler;
 
+// COMMENT MappingList
 public class MappingList extends ArrayList<Mapping> {
 
 	private static final long serialVersionUID = 1L;
@@ -69,8 +70,8 @@ public class MappingList extends ArrayList<Mapping> {
 			List<Mapping> loadMappings = handler.loadElements(MAPPING, new MappingSerializer(profile));
 			loadMappings.forEach(mapping ->
 			{
-				mapping.initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine
-													// gelöscht wurde auf der Datei)
+				mapping.initActionType(profile); // Update Actions, damit alle da sind und keine fehlt (falls eine gelöscht wurde
+													// auf der Datei)
 				mapping.updateDisplayProperty();
 				mappings.add(mapping);
 			});
@@ -95,9 +96,15 @@ public class MappingList extends ArrayList<Mapping> {
 			Files.createDirectories(path.getParent());
 			Files.createFile(path);
 		}
-		
+
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
 		handler.saveElements(MAPPING, this, new MappingSerializer());
+
+		if (Files.notExists(path)) {
+			Files.createDirectories(path.getParent());
+			Files.createFile(path);
+		}
+
 		XMLHandler.save(path, document);
 	}
 
@@ -109,7 +116,7 @@ public class MappingList extends ArrayList<Mapping> {
 		Element rootElement = document.getRootElement();
 
 		MappingSerializer mappingSerializer = new MappingSerializer(profile);
-		mapping = mappingSerializer.loadElement(rootElement);		
+		mapping = mappingSerializer.loadElement(rootElement);
 		mapping.setUuid(UUID.randomUUID());
 
 		return mapping;

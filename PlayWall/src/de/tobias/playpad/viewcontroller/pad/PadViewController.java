@@ -2,40 +2,32 @@ package de.tobias.playpad.viewcontroller.pad;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.conntent.Durationable;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
-import de.tobias.playpad.pad.conntent.PadContentRegistry;
-import de.tobias.playpad.pad.conntent.UnkownPadContentException;
+import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.listener.IPadPositionListener;
 import de.tobias.playpad.pad.listener.PadContentListener;
 import de.tobias.playpad.pad.listener.PadDurationListener;
 import de.tobias.playpad.pad.listener.PadLockedListener;
 import de.tobias.playpad.pad.listener.PadPositionListener;
 import de.tobias.playpad.pad.listener.PadStatusListener;
 import de.tobias.playpad.pad.view.IPadViewController;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadView;
 import de.tobias.playpad.viewcontroller.IPadView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
-import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.FileUtils;
-import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -59,11 +51,12 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	public PadViewController() {
 		view = new PadView(this);
 
-		padLockedListener = new PadLockedListener(this);
+		// TODO Disable this
+		/*padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
 		padContentListener = new PadContentListener(this);
 		padDurationListener = new PadDurationListener(this);
-		padPositionListener = new PadPositionListener(this);
+		padPositionListener = new PadPositionListener(this);*/
 
 		// Listener muss nur einmal hier hinzugefügt werden, weil bei einem neuen Profile, werden neue PadViewController erzeugt
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
@@ -109,55 +102,55 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 	}
 
 	private void onNew(ActionEvent event) {
-		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
-		if (pad.getProject() != null) {
-			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
-				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
-				return;
-			}
-		}
-
-		FileChooser chooser = new FileChooser();
-
-		// File Extension
-		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
-				PadContentRegistry.getSupportedFileTypes());
-		chooser.getExtensionFilters().add(extensionFilter);
-
-		// Last Folder
-		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
-		if (openFolder != null) {
-			File folder = new File(openFolder.toString());
-			chooser.setInitialDirectory(folder);
-		}
-
-		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-		if (file != null) {
-			Path path = file.toPath();
-
-			try {
-				Set<PadContentConnect> connects = PadContentRegistry.getPadContentConnectsForFile(file.toPath());
-				if (!connects.isEmpty()) {
-					if (connects.size() > 1) {
-						FileDragOptionView hud = new FileDragOptionView(view);
-						hud.showDropOptions(connects, connect ->
-						{
-							if (connect != null) {
-								setNewPadContent(file, path, connect);
-								hud.hide();
-							}
-						});
-					} else {
-						PadContentConnect connect = connects.iterator().next();
-						setNewPadContent(file, path, connect);
-					}
-				}
-			} catch (UnkownPadContentException e) {
-				e.printStackTrace();
-			}
-
-			ApplicationUtils.getApplication().getUserDefaults().setData(OPEN_FOLDER, path.getParent().toString());
-		}
+//		ProfileSettings settings = Profile.currentProfile().getProfileSettings();
+//		if (pad.getProject() != null) {
+//			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getPlayedPlayers() > 0) {
+//				PlayPadPlugin.getImplementation().getMainViewController().showLiveInfo();
+//				return;
+//			}
+//		}
+//
+//		FileChooser chooser = new FileChooser();
+//
+//		// File Extension
+//		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
+//				PadContentRegistry.getSupportedFileTypes());
+//		chooser.getExtensionFilters().add(extensionFilter);
+//
+//		// Last Folder
+//		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
+//		if (openFolder != null) {
+//			File folder = new File(openFolder.toString());
+//			chooser.setInitialDirectory(folder);
+//		}
+//
+//		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
+//		if (file != null) {
+//			Path path = file.toPath();
+//
+//			try {
+//				Set<PadContentConnect> connects = PadContentRegistry.getPadContentConnectsForFile(file.toPath());
+//				if (!connects.isEmpty()) {
+//					if (connects.size() > 1) {
+//						FileDragOptionView hud = new FileDragOptionView(view);
+//						hud.showDropOptions(connects, connect ->
+//						{
+//							if (connect != null) {
+//								setNewPadContent(file, path, connect);
+//								hud.hide();
+//							}
+//						});
+//					} else {
+//						PadContentConnect connect = connects.iterator().next();
+//						setNewPadContent(file, path, connect);
+//					}
+//				}
+//			} catch (UnkownPadContentException e) {
+//				e.printStackTrace();
+//			}
+//
+//			ApplicationUtils.getApplication().getUserDefaults().setData(OPEN_FOLDER, path.getParent().toString());
+//		}
 	}
 
 	private void setNewPadContent(File file, Path path, PadContentConnect connect) {
@@ -167,7 +160,12 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			this.pad.setContent(content);
 		}
 
-		content.handlePath(file.toPath());
+		try {
+			content.handlePath(file.toPath());
+		} catch (NoSuchComponentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 	}
 
@@ -244,7 +242,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 
 	@Override
 	public void connectPad() {
-		pad.setController(this);
+//		pad.setController(this); TODO
 
 		try {
 			// Settings
@@ -266,7 +264,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
-			padDragListener = new PadDragListener(pad, view);
+//			padDragListener = new PadDragListener(pad, view); TODO
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -387,7 +385,7 @@ public class PadViewController implements EventHandler<ActionEvent>, IPadViewCon
 		return padStatusListener;
 	}
 
-	public PadPositionListener getPadPositionListener() {
+	public IPadPositionListener getPadPositionListener() {
 		return padPositionListener;
 	}
 

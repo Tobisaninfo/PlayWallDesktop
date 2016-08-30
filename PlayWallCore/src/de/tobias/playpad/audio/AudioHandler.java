@@ -13,7 +13,6 @@ public abstract class AudioHandler {
 	private PadContent content;
 
 	public AudioHandler(PadContent content) {
-		super();
 		this.content = content;
 	}
 
@@ -39,6 +38,7 @@ public abstract class AudioHandler {
 
 	public abstract boolean isMediaLoaded();
 
+	// TODO Auch einzelne Dateien laden
 	public abstract void loadMedia(Path[] paths);
 
 	public abstract void unloadMedia();
