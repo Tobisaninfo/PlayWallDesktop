@@ -52,6 +52,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -308,10 +309,10 @@ public class MainViewController extends ViewController implements IMainViewContr
 				if (result.isPresent()) {
 					globalSettings.setIgnoreSaveDialog(alert.isSelected());
 					ButtonType buttonType = result.get();
-					if (buttonType == ButtonType.YES) {
+					if (buttonType.getButtonData() == ButtonData.YES) {
 						// Projekt Speichern
 						saveProject();
-					} else if (buttonType == ButtonType.CANCEL) {
+					} else if (buttonType.getButtonData() == ButtonData.CANCEL_CLOSE) {
 						return false;
 					}
 				}

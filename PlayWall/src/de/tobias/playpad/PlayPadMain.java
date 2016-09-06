@@ -31,7 +31,7 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -60,7 +60,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private static PlayPadImpl impl;
 	private static PlayPadUpdater updater;
-	
+
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
@@ -108,7 +108,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 
 			/*
 			 * Setup
@@ -165,7 +166,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					Platform.runLater(() ->
 					{
 						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(owner);
-						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.APPLY).ifPresent(result ->
+						autoUpdateDialog.showAndWait().filter(item -> item.getButtonData() == ButtonData.APPLY).ifPresent(result ->
 						{
 							try {
 								Updates.startUpdate();
