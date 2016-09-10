@@ -119,14 +119,6 @@ public interface IMainViewController extends NotificationHandler {
 	public MidiListener getMidiHandler();
 
 	/**
-	 * Setzt das Globale Volume bei den Kacheln des aktuellen Projekts.
-	 * 
-	 * @param doubleValue
-	 *            [0..1]
-	 */
-	public void setGlobalVolume(double doubleValue);
-
-	/**
 	 * Setzt das MainLayout des Hauptfensters.
 	 * 
 	 * @param mainLayoutConnect

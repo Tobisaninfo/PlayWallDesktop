@@ -12,17 +12,22 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import javafx.beans.property.DoubleProperty;
+import de.tobias.playpad.volume.VolumeManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Pad {
+
+	private static final VolumeManager volumeManager;
+
+	static {
+		volumeManager = new VolumeManager();
+	}
 
 	// Verwaltung
 	private UUID uuid;
@@ -37,9 +42,6 @@ public class Pad {
 
 	// Settings
 	private PadSettings padSettings;
-
-	// Custom Volume
-	private transient DoubleProperty customVolumeProperty = new SimpleDoubleProperty(1.0);
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
 	private transient PadStatusListener padStatusListener;
@@ -199,12 +201,6 @@ public class Pad {
 		return padSettings;
 	}
 
-	public void setMasterVolume(double volume) {
-		if (getContent() != null) {
-			getContent().setMasterVolume(volume);
-		}
-	}
-
 	public boolean isEof() {
 		return eof;
 	}
@@ -284,16 +280,8 @@ public class Pad {
 		return (indexProperty.get() + 1) + " - " + nameProperty.get();
 	}
 
-	// TODO Reorder
-	public void setCustomVolume(double volume) {
-		customVolumeProperty.set(volume);
-	}
-
-	public double getCustomVolume() {
-		return customVolumeProperty.get();
-	}
-
-	public DoubleProperty customVolumeProperty() {
-		return customVolumeProperty;
+	// Volume Manager
+	public static VolumeManager getVolumeManager() {
+		return volumeManager;
 	}
 }

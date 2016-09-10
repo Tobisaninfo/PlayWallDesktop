@@ -56,11 +56,12 @@ public class VolumeTriggerItem extends TriggerItem {
 			protected void interpolate(double frac) {
 				for (Pad p : project.getPads()) {
 					if (p.getIndex() != pad.getIndex()) {
-						if (p.getCustomVolume() > volume) {
-							p.setCustomVolume(currentValue - frac * (currentValue - volume));
-						} else {
-							p.setCustomVolume(currentValue + frac * (volume - currentValue));
-						}
+						// TODO Volume Trigger Implemeitation
+						// if (p.getCustomVolume() > volume) {
+						// p.setCustomVolume(currentValue - frac * (currentValue - volume));
+						// } else {
+						// p.setCustomVolume(currentValue + frac * (volume - currentValue));
+						// }
 					}
 				}
 			}

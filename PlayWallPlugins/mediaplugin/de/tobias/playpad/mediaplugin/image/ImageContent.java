@@ -1,6 +1,5 @@
 package de.tobias.playpad.mediaplugin.image;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +44,7 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public void setMasterVolume(double masterVolume) {
+	public void updateVolume() {
 	}
 
 	@Override

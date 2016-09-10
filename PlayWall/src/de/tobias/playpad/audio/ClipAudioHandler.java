@@ -177,7 +177,7 @@ public class ClipAudioHandler extends AudioHandler {
 	 * @param volume
 	 *            [0, 1]
 	 */
-	private void setVolume(double volume) {
+	public void setVolume(double volume) {
 		if (volumeControl != null) {
 			if (volume == 1.0) {
 				volumeControl.setValue(0);

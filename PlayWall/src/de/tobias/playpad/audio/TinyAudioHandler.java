@@ -206,6 +206,13 @@ public class TinyAudioHandler extends AudioHandler {
 			music.setVolume(volume * masterVolume * customVolume);
 		}
 	}
+	
+	@Override
+	public void setVolume(double volume) {
+		if (music != null) {
+			music.setVolume(volume);
+		}
+	}
 
 	@Override
 	public boolean isMediaLoaded() {

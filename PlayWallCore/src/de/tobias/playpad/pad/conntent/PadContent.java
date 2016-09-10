@@ -63,7 +63,7 @@ public abstract class PadContent {
 	 */
 	public abstract void unloadMedia();
 
-	public abstract void setMasterVolume(double masterVolume);
+	public abstract void updateVolume();
 
 	@Override
 	protected void finalize() throws Throwable {

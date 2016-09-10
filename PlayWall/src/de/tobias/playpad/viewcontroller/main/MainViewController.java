@@ -113,7 +113,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		layoutActions = new ArrayList<>();
 
 		// Init Listener
-		volumeChangeListener = new VolumeChangeListener(this);
+		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
 		initMapper(openProject);
@@ -510,16 +510,6 @@ public class MainViewController extends ViewController implements IMainViewContr
 	@Override
 	public int getPage() {
 		return currentPageShowing;
-	}
-
-	@Override
-	public void setGlobalVolume(double volume) {
-		if (openProject != null) {
-			for (Pad pad : openProject.getPads()) {
-				if (pad != null)
-					pad.setMasterVolume(volume);
-			}
-		}
 	}
 
 	// Settings
