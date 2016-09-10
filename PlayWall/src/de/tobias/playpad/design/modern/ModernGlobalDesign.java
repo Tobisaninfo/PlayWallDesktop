@@ -195,7 +195,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		String css = convertToCSS();
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {

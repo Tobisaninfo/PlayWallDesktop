@@ -1,4 +1,4 @@
-package de.tobias.playpad.project;
+package de.tobias.playpad.project.ref;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -15,6 +15,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -125,8 +126,8 @@ public class ProjectReference implements Displayable {
 	}
 
 	private static void duplicateFiles(ProjectReference currentProject, ProjectReference newProjectReference) throws IOException {
-		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getFileName());
-		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getFileName());
+		Path oldPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, currentProject.getName());
+		Path newPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, newProjectReference.getName());
 		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 

@@ -7,8 +7,8 @@ import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;

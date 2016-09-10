@@ -3,18 +3,26 @@ package de.tobias.playpad.project;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
-import de.tobias.playpad.pad.PadSerializer;
+import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.page.PageSerializer;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -27,125 +35,115 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Hold all information about the pads and it's settings.
+ * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
  * 
  * @author tobias
  *
+ * @since 6.0.0
  */
 public class Project {
 
 	/**
 	 * Pattern für den Namen des Projekts
 	 */
-	public static final String PROJECT_NAME_PATTERN = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
-	/**
-	 * Die projektreferenz gibt auskunft über den Namen und die UUID des Projektes
-	 */
-	private ProjectReference ref;
-	/**
-	 * Liste mit allen Pads.
-	 */
-	private HashMap<Integer, Pad> pads;
+	private final HashMap<Integer, Page> pages;
 
+	private final ProjectReference projectReference;
 	private ProjectSettings settings;
-
+	
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
 	private transient ObservableList<PadException> exceptions;
-
 	private transient IntegerProperty activePlayers;
 
-	/**
-	 * Erstellt ein neues leeres Projekt mit einer Referenz.
-	 * 
-	 * @param ref
-	 *            Referenz mit Namen des Projekts.
-	 */
 	public Project(ProjectReference ref) {
-		this.ref = ref;
-		this.pads = new HashMap<>();
+		this.projectReference = ref;
+		this.pages = new HashMap<>();
 		this.settings = new ProjectSettings();
-
+		
 		this.exceptions = FXCollections.observableArrayList();
 		this.activePlayers = new SimpleIntegerProperty();
 	}
 
-	/**
-	 * Gibt die Projekt Referenz zurück. Dazu zählen Name und UUID sowie das zugehörige Profile.
-	 * 
-	 * @return Referenz.
-	 */
-	public ProjectReference getRef() {
-		return ref;
-	}
-
-	// TODO Update in 5.1.0
-	/**
-	 * Gibt ein Pad an einem Index zurück. Sollte kein pad vorhanden sein (weil null, so wird vorher ein neues erzeugt.)
-	 * 
-	 * @param index
-	 *            Index
-	 * @return Pad am Index i
-	 */
-	public Pad getPad(int index) {
-		if (!pads.containsKey(index)) {
-			addPadForIndex(index);
-		}
-		return pads.get(index);
-	}
-
-	public Pad getPad(int x, int y, int page) {
-		if (x < settings.getColumns() && y < settings.getRows() && page < settings.getPageCount()) {
-			int id = (y * settings.getColumns() + x) + page * settings.getColumns() * settings.getRows();
-			return getPad(id);
-		}
-		return null;
-	}
-
-	/**
-	 * Gibt die Settings des Projectes zurück
-	 * 
-	 * @return
-	 */
 	public ProjectSettings getSettings() {
 		return settings;
 	}
 
-	/**
-	 * Erstellt ein neues leeres Pad (mit Referenz zu diesem Projekt) am Index i.
-	 * 
-	 * @param index
-	 *            Index i
-	 */
-	private void addPadForIndex(int index) {
-		pads.put(index, new Pad(this, index));
+	public ProjectReference getProjectReference() {
+		return projectReference;
 	}
 
-	/**
-	 * Ersetz ein Pad an einem Index i.
-	 * 
-	 * @param index
-	 *            Index i
-	 * @param pad
-	 *            Neues Pad für den Index i
-	 */
-	public void setPad(int index, Pad pad) {
-		pad.setIndex(index);
-		pads.put(index, pad);
+	public long getPlayedPlayers() {
+		return getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
 	}
 
-	/*
-	 * Speichern und Laden
-	 */
+	public boolean hasPlayedPlayers() {
+		return getPlayedPlayers() != 0;
+	}
+
+	public Pad getPad(int x, int y, int page) {
+		return getPage(page).getPad(x, y);
+	}
+
+	public Pad getPad(PadIndex index) {
+		Page page = pages.get(index.getPage());
+		return page.getPad(index.getId());
+	}
+
+	public Pad getPad(UUID uuid) {
+		for (Page page : pages.values()) {
+			for (Pad pad : page.getPads()) {
+				if (pad.getUuid().equals(uuid)) {
+					return pad;
+				}
+			}
+		}
+		return null;
+	}
+
+	public void setPad(PadIndex index, Pad pad) {
+		if (pad.getPage() != index.getPage()) {
+			Page oldPage = getPage(pad.getPage());
+			oldPage.removePade(index.getId());
+		}
+		Page page = pages.get(index.getPage());
+		page.setPad(index.getId(), pad);
+	}
+
+	public Collection<Pad> getPads() {
+		List<Pad> pads = new ArrayList<>();
+		pages.values().stream().map(page -> page.getPads()).forEach(pads::addAll);
+		return pads;
+	}
+
+	// Pages
+
+	public Page getPage(int index) {
+		if (!pages.containsKey(index) && index < settings.getPageCount()) {
+			pages.put(index, new Page(index, this));
+		}
+		return pages.get(index);
+	}
+
+	public Collection<Page> getPages() {
+		return pages.values();
+	}
+
+	public void setPage(int index, Page page) {
+		pages.put(index, page);
+		page.setId(index);
+	}
 
 	private static final String ROOT_ELEMENT = "Project";
-	protected static final String PAD_ELEMENT = "Pad";
+	public static final String PAGE_ELEMENT = "Page";
+	public static final String PAD_ELEMENT = "Pad";
 	private static final String SETTINGS_ELEMENT = "Settings";
 
 	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
@@ -154,29 +152,37 @@ public class Project {
 
 		if (Files.exists(projectPath)) {
 			if (ref.getProfileReference() != null) {
-				Profile.load(ref.getProfileReference()); // Lädt das entsprechende Profile und aktiviert es
+				// Lädt das entsprechende Profile und aktiviert es
+				Profile.load(ref.getProfileReference());
 			} else {
-				Profile profile = profileChooseable.getUnkownProfile(); // Lädt Profile / Erstellt neues und hat es
-																		// gleich im Speicher
+				// Lädt Profile / Erstellt neues und hat es gleich im Speicher
+				Profile profile = profileChooseable.getUnkownProfile();
 				ref.setProfileReference(profile.getRef());
 			}
 
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(Files.newInputStream(projectPath));
+			Element rootElement = document.getRootElement();
+
 			Project project = new Project(ref);
 
-			// Lädt Pads
-			XMLHandler<Pad> handler = new XMLHandler<>(projectPath);
-			List<Pad> pads = handler.loadElements(PAD_ELEMENT, new PadSerializer(project));
-
-			for (Pad pad : pads) {
-				if (loadMedia)
-					pad.loadContent();
-				project.pads.put(pad.getIndex(), pad);
+			// Lädt die Pages und somti auch die Pages
+			XMLHandler<Page> handler = new XMLHandler<>(rootElement);
+			List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
+			for (Page page : pages) {
+				project.pages.put(page.getId(), page);
 			}
 
 			// Lädt die Einstellungen
-			Element settingsElement = handler.getRootElement().element(SETTINGS_ELEMENT);
+			Element settingsElement = rootElement.element(SETTINGS_ELEMENT);
 			if (settingsElement != null)
 				project.settings = ProjectSettings.load(settingsElement);
+
+			// TODO Externalize, damit beim Start user feedback verbessert wird.
+			for (Pad pad : project.getPads()) {
+				if (loadMedia)
+					pad.loadContent();
+			}
 
 			return project;
 		} else {
@@ -185,14 +191,14 @@ public class Project {
 	}
 
 	public void save() throws IOException {
-		Path projectPath = ref.getProjectPath();
+		Path projectPath = projectReference.getProjectPath();
 		Document document = DocumentHelper.createDocument();
 
 		Element rootElement = document.addElement(ROOT_ELEMENT);
 
 		// Speichern der Pads
-		XMLHandler<Pad> handler = new XMLHandler<>(rootElement);
-		handler.saveElements(PAD_ELEMENT, pads.values(), new PadSerializer());
+		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
+		handler.saveElements(PAGE_ELEMENT, pages.values(), new PageSerializer());
 
 		// Speichern der Settings
 		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);
@@ -203,10 +209,6 @@ public class Project {
 			Files.createFile(projectPath);
 		}
 		XMLHandler.save(projectPath, document);
-	}
-
-	public HashMap<Integer, Pad> getPads() {
-		return pads;
 	}
 
 	public int getActivePlayers() {
@@ -265,10 +267,10 @@ public class Project {
 	public ObservableList<PadException> getExceptions() {
 		return exceptions;
 	}
-
-	// Load Methods
+	
+	// Utils
 	public void loadPadsContent() {
-		getPads().values().forEach(pad ->
+		getPads().forEach(pad ->
 		{
 			try {
 				pad.loadContent();
@@ -281,15 +283,11 @@ public class Project {
 
 	@Override
 	public String toString() {
-		return ref.getName() + " (" + ref.getUuid() + ")";
-	}
-
-	public int getPadCount() {
-		return pads.size();
+		return projectReference.getName() + " (" + projectReference.getUuid() + ")";
 	}
 
 	public void closeFile() {
-		pads.values().forEach(pad ->
+		getPads().forEach(pad ->
 		{
 			if (pad.getContent() != null)
 				pad.getContent().unloadMedia();

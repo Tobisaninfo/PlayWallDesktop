@@ -18,7 +18,13 @@
             <VBox spacing="14.0">
                <children>
                   <CheckBox fx:id="allCartsCheckbox" mnemonicParsing="false" text="%carttrigger.checkbox.all" />
-                  <TextField fx:id="cartTextField" prefWidth="150.0" promptText="1, 3-5" />
+                  <HBox spacing="14.0">
+                     <children>
+                        <TextField fx:id="cartTextField" prefWidth="150.0" promptText="%carttrigger.label.add.placeholder" />
+                        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addHandler" text="%carttrigger.button.add" />
+                     </children>
+                  </HBox>
+                  <ListView fx:id="addedCarts" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </VBox>
          </children>

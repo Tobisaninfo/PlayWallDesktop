@@ -143,28 +143,6 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		return changeSettings;
 	}
 
-	// @Override
-	// public void reload(ProjectSettings settings, Project project, IMainViewController controller) {
-	// Alert alert = new Alert(AlertType.INFORMATION);
-	// alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
-	//
-	// alert.getButtonTypes().clear();
-	// alert.initOwner(controller.getStage());
-	// alert.initModality(Modality.WINDOW_MODAL);
-	// Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	// PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-	//
-	// alert.show();
-	//
-	// Worker.runLater(() ->
-	// {
-	// Platform.runLater(() ->
-	// {
-	//
-	// });
-	// });
-	// }
-
 	@Override
 	public boolean validSettings() {
 		if (screenValid()) {

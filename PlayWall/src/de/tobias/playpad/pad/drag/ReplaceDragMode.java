@@ -3,6 +3,7 @@ package de.tobias.playpad.pad.drag;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
@@ -40,11 +41,11 @@ public class ReplaceDragMode extends PadDragMode {
 	}
 
 	@Override
-	public void handle(int oldPad, int newPad, Project project) {
+	public void handle(PadIndex oldPad, PadIndex newPad, Project project) {
 		Pad srcPad = project.getPad(oldPad);
 
 		project.setPad(newPad, srcPad);
-		project.setPad(oldPad, new Pad(project, oldPad));
+		project.setPad(oldPad, new Pad(project, oldPad)); // Leeres Pad an den Index
 	}
 
 }

@@ -172,8 +172,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				updateTitle(name());
 				updateProgress(-1, -1);
 				
-				Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(currentProject);
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
 				Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 

@@ -74,7 +74,7 @@ public class ImageContent extends PadContent {
 		if (Files.exists(path)) {
 			getPad().setStatus(PadStatus.READY);
 		} else {
-			getPad().throwException(path, new FileNotFoundException());
+			// getPad().throwException(path, new FileNotFoundException()); TODO Error Handling User
 		}
 	}
 

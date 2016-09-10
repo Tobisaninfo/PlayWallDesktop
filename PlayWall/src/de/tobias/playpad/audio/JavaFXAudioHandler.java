@@ -126,7 +126,7 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 				}
 			});
 			loadedProperty.set(false);
-			getContent().getPad().throwException(path, player.getError());
+//			getContent().getPad().throwException(path, player.getError()); TODO Error Handling User
 		});
 		player.setOnEndOfMedia(() -> {
 			if (!getContent().getPad().getPadSettings().isLoop()) {

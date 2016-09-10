@@ -57,6 +57,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private MainViewController mainViewController;
 	private Project currentProject;
+
 	protected GlobalSettings globalSettings;
 
 	public PlayPadImpl(GlobalSettings globalSettings) {

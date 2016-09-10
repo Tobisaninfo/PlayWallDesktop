@@ -1,6 +1,5 @@
 package de.tobias.playpad.layout.touch;
 
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;

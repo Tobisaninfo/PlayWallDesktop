@@ -1,13 +1,6 @@
 package de.tobias.playpad.layout.desktop;
 
-import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.Strings;
-import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
 import de.tobias.utils.ui.Alertable;
-import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
@@ -26,28 +19,28 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
-		if (textField.getText().isEmpty()) {
-			return;
-		}
-
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		main: for (int i = currentIndex; i < currentProject.getPadCount(); i++) {
-			Pad pad = currentProject.getPad(i);
-			if (pad.getStatus() != PadStatus.EMPTY) {
-				if (pad.getName().startsWith(textField.getText())) {
-					while (pad.getController() == null) {
-						if (!PlayPadPlugin.getImplementation().getMainViewController()
-								.showPage(PlayPadPlugin.getImplementation().getMainViewController().getPage() + 1)) {
-							break main;
-						}
-					}
-					pad.getController().getView().highlightView(3);
-					currentIndex = i + 1;
-					return;
-				}
-			}
-		}
-		alertable.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
-		currentIndex = 0;
+//		if (textField.getText().isEmpty()) {
+//			return;
+//		}
+//
+//		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+//		main: for (int i = currentIndex; i < currentProject.getPadCount(); i++) {
+//			Pad pad = currentProject.getPad(i);
+//			if (pad.getStatus() != PadStatus.EMPTY) {
+//				if (pad.getName().startsWith(textField.getText())) {
+//					while (pad.getController() == null) {
+//						if (!PlayPadPlugin.getImplementation().getMainViewController()
+//								.showPage(PlayPadPlugin.getImplementation().getMainViewController().getPage() + 1)) {
+//							break main;
+//						}
+//					}
+//					pad.getController().getView().highlightView(3);
+//					currentIndex = i + 1;
+//					return;
+//				}
+//			}
+//		}
+//		alertable.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+//		currentIndex = 0;
 	}
 }

@@ -161,8 +161,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		getActions().forEach(action -> action.clearFeedback());
 	}
 
-	public void adjustPadColorToMapper(Project project) {
-		ColorAdjuster.applyColorsToMappers(project);
+	public void adjustPadColorToMapper() {
+		ColorAdjuster.applyColorsToMappers();
 	}
 
 	@Override

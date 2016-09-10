@@ -22,6 +22,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -355,7 +356,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	private void saveProject() {
 		try {
-			if (openProject.getRef() != null) {
+			if (openProject.getProjectReference() != null) {
 				openProject.save();
 				System.out.println("Saved Project: " + openProject);
 			}
@@ -464,15 +465,13 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private void addPadsToView() {
 		ProjectSettings settings = openProject.getSettings();
 
-		int index = currentPageShowing * settings.getRows() * settings.getColumns();
 		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
 			if (padViews.size() > i) {
 				IPadView view = padViews.get(i);
-				Pad pad = openProject.getPad(index);
+				Pad pad = openProject.getPad(new PadIndex(i, currentPageShowing));
 
 				view.getViewController().setupPad(pad);
 			}
-			index++;
 		}
 	}
 
@@ -516,7 +515,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	@Override
 	public void setGlobalVolume(double volume) {
 		if (openProject != null) {
-			for (Pad pad : openProject.getPads().values()) {
+			for (Pad pad : openProject.getPads()) {
 				if (pad != null)
 					pad.setMasterVolume(volume);
 			}
@@ -558,7 +557,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
 				Platform.runLater(() ->
 				{
@@ -672,7 +671,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
 		}
 
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
+		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 	}
 
 	/**
@@ -698,7 +697,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	public void updateWindowTitle() {
 		if (openProject != null && Profile.currentProfile() != null) {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getRef().getName(),
+			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
 					Profile.currentProfile().getRef().getName()));
 		} else {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));

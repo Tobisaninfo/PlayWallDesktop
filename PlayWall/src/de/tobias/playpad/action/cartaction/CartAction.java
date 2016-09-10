@@ -22,9 +22,7 @@ import javafx.beans.property.StringProperty;
 public class CartAction extends Action implements ColorAdjustable {
 
 	public enum ControlMode {
-		PLAY_PAUSE,
-		PLAY_STOP,
-		PLAY_HOLD;
+		PLAY_PAUSE, PLAY_STOP, PLAY_HOLD;
 	}
 
 	private int x;

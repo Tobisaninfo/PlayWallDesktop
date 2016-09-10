@@ -324,7 +324,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 		String css = convertToCSS("", isCustomLayout());
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {

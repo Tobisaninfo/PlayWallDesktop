@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.update.PlayPadUpdater;

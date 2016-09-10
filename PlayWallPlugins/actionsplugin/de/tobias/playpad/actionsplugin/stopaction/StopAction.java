@@ -27,7 +27,7 @@ public class StopAction extends Action {
 
 	@Override
 	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE)
 				pad.setStatus(PadStatus.STOP, true);
 		}

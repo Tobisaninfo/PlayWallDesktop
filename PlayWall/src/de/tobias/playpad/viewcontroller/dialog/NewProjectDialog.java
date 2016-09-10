@@ -10,7 +10,7 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileReference;

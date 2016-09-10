@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad;
 
 import java.nio.file.Path;
+import java.util.UUID;
 
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
@@ -9,6 +10,7 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -23,7 +25,10 @@ import javafx.beans.property.StringProperty;
 public class Pad {
 
 	// Verwaltung
+	private UUID uuid;
 	private IntegerProperty indexProperty = new SimpleIntegerProperty();
+	private IntegerProperty pageProperty = new SimpleIntegerProperty();
+
 	private StringProperty nameProperty = new SimpleStringProperty();
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
@@ -47,20 +52,23 @@ public class Pad {
 
 	// Utils
 	private transient boolean eof;
+
 	private transient IPadViewController controller;
 	private transient Project project;
 
 	public Pad(Project project) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
 	}
 
-	public Pad(Project project, int index) {
+	public Pad(Project project, int index, int page) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		setIndex(index);
 		setStatus(PadStatus.EMPTY);
@@ -69,8 +77,12 @@ public class Pad {
 		padSettings.updateTrigger();
 	}
 
-	public Pad(Project project, int index, String name, PadContent content) {
-		this(project, index);
+	public Pad(Project project, PadIndex index) {
+		this(project, index.getId(), index.getPage());
+	}
+
+	public Pad(Project project, int index, int page, String name, PadContent content) {
+		this(project, index, page);
 		setName(name);
 		setContent(content);
 	}
@@ -95,6 +107,18 @@ public class Pad {
 		return indexProperty.get();
 	}
 
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public int getPage() {
+		return pageProperty.get();
+	}
+
 	public int getIndexReadable() {
 		return indexProperty.get() + 1;
 	}
@@ -105,6 +129,14 @@ public class Pad {
 
 	public ReadOnlyIntegerProperty indexProperty() {
 		return indexProperty;
+	}
+
+	public void setPage(int page) {
+		pageProperty.set(page);
+	}
+
+	public PadIndex getPadIndex() {
+		return new PadIndex(getIndex(), getPage());
 	}
 
 	public String getName() {
@@ -187,22 +219,6 @@ public class Pad {
 			contentProperty.get().loadMedia();
 	}
 
-	public void throwException(Path path, Exception exception) {
-		if (project != null)
-			project.addException(this, path, exception);
-		setStatus(PadStatus.ERROR);
-	}
-
-	public void removeExceptionsForPad() {
-		if (project != null)
-			project.removeExceptions(this);
-	}
-
-	public void removeException(PadException exception) {
-		if (project != null)
-			project.removeException(exception);
-	}
-
 	public PadTriggerDurationListener getPadTriggerDurationListener() {
 		return padTriggerDurationListener;
 	}
@@ -239,8 +255,24 @@ public class Pad {
 		setStatus(PadStatus.EMPTY);
 
 		if (project != null) {
-			project.removeExceptions(this);
+			// TODO Remove Exceptions refer to pad
 		}
+	}
+
+	public void throwException(Path path, Exception exception) {
+		if (project != null)
+			project.addException(this, path, exception);
+		setStatus(PadStatus.ERROR);
+	}
+
+	public void removeExceptionsForPad() {
+		if (project != null)
+			project.removeExceptions(this);
+	}
+
+	public void removeException(PadException exception) {
+		if (project != null)
+			project.removeException(exception);
 	}
 
 	@Override

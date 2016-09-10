@@ -1,4 +1,4 @@
-package de.tobias.playpad.project;
+package de.tobias.playpad.project.ref;
 
 import de.tobias.utils.list.UniqList;
 
@@ -16,22 +16,19 @@ final class ProjectReferenceList extends UniqList<ProjectReference> {
 
 	public boolean contains(Object o) {
 		if (o instanceof String) {
-			for (ProjectReference item : this) {
-				if (item.getName().equals(o)) {
+			for (ProjectReference reference : this) {
+				if (reference.getName().equals(o)) {
 					return true;
-				} else if (item.toString().equals(o)) {
+				} else if (reference.toString().equals(o)) {
 					return true;
 				}
 			}
 		} else if (o instanceof ProjectReference) {
-			for (ProjectReference item : this) {
-				if (item.getName() == o) {
+			for (ProjectReference reference : this) {
+				if (reference.getName() == o) {
 					return true;
-				} else {
-					ProjectReference projectRef = (ProjectReference) o;
-					if (item.getName().equals(projectRef.getName())) {
-						return true;
-					}
+				} else if (reference.getName().equals(((ProjectReference) o).getName())) { // TODO Check
+					return true;
 				}
 			}
 		}

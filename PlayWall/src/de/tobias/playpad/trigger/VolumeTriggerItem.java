@@ -54,7 +54,7 @@ public class VolumeTriggerItem extends TriggerItem {
 
 			@Override
 			protected void interpolate(double frac) {
-				for (Pad p : project.getPads().values()) {
+				for (Pad p : project.getPads()) {
 					if (p.getIndex() != pad.getIndex()) {
 						if (p.getCustomVolume() > volume) {
 							p.setCustomVolume(currentValue - frac * (currentValue - volume));

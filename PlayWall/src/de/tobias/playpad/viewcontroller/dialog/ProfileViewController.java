@@ -98,7 +98,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 	@FXML
 	private void chooseButtonHandler(ActionEvent event) {
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
-		project.getRef().setProfileReference(ref);
+		project.getProjectReference().setProfileReference(ref);
 
 		try {
 			Profile.load(ref);

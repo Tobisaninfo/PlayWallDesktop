@@ -248,7 +248,7 @@ public class TinyAudioHandler extends AudioHandler {
 				});
 			} catch (Exception e) {
 				loadedProperty.set(false);
-				getContent().getPad().throwException(path, e);
+//				getContent().getPad().throwException(path, e); TODO Error Handling User
 				e.printStackTrace();
 			} finally {
 				Platform.runLater(() ->

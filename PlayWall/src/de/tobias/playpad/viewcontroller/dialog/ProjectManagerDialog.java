@@ -9,9 +9,9 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
@@ -118,7 +118,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 					e.printStackTrace();
 				}
 
-				if (currentProject.getRef().equals(c)) {
+				if (currentProject.getProjectReference().equals(c)) {
 					deleteButton.setDisable(true);
 				} else {
 					deleteButton.setDisable(false);
@@ -223,7 +223,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		dialog.getStage().showAndWait();
 
 		Project project = dialog.getProject();
-		projectList.getItems().add(project.getRef());
+		projectList.getItems().add(project.getProjectReference());
 	}
 
 	@FXML
@@ -267,10 +267,11 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		ProjectReference selectedProject = getSelectedProject();
 
 		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
-		if (currentProject.getRef().equals(selectedProject)) {
+		if (currentProject.getProjectReference().equals(selectedProject)) {
 			try {
 				currentProject.save();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -283,7 +284,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		getStage().showAndWait();
 		if (!cancel) {
 			if (getSelecteItem() != null) {
-				if (currentProject.getRef() != getSelecteItem()) {
+				if (currentProject.getProjectReference() != getSelecteItem()) {
 					return Optional.of(getSelecteItem());
 				}
 			}
