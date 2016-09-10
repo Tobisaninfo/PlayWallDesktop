@@ -11,19 +11,21 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProfileChooseable;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ProjectNotFoundException;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -106,7 +108,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-		
+
 		stage.setResizable(false);
 		stage.setWidth(650);
 		stage.show();
@@ -184,12 +186,19 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	}
 
 	/**
-	 * Launch a project and close this view.
+	 * Öffnet ein Project und zeigt es im MainView an. Zudem wird as entsprechende Profile geladen und geprüft ob Module (Plugins) fehlen.
 	 * 
 	 * @param ref
 	 *            Project to launch
 	 */
 	private void launchProject(ProjectReference ref) {
+		// Es fehlen Module
+		if (!ref.getMissedModules().isEmpty()) {
+			showInfoMessage(Localization.getString(Strings.Error_Plugins_Missing));
+			PluginViewController controller = new PluginViewController(getStage(), ref.getMissedModules());
+			controller.getStage().showAndWait();
+		}
+
 		try {
 			Project project = Project.load(ref, true, this);
 			PlayPadMain.getProgramInstance().openProject(project);

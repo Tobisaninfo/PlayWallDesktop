@@ -5,6 +5,8 @@ import java.net.URL;
 
 import org.dom4j.DocumentException;
 
+import de.tobias.playpad.plugin.Module;
+
 /**
  * Eine Schnittstelle um Komponenten zu registrieren, aber nicht auszulesen.
  * 
@@ -24,10 +26,12 @@ public interface WriteOnlyRegistry<C> {
 	 *            Komponente
 	 * @param id
 	 *            ID
+	 * @param module
+	 *            Module zu dem diese Komponente gehört
 	 * @throws IllegalArgumentException
 	 *             Die Komponete gibt es bereits.
 	 */
-	public void registerComponent(C component, String id) throws IllegalArgumentException;
+	public void registerComponent(C component, String id, Module module) throws IllegalArgumentException;
 
 	/**
 	 * Lädt aus einer XML Datei die Komponenten Deklaration und registriert diese automatisch.
@@ -36,6 +40,8 @@ public interface WriteOnlyRegistry<C> {
 	 *            URL zur Deklaration
 	 * @param loader
 	 *            ClassLoader
+	 * @param module
+	 *            Module zu dem diese Komponente gehört
 	 * @throws IOException
 	 *             Fehler beim Laden der Datei.
 	 * @throws DocumentException
@@ -47,16 +53,16 @@ public interface WriteOnlyRegistry<C> {
 	 * @throws InstantiationException
 	 *             Die Klasse konnte nicht instanziert werden
 	 */
-	public void loadComponentsFromFile(URL url, ClassLoader loader)
+	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException;
 
-	public default void loadComponentsFromFile(String name)
+	public default void loadComponentsFromFile(String name, Module module)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
-		loadComponentsFromFile(getClass().getClassLoader().getResource(name), getClass().getClassLoader());
+		loadComponentsFromFile(getClass().getClassLoader().getResource(name), getClass().getClassLoader(), module);
 	}
 
-	public default void loadComponentsFromFile(String name, ClassLoader loader)
+	public default void loadComponentsFromFile(String name, ClassLoader loader, Module module)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
-		loadComponentsFromFile(loader.getResource(name), loader);
+		loadComponentsFromFile(loader.getResource(name), loader, module);
 	}
 }

@@ -7,7 +7,9 @@ import org.dom4j.Element;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperSerializer;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLHandler;
 import de.tobias.utils.xml.XMLSerializer;
@@ -18,9 +20,23 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 	private static final String MAPPER = "Mapper";
 
 	private Mapping mapping;
+	private Profile profile;
 
 	public ActionSerializer(Mapping mapping) {
 		this.mapping = mapping;
+	}
+
+	/**
+	 * Speichern.
+	 * 
+	 * @param mapping
+	 *            mapping
+	 * @param profile
+	 *            profile
+	 */
+	public ActionSerializer(Mapping mapping, Profile profile) {
+		this.mapping = mapping;
+		this.profile = profile;
 	}
 
 	@Override
@@ -49,6 +65,11 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 
 	@Override
 	public void saveElement(Element newElement, Action data) {
+		Module module = PlayPadPlugin.getRegistryCollection().getActions().getModule(data.getType());
+		if (profile != null) {
+			profile.getRef().addRequestedModule(module);
+		}
+
 		newElement.addAttribute(ACTION_TYPE, data.getType());
 
 		data.save(newElement);

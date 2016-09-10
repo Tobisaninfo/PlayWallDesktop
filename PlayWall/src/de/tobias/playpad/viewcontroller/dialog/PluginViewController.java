@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.configuration.MemorySection;
 
@@ -10,7 +11,8 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.plugin.Plugin;
+import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.plugin.PluginDescription;
 import de.tobias.playpad.plugin.Plugins;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -32,10 +34,14 @@ import javafx.stage.Window;
 
 public class PluginViewController extends ViewController {
 
-	@FXML private ListView<Plugin> pluginListView;
+	@FXML private ListView<PluginDescription> pluginListView;
 	@FXML private Button finishButton;
 
 	public PluginViewController(Window owner) {
+		this(owner, null);
+	}
+
+	public PluginViewController(Window owner, Set<Module> modules) {
 		super("pluginView", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
 
 		getStage().initOwner(owner);
@@ -60,18 +66,31 @@ public class PluginViewController extends ViewController {
 					return;
 				}
 
-				List<Plugin> plugins = Plugins.load(pluginInfoURL, true);
+				List<PluginDescription> plugins = Plugins.loadDescriptionFromServer(pluginInfoURL, true);
 
 				Collections.sort(plugins);
 				Platform.runLater(() ->
 				{
-					pluginListView.getItems().setAll(plugins);
+					// Nur bestimmte Plugins zur Liste (die, die Fehlen)
+					if (modules != null) {
+						for (PluginDescription plugin : plugins) {
+							for (Module module : modules) {
+								if (module.identifier.equals(plugin.getId())) {
+									pluginListView.getItems().add(plugin);
+								}
+							}
+						}
+					} else {
+						// Alle Plugins zur Liste
+						pluginListView.getItems().setAll(plugins);
+					}
 				});
 			} catch (IOException e) {
 				e.printStackTrace();
 				showErrorMessage(Localization.getString(Strings.Error_Standard_Gen), PlayPadMain.stageIcon);
 			}
 		});
+
 	}
 
 	@Override
@@ -92,7 +111,8 @@ public class PluginViewController extends ViewController {
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		if (Profile.currentProfile() != null)
+			Profile.currentProfile().currentLayout().applyCss(getStage());
 	}
 
 	@FXML

@@ -60,7 +60,7 @@ public class ProjectCell extends ListCell<ProjectReference> {
 
 				// File not Exists
 				Path path = ref.getProjectPath();
-				if (Files.notExists(path)) {
+				if (Files.notExists(path) || !ref.getMissedModules().isEmpty()) {
 					FontIcon graphics = new FontIcon(FontAwesomeType.WARNING);
 					graphics.setColor(Color.RED);
 					rootBox.getChildren().add(graphics);

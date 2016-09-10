@@ -139,6 +139,8 @@ public class Profile {
 	}
 
 	public void save() throws UnsupportedEncodingException, IOException {
+		ref.getRequestedModules().clear();
+		
 		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->
 		{
 			try {

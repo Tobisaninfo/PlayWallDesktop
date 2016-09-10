@@ -43,7 +43,7 @@ public class PD12 extends Device {
 	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {}
 
 	@Override
-	public void initFeedback() {}
+	public void initDevice() {}
 
 	@Override
 	public void clearFeedback() {}

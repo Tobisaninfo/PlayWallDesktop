@@ -3,6 +3,8 @@ package de.tobias.playpad.registry;
 import java.util.Collection;
 import java.util.Set;
 
+import de.tobias.playpad.plugin.Module;
+
 /**
  * Dieses Interface definiert Methoden bei Arbeit mit Komponenten, die durch Plugins zum Programm hinzugefügt werden können.
  * 
@@ -40,4 +42,13 @@ public interface Registry<C> extends WriteOnlyRegistry<C> {
 	 * @return Implementierungen
 	 */
 	public Collection<C> getComponents();
+
+	/**
+	 * Gibt das Module zurück.
+	 * 
+	 * @param id
+	 *            id der Komponente.
+	 * @return Module
+	 */
+	public Module getModule(String id);
 }

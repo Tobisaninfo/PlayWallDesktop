@@ -117,7 +117,7 @@ public class MappingListViewController extends ViewController {
 
 	@FXML
 	private void addButtonHandler(ActionEvent event) {
-		Mapping preset = new Mapping(true, Profile.currentProfile());
+		Mapping preset = new Mapping(true);
 
 		mappingList.add(preset);
 		presetsListView.getItems().add(preset);

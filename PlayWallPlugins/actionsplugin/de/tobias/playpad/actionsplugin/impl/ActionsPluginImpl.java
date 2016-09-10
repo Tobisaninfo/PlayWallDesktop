@@ -9,11 +9,12 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.actionsplugin.ActionsPlugin;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
-import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.playpad.update.Updatable;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -35,6 +36,12 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 @PluginImplementation
 public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>, ProfileListener {
 
+	private static final String NAME = "ActionsPlugin";
+	private static final String IDENTIFIER = "de.tobias.playpad.actions.impl.ActionsPluginImpl";
+
+	private static Module module;
+	private static ActionsPluginUpdater updater;
+	
 	private static ResourceBundle bundle;
 	public static CheckMenuItem muteMenuItem;
 
@@ -100,12 +107,13 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 			};
 		}
 
-		UpdateRegistery.registerUpdateable(new ActionsPluginUpdater());
 		Profile.registerListener(this);
+		module = new Module(NAME, IDENTIFIER);
+		updater = new ActionsPluginUpdater();
 
 		try {
 			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
-			padContents.loadComponentsFromFile("de/tobias/playpad/actionsplugin/assets/Actions.xml", getClass().getClassLoader());
+			padContents.loadComponentsFromFile("de/tobias/playpad/actionsplugin/assets/Actions.xml", getClass().getClassLoader(), module);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
 			e.printStackTrace();
 		}
@@ -161,5 +169,15 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 				volume = -1;
 			}
 		});
+	}
+
+	@Override
+	public Module getModule() {
+		return module;
+	}
+
+	@Override
+	public Updatable getUpdatable() {
+		return updater;
 	}
 }

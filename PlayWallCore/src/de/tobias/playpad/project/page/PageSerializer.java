@@ -19,12 +19,6 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 	private Project project;
 
 	/**
-	 * Für Serilize
-	 */
-	public PageSerializer() {
-	}
-
-	/**
 	 * Für Deserialize
 	 * 
 	 * @param project
@@ -57,6 +51,6 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 		newElement.addAttribute(NAME_ATTR, data.getName());
 
 		XMLHandler<Pad> handler = new XMLHandler<>(newElement);
-		handler.saveElements(Project.PAD_ELEMENT, data.getPads(), new PadSerializer());
+		handler.saveElements(Project.PAD_ELEMENT, data.getPads(), new PadSerializer(project));
 	}
 }

@@ -4,14 +4,12 @@ import java.net.URL;
 import java.nio.file.Path;
 
 /**
- * Diese Schnittstelle wird dafür verwendet, damit das Programm für Plugins nach Updates suchen kann und diese auch
- * durchführen kann.
+ * Diese Schnittstelle wird dafür verwendet, damit das Programm für Plugins nach Updates suchen kann und diese auch durchführen kann.
  * 
  * @author tobias
  *
  * @since 5.0.0
  */
-
 @Deprecated
 public interface Updatable {
 

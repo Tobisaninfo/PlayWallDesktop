@@ -1,9 +1,11 @@
 package de.tobias.playpad;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
@@ -113,4 +115,11 @@ public interface PlayPad {
 	 * @return Global Settings
 	 */
 	public GlobalSettings getGlobalSettings();
+
+	/**
+	 * Gibt alle aktiven Module zurück.
+	 * 
+	 * @return Module
+	 */
+	public Collection<Module> getModules();
 }

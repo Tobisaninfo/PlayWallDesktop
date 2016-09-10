@@ -192,13 +192,15 @@ public class Project {
 
 	public void save() throws IOException {
 		Path projectPath = projectReference.getProjectPath();
-		Document document = DocumentHelper.createDocument();
+		// Modules clearen und beim Speichern der pads neu setzen, damit alte Modules, die nicht gebracht werden, entfernt werden können.
+		projectReference.getRequestedModules().clear();
 
+		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement(ROOT_ELEMENT);
 
 		// Speichern der Pads
 		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
-		handler.saveElements(PAGE_ELEMENT, pages.values(), new PageSerializer());
+		handler.saveElements(PAGE_ELEMENT, pages.values(), new PageSerializer(this));
 
 		// Speichern der Settings
 		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);

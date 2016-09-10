@@ -6,7 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.dom4j.Document;
@@ -15,6 +18,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
@@ -36,6 +41,7 @@ public class ProjectReference implements Displayable {
 	private String name;
 
 	private ProfileReference profileReference;
+	private Set<Module> requestedModules;
 
 	private long size;
 	private long lastMofied;
@@ -46,6 +52,8 @@ public class ProjectReference implements Displayable {
 		this.lastMofied = System.currentTimeMillis();
 		this.size = 0;
 		this.profileReference = profileReference;
+		requestedModules = new HashSet<>();
+
 		updateDisplayProperty();
 	}
 
@@ -55,6 +63,20 @@ public class ProjectReference implements Displayable {
 		this.size = size;
 		this.lastMofied = lastMofied;
 		this.profileReference = profileReference;
+		requestedModules = new HashSet<>();
+
+		updateDisplayProperty();
+	}
+
+	public ProjectReference(UUID uuid, String name, long size, long lastMofied, ProfileReference profileReference,
+			Set<Module> requestedModules) {
+		this.uuid = uuid;
+		this.name = name;
+		this.size = size;
+		this.lastMofied = lastMofied;
+		this.profileReference = profileReference;
+		this.requestedModules = requestedModules;
+
 		updateDisplayProperty();
 	}
 
@@ -87,6 +109,26 @@ public class ProjectReference implements Displayable {
 		updateDisplayProperty();
 	}
 
+	public Set<Module> getRequestedModules() {
+		return requestedModules;
+	}
+	
+	public void addRequestedModule(Module module) {
+		requestedModules.add(module);
+	}
+	
+	public Set<Module> getMissedModules() {
+		Set<Module> missedModules = new HashSet<>();
+		Collection<Module> activeModules = PlayPadPlugin.getImplementation().getModules();
+		for (Module requested : requestedModules) {
+			if (!activeModules.contains(requested)) {
+				missedModules.add(requested);
+			}
+		}
+		return missedModules;
+	}
+
+	
 	public ProfileReference getProfileReference() {
 		return profileReference;
 	}

@@ -1,6 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.util.List;
+import java.util.Set;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
@@ -16,7 +16,7 @@ public class AutoUpdateDialog extends AdvancedDialog {
 
 	public AutoUpdateDialog(Window owner) {
 		super(owner);
-		List<Updatable> updates = UpdateRegistery.getAvailableUpdates();
+		Set<Updatable> updates = UpdateRegistery.getAvailableUpdates();
 
 		StringBuilder builder = new StringBuilder();
 		for (Updatable update : updates) {
