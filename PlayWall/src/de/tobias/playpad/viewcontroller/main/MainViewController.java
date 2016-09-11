@@ -15,6 +15,7 @@ import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
@@ -34,7 +35,6 @@ import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.ui.BasicControllerSettings;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -386,7 +386,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
-		PadDragListener.setProject(project);
+		DesktopPadDragListener.setProject(project);
 		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);

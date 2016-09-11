@@ -21,6 +21,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	private static final String TYPE = "Desktop";
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
+	private DesktopEditMode editMode = DesktopEditMode.PLAY;
 
 	private Stack<IPadView> recyclingStack;
 
@@ -41,7 +42,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
 		if (desktopMenuToolbarViewController == null) {
-			desktopMenuToolbarViewController = new DesktopMenuToolbarViewController(mainViewRef);
+			desktopMenuToolbarViewController = new DesktopMenuToolbarViewController(mainViewRef, this);
 		}
 		return desktopMenuToolbarViewController;
 	}
@@ -51,7 +52,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 		if (!recyclingStack.isEmpty()) {
 			return recyclingStack.pop();
 		}
-		return new DesktopPadView();
+		return new DesktopPadView(this);
 	}
 
 	@Override
@@ -64,4 +65,11 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 		return null;
 	}
 
+	public DesktopEditMode getEditMode() {
+		return editMode;
+	}
+
+	public void setEditMode(DesktopEditMode editMode) {
+		this.editMode = editMode;
+	}
 }

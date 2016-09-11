@@ -6,7 +6,6 @@
 		<Key id="save_proj" name="main.menuitem.save" key="S" ctrl="true" alt="false" meta="false" shift="false"/>
 		<Key id="print_proj" name="main.menuitem.print" key="P" ctrl="true" alt="false" meta="false" shift="false"/>
 		
-		<Key id="dnd" name="main.menuitem.dnd" key="M" ctrl="true" alt="false" meta="false" shift="false"/>
 		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="true" alt="false" meta="false" shift="false"/>
 		<Key id="plugins" name="main.menuitem.plugins"/>
 		<Key id="project_settings" name="main.menuitem.projectSettings" key="Comma" ctrl="true" alt="true" meta="false" shift="false"/>
@@ -23,7 +22,6 @@
 		<Key id="save_proj" name="main.menuitem.save" key="S" ctrl="false" alt="false" meta="true" shift="false"/>
 		<Key id="print_proj" name="main.menuitem.print" key="P" ctrl="false" alt="false" meta="true" shift="false"/>
 		
-		<Key id="dnd" name="main.menuitem.dnd" key="M" ctrl="false" alt="false" meta="true" shift="false"/>
 		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="false" alt="false" meta="true" shift="false"/>
 		<Key id="plugins" name="main.menuitem.plugins"/>
 		<Key id="project_settings" name="main.menuitem.projectSettings" key="Comma" ctrl="false" alt="true" meta="true" shift="false"/>

@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
 
 import de.tobias.playpad.AppUserInfoStrings;
@@ -43,11 +44,12 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.Alertable;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
@@ -69,6 +71,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -85,7 +88,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML protected MenuItem profileMenu;
 	@FXML protected MenuItem printProjectMenuItem;
 
-	@FXML protected CheckMenuItem dndModeMenuItem;
 	@FXML protected MenuItem errorMenu;
 	@FXML protected MenuItem pluginMenu;
 
@@ -107,13 +109,16 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	private IMainViewController mainViewController;
 
-	private ProjectSettingsViewController projectSettingsViewController;
-	private ProfileSettingsViewController profileSettingsViewController;
-	private GlobalSettingsViewController globalSettingsViewController;
+	private transient ProjectSettingsViewController projectSettingsViewController;
+	private transient ProfileSettingsViewController profileSettingsViewController;
+	private transient GlobalSettingsViewController globalSettingsViewController;
 
-	public DesktopMenuToolbarViewController(IMainViewController controller) {
+	private DesktopMainLayoutConnect connect;
+
+	public DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutConnect connect) {
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
+		this.connect = connect;
 
 		initLayoutMenu();
 	}
@@ -130,6 +135,37 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Help Menu --> HIDDEN TODO
 		helpMenu.setVisible(false);
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
+
+		// Edit Mode Buttons
+		SegmentedButton editButtons = new SegmentedButton();
+		ToggleButton playButton = new ToggleButton("", new FontIcon(FontAwesomeType.HAND_ALT_LEFT));
+		playButton.setFocusTraversable(false);
+		ToggleButton dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
+		dragButton.setFocusTraversable(false);
+		ToggleButton colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
+		colorButton.setFocusTraversable(false);
+		editButtons.getButtons().addAll(playButton, dragButton, colorButton);
+		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
+		{
+			if (b == dragButton) {
+				for (IPadView view : mainViewController.getPadViews()) {
+					view.enableDragAndDropDesignMode(false);
+				}
+			}
+
+			if (c == playButton) {
+				connect.setEditMode(DesktopEditMode.PLAY);
+			} else if (c == dragButton) {
+				connect.setEditMode(DesktopEditMode.DRAG);
+				System.out.println("Drag");
+				for (IPadView view : mainViewController.getPadViews()) {
+					view.enableDragAndDropDesignMode(true);
+				}
+			} else if (c == colorButton) {
+				connect.setEditMode(DesktopEditMode.COLOR);
+			}
+		});
+		iconHbox.getChildren().add(editButtons);
 	}
 
 	private void initLayoutMenu() {
@@ -203,7 +239,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		setKeyBindingForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
 		setKeyBindingForMenu(printProjectMenuItem, keys.getKey("print_proj"));
 
-		setKeyBindingForMenu(dndModeMenuItem, keys.getKey("dnd"));
 		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
 		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
 		setKeyBindingForMenu(projectSettingsMenuItem, keys.getKey("project_settings"));
@@ -219,7 +254,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(false);
 		printProjectMenuItem.setDisable(false);
 
-		dndModeMenuItem.setDisable(false);
 		errorMenu.setDisable(false);
 		pluginMenu.setDisable(false);
 		projectSettingsMenuItem.setDisable(false);
@@ -233,7 +267,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void setLocked(boolean looked) {
-		dndModeMenuItem.setDisable(looked);
+		// TODO Lock Edit Buttons
 	}
 
 	@Override
@@ -276,7 +310,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(true);
 		printProjectMenuItem.setDisable(true);
 
-		dndModeMenuItem.setDisable(true);
 		errorMenu.setDisable(true);
 		pluginMenu.setDisable(true);
 		projectSettingsMenuItem.setDisable(true);
@@ -287,13 +320,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		alwaysOnTopItem.setDisable(true);
 		searchPadMenuItem.setDisable(true);
 
-		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
-		if (dndModeMenuItem.isSelected()) {
-			PadDragListener.setDndMode(false);
-			for (IPadView view : mainViewController.getPadViews()) {
-				view.enableDragAndDropDesignMode(false);
-			}
-		}
+		connect.setEditMode(DesktopEditMode.PLAY); // TODO -> Button Mit wecheln
 	}
 
 	@Override
@@ -320,7 +347,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentPage = index;
 
-				if (newNode instanceof Button && dndModeMenuItem.isSelected()) { // Nur bei Drag And Drop mode
+				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.DRAG) { // Nur bei Drag And Drop mode
 					Button button = (Button) newNode;
 					DesktopButtonEditView editBox = new DesktopButtonEditView(openProject.getPage(index), button);
 					button.setGraphic(editBox);
@@ -408,29 +435,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void printMenuHandler(ActionEvent event) {
 		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
 		dialog.getStage().show();
-	}
-
-	@FXML
-	void dndModeHandler(ActionEvent event) {
-		if (dndModeMenuItem.isSelected()) {
-			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
-			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getActivePlayers() == 0) {
-				PadDragListener.setDndMode(true);
-				for (IPadView view : mainViewController.getPadViews()) {
-					view.enableDragAndDropDesignMode(true);
-				}
-			}
-		} else {
-			PadDragListener.setDndMode(false);
-			for (IPadView view : mainViewController.getPadViews()) {
-				view.enableDragAndDropDesignMode(false);
-			}
-		}
-
-		// Damit werden Page Buttons editierbar (die 3 Button vom DesktopButtonEditView)
-		highlightPageButton(currentPage);
 	}
 
 	@FXML

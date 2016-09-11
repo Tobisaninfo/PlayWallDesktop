@@ -56,9 +56,9 @@ public class DesktopPadView implements IPadView {
 	private BusyView busyView;
 
 	private transient DesktopPadViewController controller; // Reference to its controller
-
-	public DesktopPadView() {
-		controller = new DesktopPadViewController(this);
+	
+	public DesktopPadView(DesktopMainLayoutConnect connect) {
+		controller = new DesktopPadViewController(this, connect);
 		setupView();
 	}
 

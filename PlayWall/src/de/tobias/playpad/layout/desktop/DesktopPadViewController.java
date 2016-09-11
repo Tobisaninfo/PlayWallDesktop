@@ -29,7 +29,6 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.Localization;
@@ -57,10 +56,13 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	private PadDurationListener padDurationListener;
 	private IPadPositionListener padPositionListener;
 
-	private PadDragListener padDragListener;
+	private DesktopPadDragListener padDragListener;
 
-	public DesktopPadViewController(DesktopPadView padView) {
+	private DesktopMainLayoutConnect connect;
+	
+	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutConnect connect) {
 		this.padView = padView;
+		this.connect = connect;
 
 		padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
@@ -109,7 +111,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
-			padDragListener = new PadDragListener(pad, padView);
+			padDragListener = new DesktopPadDragListener(pad, padView, connect);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -393,7 +395,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		return padDurationListener;
 	}
 
-	public PadDragListener getPadDragListener() {
+	public DesktopPadDragListener getPadDragListener() {
 		return padDragListener;
 	}
 }

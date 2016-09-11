@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.pad;
+package de.tobias.playpad.layout.desktop;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,12 +31,12 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class PadDragListener {
+public class DesktopPadDragListener {
 
 	private Pad sourcePad;
 	final private Pane view;
 
-	private static boolean dndMode;
+	private DesktopMainLayoutConnect connect;
 	private static Project project;
 
 	private PadDragOptionView padHud;
@@ -44,8 +44,10 @@ public class PadDragListener {
 
 	private static DataFormat dataFormat = new DataFormat("de.tobias.playpad.padindex");
 
-	public PadDragListener(Pad pad, IPadView view) {
+	public DesktopPadDragListener(Pad pad, IPadView view, DesktopMainLayoutConnect connect) {
 		this.sourcePad = pad;
+		this.connect = connect;
+
 		this.view = view.getRootNode();
 
 		// Drag and Drop
@@ -157,7 +159,7 @@ public class PadDragListener {
 			PadIndex padID = (PadIndex) db.getContent(dataFormat); // TODO Check Cast
 
 			PadDragMode mode = padHud.getSelectedPadDragMode();
-			
+
 			mode.handle(padID, sourcePad.getPadIndex(), project);
 			padHud.hide();
 
@@ -170,7 +172,7 @@ public class PadDragListener {
 	}
 
 	private void dragDetacted(MouseEvent event) {
-		if (dndMode) {
+		if (connect.getEditMode() == DesktopEditMode.DRAG) {
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 			if (sourcePad.getProject() != null) {
@@ -202,23 +204,8 @@ public class PadDragListener {
 		}
 	}
 
-	/**
-	 * Aktiviert den Drag And Drop Modus für Kacheln. Diese Methode muss vom Menu / KeyShortcut aufgerufen werden.
-	 * 
-	 * @param dndMode
-	 *            <code>true</code> Aktiv
-	 */
-	public static void setDndMode(boolean dndMode) {
-		PadDragListener.dndMode = dndMode;
-	}
-
-	@Deprecated
-	public void setPad(Pad pad) {
-		this.sourcePad = pad;
-	}
-
 	public static void setProject(Project project) {
-		PadDragListener.project = project;
+		DesktopPadDragListener.project = project;
 	}
 
 }
