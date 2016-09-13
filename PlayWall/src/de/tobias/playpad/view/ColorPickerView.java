@@ -7,9 +7,11 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
-public class ColorView extends GridPane {
+public class ColorPickerView extends GridPane {
 
-	public ColorView(DisplayableColor startColor, DisplayableColor[] colors, Consumer<DisplayableColor> finish) {
+	private Rectangle currentSelected;
+	
+	public ColorPickerView(DisplayableColor startColor, DisplayableColor[] colors, Consumer<DisplayableColor> finish) {
 		double size = Math.sqrt(colors.length);
 		int iSize = (int) size;
 		if (size != iSize) {
@@ -39,7 +41,15 @@ public class ColorView extends GridPane {
 					}
 
 					// EventHandler
-					rectangle.setOnMouseReleased(event -> finish.accept(color));
+					rectangle.setOnMouseReleased(event ->
+					{
+						if (currentSelected != null) {
+							currentSelected.getStrokeDashArray().clear();
+						}
+						rectangle.getStrokeDashArray().addAll(3.0);
+						currentSelected = rectangle;
+						finish.accept(color);
+					});
 					add(rectangle, x, y);
 				}
 			}

@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.pad;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.layout.desktop.DesktopEditMode;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;

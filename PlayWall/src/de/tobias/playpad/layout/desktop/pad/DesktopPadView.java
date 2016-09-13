@@ -1,7 +1,8 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;

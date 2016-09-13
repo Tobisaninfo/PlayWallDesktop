@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.pad;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.DesktopEditMode;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.PadStatus;
@@ -43,7 +45,6 @@ import javafx.util.Duration;
 
 public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
-	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
@@ -59,7 +60,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	private DesktopPadDragListener padDragListener;
 
 	private DesktopMainLayoutConnect connect;
-	
+
 	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutConnect connect) {
 		this.padView = padView;
 		this.connect = connect;
@@ -159,21 +160,23 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	@Override
 	public void handle(ActionEvent event) {
-		if (event.getSource() == padView.getPlayButton()) {
-			onPlay();
-		} else if (event.getSource() == padView.getPauseButton()) {
-			onPause();
-		} else if (event.getSource() == padView.getStopButton()) {
-			onStop();
-		} else if (event.getSource() == padView.getNewButton()) {
-			try {
-				onNew(event);
-			} catch (NoSuchComponentException e) {
-				// TODO Error Handling
-				e.printStackTrace();
+		if (connect.getEditMode() == DesktopEditMode.PLAY) {
+			if (event.getSource() == padView.getPlayButton()) {
+				onPlay();
+			} else if (event.getSource() == padView.getPauseButton()) {
+				onPause();
+			} else if (event.getSource() == padView.getStopButton()) {
+				onStop();
+			} else if (event.getSource() == padView.getNewButton()) {
+				try {
+					onNew(event);
+				} catch (NoSuchComponentException e) {
+					// TODO Error Handling
+					e.printStackTrace();
+				}
+			} else if (event.getSource() == padView.getSettingsButton()) {
+				onSettings();
 			}
-		} else if (event.getSource() == padView.getSettingsButton()) {
-			onSettings();
 		}
 	}
 
@@ -271,7 +274,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			}
 
 			Stage owner = mvc.getStage();
-			
+
 			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
 			padSettingsViewController.getStage().setOnHiding(ev ->
 			{

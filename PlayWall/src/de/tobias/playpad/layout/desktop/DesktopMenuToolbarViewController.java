@@ -15,6 +15,8 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.IColorPickerView;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -56,6 +58,8 @@ import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -77,7 +81,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController implements EventHandler<ActionEvent> {
+public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
+		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
 
 	// meuBar
 	@FXML protected MenuBar menuBar;
@@ -107,11 +112,17 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML protected Label liveLabel;
 
+	protected SegmentedButton editButtons;
+	protected ToggleButton playButton;
+	protected ToggleButton dragButton;
+	protected ToggleButton colorButton;
+
 	private IMainViewController mainViewController;
 
 	private transient ProjectSettingsViewController projectSettingsViewController;
 	private transient ProfileSettingsViewController profileSettingsViewController;
 	private transient GlobalSettingsViewController globalSettingsViewController;
+	private transient DesktopColorPickerView colorPickerView;
 
 	private DesktopMainLayoutConnect connect;
 
@@ -119,6 +130,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 		this.connect = connect;
+		this.connect.editModeProperty().addListener(this);
+
+		// Ist Zustand herstellen, indem Listener mit dem Initialen Wert bekannt gemacht wird.
+		changed(connect.editModeProperty(), null, connect.getEditMode());
 
 		initLayoutMenu();
 	}
@@ -137,35 +152,59 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 
 		// Edit Mode Buttons
-		SegmentedButton editButtons = new SegmentedButton();
-		ToggleButton playButton = new ToggleButton("", new FontIcon(FontAwesomeType.HAND_ALT_LEFT));
+		editButtons = new SegmentedButton();
+		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
 		playButton.setFocusTraversable(false);
-		ToggleButton dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
+		dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
 		dragButton.setFocusTraversable(false);
-		ToggleButton colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
+		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
 		colorButton.setFocusTraversable(false);
 		editButtons.getButtons().addAll(playButton, dragButton, colorButton);
 		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
 		{
-			if (b == dragButton) {
-				for (IPadView view : mainViewController.getPadViews()) {
-					view.enableDragAndDropDesignMode(false);
-				}
-			}
-
 			if (c == playButton) {
 				connect.setEditMode(DesktopEditMode.PLAY);
 			} else if (c == dragButton) {
 				connect.setEditMode(DesktopEditMode.DRAG);
-				System.out.println("Drag");
-				for (IPadView view : mainViewController.getPadViews()) {
-					view.enableDragAndDropDesignMode(true);
-				}
 			} else if (c == colorButton) {
 				connect.setEditMode(DesktopEditMode.COLOR);
 			}
 		});
 		iconHbox.getChildren().add(editButtons);
+	}
+
+	// Desktop Edit Mode Change Listener --> Update Button
+	@Override
+	public void changed(ObservableValue<? extends DesktopEditMode> observable, DesktopEditMode oldValue, DesktopEditMode newValue) {
+		// handle old mode
+		if (oldValue == DesktopEditMode.DRAG) {
+			for (IPadView view : mainViewController.getPadViews()) {
+				view.enableDragAndDropDesignMode(false);
+			}
+		} else if (oldValue == DesktopEditMode.COLOR) {
+			if (colorPickerView != null) {
+				colorPickerView.hide();
+				colorPickerView = null;
+			}
+		}
+
+		// handle new mode
+		if (newValue == DesktopEditMode.PLAY) {
+			playButton.setSelected(true);
+		} else if (newValue == DesktopEditMode.DRAG) {
+			dragButton.setSelected(true);
+			for (IPadView view : mainViewController.getPadViews()) {
+				view.enableDragAndDropDesignMode(true);
+			}
+		} else if (newValue == DesktopEditMode.COLOR) {
+			colorButton.setSelected(true);
+
+			GlobalDesign design = Profile.currentProfile().currentLayout();
+			if (design instanceof IColorPickerView) {
+				colorPickerView = new DesktopColorPickerView((IColorPickerView) design);
+				colorPickerView.show();
+			}
+		}
 	}
 
 	private void initLayoutMenu() {

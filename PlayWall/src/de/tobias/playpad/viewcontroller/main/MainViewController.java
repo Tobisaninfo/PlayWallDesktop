@@ -15,7 +15,7 @@ import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
-import de.tobias.playpad.layout.desktop.DesktopPadDragListener;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;

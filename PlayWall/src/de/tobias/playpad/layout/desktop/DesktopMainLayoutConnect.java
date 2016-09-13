@@ -3,11 +3,14 @@ package de.tobias.playpad.layout.desktop;
 import java.util.Stack;
 
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.util.Localization;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Desktop Implmentierung des Main Layouts.
@@ -21,7 +24,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	private static final String TYPE = "Desktop";
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
-	private DesktopEditMode editMode = DesktopEditMode.PLAY;
+	private ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
 
 	private Stack<IPadView> recyclingStack;
 
@@ -66,10 +69,14 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	}
 
 	public DesktopEditMode getEditMode() {
-		return editMode;
+		return editMode.get();
 	}
 
 	public void setEditMode(DesktopEditMode editMode) {
-		this.editMode = editMode;
+		this.editMode.set(editMode);
+	}
+	
+	public ObjectProperty<DesktopEditMode> editModeProperty() {
+		return editMode;
 	}
 }

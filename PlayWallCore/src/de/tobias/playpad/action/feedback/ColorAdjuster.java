@@ -75,13 +75,13 @@ public class ColorAdjuster {
 			}
 
 			if (layoutStdColor != null) {
-				DisplayableFeedbackColor associator = searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
-				colorAssociator.setColor(FeedbackMessage.STANDARD, associator.mapperFeedbackValue());
+				DisplayableFeedbackColor matchedColor = searchColor(colorAssociator, FeedbackMessage.STANDARD, layoutStdColor);
+				colorAssociator.setColor(FeedbackMessage.STANDARD, matchedColor);
 			}
 
 			if (layoutEvColor != null) {
-				DisplayableFeedbackColor associator = searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
-				colorAssociator.setColor(FeedbackMessage.EVENT, associator.mapperFeedbackValue());
+				DisplayableFeedbackColor matchedColor = searchColor(colorAssociator, FeedbackMessage.EVENT, layoutEvColor);
+				colorAssociator.setColor(FeedbackMessage.EVENT, matchedColor);
 			}
 		}
 	}
