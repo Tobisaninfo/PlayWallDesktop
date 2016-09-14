@@ -15,8 +15,8 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.GlobalDesign;
-import de.tobias.playpad.design.IColorPickerView;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -77,6 +77,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -200,8 +201,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			colorButton.setSelected(true);
 
 			GlobalDesign design = Profile.currentProfile().currentLayout();
-			if (design instanceof IColorPickerView) {
-				colorPickerView = new DesktopColorPickerView((IColorPickerView) design);
+			if (design instanceof ColorModeHandler) {
+				colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
+				
+				// Add Listener for Pads
+				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+				
 				colorPickerView.show();
 			}
 		}

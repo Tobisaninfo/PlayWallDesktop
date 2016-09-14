@@ -9,6 +9,7 @@ import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.scene.NotificationPane;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -149,4 +150,6 @@ public interface IMainViewController extends NotificationHandler {
 	 * @return NotificationPane
 	 */
 	public NotificationPane getNotificationPane();
+
+	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 }

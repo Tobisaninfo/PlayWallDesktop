@@ -45,6 +45,7 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -642,6 +643,12 @@ public class MainViewController extends ViewController implements IMainViewContr
 	@Override
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
 		getParent().getScene().addEventHandler(eventType, listener);
+	}
+	
+	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().addEventFilter(eventType, handler);
+		}
 	}
 
 	@Override

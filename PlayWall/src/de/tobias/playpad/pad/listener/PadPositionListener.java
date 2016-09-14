@@ -91,7 +91,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		Warning warning = padSettings.getWarning();
 
 		if (padSettings.isCustomLayout()) {
-			padSettings.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+			padSettings.getDesign().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}
@@ -115,7 +115,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		PadSettings padSettings = pad.getPadSettings();
 
 		if (padSettings.isCustomLayout()) {
-			padSettings.getLayout().stopWarning(controller);
+			padSettings.getDesign().stopWarning(controller);
 		} else {
 			Profile.currentProfile().currentLayout().stopWarning(controller);
 		}

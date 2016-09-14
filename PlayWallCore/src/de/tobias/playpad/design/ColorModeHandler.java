@@ -11,8 +11,9 @@ import javafx.scene.Node;
  * @author tobias
  *
  */
-public interface IColorPickerView {
+public interface ColorModeHandler {
 
 	public Node getColorInterface(Consumer<DisplayableColor> onSelection);
 
+	public void setColor(CartDesign design, DisplayableColor color);
 }

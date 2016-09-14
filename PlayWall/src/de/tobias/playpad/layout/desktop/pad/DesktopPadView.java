@@ -126,6 +126,8 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void setContentView(Pad pad) {
+		superRoot.setUserData(pad);
+		
 		if (previewContent != null) {
 			previewContent.deinit();
 		}
