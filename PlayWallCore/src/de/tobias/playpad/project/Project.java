@@ -46,7 +46,7 @@ public class Project {
 	/**
 	 * Pattern für den Namen des Projekts
 	 */
-	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
