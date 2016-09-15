@@ -88,12 +88,12 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	public void onDisable() {
 		System.out.println("Disable Awake Plugin");
 	}
-
+// TODO Server path anpassen mit UpdateChannel
 	private Path loadLibMac() throws IOException {
 		Path folder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "awakelib.dylib");
 		if (Files.notExists(folder)) {
 			Files.createFile(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/libAwake/libAwakeLib.dylib");
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/libAwake/libAwakeLib.dylib");
 			System.out.println("Downlaod " + url);
 			IOUtils.copy(url.openStream(), folder);
 		}
@@ -108,14 +108,14 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 		if (Files.notExists(jnaFile)) {
 			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/jna/jna.jar");
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna.jar");
 			System.out.println("Downlaod " + url);
 			IOUtils.copy(url.openStream(), jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
 			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/jna/jna-platform.jar");
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna-platform.jar");
 			System.out.println("Downlaod " + url);
 			IOUtils.copy(url.openStream(), jnaPlatformFile);
 		}
