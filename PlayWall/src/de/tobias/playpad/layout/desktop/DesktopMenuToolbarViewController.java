@@ -183,7 +183,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		{
 			openProject.addPage();
 			initPageButtons();
-			highlightPageButton(currentSelectedPageButton);
+			highlightPageButton(mainViewController.getPage());
 		});
 
 		iconHbox.getChildren().add(editButtons);
