@@ -117,6 +117,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	protected ToggleButton playButton;
 	protected ToggleButton dragButton;
 	protected ToggleButton colorButton;
+	private Button addPageButton;
 
 	private IMainViewController mainViewController;
 
@@ -169,8 +170,22 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				connect.setEditMode(DesktopEditMode.DRAG);
 			} else if (c == colorButton) {
 				connect.setEditMode(DesktopEditMode.COLOR);
+			} else if (c == null) {
+				// select Old Button, if new selecting is empty
+				editButtons.getToggleGroup().selectToggle(b);
 			}
 		});
+
+		// Add Page Button for Drag Mode (Page Edit Mode)
+		addPageButton = new Button("", new FontIcon(FontAwesomeType.PLUS));
+		addPageButton.setFocusTraversable(false);
+		addPageButton.setOnAction(e ->
+		{
+			openProject.addPage();
+			initPageButtons();
+			highlightPageButton(currentSelectedPageButton);
+		});
+
 		iconHbox.getChildren().add(editButtons);
 	}
 
@@ -182,6 +197,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
+			iconHbox.getChildren().remove(addPageButton);
 		} else if (oldValue == DesktopEditMode.COLOR) {
 			if (colorPickerView != null) {
 				colorPickerView.hide();
@@ -197,19 +213,24 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(true);
 			}
+			iconHbox.getChildren().add(0, addPageButton);
+			System.out.println(iconHbox.getChildren());
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
 
 			GlobalDesign design = Profile.currentProfile().currentLayout();
 			if (design instanceof ColorModeHandler) {
 				colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
-				
+
 				// Add Listener for Pads
 				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
-				
+
 				colorPickerView.show();
 			}
 		}
+
+		// Update Page Button (for Edit/Display)
+		highlightPageButton(currentSelectedPageButton);
 	}
 
 	private void initLayoutMenu() {
@@ -252,14 +273,14 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void initPageButtons() {
-		currentPage = -1;
+		currentSelectedPageButton = -1;
 		pageHBox.getChildren().clear();
 
 		if (openProject == null) {
 			return;
 		}
 
-		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
+		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
 
 			String name = page.getName();
@@ -372,13 +393,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		return volumeSlider;
 	}
 
-	private int currentPage = 0;
+	private int currentSelectedPageButton = 0;
 
 	@Override
 	public void highlightPageButton(int index) {
 		if (index >= 0) {
-			if (pageHBox.getChildren().size() > currentPage && currentPage >= 0) {
-				Node removeNode = pageHBox.getChildren().get(currentPage);
+			if (pageHBox.getChildren().size() > currentSelectedPageButton && currentSelectedPageButton >= 0) {
+				Node removeNode = pageHBox.getChildren().get(currentSelectedPageButton);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
 
 				if (removeNode instanceof Button) {
@@ -389,11 +410,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			if (pageHBox.getChildren().size() > index) {
 				Node newNode = pageHBox.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
-				currentPage = index;
+				currentSelectedPageButton = index;
 
 				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.DRAG) { // Nur bei Drag And Drop mode
 					Button button = (Button) newNode;
-					DesktopButtonEditView editBox = new DesktopButtonEditView(openProject.getPage(index), button);
+					DesktopButtonEditView editBox = new DesktopButtonEditView(this, openProject.getPage(index), button);
 					button.setGraphic(editBox);
 				}
 			}

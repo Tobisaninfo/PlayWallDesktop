@@ -491,9 +491,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (openProject == null) {
 			return false;
 		}
-		ProjectSettings projectSettings = openProject.getSettings();
 
-		if (page < 0 || page >= projectSettings.getPageCount()) {
+		if (page < 0 || page >= openProject.getPages().size()) {
 			return false;
 		}
 
@@ -644,7 +643,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
 		getParent().getScene().addEventHandler(eventType, listener);
 	}
-	
+
 	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
 		for (IPadView view : padViews) {
 			view.getRootNode().addEventFilter(eventType, handler);

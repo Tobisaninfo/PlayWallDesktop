@@ -64,7 +64,6 @@ public class VersionUpdater implements UpdateService {
 		ProjectSettings projectSettings2 = new ProjectSettings();
 		projectSettings2.setColumns(columns);
 		projectSettings2.setRows(rows);
-		projectSettings2.setPageCount(pages);
 
 		projectSettings2.save(settingsElement);
 

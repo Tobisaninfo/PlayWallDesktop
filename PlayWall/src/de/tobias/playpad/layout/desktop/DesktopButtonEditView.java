@@ -7,6 +7,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
@@ -22,12 +23,15 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 	private Button leftMoveButton;
 	private Button rightMoveButton;
 	private Button editTextButton;
+	private Button deleteButton;
 
 	private transient Button pageButton;
+	private transient MenuToolbarViewController controller;
 
-	public DesktopButtonEditView(Page page, Button pageButton) {
+	public DesktopButtonEditView(MenuToolbarViewController controller, Page page, Button pageButton) {
 		this.page = page;
 		this.pageButton = pageButton;
+		this.controller = controller;
 
 		leftMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_LEFT));
 		leftMoveButton.setOnAction(this);
@@ -41,7 +45,11 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 		editTextButton.setOnAction(this);
 		editTextButton.setFocusTraversable(false);
 
-		getChildren().addAll(leftMoveButton, rightMoveButton, editTextButton);
+		deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+		deleteButton.setOnAction(this);
+		deleteButton.setFocusTraversable(false);
+
+		getChildren().addAll(leftMoveButton, rightMoveButton, editTextButton, deleteButton);
 		setSpacing(7);
 	}
 
@@ -66,7 +74,7 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 			event.consume();
 		} else if (event.getSource() == rightMoveButton) {
 			Project project = page.getProjectReference();
-			if (page.getId() < project.getSettings().getPageCount()) {
+			if (page.getId() < project.getPages().size()) {
 				Page rightPage = project.getPage(page.getId() + 1);
 
 				int rightIndex = rightPage.getId();
@@ -95,8 +103,13 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 				name = Localization.getString(Strings.UI_Window_Main_PageButton, (page.getId() + 1));
 			}
 			pageButton.setText(name);
-			
+
 			event.consume();
+		} else if (event.getSource() == deleteButton) {
+			// TODO Fragen
+			Project project = page.getProjectReference();
+			project.removePage(page);
+			controller.initPageButtons();
 		}
 	}
 

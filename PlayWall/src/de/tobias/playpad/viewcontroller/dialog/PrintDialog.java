@@ -46,7 +46,7 @@ public class PrintDialog extends ViewController {
 		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
-		int pages = project.getSettings().getPageCount();
+		int pages = project.getPages().size();
 		for (int i = 0; i < pages; i++) {
 			pageComboBox.getItems().add(i + 1);
 		}

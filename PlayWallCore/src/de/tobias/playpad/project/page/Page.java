@@ -86,4 +86,9 @@ public class Page {
 	public void removePade(int id) {
 		pads.remove(id);
 	}
+	
+	@Override
+	public String toString() {
+		return "Page [id=" + id + "]";
+	}
 }

@@ -56,7 +56,7 @@ public class Project {
 
 	private final ProjectReference projectReference;
 	private ProjectSettings settings;
-	
+
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
@@ -67,7 +67,7 @@ public class Project {
 		this.projectReference = ref;
 		this.pages = new HashMap<>();
 		this.settings = new ProjectSettings();
-		
+
 		this.exceptions = FXCollections.observableArrayList();
 		this.activePlayers = new SimpleIntegerProperty();
 	}
@@ -126,7 +126,7 @@ public class Project {
 	// Pages
 
 	public Page getPage(int index) {
-		if (!pages.containsKey(index) && index < settings.getPageCount()) {
+		if (!pages.containsKey(index) && index < ProjectSettings.MAX_PAGES) {
 			pages.put(index, new Page(index, this));
 		}
 		return pages.get(index);
@@ -269,7 +269,7 @@ public class Project {
 	public ObservableList<PadException> getExceptions() {
 		return exceptions;
 	}
-	
+
 	// Utils
 	public void loadPadsContent() {
 		getPads().forEach(pad ->
@@ -294,5 +294,22 @@ public class Project {
 			if (pad.getContent() != null)
 				pad.getContent().unloadMedia();
 		});
+	}
+
+	public void removePage(Page page) {
+		pages.remove(page.getId());
+		for (int i = page.getId() + 1; i < pages.size(); i++) {
+			Page tempPage = pages.get(i);
+			tempPage.setId(i - 1);
+			pages.put(i - 1, tempPage);
+		}
+		pages.remove(pages.size() - 1);
+
+		System.out.println(pages);
+	}
+
+	public void addPage() {
+		int index = pages.size();
+		pages.put(index, new Page(index, this));
 	}
 }
