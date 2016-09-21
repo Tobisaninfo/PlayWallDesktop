@@ -5,6 +5,7 @@ import java.util.Stack;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadView;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -73,9 +74,12 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	}
 
 	public void setEditMode(DesktopEditMode editMode) {
+		if (editMode != DesktopEditMode.PLAY && Profile.currentProfile().getProfileSettings().isLocked()) {
+			return;
+		}
 		this.editMode.set(editMode);
 	}
-	
+
 	public ObjectProperty<DesktopEditMode> editModeProperty() {
 		return editMode;
 	}

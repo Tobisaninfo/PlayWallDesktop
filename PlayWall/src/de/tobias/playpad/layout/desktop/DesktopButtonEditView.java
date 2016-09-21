@@ -110,6 +110,7 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 			Project project = page.getProjectReference();
 			project.removePage(page);
 			controller.initPageButtons();
+			controller.highlightPageButton(0); // Show first page 
 		}
 	}
 

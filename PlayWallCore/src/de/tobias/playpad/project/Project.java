@@ -300,15 +300,12 @@ public class Project {
 	}
 
 	public void removePage(Page page) {
-		System.out.println(page.getId());
 		pages.remove(page.getId());
 		// Neue Interne Indies für die Pages
 		for (int i = page.getId(); i < pages.size(); i++) {
 			Page tempPage = pages.get(i);
 			tempPage.setId(i);
 		}
-
-		System.out.println(pages);
 	}
 
 	public void addPage() {

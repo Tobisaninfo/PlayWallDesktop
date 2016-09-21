@@ -94,6 +94,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML protected MenuItem profileMenu;
 	@FXML protected MenuItem printProjectMenuItem;
 
+	@FXML protected MenuItem playMenu;
+	@FXML protected MenuItem dragMenu;
+	@FXML protected MenuItem colorMenu;
+
 	@FXML protected MenuItem errorMenu;
 	@FXML protected MenuItem pluginMenu;
 
@@ -154,6 +158,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 
 		// Edit Mode Buttons
+		// TODO MenuItems for Buttons -> KeyCodes
 		editButtons = new SegmentedButton();
 		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
 		playButton.setFocusTraversable(false);
@@ -209,12 +214,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (newValue == DesktopEditMode.PLAY) {
 			playButton.setSelected(true);
 		} else if (newValue == DesktopEditMode.DRAG) {
+			// TODO Live Mode Check
 			dragButton.setSelected(true);
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(true);
 			}
 			iconHbox.getChildren().add(0, addPageButton);
-			System.out.println(iconHbox.getChildren());
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
 
@@ -304,6 +309,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		setKeyBindingForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
 		setKeyBindingForMenu(printProjectMenuItem, keys.getKey("print_proj"));
 
+		setKeyBindingForMenu(playMenu, keys.getKey("play"));
+		setKeyBindingForMenu(dragMenu, keys.getKey("drag"));
+		setKeyBindingForMenu(colorMenu, keys.getKey("color"));
+
 		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
 		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
 		setKeyBindingForMenu(projectSettingsMenuItem, keys.getKey("project_settings"));
@@ -319,6 +328,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(false);
 		printProjectMenuItem.setDisable(false);
 
+		playMenu.setDisable(false);
+		dragMenu.setDisable(false);
+		colorMenu.setDisable(false);
+
 		errorMenu.setDisable(false);
 		pluginMenu.setDisable(false);
 		projectSettingsMenuItem.setDisable(false);
@@ -332,7 +345,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void setLocked(boolean looked) {
-		// TODO Lock Edit Buttons
+		connect.setEditMode(DesktopEditMode.PLAY);
 	}
 
 	@Override
@@ -375,6 +388,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(true);
 		printProjectMenuItem.setDisable(true);
 
+		playMenu.setDisable(true);
+		dragMenu.setDisable(true);
+		colorMenu.setDisable(true);
+
 		errorMenu.setDisable(true);
 		pluginMenu.setDisable(true);
 		projectSettingsMenuItem.setDisable(true);
@@ -407,7 +424,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				}
 			}
 
-			if (pageHBox.getChildren().size() > index) {
+			if (index < pageHBox.getChildren().size()) {
 				Node newNode = pageHBox.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentSelectedPageButton = index;
@@ -500,6 +517,21 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void printMenuHandler(ActionEvent event) {
 		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
 		dialog.getStage().show();
+	}
+
+	@FXML
+	void playMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.PLAY);
+	}
+
+	@FXML
+	void dragMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.DRAG);
+	}
+
+	@FXML
+	void colorMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.COLOR);
 	}
 
 	@FXML
