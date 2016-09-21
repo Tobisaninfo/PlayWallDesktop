@@ -158,7 +158,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 
 		// Edit Mode Buttons
-		// TODO MenuItems for Buttons -> KeyCodes
 		editButtons = new SegmentedButton();
 		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
 		playButton.setFocusTraversable(false);
@@ -166,6 +165,18 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		dragButton.setFocusTraversable(false);
 		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
 		colorButton.setFocusTraversable(false);
+		// Zeigt die Farbauswahl
+		colorButton.setOnAction(e ->
+		{
+			GlobalDesign design = Profile.currentProfile().currentLayout();
+			if (design instanceof ColorModeHandler) {
+				colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
+				colorPickerView.show(colorButton);
+
+				// Add Listener for Pads
+				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+			}
+		});
 		editButtons.getButtons().addAll(playButton, dragButton, colorButton);
 		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
 		{
@@ -222,16 +233,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			iconHbox.getChildren().add(0, addPageButton);
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
-
-			GlobalDesign design = Profile.currentProfile().currentLayout();
-			if (design instanceof ColorModeHandler) {
-				colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
-
-				// Add Listener for Pads
-				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
-
-				colorPickerView.show();
-			}
 		}
 
 		// Update Page Button (for Edit/Display)
@@ -402,7 +403,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		alwaysOnTopItem.setDisable(true);
 		searchPadMenuItem.setDisable(true);
 
-		connect.setEditMode(DesktopEditMode.PLAY); // TODO -> Button Mit wecheln
+		connect.setEditMode(DesktopEditMode.PLAY);
 	}
 
 	@Override

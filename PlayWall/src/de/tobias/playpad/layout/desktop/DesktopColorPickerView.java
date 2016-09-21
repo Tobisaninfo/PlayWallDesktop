@@ -2,27 +2,28 @@ package de.tobias.playpad.layout.desktop;
 
 import java.util.function.Consumer;
 
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
+
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
-import de.tobias.playpad.settings.Profile;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class DesktopColorPickerView implements Consumer<DisplayableColor>, EventHandler<MouseEvent> {
 
-	private Stage stage;
-
 	private ColorModeHandler colorModeHandler;
 	private DisplayableColor selectedColor;
+
+	private PopOver colorChooser;
 
 	public DesktopColorPickerView(ColorModeHandler colorModeHandler) {
 		this.colorModeHandler = colorModeHandler;
@@ -30,28 +31,33 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 		Node node = colorModeHandler.getColorInterface(this);
 		VBox root = new VBox(node);
 
-		stage = new Stage();
-		stage.setScene(new Scene(root));
-
 		// Init Stage
-		Profile.currentProfile().currentLayout().applyCss(stage);
-		stage.setResizable(false);
+		colorChooser = new PopOver();
+		colorChooser.setContentNode(root);
+		colorChooser.setDetachable(false);
+		colorChooser.setOnHiding(e -> colorChooser = null);
+		colorChooser.setCornerRadius(5);
+		colorChooser.setArrowLocation(ArrowLocation.LEFT_CENTER);
 	}
 
-	public void show() {
-		stage.show();
+	public void show(Node anchorNode) {
+		colorChooser.show(anchorNode);
 	}
 
 	public void hide() {
-		stage.close();
+		if (colorChooser != null) {
+			colorChooser.hide();
+		}
 	}
 
 	// Handle Selected Color from View.
 	@Override
 	public void accept(DisplayableColor t) {
 		selectedColor = t;
+		colorChooser.hide();
 	}
 
+	// Listener, wenn auf ein Pad Geclicked wurde, zum färben
 	@Override
 	public void handle(MouseEvent event) {
 		// TODO Rewrite this
@@ -60,9 +66,14 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 			if (view.getUserData() instanceof Pad) {
 				Pad pad = (Pad) view.getUserData();
 				PadSettings padSettings = pad.getPadSettings();
-				padSettings.setCustomLayout(true);
-				CartDesign design = padSettings.getDesign();
-				colorModeHandler.setColor(design, selectedColor);
+
+				if (event.getButton() == MouseButton.PRIMARY) {
+					padSettings.setCustomLayout(true);
+					CartDesign design = padSettings.getDesign();
+					colorModeHandler.setColor(design, selectedColor);
+				} else if (event.getButton() == MouseButton.SECONDARY) {
+					padSettings.setCustomLayout(false);
+				}
 				PlayPadMain.getProgramInstance().getMainViewController().loadUserCss();
 			}
 		}
