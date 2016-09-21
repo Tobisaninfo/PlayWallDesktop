@@ -2,6 +2,7 @@ package de.tobias.playpad.layout.desktop;
 
 import java.util.Optional;
 
+import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
@@ -13,11 +14,16 @@ import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-public class DesktopButtonEditView extends HBox implements EventHandler<ActionEvent> {
+public class DesktopPageEditButtonView extends HBox implements EventHandler<ActionEvent> {
 
 	private Page page;
 	private Button leftMoveButton;
@@ -28,7 +34,7 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 	private transient Button pageButton;
 	private transient MenuToolbarViewController controller;
 
-	public DesktopButtonEditView(MenuToolbarViewController controller, Page page, Button pageButton) {
+	public DesktopPageEditButtonView(MenuToolbarViewController controller, Page page, Button pageButton) {
 		this.page = page;
 		this.pageButton = pageButton;
 		this.controller = controller;
@@ -91,26 +97,47 @@ public class DesktopButtonEditView extends HBox implements EventHandler<ActionEv
 			event.consume();
 		} else if (event.getSource() == editTextButton) {
 			TextInputDialog dialog = new TextInputDialog();
+
+			dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Name_Header));
+			dialog.setContentText(Localization.getString(Strings.UI_Dialog_Page_Name_Content));
+			dialog.initOwner(controller.getStage());
+			dialog.initModality(Modality.WINDOW_MODAL);
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
 			Optional<String> result = dialog.showAndWait();
-			// TODO Owner, Modal, Icon, Text
-			result.ifPresent(name ->
+
+			result.filter(name -> name != null && !name.isEmpty()).ifPresent(name ->
 			{
 				page.setName(name);
 			});
 
+			// Update Page Button in Toolbar
 			String name = page.getName();
-			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (page.getId() + 1));
-			}
+			if (name.isEmpty())
+				name = Localization.getString(Strings.UI_Window_Main_PageButton, (page.getId() + 1)); // Default Text
 			pageButton.setText(name);
 
 			event.consume();
 		} else if (event.getSource() == deleteButton) {
-			// TODO Fragen
-			Project project = page.getProjectReference();
-			project.removePage(page);
-			controller.initPageButtons();
-			controller.highlightPageButton(0); // Show first page 
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+
+			alert.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Delete_Header));
+			alert.setContentText(Localization.getString(Strings.UI_Dialog_Page_Delete_Content));
+			alert.initOwner(controller.getStage());
+			alert.initModality(Modality.WINDOW_MODAL);
+			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			System.out.println(result);
+			result.filter(r -> r == ButtonType.OK).ifPresent(r ->
+			{
+				Project project = page.getProjectReference();
+				project.removePage(page);
+				controller.initPageButtons();
+				controller.highlightPageButton(0); // Show first page
+			});
 		}
 	}
 
