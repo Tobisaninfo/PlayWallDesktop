@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.pad;
+package de.tobias.playpad.layout.desktop.pad;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.layout.desktop.DesktopEditMode;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
@@ -19,6 +21,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -31,12 +34,12 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class PadDragListener {
+public class DesktopPadDragListener {
 
 	private Pad sourcePad;
 	final private Pane view;
 
-	private static boolean dndMode;
+	private DesktopMainLayoutConnect connect;
 	private static Project project;
 
 	private PadDragOptionView padHud;
@@ -44,8 +47,10 @@ public class PadDragListener {
 
 	private static DataFormat dataFormat = new DataFormat("de.tobias.playpad.padindex");
 
-	public PadDragListener(Pad pad, IPadView view) {
+	public DesktopPadDragListener(Pad pad, IPadView view, DesktopMainLayoutConnect connect) {
 		this.sourcePad = pad;
+		this.connect = connect;
+
 		this.view = view.getRootNode();
 
 		// Drag and Drop
@@ -157,12 +162,12 @@ public class PadDragListener {
 			PadIndex padID = (PadIndex) db.getContent(dataFormat); // TODO Check Cast
 
 			PadDragMode mode = padHud.getSelectedPadDragMode();
-			
+
 			mode.handle(padID, sourcePad.getPadIndex(), project);
 			padHud.hide();
 
-			PlayPadPlugin.getImplementation().getMainViewController()
-					.showPage(PlayPadPlugin.getImplementation().getMainViewController().getPage());
+			IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+			mainViewController.showPage(mainViewController.getPage());
 
 			event.setDropCompleted(success);
 			event.consume();
@@ -170,7 +175,7 @@ public class PadDragListener {
 	}
 
 	private void dragDetacted(MouseEvent event) {
-		if (dndMode) {
+		if (connect.getEditMode() == DesktopEditMode.DRAG) {
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
 			if (sourcePad.getProject() != null) {
@@ -187,8 +192,8 @@ public class PadDragListener {
 			for (int x = 0; x < snapshot.getWidth(); x++) {
 				for (int y = 0; y < snapshot.getHeight(); y++) {
 					Color oldColor = snapshot.getPixelReader().getColor(x, y).darker().darker();
-					snapshot.getPixelWriter().setColor(x, y,
-							new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getOpacity() * 0.5));
+					Color newColor = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getOpacity() * 0.5);
+					snapshot.getPixelWriter().setColor(x, y, newColor);
 				}
 			}
 
@@ -202,23 +207,8 @@ public class PadDragListener {
 		}
 	}
 
-	/**
-	 * Aktiviert den Drag And Drop Modus für Kacheln. Diese Methode muss vom Menu / KeyShortcut aufgerufen werden.
-	 * 
-	 * @param dndMode
-	 *            <code>true</code> Aktiv
-	 */
-	public static void setDndMode(boolean dndMode) {
-		PadDragListener.dndMode = dndMode;
-	}
-
-	@Deprecated
-	public void setPad(Pad pad) {
-		this.sourcePad = pad;
-	}
-
 	public static void setProject(Project project) {
-		PadDragListener.project = project;
+		DesktopPadDragListener.project = project;
 	}
 
 }

@@ -11,8 +11,8 @@ import com.hp.gagawa.java.elements.Tr;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.application.ApplicationUtils;
@@ -46,7 +46,7 @@ public class PrintDialog extends ViewController {
 		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
-		int pages = project.getSettings().getPageCount();
+		int pages = project.getPages().size();
 		for (int i = 0; i < pages; i++) {
 			pageComboBox.getItems().add(i + 1);
 		}

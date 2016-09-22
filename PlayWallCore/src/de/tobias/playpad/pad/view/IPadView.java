@@ -39,7 +39,7 @@ public interface IPadView {
 	public IPadViewController getViewController();
 
 	/**
-	 * Gibt das oberste GUI Element zurück, welche im MainView verwendet wird.
+	 * Gibt das oberste GUI Element des Pads zurück, welche im MainView verwendet wird.
 	 * 
 	 * @return root node
 	 */

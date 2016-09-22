@@ -166,6 +166,15 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		endStyleClass(builder);
 	}
 
+	@Override
+	public void copyGlobalLayout(GlobalDesign globalLayout) {
+		if (globalLayout instanceof ModernGlobalDesign) {
+			ModernGlobalDesign modernLayoutGlobal = (ModernGlobalDesign) globalLayout;
+			backgroundColor = modernLayoutGlobal.getBackgroundColor();
+			playColor = modernLayoutGlobal.getPlayColor();
+		}
+	}
+
 	// Color Associator
 	@Override
 	public Color getAssociatedEventColor() {
@@ -177,12 +186,4 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		return Color.web(backgroundColor.getColorHi());
 	}
 
-	@Override
-	public void copyGlobalLayout(GlobalDesign globalLayout) {
-		if (globalLayout instanceof ModernGlobalDesign) {
-			ModernGlobalDesign modernLayoutGlobal = (ModernGlobalDesign) globalLayout;
-			backgroundColor = modernLayoutGlobal.getBackgroundColor();
-			playColor = modernLayoutGlobal.getPlayColor();
-		}
-	}
 }

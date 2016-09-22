@@ -3,11 +3,14 @@ package de.tobias.playpad.design.modern;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.FadeableColor;
@@ -19,14 +22,16 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.Warning;
+import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator {
+public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator, ColorModeHandler {
 
 	public static final String TYPE = "modern";
 
@@ -312,5 +317,18 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	@Override
 	public Color getAssociatedStandardColor() {
 		return Color.web(backgroundColor.getColorHi());
+	}
+
+	// Color View
+	@Override
+	public Node getColorInterface(Consumer<DisplayableColor> onSelection) {
+		return new ColorPickerView(null, ModernColor.values(), onSelection);
+	}
+
+	@Override
+	public void setColor(CartDesign design, DisplayableColor color) {
+		if (design instanceof ModernCartDesign && color instanceof ModernColor) {
+			((ModernCartDesign) design).setBackgroundColor((ModernColor) color);
+		}
 	}
 }

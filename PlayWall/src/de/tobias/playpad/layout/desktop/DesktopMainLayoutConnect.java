@@ -3,11 +3,15 @@ package de.tobias.playpad.layout.desktop;
 import java.util.Stack;
 
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadView;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.util.Localization;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * Desktop Implmentierung des Main Layouts.
@@ -21,6 +25,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	private static final String TYPE = "Desktop";
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
+	private ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
 
 	private Stack<IPadView> recyclingStack;
 
@@ -41,7 +46,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 	@Override
 	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef) {
 		if (desktopMenuToolbarViewController == null) {
-			desktopMenuToolbarViewController = new DesktopMenuToolbarViewController(mainViewRef);
+			desktopMenuToolbarViewController = new DesktopMenuToolbarViewController(mainViewRef, this);
 		}
 		return desktopMenuToolbarViewController;
 	}
@@ -51,7 +56,7 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 		if (!recyclingStack.isEmpty()) {
 			return recyclingStack.pop();
 		}
-		return new DesktopPadView();
+		return new DesktopPadView(this);
 	}
 
 	@Override
@@ -64,4 +69,18 @@ public class DesktopMainLayoutConnect implements MainLayoutConnect {
 		return null;
 	}
 
+	public DesktopEditMode getEditMode() {
+		return editMode.get();
+	}
+
+	public void setEditMode(DesktopEditMode editMode) {
+		if (editMode != DesktopEditMode.PLAY && Profile.currentProfile().getProfileSettings().isLocked()) {
+			return;
+		}
+		this.editMode.set(editMode);
+	}
+
+	public ObjectProperty<DesktopEditMode> editModeProperty() {
+		return editMode;
+	}
 }

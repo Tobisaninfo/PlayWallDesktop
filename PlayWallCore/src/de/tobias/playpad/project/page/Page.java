@@ -76,6 +76,7 @@ public class Page {
 
 	public void setPad(int id, Pad pad) {
 		pads.put(id, pad);
+		pad.setPage(this.id);
 		pad.setIndex(id);
 	}
 
@@ -85,5 +86,10 @@ public class Page {
 
 	public void removePade(int id) {
 		pads.remove(id);
+	}
+	
+	@Override
+	public String toString() {
+		return "Page [id=" + id + "]";
 	}
 }

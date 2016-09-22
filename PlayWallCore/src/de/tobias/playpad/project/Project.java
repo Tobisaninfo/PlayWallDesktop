@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -47,16 +46,17 @@ public class Project {
 	 * Pattern für den Namen des Projekts
 	 */
 	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
+	
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
-	private final HashMap<Integer, Page> pages;
+	private final List<Page> pages;
 
 	private final ProjectReference projectReference;
 	private ProjectSettings settings;
-	
+
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
@@ -65,9 +65,9 @@ public class Project {
 
 	public Project(ProjectReference ref) {
 		this.projectReference = ref;
-		this.pages = new HashMap<>();
+		this.pages = new ArrayList<>();
 		this.settings = new ProjectSettings();
-		
+
 		this.exceptions = FXCollections.observableArrayList();
 		this.activePlayers = new SimpleIntegerProperty();
 	}
@@ -98,7 +98,7 @@ public class Project {
 	}
 
 	public Pad getPad(UUID uuid) {
-		for (Page page : pages.values()) {
+		for (Page page : pages) {
 			for (Pad pad : page.getPads()) {
 				if (pad.getUuid().equals(uuid)) {
 					return pad;
@@ -119,25 +119,29 @@ public class Project {
 
 	public Collection<Pad> getPads() {
 		List<Pad> pads = new ArrayList<>();
-		pages.values().stream().map(page -> page.getPads()).forEach(pads::addAll);
+		pages.stream().map(page -> page.getPads()).forEach(pads::addAll);
 		return pads;
 	}
 
 	// Pages
 
 	public Page getPage(int index) {
-		if (!pages.containsKey(index) && index < settings.getPageCount()) {
-			pages.put(index, new Page(index, this));
+		if (index >= pages.size() && index < ProjectSettings.MAX_PAGES) {
+			pages.add(new Page(index, this));
 		}
 		return pages.get(index);
 	}
 
 	public Collection<Page> getPages() {
-		return pages.values();
+		// Create new page if all is empty (automaticlly)
+		if (pages.isEmpty()) {
+			pages.add(new Page(0, this));
+		}
+		return pages;
 	}
 
 	public void setPage(int index, Page page) {
-		pages.put(index, page);
+		pages.set(index, page);
 		page.setId(index);
 	}
 
@@ -170,7 +174,7 @@ public class Project {
 			XMLHandler<Page> handler = new XMLHandler<>(rootElement);
 			List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
 			for (Page page : pages) {
-				project.pages.put(page.getId(), page);
+				project.pages.add(page);
 			}
 
 			// Lädt die Einstellungen
@@ -200,7 +204,7 @@ public class Project {
 
 		// Speichern der Pads
 		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
-		handler.saveElements(PAGE_ELEMENT, pages.values(), new PageSerializer(this));
+		handler.saveElements(PAGE_ELEMENT, pages, new PageSerializer(this));
 
 		// Speichern der Settings
 		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);
@@ -269,7 +273,7 @@ public class Project {
 	public ObservableList<PadException> getExceptions() {
 		return exceptions;
 	}
-	
+
 	// Utils
 	public void loadPadsContent() {
 		getPads().forEach(pad ->
@@ -294,5 +298,22 @@ public class Project {
 			if (pad.getContent() != null)
 				pad.getContent().unloadMedia();
 		});
+	}
+
+	public void removePage(Page page) {
+		pages.remove(page.getId());
+		// Neue Interne Indies für die Pages
+		for (int i = page.getId(); i < pages.size(); i++) {
+			Page tempPage = pages.get(i);
+			tempPage.setId(i);
+		}
+	}
+
+	public void addPage() {
+		if (pages.size() == ProjectSettings.MAX_PAGES) {
+			return;
+		}
+		int index = pages.size();
+		pages.add(new Page(index, this));
 	}
 }

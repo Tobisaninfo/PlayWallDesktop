@@ -104,9 +104,9 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	}
 
 	@Override
-	public void setColor(FeedbackMessage feedbackMessage, int value) {
+	public void setColor(FeedbackMessage feedbackMessage, DisplayableFeedbackColor color) {
 		if (feedbackMessage == FeedbackMessage.STANDARD || feedbackMessage == FeedbackMessage.EVENT) {
-			feedback.setFeedback(feedbackMessage, value);
+			feedback.setFeedback(feedbackMessage, color.mapperFeedbackValue());
 		} else {
 			throw new IllegalArgumentException("Unexpected Message Type.");
 		}

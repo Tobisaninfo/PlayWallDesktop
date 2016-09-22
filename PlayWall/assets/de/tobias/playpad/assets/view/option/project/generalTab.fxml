@@ -5,16 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label text="%settings.gen.label.view" underline="true" />
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="BASELINE_RIGHT" layoutX="21.0" layoutY="40.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.pages" />
-            <TextField fx:id="pageCountTextField" prefWidth="50.0" />
-         </children>
-      </HBox>
       <HBox spacing="14.0">
          <children>
             <Label alignment="BASELINE_RIGHT" layoutX="20.0" layoutY="68.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.columns" />

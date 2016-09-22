@@ -50,7 +50,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 			return;
 		}
 
-		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
+		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
 			button.setUserData(i);
 			button.setFocusTraversable(false);

@@ -15,6 +15,7 @@ import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
@@ -34,7 +35,6 @@ import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.ui.BasicControllerSettings;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -45,6 +45,7 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -386,7 +387,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
-		PadDragListener.setProject(project);
+		DesktopPadDragListener.setProject(project);
 		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
@@ -490,9 +491,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (openProject == null) {
 			return false;
 		}
-		ProjectSettings projectSettings = openProject.getSettings();
 
-		if (page < 0 || page >= projectSettings.getPageCount()) {
+		if (page < 0 || page >= openProject.getPages().size()) {
 			return false;
 		}
 
@@ -504,6 +504,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.highlightPageButton(page);
 		}
+		
 		return true;
 	}
 
@@ -642,6 +643,18 @@ public class MainViewController extends ViewController implements IMainViewContr
 	@Override
 	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener) {
 		getParent().getScene().addEventHandler(eventType, listener);
+	}
+
+	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().addEventFilter(eventType, handler);
+		}
+	}
+	
+	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().removeEventFilter(eventType, handler);
+		}
 	}
 
 	@Override

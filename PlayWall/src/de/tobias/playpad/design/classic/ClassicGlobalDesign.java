@@ -328,7 +328,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {
-				CartDesign layoutOpt = padSettings.getLayout();
+				CartDesign layoutOpt = padSettings.getDesign();
 				css += "\n" + layoutOpt.convertToCss(pad.getPadIndex().toString(), true);
 			}
 		}

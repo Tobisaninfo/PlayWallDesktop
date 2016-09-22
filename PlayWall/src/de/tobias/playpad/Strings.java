@@ -257,4 +257,18 @@ public class Strings {
 	public static final String Search_Button = "Search.Button";
 	public static final String Search_Placeholder = "Search.Placeholder";
 	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches";
+	
+	// UI - Dialog - Page - Delete
+	public static final String UI_Dialog_Page_Delete_Header = "UI.Dialog.Page.Delete.Header";
+	public static final String UI_Dialog_Page_Delete_Content = "UI.Dialog.Page.Delete.Content";
+	
+	// UI - Dialog - Page - Name
+	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
+	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
+	
+	// Tooltip
+	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
+	public static final String Tooltip_DragButton = "Tooltip.DragButton";
+	public static final String Tooltip_PageButton = "Tooltip.PageButton";
+	public static final String Tooltip_ColorButton = "Tooltip.ColorButton";
 }

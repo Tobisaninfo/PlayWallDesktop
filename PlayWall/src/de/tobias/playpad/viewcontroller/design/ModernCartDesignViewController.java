@@ -10,7 +10,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.view.ColorView;
+import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,7 +65,7 @@ public class ModernCartDesignViewController extends CartDesignViewController {
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
-		ColorView view = new ColorView(startColor, ModernColor.values(), (DisplayableColor t) ->
+		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), (DisplayableColor t) ->
 		{
 			colorChooser.hide();
 

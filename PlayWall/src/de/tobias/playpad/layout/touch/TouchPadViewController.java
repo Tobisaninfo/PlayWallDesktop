@@ -14,7 +14,6 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -36,8 +35,6 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 	private PadContentListener padContentListener;
 	private PadDurationListener padDurationListener;
 	private IPadPositionListener padPositionListener;
-
-	private PadDragListener padDragListener;
 
 	public TouchPadViewController(TouchPadView padView) {
 		this.padView = padView;
@@ -89,8 +86,6 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			// First Listener call with new data
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
-
-			padDragListener = new PadDragListener(pad, padView);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,14 +115,12 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 				durationable.positionProperty().removeListener(padPositionListener);
 			}
 			pad.setController(null);
-			padDragListener = null;
 
 			// GUI Cleaning
 			padPositionListener.stopWaning();
 			padView.removeStyleClasses();
 		}
 
-		this.padDragListener = null;
 		this.pad = null;
 	}
 
@@ -229,9 +222,5 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 	@Override
 	public ChangeListener<Duration> getPadDurationListener() {
 		return padDurationListener;
-	}
-
-	public PadDragListener getPadDragListener() {
-		return padDragListener;
 	}
 }

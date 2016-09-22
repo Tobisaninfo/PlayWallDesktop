@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.pad;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.DesktopEditMode;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.PadStatus;
@@ -29,7 +31,6 @@ import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.Localization;
@@ -44,7 +45,6 @@ import javafx.util.Duration;
 
 public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
-	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
@@ -57,10 +57,13 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	private PadDurationListener padDurationListener;
 	private IPadPositionListener padPositionListener;
 
-	private PadDragListener padDragListener;
+	private DesktopPadDragListener padDragListener;
 
-	public DesktopPadViewController(DesktopPadView padView) {
+	private DesktopMainLayoutConnect connect;
+
+	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutConnect connect) {
 		this.padView = padView;
+		this.connect = connect;
 
 		padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
@@ -109,7 +112,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
-			padDragListener = new PadDragListener(pad, padView);
+			padDragListener = new DesktopPadDragListener(pad, padView, connect);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -157,21 +160,23 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	@Override
 	public void handle(ActionEvent event) {
-		if (event.getSource() == padView.getPlayButton()) {
-			onPlay();
-		} else if (event.getSource() == padView.getPauseButton()) {
-			onPause();
-		} else if (event.getSource() == padView.getStopButton()) {
-			onStop();
-		} else if (event.getSource() == padView.getNewButton()) {
-			try {
-				onNew(event);
-			} catch (NoSuchComponentException e) {
-				// TODO Error Handling
-				e.printStackTrace();
+		if (connect.getEditMode() == DesktopEditMode.PLAY) {
+			if (event.getSource() == padView.getPlayButton()) {
+				onPlay();
+			} else if (event.getSource() == padView.getPauseButton()) {
+				onPause();
+			} else if (event.getSource() == padView.getStopButton()) {
+				onStop();
+			} else if (event.getSource() == padView.getNewButton()) {
+				try {
+					onNew(event);
+				} catch (NoSuchComponentException e) {
+					// TODO Error Handling
+					e.printStackTrace();
+				}
+			} else if (event.getSource() == padView.getSettingsButton()) {
+				onSettings();
 			}
-		} else if (event.getSource() == padView.getSettingsButton()) {
-			onSettings();
 		}
 	}
 
@@ -393,7 +398,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		return padDurationListener;
 	}
 
-	public PadDragListener getPadDragListener() {
+	public DesktopPadDragListener getPadDragListener() {
 		return padDragListener;
 	}
 }

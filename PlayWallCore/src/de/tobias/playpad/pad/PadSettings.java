@@ -152,7 +152,7 @@ public class PadSettings {
 		return customLayoutProperty;
 	}
 
-	public CartDesign getLayout() {
+	public CartDesign getDesign() {
 		return getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
 	}
 

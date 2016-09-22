@@ -1,7 +1,8 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.PadContent;
@@ -57,9 +58,9 @@ public class DesktopPadView implements IPadView {
 	private BusyView busyView;
 
 	private transient DesktopPadViewController controller; // Reference to its controller
-
-	public DesktopPadView() {
-		controller = new DesktopPadViewController(this);
+	
+	public DesktopPadView(DesktopMainLayoutConnect connect) {
+		controller = new DesktopPadViewController(this, connect);
 		setupView();
 	}
 
@@ -126,6 +127,8 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void setContentView(Pad pad) {
+		superRoot.setUserData(pad);
+		
 		if (previewContent != null) {
 			previewContent.deinit();
 		}
@@ -334,7 +337,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		Pad pad = getViewController().getPad();
-		PadIndex index = pad.getPadIndex();
+		int index = pad.getIndex();
 
 		superRoot.getStyleClass().removeAll("pad", "pad" + index);
 

@@ -4,6 +4,13 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;
 import javafx.scene.input.DragEvent;
 
+/**
+ * Drag and Drop eines Pads auf ein Page Button (umschalten auf neue Page), wird im DesktopMenuToolbarController verwaltet.
+ * 
+ * @author tobias
+ * 
+ * @since 5.1.0
+ */
 public class PageButtonDragHandler implements EventHandler<DragEvent> {
 
 	private IMainViewController controller;
