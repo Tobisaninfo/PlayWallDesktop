@@ -504,6 +504,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.highlightPageButton(page);
 		}
+		
 		return true;
 	}
 
@@ -647,6 +648,12 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
 		for (IPadView view : padViews) {
 			view.getRootNode().addEventFilter(eventType, handler);
+		}
+	}
+	
+	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().removeEventFilter(eventType, handler);
 		}
 	}
 

@@ -76,6 +76,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -84,6 +85,8 @@ import javafx.stage.Stage;
 
 public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
 		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
+
+	// TODO Page Buttons gleicher Margin wie pads
 
 	// meuBar
 	@FXML protected MenuBar menuBar;
@@ -120,6 +123,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	protected SegmentedButton editButtons;
 	protected ToggleButton playButton;
 	protected ToggleButton dragButton;
+	protected ToggleButton pageButton;
 	protected ToggleButton colorButton;
 	private Button addPageButton;
 
@@ -160,10 +164,16 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Edit Mode Buttons
 		editButtons = new SegmentedButton();
 		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
+		playButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PlayButton)));
 		playButton.setFocusTraversable(false);
 		dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
+		dragButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_DragButton)));
 		dragButton.setFocusTraversable(false);
+		pageButton = new ToggleButton("", new FontIcon(FontAwesomeType.FILES_ALT));
+		pageButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PageButton)));
+		pageButton.setFocusTraversable(false);
 		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
+		colorButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_ColorButton)));
 		colorButton.setFocusTraversable(false);
 		// Zeigt die Farbauswahl
 		colorButton.setOnAction(e ->
@@ -177,13 +187,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
 			}
 		});
-		editButtons.getButtons().addAll(playButton, dragButton, colorButton);
+		editButtons.getButtons().addAll(playButton, dragButton, pageButton, colorButton);
 		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
 		{
 			if (c == playButton) {
 				connect.setEditMode(DesktopEditMode.PLAY);
 			} else if (c == dragButton) {
 				connect.setEditMode(DesktopEditMode.DRAG);
+			} else if (c == pageButton) {
+				connect.setEditMode(DesktopEditMode.PAGE);
 			} else if (c == colorButton) {
 				connect.setEditMode(DesktopEditMode.COLOR);
 			} else if (c == null) {
@@ -213,9 +225,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
+		} else if (oldValue == DesktopEditMode.PAGE) {
+			highlightPageButton(currentSelectedPageButton);
 			iconHbox.getChildren().remove(addPageButton);
 		} else if (oldValue == DesktopEditMode.COLOR) {
 			if (colorPickerView != null) {
+				mainViewController.removeListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
 				colorPickerView.hide();
 				colorPickerView = null;
 			}
@@ -230,13 +245,14 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(true);
 			}
+		} else if (newValue == DesktopEditMode.PAGE) {
+			pageButton.setSelected(true);
 			iconHbox.getChildren().add(0, addPageButton);
+			highlightPageButton(currentSelectedPageButton);
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
 		}
 
-		// Update Page Button (for Edit/Display)
-		highlightPageButton(currentSelectedPageButton);
 	}
 
 	private void initLayoutMenu() {
@@ -430,7 +446,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentSelectedPageButton = index;
 
-				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.DRAG) { // Nur bei Drag And Drop mode
+				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.PAGE) { // Nur bei Drag And Drop mode
 					Button button = (Button) newNode;
 					DesktopPageEditButtonView editBox = new DesktopPageEditButtonView(this, openProject.getPage(index), button);
 					button.setGraphic(editBox);

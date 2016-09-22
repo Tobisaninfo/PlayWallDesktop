@@ -26,6 +26,7 @@ public class Profile {
 	private static final String MAPPING_XML = "Mapping.xml";
 	private static final String LAYOUT_XML = "Layout.xml";
 
+	// TODO REDO
 	public static final String profileNameEx = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();

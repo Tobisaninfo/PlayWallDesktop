@@ -45,6 +45,7 @@ public class Project {
 	/**
 	 * Pattern für den Namen des Projekts
 	 */
+	// TODO REDO
 	public static final String PROJECT_NAME_PATTERN = "\\w{1}[\\w\\s-_]{0,}";
 	/**
 	 * Dateiendung für eine projekt Datei
@@ -309,6 +310,9 @@ public class Project {
 	}
 
 	public void addPage() {
+		if (pages.size() == ProjectSettings.MAX_PAGES) {
+			return;
+		}
 		int index = pages.size();
 		pages.add(new Page(index, this));
 	}

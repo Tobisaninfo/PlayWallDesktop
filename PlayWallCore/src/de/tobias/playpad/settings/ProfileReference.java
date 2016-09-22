@@ -65,6 +65,7 @@ public class ProfileReference implements Displayable {
 	public ProfileReference(UUID uuid, String name) {
 		this.uuid = uuid;
 		this.name = name;
+		requestedModules = new HashSet<>();
 		updateDisplayProperty();
 	}
 

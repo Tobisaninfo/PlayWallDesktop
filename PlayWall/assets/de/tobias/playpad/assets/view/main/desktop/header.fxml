@@ -39,21 +39,25 @@
       </Menu>
       <Menu mnemonicParsing="false" text="%main.menu.option">
          <items>
-                  <MenuItem fx:id="playMenu" mnemonicParsing="false" onAction="#playMenuHandler" text="%main.menuitem.play">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem fx:id="dragMenu" mnemonicParsing="false" onAction="#dragMenuHandler" text="%main.menuitem.drag">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="M" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                     </accelerator>
-                  </MenuItem>
-                  <MenuItem fx:id="colorMenu" mnemonicParsing="false" onAction="#colorMenuHandler" text="%main.menuitem.color">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                     </accelerator>
-                  </MenuItem>
+                  <Menu mnemonicParsing="false" text="%main.menu.editmode">
+                     <items>
+                        <MenuItem fx:id="playMenu" mnemonicParsing="false" onAction="#playMenuHandler" text="%main.menuitem.play">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="dragMenu" mnemonicParsing="false" onAction="#dragMenuHandler" text="%main.menuitem.drag">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="M" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="colorMenu" mnemonicParsing="false" onAction="#colorMenuHandler" text="%main.menuitem.color">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                           </accelerator>
+                        </MenuItem>
+                     </items>
+                  </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="errorMenu" mnemonicParsing="false" onAction="#errorMenuHandler" text="%main.menuitem.errors">
                <accelerator>

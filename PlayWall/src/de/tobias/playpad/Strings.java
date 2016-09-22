@@ -265,4 +265,10 @@ public class Strings {
 	// UI - Dialog - Page - Name
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
+	
+	// Tooltip
+	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
+	public static final String Tooltip_DragButton = "Tooltip.DragButton";
+	public static final String Tooltip_PageButton = "Tooltip.PageButton";
+	public static final String Tooltip_ColorButton = "Tooltip.ColorButton";
 }

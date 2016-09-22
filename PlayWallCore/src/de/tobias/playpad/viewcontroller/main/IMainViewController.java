@@ -152,4 +152,6 @@ public interface IMainViewController extends NotificationHandler {
 	public NotificationPane getNotificationPane();
 
 	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
+	
+	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 }

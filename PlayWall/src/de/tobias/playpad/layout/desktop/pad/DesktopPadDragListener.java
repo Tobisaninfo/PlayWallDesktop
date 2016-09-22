@@ -21,6 +21,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -165,8 +166,8 @@ public class DesktopPadDragListener {
 			mode.handle(padID, sourcePad.getPadIndex(), project);
 			padHud.hide();
 
-			PlayPadPlugin.getImplementation().getMainViewController()
-					.showPage(PlayPadPlugin.getImplementation().getMainViewController().getPage());
+			IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+			mainViewController.showPage(mainViewController.getPage());
 
 			event.setDropCompleted(success);
 			event.consume();
@@ -191,8 +192,8 @@ public class DesktopPadDragListener {
 			for (int x = 0; x < snapshot.getWidth(); x++) {
 				for (int y = 0; y < snapshot.getHeight(); y++) {
 					Color oldColor = snapshot.getPixelReader().getColor(x, y).darker().darker();
-					snapshot.getPixelWriter().setColor(x, y,
-							new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getOpacity() * 0.5));
+					Color newColor = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getOpacity() * 0.5);
+					snapshot.getPixelWriter().setColor(x, y, newColor);
 				}
 			}
 
