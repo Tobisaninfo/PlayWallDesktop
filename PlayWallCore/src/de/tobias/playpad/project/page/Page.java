@@ -76,6 +76,7 @@ public class Page {
 
 	public void setPad(int id, Pad pad) {
 		pads.put(id, pad);
+		pad.setPage(this.id);
 		pad.setIndex(id);
 	}
 
