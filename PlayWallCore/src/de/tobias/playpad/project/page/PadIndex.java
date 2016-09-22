@@ -56,7 +56,7 @@ public class PadIndex implements Serializable {
 
 	@Override
 	public String toString() {
-		return "PadIndex [id=" + id + ", page=" + page + "]";
+		return id + "-" + page;
 	}
 
 }

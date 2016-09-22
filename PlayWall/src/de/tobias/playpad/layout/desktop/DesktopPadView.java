@@ -10,6 +10,7 @@ import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -301,7 +302,7 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public void applyStyleClasses(int index) {
+	public void applyStyleClasses(PadIndex index) {
 		superRoot.getStyleClass().addAll("pad", "pad" + index);
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
@@ -333,7 +334,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		Pad pad = getViewController().getPad();
-		int index = pad.getIndex();
+		PadIndex index = pad.getPadIndex();
 
 		superRoot.getStyleClass().removeAll("pad", "pad" + index);
 

@@ -114,7 +114,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			e.printStackTrace();
 		}
 
-		padView.applyStyleClasses(pad.getIndex());
+		padView.applyStyleClasses(pad.getPadIndex());
 		padView.setContentView(pad);
 	}
 
@@ -269,7 +269,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			}
 
 			Stage owner = mvc.getStage();
-			
+
 			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
 			padSettingsViewController.getStage().setOnHiding(ev ->
 			{

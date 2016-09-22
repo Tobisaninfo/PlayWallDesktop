@@ -87,9 +87,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			pad.statusProperty().addListener(padStatusListener);
 
 			// First Listener call with new data
-			padContentListener.changed(null, null, pad.getContent()); // Add
-																		// Duration
-																		// listener
+			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
 			padDragListener = new PadDragListener(pad, padView);
@@ -97,7 +95,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			e.printStackTrace();
 		}
 
-		padView.applyStyleClasses(pad.getIndex());
+		padView.applyStyleClasses(pad.getPadIndex());
 		padView.setContentView(pad);
 	}
 

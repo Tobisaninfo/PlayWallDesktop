@@ -8,6 +8,7 @@ import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -231,7 +232,7 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public void applyStyleClasses(int index) {
+	public void applyStyleClasses(PadIndex index) {
 		superRoot.getStyleClass().addAll("pad", "pad" + index);
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");

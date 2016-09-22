@@ -2,6 +2,7 @@ package de.tobias.playpad.pad.view;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.project.page.PadIndex;
 import javafx.css.PseudoClass;
 import javafx.scene.layout.Pane;
 
@@ -120,8 +121,11 @@ public interface IPadView {
 
 	/**
 	 * Fügt die StyleClasses der PadView hinzu. Die Methode wird vom Controller aufgerufen.
+	 * 
+	 * @param index
+	 *            Index von der Kachel
 	 */
-	public void applyStyleClasses(int index);
+	public void applyStyleClasses(PadIndex index);
 
 	/**
 	 * Entfernt die StyleClasses vom PadView. Die Methode wird vom Controller aufgerufen.
