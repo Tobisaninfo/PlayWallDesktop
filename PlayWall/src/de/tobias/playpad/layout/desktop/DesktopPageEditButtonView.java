@@ -130,7 +130,6 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 			Optional<ButtonType> result = alert.showAndWait();
-			System.out.println(result);
 			result.filter(r -> r == ButtonType.OK).ifPresent(r ->
 			{
 				Project project = page.getProjectReference();

@@ -117,7 +117,7 @@ public interface IPadView {
 	 * @param pad
 	 *            Pad
 	 */
-	public void addDefaultElement(Pad pad);
+	public void addDefaultElements(Pad pad);
 
 	/**
 	 * Fügt die StyleClasses der PadView hinzu. Die Methode wird vom Controller aufgerufen.

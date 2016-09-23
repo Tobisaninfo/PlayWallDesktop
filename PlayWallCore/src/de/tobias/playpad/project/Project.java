@@ -46,7 +46,7 @@ public class Project {
 	 * Pattern für den Namen des Projekts
 	 */
 	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
-	
+
 	/**
 	 * Dateiendung für eine projekt Datei
 	 */
@@ -109,9 +109,12 @@ public class Project {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
-		if (pad.getPage() != index.getPage()) {
-			Page oldPage = getPage(pad.getPage());
-			oldPage.removePade(index.getId());
+		if (pad != null) {
+
+			if (pad.getPage() != index.getPage()) {
+				Page oldPage = getPage(pad.getPage());
+				oldPage.removePade(index.getId());
+			}
 		}
 		Page page = pages.get(index.getPage());
 		page.setPad(index.getId(), pad);
@@ -124,7 +127,6 @@ public class Project {
 	}
 
 	// Pages
-
 	public Page getPage(int index) {
 		if (index >= pages.size() && index < ProjectSettings.MAX_PAGES) {
 			pages.add(new Page(index, this));
@@ -309,11 +311,12 @@ public class Project {
 		}
 	}
 
-	public void addPage() {
+	public boolean addPage() {
 		if (pages.size() == ProjectSettings.MAX_PAGES) {
-			return;
+			return false;
 		}
 		int index = pages.size();
 		pages.add(new Page(index, this));
+		return true;
 	}
 }

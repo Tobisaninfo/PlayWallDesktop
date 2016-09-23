@@ -220,7 +220,7 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public void addDefaultElement(Pad pad) {
+	public void addDefaultElements(Pad pad) {
 		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
 
 		// alle Labels in der InfoBox sollen die gleiche Höhe haben, damit die Icons auf gleicher höhe sind

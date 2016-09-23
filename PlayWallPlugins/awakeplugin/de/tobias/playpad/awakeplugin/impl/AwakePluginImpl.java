@@ -94,7 +94,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		if (Files.notExists(folder)) {
 			Files.createFile(folder);
 			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/libAwake/libAwakeLib.dylib");
-			System.out.println("Downlaod " + url);
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), folder);
 		}
 		return folder;
@@ -109,14 +109,14 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		if (Files.notExists(jnaFile)) {
 			Files.createDirectories(folder);
 			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna.jar");
-			System.out.println("Downlaod " + url);
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
 			Files.createDirectories(folder);
 			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna-platform.jar");
-			System.out.println("Downlaod " + url);
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), jnaPlatformFile);
 		}
 	}

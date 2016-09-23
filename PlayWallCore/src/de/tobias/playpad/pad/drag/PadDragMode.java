@@ -15,7 +15,18 @@ public abstract class PadDragMode implements Displayable, Comparable<PadDragMode
 
 	public abstract String getType();
 
-	public abstract void handle(PadIndex oldPad, PadIndex newPad, Project project);
+	/**
+	 * Führt die Drag and Drop Aktion aus, ändert das Datenmodell.
+	 * 
+	 * @param oldPad
+	 *            Alter Index
+	 * @param newPad
+	 *            Neuer Index
+	 * @param project
+	 *            Projekt zu den Pads
+	 * @return <code>true</code> Erfolgreiches DnD
+	 */
+	public abstract boolean handle(PadIndex oldPad, PadIndex newPad, Project project);
 
 	@Override
 	public int compareTo(PadDragMode o) {

@@ -36,8 +36,11 @@ import javafx.scene.paint.Color;
 
 public class DesktopPadDragListener {
 
-	private Pad sourcePad;
-	final private Pane view;
+	private static final String PADINDEX_DATATYPE = "de.tobias.playpad.padindex";
+	private static final DataFormat dataFormat = new DataFormat(PADINDEX_DATATYPE);
+
+	private Pad currentPad;
+	private final Pane padView; // Node der PadView
 
 	private DesktopMainLayoutConnect connect;
 	private static Project project;
@@ -45,19 +48,17 @@ public class DesktopPadDragListener {
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	private static DataFormat dataFormat = new DataFormat("de.tobias.playpad.padindex");
-
-	public DesktopPadDragListener(Pad pad, IPadView view, DesktopMainLayoutConnect connect) {
-		this.sourcePad = pad;
+	public DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutConnect connect) {
+		this.currentPad = currentPad;
 		this.connect = connect;
 
-		this.view = view.getRootNode();
+		this.padView = view.getRootNode();
 
 		// Drag and Drop
-		this.view.setOnDragOver(event -> dragOver(event));
-		this.view.setOnDragExited(event -> dragExited());
-		this.view.setOnDragDropped(event -> dragDropped(event));
-		this.view.setOnDragDetected(event -> dragDetacted(event));
+		this.padView.setOnDragOver(event -> dragOver(event));
+		this.padView.setOnDragExited(event -> dragExited());
+		this.padView.setOnDragDropped(event -> dragDropped(event));
+		this.padView.setOnDragDetected(event -> dragDetacted(event));
 	}
 
 	private void dragOver(DragEvent event) {
@@ -66,17 +67,12 @@ public class DesktopPadDragListener {
 		}
 
 		if (event.getGestureSource() != this && event.getDragboard().hasFiles()) {
-			if (event.getDragboard().getFiles().get(0).isFile()) {
-
-				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-
-				if (sourcePad.getProject() != null) {
-					if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && sourcePad.getProject().getActivePlayers() > 0) {
-						return;
-					}
+			File file = event.getDragboard().getFiles().get(0);
+			if (file.isFile()) {
+				// Check Live Mode
+				if (checkLiveMode()) {
+					return;
 				}
-
-				File file = event.getDragboard().getFiles().get(0);
 
 				// Build In Filesupport
 				try {
@@ -85,7 +81,7 @@ public class DesktopPadDragListener {
 
 					if (!connects.isEmpty()) {
 						if (fileHud == null) {
-							fileHud = new FileDragOptionView(view);
+							fileHud = new FileDragOptionView(padView);
 						}
 						fileHud.showDropOptions(connects);
 
@@ -101,13 +97,13 @@ public class DesktopPadDragListener {
 		// Drag and Drop von Pads
 		if (event.getDragboard().hasContent(dataFormat)) {
 			PadIndex index = (PadIndex) event.getDragboard().getContent(dataFormat); // TODO Check cast
-			if (!sourcePad.getPadIndex().equals(index)) {
+			if (!currentPad.getPadIndex().equals(index)) {
 
 				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
 
 				if (!connects.isEmpty()) {
 					if (padHud == null) {
-						padHud = new PadDragOptionView(view);
+						padHud = new PadDragOptionView(padView);
 					}
 					padHud.showDropOptions(connects);
 
@@ -127,18 +123,21 @@ public class DesktopPadDragListener {
 		}
 	}
 
+	// Drag Content ist los gelassen am Ziel
 	private void dragDropped(DragEvent event) {
 		Dragboard db = event.getDragboard();
 		boolean success = false;
+
+		// File Handling
 		if (db.hasFiles()) {
 			success = true;
 			File file = db.getFiles().get(0);
 
 			PadContentConnect connect = fileHud.getSelectedConnect();
 			if (connect != null) {
-				PadContent content = sourcePad.getContent();
-				if (sourcePad.getContent() == null || !sourcePad.getContent().getType().equals(connect.getType())) {
-					content = connect.newInstance(sourcePad);
+				PadContent content = currentPad.getContent();
+				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
+					content = connect.newInstance(currentPad);
 				}
 
 				try {
@@ -147,48 +146,54 @@ public class DesktopPadDragListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				this.sourcePad.setContent(content);
-				this.sourcePad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
+				this.currentPad.setContent(content);
+				this.currentPad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
-				if (sourcePad.getController() != null) {
-					IPadView padView = sourcePad.getController().getView();
-					padView.setContentView(sourcePad);
-					padView.addDefaultElement(sourcePad);
+				if (currentPad.getController() != null) {
+					IPadView padView = currentPad.getController().getView();
+					padView.setContentView(currentPad);
+					padView.addDefaultElements(currentPad);
 				}
 			}
 		}
 
+		// Pad DnD
 		if (db.hasContent(dataFormat)) {
-			PadIndex padID = (PadIndex) db.getContent(dataFormat); // TODO Check Cast
+			Object data = db.getContent(dataFormat);
+			if (data instanceof PadIndex) {
+				PadIndex srcIndex = (PadIndex) data;
+				PadIndex newIndex = currentPad.getPadIndex(); // Lister ist auf Ziel Pad, daher ist der Index von currentPad
 
-			PadDragMode mode = padHud.getSelectedPadDragMode();
+				System.out.println(newIndex);
 
-			mode.handle(padID, sourcePad.getPadIndex(), project);
-			padHud.hide();
+				// Drag handle
+				PadDragMode mode = padHud.getSelectedPadDragMode();
+				success = mode.handle(srcIndex, newIndex, project);
+				padHud.hide();
 
-			IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
-			mainViewController.showPage(mainViewController.getPage());
+				// Update der Pad Views nach dem DnD
+				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+				mainViewController.showPage(mainViewController.getPage());
 
-			event.setDropCompleted(success);
-			event.consume();
+				// Event Completion
+				event.setDropCompleted(success);
+				event.consume();
+			}
 		}
 	}
 
 	private void dragDetacted(MouseEvent event) {
 		if (connect.getEditMode() == DesktopEditMode.DRAG) {
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-
-			if (sourcePad.getProject() != null) {
-				if (globalSettings.isLiveMode() && globalSettings.isLiveModeDrag() && sourcePad.getProject().getActivePlayers() > 0) {
-					return;
-				}
+			if (checkLiveMode()) {
+				return;
 			}
 
-			Dragboard dragboard = view.startDragAndDrop(TransferMode.MOVE);
+			Dragboard dragboard = padView.startDragAndDrop(TransferMode.MOVE);
 
+			// Create Snapshot
 			SnapshotParameters parameters = new SnapshotParameters();
 			parameters.setFill(Color.TRANSPARENT);
-			WritableImage snapshot = view.snapshot(parameters, null);
+			WritableImage snapshot = padView.snapshot(parameters, null);
 			for (int x = 0; x < snapshot.getWidth(); x++) {
 				for (int y = 0; y < snapshot.getHeight(); y++) {
 					Color oldColor = snapshot.getPixelReader().getColor(x, y).darker().darker();
@@ -200,11 +205,22 @@ public class DesktopPadDragListener {
 			dragboard.setDragView(snapshot);
 
 			ClipboardContent content = new ClipboardContent();
-			content.put(dataFormat, sourcePad.getPadIndex());
+			content.put(dataFormat, currentPad.getPadIndex());
 			dragboard.setContent(content);
 
 			event.consume();
 		}
+	}
+
+	// Utils
+	private boolean checkLiveMode() {
+		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		if (currentPad.getProject() != null) {
+			if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && currentPad.getProject().getActivePlayers() > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void setProject(Project project) {

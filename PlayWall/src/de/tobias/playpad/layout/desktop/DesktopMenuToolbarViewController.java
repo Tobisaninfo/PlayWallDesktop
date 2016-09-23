@@ -99,6 +99,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML protected MenuItem playMenu;
 	@FXML protected MenuItem dragMenu;
+	@FXML protected MenuItem pageMenu;
 	@FXML protected MenuItem colorMenu;
 
 	@FXML protected MenuItem errorMenu;
@@ -211,9 +212,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		addPageButton.setFocusTraversable(false);
 		addPageButton.setOnAction(e ->
 		{
-			openProject.addPage();
-			initPageButtons();
-			highlightPageButton(mainViewController.getPage());
+			if (openProject.addPage()) {
+				// seite konnte hinzugefügt werden
+				initPageButtons();
+				highlightPageButton(mainViewController.getPage());
+			} else {
+				showErrorMessage(Localization.getString(Strings.Error_Project_PageCount), PlayPadMain.stageIcon);
+			}
 		});
 
 		iconHbox.getChildren().add(editButtons);
@@ -242,7 +247,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (newValue == DesktopEditMode.PLAY) {
 			playButton.setSelected(true);
 		} else if (newValue == DesktopEditMode.DRAG) {
-			// TODO Live Mode Check
+			// Wenn Live Mode on, dann zum alten Wert zurück
+			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && openProject.getActivePlayers() != 0) {
+				connect.setEditMode(oldValue);
+				return;
+			}
+			// Drag and Drop Aktivieren
 			dragButton.setSelected(true);
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(true);
@@ -330,6 +341,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		setKeyBindingForMenu(playMenu, keys.getKey("play"));
 		setKeyBindingForMenu(dragMenu, keys.getKey("drag"));
+		setKeyBindingForMenu(pageMenu, keys.getKey("page"));
 		setKeyBindingForMenu(colorMenu, keys.getKey("color"));
 
 		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
@@ -349,6 +361,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		playMenu.setDisable(false);
 		dragMenu.setDisable(false);
+		pageMenu.setDisable(false);
 		colorMenu.setDisable(false);
 
 		errorMenu.setDisable(false);
@@ -409,6 +422,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		playMenu.setDisable(true);
 		dragMenu.setDisable(true);
+		pageMenu.setDisable(true);
 		colorMenu.setDisable(true);
 
 		errorMenu.setDisable(true);

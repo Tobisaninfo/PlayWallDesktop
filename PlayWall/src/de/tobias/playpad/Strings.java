@@ -46,8 +46,7 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
-	@Deprecated
-	public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
+	@Deprecated public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
 	// UI - Dialog - Launch
@@ -145,6 +144,7 @@ public class Strings {
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
+	public static final String Error_Project_PageCount = "Error.Project.PageCount";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
@@ -257,15 +257,15 @@ public class Strings {
 	public static final String Search_Button = "Search.Button";
 	public static final String Search_Placeholder = "Search.Placeholder";
 	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches";
-	
+
 	// UI - Dialog - Page - Delete
 	public static final String UI_Dialog_Page_Delete_Header = "UI.Dialog.Page.Delete.Header";
 	public static final String UI_Dialog_Page_Delete_Content = "UI.Dialog.Page.Delete.Content";
-	
+
 	// UI - Dialog - Page - Name
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
-	
+
 	// Tooltip
 	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
 	public static final String Tooltip_DragButton = "Tooltip.DragButton";

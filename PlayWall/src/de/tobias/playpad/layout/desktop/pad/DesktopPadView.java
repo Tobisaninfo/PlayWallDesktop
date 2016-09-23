@@ -273,7 +273,7 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public void addDefaultElement(Pad pad) {
+	public void addDefaultElements(Pad pad) {
 		if (pad != null) {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
