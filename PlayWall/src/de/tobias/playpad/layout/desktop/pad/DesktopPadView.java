@@ -143,7 +143,7 @@ public class DesktopPadView implements IPadView {
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
-					node.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title");
+					node.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
 
 					// Copy Pseudoclasses
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
@@ -160,7 +160,7 @@ public class DesktopPadView implements IPadView {
 		}
 		EmptyPadView view = new EmptyPadView(preview);
 		if (pad != null) {
-			view.getStyleClass().addAll("pad-title", "pad" + pad.getIndex() + "-title");
+			view.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
 		} else {
 			view.getStyleClass().addAll("pad-title");
 		}
@@ -337,7 +337,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		Pad pad = getViewController().getPad();
-		int index = pad.getIndex();
+		PadIndex index = pad.getPadIndex();
 
 		superRoot.getStyleClass().removeAll("pad", "pad" + index);
 

@@ -180,11 +180,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		{
 			GlobalDesign design = Profile.currentProfile().currentLayout();
 			if (design instanceof ColorModeHandler) {
-				colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
-				colorPickerView.show(colorButton);
+				if (colorPickerView == null) {
+					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
 
-				// Add Listener for Pads
-				mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+					// Add Listener for Pads
+					mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+				}
+				colorPickerView.show(colorButton);
 			}
 		});
 		editButtons.getButtons().addAll(playButton, dragButton, pageButton, colorButton);

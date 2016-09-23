@@ -251,7 +251,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		Pad pad = getViewController().getPad();
-		int index = pad.getIndex();
+		PadIndex index = pad.getPadIndex();
 
 		superRoot.getStyleClass().removeAll("pad", "pad" + index);
 

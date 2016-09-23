@@ -35,7 +35,6 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 		colorChooser = new PopOver();
 		colorChooser.setContentNode(root);
 		colorChooser.setDetachable(false);
-		colorChooser.setOnHiding(e -> colorChooser = null);
 		colorChooser.setCornerRadius(5);
 		colorChooser.setArrowLocation(ArrowLocation.TOP_CENTER);
 	}

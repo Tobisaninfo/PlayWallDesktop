@@ -84,7 +84,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private MenuToolbarViewController menuToolbarViewController;
 
 	private Project openProject;
-	private int currentPageShowing = -1;
+	private int currentPageShowing = 0;
 
 	// Mapper
 	private Midi midi;
@@ -377,13 +377,14 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public void openProject(Project project) {
 		removePadsFromView();
 
-		if (project != null)
+		if (openProject != null)
 			removePadsFromView();
 
 		openProject = project;
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
+		Profile.currentProfile().getMappings().getActiveMapping().showFeedback(openProject);
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
@@ -504,6 +505,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.highlightPageButton(page);
 		}
+		loadUserCss();
 		
 		return true;
 	}
@@ -548,14 +550,16 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
-
+				
 				Platform.runLater(() ->
 				{
 					// Handle Mapper
-					if (Profile.currentProfile() != null) {
+					if (currentProfile != null) {
 						activeMapping.initFeedback();
-						activeMapping.showFeedback(openProject);
+						if (openProject != null) {
+							activeMapping.showFeedback(openProject);
+							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
+						}
 					}
 				});
 			});
@@ -671,10 +675,13 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		// design spezific css
 		if (openProject != null) {
-			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
+			Profile currentProfile = Profile.currentProfile();
+			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
+			
+			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			activeMapping.adjustPadColorToMapper();
+			activeMapping.showFeedback(openProject);
 		}
-
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 	}
 
 	/**
