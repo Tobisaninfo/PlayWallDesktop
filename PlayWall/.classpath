@@ -15,5 +15,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JLayer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PlayWallCore"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Updater"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

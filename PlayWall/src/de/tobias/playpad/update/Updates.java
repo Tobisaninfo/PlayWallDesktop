@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import de.tobias.playpad.AppUserInfoStrings;
+import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.NativeLauncher;

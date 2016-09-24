@@ -16,7 +16,7 @@ import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.update.Updatable;
+import de.tobias.updater.client.Updatable;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;

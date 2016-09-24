@@ -7,7 +7,7 @@ import de.tobias.playpad.launchpadplugin.midi.device.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.device.s.LaunchPadS;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.update.Updatable;
+import de.tobias.updater.client.Updatable;
 import de.tobias.utils.util.Localization;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;

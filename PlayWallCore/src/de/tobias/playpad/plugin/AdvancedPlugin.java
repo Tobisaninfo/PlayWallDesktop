@@ -1,6 +1,6 @@
 package de.tobias.playpad.plugin;
 
-import de.tobias.playpad.update.Updatable;
+import de.tobias.updater.client.Updatable;
 
 /**
  * Schnittatelle, von der Plugins erben, damit diese alle notwendigen Services unterstützen.

@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import de.tobias.updater.client.Updatable;
+import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.util.SystemUtils;

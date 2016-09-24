@@ -16,7 +16,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.update.UpdateChannel;
+import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.settings.Storable;
