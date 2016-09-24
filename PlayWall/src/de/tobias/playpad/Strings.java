@@ -46,7 +46,6 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
-	@Deprecated public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
 	// UI - Dialog - Launch
@@ -161,7 +160,6 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
-	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
 	public static final String Error_Plugins_Available = "Error.Plugins.Available";
 	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
 
@@ -229,9 +227,6 @@ public class Strings {
 	public static final String UI_Dialog_Update_Cell = "UI.Dialog.Update.Cell";
 	public static final String UI_Dialog_Update_Info = "UI.Dialog.Update.Info";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
-
-	// Error - Update - Downlaod
-	@Deprecated public static final String Error_Update_Download = "Error.Update.Download";
 
 	// Layout
 	public static final String Layout_Modern_Name = "Layout.Modern.Name";

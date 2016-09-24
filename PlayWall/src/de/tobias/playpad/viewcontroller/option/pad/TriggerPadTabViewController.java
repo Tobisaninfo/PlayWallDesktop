@@ -53,6 +53,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 		treeView.setRoot(rootItem);
 	}
 
+	@Override
 	public void changed(ObservableValue<? extends TreeItem<TriggerUIWrapper>> observable, TreeItem<TriggerUIWrapper> oldValue,
 			TreeItem<TriggerUIWrapper> newValue) {
 		contentView.getChildren().clear();

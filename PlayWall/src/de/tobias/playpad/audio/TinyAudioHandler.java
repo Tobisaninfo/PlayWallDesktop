@@ -98,9 +98,7 @@ public class TinyAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {
-				} catch (ConcurrentModificationException e) {
-				} catch (Exception e) {
+				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -201,13 +199,6 @@ public class TinyAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume, double customVolume) {
-		if (music != null) {
-			music.setVolume(volume * masterVolume * customVolume);
-		}
-	}
-	
-	@Override
 	public void setVolume(double volume) {
 		if (music != null) {
 			music.setVolume(volume);
@@ -255,7 +246,7 @@ public class TinyAudioHandler extends AudioHandler {
 				});
 			} catch (Exception e) {
 				loadedProperty.set(false);
-//				getContent().getPad().throwException(path, e); TODO Error Handling User
+				// getContent().getPad().throwException(path, e); TODO Error Handling User
 				e.printStackTrace();
 			} finally {
 				Platform.runLater(() ->
@@ -270,7 +261,7 @@ public class TinyAudioHandler extends AudioHandler {
 
 	private void calcDuration(URL url) throws UnsupportedAudioFileException, IOException {
 		AudioInputStream iStr = AudioSystem.getAudioInputStream(url);
-		double max = 1000.0 * (double) iStr.getFrameLength() / (double) iStr.getFormat().getFrameRate();
+		double max = 1000.0 * iStr.getFrameLength() / iStr.getFormat().getFrameRate();
 		Duration duration = Duration.millis(max);
 		Platform.runLater(() -> this.duration.set(duration));
 		iStr.close();

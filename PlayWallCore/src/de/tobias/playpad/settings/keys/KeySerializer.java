@@ -14,6 +14,7 @@ public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 	private static final String META_ATTR = "meta";
 	private static final String SHIFT_ATTR = "shift";
 
+	@Override
 	public Key loadElement(Element element) {
 		boolean shift = false;
 		if (element.attributeValue(SHIFT_ATTR) != null) {

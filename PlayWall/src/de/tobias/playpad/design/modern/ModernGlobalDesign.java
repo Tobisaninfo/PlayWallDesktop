@@ -106,6 +106,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		return minWidth;
 	}
 
+	@Override
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;

@@ -14,6 +14,7 @@ final class ProfileReferenceList extends UniqList<ProfileReference> {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public boolean contains(Object o) {
 		if (o instanceof String) {
 			for (ProfileReference reference : this) {

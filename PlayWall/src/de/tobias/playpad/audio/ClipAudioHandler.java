@@ -85,9 +85,7 @@ public class ClipAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {
-				} catch (ConcurrentModificationException e) {
-				} catch (Exception e) {
+				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -166,17 +164,13 @@ public class ClipAudioHandler extends AudioHandler {
 		return durationProperty;
 	}
 
-	@Override
-	public void setVolume(double volume, double masterVolume, double customVolume) {
-		setVolume(masterVolume * volume * customVolume);
-	}
-
 	/**
 	 * Lineaer to dB
 	 * 
 	 * @param volume
 	 *            [0, 1]
 	 */
+	@Override
 	public void setVolume(double volume) {
 		if (volumeControl != null) {
 			if (volume == 1.0) {

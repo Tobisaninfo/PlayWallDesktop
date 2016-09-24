@@ -35,9 +35,6 @@ public abstract class AudioHandler {
 	public abstract ReadOnlyObjectProperty<Duration> durationProperty();
 
 	public abstract void setVolume(double volume);
-	
-	@Deprecated
-	public abstract void setVolume(double volume, double masterVolume, double customVolume);
 
 	public abstract boolean isMediaLoaded();
 

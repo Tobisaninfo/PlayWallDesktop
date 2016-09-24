@@ -41,6 +41,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		this.playColor = playColor;
 	}
 
+	@Override
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;

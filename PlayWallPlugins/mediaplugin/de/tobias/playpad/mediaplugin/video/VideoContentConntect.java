@@ -87,7 +87,7 @@ public class VideoContentConntect extends PadContentConnect {
 		}
 
 		@Override
-		public void unconnect() {
+		public void deinit() {
 			nameLabel.textProperty().unbind();
 		}
 	}

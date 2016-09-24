@@ -14,6 +14,7 @@ final class ProjectReferenceList extends UniqList<ProjectReference> {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public boolean contains(Object o) {
 		if (o instanceof String) {
 			for (ProjectReference reference : this) {

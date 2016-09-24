@@ -123,7 +123,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		}
 	}
 
-	@FXML
+	@Override
 	public void handle(ActionEvent event) {
 		if (equalizerViewController == null) {
 			equalizerViewController = new EqualizerViewController(mainStage);

@@ -90,7 +90,7 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 					boolean includeProject = profileCheckBox.isSelected();
 					boolean includeMedia = mediaCheckBox.isSelected();
 
-					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, (ExportView) this);
+					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, this);
 
 					Platform.runLater(() ->
 					{

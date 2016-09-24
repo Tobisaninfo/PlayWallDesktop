@@ -65,6 +65,7 @@ public class CartTriggerViewController extends ContentViewController {
 			@Override
 			public ListCell<UUID> call(ListView<UUID> param) {
 				ListCell<UUID> cell = new ListCell<UUID>() {
+					@Override
 					protected void updateItem(UUID item, boolean empty) {
 						super.updateItem(item, empty);
 						if (!empty) {

@@ -181,7 +181,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		padGridPane.getStyleClass().add("pad-grid");
 
 		notificationPane = new NotificationPane(padGridPane);
-		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
+		notificationPane.getStyleClass().add(org.controlsfx.control.NotificationPane.STYLE_CLASS_DARK);
 
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
@@ -192,6 +192,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		return mainLayout;
 	}
 
+	@Override
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
 		removePadsFromView();
 		removePadViews();
@@ -382,6 +383,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		openProject = project;
 
+		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		Profile.currentProfile().getMappings().getActiveMapping().showFeedback(openProject);
@@ -409,7 +411,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		// Table
 		padGridPane.getColumnConstraints().clear();
-		double xPercentage = 1.0 / (double) projectSettings.getColumns();
+		double xPercentage = 1.0 / projectSettings.getColumns();
 		for (int i = 0; i < projectSettings.getColumns(); i++) {
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);
@@ -417,7 +419,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		padGridPane.getRowConstraints().clear();
-		double yPercentage = 1.0 / (double) projectSettings.getRows();
+		double yPercentage = 1.0 / projectSettings.getRows();
 		for (int i = 0; i < projectSettings.getRows(); i++) {
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);
@@ -649,12 +651,14 @@ public class MainViewController extends ViewController implements IMainViewContr
 		getParent().getScene().addEventHandler(eventType, listener);
 	}
 
+	@Override
 	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
 		for (IPadView view : padViews) {
 			view.getRootNode().addEventFilter(eventType, handler);
 		}
 	}
 	
+	@Override
 	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
 		for (IPadView view : padViews) {
 			view.getRootNode().removeEventFilter(eventType, handler);
@@ -705,6 +709,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 	}
 
+	@Override
 	public void updateWindowTitle() {
 		if (openProject != null && Profile.currentProfile() != null) {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),

@@ -161,6 +161,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 		return minWidth;
 	}
 
+	@Override
 	public void reset() {
 		themeProperty = new SimpleObjectProperty<>(Theme.LIGHT);
 		customLayout = false;

@@ -23,6 +23,7 @@ import de.tobias.playpad.audio.JavaFXAudioHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.plugin.AdvancedPlugin;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
@@ -36,6 +37,8 @@ import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
+import de.tobias.playpad.volume.GlobalVolume;
+import de.tobias.playpad.volume.PadVolume;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
@@ -80,7 +83,7 @@ public class PlayPadImpl implements PlayPad {
 		modules = new HashSet<>();
 
 		this.globalSettings = globalSettings;
-		
+
 		getModules().add(module); // Add Main Module
 	}
 
@@ -211,6 +214,7 @@ public class PlayPadImpl implements PlayPad {
 		Worker.shutdown();
 	}
 
+	@Override
 	public void loadPlugin(URI uri) {
 		pluginManager.addPluginsFrom(uri);
 
@@ -275,6 +279,10 @@ public class PlayPadImpl implements PlayPad {
 			e.printStackTrace();
 		}
 
+		// Volume Management
+		Pad.getVolumeManager().addFilter(new GlobalVolume());
+		Pad.getVolumeManager().addFilter(new PadVolume());
+
 		// Key Bindings
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", resourceBundle);
@@ -284,6 +292,7 @@ public class PlayPadImpl implements PlayPad {
 
 	}
 
+	@Override
 	public Set<Module> getModules() {
 		return modules;
 	}

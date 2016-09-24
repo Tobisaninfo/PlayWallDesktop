@@ -70,7 +70,7 @@ public class AudioContentConnect extends PadContentConnect {
 		public AudioContentView(Pad pad, Pane parentNode) {
 			nameLabel = new Label();
 			nameLabel.textProperty().bind(pad.nameProperty());
-			
+
 			nameLabel.setWrapText(true);
 			nameLabel.setAlignment(Pos.CENTER);
 			nameLabel.setTextAlignment(TextAlignment.CENTER);
@@ -86,7 +86,7 @@ public class AudioContentConnect extends PadContentConnect {
 		}
 
 		@Override
-		public void unconnect() {
+		public void deinit() {
 			nameLabel.textProperty().unbind();
 		}
 	}

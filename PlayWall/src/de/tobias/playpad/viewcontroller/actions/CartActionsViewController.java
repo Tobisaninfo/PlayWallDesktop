@@ -8,8 +8,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.connect.CartActionConnect;
-import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
@@ -63,7 +63,7 @@ public class CartActionsViewController extends ContentViewController {
 		gridPane.getChildren().clear();
 
 		gridPane.getColumnConstraints().clear();
-		double xPercentage = 1.0 / (double) settings.getColumns();
+		double xPercentage = 1.0 / settings.getColumns();
 		for (int i = 0; i < settings.getColumns(); i++) {
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);
@@ -71,7 +71,7 @@ public class CartActionsViewController extends ContentViewController {
 		}
 
 		gridPane.getRowConstraints().clear();
-		double yPercentage = 1.0 / (double) settings.getRows();
+		double yPercentage = 1.0 / settings.getRows();
 		for (int i = 0; i < settings.getRows(); i++) {
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);

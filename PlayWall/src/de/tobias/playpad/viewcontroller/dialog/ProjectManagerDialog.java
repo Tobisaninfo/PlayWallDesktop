@@ -79,7 +79,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	public void init() {
 		// Notification Handler
 		notificationPane = new NotificationPane(rootNode);
-		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
+		notificationPane.getStyleClass().add(org.controlsfx.control.NotificationPane.STYLE_CLASS_DARK);
 
 		setAnchor(notificationPane, 0, 0, 0, 0);
 		((AnchorPane) getParent()).getChildren().add(notificationPane);
@@ -201,7 +201,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		String oldName = projectReference.toString();
 
 		try {
-			String newProjectName = (String) nameTextField.getText();
+			String newProjectName = nameTextField.getText();
 			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;

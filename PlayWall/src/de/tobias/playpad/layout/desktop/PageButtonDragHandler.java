@@ -21,6 +21,7 @@ public class PageButtonDragHandler implements EventHandler<DragEvent> {
 		this.page = page;
 	}
 
+	@Override
 	public void handle(DragEvent event) {
 		if (event.getEventType() == DragEvent.DRAG_OVER) {
 			controller.showPage(page);

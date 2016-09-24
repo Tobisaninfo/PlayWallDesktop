@@ -103,6 +103,7 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 		}
 	}
 
+	@Override
 	public boolean closeRequest() {
 		return onFinish();
 	}
