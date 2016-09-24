@@ -561,6 +561,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void dragMenuHandler(ActionEvent event) {
 		connect.setEditMode(DesktopEditMode.DRAG);
 	}
+	
+	@FXML
+	void pageMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.PAGE);
+	}
 
 	@FXML
 	void colorMenuHandler(ActionEvent event) {

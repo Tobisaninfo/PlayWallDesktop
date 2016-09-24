@@ -84,7 +84,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
 
-		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.yml");
+		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
 
 		impl = new PlayPadImpl(globalSettings);

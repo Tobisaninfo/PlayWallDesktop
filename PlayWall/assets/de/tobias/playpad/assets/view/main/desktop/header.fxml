@@ -51,7 +51,7 @@
                               <KeyCodeCombination alt="UP" code="J" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                            </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="pageMenu" mnemonicParsing="false" text="%main.menuitem.page">
+                        <MenuItem fx:id="pageMenu" mnemonicParsing="false" onAction="#pageMenuHandler" text="%main.menuitem.page">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                            </accelerator>

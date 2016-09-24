@@ -110,10 +110,12 @@ public class Project {
 
 	public void setPad(PadIndex index, Pad pad) {
 		if (pad != null) {
-
 			if (pad.getPage() != index.getPage()) {
 				Page oldPage = getPage(pad.getPage());
-				oldPage.removePade(index.getId());
+				// Nur Löschen, wenn auch noch das Pad an dieser Stelle ist, und nicht an andere Stelle
+				if (oldPage.getPad(pad.getIndex()).equals(pad)) {
+					oldPage.removePade(index.getId());
+				}
 			}
 		}
 		Page page = pages.get(index.getPage());
