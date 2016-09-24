@@ -387,15 +387,15 @@ public class DesktopPadView implements IPadView {
 		pulseTranslation.play();
 	}
 
-	public void clearIndex() {
+	public void clearIndexLabel() {
 		indexLabel.setText("");
 	}
 
-	public void clearTime() {
+	public void clearTimeLabel() {
 		timeLabel.setText("");
 	}
 
-	public void clearPreviewContent() {
+	public void clearPreviewContentView() {
 		if (previewContent != null) {
 			previewContent.deinit();
 		}

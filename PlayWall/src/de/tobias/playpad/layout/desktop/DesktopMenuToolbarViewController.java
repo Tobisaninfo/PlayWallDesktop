@@ -266,6 +266,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			colorButton.setSelected(true);
 		}
 
+		mainViewController.getPadViews().forEach(i -> i.getViewController().updateButtonDisable());
 	}
 
 	private void initLayoutMenu() {
@@ -561,7 +562,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void dragMenuHandler(ActionEvent event) {
 		connect.setEditMode(DesktopEditMode.DRAG);
 	}
-	
+
 	@FXML
 	void pageMenuHandler(ActionEvent event) {
 		connect.setEditMode(DesktopEditMode.PAGE);

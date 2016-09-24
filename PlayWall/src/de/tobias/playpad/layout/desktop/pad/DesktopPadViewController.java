@@ -59,11 +59,13 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	private DesktopPadDragListener padDragListener;
 
-	private DesktopMainLayoutConnect connect;
+	private static DesktopMainLayoutConnect connect;
 
 	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutConnect connect) {
 		this.padView = padView;
-		this.connect = connect;
+
+		if (DesktopPadViewController.connect != connect) // Set once
+			DesktopPadViewController.connect = connect;
 
 		padLockedListener = new PadLockedListener(this);
 		padStatusListener = new PadStatusListener(this);
@@ -103,16 +105,17 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padContentListener.setPad(pad);
 			padPositionListener.setPad(pad);
 
-			// Pad Content Chnage
+			// Add Listener
 			pad.contentProperty().addListener(padContentListener);
-			// Pad Status Change
 			pad.statusProperty().addListener(padStatusListener);
 
-			// First Listener call with new data
+			// Inital Listener call with new data
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 
+			// Add Drag and Drop Listener
 			padDragListener = new DesktopPadDragListener(pad, padView, connect);
+			padDragListener.addListener();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -124,15 +127,14 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	@Override
 	public void removePad() {
 		if (padView != null && pad != null) {
-
-			padView.clearIndex();
-			padView.clearPreviewContent();
-			padView.clearTime();
-
+			// Clear VIew
+			padView.clearIndexLabel();
+			padView.clearPreviewContentView();
+			padView.clearTimeLabel();
 			padView.setTriggerLabelActive(false);
-
 			padView.loopLabelVisibleProperty().unbind();
 
+			// Remove Bindings & Listener
 			pad.contentProperty().removeListener(padContentListener);
 			pad.statusProperty().removeListener(padStatusListener);
 
@@ -142,6 +144,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				durationable.positionProperty().removeListener(padPositionListener);
 			}
 			pad.setController(null);
+
+			padDragListener.removeListener();
 			padDragListener = null;
 
 			// GUI Cleaning
@@ -382,7 +386,17 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getSettingsButton().setDisable(false);
 		}
 
+		// Disable Settings and New wenn Locked
 		if (Profile.currentProfile().getProfileSettings().isLocked()) {
+			padView.getNewButton().setDisable(true);
+			padView.getSettingsButton().setDisable(true);
+		}
+		
+		// Alles Desktivieren, wenn nicht Play Mode
+		if (connect.getEditMode() != DesktopEditMode.PLAY) {
+			padView.getPlayButton().setDisable(true);
+			padView.getPauseButton().setDisable(true);
+			padView.getStopButton().setDisable(true);
 			padView.getNewButton().setDisable(true);
 			padView.getSettingsButton().setDisable(true);
 		}

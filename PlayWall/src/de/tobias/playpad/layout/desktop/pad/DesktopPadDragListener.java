@@ -23,6 +23,7 @@ import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.FileUtils;
+import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
@@ -34,7 +35,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class DesktopPadDragListener {
+public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 	private static final String PADINDEX_DATATYPE = "de.tobias.playpad.padindex";
 	private static final DataFormat dataFormat = new DataFormat(PADINDEX_DATATYPE);
@@ -53,12 +54,31 @@ public class DesktopPadDragListener {
 		this.connect = connect;
 
 		this.padView = view.getRootNode();
+	}
 
-		// Drag and Drop
+	public void addListener() {
 		this.padView.setOnDragOver(event -> dragOver(event));
 		this.padView.setOnDragExited(event -> dragExited());
 		this.padView.setOnDragDropped(event -> dragDropped(event));
 		this.padView.setOnDragDetected(event -> dragDetacted(event));
+	}
+
+	public void removeListener() {
+		this.padView.setOnDragOver(null);
+		this.padView.setOnDragExited(null);
+		this.padView.setOnDragDropped(null);
+		this.padView.setOnDragDetected(null);
+	}
+
+	@Override
+	public void handle(DragEvent event) {
+		if (event.getEventType() == DragEvent.DRAG_OVER) {
+			dragOver(event);
+		} else if (event.getEventType() == DragEvent.DRAG_EXITED) {
+			dragExited();
+		} else if (event.getEventType() == DragEvent.DRAG_DROPPED) {
+			dragDropped(event);
+		}
 	}
 
 	private void dragOver(DragEvent event) {
