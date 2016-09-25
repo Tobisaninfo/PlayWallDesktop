@@ -211,8 +211,23 @@ public class PadSettings implements Cloneable {
 		PadSettings settings = (PadSettings) super.clone();
 		settings.volumeProperty = new SimpleDoubleProperty(getVolume());
 		settings.loopProperty = new SimpleBooleanProperty(isLoop());
-		settings.timeModeProperty = new SimpleObjectProperty<TimeMode>(getTimeMode());
-		settings.warningProperty = new SimpleObjectProperty<>(getWarning());
+
+		if (isCustomTimeMode())
+			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>(getTimeMode());
+		else
+			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>();
+
+		if (isCustomFade())
+			settings.fadeProperty = new SimpleObjectProperty<>(getFade());
+		else
+			settings.fadeProperty = new SimpleObjectProperty<>();
+
+		if (isCustomWarning())
+			settings.warningProperty = new SimpleObjectProperty<>(getWarning());
+		else
+			settings.warningProperty = new SimpleObjectProperty<>();
+
+		settings.customLayoutProperty = new SimpleBooleanProperty(isCustomWarning());
 		settings.layouts = new HashMap<>();
 		for (String key : layouts.keySet()) {
 			CartDesign clone = (CartDesign) layouts.get(key).clone();
