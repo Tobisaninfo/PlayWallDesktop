@@ -26,6 +26,7 @@ import de.tobias.playpad.plugin.Module;
 public class ComponentRegistry<C> implements Registry<C> {
 
 	private HashMap<String, C> components;
+	// Zu einem Component die zugehörigen Meta Daten (das Modul)
 	private HashMap<String, Module> modules;
 	private String name;
 

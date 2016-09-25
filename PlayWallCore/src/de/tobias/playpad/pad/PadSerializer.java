@@ -210,6 +210,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			content.save(contentElement);
 
 			Module module = PlayPadPlugin.getRegistryCollection().getPadContents().getModule(content.getType());
+			// Für verschiedene Pad Typen wird hier das Modul gespeichert, damit das Projekt weis, welche notwendig sien beim öffnen
 			project.getProjectReference().addRequestedModule(module);
 		}
 	}

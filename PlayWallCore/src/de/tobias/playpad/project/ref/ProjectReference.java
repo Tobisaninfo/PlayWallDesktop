@@ -43,24 +43,31 @@ public class ProjectReference implements Displayable {
 	private ProfileReference profileReference;
 	private Set<Module> requestedModules;
 
-	private long size;
 	private long lastMofied;
 
 	public ProjectReference(UUID uuid, String name, ProfileReference profileReference) {
 		this.uuid = uuid;
 		this.name = name;
 		this.lastMofied = System.currentTimeMillis();
-		this.size = 0;
 		this.profileReference = profileReference;
 		requestedModules = new HashSet<>();
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long size, long lastMofied, ProfileReference profileReference) {
+	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, Set<Module> modules) {
 		this.uuid = uuid;
 		this.name = name;
-		this.size = size;
+		this.lastMofied = System.currentTimeMillis();
+		this.profileReference = profileReference;
+		requestedModules = modules;
+
+		updateDisplayProperty();
+	}
+
+	public ProjectReference(UUID uuid, String name, long lastMofied, ProfileReference profileReference) {
+		this.uuid = uuid;
+		this.name = name;
 		this.lastMofied = lastMofied;
 		this.profileReference = profileReference;
 		requestedModules = new HashSet<>();
@@ -68,11 +75,9 @@ public class ProjectReference implements Displayable {
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long size, long lastMofied, ProfileReference profileReference,
-			Set<Module> requestedModules) {
+	public ProjectReference(UUID uuid, String name, long lastMofied, ProfileReference profileReference, Set<Module> requestedModules) {
 		this.uuid = uuid;
 		this.name = name;
-		this.size = size;
 		this.lastMofied = lastMofied;
 		this.profileReference = profileReference;
 		this.requestedModules = requestedModules;
@@ -86,14 +91,6 @@ public class ProjectReference implements Displayable {
 
 	public String getName() {
 		return name;
-	}
-
-	public long getSize() {
-		return size;
-	}
-
-	public void setSize(long size) {
-		this.size = size;
 	}
 
 	public void setLastMofied(long lastMofied) {
@@ -112,11 +109,11 @@ public class ProjectReference implements Displayable {
 	public Set<Module> getRequestedModules() {
 		return requestedModules;
 	}
-	
+
 	public void addRequestedModule(Module module) {
 		requestedModules.add(module);
 	}
-	
+
 	public Set<Module> getMissedModules() {
 		Set<Module> missedModules = new HashSet<>();
 		Collection<Module> activeModules = PlayPadPlugin.getImplementation().getModules();
@@ -125,10 +122,15 @@ public class ProjectReference implements Displayable {
 				missedModules.add(requested);
 			}
 		}
+
+		for (Module requested : profileReference.getRequestedModules()) {
+			if (!activeModules.contains(requested)) {
+				missedModules.add(requested);
+			}
+		}
 		return missedModules;
 	}
 
-	
 	public ProfileReference getProfileReference() {
 		return profileReference;
 	}
