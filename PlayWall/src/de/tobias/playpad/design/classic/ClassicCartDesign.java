@@ -17,10 +17,10 @@ import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.utils.util.ColorXMLUtils;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class ClassicCartDesign extends Design implements CartDesign {
 
@@ -214,7 +214,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
+	public void handleWarning(IPadViewController controller, Duration warning, GlobalDesign layout) {
 		final IPadView view = controller.getView();
 
 		try {

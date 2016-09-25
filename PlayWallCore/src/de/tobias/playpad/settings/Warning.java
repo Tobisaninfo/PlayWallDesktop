@@ -6,10 +6,11 @@ import de.tobias.utils.settings.SettingsSerializable;
 import de.tobias.utils.settings.Storable;
 import javafx.util.Duration;
 
-public class Warning implements SettingsSerializable{
+@Deprecated
+public class Warning implements SettingsSerializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Storable private Duration time;
 
 	public Warning() {

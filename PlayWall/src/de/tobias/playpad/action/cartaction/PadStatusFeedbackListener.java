@@ -5,7 +5,6 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.settings.Warning;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
@@ -41,11 +40,11 @@ public class PadStatusFeedbackListener implements ChangeListener<PadStatus> {
 							PadSettings padSettings = pad.getPadSettings();
 
 							if (!padSettings.isLoop()) {
-								Warning warning = padSettings.getWarning();
+								Duration warning = padSettings.getWarning();
 								Duration rest = durationable.getDuration().subtract(durationable.getPosition());
 								double seconds = rest.toSeconds();
 
-								if (warning.getTime().toSeconds() > seconds) {
+								if (warning.toSeconds() > seconds) {
 									action.handleFeedback(FeedbackMessage.WARNING);
 								}
 							}

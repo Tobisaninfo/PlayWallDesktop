@@ -21,7 +21,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Pad {
+public class Pad implements Cloneable {
 
 	private static final VolumeManager volumeManager;
 
@@ -90,6 +90,19 @@ public class Pad {
 	}
 
 	private void initPadListener() {
+		// Remov eold listener from propeties
+		if (padStatusListener != null && statusProperty != null) {
+			statusProperty.removeListener(padStatusListener);
+		}
+		if (padTriggerStatusListener != null && statusProperty != null) {
+			statusProperty.removeListener(padTriggerStatusListener);
+		}
+		if (padTriggerDurationListener != null && contentProperty != null) {
+			contentProperty.removeListener(padTriggerContentListener);
+			padTriggerContentListener.changed(contentProperty, getContent(), null);
+		}
+
+		// init new listener for properties
 		padStatusListener = new PadStatusListener(this);
 		statusProperty.addListener(padStatusListener);
 
@@ -283,5 +296,25 @@ public class Pad {
 	// Volume Manager
 	public static VolumeManager getVolumeManager() {
 		return volumeManager;
+	}
+
+	// Clone
+	@Override
+	public Pad clone() throws CloneNotSupportedException {
+		Pad clone = (Pad) super.clone();
+
+		clone.uuid = UUID.randomUUID();
+		clone.indexProperty = new SimpleIntegerProperty();
+		clone.pageProperty = new SimpleIntegerProperty();
+
+		clone.nameProperty = new SimpleStringProperty(getName());
+		clone.statusProperty = new SimpleObjectProperty<PadStatus>(getStatus());
+		clone.contentProperty = new SimpleObjectProperty<PadContent>(getContent().clone());
+		clone.getContent().setPad(clone);
+		
+		clone.padSettings = padSettings.clone();
+
+		clone.initPadListener();
+		return clone;
 	}
 }

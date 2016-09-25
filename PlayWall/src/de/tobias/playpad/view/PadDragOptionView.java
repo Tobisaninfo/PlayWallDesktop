@@ -109,7 +109,12 @@ public class PadDragOptionView {
 			for (PadDragMode connect : options.stream().sorted().toArray(value -> new PadDragMode[value])) {
 				Label label = new Label();
 				label.getStyleClass().add("dnd-file-option");
-				label.textProperty().bind(connect.displayProperty());
+
+				// Text nur wenn 2 oder weniger Optionen sind, weil zu wenig Platz
+				if (options.size() >= 2) {
+					label.textProperty().bind(connect.displayProperty());
+				}
+
 				Node graphics = connect.getGraphics();
 				if (graphics != null) {
 					graphics.setStyle("-fx-text-fill: white;");

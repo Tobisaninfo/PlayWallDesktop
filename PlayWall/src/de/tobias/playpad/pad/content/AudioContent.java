@@ -258,4 +258,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		}
 	}
 
+	@Override
+	public PadContent clone() throws CloneNotSupportedException {
+		AudioContent clone = (AudioContent) super.clone();
+		clone.path = Paths.get(path.toUri());
+		clone.loadMedia();
+		return clone;
+	}
 }

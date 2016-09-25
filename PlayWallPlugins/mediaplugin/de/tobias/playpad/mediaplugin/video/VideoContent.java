@@ -269,4 +269,12 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public PadContent clone() throws CloneNotSupportedException {
+		VideoContent clone = (VideoContent) super.clone();
+		clone.path = Paths.get(path.toUri());
+		clone.loadMedia();
+		return clone;
+	}
 }

@@ -21,12 +21,12 @@ public class WarningFeedbackViewController extends ContentViewController {
 		super("warningFeedbackSettingsView", "de/tobias/playpad/assets/settings/", PlayPadMain.getUiResourceBundle());
 		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 
-		warningFeedbackTimeSlider.setValue(profilSettings.getWarningFeedback().getTime().toSeconds());
+		warningFeedbackTimeSlider.setValue(profilSettings.getWarningFeedback().toSeconds());
 		setTimeLabel();
 
 		warningFeedbackTimeSlider.valueProperty().addListener((a, b, c) ->
 		{
-			profilSettings.getWarningFeedback().setTime(Duration.seconds(c.doubleValue()));
+			profilSettings.setWarningTime(Duration.seconds(c.doubleValue()));
 		});
 	}
 
@@ -49,13 +49,13 @@ public class WarningFeedbackViewController extends ContentViewController {
 
 	public void setPadWarning(Pad pad) {
 		if (pad.getPadSettings().getWarning() != null) {
-			warningFeedbackTimeSlider.setValue(pad.getPadSettings().getWarning().getTime().toSeconds());
+			warningFeedbackTimeSlider.setValue(pad.getPadSettings().getWarning().toSeconds());
 			setTimeLabel();
 		}
 
 		warningFeedbackTimeSlider.valueProperty().addListener((a, b, c) ->
 		{
-			pad.getPadSettings().getWarning().setTime(Duration.seconds(c.doubleValue()));
+			pad.getPadSettings().setWarning(Duration.seconds(c.doubleValue()));
 		});
 	}
 }

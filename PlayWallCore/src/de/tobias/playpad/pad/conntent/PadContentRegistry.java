@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad;
+package de.tobias.playpad.pad.conntent;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 

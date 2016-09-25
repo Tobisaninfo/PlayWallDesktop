@@ -21,7 +21,6 @@ import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
@@ -280,7 +279,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
+	public void handleWarning(IPadViewController controller, Duration warning) {
 		if (isWarnAnimation) {
 			warnAnimation(controller, warning);
 		} else {
@@ -293,20 +292,19 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(IPadViewController controller, Warning warning) {
+	private void warnAnimation(IPadViewController controller, Duration warning) {
 		FadeableColor stopColor = new FadeableColor(this.backgroundColor.getColorHi(), this.backgroundColor.getColorLow());
 		FadeableColor playColor = new FadeableColor(this.playColor.getColorHi(), this.playColor.getColorLow());
 
-		Duration warnDuration = warning.getTime();
 		Pad pad = controller.getPad();
 
 		if (pad.getContent() instanceof Durationable) {
-			if (warnDuration.greaterThan(((Durationable) pad.getContent()).getDuration())) {
-				warnDuration = ((Durationable) pad.getContent()).getDuration();
+			if (warning.greaterThan(((Durationable) pad.getContent()).getDuration())) {
+				warning = ((Durationable) pad.getContent()).getDuration();
 			}
 		}
 
-		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warning);
 	}
 
 	// Color Associator

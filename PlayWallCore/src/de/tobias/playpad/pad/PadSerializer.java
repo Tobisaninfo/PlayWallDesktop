@@ -15,12 +15,12 @@ import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLSerializer;
+import javafx.util.Duration;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
@@ -78,8 +78,14 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIMEMODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
 			padSettings.setFade(Fade.load(settingsElement.element(FADE_ELEMENT)));
-		if (settingsElement.element(WARNING_ELEMENT) != null)
-			padSettings.setWarning(Warning.load(settingsElement.element(WARNING_ELEMENT)));
+		if (settingsElement.element(WARNING_ELEMENT) != null) {
+			try {
+				Duration duration = Duration.valueOf(settingsElement.element(WARNING_ELEMENT).getStringValue().replace(" ", ""));
+				padSettings.setWarning(duration);
+			} catch (Exception e) {
+				padSettings.setWarning(Duration.seconds(5));
+			}
+		}
 
 		// Laoyut
 		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
@@ -173,7 +179,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		if (padSettings.isCustomTimeMode())
 			settingsElement.addElement(TIMEMODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
 		if (padSettings.isCustomWarning())
-			padSettings.getWarning().save(settingsElement.addElement(WARNING_ELEMENT));
+			settingsElement.addElement(WARNING_ELEMENT).addText(padSettings.getWarning().toString());
 		if (padSettings.isCustomFade())
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
 

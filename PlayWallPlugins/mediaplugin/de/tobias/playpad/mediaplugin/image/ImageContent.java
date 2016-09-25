@@ -130,5 +130,13 @@ public class ImageContent extends PadContent {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public PadContent clone() throws CloneNotSupportedException {
+		ImageContent clone = (ImageContent) super.clone();
+		clone.path = Paths.get(path.toUri());
+		clone.loadMedia();
+		return clone;
+	}
 
 }

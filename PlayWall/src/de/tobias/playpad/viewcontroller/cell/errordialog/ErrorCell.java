@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.cell.errordialog;
 
 import de.tobias.playpad.pad.PadException;
-import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;

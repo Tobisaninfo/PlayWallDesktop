@@ -1,4 +1,5 @@
 <Actions>
 	<Component id="move">de.tobias.playpad.pad.drag.MoveDragMode</Component>
+	<Component id="duplicate">de.tobias.playpad.pad.drag.DuplicateDragMode</Component>
 	<Component id="replace">de.tobias.playpad.pad.drag.ReplaceDragMode</Component>
 </Actions>

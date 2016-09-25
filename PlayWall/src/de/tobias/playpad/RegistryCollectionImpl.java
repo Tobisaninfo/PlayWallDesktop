@@ -4,7 +4,7 @@ import de.tobias.playpad.action.ActionConnect;
 import de.tobias.playpad.action.mapper.MapperConnect;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.design.DesignConnect;
-import de.tobias.playpad.pad.PadContentRegistry;
+import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.DefaultComponentRegistry;

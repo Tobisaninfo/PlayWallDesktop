@@ -242,6 +242,7 @@ public class Strings {
 
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
+	public static final String DnDMode_Duplicate = "DnDMode.Duplicate";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
 
 	// Main Layout

@@ -9,7 +9,6 @@ import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.beans.binding.BooleanBinding;
@@ -19,15 +18,16 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.util.Duration;
 
-public class PadSettings {
+public class PadSettings implements Cloneable {
 
 	// Settings
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
-	private ObjectProperty<Warning> warningProperty = new SimpleObjectProperty<>();
+	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customLayoutProperty = new SimpleBooleanProperty(false);
 	private HashMap<String, CartDesign> layouts = new HashMap<>();
@@ -123,7 +123,7 @@ public class PadSettings {
 		return warningProperty.isNotNull();
 	}
 
-	public Warning getWarning() {
+	public Duration getWarning() {
 		if (warningProperty.isNull().get()) {
 			if (Profile.currentProfile() != null) {
 				return Profile.currentProfile().getProfileSettings().getWarningFeedback();
@@ -132,11 +132,11 @@ public class PadSettings {
 		return warningProperty.get();
 	}
 
-	public void setWarning(Warning warning) {
+	public void setWarning(Duration warning) {
 		this.warningProperty.set(warning);
 	}
 
-	public ObjectProperty<Warning> warningProperty() {
+	public ObjectProperty<Duration> warningProperty() {
 		return warningProperty;
 	}
 
@@ -204,5 +204,26 @@ public class PadSettings {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public PadSettings clone() throws CloneNotSupportedException {
+		PadSettings settings = (PadSettings) super.clone();
+		settings.volumeProperty = new SimpleDoubleProperty(getVolume());
+		settings.loopProperty = new SimpleBooleanProperty(isLoop());
+		settings.timeModeProperty = new SimpleObjectProperty<TimeMode>(getTimeMode());
+		settings.warningProperty = new SimpleObjectProperty<>(getWarning());
+		settings.layouts = new HashMap<>();
+		for (String key : layouts.keySet()) {
+			CartDesign clone = (CartDesign) layouts.get(key).clone();
+			settings.layouts.put(key, clone);
+		}
+
+		settings.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
+		settings.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
+
+		settings.updateTrigger();
+
+		return settings;
 	}
 }
