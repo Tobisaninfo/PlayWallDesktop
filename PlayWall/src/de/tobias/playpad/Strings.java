@@ -267,4 +267,10 @@ public class Strings {
 	public static final String Tooltip_DragButton = "Tooltip.DragButton";
 	public static final String Tooltip_PageButton = "Tooltip.PageButton";
 	public static final String Tooltip_ColorButton = "Tooltip.ColorButton";
+
+	public static final String Tooltip_Page_LeftMove = "Tooltip.Page.LeftMove";
+	public static final String Tooltip_Page_RightMove = "Tooltip.Page.RightMove";
+	public static final String Tooltip_Page_Rename = "Tooltip.Page.Rename";
+	public static final String Tooltip_Page_Clone = "Tooltip.Page.Clone";
+	public static final String Tooltip_Page_Delete = "Tooltip.Page.Delete";
 }

@@ -13,7 +13,7 @@ import de.tobias.playpad.project.ProjectSettings;
  * 
  * @since 6.0.0
  */
-public class Page {
+public class Page implements Cloneable {
 
 	private int id;
 	private String name;
@@ -43,6 +43,9 @@ public class Page {
 
 	public void setId(int id) {
 		this.id = id;
+		for (Pad pad : pads.values()) {
+			pad.setPage(id);
+		}
 	}
 
 	public String getName() {
@@ -95,5 +98,19 @@ public class Page {
 	@Override
 	public String toString() {
 		return "Page [id=" + id + "]";
+	}
+
+	@Override
+	public Page clone() throws CloneNotSupportedException {
+		Page clone = (Page) super.clone();
+		clone.id = id;
+		clone.name = name;
+		clone.projectReference = projectReference;
+		clone.pads = new HashMap<>();
+		for (int key : pads.keySet()) {
+			Pad padClone = pads.get(key).clone();
+			clone.pads.put(key, padClone);
+		}
+		return clone;
 	}
 }

@@ -304,15 +304,22 @@ public class Pad implements Cloneable {
 		Pad clone = (Pad) super.clone();
 
 		clone.uuid = UUID.randomUUID();
-		clone.indexProperty = new SimpleIntegerProperty();
-		clone.pageProperty = new SimpleIntegerProperty();
+		clone.indexProperty = new SimpleIntegerProperty(getIndex());
+		clone.pageProperty = new SimpleIntegerProperty(getPage());
 
 		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.statusProperty = new SimpleObjectProperty<PadStatus>(getStatus());
-		clone.contentProperty = new SimpleObjectProperty<PadContent>(getContent().clone());
-		clone.getContent().setPad(clone);
-		
+		if (getContent() != null) {
+			clone.contentProperty = new SimpleObjectProperty<PadContent>(getContent().clone());
+			clone.getContent().setPad(clone);
+		} else {
+			clone.contentProperty = new SimpleObjectProperty<PadContent>();
+		}
+
 		clone.padSettings = padSettings.clone();
+
+		clone.controller = null;
+		clone.project = project;
 
 		clone.initPadListener();
 		return clone;

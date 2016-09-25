@@ -19,6 +19,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,6 +30,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 	private Button leftMoveButton;
 	private Button rightMoveButton;
 	private Button editTextButton;
+	private Button cloneButton;
 	private Button deleteButton;
 
 	private transient Button pageButton;
@@ -41,21 +43,30 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 
 		leftMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_LEFT));
 		leftMoveButton.setOnAction(this);
+		leftMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_LeftMove)));
 		leftMoveButton.setFocusTraversable(false);
 
 		rightMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_RIGHT));
 		rightMoveButton.setOnAction(this);
+		rightMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_RightMove)));
 		rightMoveButton.setFocusTraversable(false);
 
 		editTextButton = new Button("", new FontIcon(FontAwesomeType.EDIT));
 		editTextButton.setOnAction(this);
+		editTextButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Rename)));
 		editTextButton.setFocusTraversable(false);
+
+		cloneButton = new Button("", new FontIcon(FontAwesomeType.COPY));
+		cloneButton.setOnAction(this);
+		cloneButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Clone)));
+		cloneButton.setFocusTraversable(false);
 
 		deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
 		deleteButton.setOnAction(this);
+		deleteButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Delete)));
 		deleteButton.setFocusTraversable(false);
 
-		getChildren().addAll(leftMoveButton, rightMoveButton, editTextButton, deleteButton);
+		getChildren().addAll(leftMoveButton, rightMoveButton, editTextButton, cloneButton, deleteButton);
 		setSpacing(7);
 	}
 
@@ -119,6 +130,19 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			pageButton.setText(name);
 
 			event.consume();
+		} else if (event.getSource() == cloneButton) {
+			try {
+				Page clone = page.clone();
+				Project project = page.getProjectReference();
+				project.addPage(clone);
+
+				controller.initPageButtons();
+				controller.highlightPageButton(page.getId());
+				event.consume();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else if (event.getSource() == deleteButton) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 
@@ -134,8 +158,10 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			{
 				Project project = page.getProjectReference();
 				project.removePage(page);
+				PlayPadMain.getProgramInstance().getMainViewController().showPage(0);
 				controller.initPageButtons();
 				controller.highlightPageButton(0); // Show first page
+				event.consume();
 			});
 		}
 	}

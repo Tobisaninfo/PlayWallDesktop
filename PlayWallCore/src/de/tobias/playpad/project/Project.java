@@ -314,11 +314,18 @@ public class Project {
 	}
 
 	public boolean addPage() {
+		int index = pages.size();
+		return addPage(new Page(index, this));
+	}
+
+	public boolean addPage(Page page) {
 		if (pages.size() == ProjectSettings.MAX_PAGES) {
 			return false;
 		}
 		int index = pages.size();
-		pages.add(new Page(index, this));
+		page.setId(index);
+		pages.add(page);
 		return true;
+
 	}
 }

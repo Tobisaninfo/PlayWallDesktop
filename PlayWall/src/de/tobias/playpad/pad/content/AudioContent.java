@@ -51,10 +51,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	public AudioContent(Pad pad) {
 		super(pad);
-		volumeListener = (a, b, c) ->
-		{
-			updateVolume();
-		};
+		// Pad Volume Listener
+		volumeListener = (a, b, c) -> updateVolume();
 	}
 
 	@Override
@@ -262,6 +260,13 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public PadContent clone() throws CloneNotSupportedException {
 		AudioContent clone = (AudioContent) super.clone();
 		clone.path = Paths.get(path.toUri());
+
+		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		clone.audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
+
+		clone.durationProperty = new SimpleObjectProperty<>();
+		clone.positionProperty = new SimpleObjectProperty<>();
+
 		clone.loadMedia();
 		return clone;
 	}

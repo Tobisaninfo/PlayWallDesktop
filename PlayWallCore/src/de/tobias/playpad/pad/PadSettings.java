@@ -227,7 +227,7 @@ public class PadSettings implements Cloneable {
 		else
 			settings.warningProperty = new SimpleObjectProperty<>();
 
-		settings.customLayoutProperty = new SimpleBooleanProperty(isCustomWarning());
+		settings.customLayoutProperty = new SimpleBooleanProperty(isCustomLayout());
 		settings.layouts = new HashMap<>();
 		for (String key : layouts.keySet()) {
 			CartDesign clone = (CartDesign) layouts.get(key).clone();
