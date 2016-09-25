@@ -1,4 +1,4 @@
-package de.tobias.playpad.settings;
+package de.tobias.playpad.profile.ref;
 
 import de.tobias.utils.list.UniqList;
 

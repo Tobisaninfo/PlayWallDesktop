@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
@@ -131,8 +131,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			/*
 			 * Load Data
 			 */
-			ProfileReference.loadProfiles();
-			ProjectReference.loadProjects();
+			ProfileReferences.loadProfiles();
+			ProjectReferences.loadProjects();
 
 			// Changelog nach Update anzeigen
 			ViewController.create(ChangelogDialog.class);
@@ -141,7 +141,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
+					impl.openProject(Project.load(ProjectReferences.getProject(uuid), true, null));
 					return;
 				}
 			}
@@ -186,8 +186,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
-			ProfileReference.saveProfiles();
-			ProjectReference.saveProjects();
+			ProfileReferences.saveProfiles();
+			ProjectReferences.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler

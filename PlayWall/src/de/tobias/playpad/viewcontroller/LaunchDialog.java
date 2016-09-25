@@ -15,6 +15,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
@@ -58,7 +59,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 	public LaunchDialog(Stage stage) {
 		super("launchDialog", "de/tobias/playpad/assets/dialog/", stage, null, PlayPadMain.getUiResourceBundle());
-		projectListView.getItems().addAll(ProjectReference.getProjectsSorted());
+		projectListView.getItems().addAll(ProjectReferences.getProjectsSorted());
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 			alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 			{
 				try {
-					ProjectReference.removeDocument(ref);
+					ProjectReferences.removeDocument(ref);
 					projectListView.getItems().remove(ref); // VIEW
 				} catch (DocumentException | IOException e) {
 					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));

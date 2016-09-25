@@ -25,6 +25,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -735,7 +736,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		String project = openProject.getProjectReference().getName();
 
-		ProjectReference.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
+		ProjectReferences.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
 		{
 			MenuItem menuItem = new MenuItem(item.toString());
 			menuItem.setUserData(item);

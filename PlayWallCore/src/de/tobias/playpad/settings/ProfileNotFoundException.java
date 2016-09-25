@@ -1,5 +1,7 @@
 package de.tobias.playpad.settings;
 
+import de.tobias.playpad.profile.ref.ProfileReference;
+
 public class ProfileNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;

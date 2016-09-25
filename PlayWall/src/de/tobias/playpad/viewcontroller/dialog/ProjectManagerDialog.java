@@ -9,11 +9,12 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -69,7 +70,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		super("openDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.currentProject = currentProject;
 
-		projectList.getItems().setAll(ProjectReference.getProjectsSorted());
+		projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
 
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
@@ -176,7 +177,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 		{
 			try {
-				ProjectReference.removeDocument(ref);
+				ProjectReferences.removeDocument(ref);
 				projectList.getItems().remove(ref); // VIEW
 			} catch (Exception e) {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
@@ -202,13 +203,13 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 		try {
 			String newProjectName = nameTextField.getText();
-			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReferences.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
 			}
 
 			projectReference.setName(newProjectName);
-			projectList.getItems().setAll(ProjectReference.getProjectsSorted());
+			projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
 
 			selectProject(projectReference);
 		} catch (Exception e) {

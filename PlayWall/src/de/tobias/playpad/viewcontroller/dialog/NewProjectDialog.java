@@ -9,11 +9,13 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -57,7 +59,7 @@ public class NewProjectDialog extends ViewController {
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
 
-		profileComboBox.getItems().addAll(ProfileReference.getProfiles());
+		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
 	}
 
@@ -68,7 +70,7 @@ public class NewProjectDialog extends ViewController {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+				if (ProjectReferences.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -138,7 +140,7 @@ public class NewProjectDialog extends ViewController {
 			project.getSettings().setMediaPath(newMediaPath);
 			project.save();
 
-			ProjectReference.addProject(projectReference);
+			ProjectReferences.addProject(projectReference);
 
 			getStage().close();
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {

@@ -22,7 +22,6 @@ import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.media.AudioEqualizer;
 import javafx.scene.media.EqualizerBand;

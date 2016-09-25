@@ -16,9 +16,11 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -70,7 +72,7 @@ public class ProjectImporter {
 			UUID localProfileUUID = null;
 			if (includeProfile) {
 				// Dieser Dialog wird aufgerufen, wenn das Profile bereits existiert, wenn nicht wird es direkt importiert
-				if (ProfileReference.getProfiles().contains(profileName)) {
+				if (ProfileReferences.getProfiles().contains(profileName)) {
 					profileName = importable.replaceProfile(profileName);
 				}
 
@@ -98,7 +100,7 @@ public class ProjectImporter {
 					});
 
 					ProfileReference profileRef = new ProfileReference(localProfileUUID, profileName);
-					ProfileReference.addProfile(profileRef);
+					ProfileReferences.addProfile(profileRef);
 				} else {
 					Profile profile = chooseable.getUnkownProfile();
 					if (profile != null) {
@@ -121,13 +123,13 @@ public class ProjectImporter {
 
 				zip.getFile(projectFile, localFile);
 
-				if (ProjectReference.getProjects().contains(projectName)) {
+				if (ProjectReferences.getProjects().contains(projectName)) {
 					projectName = importable.replaceProject(projectName);
 				}
 
 				ProjectReference projectRef = new ProjectReference(localProjectUUID, projectName,
-						ProfileReference.getReference(localProfileUUID));
-				ProjectReference.addProject(projectRef);
+						ProfileReferences.getReference(localProfileUUID));
+				ProjectReferences.addProject(projectRef);
 
 				// Import Media
 				if (includeMedia) {

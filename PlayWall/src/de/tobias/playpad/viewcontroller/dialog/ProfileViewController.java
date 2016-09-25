@@ -7,10 +7,11 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
@@ -50,7 +51,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
 
-		if (ProfileReference.getProfiles().size() == 1
+		if (ProfileReferences.getProfiles().size() == 1
 				|| profileList.getSelectionModel().getSelectedItem().equals(Profile.currentProfile().getRef())) {
 			deleteButton.setDisable(true);
 		}
@@ -58,14 +59,14 @@ public class ProfileViewController extends ViewController implements ChangeListe
 
 	@Override
 	public void init() {
-		profileList.getItems().setAll(ProfileReference.getProfiles());
+		profileList.getItems().setAll(ProfileReferences.getProfiles());
 		profileList.setCellFactory(list -> new DisplayableCell<>());
 
 		nameTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c != null) {
 				try {
-					if ((ProfileReference.getProfiles().contains(c) && !profileList.getSelectionModel().getSelectedItem().equals(c))
+					if ((ProfileReferences.getProfiles().contains(c) && !profileList.getSelectionModel().getSelectedItem().equals(c))
 							&& !c.equals(profileList.getSelectionModel().getSelectedItem().getName())) {
 						nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 					} else {
@@ -150,7 +151,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		alert.showAndWait().filter(button -> button == ButtonType.OK).ifPresent(button ->
 		{
 			try {
-				ProfileReference.removeProfile(ref);
+				ProfileReferences.removeProfile(ref);
 				profileList.getItems().remove(ref);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -164,7 +165,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 		try {
 			String newProfileName = nameTextField.getText();
-			if (ProfileReference.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
+			if (ProfileReferences.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, newProfileName));
 				return;
 			}
@@ -190,7 +191,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		chooseButton.setDisable(newValue == null);
 		duplicateButton.setDisable(newValue == null);
 
-		if (ProfileReference.getProfiles().size() == 1 || profileList.getSelectionModel().getSelectedItem() == null
+		if (ProfileReferences.getProfiles().size() == 1 || profileList.getSelectionModel().getSelectedItem() == null
 				|| profileList.getSelectionModel().getSelectedItem().equals(Profile.currentProfile().getRef())) {
 			deleteButton.setDisable(true);
 		} else {

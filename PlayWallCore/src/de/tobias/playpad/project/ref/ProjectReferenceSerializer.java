@@ -11,7 +11,8 @@ import org.dom4j.Element;
 
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.ModuleSerializer;
-import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLDeserializer;
@@ -34,7 +35,7 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 		XMLHandler<Module> handler = new XMLHandler<>(element);
 		Set<Module> modules = new HashSet<>(handler.loadElements(MODULE_ELEMENT, new ModuleSerializer()));
 
-		ProfileReference profileRef = ProfileReference.getReference(profile);
+		ProfileReference profileRef = ProfileReferences.getReference(profile);
 		ProjectReference ref = new ProjectReference(uuid, name, profileRef, modules);
 
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());

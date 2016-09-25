@@ -2,8 +2,20 @@ package de.tobias.playpad.settings;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.pad.PadSettings;
 import javafx.util.Duration;
 
+/**
+ * Einstellungen zum Fading, zusammengefasst in dieser Klasse.
+ * 
+ * @author tobias
+ * 
+ * @since 6.0.0
+ * 
+ * @see ProfileSettings#getFade()
+ * @see PadSettings#getFade()
+ *
+ */
 public class Fade {
 
 	private Duration fadeIn;
@@ -14,19 +26,48 @@ public class Fade {
 	private boolean fadeOutPause;
 	private boolean fadeOutStop;
 
+	/**
+	 * Erstellt ein neues Fading mit den Default Werten. (Fade Dauer: 0 sec)
+	 */
 	public Fade() {
-		fadeIn = Duration.ZERO;
-		fadeOut = Duration.ZERO;
-
-		fadeInStart = false;
-		fadeInPause = true;
-		fadeOutPause = true;
-		fadeOutStop = true;
+		this(Duration.ZERO, Duration.ZERO);
 	}
 
+	/**
+	 * Erstellt einen neues Fading mit Custom Zeiten und Default Einstellungen für Play, Pause, Stop.
+	 * 
+	 * @param fadeIn
+	 *            Fade In Dauer
+	 * @param fadeOut
+	 *            Fade Out Dauer
+	 */
 	public Fade(Duration fadeIn, Duration fadeOut) {
+		this(fadeIn, fadeOut, false, true, true, true);
+	}
+
+	/**
+	 * Erstellt ein Fading mit Custom Werten.
+	 * 
+	 * @param fadeIn
+	 *            Fade In Dauer
+	 * @param fadeOut
+	 *            Fade Out Dauer
+	 * @param fadeInStart
+	 *            Fade beim Start
+	 * @param fadeInPause
+	 *            Fade nach Pause
+	 * @param fadeOutPause
+	 *            Fade vor Pause
+	 * @param fadeOutStop
+	 *            Fade vor Stop
+	 */
+	public Fade(Duration fadeIn, Duration fadeOut, boolean fadeInStart, boolean fadeInPause, boolean fadeOutPause, boolean fadeOutStop) {
 		this.fadeIn = fadeIn;
 		this.fadeOut = fadeOut;
+		this.fadeInStart = fadeInStart;
+		this.fadeInPause = fadeInPause;
+		this.fadeOutPause = fadeOutPause;
+		this.fadeOutStop = fadeOutStop;
 	}
 
 	public Duration getFadeIn() {
@@ -77,6 +118,10 @@ public class Fade {
 		this.fadeOutStop = fadeOutStop;
 	}
 
+	/*
+	 * Serialize
+	 */
+
 	private static final String FADE_OUT = "FadeOut";
 	private static final String FADE_IN = "FadeIn";
 
@@ -114,7 +159,9 @@ public class Fade {
 				fade.setFadeOutStop(Boolean.valueOf(fadeOutElement.attributeValue(ON_STOP_ATTR)));
 			fade.setFadeOut(Duration.valueOf(fadeOutElement.getStringValue().replace(" ", "")));
 			return fade;
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

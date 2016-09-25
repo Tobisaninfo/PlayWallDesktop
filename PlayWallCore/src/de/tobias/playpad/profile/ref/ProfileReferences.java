@@ -1,13 +1,11 @@
-package de.tobias.playpad.settings;
+package de.tobias.playpad.profile.ref;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.dom4j.Document;
@@ -15,117 +13,21 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.tobias.playpad.Displayable;
-import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.FileUtils.FileActionAdapter;
 import de.tobias.utils.xml.XMLHandler;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
-/**
- * Container für Profile Referenzen
- * 
- * @author tobias
- * 
- * @see Profile
- * @since 5.0.0
- */
-public class ProfileReference implements Displayable {
+public final class ProfileReferences {
 
-	private static final String DEFAULT_PROFILE_NAME = "Default";
-
-	private final UUID uuid;
-	private String name;
-	private Set<Module> requestedModules;
-
-	/**
-	 * Erstellt eine neue Referenz mit einer Random UUID.
-	 * 
-	 * @param name
-	 *            Name
-	 */
-	public ProfileReference(String name) {
-		this.name = name;
-		this.uuid = UUID.randomUUID();
-		requestedModules = new HashSet<>();
-		updateDisplayProperty();
-	}
-
-	/**
-	 * Erstellt eine neue Referenz mit Namen und UUID.
-	 * 
-	 * @param uuid
-	 *            UUID
-	 * @param name
-	 *            Name
-	 */
-	public ProfileReference(UUID uuid, String name) {
-		this.uuid = uuid;
-		this.name = name;
-		requestedModules = new HashSet<>();
-		updateDisplayProperty();
-	}
-
-	/**
-	 * Erstellt eine neue Referenz mit Namen und UUID.
-	 * 
-	 * @param uuid
-	 *            UUID
-	 * @param name
-	 *            Name
-	 */
-	public ProfileReference(UUID uuid, String name, Set<Module> requestedModules) {
-		this(uuid, name);
-		this.requestedModules = requestedModules;
-	}
-
-	/**
-	 * Gibt den Namen zurück
-	 * 
-	 * @return Name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Gibt die UUID zurück
-	 * 
-	 * @return uudi
-	 */
-	public UUID getUuid() {
-		return uuid;
-	}
-
-	/**
-	 * Setzt einen neuen Namen.
-	 * 
-	 * @param name
-	 *            Neuer Name
-	 */
-	public void setName(String name) {
-		this.name = name;
-		updateDisplayProperty();
-	}
-	
-	
-	public Set<Module> getRequestedModules() {
-		return requestedModules;
-	}
-	
-	public void addRequestedModule(Module module) {
-		requestedModules.add(module);
-	}
-
-	// Verwaltungsmethoden für Profile Referenzen // TODO Extract in Extra Class
+	private ProfileReferences() {}
 
 	/**
 	 * Liste mit allen Referenzen
 	 */
-	private static List<ProfileReference> profiles = new ProfileReferenceList();
+	static List<ProfileReference> profiles = new ProfileReferenceList();
 
 	/**
 	 * Sucht eine Referenz zu einer UUID raus.
@@ -136,7 +38,7 @@ public class ProfileReference implements Displayable {
 	 */
 	public static ProfileReference getReference(UUID profile) {
 		for (ProfileReference ref : profiles) {
-			if (ref.uuid.equals(profile)) {
+			if (ref.getUuid().equals(profile)) {
 				return ref;
 			}
 		}
@@ -165,7 +67,7 @@ public class ProfileReference implements Displayable {
 	 */
 	public static Profile newProfile(String name) throws UnsupportedEncodingException, IOException {
 		ProfileReference ref = new ProfileReference(UUID.randomUUID(), name);
-		ProfileReference.addProfile(ref);
+		ProfileReferences.addProfile(ref);
 
 		Profile profile = new Profile(ref);
 		profile.save();
@@ -253,6 +155,7 @@ public class ProfileReference implements Displayable {
 	}
 
 	// Load and Save
+	private static final String DEFAULT_PROFILE_NAME = "Default";
 
 	private static final String FILE_NAME = "Profiles.xml";
 	private static final String ROOT_ELEMENT = "Settings";
@@ -267,20 +170,20 @@ public class ProfileReference implements Displayable {
 	 *             XML Fehler
 	 */
 	public static void loadProfiles() throws IOException, DocumentException {
-		profiles.clear();
+		ProfileReferences.profiles.clear();
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
 
 		if (Files.exists(path)) {
 			// Load data from xml
 			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
-			profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
-			System.out.println(profiles);
+			ProfileReferences.profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
+			System.out.println("Find Profile: " + ProfileReferences.profiles);
 		}
 
 		// Add Default Element if list is empty
-		if (profiles.isEmpty()) {
-			Profile profile = newProfile(DEFAULT_PROFILE_NAME);
+		if (ProfileReferences.profiles.isEmpty()) {
+			Profile profile = ProfileReferences.newProfile(DEFAULT_PROFILE_NAME);
 			profile.save();
 		}
 	}
@@ -299,7 +202,7 @@ public class ProfileReference implements Displayable {
 
 		// Save data to xml
 		XMLHandler<ProfileReference> handler = new XMLHandler<>(root);
-		handler.saveElements(PROFILE_ELEMENT, profiles, new ProfileReferenceSerializer());
+		handler.saveElements(PROFILE_ELEMENT, ProfileReferences.profiles, new ProfileReferenceSerializer());
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
 		if (Files.notExists(path)) {
@@ -309,40 +212,4 @@ public class ProfileReference implements Displayable {
 		XMLHandler.save(path, document);
 	}
 
-	/**
-	 * Gibt einen Pfad für einen Dateinamen in diesem Profile zurück.
-	 * 
-	 * @param name
-	 *            Name der Datei
-	 * @return Path für die Datei
-	 */
-	public Path getCustomFilePath(String name) {
-		return ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, getFileName(), name);
-	}
-
-	/**
-	 * Gibt den internen (File-) Namen des Profiles zurück.
-	 * 
-	 * @return Ordnernamen
-	 */
-	public String getFileName() {
-		return uuid.toString();
-	}
-
-	@Override
-	public String toString() {
-		return name;
-	}
-
-	// Displayable
-	private StringProperty displayProperty = new SimpleStringProperty(toString());
-
-	@Override
-	public StringProperty displayProperty() {
-		return displayProperty;
-	}
-
-	private void updateDisplayProperty() {
-		displayProperty.set(toString());
-	}
 }
