@@ -7,7 +7,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemConnect;
-import de.tobias.playpad.trigger.TriggerUIWrapper;
+import de.tobias.playpad.trigger.TriggerDisplayable;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -23,9 +23,9 @@ public class TriggerPointViewController extends ContentViewController {
 	@FXML private VBox itemView;
 	@FXML private HBox buttonBox;
 
-	private TriggerUIWrapper triggerWrapper;
+	private TriggerDisplayable triggerWrapper;
 
-	public TriggerPointViewController(TriggerUIWrapper triggerWrapper) {
+	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
 		super("triggerPoint", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
 		this.triggerWrapper = triggerWrapper;
 

@@ -84,15 +84,18 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
 
+		// Localization
+		setupLocalization();
+
+		// Setup Global Settings
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
+		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
+		globalSettings.getKeyCollection().load(globalSettingsPath);
 
 		impl = new PlayPadImpl(globalSettings);
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
-
-		// Localization
-		setupLocalization();
 
 		// Console
 		if (!app.isDebug()) {
@@ -108,8 +111,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 
 			/*
 			 * Setup

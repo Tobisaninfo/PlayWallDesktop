@@ -155,4 +155,8 @@ public class Key implements Displayable {
 		displayProperty.set(toString());
 		return displayProperty;
 	}
+
+	public boolean isEmpty() {
+		return key.isEmpty() && !ctrl && !shift & !meta && !alt;
+	}
 }

@@ -1,5 +1,8 @@
 package de.tobias.playpad.settings.keys;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.xml.XMLHandler;
 
@@ -60,15 +64,27 @@ public class KeyCollection {
 	 * @return Localized Name
 	 */
 	public String getName(String id) {
-		return keys.get(id).getName();
+		KeyCollectionEntry keyCollectionEntry = keys.get(id);
+		if (keyCollectionEntry != null) {
+			return keyCollectionEntry.getName();
+		} else {
+			return null;
+		}
 	}
 
 	public Key getKey(String id) {
-		return keys.get(id).getKey();
+		KeyCollectionEntry keyCollectionEntry = keys.get(id);
+		if (keyCollectionEntry != null) {
+			return keyCollectionEntry.getKey();
+		} else {
+			return null;
+		}
 	}
 
 	private void updateKey(Key key) {
-		keys.get(key.getId()).setKey(key);
+		KeyCollectionEntry keyCollectionEntry = keys.get(key.getId());
+		if (keyCollectionEntry != null)
+			keyCollectionEntry.setKey(key);
 	}
 
 	public Collection<Key> getKeys() {
@@ -98,7 +114,7 @@ public class KeyCollection {
 	 */
 	public boolean keysConflict(Key key) {
 		for (KeyCollectionEntry k : keys.values()) {
-			if (k.getKey().getKeyCode().equals(key.getKeyCode())) {
+			if (k.getKey().getKeyCode().equals(key.getKeyCode()) && !key.isEmpty()) {
 				return true;
 			}
 		}
@@ -128,11 +144,19 @@ public class KeyCollection {
 
 	private static final String KEY_ELEMENT = "Key";
 
-	public void load(Element element) {
-		XMLHandler<Key> handler = new XMLHandler<>(element);
-		List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
-		for (Key key : keys) {
-			updateKey(key);
+	public void load(Path path) throws DocumentException, IOException {
+		if (Files.exists(path)) {
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(Files.newInputStream(path));
+			Element root = document.getRootElement();
+
+			if (root.element(GlobalSettings.KEYS_ELEMENT) != null) {
+				XMLHandler<Key> handler = new XMLHandler<>(root.element(GlobalSettings.KEYS_ELEMENT));
+				List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
+				for (Key key : keys) {
+					updateKey(key);
+				}
+			}
 		}
 	}
 

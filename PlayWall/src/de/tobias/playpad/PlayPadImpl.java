@@ -283,10 +283,6 @@ public class PlayPadImpl implements PlayPad {
 		Pad.getVolumeManager().addFilter(new GlobalVolume());
 		Pad.getVolumeManager().addFilter(new PadVolume());
 
-		// Key Bindings
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", resourceBundle);
-
 		// Mapper
 		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
 
