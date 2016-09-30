@@ -49,7 +49,9 @@ namespace NativeAudio {
             methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "isPlaying", "isPlaying6", "()Z"));
             methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "setVolume", "setVolume7", "(F)V"));
             methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "setLoop", "setLoop8", "(Z)V"));
-            methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "unload", "unload9", "()V"));
+            methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "setDevice", "setDevice9", "(Ljava/lang/String;)V"));
+            methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "getDevices", "getDevices10", "()[Ljava/lang/String;"));
+            methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "unload", "unload11", "()V"));
             methods.Add(global::net.sf.jni4net.jni.JNINativeMethod.Create(@__type, "__ctorNativeAudio0", "__ctorNativeAudio0", "(Lnet/sf/jni4net/inj/IClrProxy;)V"));
             return methods;
         }
@@ -152,7 +154,28 @@ namespace NativeAudio {
             }catch (global::System.Exception __ex){@__env.ThrowExisting(__ex);}
         }
         
-        private static void unload9(global::System.IntPtr @__envp, global::net.sf.jni4net.utils.JniLocalHandle @__obj) {
+        private static void setDevice9(global::System.IntPtr @__envp, global::net.sf.jni4net.utils.JniLocalHandle @__obj, global::net.sf.jni4net.utils.JniLocalHandle name) {
+            // (Ljava/lang/String;)V
+            // (LSystem/String;)V
+            global::net.sf.jni4net.jni.JNIEnv @__env = global::net.sf.jni4net.jni.JNIEnv.Wrap(@__envp);
+            try {
+            global::NativeAudio.NativeAudio @__real = global::net.sf.jni4net.utils.Convertor.StrongJp2C<global::NativeAudio.NativeAudio>(@__env, @__obj);
+            @__real.setDevice(global::net.sf.jni4net.utils.Convertor.StrongJ2CString(@__env, name));
+            }catch (global::System.Exception __ex){@__env.ThrowExisting(__ex);}
+        }
+        
+        private static global::net.sf.jni4net.utils.JniHandle getDevices10(global::System.IntPtr @__envp, global::net.sf.jni4net.utils.JniLocalHandle @__class) {
+            // ()[Ljava/lang/String;
+            // ()[LSystem/String;
+            global::net.sf.jni4net.jni.JNIEnv @__env = global::net.sf.jni4net.jni.JNIEnv.Wrap(@__envp);
+            global::net.sf.jni4net.utils.JniHandle @__return = default(global::net.sf.jni4net.utils.JniHandle);
+            try {
+            @__return = global::net.sf.jni4net.utils.Convertor.ArrayStrongC2JString(@__env, global::NativeAudio.NativeAudio.getDevices());
+            }catch (global::System.Exception __ex){@__env.ThrowExisting(__ex);}
+            return @__return;
+        }
+        
+        private static void unload11(global::System.IntPtr @__envp, global::net.sf.jni4net.utils.JniLocalHandle @__obj) {
             // ()V
             // ()V
             global::net.sf.jni4net.jni.JNIEnv @__env = global::net.sf.jni4net.jni.JNIEnv.Wrap(@__envp);

@@ -55,6 +55,12 @@ public class NativeAudio extends system.Object {
     @net.sf.jni4net.attributes.ClrMethod("(Z)V")
     public native void setLoop(boolean loop);
     
+    @net.sf.jni4net.attributes.ClrMethod("(LSystem/String;)V")
+    public native void setDevice(java.lang.String name);
+    
+    @net.sf.jni4net.attributes.ClrMethod("()[LSystem/String;")
+    public native static java.lang.String[] getDevices();
+    
     @net.sf.jni4net.attributes.ClrMethod("()V")
     public native void unload();
     

@@ -4,7 +4,7 @@ if not exist target\classes mkdir target\classes
 
 
 echo compile classes
-javac -nowarn -d target\classes -sourcepath jvm -cp "d:\programmieren\git-java\playwall\playwallnativewin\j4n\jni4net-0.8.8.0-bin\lib\jni4net.j-0.8.8.0.jar"; "jvm\nativeaudio\LoopStream.java" "jvm\nativeaudio\NativeAudio.java" 
+javac -nowarn -d target\classes -sourcepath jvm -cp "d:\programmieren\git-java\playwall\playwallnativewin\j4n\jni4net.j-0.8.8.0.jar"; "jvm\nativeaudio\LoopStream.java" "jvm\nativeaudio\NativeAudio.java" 
 IF %ERRORLEVEL% NEQ 0 goto end
 
 
@@ -14,7 +14,7 @@ IF %ERRORLEVEL% NEQ 0 goto end
 
 
 echo NativeAudio.j4n.dll 
-csc /nologo /warn:0 /t:library /out:NativeAudio.j4n.dll /recurse:clr\*.cs  /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\NativeAudio.dll" /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\jni4net-0.8.8.0-bin\lib\jni4net.n-0.8.8.0.dll"
+csc /nologo /warn:0 /t:library /out:NativeAudio.j4n.dll /recurse:clr\*.cs  /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\NativeAudio.dll" /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\jni4net.n-0.8.8.0.dll"
 IF %ERRORLEVEL% NEQ 0 goto end
 
 
