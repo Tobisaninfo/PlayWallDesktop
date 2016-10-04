@@ -4,8 +4,8 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 
 /**
- * Audio Handler Interface zur Verwaltung einer AudioHandler Implementierung. Für Aktionen beim schließen des
- * Programmes, muss der AudioHandler AutoClosable implementieren.
+ * Audio Handler Interface zur Verwaltung einer AudioHandler Implementierung. Für Aktionen beim schließen des Programmes, muss der AudioHandler
+ * AutoClosable implementieren.
  * 
  * @author tobias
  *
@@ -35,4 +35,13 @@ public abstract class AudioHandlerConnect {
 	 * @return Type
 	 */
 	public abstract String getType();
+
+	/**
+	 * Prüft ob ein Feature verfügbar ist.
+	 * 
+	 * @param audioCapability
+	 *            Feature
+	 * @return <code>true</code> Verfügbar
+	 */
+	public abstract boolean isFeatureAvaiable(AudioCapability audioCapability);
 }

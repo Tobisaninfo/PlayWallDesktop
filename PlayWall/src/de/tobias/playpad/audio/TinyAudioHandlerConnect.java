@@ -25,4 +25,13 @@ public class TinyAudioHandlerConnect extends AudioHandlerConnect implements Auto
 	public void close() throws Exception {
 		TinyAudioHandler.shutdown();
 	}
+
+	@Override
+	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+		for (Class<?> clazz : TinyAudioHandler.class.getInterfaces()) {
+			if (clazz.equals(audioCapability.getAudioFeature()))
+				return true;
+		}
+		return false;
+	}
 }

@@ -3,6 +3,8 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.audio.AudioCapability;
+import de.tobias.playpad.audio.AudioHandlerConnect;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -12,17 +14,24 @@ import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class AudioTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	// Audio
 	@FXML private ComboBox<String> audioTypeComboBox;
-	@FXML private AnchorPane audioUserInfoSettings;
+	@FXML private VBox options;
+
 	private AudioHandlerViewController audioViewController;
 	private boolean changeAudioSettings;
 
@@ -31,7 +40,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 		if (playerActive) {
 			audioTypeComboBox.setDisable(true);
-			audioUserInfoSettings.setDisable(true);
+			options.setDisable(true);
 		}
 	}
 
@@ -60,19 +69,35 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 			}
 		}
 
-		audioUserInfoSettings.getChildren().clear();
+		options.getChildren().clear();
 
+		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		try {
-			AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-			audioViewController = audioHandlerRegistry.getComponent(classID).getAudioHandlerSettingsViewController();
+			AudioHandlerConnect audio = audioHandlerRegistry.getComponent(classID);
 
-			if (audioViewController != null) {
-				audioUserInfoSettings.getChildren().add(audioViewController.getParent());
+			for (AudioCapability audioCapability : AudioCapability.getFeatures()) {
+				options.getChildren().add(createCapabilityView(audio, audioCapability));
 			}
 		} catch (NoSuchComponentException e) {
 			e.printStackTrace();
-			// TODO Errorhandling
 		}
+	}
+
+	private Parent createCapabilityView(AudioHandlerConnect audio, AudioCapability audioCapability) {
+		HBox hbox = new HBox(14);
+		Label nameLabel = new Label(Localization.getString(audioCapability.getName()));
+		nameLabel.setAlignment(Pos.CENTER_RIGHT);
+		nameLabel.setMinWidth(150);
+
+		Label availableLabel;
+		if (audio.isFeatureAvaiable(audioCapability)) {
+			availableLabel = new FontIcon(FontAwesomeType.CHECK);
+		} else {
+			availableLabel = new FontIcon(FontAwesomeType.TIMES);
+		}
+
+		hbox.getChildren().addAll(nameLabel, availableLabel);
+		return hbox;
 	}
 
 	@Override

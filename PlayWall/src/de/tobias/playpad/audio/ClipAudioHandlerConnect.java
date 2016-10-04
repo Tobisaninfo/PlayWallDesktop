@@ -23,7 +23,15 @@ public class ClipAudioHandlerConnect extends AudioHandlerConnect implements Auto
 
 	@Override
 	public void close() throws Exception {
-		TinyAudioHandler.shutdown();
+		ClipAudioHandler.shutdown();
 	}
 
+	@Override
+	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+		for (Class<?> clazz : ClipAudioHandler.class.getInterfaces()) {
+			if (clazz.equals(audioCapability.getAudioFeature()))
+				return true;
+		}
+		return false;
+	}
 }
