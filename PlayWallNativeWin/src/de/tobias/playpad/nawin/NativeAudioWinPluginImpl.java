@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.nawin.audio.NativeAudioWinHandlerConnect;
-import de.tobias.playpad.nawin.audio.NativeAudioWinPlugin;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.App;

@@ -1,4 +1,4 @@
-package de.tobias.playpad.nawin.audio;
+package de.tobias.playpad.nawin;
 
 import de.tobias.playpad.plugin.AdvancedPlugin;
 

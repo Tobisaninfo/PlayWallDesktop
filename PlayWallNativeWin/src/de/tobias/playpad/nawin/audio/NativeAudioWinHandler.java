@@ -1,4 +1,4 @@
-package de.tobias.playpad.nawin;
+package de.tobias.playpad.nawin.audio;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import de.tobias.playpad.audio.AudioHandler;
+import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.settings.Profile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -17,7 +19,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Duration;
 import nativeaudio.NativeAudio;
 
-public class NativeAudioWinHandler extends AudioHandler {
+public class NativeAudioWinHandler extends AudioHandler implements Soundcardable {
+
+	public static final String SOUND_CARD = "SoundCard";
 
 	private NativeAudio audioHandler;
 	private ObjectProperty<Duration> durationProperty;
@@ -79,6 +83,7 @@ public class NativeAudioWinHandler extends AudioHandler {
 	@Override
 	public void play() {
 		audioHandler.setLoop(getContent().getPad().getPadSettings().isLoop());
+
 		audioHandler.play();
 
 		boolean start = false;
@@ -141,12 +146,25 @@ public class NativeAudioWinHandler extends AudioHandler {
 
 	@Override
 	public void loadMedia(Path[] paths) {
+		Platform.runLater(() -> {
+			if (getContent().getPad().isPadVisible()) {
+				getContent().getPad().getController().getView().showBusyView(true);
+			}
+		});
 		if (audioHandler == null)
 			audioHandler = new NativeAudio();
 		audioHandler.load(paths[0].toString());
+
+		String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo()
+				.get(NativeAudioWinHandler.SOUND_CARD);
+		audioHandler.setDevice(name);
+
 		Platform.runLater(() -> {
 			durationProperty.set(Duration.millis(audioHandler.getDuration()));
 			getContent().getPad().setStatus(PadStatus.READY);
+			if (getContent().getPad().isPadVisible()) {
+				getContent().getPad().getController().getView().showBusyView(false);
+			}
 		});
 	}
 
@@ -154,6 +172,11 @@ public class NativeAudioWinHandler extends AudioHandler {
 	public void unloadMedia() {
 		audioHandler.unload();
 		audioHandler = null;
+	}
+
+	@Override
+	public void setOutputDevice(String name) {
+		audioHandler.setDevice(name);
 	}
 
 }

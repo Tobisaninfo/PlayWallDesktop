@@ -14,7 +14,7 @@ IF %ERRORLEVEL% NEQ 0 goto end
 
 
 echo NativeAudio.j4n.dll 
-csc /nologo /warn:0 /t:library /out:NativeAudio.j4n.dll /recurse:clr\*.cs  /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\NativeAudio.dll" /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\jni4net.n-0.8.8.0.dll"
+csc /nologo /warn:0 /t:library /out:NativeAudio.j4n.dll /recurse:clr\*.cs  /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\NativeAudio.dll" /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\NAudio.dll" /reference:"D:\Programmieren\Git-Java\PlayWall\PlayWallNativeWin\j4n\jni4net.n-0.8.8.0.dll"
 IF %ERRORLEVEL% NEQ 0 goto end
 
 

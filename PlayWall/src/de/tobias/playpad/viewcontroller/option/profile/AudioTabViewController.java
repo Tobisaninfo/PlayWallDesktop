@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -32,7 +35,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	@FXML private ComboBox<String> audioTypeComboBox;
 	@FXML private VBox options;
 
-	private AudioHandlerViewController audioViewController;
+	private List<AudioHandlerViewController> audioViewController;
 	private boolean changeAudioSettings;
 
 	public AudioTabViewController(boolean playerActive) {
@@ -46,6 +49,8 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	@Override
 	public void init() {
+		audioViewController = new ArrayList<>();
+
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		// Audio Classes
@@ -53,8 +58,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		audioTypeComboBox.getItems().addAll(audioHandlerRegistry.getTypes());
 
 		// Listener for selection
-		audioTypeComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
-		{
+		audioTypeComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
 			if (b != null && c != null)
 				changeAudioSettings = true;
 			showAudioSettings(c);
@@ -64,7 +68,8 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	private void showAudioSettings(String classID) {
 		if (audioViewController != null) {
-			if (audioViewController.isChanged()) {
+			// Es gibt ein Settings View Controller der isChanged true ist
+			if (audioViewController.stream().filter(c -> c.isChanged()).count() > 0) {
 				changeAudioSettings = true;
 			}
 		}
@@ -84,20 +89,32 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	}
 
 	private Parent createCapabilityView(AudioHandlerConnect audio, AudioCapability audioCapability) {
-		HBox hbox = new HBox(14);
+		HBox masterView = new HBox(14);
+		VBox detailView = new VBox(14);
+
 		Label nameLabel = new Label(Localization.getString(audioCapability.getName()));
 		nameLabel.setAlignment(Pos.CENTER_RIGHT);
 		nameLabel.setMinWidth(150);
 
+		AudioHandlerViewController settingsViewController = null;
+
 		Label availableLabel;
 		if (audio.isFeatureAvaiable(audioCapability)) {
 			availableLabel = new FontIcon(FontAwesomeType.CHECK);
+
+			settingsViewController = audio.getAudioFeatureSettings(audioCapability);
 		} else {
 			availableLabel = new FontIcon(FontAwesomeType.TIMES);
 		}
 
-		hbox.getChildren().addAll(nameLabel, availableLabel);
-		return hbox;
+		detailView.getChildren().add(availableLabel);
+		if (settingsViewController != null) {
+			detailView.getChildren().add(settingsViewController.getParent());
+			audioViewController.add(settingsViewController);
+		}
+
+		masterView.getChildren().addAll(nameLabel, detailView);
+		return masterView;
 	}
 
 	@Override
@@ -118,10 +135,8 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	@Override
 	public boolean needReload() {
-		if (audioViewController != null) {
-			if (audioViewController.isChanged()) {
-				changeAudioSettings = true;
-			}
+		if (audioViewController.stream().filter(c -> c.isChanged()).count() > 0) {
+			changeAudioSettings = true;
 		}
 		return changeAudioSettings;
 	}
@@ -129,6 +144,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	@Override
 	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
 		return new Task<Void>() {
+
 			@Override
 			protected Void call() throws Exception {
 				updateTitle(name());

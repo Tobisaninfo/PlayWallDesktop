@@ -34,4 +34,9 @@ public class ClipAudioHandlerConnect extends AudioHandlerConnect implements Auto
 		}
 		return false;
 	}
+
+	@Override
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+		return null;
+	}
 }

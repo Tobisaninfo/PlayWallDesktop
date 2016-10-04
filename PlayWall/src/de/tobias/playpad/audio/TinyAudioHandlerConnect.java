@@ -34,4 +34,12 @@ public class TinyAudioHandlerConnect extends AudioHandlerConnect implements Auto
 		}
 		return false;
 	}
+	
+	@Override
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+		if (audioCapablility == AudioCapability.SOUNDCARD) {
+			return new TinySoundSettingsViewController();
+		}
+		return null;
+	}
 }

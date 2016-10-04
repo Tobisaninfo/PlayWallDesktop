@@ -28,4 +28,9 @@ public class JavaFXHandlerConnect extends AudioHandlerConnect {
 		}
 		return false;
 	}
+	
+	@Override
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+		return null;
+	}
 }
