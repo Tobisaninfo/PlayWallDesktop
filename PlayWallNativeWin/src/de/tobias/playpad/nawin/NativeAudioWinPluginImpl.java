@@ -23,18 +23,18 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 
 	private static final String ASSETS = "de/tobias/playpad/nawin/assets/";
-	
+
 	private static final String NAME = "NativeAudioWin";
 	private static final String IDENTIFIER = "de.tobias.playpad.nawin.NativeAudioWinPluginImpl";
-	
+
 	private Module module;
 	private Updatable updatable;
-	
+
 	@PluginLoaded
 	public void onLoaded(NativeAudioWinPlugin plugin) {
 		module = new Module(NAME, IDENTIFIER);
 		updatable = new NativeAudioWinUpdater();
-		
+
 		try {
 			prepareBridging();
 			bridgeCsharp();
@@ -50,19 +50,21 @@ public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 
 	private void prepareBridging() throws IOException {
 		App app = ApplicationUtils.getApplication();
-		Path resourceFolder = app.getPath(PathType.LIBRARY, "nawin");
-		if (Files.notExists(resourceFolder)) {
-			Files.createDirectories(resourceFolder);
-		}
+		if (!app.isDebug()) {
+			Path resourceFolder = app.getPath(PathType.LIBRARY, "nawin");
+			if (Files.notExists(resourceFolder)) {
+				Files.createDirectories(resourceFolder);
+			}
 
-		copyResource(resourceFolder, ASSETS, "jni4net.j-0.8.8.0.jar");
-		copyResource(resourceFolder, ASSETS, "jni4net.n-0.8.8.0.dll");
-		copyResource(resourceFolder, ASSETS, "jni4net.n.w32.v40-0.8.8.0.dll");
-		copyResource(resourceFolder, ASSETS, "jni4net.n.w64.v40-0.8.8.0.dll");
-		copyResource(resourceFolder, ASSETS, "NativeAudio.dll");
-		copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.dll");
-		copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.jar");
-		copyResource(resourceFolder, ASSETS, "NAudio.dll");
+			copyResource(resourceFolder, ASSETS, "jni4net.j-0.8.8.0.jar");
+			copyResource(resourceFolder, ASSETS, "jni4net.n-0.8.8.0.dll");
+			copyResource(resourceFolder, ASSETS, "jni4net.n.w32.v40-0.8.8.0.dll");
+			copyResource(resourceFolder, ASSETS, "jni4net.n.w64.v40-0.8.8.0.dll");
+			copyResource(resourceFolder, ASSETS, "NativeAudio.dll");
+			copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.dll");
+			copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.jar");
+			copyResource(resourceFolder, ASSETS, "NAudio.dll");
+		}
 	}
 
 	private void copyResource(Path resourceFolder, String packageName, String file) throws IOException {
@@ -84,12 +86,12 @@ public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 	public void onShutdown() {
 
 	}
-	
+
 	@Override
 	public Module getModule() {
 		return module;
 	}
-	
+
 	@Override
 	public Updatable getUpdatable() {
 		return updatable;
