@@ -38,7 +38,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import kuusisto.tinysound.Music;
 import kuusisto.tinysound.TinySound;
 
-public class TinyAudioHandler extends AudioHandler {
+public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
 	public static final String SOUND_CARD = "SoundCard";
 
@@ -212,7 +212,8 @@ public class TinyAudioHandler extends AudioHandler {
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		initTinySound();
+		String audioCardName = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(SOUND_CARD);
+		initTinySound(audioCardName);
 
 		unloadMedia();
 		Platform.runLater(() ->
@@ -296,9 +297,7 @@ public class TinyAudioHandler extends AudioHandler {
 
 	private static String audioCardName;
 
-	private void initTinySound() {
-		String audioCardName = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(SOUND_CARD);
-
+	private void initTinySound(String audioCardName) {
 		if (TinyAudioHandler.audioCardName != null) {
 			if (!TinyAudioHandler.audioCardName.equals(audioCardName)) {
 				TinySound.shutdown();
@@ -331,5 +330,10 @@ public class TinyAudioHandler extends AudioHandler {
 	public static void shutdown() {
 		executorService.shutdown();
 		positionThread.interrupt();
+	}
+
+	@Override
+	public void setOutputDevice(String name) {
+		initTinySound(name);
 	}
 }
