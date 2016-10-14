@@ -1,7 +1,8 @@
-package de.tobias.playpad;
+package de.tobias.playpad.namac;
 
 import java.util.HashMap;
 
+import de.tobias.playpad.NativeAudio;
 import de.tobias.playpad.NativeAudio.NativeAudioDelegate;
 import de.tobias.playpad.audio.AudioCapability;
 import de.tobias.playpad.audio.AudioHandler;

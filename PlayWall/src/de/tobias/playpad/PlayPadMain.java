@@ -124,11 +124,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			// Load Plugin Path
 			Path pluginFolder;
 			if (getParameters().getNamed().containsKey("plugin")) {
-				pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
+				String pluginParam = getParameters().getNamed().get("plugin");
+				for (String part : pluginParam.split(":")) {
+					pluginFolder = Paths.get(part);
+					setupPlugins(pluginFolder);
+				}
 			} else {
 				pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
+				setupPlugins(pluginFolder);
 			}
-			setupPlugins(pluginFolder);
 
 			/*
 			 * Load Data

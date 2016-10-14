@@ -1,7 +1,8 @@
-package de.tobias.playpad;
+package de.tobias.playpad.namac;
 
 import java.nio.file.Path;
 
+import de.tobias.playpad.NativeAudio;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
 import de.tobias.playpad.pad.PadStatus;

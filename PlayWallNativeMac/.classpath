@@ -3,7 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/YML"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PlayWallCore"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/libUtils"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Plugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Updater"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
