@@ -24,12 +24,12 @@ public class NativeAudioWinUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "1.0";
+		return "1.1";
 	}
 
 	@Override
