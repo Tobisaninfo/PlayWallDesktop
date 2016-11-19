@@ -32,7 +32,8 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 	private static final int SLEEP_TIME_POSITION = 50;
 
 	static {
-		positionThread = new Thread(() -> {
+		positionThread = new Thread(() ->
+		{
 			while (true) {
 				try {
 					if (playedHandlers.isEmpty()) {
@@ -136,7 +137,9 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 
 	@Override
 	public void setVolume(double volume) {
-		audioHandler.setVolume((float) volume);
+		if (audioHandler != null) {
+			audioHandler.setVolume((float) volume);
+		}
 	}
 
 	@Override
@@ -146,7 +149,8 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			if (getContent().getPad().isPadVisible()) {
 				getContent().getPad().getController().getView().showBusyView(true);
 			}
@@ -155,11 +159,11 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 			audioHandler = new NativeAudio();
 		audioHandler.load(paths[0].toString());
 
-		String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo()
-				.get(NativeAudioWinHandler.SOUND_CARD);
+		String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(NativeAudioWinHandler.SOUND_CARD);
 		audioHandler.setDevice(name);
 
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			durationProperty.set(Duration.millis(audioHandler.getDuration()));
 			getContent().getPad().setStatus(PadStatus.READY);
 			if (getContent().getPad().isPadVisible()) {
