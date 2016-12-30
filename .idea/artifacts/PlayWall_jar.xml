@@ -17,7 +17,6 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JNA/jna-4.1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JNA/jna-platform-4.1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/HTML/gagawa-1.0.1.jar" path-in-jar="/" />
-      <element id="library" level="application" name="libUtils" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JLayer1.0.1/jl1.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/tinysound-1.1.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/jorbis-0.0.17.jar" path-in-jar="/" />
@@ -26,7 +25,8 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/guava-15.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/snakeyaml-1.11.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/YAMLStorage.jar" path-in-jar="/" />
-      <element id="library" level="application" name="Updater" />
+      <element id="library" level="project" name="libUtils" />
+      <element id="library" level="project" name="Updater" />
     </root>
   </artifact>
 </component>

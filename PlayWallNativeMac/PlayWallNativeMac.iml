@@ -10,9 +10,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module" module-name="PlayWallCore" />
-    <orderEntry type="library" name="YML" level="application" />
-    <orderEntry type="library" name="Plugins" level="application" />
-    <orderEntry type="library" name="Updater" level="application" />
-    <orderEntry type="library" name="libUtils" level="application" />
+    <orderEntry type="library" name="libUtils" level="project" />
+    <orderEntry type="library" name="Updater" level="project" />
+    <orderEntry type="library" name="Plugins" level="project" />
+    <orderEntry type="library" name="YML" level="project" />
   </component>
 </module>

@@ -21,16 +21,17 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" exported="" name="ControlsFX" level="application" />
-    <orderEntry type="library" exported="" name="XML" level="application" />
-    <orderEntry type="library" exported="" name="YML" level="application" />
-    <orderEntry type="library" exported="" name="Plugins" level="application" />
-    <orderEntry type="library" exported="" name="JLayer" level="application" />
-    <orderEntry type="library" exported="" name="TinySound" level="application" />
-    <orderEntry type="library" exported="" name="JNA" level="application" />
-    <orderEntry type="library" exported="" name="HTML Builder" level="application" />
-    <orderEntry type="library" exported="" name="libUtils" level="application" />
-    <orderEntry type="library" exported="" name="Updater" level="application" />
+    <orderEntry type="library" exported="" name="ControlsFX" level="project" />
+    <orderEntry type="library" exported="" name="XML" level="project" />
+    <orderEntry type="library" exported="" name="YML" level="project" />
+    <orderEntry type="library" exported="" name="Plugins" level="project" />
+    <orderEntry type="library" exported="" name="JLayer" level="project" />
+    <orderEntry type="library" exported="" name="TinySound" level="project" />
+    <orderEntry type="library" exported="" name="JNA" level="project" />
+    <orderEntry type="library" exported="" name="HTML Builder" level="project" />
+    <orderEntry type="library" exported="" name="libUtils" level="project" />
+    <orderEntry type="library" exported="" name="Updater" level="project" />
+    <orderEntry type="library" name="Json" level="project" />
     <orderEntry type="library" exported="" name="scala-sdk-2.12.1" level="application" />
   </component>
 </module>

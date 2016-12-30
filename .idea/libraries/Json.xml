@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Json">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Libraries/File Parser/Json/json-smart-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
