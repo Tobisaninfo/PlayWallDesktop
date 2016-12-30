@@ -24,12 +24,12 @@ public class MediaPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 6;
+		return 7;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "4.2";
+		return "4.2.1";
 	}
 
 	@Override
