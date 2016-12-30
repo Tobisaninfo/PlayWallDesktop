@@ -12,6 +12,7 @@
     <orderEntry type="library" exported="" name="XML" level="project" />
     <orderEntry type="library" exported="" name="YML" level="project" />
     <orderEntry type="library" exported="" name="Updater" level="project" />
+    <orderEntry type="library" exported="" name="JNA" level="project" />
     <orderEntry type="module" module-name="PlayWallCore" exported="" />
   </component>
 </module>
