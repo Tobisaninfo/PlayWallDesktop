@@ -3,20 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
     <root id="archive" name="PluginAwake.jar">
       <element id="module-output" name="PluginAwake" />
-      <element id="module-output" name="PlayWallCore" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/tinysound-1.1.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/jorbis-0.0.17.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/tritonus_share.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/vorbisspi1.0.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JLayer1.0.1/jl1.0.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/guava-15.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/snakeyaml-1.11.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/YAMLStorage.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/Json/json-smart-1.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/XML/dom4j-1.6.1.jar" path-in-jar="/" />
-      <element id="library" level="project" name="Updater" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/jspf/dist/jspf.core-1.0.2.jar" path-in-jar="/" />
-      <element id="library" level="project" name="libUtils" />
     </root>
   </artifact>
 </component>

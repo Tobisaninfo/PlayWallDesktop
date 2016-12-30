@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PluginNativeWin:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
+    <root id="archive" name="PluginNativeWin.jar">
+      <element id="module-output" name="PluginNativeWin" />
+    </root>
+  </artifact>
+</component>
