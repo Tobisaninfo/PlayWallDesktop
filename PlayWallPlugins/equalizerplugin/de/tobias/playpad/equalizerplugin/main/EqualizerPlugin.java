@@ -1,8 +1,7 @@
 package de.tobias.playpad.equalizerplugin.main;
 
-import net.xeoh.plugins.base.Plugin;
+import de.tobias.playpad.plugin.AdvancedPlugin;
 
-
-public interface EqualizerPlugin extends Plugin {
+public interface EqualizerPlugin extends AdvancedPlugin {
 
 }

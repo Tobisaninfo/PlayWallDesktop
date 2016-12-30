@@ -15,7 +15,6 @@ import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -25,6 +24,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ClassicGlobalDesign extends Design implements GlobalDesign {
 
@@ -161,6 +161,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 		return minWidth;
 	}
 
+	@Override
 	public void reset() {
 		themeProperty = new SimpleObjectProperty<>(Theme.LIGHT);
 		customLayout = false;
@@ -324,12 +325,12 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 		String css = convertToCSS("", isCustomLayout());
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {
-				CartDesign layoutOpt = padSettings.getLayout();
-				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
+				CartDesign layoutOpt = padSettings.getDesign();
+				css += "\n" + layoutOpt.convertToCss(pad.getPadIndex().toString(), true);
 			}
 		}
 
@@ -345,7 +346,7 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
+	public void handleWarning(IPadViewController controller, Duration warning) {
 		final IPadView view = controller.getView();
 
 		try {

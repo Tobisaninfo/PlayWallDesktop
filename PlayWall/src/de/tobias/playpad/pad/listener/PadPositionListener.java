@@ -8,7 +8,6 @@ import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Fadeable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.Warning;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
@@ -66,11 +65,11 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		// wird
 		if (!pad.getPadSettings().isLoop() && pad.getStatus() == PadStatus.PLAY) {
 			// Warning
-			Warning warning = pad.getPadSettings().getWarning();
+			Duration warning = pad.getPadSettings().getWarning();
 			Duration rest = durationable.getDuration().subtract(newValue);
 			double seconds = rest.toSeconds();
 
-			if (warning.getTime().toSeconds() > seconds && !send) {
+			if (warning.toSeconds() > seconds && !send) {
 				startWarningThread();
 				send = true;
 			}
@@ -88,10 +87,10 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 	@Override
 	public void run() {
 		PadSettings padSettings = pad.getPadSettings();
-		Warning warning = padSettings.getWarning();
+		Duration warning = padSettings.getWarning();
 
 		if (padSettings.isCustomLayout()) {
-			padSettings.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+			padSettings.getDesign().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
 		} else {
 			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
 		}
@@ -115,7 +114,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		PadSettings padSettings = pad.getPadSettings();
 
 		if (padSettings.isCustomLayout()) {
-			padSettings.getLayout().stopWarning(controller);
+			padSettings.getDesign().stopWarning(controller);
 		} else {
 			Profile.currentProfile().currentLayout().stopWarning(controller);
 		}

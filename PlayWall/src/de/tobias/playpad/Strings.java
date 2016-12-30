@@ -46,8 +46,6 @@ public class Strings {
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
-	@Deprecated
-	public static final String UI_Window_Main_SaveRequest = "UI.Window.Main.SaveRequest";
 	public static final String UI_Window_Main_PageButton = "UI.Window.Main.PageButton";
 
 	// UI - Dialog - Launch
@@ -145,6 +143,7 @@ public class Strings {
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
+	public static final String Error_Project_PageCount = "Error.Project.PageCount";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
@@ -161,8 +160,8 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
-	@Deprecated public static final String Error_Plugins_Download = "Error.Plugins.Download";
 	public static final String Error_Plugins_Available = "Error.Plugins.Available";
+	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";
@@ -229,9 +228,6 @@ public class Strings {
 	public static final String UI_Dialog_Update_Info = "UI.Dialog.Update.Info";
 	public static final String UI_Window_Settings_Updates_CurrentVersion = "UI.Window.Settings.Updates.CurrentVersion";
 
-	// Error - Update - Downlaod
-	@Deprecated public static final String Error_Update_Download = "Error.Update.Download";
-
 	// Layout
 	public static final String Layout_Modern_Name = "Layout.Modern.Name";
 	public static final String Layout_Classic_Name = "Layout.Classic.Name";
@@ -246,6 +242,7 @@ public class Strings {
 
 	// Drag and Drop Mode
 	public static final String DnDMode_Move = "DnDMode.Move";
+	public static final String DnDMode_Duplicate = "DnDMode.Duplicate";
 	public static final String DnDMode_Replace = "DnDMode.Replace";
 
 	// Main Layout
@@ -256,4 +253,24 @@ public class Strings {
 	public static final String Search_Button = "Search.Button";
 	public static final String Search_Placeholder = "Search.Placeholder";
 	public static final String Search_Alert_NoMatches = "Search.Alert.NoMatches";
+
+	// UI - Dialog - Page - Delete
+	public static final String UI_Dialog_Page_Delete_Header = "UI.Dialog.Page.Delete.Header";
+	public static final String UI_Dialog_Page_Delete_Content = "UI.Dialog.Page.Delete.Content";
+
+	// UI - Dialog - Page - Name
+	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
+	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
+
+	// Tooltip
+	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
+	public static final String Tooltip_DragButton = "Tooltip.DragButton";
+	public static final String Tooltip_PageButton = "Tooltip.PageButton";
+	public static final String Tooltip_ColorButton = "Tooltip.ColorButton";
+
+	public static final String Tooltip_Page_LeftMove = "Tooltip.Page.LeftMove";
+	public static final String Tooltip_Page_RightMove = "Tooltip.Page.RightMove";
+	public static final String Tooltip_Page_Rename = "Tooltip.Page.Rename";
+	public static final String Tooltip_Page_Clone = "Tooltip.Page.Clone";
+	public static final String Tooltip_Page_Delete = "Tooltip.Page.Delete";
 }

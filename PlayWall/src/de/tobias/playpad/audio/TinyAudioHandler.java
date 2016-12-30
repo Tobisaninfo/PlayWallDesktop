@@ -38,7 +38,7 @@ import javazoom.jl.decoder.JavaLayerException;
 import kuusisto.tinysound.Music;
 import kuusisto.tinysound.TinySound;
 
-public class TinyAudioHandler extends AudioHandler {
+public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
 	public static final String SOUND_CARD = "SoundCard";
 
@@ -98,9 +98,7 @@ public class TinyAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {
-				} catch (ConcurrentModificationException e) {
-				} catch (Exception e) {
+				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -201,9 +199,9 @@ public class TinyAudioHandler extends AudioHandler {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume, double customVolume) {
+	public void setVolume(double volume) {
 		if (music != null) {
-			music.setVolume(volume * masterVolume * customVolume);
+			music.setVolume(volume);
 		}
 	}
 
@@ -214,7 +212,8 @@ public class TinyAudioHandler extends AudioHandler {
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		initTinySound();
+		String audioCardName = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(SOUND_CARD);
+		initTinySound(audioCardName);
 
 		unloadMedia();
 		Platform.runLater(() ->
@@ -248,7 +247,7 @@ public class TinyAudioHandler extends AudioHandler {
 				});
 			} catch (Exception e) {
 				loadedProperty.set(false);
-				getContent().getPad().throwException(path, e);
+				// getContent().getPad().throwException(path, e); TODO Error Handling User
 				e.printStackTrace();
 			} finally {
 				Platform.runLater(() ->
@@ -263,7 +262,7 @@ public class TinyAudioHandler extends AudioHandler {
 
 	private void calcDuration(URL url) throws UnsupportedAudioFileException, IOException {
 		AudioInputStream iStr = AudioSystem.getAudioInputStream(url);
-		double max = 1000.0 * (double) iStr.getFrameLength() / (double) iStr.getFormat().getFrameRate();
+		double max = 1000.0 * iStr.getFrameLength() / iStr.getFormat().getFrameRate();
 		Duration duration = Duration.millis(max);
 		Platform.runLater(() -> this.duration.set(duration));
 		iStr.close();
@@ -298,9 +297,7 @@ public class TinyAudioHandler extends AudioHandler {
 
 	private static String audioCardName;
 
-	private void initTinySound() {
-		String audioCardName = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(SOUND_CARD);
-
+	private void initTinySound(String audioCardName) {
 		if (TinyAudioHandler.audioCardName != null) {
 			if (!TinyAudioHandler.audioCardName.equals(audioCardName)) {
 				TinySound.shutdown();
@@ -333,5 +330,10 @@ public class TinyAudioHandler extends AudioHandler {
 	public static void shutdown() {
 		executorService.shutdown();
 		positionThread.interrupt();
+	}
+
+	@Override
+	public void setOutputDevice(String name) {
+		initTinySound(name);
 	}
 }

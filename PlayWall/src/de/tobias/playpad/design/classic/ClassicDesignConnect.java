@@ -2,8 +2,8 @@ package de.tobias.playpad.design.classic;
 
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ClassicCartDesignViewController;

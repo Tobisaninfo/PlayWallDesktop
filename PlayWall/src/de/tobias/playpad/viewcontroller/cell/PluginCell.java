@@ -1,18 +1,15 @@
 package de.tobias.playpad.viewcontroller.cell;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.plugin.Plugin;
+import de.tobias.playpad.plugin.PluginDescription;
 import de.tobias.playpad.plugin.Plugins;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -20,9 +17,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 
-public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boolean> {
+public class PluginCell extends ListCell<PluginDescription> implements ChangeListener<Boolean> {
 
-	private Plugin plugin;
+	private PluginDescription plugin;
 	private HBox buttons;
 	private CheckBox checkBox;
 
@@ -36,7 +33,7 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 	}
 
 	@Override
-	protected void updateItem(Plugin item, boolean empty) {
+	protected void updateItem(PluginDescription item, boolean empty) {
 		super.updateItem(item, empty);
 		if (!empty) {
 			this.plugin = item;
@@ -58,51 +55,22 @@ public class PluginCell extends ListCell<Plugin> implements ChangeListener<Boole
 
 		Path path = app.getPath(PathType.LIBRARY, plugin.getFileName());
 		if (newValue) { // Wurde Aktiviert
-			downloadPlugin(plugin, path);
+			Worker.runLater(() ->
+			{
+				Plugins.downloadPlugin(plugin, path);
 
-			// Dependencies
-			loadDependencies(app);
+				// Dependencies
+				Plugins.loadDependencies(plugin);
 
-			// Add Plugin to classpath
-			PlayPadMain.getProgramInstance().loadPlugin(path.toUri());
+				// Add Plugin to classpath
+				Platform.runLater(() -> PlayPadMain.getProgramInstance().loadPlugin(path.toUri())); // FX Thread, damit Plugins GUI Zeug
+																									// gleich auf dem richtigen Thread
+																									// haben, sonst müssen sie den Worker
+																									// nutzen
+			});
 		} else {
 			// Deaktivieren
 			PlayPadMain.getProgramInstance().addDeletedPlugin(path);
-		}
-	}
-
-	private void loadDependencies(App app) {
-		List<Plugin> dependencies = findDependencies();
-		dependencies.forEach(p ->
-		{
-			Path decPath = app.getPath(PathType.LIBRARY, p.getFileName());
-			downloadPlugin(p, decPath);
-
-			// Add Plugin to classpath
-			PlayPadMain.getProgramInstance().loadPlugin(decPath.toUri());
-		});
-	}
-
-	private List<Plugin> findDependencies() {
-		List<Plugin> plugins = new ArrayList<>();
-		for (String dependencyName : plugin.getDependencies()) {
-			for (Plugin plugin : Plugins.getPlugins()) {
-				if (plugin.getName().equals(dependencyName)) {
-					plugins.add(plugin);
-				}
-			}
-		}
-		return plugins;
-	}
-
-	private void downloadPlugin(Plugin plugin, Path path) {
-		if (Files.notExists(path)) {
-			try {
-				Files.createDirectories(path.getParent());
-				Files.copy(new URL(plugin.getUrl()).openStream(), path);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

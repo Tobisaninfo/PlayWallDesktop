@@ -26,7 +26,7 @@ public class LaunchPadS extends Device implements DeviceColorAssociatorConnector
 	}
 
 	@Override
-	public void initFeedback() {
+	public void initDevice() {
 		// Flash Enable
 		try {
 			Midi.getInstance().sendMessage(176, 0, 40);
@@ -37,7 +37,7 @@ public class LaunchPadS extends Device implements DeviceColorAssociatorConnector
 
 	@Override
 	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {
-		initFeedback();
+		initDevice();
 
 		int command = 144;
 

@@ -8,7 +8,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.project.ProjectExporter.ExportView;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -90,7 +90,7 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 					boolean includeProject = profileCheckBox.isSelected();
 					boolean includeMedia = mediaCheckBox.isSelected();
 
-					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, (ExportView) this);
+					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, this);
 
 					Platform.runLater(() ->
 					{

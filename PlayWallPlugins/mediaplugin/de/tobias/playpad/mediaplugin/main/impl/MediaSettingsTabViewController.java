@@ -124,7 +124,7 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 	public boolean validSettings() {
 		return true;
 	}
-
+	
 	@Override
 	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
 		return new Task<Void>() {

@@ -4,8 +4,9 @@ import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
@@ -27,7 +28,7 @@ public class DuplicateProfileDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProfileReference.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+			if (ProfileReferences.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
@@ -38,13 +39,13 @@ public class DuplicateProfileDialog extends TextInputDialog {
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
-				if (ProfileReference.getProfiles().contains(name)) {
+				if (ProfileReferences.getProfiles().contains(name)) {
 					controller.showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 					return;
 				}
 
 				newRef = new ProfileReference(name);
-				ProfileReference.duplicate(cloneableProfile, newRef);
+				ProfileReferences.duplicate(cloneableProfile, newRef);
 
 			} catch (Exception e) {
 				e.printStackTrace();

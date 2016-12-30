@@ -1,12 +1,15 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import java.util.List;
+
 import javax.sound.midi.MidiDevice.Info;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
@@ -86,7 +89,7 @@ public class NewProfileDialog extends ViewController {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProfileReference.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+				if (ProfileReferences.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -125,12 +128,14 @@ public class NewProfileDialog extends ViewController {
 	private void finishButtonHandler(ActionEvent event) {
 		String name = nameTextField.getText();
 		try {
-			if (ProfileReference.getProfiles().contains(name) || !name.matches(Profile.profileNameEx)) {
+			List<ProfileReference> profiles = ProfileReferences.getProfiles();
+
+			if (profiles.contains(name) || !name.matches(Profile.profileNameEx)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 				return;
 			}
 
-			profile = ProfileReference.newProfile(name);
+			profile = ProfileReferences.newProfile(name);
 
 			profile.getProfileSettings().setMidiActive(activeCheckBox.isSelected());
 			profile.getProfileSettings().setMidiDeviceName(midiDeviceComboBox.getSelectionModel().getSelectedItem());

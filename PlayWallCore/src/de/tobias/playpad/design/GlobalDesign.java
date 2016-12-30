@@ -19,9 +19,9 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public interface GlobalDesign {
 
@@ -50,7 +50,7 @@ public interface GlobalDesign {
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	public void handleWarning(IPadViewController controller, Warning warning);
+	public void handleWarning(IPadViewController controller, Duration warning);
 
 	public default void stopWarning(IPadViewController controller) {}
 

@@ -11,11 +11,10 @@ import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
-import de.tobias.playpad.settings.Warning;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class ModernCartDesign extends Design implements CartDesign, DesignColorAssociator {
+public class ModernCartDesign extends Design implements CartDesign, DesignColorAssociator, Cloneable {
 
 	public static final String TYPE = "modern";
 
@@ -41,6 +40,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		this.playColor = playColor;
 	}
 
+	@Override
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;
@@ -75,7 +75,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
+	public void handleWarning(IPadViewController controller, Duration warning, GlobalDesign layout) {
 		if (layout instanceof ModernGlobalDesign && ((ModernGlobalDesign) layout).isWarnAnimation()) {
 			warnAnimation(controller, warning);
 		} else {
@@ -88,21 +88,20 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(IPadViewController controller, Warning warning) {
+	private void warnAnimation(IPadViewController controller, Duration warning) {
 		FadeableColor stopColor = new FadeableColor(this.backgroundColor.getColorHi(), this.backgroundColor.getColorLow());
 		FadeableColor playColor = new FadeableColor(this.playColor.getColorHi(), this.playColor.getColorLow());
 
-		Duration warnDuration = warning.getTime();
 		Pad pad = controller.getPad();
 
 		if (pad.getContent() instanceof Durationable) {
 			Duration padDuration = ((Durationable) pad.getContent()).getDuration();
-			if (warnDuration.greaterThan(padDuration)) {
-				warnDuration = padDuration;
+			if (warning.greaterThan(padDuration)) {
+				warning = padDuration;
 			}
 		}
 
-		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warning);
 	}
 
 	// Cart Layout
@@ -166,6 +165,15 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		endStyleClass(builder);
 	}
 
+	@Override
+	public void copyGlobalLayout(GlobalDesign globalLayout) {
+		if (globalLayout instanceof ModernGlobalDesign) {
+			ModernGlobalDesign modernLayoutGlobal = (ModernGlobalDesign) globalLayout;
+			backgroundColor = modernLayoutGlobal.getBackgroundColor();
+			playColor = modernLayoutGlobal.getPlayColor();
+		}
+	}
+
 	// Color Associator
 	@Override
 	public Color getAssociatedEventColor() {
@@ -178,11 +186,11 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 	}
 
 	@Override
-	public void copyGlobalLayout(GlobalDesign globalLayout) {
-		if (globalLayout instanceof ModernGlobalDesign) {
-			ModernGlobalDesign modernLayoutGlobal = (ModernGlobalDesign) globalLayout;
-			backgroundColor = modernLayoutGlobal.getBackgroundColor();
-			playColor = modernLayoutGlobal.getPlayColor();
-		}
+	public Object clone() throws CloneNotSupportedException {
+		ModernCartDesign clone = (ModernCartDesign) super.clone();
+		clone.backgroundColor = backgroundColor;
+		clone.playColor = playColor;
+		return clone;
 	}
+
 }

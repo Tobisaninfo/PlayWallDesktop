@@ -2,6 +2,7 @@ package de.tobias.playpad.pad.view;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.project.page.PadIndex;
 import javafx.css.PseudoClass;
 import javafx.scene.layout.Pane;
 
@@ -38,7 +39,7 @@ public interface IPadView {
 	public IPadViewController getViewController();
 
 	/**
-	 * Gibt das oberste GUI Element zurück, welche im MainView verwendet wird.
+	 * Gibt das oberste GUI Element des Pads zurück, welche im MainView verwendet wird.
 	 * 
 	 * @return root node
 	 */
@@ -116,12 +117,15 @@ public interface IPadView {
 	 * @param pad
 	 *            Pad
 	 */
-	public void addDefaultElement(Pad pad);
+	public void addDefaultElements(Pad pad);
 
 	/**
 	 * Fügt die StyleClasses der PadView hinzu. Die Methode wird vom Controller aufgerufen.
+	 * 
+	 * @param index
+	 *            Index von der Kachel
 	 */
-	public void applyStyleClasses(int index);
+	public void applyStyleClasses(PadIndex index);
 
 	/**
 	 * Entfernt die StyleClasses vom PadView. Die Methode wird vom Controller aufgerufen.

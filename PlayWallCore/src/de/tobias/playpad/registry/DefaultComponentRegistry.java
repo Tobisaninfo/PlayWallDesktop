@@ -8,6 +8,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import de.tobias.playpad.plugin.Module;
+
 public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements DefaultRegistry<C> {
 
 	private C defaultValue;
@@ -46,7 +48,7 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 	}
 
 	@Override
-	public void loadComponentsFromFile(URL url, ClassLoader loader)
+	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (url == null) {
 			throw new IOException("URL not found: " + url);
@@ -64,7 +66,7 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
 				C component = clazz.newInstance();
 
-				registerComponent(component, type);
+				registerComponent(component, type, module);
 
 				if (element.attributeValue("default") != null) {
 					String defaultValue = element.attributeValue("default");

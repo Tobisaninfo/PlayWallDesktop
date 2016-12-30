@@ -3,11 +3,14 @@ package de.tobias.playpad.design.modern;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import org.dom4j.Element;
 
+import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.FadeableColor;
@@ -18,15 +21,16 @@ import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.Warning;
+import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator {
+public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator, ColorModeHandler {
 
 	public static final String TYPE = "modern";
 
@@ -101,6 +105,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		return minWidth;
 	}
 
+	@Override
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;
@@ -195,12 +200,12 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		String css = convertToCSS();
 
 		// Pad Spezelles Layout immer
-		for (Pad pad : project.getPads().values()) {
+		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomLayout()) {
 				CartDesign layoutOpt = padSettings.getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
-				css += "\n" + layoutOpt.convertToCss(String.valueOf(pad.getIndex()), true);
+				css += "\n" + layoutOpt.convertToCss(pad.getPadIndex().toString(), true);
 			}
 		}
 
@@ -274,7 +279,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning) {
+	public void handleWarning(IPadViewController controller, Duration warning) {
 		if (isWarnAnimation) {
 			warnAnimation(controller, warning);
 		} else {
@@ -287,20 +292,19 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(IPadViewController controller, Warning warning) {
+	private void warnAnimation(IPadViewController controller, Duration warning) {
 		FadeableColor stopColor = new FadeableColor(this.backgroundColor.getColorHi(), this.backgroundColor.getColorLow());
 		FadeableColor playColor = new FadeableColor(this.playColor.getColorHi(), this.playColor.getColorLow());
 
-		Duration warnDuration = warning.getTime();
 		Pad pad = controller.getPad();
 
 		if (pad.getContent() instanceof Durationable) {
-			if (warnDuration.greaterThan(((Durationable) pad.getContent()).getDuration())) {
-				warnDuration = ((Durationable) pad.getContent()).getDuration();
+			if (warning.greaterThan(((Durationable) pad.getContent()).getDuration())) {
+				warning = ((Durationable) pad.getContent()).getDuration();
 			}
 		}
 
-		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warnDuration);
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, warning);
 	}
 
 	// Color Associator
@@ -312,5 +316,18 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 	@Override
 	public Color getAssociatedStandardColor() {
 		return Color.web(backgroundColor.getColorHi());
+	}
+
+	// Color View
+	@Override
+	public Node getColorInterface(Consumer<DisplayableColor> onSelection) {
+		return new ColorPickerView(null, ModernColor.values(), onSelection);
+	}
+
+	@Override
+	public void setColor(CartDesign design, DisplayableColor color) {
+		if (design instanceof ModernCartDesign && color instanceof ModernColor) {
+			((ModernCartDesign) design).setBackgroundColor((ModernColor) color);
+		}
 	}
 }

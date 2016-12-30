@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import de.tobias.playpad.update.Updatable;
-import de.tobias.playpad.update.UpdateChannel;
+import de.tobias.updater.client.Updatable;
+import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -24,12 +24,12 @@ public class MediaPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 6;
+		return 7;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "4.2";
+		return "4.2.1";
 	}
 
 	@Override

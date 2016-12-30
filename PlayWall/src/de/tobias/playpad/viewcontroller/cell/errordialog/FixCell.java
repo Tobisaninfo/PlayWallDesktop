@@ -52,7 +52,7 @@ public class FixCell extends TableCell<PadException, PadException> {
 			deleteButton.setOnAction(a ->
 			{
 				deleteExButton.getHandler().handle(item.getPad(), stage);
-				item.getPad().getProject().removeException(item);
+				// item.getPad().getProject().removeException(item);TODO Error Handling User
 			});
 			vbox.getChildren().add(deleteButton);
 

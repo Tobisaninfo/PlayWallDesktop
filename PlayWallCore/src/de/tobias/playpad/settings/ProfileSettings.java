@@ -46,7 +46,7 @@ public class ProfileSettings implements SettingsSerializable {
 
 	// Cart Settings
 	@Storable private boolean multiplePlayer = true;
-	@Storable private Warning warningFeedback = new Warning(Duration.seconds(5));
+	@Storable private Duration warningTime = Duration.seconds(5);
 
 	@Storable private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 
@@ -80,8 +80,8 @@ public class ProfileSettings implements SettingsSerializable {
 		return mainLayoutType;
 	}
 
-	public Warning getWarningFeedback() {
-		return warningFeedback;
+	public Duration getWarningFeedback() {
+		return warningTime;
 	}
 
 	public boolean isMidiActive() {
@@ -129,8 +129,8 @@ public class ProfileSettings implements SettingsSerializable {
 		this.mainLayoutType = mainLayoutType;
 	}
 
-	public void setWarningFeedback(Warning warningFeedback) {
-		this.warningFeedback = warningFeedback;
+	public void setWarningTime(Duration warningTime) {
+		this.warningTime = warningTime;
 	}
 
 	public void setMidiActive(boolean midiActive) {
@@ -210,9 +210,11 @@ public class ProfileSettings implements SettingsSerializable {
 			}
 
 			if (root.element(WARNING_ELEMENT) != null) {
-				Warning warning = Warning.load(root.element(WARNING_ELEMENT));
-				if (warning != null) {
-					profileSettings.setWarningFeedback(warning);
+				try {
+					Duration duration = Duration.valueOf(root.element(WARNING_ELEMENT).getStringValue().replace(" ", ""));
+					profileSettings.setWarningTime(duration);
+				} catch (Exception e) {
+					profileSettings.setWarningTime(Duration.seconds(5));
 				}
 			}
 
@@ -266,7 +268,7 @@ public class ProfileSettings implements SettingsSerializable {
 		root.addElement(LAYOUT_TYPE_ELEMENT).addText(layoutType);
 		root.addElement(MAIN_LAYOUT_TYPE_ELEMENT).addText(mainLayoutType);
 
-		warningFeedback.save(root.addElement(WARNING_ELEMENT));
+		root.addElement(WARNING_ELEMENT).addText(warningTime.toString());
 		fade.save(root.addElement(FADE_ELEMENT));
 		root.addElement(TIME_DISPLAY_ELEMENT).addText(player_timeDisplayMode.name());
 

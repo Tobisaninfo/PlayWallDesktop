@@ -140,6 +140,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		}
 	}
 
+	@Override
 	public boolean closeRequest() {
 		return onFinish();
 	}

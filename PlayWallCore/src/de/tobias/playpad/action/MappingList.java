@@ -2,6 +2,7 @@ package de.tobias.playpad.action;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.xml.XMLHandler;
+import de.tobias.utils.xml.XMLHandler;
 
 // COMMENT MappingList
 public class MappingList extends ArrayList<Mapping> {
@@ -25,9 +26,12 @@ public class MappingList extends ArrayList<Mapping> {
 	private static final long serialVersionUID = 1L;
 
 	private UUID activeMapping;
+	private WeakReference<Profile> profile;
 
 	public MappingList(Profile profile) {
-		add(new Mapping(true, profile));
+		add(new Mapping(true));
+
+		this.profile = new WeakReference<Profile>(profile);
 	}
 
 	public Mapping getActiveMapping() {
@@ -79,7 +83,7 @@ public class MappingList extends ArrayList<Mapping> {
 
 		// Init mappings, if non exists
 		if (mappings.size() == 0) {
-			mappings.add(new Mapping(true, profile));
+			mappings.add(new Mapping(true));
 		}
 
 		return mappings;
@@ -98,7 +102,7 @@ public class MappingList extends ArrayList<Mapping> {
 		}
 
 		XMLHandler<Mapping> handler = new XMLHandler<>(rootElement);
-		handler.saveElements(MAPPING, this, new MappingSerializer());
+		handler.saveElements(MAPPING, this, new MappingSerializer(profile.get()));
 
 		if (Files.notExists(path)) {
 			Files.createDirectories(path.getParent());
@@ -109,7 +113,7 @@ public class MappingList extends ArrayList<Mapping> {
 	}
 
 	public static Mapping importMappingPreset(Path path, Profile profile) throws DocumentException, IOException {
-		Mapping mapping = new Mapping(false, profile);
+		Mapping mapping = new Mapping(false);
 
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(Files.newInputStream(path));
@@ -126,7 +130,7 @@ public class MappingList extends ArrayList<Mapping> {
 		Document docoment = DocumentHelper.createDocument();
 		Element rootElement = docoment.addElement(MAPPING);
 
-		MappingSerializer mappingSerializer = new MappingSerializer();
+		MappingSerializer mappingSerializer = new MappingSerializer(null);
 		mappingSerializer.saveElement(rootElement, preset);
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(path), OutputFormat.createPrettyPrint());

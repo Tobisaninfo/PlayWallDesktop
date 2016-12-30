@@ -35,7 +35,7 @@ public abstract class Device extends EventDispatcher implements Listener {
 
 	public abstract DisplayableFeedbackColor getColor(int id);
 
-	public abstract void initFeedback();
+	public abstract void initDevice();
 
 	public abstract void handleFeedback(FeedbackMessage type, int key, Feedback feedback);
 

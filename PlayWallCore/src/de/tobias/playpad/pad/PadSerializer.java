@@ -1,5 +1,7 @@
 package de.tobias.playpad.pad;
 
+import java.util.UUID;
+
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -7,20 +9,22 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLSerializer;
 import de.tobias.utils.settings.UserDefaults;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLSerializer;
+import javafx.util.Duration;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
+	private static final String UUID_ATTR = "uuid";
 	private static final String INDEX_ATTR = "index";
 	private static final String NAME_ATTR = "name";
 	private static final String STATUS_ATTR = "status";
@@ -44,19 +48,18 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 	public static final String CONTENT_ELEMENT = "Content";
 	private static final String CONTENT_TYPE_ATTR = "type";
 
-	// TODO Remove project var
 	private Project project;
 
 	public PadSerializer(Project project) {
 		this.project = project;
 	}
 
-	public PadSerializer() {}
-
 	@Override
 	public Pad loadElement(Element element) {
 		Pad pad = new Pad(project);
 
+		if (element.attributeValue(UUID_ATTR) != null)
+			pad.setUuid(UUID.fromString(element.attributeValue(UUID_ATTR)));
 		pad.setIndex(Integer.valueOf(element.attributeValue(INDEX_ATTR)));
 		pad.setName(element.attributeValue(NAME_ATTR));
 		PadStatus status = PadStatus.valueOf(element.attributeValue(STATUS_ATTR));
@@ -75,8 +78,14 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIMEMODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
 			padSettings.setFade(Fade.load(settingsElement.element(FADE_ELEMENT)));
-		if (settingsElement.element(WARNING_ELEMENT) != null)
-			padSettings.setWarning(Warning.load(settingsElement.element(WARNING_ELEMENT)));
+		if (settingsElement.element(WARNING_ELEMENT) != null) {
+			try {
+				Duration duration = Duration.valueOf(settingsElement.element(WARNING_ELEMENT).getStringValue().replace(" ", ""));
+				padSettings.setWarning(duration);
+			} catch (Exception e) {
+				padSettings.setWarning(Duration.seconds(5));
+			}
+		}
 
 		// Laoyut
 		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
@@ -143,7 +152,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				pad.throwException(null, e);
+				// pad.throwException(null, e); TODO Throw exception to user
 			}
 		}
 
@@ -152,6 +161,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 	@Override
 	public void saveElement(Element element, Pad data) {
+		element.addAttribute(UUID_ATTR, data.getUuid().toString());
 		element.addAttribute(INDEX_ATTR, String.valueOf(data.getIndex()));
 		element.addAttribute(NAME_ATTR, data.getName());
 		if (data.getStatus() == PadStatus.EMPTY || data.getStatus() == PadStatus.ERROR) {
@@ -169,7 +179,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		if (padSettings.isCustomTimeMode())
 			settingsElement.addElement(TIMEMODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
 		if (padSettings.isCustomWarning())
-			padSettings.getWarning().save(settingsElement.addElement(WARNING_ELEMENT));
+			settingsElement.addElement(WARNING_ELEMENT).addText(padSettings.getWarning().toString());
 		if (padSettings.isCustomFade())
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
 
@@ -199,10 +209,15 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		}
 
 		// Content
-		if (data.getContent() != null) {
+		PadContent content = data.getContent();
+		if (content != null) {
 			Element contentElement = element.addElement(CONTENT_ELEMENT);
-			contentElement.addAttribute(CONTENT_TYPE_ATTR, data.getContent().getType());
-			data.getContent().save(contentElement);
+			contentElement.addAttribute(CONTENT_TYPE_ATTR, content.getType());
+			content.save(contentElement);
+
+			Module module = PlayPadPlugin.getRegistryCollection().getPadContents().getModule(content.getType());
+			// Für verschiedene Pad Typen wird hier das Modul gespeichert, damit das Projekt weis, welche notwendig sien beim öffnen
+			project.getProjectReference().addRequestedModule(module);
 		}
 	}
 }

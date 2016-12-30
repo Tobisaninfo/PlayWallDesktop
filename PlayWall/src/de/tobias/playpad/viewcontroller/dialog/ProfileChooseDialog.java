@@ -6,9 +6,10 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -35,7 +36,7 @@ public class ProfileChooseDialog extends ViewController {
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
 
-		profileComboBox.getItems().addAll(ProfileReference.getProfiles());
+		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
 	}
 

@@ -10,7 +10,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.view.ColorView;
+import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -94,7 +94,7 @@ public class ModernGlobalDesignViewController extends GlobalDesignViewController
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
-		ColorView view = new ColorView(startColor, ModernColor.values(), (DisplayableColor t) ->
+		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), (DisplayableColor t) ->
 		{
 			colorChooser.hide();
 

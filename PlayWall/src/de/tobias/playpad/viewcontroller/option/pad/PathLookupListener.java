@@ -21,6 +21,7 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 		this.alertable = alertable;
 	}
 
+	@Override
 	public void handle(ActionEvent event) {
 		Object source = event.getSource();
 		if (source instanceof Button) {

@@ -5,6 +5,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.input.KeyCombination;
 
+/**
+ * Eine Tastenkombination für das Mapping zum Menü.
+ * 
+ * @author tobias
+ *
+ * @since 5.1.0
+ */
 public class Key implements Displayable {
 
 	private String id;
@@ -15,10 +22,32 @@ public class Key implements Displayable {
 	private boolean meta;
 	private boolean shift;
 
+	/**
+	 * Erstellt eine leere Tastenkombination.
+	 * 
+	 * @param id
+	 *            ID für die Speicherung
+	 */
 	public Key(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * Erstellt eine Vollständige Tastenkombination mit ID und Datenwerten.
+	 * 
+	 * @param id
+	 *            ID f+r doe Speicherung
+	 * @param key
+	 *            Taste
+	 * @param ctrl
+	 *            ctrl
+	 * @param alt
+	 *            alt
+	 * @param meta
+	 *            meta (Mac: CMD)
+	 * @param shift
+	 *            shift
+	 */
 	public Key(String id, String key, boolean ctrl, boolean alt, boolean meta, boolean shift) {
 		this.id = id;
 
@@ -83,26 +112,30 @@ public class Key implements Displayable {
 		return id;
 	}
 
+	/**
+	 * Gibt die Tastenkombination als String für das Menü in JavaFX zurück.
+	 * 
+	 * @return
+	 */
 	public String getKeyCode() {
 		StringBuilder builder = new StringBuilder();
 
 		if (ctrl)
 			builder.append("ctrl+");
-
 		if (alt)
 			builder.append("alt+");
-
 		if (meta)
 			builder.append("meta+");
-
 		if (shift)
 			builder.append("shift+");
-
 		builder.append(key);
 
 		return builder.toString();
 	}
 
+	/**
+	 * Gibt die Tastenkombination von JavaFX geparsed zurück. Diese wird dann für das Menü und die Darstellung verwendet.
+	 */
 	@Override
 	public String toString() {
 		if (!getKeyCode().isEmpty())
@@ -115,11 +148,15 @@ public class Key implements Displayable {
 			return "";
 	}
 
-	private StringProperty displayProperty = new SimpleStringProperty();
+	private transient StringProperty displayProperty = new SimpleStringProperty();
 
 	@Override
 	public StringProperty displayProperty() {
 		displayProperty.set(toString());
 		return displayProperty;
+	}
+
+	public boolean isEmpty() {
+		return key.isEmpty() && !ctrl && !shift & !meta && !alt;
 	}
 }

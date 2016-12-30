@@ -72,7 +72,8 @@ public class ErrorSummaryDialog extends ViewController {
 					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
 							padException.getPad().getIndexReadable());
 				else
-					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(), padException.getPath().toString());
+					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
+							padException.getPath().toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -94,7 +95,7 @@ public class ErrorSummaryDialog extends ViewController {
 	}
 
 	public void setProject(Project project) {
-		errorTable.setItems(project.getExceptions());
+		// errorTable.setItems(project.getExceptions()); TODO Error Handling User
 		errorTable.getItems().addListener(new ListChangeListener<PadException>() {
 
 			@Override

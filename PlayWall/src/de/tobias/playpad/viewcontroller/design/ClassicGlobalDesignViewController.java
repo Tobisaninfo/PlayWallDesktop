@@ -2,8 +2,8 @@ package de.tobias.playpad.viewcontroller.design;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.classic.ClassicGlobalDesign;
 import de.tobias.playpad.design.classic.Theme;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;

@@ -170,6 +170,7 @@ public class Midi {
 			}
 		}
 
+		@Override
 		public void close() {}
 	}
 

@@ -119,7 +119,7 @@ public class ImageContentConntect extends PadContentConnect {
 		}
 
 		@Override
-		public void unconnect() {
+		public void deinit() {
 			nameLabel.textProperty().unbind();
 		}
 

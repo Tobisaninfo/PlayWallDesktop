@@ -4,8 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import de.tobias.playpad.Displayable;
-import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.geometry.Pos;
@@ -60,7 +60,7 @@ public class ProjectCell extends ListCell<ProjectReference> {
 
 				// File not Exists
 				Path path = ref.getProjectPath();
-				if (Files.notExists(path)) {
+				if (Files.notExists(path) || !ref.getMissedModules().isEmpty()) {
 					FontIcon graphics = new FontIcon(FontAwesomeType.WARNING);
 					graphics.setColor(Color.RED);
 					rootBox.getChildren().add(graphics);

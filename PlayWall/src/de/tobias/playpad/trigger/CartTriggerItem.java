@@ -2,6 +2,7 @@ package de.tobias.playpad.trigger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.dom4j.Element;
 
@@ -14,19 +15,19 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
 public class CartTriggerItem extends TriggerItem {
 
-	private List<Integer> carts;
+	private List<UUID> uuids;
 	private boolean allCarts;
 	private PadStatus newStatus; // Only Play, Pause, Stop
 
 	public CartTriggerItem() {
 		newStatus = PadStatus.PLAY;
 		allCarts = false;
-		carts = new ArrayList<Integer>() {
+		uuids = new ArrayList<UUID>() {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public boolean add(Integer e) {
+			public boolean add(UUID e) {
 				if (!contains(e))
 					return super.add(e);
 				else
@@ -35,8 +36,8 @@ public class CartTriggerItem extends TriggerItem {
 		};
 	}
 
-	public List<Integer> getCarts() {
-		return carts;
+	public List<UUID> getCarts() {
+		return uuids;
 	}
 
 	public boolean isAllCarts() {
@@ -62,16 +63,22 @@ public class CartTriggerItem extends TriggerItem {
 	}
 
 	@Override
-	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
+	public void performAction(Pad source, Project project, IMainViewController controller, Profile profile) {
 		if (allCarts) {
-			for (Pad cart : project.getPads().values()) {
-				if (cart.getIndex() != pad.getIndex())
+			for (Pad cart : project.getPads()) {
+				if (cart.getUuid().equals(source.getUuid()))
 					cart.setStatus(newStatus);
 			}
 		} else {
-			for (int cart : carts) {
-				if (cart != pad.getIndex())
-					project.getPad(cart).setStatus(newStatus);
+			System.out.println(uuids);
+			// TODO Cart Trigger mit Pages und Index --> PadIndex
+			for (UUID uuid : uuids) {
+				if (!uuid.equals(source.getUuid())) {
+					Pad pad = project.getPad(uuid);
+					System.out.println(pad);
+					if (pad != null)
+						pad.setStatus(newStatus);
+				}
 			}
 		}
 	}
@@ -92,7 +99,7 @@ public class CartTriggerItem extends TriggerItem {
 		for (Object cartObj : element.elements(CART_ELEMENT)) {
 			if (cartObj instanceof Element) {
 				Element cartElement = (Element) cartObj;
-				carts.add(Integer.valueOf(cartElement.getStringValue()));
+				uuids.add(UUID.fromString(cartElement.getStringValue()));
 			}
 		}
 	}
@@ -104,64 +111,9 @@ public class CartTriggerItem extends TriggerItem {
 		element.addAttribute(STATUS_ATTR, newStatus.name());
 		element.addAttribute(ALLCARTS_ATTR, String.valueOf(allCarts));
 
-		for (int cart : carts) {
+		for (UUID cart : uuids) {
 			Element cartElement = element.addElement(CART_ELEMENT);
 			cartElement.addText(String.valueOf(cart));
 		}
-	}
-
-	public void setCartsString(String string) {
-		if (string != null) {
-			carts.clear();
-			string = string.replace(" ", "");
-			for (String part : string.split(",")) {
-				if (part.contains("-")) {
-					if (part.split("-").length == 2) {
-						int start = Integer.valueOf(part.split("-")[0]);
-						int end = Integer.valueOf(part.split("-")[1]);
-
-						for (int i = start; i <= end; i++) {
-							carts.add(i - 1);
-						}
-					}
-				} else {
-					int cart = Integer.valueOf(part);
-					carts.add(cart - 1);
-				}
-			}
-			carts.sort(Integer::compareTo);
-		}
-	}
-
-	public String getCartsString() {
-		String string = "";
-		int startValue = -1;
-
-		for (int i = 0; i < carts.size(); i++) {
-			if (i + 1 < carts.size()) {
-				if (carts.get(i) + 1 == carts.get(i + 1)) {
-					if (startValue == -1) {
-						startValue = carts.get(i);
-					}
-				} else {
-					if (startValue != -1)
-						string += (startValue + 1) + "-" + (carts.get(i) + 1) + ",";
-					else
-						string += (carts.get(i) + 1) + ",";
-					startValue = -1;
-
-				}
-			} else {
-				if (startValue == -1) {
-					string += (carts.get(i) + 1) + ",";
-				} else {
-					string += (startValue + 1) + "-" + (carts.get(i) + 1) + ",";
-				}
-			}
-		}
-		if (string.isEmpty()) {
-			return null;
-		}
-		return string.substring(0, string.length() - 1);
 	}
 }

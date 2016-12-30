@@ -1,5 +1,7 @@
 package de.tobias.playpad.project;
 
+import de.tobias.playpad.project.ref.ProjectReference;
+
 public class ProjectNotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;

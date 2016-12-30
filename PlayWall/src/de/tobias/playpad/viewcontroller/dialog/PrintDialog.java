@@ -13,7 +13,10 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.viewcontroller.cell.PageNameListCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
@@ -45,11 +48,13 @@ public class PrintDialog extends ViewController {
 		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
-		int pages = project.getSettings().getPageCount();
+		int pages = project.getPages().size();
 		for (int i = 0; i < pages; i++) {
-			pageComboBox.getItems().add(i + 1);
+			pageComboBox.getItems().add(i);
 		}
 		pageComboBox.getSelectionModel().selectFirst();
+		pageComboBox.setCellFactory(param -> new PageNameListCell());
+		pageComboBox.setButtonCell(new PageNameListCell());
 
 		getStage().initOwner(owner);
 	}
@@ -58,7 +63,7 @@ public class PrintDialog extends ViewController {
 	public void init() {
 		pageComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
-			createPreview(c - 1);
+			createPreview(c);
 		});
 
 		addCloseKeyShortcut(() -> getStage().close());
@@ -75,7 +80,7 @@ public class PrintDialog extends ViewController {
 		Profile.currentProfile().currentLayout().applyCss(getStage());
 	}
 
-	private void createPreview(int page) {
+	private void createPreview(int pageIndex) {
 		Html html = new Html();
 		Body body = new Body();
 		body.setStyle("max-width: 1000px; font-family: sans-serif;");
@@ -83,7 +88,13 @@ public class PrintDialog extends ViewController {
 
 		H1 header = new H1();
 
-		String headerString = Localization.getString(Strings.Info_Print_Header, project.getRef().getName(), page + 1);
+		Page page = project.getPage(pageIndex);
+		String pageName = page.getName();
+		if (pageName.isEmpty()) {
+			pageName = Localization.getString(Strings.UI_Window_Main_PageButton, (pageIndex + 1));
+		}
+
+		String headerString = Localization.getString(Strings.Info_Print_Header, project.getProjectReference().getName(), pageName);
 		header.appendText(headerString);
 		header.setStyle("text-align: center;");
 		body.appendChild(header);
@@ -92,7 +103,7 @@ public class PrintDialog extends ViewController {
 		table.setStyle("border:1px solid black;border-collapse:collapse;");
 
 		ProjectSettings settings = project.getSettings();
-		int i = page * settings.getRows() * settings.getColumns();
+		int padIndex = 0;
 
 		for (int y = 0; y < settings.getRows(); y++) {
 			Tr tr = new Tr();
@@ -103,14 +114,14 @@ public class PrintDialog extends ViewController {
 						+ "px; padding: 5px; vertical-align: center; text-align: center; min-height: 30px; min-width: 100px;");
 				Div div = new Div();
 				div.setStyle("word-break: break-all; white-space: normal;");
-				Pad pad = this.project.getPad(i);
+				Pad pad = this.project.getPad(new PadIndex(padIndex, pageIndex));
 
 				if (pad.getContent() != null && pad.getContent().isPadLoaded())
 					div.appendText(pad.getName());
 				else
 					div.appendText("-");
 				td.appendChild(div);
-				i++;
+				padIndex++;
 				tr.appendChild(td);
 			}
 		}

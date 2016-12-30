@@ -16,7 +16,7 @@ import org.dom4j.io.XMLWriter;
 
 import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.update.UpdateChannel;
+import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.settings.Storable;
@@ -147,7 +147,7 @@ public class GlobalSettings {
 
 	// Save & Load Data
 
-	private static final String KEYS_ELEMENT = "Keys";
+	public static final String KEYS_ELEMENT = "Keys";
 	private static final String AUTO_UPDATE_ELEMENT = "AutoUpdate";
 	private static final String IGNORE_UPDATE_ELEMENT = "IgnoreUpdate";
 	private static final String UPDATE_CHANNEL_ELEMENT = "UpdateChannel";
@@ -176,9 +176,6 @@ public class GlobalSettings {
 			SAXReader reader = new SAXReader();
 			Document document = reader.read(Files.newInputStream(savePath));
 			Element root = document.getRootElement();
-
-			if (root.element(KEYS_ELEMENT) != null)
-				settings.keyCollection.load(root.element(KEYS_ELEMENT));
 
 			if (root.element(AUTO_UPDATE_ELEMENT) != null) {
 				settings.setAutoUpdate(Boolean.valueOf(root.element(AUTO_UPDATE_ELEMENT).getStringValue()));

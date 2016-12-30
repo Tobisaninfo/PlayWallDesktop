@@ -5,7 +5,6 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
@@ -13,6 +12,7 @@ import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
@@ -60,7 +60,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (c && !padSettings.isCustomWarning())
-				padSettings.setWarning(new Warning());
+				padSettings.setWarning(Duration.seconds(5));
 			else if (!c && padSettings.isCustomWarning())
 				padSettings.setWarning(null);
 

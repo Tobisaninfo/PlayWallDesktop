@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad;
 
 import java.nio.file.Path;
+import java.util.UUID;
 
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
@@ -9,21 +10,30 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import javafx.beans.property.DoubleProperty;
+import de.tobias.playpad.volume.VolumeManager;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class Pad {
+public class Pad implements Cloneable {
+
+	private static final VolumeManager volumeManager;
+
+	static {
+		volumeManager = new VolumeManager();
+	}
 
 	// Verwaltung
+	private UUID uuid;
 	private IntegerProperty indexProperty = new SimpleIntegerProperty();
+	private IntegerProperty pageProperty = new SimpleIntegerProperty();
+
 	private StringProperty nameProperty = new SimpleStringProperty();
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
@@ -32,9 +42,6 @@ public class Pad {
 
 	// Settings
 	private PadSettings padSettings;
-
-	// Custom Volume
-	private transient DoubleProperty customVolumeProperty = new SimpleDoubleProperty(1.0);
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
 	private transient PadStatusListener padStatusListener;
@@ -47,20 +54,23 @@ public class Pad {
 
 	// Utils
 	private transient boolean eof;
+
 	private transient IPadViewController controller;
 	private transient Project project;
 
 	public Pad(Project project) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
 	}
 
-	public Pad(Project project, int index) {
+	public Pad(Project project, int index, int page) {
 		this.project = project;
-		padSettings = new PadSettings();
+		this.uuid = UUID.randomUUID();
+		this.padSettings = new PadSettings();
 
 		setIndex(index);
 		setStatus(PadStatus.EMPTY);
@@ -69,13 +79,30 @@ public class Pad {
 		padSettings.updateTrigger();
 	}
 
-	public Pad(Project project, int index, String name, PadContent content) {
-		this(project, index);
+	public Pad(Project project, PadIndex index) {
+		this(project, index.getId(), index.getPage());
+	}
+
+	public Pad(Project project, int index, int page, String name, PadContent content) {
+		this(project, index, page);
 		setName(name);
 		setContent(content);
 	}
 
 	private void initPadListener() {
+		// Remov eold listener from propeties
+		if (padStatusListener != null && statusProperty != null) {
+			statusProperty.removeListener(padStatusListener);
+		}
+		if (padTriggerStatusListener != null && statusProperty != null) {
+			statusProperty.removeListener(padTriggerStatusListener);
+		}
+		if (padTriggerDurationListener != null && contentProperty != null) {
+			contentProperty.removeListener(padTriggerContentListener);
+			padTriggerContentListener.changed(contentProperty, getContent(), null);
+		}
+
+		// init new listener for properties
 		padStatusListener = new PadStatusListener(this);
 		statusProperty.addListener(padStatusListener);
 
@@ -95,6 +122,18 @@ public class Pad {
 		return indexProperty.get();
 	}
 
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public int getPage() {
+		return pageProperty.get();
+	}
+
 	public int getIndexReadable() {
 		return indexProperty.get() + 1;
 	}
@@ -105,6 +144,14 @@ public class Pad {
 
 	public ReadOnlyIntegerProperty indexProperty() {
 		return indexProperty;
+	}
+
+	public void setPage(int page) {
+		pageProperty.set(page);
+	}
+
+	public PadIndex getPadIndex() {
+		return new PadIndex(getIndex(), getPage());
 	}
 
 	public String getName() {
@@ -167,12 +214,6 @@ public class Pad {
 		return padSettings;
 	}
 
-	public void setMasterVolume(double volume) {
-		if (getContent() != null) {
-			getContent().setMasterVolume(volume);
-		}
-	}
-
 	public boolean isEof() {
 		return eof;
 	}
@@ -185,22 +226,6 @@ public class Pad {
 	public void loadContent() throws NoSuchComponentException {
 		if (contentProperty.get() != null)
 			contentProperty.get().loadMedia();
-	}
-
-	public void throwException(Path path, Exception exception) {
-		if (project != null)
-			project.addException(this, path, exception);
-		setStatus(PadStatus.ERROR);
-	}
-
-	public void removeExceptionsForPad() {
-		if (project != null)
-			project.removeExceptions(this);
-	}
-
-	public void removeException(PadException exception) {
-		if (project != null)
-			project.removeException(exception);
 	}
 
 	public PadTriggerDurationListener getPadTriggerDurationListener() {
@@ -239,8 +264,24 @@ public class Pad {
 		setStatus(PadStatus.EMPTY);
 
 		if (project != null) {
-			project.removeExceptions(this);
+			// TODO Remove Exceptions refer to pad
 		}
+	}
+
+	public void throwException(Path path, Exception exception) {
+		if (project != null)
+			project.addException(this, path, exception);
+		setStatus(PadStatus.ERROR);
+	}
+
+	public void removeExceptionsForPad() {
+		if (project != null)
+			project.removeExceptions(this);
+	}
+
+	public void removeException(PadException exception) {
+		if (project != null)
+			project.removeException(exception);
 	}
 
 	@Override
@@ -252,16 +293,35 @@ public class Pad {
 		return (indexProperty.get() + 1) + " - " + nameProperty.get();
 	}
 
-	// TODO Reorder
-	public void setCustomVolume(double volume) {
-		customVolumeProperty.set(volume);
+	// Volume Manager
+	public static VolumeManager getVolumeManager() {
+		return volumeManager;
 	}
 
-	public double getCustomVolume() {
-		return customVolumeProperty.get();
-	}
+	// Clone
+	@Override
+	public Pad clone() throws CloneNotSupportedException {
+		Pad clone = (Pad) super.clone();
 
-	public DoubleProperty customVolumeProperty() {
-		return customVolumeProperty;
+		clone.uuid = UUID.randomUUID();
+		clone.indexProperty = new SimpleIntegerProperty(getIndex());
+		clone.pageProperty = new SimpleIntegerProperty(getPage());
+
+		clone.nameProperty = new SimpleStringProperty(getName());
+		clone.statusProperty = new SimpleObjectProperty<PadStatus>(getStatus());
+		if (getContent() != null) {
+			clone.contentProperty = new SimpleObjectProperty<PadContent>(getContent().clone());
+			clone.getContent().setPad(clone);
+		} else {
+			clone.contentProperty = new SimpleObjectProperty<PadContent>();
+		}
+
+		clone.padSettings = padSettings.clone();
+
+		clone.controller = null;
+		clone.project = project;
+
+		clone.initPadListener();
+		return clone;
 	}
 }

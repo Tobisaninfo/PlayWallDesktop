@@ -17,10 +17,10 @@ import de.tobias.playpad.design.Design;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
-import de.tobias.playpad.settings.Warning;
 import de.tobias.utils.util.ColorXMLUtils;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class ClassicCartDesign extends Design implements CartDesign {
 
@@ -91,6 +91,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 		this.accentColor = accentColor;
 	}
 
+	@Override
 	public void reset() {
 		backgroundColor = Color.TRANSPARENT;
 		playbackColor = Color.web("#ffb48bbb");
@@ -102,6 +103,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 		titleLabelColor = Color.BLACK;
 	}
 
+	@Override
 	public void load(Element rootElement) {
 		setBackgroundColor(ColorXMLUtils.load(rootElement.element("BackgroundColor")));
 		setPlaybackColor(ColorXMLUtils.load(rootElement.element("PlaybackColor")));
@@ -120,6 +122,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 		}
 	}
 
+	@Override
 	public void save(Element element) {
 		ColorXMLUtils.save(element.addElement("BackgroundColor"), backgroundColor);
 		ColorXMLUtils.save(element.addElement("PlaybackColor"), playbackColor);
@@ -162,6 +165,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 		return layout;
 	}
 
+	@Override
 	public String convertToCss(String classSufix, boolean fullCss) {
 		StringBuilder builder = new StringBuilder();
 
@@ -210,7 +214,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 	}
 
 	@Override
-	public void handleWarning(IPadViewController controller, Warning warning, GlobalDesign layout) {
+	public void handleWarning(IPadViewController controller, Duration warning, GlobalDesign layout) {
 		final IPadView view = controller.getView();
 
 		try {

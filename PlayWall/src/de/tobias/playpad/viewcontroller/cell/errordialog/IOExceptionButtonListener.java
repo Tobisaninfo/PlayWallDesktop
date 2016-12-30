@@ -6,10 +6,10 @@ import java.nio.file.Path;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadContentRegistry;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.utils.util.FileUtils;

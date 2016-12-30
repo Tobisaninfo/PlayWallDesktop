@@ -12,13 +12,14 @@ import org.dom4j.DocumentException;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.awakeplugin.AwakePlugin;
 import de.tobias.playpad.awakeplugin.AwakeSettings;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -40,6 +41,12 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 @PluginImplementation
 public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
+	private static final String NAME = "AwakePlugin";
+	private static final String IDENTIFIER = "de.tobias.playpad.awakeplugin.impl.AwakePluginImpl";
+
+	private Module module;
+	private Updatable updatable;
+
 	private static final String SETTINGS_FILENAME = "Awake.xml";
 
 	private CheckMenuItem activeMenu;
@@ -53,7 +60,8 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	public void onLoad(AwakePlugin plugin) {
 		bundle = Localization.loadBundle("de/tobias/playpad/awakeplugin/assets/awake", getClass().getClassLoader());
 
-		UpdateRegistery.registerUpdateable(new AwakePluginUpdater());
+		module = new Module(NAME, IDENTIFIER);
+		updatable = new AwakePluginUpdater();
 
 		if (OS.getType() == OSType.Windows) {
 			try {
@@ -80,13 +88,13 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	public void onDisable() {
 		System.out.println("Disable Awake Plugin");
 	}
-
+// TODO Server path anpassen mit UpdateChannel
 	private Path loadLibMac() throws IOException {
 		Path folder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "awakelib.dylib");
 		if (Files.notExists(folder)) {
 			Files.createFile(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/libAwake/libAwakeLib.dylib");
-			System.out.println("Downlaod " + url);
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/libAwake/libAwakeLib.dylib");
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), folder);
 		}
 		return folder;
@@ -100,15 +108,15 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 		if (Files.notExists(jnaFile)) {
 			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/jna/jna.jar");
-			System.out.println("Downlaod " + url);
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna.jar");
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
 			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/plugins/jna/jna-platform.jar");
-			System.out.println("Downlaod " + url);
+			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna-platform.jar");
+			System.out.println("Download " + url);
 			IOUtils.copy(url.openStream(), jnaPlatformFile);
 		}
 	}
@@ -120,7 +128,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		try {
 			settings = AwakeSettings.load(path);
 		} catch (NoSuchFileException e) {
-			System.out.println("No Awake.xml config on folder");
+			System.out.println("No Awake.xml config in folder");
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 		}
@@ -181,7 +189,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		}
 	}
 
-	public void activeSleep(boolean activate) {
+	private void activeSleep(boolean activate) {
 		if (activate) {
 			if (OS.getType() == OSType.Windows) {
 				Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED | Kernel32.ES_SYSTEM_REQUIRED);
@@ -195,5 +203,15 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 				AwakeUtils.getInstance().unlock();
 			}
 		}
+	}
+
+	@Override
+	public Module getModule() {
+		return module;
+	}
+
+	@Override
+	public Updatable getUpdatable() {
+		return updatable;
 	}
 }

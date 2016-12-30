@@ -9,13 +9,14 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionConnect;
-import de.tobias.playpad.mediaplugin.main.VideoPlugin;
+import de.tobias.playpad.mediaplugin.main.MediaPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.update.UpdateRegistery;
+import de.tobias.updater.client.Updatable;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -33,8 +34,14 @@ import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
 
 @PluginImplementation
-public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeListener<Boolean> {
+public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeListener<Boolean> {
 
+	private static final String NAME = "MediaPlugin";
+	private static final String IDENTIFIER = "de.tobias.playpad.videoplugin.main.impl.VideoPluginImpl";
+
+	private static Module module;
+	private static MediaPluginUpdater updater;
+	
 	private static MediaPluginImpl instance;
 	private MediaViewController videoViewController;
 	private VideoSettings settings = new VideoSettings();
@@ -46,8 +53,12 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 	private static final String SETTINGS_FILENAME = "Media.xml";
 
 	@PluginLoaded
-	public void onEnable(VideoPlugin plugin) {
+	public void onEnable(MediaPlugin plugin) {
+		// Init
 		instance = this;
+		updater = new MediaPluginUpdater();
+		module = new Module(NAME, IDENTIFIER);
+
 		blindProperty = new SimpleBooleanProperty();
 
 		bundle = Localization.loadBundle("de/tobias/playpad/mediaplugin/assets/video", getClass().getClassLoader());
@@ -56,7 +67,7 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 		// Load Content Types
 		try {
 			Registry<PadContentConnect> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader());
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
 			e.printStackTrace();
 		}
@@ -83,11 +94,9 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 			});
 		}
 
-		UpdateRegistery.registerUpdateable(new MediaPluginUpdater());
-
 		try {
 			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader());
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader(), module);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
 			e.printStackTrace();
 		}
@@ -160,5 +169,15 @@ public class MediaPluginImpl implements VideoPlugin, SettingsListener, ChangeLis
 				blindHUD.removeFromParent();
 			}
 		});
+	}
+	
+	@Override
+	public Module getModule() {
+		return module;
+	}
+	
+	@Override
+	public Updatable getUpdatable() {
+		return updater;
 	}
 }

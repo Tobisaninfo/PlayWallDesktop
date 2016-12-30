@@ -7,8 +7,10 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
+import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.scene.NotificationPane;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -25,7 +27,7 @@ import javafx.stage.Stage;
  * @since 5.1.0
  *
  */
-public interface IMainViewController extends NotificationHandler {
+public interface IMainViewController extends NotificationHandler, Alertable {
 
 	/**
 	 * Setzt die Grid Farbe.
@@ -119,14 +121,6 @@ public interface IMainViewController extends NotificationHandler {
 	public MidiListener getMidiHandler();
 
 	/**
-	 * Setzt das Globale Volume bei den Kacheln des aktuellen Projekts.
-	 * 
-	 * @param doubleValue
-	 *            [0..1]
-	 */
-	public void setGlobalVolume(double doubleValue);
-
-	/**
 	 * Setzt das MainLayout des Hauptfensters.
 	 * 
 	 * @param mainLayoutConnect
@@ -157,4 +151,8 @@ public interface IMainViewController extends NotificationHandler {
 	 * @return NotificationPane
 	 */
 	public NotificationPane getNotificationPane();
+
+	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
+	
+	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 }

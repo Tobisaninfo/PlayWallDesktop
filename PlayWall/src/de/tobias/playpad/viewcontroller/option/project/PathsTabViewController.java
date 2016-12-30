@@ -122,7 +122,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 				project.closeFile();
 
-				for (Pad pad : project.getPads().values()) {
+				for (Pad pad : project.getPads()) {
 					try {
 						if (pad.getStatus() != PadStatus.EMPTY) {
 							PadContent content = pad.getContent();

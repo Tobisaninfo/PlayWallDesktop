@@ -9,11 +9,12 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
@@ -69,7 +70,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		super("openDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
 		this.currentProject = currentProject;
 
-		projectList.getItems().setAll(ProjectReference.getProjectsSorted());
+		projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
 
 		getStage().initOwner(owner);
 		getStage().initModality(Modality.WINDOW_MODAL);
@@ -79,7 +80,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	public void init() {
 		// Notification Handler
 		notificationPane = new NotificationPane(rootNode);
-		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
+		notificationPane.getStyleClass().add(org.controlsfx.control.NotificationPane.STYLE_CLASS_DARK);
 
 		setAnchor(notificationPane, 0, 0, 0, 0);
 		((AnchorPane) getParent()).getChildren().add(notificationPane);
@@ -118,7 +119,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 					e.printStackTrace();
 				}
 
-				if (currentProject.getRef().equals(c)) {
+				if (currentProject.getProjectReference().equals(c)) {
 					deleteButton.setDisable(true);
 				} else {
 					deleteButton.setDisable(false);
@@ -176,7 +177,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 		{
 			try {
-				ProjectReference.removeDocument(ref);
+				ProjectReferences.removeDocument(ref);
 				projectList.getItems().remove(ref); // VIEW
 			} catch (Exception e) {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
@@ -201,14 +202,14 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		String oldName = projectReference.toString();
 
 		try {
-			String newProjectName = (String) nameTextField.getText();
-			if (ProjectReference.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
+			String newProjectName = nameTextField.getText();
+			if (ProjectReferences.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
 			}
 
 			projectReference.setName(newProjectName);
-			projectList.getItems().setAll(ProjectReference.getProjectsSorted());
+			projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
 
 			selectProject(projectReference);
 		} catch (Exception e) {
@@ -223,7 +224,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		dialog.getStage().showAndWait();
 
 		Project project = dialog.getProject();
-		projectList.getItems().add(project.getRef());
+		projectList.getItems().add(project.getProjectReference());
 	}
 
 	@FXML
@@ -267,10 +268,11 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		ProjectReference selectedProject = getSelectedProject();
 
 		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
-		if (currentProject.getRef().equals(selectedProject)) {
+		if (currentProject.getProjectReference().equals(selectedProject)) {
 			try {
 				currentProject.save();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -283,7 +285,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		getStage().showAndWait();
 		if (!cancel) {
 			if (getSelecteItem() != null) {
-				if (currentProject.getRef() != getSelecteItem()) {
+				if (currentProject.getProjectReference() != getSelecteItem()) {
 					return Optional.of(getSelecteItem());
 				}
 			}

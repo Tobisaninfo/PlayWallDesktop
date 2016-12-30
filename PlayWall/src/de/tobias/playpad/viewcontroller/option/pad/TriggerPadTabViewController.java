@@ -7,7 +7,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.playpad.trigger.TriggerUIWrapper;
+import de.tobias.playpad.trigger.TriggerDisplayable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.TriggerPointViewController;
@@ -20,9 +20,9 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class TriggerPadTabViewController extends PadSettingsTabViewController implements ChangeListener<TreeItem<TriggerUIWrapper>> {
+public class TriggerPadTabViewController extends PadSettingsTabViewController implements ChangeListener<TreeItem<TriggerDisplayable>> {
 
-	@FXML private TreeView<TriggerUIWrapper> treeView;
+	@FXML private TreeView<TriggerDisplayable> treeView;
 	@FXML private VBox contentView;
 
 	private Pad pad;
@@ -40,25 +40,26 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 	private void createTreeView() {
 		HashMap<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
-		TreeItem<TriggerUIWrapper> rootItem = new TreeItem<>();
+		TreeItem<TriggerDisplayable> rootItem = new TreeItem<>();
 
 		// Sort the tpyes for the treeview
 		for (TriggerPoint point : TriggerPoint.values()) {
 			Trigger trigger = triggers.get(point);
 
-			TreeItem<TriggerUIWrapper> triggerItem = new TreeItem<>(new TriggerUIWrapper(trigger));
+			TreeItem<TriggerDisplayable> triggerItem = new TreeItem<>(new TriggerDisplayable(trigger));
 			rootItem.getChildren().add(triggerItem);
 		}
 
 		treeView.setRoot(rootItem);
 	}
 
-	public void changed(ObservableValue<? extends TreeItem<TriggerUIWrapper>> observable, TreeItem<TriggerUIWrapper> oldValue,
-			TreeItem<TriggerUIWrapper> newValue) {
+	@Override
+	public void changed(ObservableValue<? extends TreeItem<TriggerDisplayable>> observable, TreeItem<TriggerDisplayable> oldValue,
+			TreeItem<TriggerDisplayable> newValue) {
 		contentView.getChildren().clear();
 
 		if (newValue != null) {
-			TriggerUIWrapper triggerWrapper = newValue.getValue();
+			TriggerDisplayable triggerWrapper = newValue.getValue();
 			TriggerPointViewController controller = new TriggerPointViewController(triggerWrapper);
 			contentView.getChildren().setAll(controller.getParent());
 			VBox.setVgrow(controller.getParent(), Priority.ALWAYS);

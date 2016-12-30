@@ -19,6 +19,8 @@ import javafx.scene.paint.Color;
 public class LaunchPadMK2 extends Device implements DeviceColorAssociatorConnector {
 
 	public static final String NAME = "Launchpad MK2";
+
+	// Modern Colors mapped to the colors of the launchpad
 	private static Map<String, String> mapProperties;
 
 	public LaunchPadMK2() {
@@ -41,7 +43,8 @@ public class LaunchPadMK2 extends Device implements DeviceColorAssociatorConnect
 	}
 
 	@Override
-	public void initFeedback() {}
+	public void initDevice() {
+	}
 
 	@Override
 	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {
@@ -114,14 +117,16 @@ public class LaunchPadMK2 extends Device implements DeviceColorAssociatorConnect
 
 	@Override
 	public DisplayableFeedbackColor map(Color color) {
-		try {
-			URL resource = getClass().getClassLoader().getResource("de/tobias/playpad/launchpadplugin/assets/launchpad_mk2.map");
-			mapProperties = MapParser.load(resource);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		// TEST Ist das nötig
+		// try {
+		// URL resource = getClass().getClassLoader().getResource("de/tobias/playpad/launchpadplugin/assets/launchpad_mk2.map");
+		// mapProperties = MapParser.load(resource);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 		if (mapProperties.containsKey(color.toString())) {
-			return LaunchPadMK2Color.valueOf(mapProperties.get(color.toString()));
+			String nameOfConst = mapProperties.get(color.toString());
+			return LaunchPadMK2Color.valueOf(nameOfConst);
 		}
 		return null;
 	}

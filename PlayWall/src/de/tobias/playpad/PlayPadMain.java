@@ -9,16 +9,16 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.ProfileReference;
 import de.tobias.playpad.update.PlayPadUpdater;
-import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
+import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -31,7 +31,7 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -60,7 +60,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private static PlayPadImpl impl;
 	private static PlayPadUpdater updater;
-	
+
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
@@ -84,15 +84,18 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
 
-		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.yml");
+		// Localization
+		setupLocalization();
+
+		// Setup Global Settings
+		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
+		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
+		globalSettings.getKeyCollection().load(globalSettingsPath);
 
 		impl = new PlayPadImpl(globalSettings);
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
-
-		// Localization
-		setupLocalization();
 
 		// Console
 		if (!app.isDebug()) {
@@ -121,17 +124,21 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			// Load Plugin Path
 			Path pluginFolder;
 			if (getParameters().getNamed().containsKey("plugin")) {
-				pluginFolder = Paths.get(getParameters().getNamed().get("plugin"));
+				String pluginParam = getParameters().getNamed().get("plugin");
+				for (String part : pluginParam.split(":")) {
+					pluginFolder = Paths.get(part);
+					setupPlugins(pluginFolder);
+				}
 			} else {
 				pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
+				setupPlugins(pluginFolder);
 			}
-			setupPlugins(pluginFolder);
 
 			/*
 			 * Load Data
 			 */
-			ProfileReference.loadProfiles();
-			ProjectReference.loadProjects();
+			ProfileReferences.loadProfiles();
+			ProjectReferences.loadProjects();
 
 			// Changelog nach Update anzeigen
 			ViewController.create(ChangelogDialog.class);
@@ -140,7 +147,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					impl.openProject(Project.load(ProjectReference.getProject(uuid), true, null));
+					impl.openProject(Project.load(ProjectReferences.getProject(uuid), true, null));
 					return;
 				}
 			}
@@ -165,7 +172,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					Platform.runLater(() ->
 					{
 						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(owner);
-						autoUpdateDialog.showAndWait().filter(item -> item == ButtonType.APPLY).ifPresent(result ->
+						autoUpdateDialog.showAndWait().filter(item -> item.getButtonData() == ButtonData.APPLY).ifPresent(result ->
 						{
 							try {
 								Updates.startUpdate();
@@ -185,8 +192,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
-			ProfileReference.saveProfiles();
-			ProjectReference.saveProjects();
+			ProfileReferences.saveProfiles();
+			ProjectReferences.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler

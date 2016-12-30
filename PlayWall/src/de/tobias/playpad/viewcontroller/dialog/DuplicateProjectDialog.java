@@ -4,9 +4,10 @@ import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectReference;
-import de.tobias.playpad.settings.ProfileReference;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
@@ -40,7 +41,7 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReference.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReferences.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
@@ -51,12 +52,12 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
-				if (ProfileReference.getProfiles().contains(name)) {
+				if (ProfileReferences.getProfiles().contains(name)) {
 					controller.showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 					return;
 				}
 
-				ref = ProjectReference.duplicate(cloneableProject, name);
+				ref = ProjectReferences.duplicate(cloneableProject, name);
 			} catch (Exception e) {
 				e.printStackTrace();
 				controller.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));

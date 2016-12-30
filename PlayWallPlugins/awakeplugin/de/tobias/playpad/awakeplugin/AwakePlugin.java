@@ -1,7 +1,7 @@
 package de.tobias.playpad.awakeplugin;
 
-import net.xeoh.plugins.base.Plugin;
+import de.tobias.playpad.plugin.AdvancedPlugin;
 
-public interface AwakePlugin extends Plugin {
+public interface AwakePlugin extends AdvancedPlugin {
 
 }

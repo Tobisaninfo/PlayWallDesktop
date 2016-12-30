@@ -14,6 +14,8 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
 import de.tobias.playpad.design.DesignConnect;
 import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
@@ -26,7 +28,7 @@ public class Profile {
 	private static final String MAPPING_XML = "Mapping.xml";
 	private static final String LAYOUT_XML = "Layout.xml";
 
-	public static final String profileNameEx = "[\\p{L},0-9]{1}[\\p{L}\\s-_]{0,}";
+	public static final String profileNameEx = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();
 	private static Profile currentProfile;
@@ -38,7 +40,13 @@ public class Profile {
 	private MappingList mappings;
 	private HashMap<String, GlobalDesign> layouts;
 
-	Profile(ProfileReference ref) {
+	/**
+	 * Use {@link ProfileReferences#addProfile(ProfileReference)} instead
+	 * 
+	 * @param ref
+	 *            Ref
+	 */
+	public Profile(ProfileReference ref) {
 		this.ref = ref;
 		this.profileSettings = new ProfileSettings();
 		this.mappings = new MappingList(this);
@@ -139,6 +147,8 @@ public class Profile {
 	}
 
 	public void save() throws UnsupportedEncodingException, IOException {
+		ref.getRequestedModules().clear();
+
 		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->
 		{
 			try {

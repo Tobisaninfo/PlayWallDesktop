@@ -24,7 +24,7 @@ public class PadContentListener implements ChangeListener<PadContent> {
 	public void changed(ObservableValue<? extends PadContent> observable, PadContent oldValue, PadContent newValue) {
 		// wenn Content change, update preview & buttons
 		controller.getView().setContentView(pad);
-		controller.getView().addDefaultElement(pad);
+		controller.getView().addDefaultElements(pad);
 
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();

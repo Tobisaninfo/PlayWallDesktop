@@ -1,6 +1,5 @@
 package de.tobias.playpad.mediaplugin.image;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,8 +44,7 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public void setMasterVolume(double masterVolume) {
-	}
+	public void updateVolume() {}
 
 	@Override
 	public String getType() {
@@ -74,12 +72,15 @@ public class ImageContent extends PadContent {
 		if (Files.exists(path)) {
 			getPad().setStatus(PadStatus.READY);
 		} else {
-			getPad().throwException(path, new FileNotFoundException());
+			// getPad().throwException(path, new FileNotFoundException()); TODO Error Handling User
 		}
 	}
 
 	@Override
 	public void unloadMedia() {
+		// First Stop the pad (if playing)
+		getPad().setStatus(PadStatus.STOP);
+
 		Platform.runLater(() ->
 		{
 			if (getPad() != null) {
@@ -130,6 +131,14 @@ public class ImageContent extends PadContent {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public PadContent clone() throws CloneNotSupportedException {
+		ImageContent clone = (ImageContent) super.clone();
+		clone.path = Paths.get(path.toUri());
+		clone.loadMedia();
+		return clone;
 	}
 
 }

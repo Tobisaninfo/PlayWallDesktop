@@ -19,14 +19,8 @@ public interface IPadContentView {
 	 */
 	public Node getNode();
 
-	@Deprecated
-	public void unconnect();
-
 	/**
 	 * Deinitialisiert die View. Hier können mögliche Bindings und Listener entfernt werden.
 	 */
-	public default void deinit() {
-		// TODO Remove the default after remove unconnect from interface
-		unconnect();
-	}
+	public void deinit();
 }

@@ -2,8 +2,8 @@ package de.tobias.playpad.settings.keys;
 
 import org.dom4j.Element;
 
-import de.tobias.playpad.xml.XMLDeserializer;
-import de.tobias.playpad.xml.XMLSerializer;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLSerializer;
 
 public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 
@@ -14,6 +14,7 @@ public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 	private static final String META_ATTR = "meta";
 	private static final String SHIFT_ATTR = "shift";
 
+	@Override
 	public Key loadElement(Element element) {
 		boolean shift = false;
 		if (element.attributeValue(SHIFT_ATTR) != null) {

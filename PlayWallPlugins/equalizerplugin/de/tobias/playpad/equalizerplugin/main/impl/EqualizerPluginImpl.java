@@ -11,17 +11,17 @@ import de.tobias.playpad.equalizerplugin.main.Equalizer;
 import de.tobias.playpad.equalizerplugin.main.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.WindowListener;
-import de.tobias.playpad.update.UpdateRegistery;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.media.AudioEqualizer;
 import javafx.scene.media.EqualizerBand;
@@ -32,6 +32,12 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 
 @PluginImplementation
 public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
+
+	private static final String NAME = "Equalizer";
+	private static final String IDENTIFIER = "de.tobias.playpad.videoplugin.main.impl.EqualizerPluginImpl";
+
+	private Module module;
+	private Updatable updatable;
 
 	private Stage mainStage;
 	private EqualizerViewController equalizerViewController;
@@ -52,7 +58,8 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 			e.printStackTrace();
 		}
 
-		UpdateRegistery.registerUpdateable(new EqualizerPluginUpdater());
+		updatable = new EqualizerPluginUpdater();
+		module = new Module(NAME, IDENTIFIER);
 
 		PlayPadPlugin.getImplementation().addMainViewListener(this);
 		PlayPadPlugin.getImplementation().addPadListener(this);
@@ -115,7 +122,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		}
 	}
 
-	@FXML
+	@Override
 	public void handle(ActionEvent event) {
 		if (equalizerViewController == null) {
 			equalizerViewController = new EqualizerViewController(mainStage);
@@ -125,5 +132,15 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		} else {
 			equalizerViewController.getStage().show();
 		}
+	}
+
+	@Override
+	public Module getModule() {
+		return module;
+	}
+
+	@Override
+	public Updatable getUpdatable() {
+		return updatable;
 	}
 }

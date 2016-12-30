@@ -25,7 +25,6 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	private Screen mainWindowScreen;
 	private Alertable parentController; // Für Benachrichtungen
 
-	@FXML private TextField pageCountTextField;
 	@FXML private TextField columnTextField;
 	@FXML private TextField rowTextField;
 
@@ -38,27 +37,12 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		if (activePlayer) {
 			rowTextField.setDisable(true);
 			columnTextField.setDisable(true);
-			pageCountTextField.setDisable(true);
 		}
 
 	}
 
 	@Override
 	public void init() {
-		pageCountTextField.textProperty().addListener((a, b, c) ->
-		{
-			if (c.matches(DIGIT_POSITIV) && !c.isEmpty()) {
-				int number = Integer.valueOf(c);
-				if (number > ProjectSettings.MAX_PAGES) {
-					pageCountTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true); // Zahl zu groß
-				} else {
-					pageCountTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false); // Zahl ok
-				}
-			} else {
-				pageCountTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true); // Negativ oder leer
-			}
-		});
-
 		columnTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIV) && !c.isEmpty()) {
@@ -98,14 +82,12 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 			if (neededHeight <= height && neededWidth <= width)
 				return true;
-		} catch (NumberFormatException e) {
-		}
+		} catch (NumberFormatException e) {}
 		return false;
 	}
 
 	@Override
 	public void loadSettings(ProjectSettings settings) {
-		pageCountTextField.setText(String.valueOf(settings.getPageCount()));
 		columnTextField.setText(String.valueOf(settings.getColumns()));
 		rowTextField.setText(String.valueOf(settings.getRows()));
 
@@ -125,9 +107,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	public void saveSettings(ProjectSettings settings) {
 		int columns = Integer.valueOf(columnTextField.getText());
 		int rows = Integer.valueOf(rowTextField.getText());
-		int pageCount = Integer.valueOf(pageCountTextField.getText());
 
-		if (settings.getColumns() != columns || settings.getRows() != rows || settings.getPageCount() != pageCount)
+		if (settings.getColumns() != columns || settings.getRows() != rows)
 			changeSettings = true;
 		else
 			changeSettings = false;
@@ -135,35 +116,12 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		// Copy Settings
 		settings.setColumns(columns);
 		settings.setRows(rows);
-		settings.setPageCount(pageCount);
 	}
 
 	@Override
 	public boolean needReload() {
 		return changeSettings;
 	}
-
-	// @Override
-	// public void reload(ProjectSettings settings, Project project, IMainViewController controller) {
-	// Alert alert = new Alert(AlertType.INFORMATION);
-	// alert.setContentText(Localization.getString(Strings.UI_Window_Settings_Gen_Wait));
-	//
-	// alert.getButtonTypes().clear();
-	// alert.initOwner(controller.getStage());
-	// alert.initModality(Modality.WINDOW_MODAL);
-	// Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-	// PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-	//
-	// alert.show();
-	//
-	// Worker.runLater(() ->
-	// {
-	// Platform.runLater(() ->
-	// {
-	//
-	// });
-	// });
-	// }
 
 	@Override
 	public boolean validSettings() {
@@ -191,6 +149,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	@Override
 	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller) {
 		return new Task<Void>() {
+
 			@Override
 			protected Void call() throws Exception {
 				updateTitle(name());

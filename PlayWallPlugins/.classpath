@@ -13,5 +13,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ControlFx"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/PlayWallCore"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/YML"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Updater"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

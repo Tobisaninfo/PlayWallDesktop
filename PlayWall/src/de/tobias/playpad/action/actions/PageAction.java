@@ -98,6 +98,7 @@ public class PageAction extends Action {
 		return new SimpleStringProperty(toString());
 	}
 
+	@Override
 	public Action cloneAction() throws CloneNotSupportedException {
 		PageAction action = (PageAction) super.clone();
 

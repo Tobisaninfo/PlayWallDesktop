@@ -11,7 +11,7 @@ import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.view.ColorView;
+import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -84,7 +84,7 @@ public class DoubleFeedbackViewController extends ContentViewController {
 					color = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.EVENT));
 				}
 				
-				ColorView colorView = new ColorView(color, device.getColors(), item ->
+				ColorPickerView colorView = new ColorPickerView(color, device.getColors(), item ->
 				{
 					colorChooser.hide();
 					if (item instanceof DisplayableFeedbackColor) {

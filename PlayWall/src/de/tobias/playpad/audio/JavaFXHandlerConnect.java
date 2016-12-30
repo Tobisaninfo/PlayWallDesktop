@@ -19,4 +19,18 @@ public class JavaFXHandlerConnect extends AudioHandlerConnect {
 	public String getType() {
 		return JavaFXAudioHandler.TYPE;
 	}
+	
+	@Override
+	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+		for (Class<?> clazz : JavaFXAudioHandler.class.getInterfaces()) {
+			if (clazz.equals(audioCapability.getAudioFeature()))
+				return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+		return null;
+	}
 }

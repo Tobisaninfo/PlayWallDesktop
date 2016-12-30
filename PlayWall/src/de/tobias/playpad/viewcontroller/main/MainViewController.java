@@ -15,6 +15,7 @@ import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
@@ -22,6 +23,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -33,9 +35,7 @@ import de.tobias.playpad.view.main.MainLayoutConnect;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.ui.BasicControllerSettings;
-import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
@@ -44,6 +44,7 @@ import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -52,6 +53,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -66,7 +68,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
+public class MainViewController extends ViewController implements IMainViewController, ProfileListener {
 
 	private static final int FIRST_PAGE = 0;
 
@@ -81,7 +83,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private MenuToolbarViewController menuToolbarViewController;
 
 	private Project openProject;
-	private int currentPageShowing = -1;
+	private int currentPageShowing = 0;
 
 	// Mapper
 	private Midi midi;
@@ -111,7 +113,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		layoutActions = new ArrayList<>();
 
 		// Init Listener
-		volumeChangeListener = new VolumeChangeListener(this);
+		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
 		initMapper(openProject);
@@ -178,7 +180,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		padGridPane.getStyleClass().add("pad-grid");
 
 		notificationPane = new NotificationPane(padGridPane);
-		notificationPane.getStyleClass().add(NotificationPane.STYLE_CLASS_DARK);
+		notificationPane.getStyleClass().add(org.controlsfx.control.NotificationPane.STYLE_CLASS_DARK);
 
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
@@ -189,6 +191,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		return mainLayout;
 	}
 
+	@Override
 	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
 		removePadsFromView();
 		removePadViews();
@@ -308,10 +311,10 @@ public class MainViewController extends ViewController implements IMainViewContr
 				if (result.isPresent()) {
 					globalSettings.setIgnoreSaveDialog(alert.isSelected());
 					ButtonType buttonType = result.get();
-					if (buttonType == ButtonType.YES) {
+					if (buttonType.getButtonData() == ButtonData.YES) {
 						// Projekt Speichern
 						saveProject();
-					} else if (buttonType == ButtonType.CANCEL) {
+					} else if (buttonType.getButtonData() == ButtonData.CANCEL_CLOSE) {
 						return false;
 					}
 				}
@@ -354,7 +357,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 	private void saveProject() {
 		try {
-			if (openProject.getRef() != null) {
+			if (openProject.getProjectReference() != null) {
 				openProject.save();
 				System.out.println("Saved Project: " + openProject);
 			}
@@ -374,17 +377,19 @@ public class MainViewController extends ViewController implements IMainViewContr
 	public void openProject(Project project) {
 		removePadsFromView();
 
-		if (project != null)
+		if (openProject != null)
 			removePadsFromView();
 
 		openProject = project;
 
+		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
+		Profile.currentProfile().getMappings().getActiveMapping().showFeedback(openProject);
 
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
-		PadDragListener.setProject(project);
+		DesktopPadDragListener.setProject(project);
 		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
@@ -405,7 +410,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		// Table
 		padGridPane.getColumnConstraints().clear();
-		double xPercentage = 1.0 / (double) projectSettings.getColumns();
+		double xPercentage = 1.0 / projectSettings.getColumns();
 		for (int i = 0; i < projectSettings.getColumns(); i++) {
 			ColumnConstraints c = new ColumnConstraints();
 			c.setPercentWidth(xPercentage * 100);
@@ -413,7 +418,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		padGridPane.getRowConstraints().clear();
-		double yPercentage = 1.0 / (double) projectSettings.getRows();
+		double yPercentage = 1.0 / projectSettings.getRows();
 		for (int i = 0; i < projectSettings.getRows(); i++) {
 			RowConstraints c = new RowConstraints();
 			c.setPercentHeight(yPercentage * 100);
@@ -463,15 +468,13 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private void addPadsToView() {
 		ProjectSettings settings = openProject.getSettings();
 
-		int index = currentPageShowing * settings.getRows() * settings.getColumns();
 		for (int i = 0; i < settings.getRows() * settings.getColumns(); i++) {
 			if (padViews.size() > i) {
 				IPadView view = padViews.get(i);
-				Pad pad = openProject.getPad(index);
+				Pad pad = openProject.getPad(new PadIndex(i, currentPageShowing));
 
 				view.getViewController().setupPad(pad);
 			}
-			index++;
 		}
 	}
 
@@ -490,9 +493,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (openProject == null) {
 			return false;
 		}
-		ProjectSettings projectSettings = openProject.getSettings();
 
-		if (page < 0 || page >= projectSettings.getPageCount()) {
+		if (page < 0 || page >= openProject.getPages().size()) {
 			return false;
 		}
 
@@ -504,22 +506,14 @@ public class MainViewController extends ViewController implements IMainViewContr
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.highlightPageButton(page);
 		}
+		loadUserCss();
+		
 		return true;
 	}
 
 	@Override
 	public int getPage() {
 		return currentPageShowing;
-	}
-
-	@Override
-	public void setGlobalVolume(double volume) {
-		if (openProject != null) {
-			for (Pad pad : openProject.getPads().values()) {
-				if (pad != null)
-					pad.setMasterVolume(volume);
-			}
-		}
 	}
 
 	// Settings
@@ -557,14 +551,16 @@ public class MainViewController extends ViewController implements IMainViewContr
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
-
+				
 				Platform.runLater(() ->
 				{
 					// Handle Mapper
-					if (Profile.currentProfile() != null) {
+					if (currentProfile != null) {
 						activeMapping.initFeedback();
-						activeMapping.showFeedback(openProject);
+						if (openProject != null) {
+							activeMapping.showFeedback(openProject);
+							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
+						}
 					}
 				});
 			});
@@ -655,6 +651,20 @@ public class MainViewController extends ViewController implements IMainViewContr
 	}
 
 	@Override
+	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().addEventFilter(eventType, handler);
+		}
+	}
+	
+	@Override
+	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType) {
+		for (IPadView view : padViews) {
+			view.getRootNode().removeEventFilter(eventType, handler);
+		}
+	}
+
+	@Override
 	public void loadUserCss() {
 		Scene scene = getStage().getScene();
 
@@ -668,10 +678,13 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		// design spezific css
 		if (openProject != null) {
-			Profile.currentProfile().currentLayout().applyCssMainView(this, getStage(), openProject);
+			Profile currentProfile = Profile.currentProfile();
+			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
+			
+			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			activeMapping.adjustPadColorToMapper();
+			activeMapping.showFeedback(openProject);
 		}
-
-		Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper(openProject);
 	}
 
 	/**
@@ -695,9 +708,10 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 	}
 
+	@Override
 	public void updateWindowTitle() {
 		if (openProject != null && Profile.currentProfile() != null) {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getRef().getName(),
+			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
 					Profile.currentProfile().getRef().getName()));
 		} else {
 			getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));

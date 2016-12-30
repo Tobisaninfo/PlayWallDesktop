@@ -20,7 +20,7 @@ public class MidiMapperConnect extends MapperConnect implements MapperConnectFee
 
 	@Override
 	public void initFeedbackType() {
-		Midi.getInstance().getMidiDevice().ifPresent(device -> device.initFeedback());
+		Midi.getInstance().getMidiDevice().ifPresent(device -> device.initDevice());
 	}
 
 	@Override

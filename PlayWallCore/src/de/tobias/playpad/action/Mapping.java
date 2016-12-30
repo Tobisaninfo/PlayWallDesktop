@@ -26,7 +26,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	private UUID uuid;
 	private HashMap<Action, List<Mapper>> mapping;
 
-	public Mapping(boolean init, Profile profile) {
+	public Mapping(boolean init) {
 		mapping = new HashMap<>();
 		if (init) {
 			name = "Default";
@@ -161,8 +161,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		getActions().forEach(action -> action.clearFeedback());
 	}
 
-	public void adjustPadColorToMapper(Project project) {
-		ColorAdjuster.applyColorsToMappers(project);
+	public void adjustPadColorToMapper() {
+		ColorAdjuster.applyColorsToMappers();
 	}
 
 	@Override

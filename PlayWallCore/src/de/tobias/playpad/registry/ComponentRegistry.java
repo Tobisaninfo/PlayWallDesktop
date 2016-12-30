@@ -11,6 +11,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import de.tobias.playpad.plugin.Module;
+
 /**
  * Eine Implementierung für eine Registry.
  * 
@@ -24,19 +26,23 @@ import org.dom4j.io.SAXReader;
 public class ComponentRegistry<C> implements Registry<C> {
 
 	private HashMap<String, C> components;
+	// Zu einem Component die zugehörigen Meta Daten (das Modul)
+	private HashMap<String, Module> modules;
 	private String name;
 
 	public ComponentRegistry(String name) {
-		components = new HashMap<>();
+		this.components = new HashMap<>();
+		this.modules = new HashMap<>();
 		this.name = name;
 	}
 
 	@Override
-	public void registerComponent(C component, String id) throws IllegalArgumentException {
+	public void registerComponent(C component, String id, Module module) throws IllegalArgumentException {
 		if (components.containsKey(id)) {
 			throw new IllegalArgumentException("A components already exists with this id: " + id);
 		}
 		components.put(id, component);
+		modules.put(id, module);
 		System.out.println("Registered: " + name + "#" + id);
 	}
 
@@ -59,7 +65,7 @@ public class ComponentRegistry<C> implements Registry<C> {
 	}
 
 	@Override
-	public void loadComponentsFromFile(URL url, ClassLoader loader)
+	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
 			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		if (url == null) {
 			throw new IOException("URL not found: " + url);
@@ -77,9 +83,13 @@ public class ComponentRegistry<C> implements Registry<C> {
 				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
 				C component = clazz.newInstance();
 
-				registerComponent(component, type);
+				registerComponent(component, type, module);
 			}
 		}
 	}
 
+	@Override
+	public Module getModule(String id) {
+		return modules.get(id);
+	}
 }

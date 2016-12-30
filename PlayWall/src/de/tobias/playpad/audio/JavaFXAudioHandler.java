@@ -79,9 +79,10 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 	}
 
 	@Override
-	public void setVolume(double volume, double masterVolume, double customVolume) {
-		if (player != null)
-			player.setVolume(volume * masterVolume * customVolume);
+	public void setVolume(double volume) {
+		if (player != null) {
+			player.setVolume(volume);
+		}
 	}
 
 	@Override
@@ -91,7 +92,8 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() -> {
+		Platform.runLater(() ->
+		{
 			if (getContent().getPad().isPadVisible()) {
 				getContent().getPad().getController().getView().showBusyView(true);
 			}
@@ -107,28 +109,33 @@ public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 		player = new MediaPlayer(media);
 
 		// Player Listener
-		player.setOnReady(() -> {
+		player.setOnReady(() ->
+		{
 			durationProperty.set(player.getTotalDuration());
 			getContent().getPad().setStatus(PadStatus.READY);
 			loadedProperty.set(true);
 
-			Platform.runLater(() -> {
+			Platform.runLater(() ->
+			{
 				if (getContent().getPad().isPadVisible()) {
 					getContent().getPad().getController().getView().showBusyView(false);
 				}
 			});
 		});
 
-		player.setOnError(() -> {
-			Platform.runLater(() -> {
+		player.setOnError(() ->
+		{
+			Platform.runLater(() ->
+			{
 				if (getContent().getPad().isPadVisible()) {
 					getContent().getPad().getController().getView().showBusyView(false);
 				}
 			});
 			loadedProperty.set(false);
-			getContent().getPad().throwException(path, player.getError());
+			// getContent().getPad().throwException(path, player.getError()); TODO Error Handling User
 		});
-		player.setOnEndOfMedia(() -> {
+		player.setOnEndOfMedia(() ->
+		{
 			if (!getContent().getPad().getPadSettings().isLoop()) {
 				getContent().getPad().setEof(true);
 				getContent().getPad().setStatus(PadStatus.STOP);

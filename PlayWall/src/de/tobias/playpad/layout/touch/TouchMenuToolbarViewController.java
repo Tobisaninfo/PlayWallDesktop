@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutConnect;
@@ -50,8 +51,14 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 			return;
 		}
 
-		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
-			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
+		for (int i = 0; i < openProject.getPages().size(); i++) {
+			Page page = openProject.getPage(i);
+			String name = page.getName(); 
+			if (name.isEmpty()) {
+				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
+			}
+			
+			Button button = new Button(name);
 			button.setUserData(i);
 			button.setFocusTraversable(false);
 			button.setOnAction(this);

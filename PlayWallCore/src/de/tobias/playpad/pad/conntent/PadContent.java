@@ -20,7 +20,7 @@ import de.tobias.utils.util.ZipFile;
  * @version 5.1.0
  * @see Pad
  */
-public abstract class PadContent {
+public abstract class PadContent implements Cloneable {
 
 	// Refrence
 	private Pad pad;
@@ -31,6 +31,14 @@ public abstract class PadContent {
 
 	public Pad getPad() {
 		return pad;
+	}
+
+	/**
+	 * Never use this. only for cloning
+	 * @param pad
+	 */
+	public void setPad(Pad pad) {
+		this.pad = pad;
 	}
 
 	public abstract String getType();
@@ -63,7 +71,7 @@ public abstract class PadContent {
 	 */
 	public abstract void unloadMedia();
 
-	public abstract void setMasterVolume(double masterVolume);
+	public abstract void updateVolume();
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -113,6 +121,12 @@ public abstract class PadContent {
 			return newPath;
 		}
 		return orginal;
+	}
+
+	@Override
+	public PadContent clone() throws CloneNotSupportedException {
+		PadContent clone = (PadContent) super.clone();
+		return clone;
 	}
 
 }

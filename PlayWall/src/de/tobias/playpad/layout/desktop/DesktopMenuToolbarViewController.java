@@ -8,19 +8,24 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
 
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.ColorModeHandler;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
-import de.tobias.playpad.project.ProjectReference;
+import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -42,17 +47,20 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
-import de.tobias.playpad.viewcontroller.pad.PadDragListener;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.Alertable;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -68,12 +76,18 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController implements EventHandler<ActionEvent> {
+public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
+		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
+
+	// TODO Page Buttons gleicher Margin wie pads
 
 	// meuBar
 	@FXML protected MenuBar menuBar;
@@ -84,7 +98,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML protected MenuItem profileMenu;
 	@FXML protected MenuItem printProjectMenuItem;
 
-	@FXML protected CheckMenuItem dndModeMenuItem;
+	@FXML protected MenuItem playMenu;
+	@FXML protected MenuItem dragMenu;
+	@FXML protected MenuItem pageMenu;
+	@FXML protected MenuItem colorMenu;
+
 	@FXML protected MenuItem errorMenu;
 	@FXML protected MenuItem pluginMenu;
 
@@ -104,15 +122,30 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML protected Label liveLabel;
 
+	protected SegmentedButton editButtons;
+	protected ToggleButton playButton;
+	protected ToggleButton dragButton;
+	protected ToggleButton pageButton;
+	protected ToggleButton colorButton;
+	private Button addPageButton;
+
 	private IMainViewController mainViewController;
 
-	private ProjectSettingsViewController projectSettingsViewController;
-	private ProfileSettingsViewController profileSettingsViewController;
-	private GlobalSettingsViewController globalSettingsViewController;
+	private transient ProjectSettingsViewController projectSettingsViewController;
+	private transient ProfileSettingsViewController profileSettingsViewController;
+	private transient GlobalSettingsViewController globalSettingsViewController;
+	private transient DesktopColorPickerView colorPickerView;
 
-	public DesktopMenuToolbarViewController(IMainViewController controller) {
+	private DesktopMainLayoutConnect connect;
+
+	public DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutConnect connect) {
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
+		this.connect = connect;
+		this.connect.editModeProperty().addListener(this);
+
+		// Ist Zustand herstellen, indem Listener mit dem Initialen Wert bekannt gemacht wird.
+		changed(connect.editModeProperty(), null, connect.getEditMode());
 
 		initLayoutMenu();
 	}
@@ -129,6 +162,112 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Help Menu --> HIDDEN TODO
 		helpMenu.setVisible(false);
 		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
+
+		// Edit Mode Buttons
+		editButtons = new SegmentedButton();
+		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
+		playButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PlayButton)));
+		playButton.setFocusTraversable(false);
+		dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
+		dragButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_DragButton)));
+		dragButton.setFocusTraversable(false);
+		pageButton = new ToggleButton("", new FontIcon(FontAwesomeType.FILES_ALT));
+		pageButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PageButton)));
+		pageButton.setFocusTraversable(false);
+		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
+		colorButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_ColorButton)));
+		colorButton.setFocusTraversable(false);
+		// Zeigt die Farbauswahl
+		colorButton.setOnAction(e ->
+		{
+			GlobalDesign design = Profile.currentProfile().currentLayout();
+			if (design instanceof ColorModeHandler) {
+				if (colorPickerView == null) {
+					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
+
+					// Add Listener for Pads
+					mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+				}
+				colorPickerView.show(colorButton);
+			}
+		});
+		editButtons.getButtons().addAll(playButton, dragButton, pageButton, colorButton);
+		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
+		{
+			if (c == playButton) {
+				connect.setEditMode(DesktopEditMode.PLAY);
+			} else if (c == dragButton) {
+				connect.setEditMode(DesktopEditMode.DRAG);
+			} else if (c == pageButton) {
+				connect.setEditMode(DesktopEditMode.PAGE);
+			} else if (c == colorButton) {
+				connect.setEditMode(DesktopEditMode.COLOR);
+			} else if (c == null) {
+				// select Old Button, if new selecting is empty
+				editButtons.getToggleGroup().selectToggle(b);
+			}
+		});
+
+		// Add Page Button for Drag Mode (Page Edit Mode)
+		addPageButton = new Button("", new FontIcon(FontAwesomeType.PLUS));
+		addPageButton.setFocusTraversable(false);
+		addPageButton.setOnAction(e ->
+		{
+			if (openProject.addPage()) {
+				// seite konnte hinzugefügt werden
+				initPageButtons();
+				highlightPageButton(mainViewController.getPage());
+			} else {
+				showErrorMessage(Localization.getString(Strings.Error_Project_PageCount), PlayPadMain.stageIcon);
+			}
+		});
+
+		iconHbox.getChildren().add(editButtons);
+	}
+
+	// Desktop Edit Mode Change Listener --> Update Button
+	@Override
+	public void changed(ObservableValue<? extends DesktopEditMode> observable, DesktopEditMode oldValue, DesktopEditMode newValue) {
+		// handle old mode
+		if (oldValue == DesktopEditMode.DRAG) {
+			for (IPadView view : mainViewController.getPadViews()) {
+				view.enableDragAndDropDesignMode(false);
+			}
+		} else if (oldValue == DesktopEditMode.PAGE) {
+			highlightPageButton(currentSelectedPageButton);
+			iconHbox.getChildren().remove(addPageButton);
+		} else if (oldValue == DesktopEditMode.COLOR) {
+			if (colorPickerView != null) {
+				mainViewController.removeListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+				colorPickerView.hide();
+				colorPickerView = null;
+			}
+		}
+
+		// handle new mode
+		if (newValue == DesktopEditMode.PLAY) {
+			playButton.setSelected(true);
+		} else if (newValue == DesktopEditMode.DRAG) {
+			// Wenn Live Mode on, dann zum alten Wert zurück
+			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			if (settings.isLiveMode() && settings.isLiveModeDrag() && openProject.getActivePlayers() != 0) {
+				connect.setEditMode(oldValue);
+				return;
+			}
+			// Drag and Drop Aktivieren
+			dragButton.setSelected(true);
+			for (IPadView view : mainViewController.getPadViews()) {
+				view.enableDragAndDropDesignMode(true);
+			}
+		} else if (newValue == DesktopEditMode.PAGE) {
+			pageButton.setSelected(true);
+			iconHbox.getChildren().add(0, addPageButton);
+			highlightPageButton(currentSelectedPageButton);
+		} else if (newValue == DesktopEditMode.COLOR) {
+			colorButton.setSelected(true);
+		}
+
+		mainViewController.getPadViews().forEach(i -> i.getViewController().updateButtonDisable());
 	}
 
 	private void initLayoutMenu() {
@@ -171,14 +310,22 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void initPageButtons() {
+		currentSelectedPageButton = -1;
 		pageHBox.getChildren().clear();
 
 		if (openProject == null) {
 			return;
 		}
 
-		for (int i = 0; i < openProject.getSettings().getPageCount(); i++) {
-			Button button = new Button(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)));
+		for (int i = 0; i < openProject.getPages().size(); i++) {
+			Page page = openProject.getPage(i);
+
+			String name = page.getName();
+			if (name.isEmpty()) {
+				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
+			}
+
+			Button button = new Button(name);
 			button.setUserData(i);
 			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
 			button.setFocusTraversable(false);
@@ -194,7 +341,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		setKeyBindingForMenu(saveProjectMenuItem, keys.getKey("save_proj"));
 		setKeyBindingForMenu(printProjectMenuItem, keys.getKey("print_proj"));
 
-		setKeyBindingForMenu(dndModeMenuItem, keys.getKey("dnd"));
+		setKeyBindingForMenu(playMenu, keys.getKey("play"));
+		setKeyBindingForMenu(dragMenu, keys.getKey("drag"));
+		setKeyBindingForMenu(pageMenu, keys.getKey("page"));
+		setKeyBindingForMenu(colorMenu, keys.getKey("color"));
+
 		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
 		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
 		setKeyBindingForMenu(projectSettingsMenuItem, keys.getKey("project_settings"));
@@ -210,7 +361,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(false);
 		printProjectMenuItem.setDisable(false);
 
-		dndModeMenuItem.setDisable(false);
+		playMenu.setDisable(false);
+		dragMenu.setDisable(false);
+		pageMenu.setDisable(false);
+		colorMenu.setDisable(false);
+
 		errorMenu.setDisable(false);
 		pluginMenu.setDisable(false);
 		projectSettingsMenuItem.setDisable(false);
@@ -224,7 +379,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@Override
 	public void setLocked(boolean looked) {
-		dndModeMenuItem.setDisable(looked);
+		connect.setEditMode(DesktopEditMode.PLAY);
 	}
 
 	@Override
@@ -267,7 +422,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		saveProjectMenuItem.setDisable(true);
 		printProjectMenuItem.setDisable(true);
 
-		dndModeMenuItem.setDisable(true);
+		playMenu.setDisable(true);
+		dragMenu.setDisable(true);
+		pageMenu.setDisable(true);
+		colorMenu.setDisable(true);
+
 		errorMenu.setDisable(true);
 		pluginMenu.setDisable(true);
 		projectSettingsMenuItem.setDisable(true);
@@ -278,13 +437,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		alwaysOnTopItem.setDisable(true);
 		searchPadMenuItem.setDisable(true);
 
-		// Disable Drag Mode wenn aktiv und diese Toolbar deaktiviert wird.
-		if (dndModeMenuItem.isSelected()) {
-			PadDragListener.setDndMode(false);
-			for (IPadView view : mainViewController.getPadViews()) {
-				view.enableDragAndDropDesignMode(false);
-			}
-		}
+		connect.setEditMode(DesktopEditMode.PLAY);
 	}
 
 	@Override
@@ -292,20 +445,30 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		return volumeSlider;
 	}
 
-	private int currentPage = 0;
+	private int currentSelectedPageButton = 0;
 
 	@Override
 	public void highlightPageButton(int index) {
 		if (index >= 0) {
-			if (pageHBox.getChildren().size() > currentPage) {
-				Node removeNode = pageHBox.getChildren().get(currentPage);
+			if (pageHBox.getChildren().size() > currentSelectedPageButton && currentSelectedPageButton >= 0) {
+				Node removeNode = pageHBox.getChildren().get(currentSelectedPageButton);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
+
+				if (removeNode instanceof Button) {
+					((Button) removeNode).setGraphic(null);
+				}
 			}
 
-			if (pageHBox.getChildren().size() > index) {
+			if (index < pageHBox.getChildren().size()) {
 				Node newNode = pageHBox.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
-				currentPage = index;
+				currentSelectedPageButton = index;
+
+				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.PAGE) { // Nur bei Drag And Drop mode
+					Button button = (Button) newNode;
+					DesktopPageEditButtonView editBox = new DesktopPageEditButtonView(this, openProject.getPage(index), button);
+					button.setGraphic(editBox);
+				}
 			}
 		}
 	}
@@ -330,9 +493,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		doAction(() ->
 		{
 			Stage stage = mainViewController.getStage();
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 
-			ProjectManagerDialog view = new ProjectManagerDialog(stage, currentProject);
+			ProjectManagerDialog view = new ProjectManagerDialog(stage, openProject);
 			Optional<ProjectReference> result = view.showAndWait();
 
 			if (result.isPresent()) {
@@ -367,10 +529,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		try {
-			currentProject.save();
+			openProject.save();
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
@@ -382,9 +542,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void profileMenuHandler(ActionEvent event) {
 		doAction(() ->
 		{
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
-			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), currentProject);
+			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), openProject);
 			controller.getStage().showAndWait();
 			mainViewController.updateWindowTitle();
 		});
@@ -392,30 +550,28 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void printMenuHandler(ActionEvent event) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		PrintDialog dialog = new PrintDialog(currentProject, mainViewController.getStage());
+		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
 		dialog.getStage().show();
 	}
 
 	@FXML
-	void dndModeHandler(ActionEvent event) {
-		if (dndModeMenuItem.isSelected()) {
-			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
-			Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
+	void playMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.PLAY);
+	}
 
-			if (settings.isLiveMode() && settings.isLiveModeDrag() && currentProject.getActivePlayers() == 0) {
-				PadDragListener.setDndMode(true);
-				for (IPadView view : mainViewController.getPadViews()) {
-					view.enableDragAndDropDesignMode(true);
-				}
-			}
-		} else {
-			PadDragListener.setDndMode(false);
-			for (IPadView view : mainViewController.getPadViews()) {
-				view.enableDragAndDropDesignMode(false);
-			}
-		}
+	@FXML
+	void dragMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.DRAG);
+	}
 
+	@FXML
+	void pageMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.PAGE);
+	}
+
+	@FXML
+	void colorMenuHandler(ActionEvent event) {
+		connect.setEditMode(DesktopEditMode.COLOR);
 	}
 
 	@FXML
@@ -434,19 +590,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void projectSettingsHandler(ActionEvent event) {
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		if (projectSettingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
 			Runnable onFinish = () ->
 			{
 				projectSettingsViewController = null;
-				mainStage.toFront();
 			};
 
-			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, currentProject,
-					onFinish);
+			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, openProject, onFinish);
 
 			projectSettingsViewController.getStage().show();
 		} else if (projectSettingsViewController.getStage().isShowing()) {
@@ -458,9 +610,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void profileSettingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-
 		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
-
 		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getActivePlayers() > 0) {
 			return;
 		}
@@ -476,7 +626,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				mainStage.toFront();
 			};
 
-			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, currentProject,
+			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, openProject,
 					onFinish);
 
 			profileSettingsViewController.getStage().show();
@@ -522,7 +672,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		field.setPromptText(Localization.getString(Strings.Search_Placeholder));
 
 		Button button = new Button(Localization.getString(Strings.Search_Button));
-		button.setOnAction(new DesktopSearchController(field, this));
+		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
+		button.setOnAction(new DesktopSearchController(project, field, mainViewController));
 
 		HBox box = new HBox(14, field, button);
 		box.setAlignment(Pos.CENTER_LEFT);
@@ -531,8 +682,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		pane.show("", box);
 
 		// Auto Complete
-		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		Set<String> names = currentProject.getPads().values().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
+		Set<String> names = openProject.getPads().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
 				.collect(Collectors.toSet());
 		TextFields.bindAutoCompletion(field, names);
 	}
@@ -585,9 +735,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	public void createRecentDocumentMenuItems() {
 		recentOpenMenu.getItems().clear();
 
-		String project = openProject.getRef().getName();
+		String project = openProject.getProjectReference().getName();
 
-		ProjectReference.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
+		ProjectReferences.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
 		{
 			MenuItem menuItem = new MenuItem(item.toString());
 			menuItem.setUserData(item);
