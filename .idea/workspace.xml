@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="PlayWall" />
+      <artifact name="PlayWall:jar" />
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79f1c12d-cb47-4c05-a8f3-d2eb3588d81c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/PlayWall/src/de/tobias/playpad/view/PadView.java" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/PlayWall/src/META-INF/MANIFEST.MF" />
     </list>
     <ignored path="$PROJECT_DIR$/PlayWall/bin/" />
     <ignored path="$PROJECT_DIR$/PlayWallCore/bin/" />
@@ -505,7 +505,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>PlayWall</last-edited>
+          <last-edited>PlayWall:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
