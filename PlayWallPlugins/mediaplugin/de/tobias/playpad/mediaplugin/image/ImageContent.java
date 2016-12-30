@@ -44,8 +44,7 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public void updateVolume() {
-	}
+	public void updateVolume() {}
 
 	@Override
 	public String getType() {
@@ -79,6 +78,9 @@ public class ImageContent extends PadContent {
 
 	@Override
 	public void unloadMedia() {
+		// First Stop the pad (if playing)
+		getPad().setStatus(PadStatus.STOP);
+
 		Platform.runLater(() ->
 		{
 			if (getPad() != null) {
@@ -130,7 +132,7 @@ public class ImageContent extends PadContent {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public PadContent clone() throws CloneNotSupportedException {
 		ImageContent clone = (ImageContent) super.clone();
