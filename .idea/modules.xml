@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PlayWall/PlayWall.iml" filepath="$PROJECT_DIR$/PlayWall/PlayWall.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" filepath="$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallNativeMac/PlayWallNativeMac.iml" filepath="$PROJECT_DIR$/PlayWallNativeMac/PlayWallNativeMac.iml" />
     </modules>
   </component>
 </project>
