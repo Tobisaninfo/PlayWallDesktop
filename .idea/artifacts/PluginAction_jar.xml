@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="PluginAction:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/PluginAction_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/</output-path>
     <root id="archive" name="PluginAction.jar">
       <element id="module-output" name="PluginAction" />
       <element id="module-output" name="PlayWallCore" />
