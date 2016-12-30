@@ -9,8 +9,8 @@
       <module fileurl="file://$PROJECT_DIR$/PluginEqualizer/PluginEqualizer.iml" filepath="$PROJECT_DIR$/PluginEqualizer/PluginEqualizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/PluginLaunchpad/PluginLaunchpad.iml" filepath="$PROJECT_DIR$/PluginLaunchpad/PluginLaunchpad.iml" />
       <module fileurl="file://$PROJECT_DIR$/PluginMedia/PluginMedia.iml" filepath="$PROJECT_DIR$/PluginMedia/PluginMedia.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallNativeMac/PluginNativeMac.iml" filepath="$PROJECT_DIR$/PlayWallNativeMac/PluginNativeMac.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallNativeWin/PluginNativeWin.iml" filepath="$PROJECT_DIR$/PlayWallNativeWin/PluginNativeWin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PluginNativeMac/PluginNativeMac.iml" filepath="$PROJECT_DIR$/PluginNativeMac/PluginNativeMac.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PluginNativeWin/PluginNativeWin.iml" filepath="$PROJECT_DIR$/PluginNativeWin/PluginNativeWin.iml" />
     </modules>
   </component>
 </project>

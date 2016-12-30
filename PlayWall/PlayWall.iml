@@ -29,7 +29,7 @@
     <orderEntry type="library" exported="" name="HTML Builder" level="project" />
     <orderEntry type="library" exported="" name="libUtils" level="project" />
     <orderEntry type="library" exported="" name="Updater" level="project" />
-    <orderEntry type="library" name="Json" level="project" />
+    <orderEntry type="library" exported="" name="Json" level="project" />
     <orderEntry type="library" exported="" name="scala-sdk-2.12.1" level="application" />
   </component>
 </module>
