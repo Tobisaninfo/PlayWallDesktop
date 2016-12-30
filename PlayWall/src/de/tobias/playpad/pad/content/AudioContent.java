@@ -196,6 +196,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public void unloadMedia() {
+		// First Stop the pad (if playing)
+		getPad().setStatus(PadStatus.STOP);
+
 		durationProperty.unbind();
 		positionProperty.unbind();
 
@@ -204,7 +207,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		if (audioHandler != null)
 			audioHandler.unloadMedia();
 
-		Platform.runLater(() ->
+		Platform.runLater(() -> // TODO Platform.runLater ?
 		{
 			if (getPad() != null) {
 				getPad().setStatus(PadStatus.EMPTY);

@@ -36,7 +36,6 @@ import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.utils.ui.BasicControllerSettings;
-import de.tobias.utils.ui.NotificationHandler;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
@@ -69,7 +68,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class MainViewController extends ViewController implements IMainViewController, NotificationHandler, ProfileListener {
+public class MainViewController extends ViewController implements IMainViewController, ProfileListener {
 
 	private static final int FIRST_PAGE = 0;
 

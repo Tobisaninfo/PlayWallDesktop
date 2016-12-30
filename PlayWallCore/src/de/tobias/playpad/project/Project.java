@@ -110,9 +110,9 @@ public class Project {
 
 	public void setPad(PadIndex index, Pad pad) {
 		if (pad != null) {
+			// Remove Pad from old location
 			if (pad.getPage() != index.getPage()) {
 				Page oldPage = getPage(pad.getPage());
-				// Nur Löschen, wenn auch noch das Pad an dieser Stelle ist, und nicht an andere Stelle
 				if (oldPage.getPad(pad.getIndex()).equals(pad)) {
 					oldPage.removePade(index.getId());
 				}
@@ -322,10 +322,31 @@ public class Project {
 		if (pages.size() == ProjectSettings.MAX_PAGES) {
 			return false;
 		}
-		int index = pages.size();
-		page.setId(index);
-		pages.add(page);
-		return true;
 
+		int newIndex = pages.size();
+
+		page.setId(newIndex);
+		pages.add(page);
+
+		return true;
+	}
+
+	/**
+	 * Find pads, which name starts with a given string
+	 * 
+	 * @param name
+	 *            search key
+	 * @return found pads in project
+	 */
+	public List<Pad> findPads(String name) {
+		List<Pad> result = new ArrayList<>();
+		for (Pad pad : getPads()) {
+			if (pad.getStatus() != PadStatus.EMPTY) {
+				if (pad.getName().startsWith(name)) {
+					result.add(pad);
+				}
+			}
+		}
+		return result;
 	}
 }
