@@ -672,7 +672,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		field.setPromptText(Localization.getString(Strings.Search_Placeholder));
 
 		Button button = new Button(Localization.getString(Strings.Search_Button));
-		button.setOnAction(new DesktopSearchController(field, this));
+		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
+		button.setOnAction(new DesktopSearchController(project, field, mainViewController));
 
 		HBox box = new HBox(14, field, button);
 		box.setAlignment(Pos.CENTER_LEFT);

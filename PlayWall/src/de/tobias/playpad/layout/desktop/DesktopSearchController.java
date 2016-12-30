@@ -1,6 +1,13 @@
 package de.tobias.playpad.layout.desktop;
 
-import de.tobias.utils.ui.Alertable;
+import java.util.List;
+
+import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.Strings;
+import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
@@ -8,40 +15,52 @@ import javafx.scene.control.TextField;
 // TODO Search Pads
 public class DesktopSearchController implements EventHandler<ActionEvent> {
 
-	private TextField textField;
-	private Alertable alertable;
+	private static final int HIGHLIGHT_DURATION = 3;
 
-	public DesktopSearchController(TextField textField, Alertable alertable) {
+	private Project currentProject;
+
+	private TextField textField;
+	private IMainViewController mainView;
+
+	public DesktopSearchController(Project project, TextField textField, IMainViewController mainView) {
+		this.currentProject = project;
+
 		this.textField = textField;
-		this.alertable = alertable;
+		this.mainView = mainView;
 	}
 
+	// Current Search
+	private String lastSearchTerm;
 	private int currentIndex = 0;
+	private List<Pad> searchResult;
 
 	@Override
 	public void handle(ActionEvent event) {
-//		if (textField.getText().isEmpty()) {
-//			return;
-//		}
-//
-//		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-//		main: for (int i = currentIndex; i < currentProject.getPadCount(); i++) {
-//			Pad pad = currentProject.getPad(i);
-//			if (pad.getStatus() != PadStatus.EMPTY) {
-//				if (pad.getName().startsWith(textField.getText())) {
-//					while (pad.getController() == null) {
-//						if (!PlayPadPlugin.getImplementation().getMainViewController()
-//								.showPage(PlayPadPlugin.getImplementation().getMainViewController().getPage() + 1)) {
-//							break main;
-//						}
-//					}
-//					pad.getController().getView().highlightView(3);
-//					currentIndex = i + 1;
-//					return;
-//				}
-//			}
-//		}
-//		alertable.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
-//		currentIndex = 0;
+		String currentSearchTerm = textField.getText();
+		if (currentSearchTerm.isEmpty()) {
+			return;
+		}
+
+		// New Search
+		if (!currentSearchTerm.equals(lastSearchTerm)) {
+			this.lastSearchTerm = currentSearchTerm;
+			searchResult = currentProject.findPads(currentSearchTerm);
+			currentIndex = 0;
+		}
+
+		if (searchResult.isEmpty()) {
+			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+		}
+
+		if (currentIndex < searchResult.size()) {
+			Pad result = searchResult.get(currentIndex++);
+			mainView.showPage(result.getPage());
+			if (result.getController() != null) {
+				result.getController().getView().highlightView(HIGHLIGHT_DURATION);
+			}
+		} else {
+			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+			currentIndex = 0;
+		}
 	}
 }
