@@ -1,10 +1,14 @@
 package de.tobias.playpad.action.mapper;
 
-public abstract class MapperConnect {
+import de.tobias.playpad.registry.Component;
+
+public abstract class MapperFactory extends Component {
+
+	public MapperFactory(String type) {
+		super(type);
+	}
 
 	public abstract Mapper createNewMapper();
 
 	public abstract MapperViewController getQuickSettingsViewController(Mapper mapper);
-
-	public abstract String getType();
 }

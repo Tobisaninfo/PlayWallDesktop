@@ -64,7 +64,7 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public String getType() {
-		return BlindActionConnect.TYPE;
+		return BlindActionFactory.TYPE;
 	}
 
 	@Override

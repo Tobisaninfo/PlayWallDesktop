@@ -35,8 +35,6 @@ import javazoom.jl.decoder.JavaLayerException;
 
 public class ClipAudioHandler extends AudioHandler {
 
-	public static final String TYPE = "clip";
-	public static final String NAME = "Clip (Experimental)";
 	private static final String MP3 = "mp3";
 
 	private Mixer mixer;

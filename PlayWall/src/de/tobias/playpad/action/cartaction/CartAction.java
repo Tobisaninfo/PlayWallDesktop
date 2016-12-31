@@ -5,7 +5,6 @@ import org.dom4j.Element;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
-import de.tobias.playpad.action.connect.CartActionConnect;
 import de.tobias.playpad.action.feedback.ColorAdjustable;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
@@ -25,6 +24,8 @@ public class CartAction extends Action implements ColorAdjustable {
 		PLAY_PAUSE, PLAY_STOP, PLAY_HOLD;
 	}
 
+	private final String type;
+
 	private int x;
 	private int y;
 
@@ -36,15 +37,13 @@ public class CartAction extends Action implements ColorAdjustable {
 	private transient PadStatusFeedbackListener padStatusFeedbackListener = new PadStatusFeedbackListener();
 	private transient PadPositionWarningListener padPositionListener = new PadPositionWarningListener(this);
 
-	public CartAction() {
-		this.x = 0;
-		this.y = 0;
-
-		this.mode = ControlMode.PLAY_STOP;
+	public CartAction(String type) {
+		this(type, 0, 0, ControlMode.PLAY_STOP);
 		this.autoFeedbackColors = true;
 	}
 
-	public CartAction(int x, int y, ControlMode mode) {
+	public CartAction(String type, int x, int y, ControlMode mode) {
+		this.type = type;
 		this.x = x;
 		this.y = y;
 
@@ -112,7 +111,7 @@ public class CartAction extends Action implements ColorAdjustable {
 
 	@Override
 	public String getType() {
-		return CartActionConnect.TYPE;
+		return type;
 	}
 
 	@Override

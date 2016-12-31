@@ -20,9 +20,15 @@ import javafx.scene.control.Label;
 
 public class StopAction extends Action {
 
+	private String type;
+
+	public StopAction(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String getType() {
-		return StopActionConnect.TYPE;
+		return type;
 	}
 
 	@Override

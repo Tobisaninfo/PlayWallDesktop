@@ -3,23 +3,21 @@ package de.tobias.playpad.trigger;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
-import de.tobias.playpad.tigger.TriggerItemConnect;
+import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.VolumeTriggerViewController;
 import de.tobias.utils.ui.ContentViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 
-public class VolumeTriggerItemConnect extends TriggerItemConnect {
+public class VolumeTriggerItemFactory extends TriggerItemFactory {
 
-	public final static String TYPE = "Volume";
-	
-	@Override
-	public String getType() {
-		return TYPE;
+	public VolumeTriggerItemFactory(String type) {
+		super(type);
 	}
 
 	@Override
 	public TriggerItem newInstance(Trigger trigger) {
-		return new VolumeTriggerItem();
+		return new VolumeTriggerItem(getType());
 	}
 
 	@Override

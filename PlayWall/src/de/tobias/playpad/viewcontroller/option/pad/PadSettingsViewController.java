@@ -9,8 +9,8 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.path.MultiPathContent;
 import de.tobias.playpad.pad.conntent.path.SinglePathContent;
@@ -60,8 +60,8 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 				String type = pad.getContent().getType();
 				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
 
-				PadContentConnect padContentConnect = registry.getComponent(type);
-				PadSettingsTabViewController contentTab = padContentConnect.getSettingsViewController(pad);
+				ContentFactory contentFactory = registry.getFactory(type);
+				PadSettingsTabViewController contentTab = contentFactory.getSettingsViewController(pad);
 
 				if (contentTab != null)
 					addTab(contentTab);

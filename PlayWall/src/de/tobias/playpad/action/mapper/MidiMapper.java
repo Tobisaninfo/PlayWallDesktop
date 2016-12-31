@@ -25,20 +25,20 @@ import javafx.scene.paint.Color;
 
 public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbackable {
 
+	private String type;
+
 	private int command;
 	private int key;
 
 	private Feedback feedback;
 	private FeedbackType feedbackType;
 
-	public MidiMapper() {
-		this.command = 0;
-		this.key = 0;
-
-		updateDisplayProperty();
+	public MidiMapper(String type) {
+		this(type, 0, 0);
 	}
 
-	public MidiMapper(int command, int key) {
+	public MidiMapper(String type, int command, int key) {
+		this.type = type;
 		this.command = command;
 		this.key = key;
 		updateDisplayProperty();
@@ -90,7 +90,7 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public String getType() {
-		return MidiMapperConnect.TYPE;
+		return type;
 	}
 
 	// Feedback, abhängig vom Device

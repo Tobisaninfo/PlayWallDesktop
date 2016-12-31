@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
 public class DesignTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	@FXML private VBox layoutContainer;
-	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
+	@FXML private ComboBox<DesignFactory> layoutTypeComboBox;
 	private GlobalDesignViewController globalLayoutViewController;
 
 	public DesignTabViewController() {
@@ -32,7 +32,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 
 		String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 		try {
-			layoutTypeComboBox.setValue(PlayPadPlugin.getRegistryCollection().getDesigns().getComponent(layoutType));
+			layoutTypeComboBox.setValue(PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType));
 		} catch (NoSuchComponentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

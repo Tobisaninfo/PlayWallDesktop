@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Fade;
@@ -162,9 +162,9 @@ public class PadSettings implements Cloneable {
 
 	public CartDesign getLayout(String type) {
 		if (!layouts.containsKey(type)) {
-			DefaultRegistry<DesignConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
+			DefaultRegistry<DesignFactory> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
 			try {
-				layouts.put(type, layouts2.getComponent(type).newCartDesign());
+				layouts.put(type, layouts2.getFactory(type).newCartDesign());
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

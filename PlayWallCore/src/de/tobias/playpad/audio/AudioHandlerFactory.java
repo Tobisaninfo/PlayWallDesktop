@@ -1,7 +1,9 @@
 package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Audio Handler Interface zur Verwaltung einer AudioHandler Implementierung.
@@ -12,7 +14,11 @@ import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
  *
  * @since 5.0.0
  */
-public abstract class AudioHandlerConnect {
+public abstract class AudioHandlerFactory extends Component {
+
+	public AudioHandlerFactory(String type) {
+		super(type);
+	}
 
 	/**
 	 * Erstellt für eine Kachel ein neunes AudioInterface
@@ -29,13 +35,6 @@ public abstract class AudioHandlerConnect {
 	 * @return neuer ViewContoller
 	 */
 	public abstract AudioHandlerViewController getAudioHandlerSettingsViewController();
-
-	/**
-	 * Gibt den Type des AudioHandlers zurück.
-	 * 
-	 * @return Type
-	 */
-	public abstract String getType();
 
 	/**
 	 * Prüft ob ein Feature verfügbar ist.

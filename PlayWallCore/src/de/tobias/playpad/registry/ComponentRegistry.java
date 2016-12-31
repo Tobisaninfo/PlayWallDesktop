@@ -1,57 +1,70 @@
 package de.tobias.playpad.registry;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Set;
-
+import de.tobias.playpad.plugin.Module;
+import de.tobias.utils.ui.icon.FontIconType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import de.tobias.playpad.plugin.Module;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Eine Implementierung für eine Registry.
- * 
- * @author tobias
  *
- * @param <C>
- *            Componentent
- * 
+ * @param <C> Componentent
+ * @author tobias
  * @since 5.1.0
  */
-public class ComponentRegistry<C> implements Registry<C> {
+public class ComponentRegistry<C extends Component> implements Registry<C> {
 
-	private HashMap<String, C> components;
-	// Zu einem Component die zugehörigen Meta Daten (das Modul)
-	private HashMap<String, Module> modules;
+	private HashMap<String, Item<C>> components;
+
 	private String name;
 
 	public ComponentRegistry(String name) {
 		this.components = new HashMap<>();
-		this.modules = new HashMap<>();
 		this.name = name;
 	}
 
 	@Override
-	public void registerComponent(C component, String id, Module module) throws IllegalArgumentException {
-		if (components.containsKey(id)) {
-			throw new IllegalArgumentException("A components already exists with this id: " + id);
+	public void registerComponent(C factory, Module module) throws IllegalArgumentException {
+		if (components.containsKey(factory.getType())) {
+			throw new IllegalArgumentException("A components already exists with this id: " + factory.getType());
 		}
-		components.put(id, component);
-		modules.put(id, module);
-		System.out.println("Registered: " + name + "#" + id);
+
+		Item<C> item = new Item<>();
+		item.content = factory;
+		item.module = module;
+
+		components.put(factory.getType(), item);
+		System.out.println("Registered: " + name + "#" + factory.getType());
 	}
 
 	@Override
-	public C getComponent(String id) throws NoSuchComponentException {
+	public C getFactory(String id) throws NoSuchComponentException {
 		if (!components.containsKey(id)) {
 			throw new NoSuchComponentException(id);
 		}
-		return components.get(id);
+		return components.get(id).content;
+	}
+
+	@Override
+	public C getFactory(Class<?> clazz) throws NoSuchComponentException {
+		for (Item<C> item : components.values()) {
+			if (item.content.getClass().equals(clazz)) {
+				return item.content;
+			}
+		}
+		throw new NoSuchComponentException(clazz.getName());
 	}
 
 	@Override
@@ -61,12 +74,13 @@ public class ComponentRegistry<C> implements Registry<C> {
 
 	@Override
 	public Collection<C> getComponents() {
-		return components.values();
+		// Maps internal structure to Content List
+		return components.values().stream().map(a -> a.content).collect(Collectors.toList());
 	}
 
 	@Override
-	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
-			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module, ResourceBundle resourceBundle)
+			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		if (url == null) {
 			throw new IOException("URL not found: " + url);
 		}
@@ -81,15 +95,36 @@ public class ComponentRegistry<C> implements Registry<C> {
 
 				// Find the class of the type
 				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
-				C component = clazz.newInstance();
+				Constructor<C> constructor = clazz.getConstructor(String.class);
+				C factory = constructor.newInstance(type);
 
-				registerComponent(component, type, module);
+				// setup Displayable
+				if (element.attributeValue("name") != null) {
+					String name = element.attributeValue("name");
+					String localizedName = resourceBundle.getString(name);
+					factory.setName(localizedName);
+				}
+
+				if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
+					String icon = element.attributeValue("icon");
+					Class iconClass = Class.forName(element.attributeValue("class"));
+					int size = Integer.valueOf(element.attributeValue("size"));
+					Object iconObj = Enum.valueOf(iconClass, icon);
+					if (iconObj instanceof FontIconType) {
+						FontIconType iconType = (FontIconType) iconObj;
+						factory.setGraphics(iconType, size);
+					}
+				}
+
+				registerComponent(factory, module);
 			}
 		}
 	}
 
 	@Override
 	public Module getModule(String id) {
-		return modules.get(id);
+		return components.get(id).module;
 	}
+
+
 }

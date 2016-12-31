@@ -38,7 +38,9 @@ public class NativeAudioMacPluginImpl implements NativeAudioMacPlugin {
 
 			if (OS.isMacOS()) {
 				AudioRegistry registry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-				registry.registerComponent(new NativeAudioMacHandlerConnect(), "NativeMac", module);
+				NativeAudioMacHandlerFactory nativeMac = new NativeAudioMacHandlerFactory("NativeMac");
+				nativeMac.setName("NativeMac");
+				registry.registerComponent(nativeMac, module);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

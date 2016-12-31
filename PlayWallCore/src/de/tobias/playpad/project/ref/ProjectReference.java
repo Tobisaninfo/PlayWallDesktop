@@ -108,9 +108,11 @@ public class ProjectReference implements Displayable {
 			}
 		}
 
-		for (Module requested : profileReference.getRequestedModules()) {
-			if (!activeModules.contains(requested)) {
-				missedModules.add(requested);
+		if (profileReference != null) {
+			for (Module requested : profileReference.getRequestedModules()) {
+				if (!activeModules.contains(requested)) {
+					missedModules.add(requested);
+				}
 			}
 		}
 		return missedModules;

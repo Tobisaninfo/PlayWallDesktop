@@ -3,13 +3,13 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
@@ -60,7 +60,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		// Custom Tabs - Content Types
 		for (String type : PlayPadPlugin.getRegistryCollection().getPadContents().getTypes()) {
 			try {
-				PadContentConnect component = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(type);
+				ContentFactory component = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(type);
 				ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
 				if (controller != null) {
 					addTab(controller);

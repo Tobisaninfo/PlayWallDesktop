@@ -19,7 +19,11 @@ public class CartTriggerItem extends TriggerItem {
 	private boolean allCarts;
 	private PadStatus newStatus; // Only Play, Pause, Stop
 
-	public CartTriggerItem() {
+	private String type;
+
+	public CartTriggerItem(String type) {
+		super();
+		this.type = type;
 		newStatus = PadStatus.PLAY;
 		allCarts = false;
 		uuids = new ArrayList<UUID>() {
@@ -59,7 +63,7 @@ public class CartTriggerItem extends TriggerItem {
 
 	@Override
 	public String getType() {
-		return CartTriggerItemConnect.TYPE;
+		return type;
 	}
 
 	@Override

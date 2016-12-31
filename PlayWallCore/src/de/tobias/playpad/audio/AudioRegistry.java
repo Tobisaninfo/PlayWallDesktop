@@ -4,15 +4,15 @@ import de.tobias.playpad.registry.DefaultComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 
-public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerConnect> {
+public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerFactory> {
 
 	public AudioRegistry() {
 		super("Audio Handler");
 	}
 
-	public AudioHandlerConnect getCurrentAudioHandler() {
+	public AudioHandlerFactory getCurrentAudioHandler() {
 		try {
-			return getComponent(Profile.currentProfile().getProfileSettings().getAudioClass());
+			return getFactory(Profile.currentProfile().getProfileSettings().getAudioClass());
 		} catch (NoSuchComponentException e) {
 			return getDefault();
 		}

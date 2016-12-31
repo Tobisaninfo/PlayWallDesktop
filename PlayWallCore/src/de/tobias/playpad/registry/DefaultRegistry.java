@@ -5,16 +5,18 @@ package de.tobias.playpad.registry;
  * 
  * @author tobias - s0553746
  *
- * @param <C> Type der Daten
+ * @param <F> Type der Daten
  */
-public interface DefaultRegistry<C> extends Registry<C> {
+public interface DefaultRegistry<F extends Component> extends Registry<F> {
 
-	public C getDefault();
+	F getDefault();
 
-	public String getDefaultID();
+	String getDefaultID();
 
-	public void setDefault(C component);
+	void setDefault(F component);
 
-	public void setDefaultID(String id) throws NoSuchComponentException;
+	void setDefaultID(String id) throws NoSuchComponentException;
+
+	void setDefaultID(Class<?> clazz) throws NoSuchComponentException;
 
 }

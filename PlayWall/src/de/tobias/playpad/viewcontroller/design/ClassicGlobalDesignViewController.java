@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.design;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.classic.ClassicGlobalDesign;
 import de.tobias.playpad.design.classic.Theme;
@@ -22,7 +22,7 @@ public class ClassicGlobalDesignViewController extends GlobalDesignViewControlle
 
 	private ClassicGlobalDesign layout;
 
-	@FXML private ComboBox<DesignConnect> layoutTypeComboBox;
+	@FXML private ComboBox<DesignFactory> layoutTypeComboBox;
 
 	@FXML private ComboBox<Theme> programLayoutComboBox;
 	@FXML private ColorPicker accentColorChooser;

@@ -1,11 +1,10 @@
-package de.tobias.playpad.action.connect;
+package de.tobias.playpad.action.factory;
 
 import java.util.Collections;
 import java.util.List;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
@@ -15,15 +14,14 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.icon.MaterialDesignIcon;
-import de.tobias.utils.util.Localization;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
-public class NavigateActionConnect extends ActionConnect implements ActionDisplayable {
+public class NavigateActionFactory extends ActionFactory implements ActionDisplayable {
 
-	public static final String TYPE = "NAVIGATE";
+	public NavigateActionFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
@@ -49,18 +47,8 @@ public class NavigateActionConnect extends ActionConnect implements ActionDispla
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(new NavigateAction(NavigationType.PREVIOUS));
-		mapping.addActionIfNotContains(new NavigateAction(NavigationType.NEXT));
-	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(Localization.getString(Strings.Action_Navigate_Name));
-	}
-
-	@Override
-	public Node getGraphics() {
-		return new FontIcon(MaterialDesignIcon.FONT_FILE, MaterialDesignIcon.NAVIGATION);
+		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.PREVIOUS));
+		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.NEXT));
 	}
 
 	@Override
@@ -70,7 +58,7 @@ public class NavigateActionConnect extends ActionConnect implements ActionDispla
 
 	@Override
 	public Action newInstance() {
-		return new NavigateAction();
+		return new NavigateAction(getType());
 	}
 
 	@Override
@@ -78,8 +66,4 @@ public class NavigateActionConnect extends ActionConnect implements ActionDispla
 		return ActionType.CONTROL;
 	}
 
-	@Override
-	public String getType() {
-		return TYPE;
-	}
 }

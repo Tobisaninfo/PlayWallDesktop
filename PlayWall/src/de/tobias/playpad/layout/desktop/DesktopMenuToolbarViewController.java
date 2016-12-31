@@ -33,7 +33,7 @@ import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.HelpMenuItem;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
@@ -136,9 +136,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private transient GlobalSettingsViewController globalSettingsViewController;
 	private transient DesktopColorPickerView colorPickerView;
 
-	private DesktopMainLayoutConnect connect;
+	private DesktopMainLayoutFactory connect;
 
-	public DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutConnect connect) {
+	public DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 		this.connect = connect;
@@ -272,12 +272,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	private void initLayoutMenu() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-		Registry<MainLayoutConnect> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+		Registry<MainLayoutFactory> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
 
 		int index = 1; // Für Tastenkombination
-		for (MainLayoutConnect connect : mainLayouts.getComponents()) {
+		for (MainLayoutFactory connect : mainLayouts.getComponents()) {
 			if (!connect.getType().equals(profileSettings.getMainLayoutType())) {
-				MenuItem item = new MenuItem(connect.name());
+				MenuItem item = new MenuItem(connect.toString());
 
 				item.setOnAction(e ->
 				{

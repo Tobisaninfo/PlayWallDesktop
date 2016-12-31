@@ -5,12 +5,13 @@ import de.tobias.playpad.mediaplugin.main.impl.MediaSettingsTabViewController;
 import de.tobias.playpad.mediaplugin.main.impl.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
@@ -21,26 +22,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class VideoContentConntect extends PadContentConnect {
+public class VideoContentConntect extends ContentFactory {
 
-	public static final String TYPE = "video";
 	public static final String[] FILE_EXTENSION = { "*.mp4", "*.mov" };
 
-	private FontIcon icon;
-
-	public VideoContentConntect() {
-		icon = new FontIcon(FontAwesomeType.FILM);
-		icon.setSize(30);
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
+	public VideoContentConntect(String type) {
+		super(type);
 	}
 
 	@Override
 	public PadContent newInstance(Pad pad) {
-		return new VideoContent(pad);
+		return new VideoContent(getType(), pad);
 	}
 
 	@Override
@@ -91,15 +83,4 @@ public class VideoContentConntect extends PadContentConnect {
 			nameLabel.textProperty().unbind();
 		}
 	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(MediaPluginImpl.getInstance().getBundle().getString(Strings.Content_Video_Name));
-	}
-
-	@Override
-	public Node getGraphics() {
-		return icon;
-	}
-
 }

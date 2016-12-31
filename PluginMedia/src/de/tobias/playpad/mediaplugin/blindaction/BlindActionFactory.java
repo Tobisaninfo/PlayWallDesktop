@@ -1,18 +1,23 @@
-package de.tobias.playpad.actionsplugin.stopaction;
+package de.tobias.playpad.mediaplugin.blindaction;
 
 import java.util.List;
 
 import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.scene.control.TreeItem;
 
-public class StopActionConnect extends ActionConnect {
+public class BlindActionFactory extends ActionFactory {
 
-	public static final String TYPE = "STOP";
+	public static final String TYPE = "BLIND";
+
+	public BlindActionFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
@@ -22,19 +27,19 @@ public class StopActionConnect extends ActionConnect {
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(newInstance());
+		mapping.addActionIfNotContains(new BlindAction());
 	}
 
 	@Override
 	public Action newInstance() {
-		return new StopAction();
+		return new BlindAction();
 	}
-
+	
 	@Override
 	public ActionType geActionType() {
-		return ActionType.CONTROL;
+		return ActionType.SETTINGS;
 	}
-
+	
 	@Override
 	public String getType() {
 		return TYPE;

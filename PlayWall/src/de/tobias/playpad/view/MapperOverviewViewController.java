@@ -8,7 +8,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperConnect;
+import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
@@ -58,13 +58,13 @@ public class MapperOverviewViewController implements IMapperOverviewViewControll
 		headline.setUnderline(true);
 		root.getChildren().addAll(headline, mappingView, addMappingBox);
 
-		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
 		Set<String> types = registry.getTypes();
 		types.stream().sorted().forEach(item ->
 		{
 			String name = item;
 			try {
-				MapperConnect connect = registry.getComponent(item);
+				MapperFactory connect = registry.getFactory(item);
 				name = connect.toString();
 			} catch (NoSuchComponentException e) {
 				// TODO Error Handling
@@ -97,9 +97,9 @@ public class MapperOverviewViewController implements IMapperOverviewViewControll
 	}
 
 	private MapperViewController onAddMapper(String type) throws NoSuchComponentException {
-		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
 
-		Mapper mapper = registry.getComponent(type).createNewMapper();
+		Mapper mapper = registry.getFactory(type).createNewMapper();
 		action.addMapper(mapper);
 		return addMapperView(type, mapper);
 	}

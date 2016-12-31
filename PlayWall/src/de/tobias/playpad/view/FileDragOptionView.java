@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -47,22 +47,6 @@ public class FileDragOptionView {
 
 	}
 
-	public Transition getInTransition() {
-		return inTransition;
-	}
-
-	public void setInTransition(Transition inTransition) {
-		this.inTransition = inTransition;
-	}
-
-	public Transition getOutTransition() {
-		return outTransition;
-	}
-
-	public void setOutTransition(Transition outTransition) {
-		this.outTransition = outTransition;
-	}
-
 	private Transition createTransition(boolean in) {
 		FadeTransition fadeTransition = new FadeTransition();
 		fadeTransition.setNode(optionPane);
@@ -98,20 +82,20 @@ public class FileDragOptionView {
 		return parallelTransition;
 	}
 
-	private PadContentConnect selectedConnect;
+	private ContentFactory selectedConnect;
 
-	public void showDropOptions(Set<PadContentConnect> options) {
+	public void showDropOptions(Set<ContentFactory> options) {
 		if (!parent.getChildren().contains(optionPane)) {
 			selectedConnect = null;
 
 			parent.getChildren().add(optionPane);
 			optionPane.getChildren().clear();
 
-			for (PadContentConnect connect : options.stream().sorted().toArray(value -> new PadContentConnect[value])) {
+			options.stream().sorted().forEach(contentType -> {
 				Label label = new Label();
 				label.getStyleClass().add("dnd-file-option");
-				label.textProperty().bind(connect.displayProperty());
-				Node graphics = connect.getGraphics();
+				label.textProperty().bind(contentType.displayProperty());
+				Node graphics = contentType.getGraphics();
 				if (graphics != null) {
 					graphics.setStyle("-fx-text-fill: white;");
 					label.setGraphic(graphics);
@@ -121,7 +105,7 @@ public class FileDragOptionView {
 				label.setOnDragOver(e ->
 				{
 					label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, true);
-					selectedConnect = connect;
+					selectedConnect = contentType;
 				});
 				label.setOnDragExited(e ->
 				{
@@ -129,7 +113,7 @@ public class FileDragOptionView {
 					selectedConnect = null;
 				});
 
-				label.setUserData(connect);
+				label.setUserData(contentType);
 
 				label.setAlignment(Pos.CENTER);
 				label.setTextAlignment(TextAlignment.CENTER);
@@ -140,14 +124,14 @@ public class FileDragOptionView {
 				HBox.setHgrow(label, Priority.ALWAYS);
 
 				optionPane.getChildren().add(label);
-			}
+			});
 
 			inTransition.play();
 		}
 
 	}
 
-	public void showDropOptions(Set<PadContentConnect> options, Consumer<PadContentConnect> onFinish) {
+	public void showDropOptions(Set<ContentFactory> options, Consumer<ContentFactory> onFinish) {
 		showDropOptions(options);
 
 		for (Node node : optionPane.getChildren()) {
@@ -155,7 +139,7 @@ public class FileDragOptionView {
 				Label label = (Label) node;
 				label.setOnMouseClicked(ev ->
 				{
-					onFinish.accept((PadContentConnect) label.getUserData());
+					onFinish.accept((ContentFactory) label.getUserData());
 				});
 				label.setOnMouseEntered(e ->
 				{
@@ -169,7 +153,7 @@ public class FileDragOptionView {
 		}
 	}
 
-	public PadContentConnect getSelectedConnect() {
+	public ContentFactory getSelectedConnect() {
 		return selectedConnect;
 	}
 

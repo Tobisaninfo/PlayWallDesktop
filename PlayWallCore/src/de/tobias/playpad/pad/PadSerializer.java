@@ -2,13 +2,13 @@ package de.tobias.playpad.pad;
 
 import java.util.UUID;
 
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
@@ -100,8 +100,8 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 					String type = layoutElement.attributeValue(LAYOUT_TYPE_ATTR);
 
 					try {
-						DefaultRegistry<DesignConnect> layouts = PlayPadPlugin.getRegistryCollection().getDesigns();
-						CartDesign layout = layouts.getComponent(type).newCartDesign();
+						DefaultRegistry<DesignFactory> layouts = PlayPadPlugin.getRegistryCollection().getDesigns();
+						CartDesign layout = layouts.getFactory(type).newCartDesign();
 						layout.load(layoutElement);
 
 						padSettings.setLayout(layout, type);
@@ -144,8 +144,8 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		if (contentElement != null) {
 			String contentType = contentElement.attributeValue(CONTENT_TYPE_ATTR);
 			try {
-				Registry<PadContentConnect> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-				PadContent content = padContents.getComponent(contentType).newInstance(pad);
+				Registry<ContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+				PadContent content = padContents.getFactory(contentType).newInstance(pad);
 
 				content.load(contentElement);
 				pad.setContent(content);

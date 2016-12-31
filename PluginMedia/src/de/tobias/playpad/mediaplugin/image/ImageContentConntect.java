@@ -3,12 +3,13 @@ package de.tobias.playpad.mediaplugin.image;
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.mediaplugin.main.impl.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
@@ -23,26 +24,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class ImageContentConntect extends PadContentConnect {
+public class ImageContentConntect extends ContentFactory {
 
-	public static final String TYPE = "image";
 	public static final String[] FILE_EXTENSION = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" };
 
-	private FontIcon icon;
-
-	public ImageContentConntect() {
-		icon = new FontIcon(FontAwesomeType.PICTURE_ALT);
-		icon.setSize(30);
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
+	public ImageContentConntect(String type) {
+		super(type);
 	}
 
 	@Override
 	public PadContent newInstance(Pad pad) {
-		return new ImageContent(pad);
+		return new ImageContent(getType(), pad);
 	}
 
 	@Override
@@ -130,15 +122,5 @@ public class ImageContentConntect extends PadContentConnect {
 				imageLabel.setStyle("-fx-background-image: url(\"" + content.getPath().toUri().toString()
 						+ "\"); -fx-background-size: contain; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-opacity: 0.3;");
 		}
-	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(MediaPluginImpl.getInstance().getBundle().getString(Strings.Content_Image_Name));
-	}
-
-	@Override
-	public Node getGraphics() {
-		return icon;
 	}
 }

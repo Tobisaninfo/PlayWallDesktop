@@ -1,25 +1,28 @@
 package de.tobias.playpad.registry;
 
-import java.io.IOException;
-import java.net.URL;
-
+import de.tobias.playpad.plugin.Module;
+import de.tobias.utils.ui.icon.FontIconType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import de.tobias.playpad.plugin.Module;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements DefaultRegistry<C> {
+public class DefaultComponentRegistry<F extends Component> extends ComponentRegistry<F> implements DefaultRegistry<F> {
 
-	private C defaultValue;
+	private F defaultValue;
 
 	public DefaultComponentRegistry(String name) {
 		super(name);
 	}
 
 	@Override
-	public C getDefault() {
+	public F getDefault() {
 		return defaultValue;
 	}
 
@@ -27,7 +30,7 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 	public String getDefaultID() {
 		for (String type : getTypes()) {
 			try {
-				if (getComponent(type).equals(defaultValue)) {
+				if (getFactory(type).equals(defaultValue)) {
 					return type;
 				}
 			} catch (NoSuchComponentException e) {
@@ -38,18 +41,23 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 	}
 
 	@Override
-	public void setDefault(C component) {
+	public void setDefault(F component) {
 		this.defaultValue = component;
 	}
 
 	@Override
 	public void setDefaultID(String id) throws NoSuchComponentException {
-		setDefault(getComponent(id));
+		setDefault(getFactory(id));
 	}
 
 	@Override
-	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
-			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void setDefaultID(Class<?> clazz) throws NoSuchComponentException{
+		setDefault(getFactory(clazz));
+	}
+
+	@Override
+	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module, ResourceBundle resourceBundle)
+			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		if (url == null) {
 			throw new IOException("URL not found: " + url);
 		}
@@ -63,15 +71,34 @@ public class DefaultComponentRegistry<C> extends ComponentRegistry<C> implements
 				String type = element.attributeValue("id");
 
 				// Find the class of the type
-				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
-				C component = clazz.newInstance();
+				@SuppressWarnings("unchecked") Class<F> clazz = (Class<F>) loader.loadClass(element.getStringValue());
+				Constructor<F> constructor = clazz.getConstructor(String.class);
+				F factory = constructor.newInstance(type);
 
-				registerComponent(component, type, module);
+				registerComponent(factory, module);
 
 				if (element.attributeValue("default") != null) {
 					String defaultValue = element.attributeValue("default");
 					if (defaultValue.equals("true")) {
-						setDefault(component);
+						setDefault(factory);
+					}
+				}
+
+				// setup Displayable
+				if (element.attributeValue("name") != null) {
+					String name = element.attributeValue("name");
+					String localizedName = resourceBundle.getString(name);
+					factory.setName(localizedName);
+				}
+
+				if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
+					String icon = element.attributeValue("icon");
+					Class iconClass = Class.forName(element.attributeValue("class"));
+					int size = Integer.valueOf(element.attributeValue("size"));
+					Object iconObj = Enum.valueOf(iconClass, icon);
+					if (iconObj instanceof FontIconType) {
+						FontIconType iconType = (FontIconType) iconObj;
+						factory.setGraphics(iconType, size);
 					}
 				}
 			}

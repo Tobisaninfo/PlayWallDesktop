@@ -2,7 +2,9 @@ package de.tobias.playpad.action;
 
 import java.util.List;
 
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -14,7 +16,11 @@ import javafx.scene.control.TreeItem;
  * 
  * @see Action Implementierung der eigentlichen Action.
  */
-public abstract class ActionConnect {
+public abstract class ActionFactory extends Component {
+
+	public ActionFactory(String type) {
+		super(type);
+	}
 
 	/**
 	 * Erstellt ein TreeItem für die Grupierung der Actions.
@@ -35,8 +41,6 @@ public abstract class ActionConnect {
 	 *            Mapping
 	 * @param profile
 	 *            Profile für Einstellungen
-	 * @param projectSettings
-	 *            Project Einstellungen
 	 */
 	public abstract void initActionType(Mapping mapping, Profile profile);
 
@@ -56,10 +60,4 @@ public abstract class ActionConnect {
 	 */
 	public abstract ActionType geActionType();
 
-	/**
-	 * Gibt die ID der Action zurück.
-	 * 
-	 * @return ID
-	 */
-	public abstract String getType();
 }

@@ -1,12 +1,16 @@
 package de.tobias.playpad.action.mapper;
 
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 
-public class MidiMapperConnect extends MapperConnect implements MapperConnectFeedbackable {
+public class MidiMapperFactory extends MapperFactory implements MapperConnectFeedbackable {
 
-	public static final String TYPE = "MIDI";
+	public MidiMapperFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public MapperViewController getQuickSettingsViewController(Mapper mapper) {
@@ -15,24 +19,20 @@ public class MidiMapperConnect extends MapperConnect implements MapperConnectFee
 
 	@Override
 	public Mapper createNewMapper() {
-		return new MidiMapper();
+		return new MidiMapper(getType());
 	}
 
 	@Override
 	public void initFeedbackType() {
-		Midi.getInstance().getMidiDevice().ifPresent(device -> device.initDevice());
+		Midi.getInstance().getMidiDevice().ifPresent(Device::initDevice);
 	}
 
 	@Override
 	public void clearFeedbackType() {
-		Midi.getInstance().getMidiDevice().ifPresent(device -> device.clearFeedback());
+		Midi.getInstance().getMidiDevice().ifPresent(Device::clearFeedback);
 	}
 
-	@Override
-	public String getType() {
-		return TYPE;
-	}
-
+	// TODO Remove
 	@Override
 	public String toString() {
 		return Localization.getString(Strings.Mapper_Midi_Name);

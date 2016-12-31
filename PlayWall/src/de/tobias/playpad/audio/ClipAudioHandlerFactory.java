@@ -2,33 +2,39 @@ package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
+import de.tobias.playpad.viewcontroller.audio.ClipSettingsViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
-public class JavaFXHandlerConnect extends AudioHandlerConnect {
+public class ClipAudioHandlerFactory extends AudioHandlerFactory implements AutoCloseable {
+
+	public ClipAudioHandlerFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public AudioHandler createAudioHandler(PadContent content) {
-		return new JavaFXAudioHandler(content);
+		return new ClipAudioHandler(content);
 	}
 
 	@Override
 	public AudioHandlerViewController getAudioHandlerSettingsViewController() {
-		return null;
+		return new ClipSettingsViewController();
 	}
-	
+
 	@Override
-	public String getType() {
-		return JavaFXAudioHandler.TYPE;
+	public void close() throws Exception {
+		ClipAudioHandler.shutdown();
 	}
-	
+
 	@Override
 	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
-		for (Class<?> clazz : JavaFXAudioHandler.class.getInterfaces()) {
+		for (Class<?> clazz : ClipAudioHandler.class.getInterfaces()) {
 			if (clazz.equals(audioCapability.getAudioFeature()))
 				return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
 		return null;

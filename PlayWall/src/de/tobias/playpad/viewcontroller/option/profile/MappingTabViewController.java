@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -8,7 +9,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
@@ -38,12 +39,16 @@ import javafx.scene.layout.VBox;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
-	@FXML private ComboBox<Mapping> mappingComboBox;
-	@FXML private Button editMappingsButton;
+	@FXML
+	private ComboBox<Mapping> mappingComboBox;
+	@FXML
+	private Button editMappingsButton;
 
-	@FXML private TreeView<ActionDisplayable> treeView;
+	@FXML
+	private TreeView<ActionDisplayable> treeView;
 
-	@FXML private VBox detailView;
+	@FXML
+	private VBox detailView;
 	private IMapperOverviewViewController mapperOverviewViewController;
 
 	private Mapping oldMapping;
@@ -87,8 +92,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
-		Set<String> types = PlayPadPlugin.getRegistryCollection().getActions().getTypes();
-		List<String> sortedTypes = types.stream().sorted().collect(Collectors.toList());
+		Collection<ActionFactory> types = PlayPadPlugin.getRegistryCollection().getActions().getComponents();
+		List<ActionFactory> sortedTypes = types.stream().sorted((a, b) -> a.getType().compareTo(b.getType())).collect(Collectors.toList());
 
 		// Sort the tpyes for the treeview
 		for (ActionType actionType : ActionType.values()) {
@@ -98,18 +103,12 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		return rootItem;
 	}
 
-	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<String> sortedTypes, ActionType type) {
-		for (String id : sortedTypes) {
-			List<Action> actions = mapping.getActionsOfType(id);
-			try {
-				ActionConnect actionConnect = PlayPadPlugin.getRegistryCollection().getActions().getComponent(id);
-				if (actionConnect.geActionType() == type) {
-					TreeItem<ActionDisplayable> item = actionConnect.getTreeViewForActions(actions, mapping);
-					rootItem.getChildren().add(item);
-				}
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<ActionFactory> sortedTypes, ActionType type) {
+		for (ActionFactory actionFactory : sortedTypes) {
+			List<Action> actions = mapping.getActionsOfType(actionFactory);
+			if (actionFactory.geActionType() == type) {
+				TreeItem<ActionDisplayable> item = actionFactory.getTreeViewForActions(actions, mapping);
+				rootItem.getChildren().add(item);
 			}
 		}
 	}
@@ -171,7 +170,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 			protected Void call() throws Exception {
 				updateTitle(name());
 				updateProgress(-1, -1);
-				
+
 				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
 				Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();

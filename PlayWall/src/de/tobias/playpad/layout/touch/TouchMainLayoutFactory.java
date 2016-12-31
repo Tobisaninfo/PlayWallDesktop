@@ -4,9 +4,10 @@ import java.util.Stack;
 
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 
 /**
@@ -16,26 +17,15 @@ import de.tobias.utils.util.Localization;
  *
  * @since 5.1.0
  */
-public class TouchMainLayoutConnect implements MainLayoutConnect {
-
-	private static final String TYPE = "Touch";
+public class TouchMainLayoutFactory extends MainLayoutFactory {
 
 	private TouchMenuToolbarViewController touchMainLayoutConnect;
 
 	private Stack<IPadView> recyclingStack;
 
-	public TouchMainLayoutConnect() {
+	public TouchMainLayoutFactory(String type) {
+		super(type);
 		recyclingStack = new Stack<>();
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
-	}
-
-	@Override
-	public String name() {
-		return Localization.getString(Strings.MainLayout_Touch);
 	}
 
 	@Override

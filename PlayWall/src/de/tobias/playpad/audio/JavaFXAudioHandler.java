@@ -18,9 +18,6 @@ import javafx.util.Duration;
 
 public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
 
-	public static final String TYPE = "JavaFx";
-	public static final String NAME = "Java FX Media";
-
 	private Media media;
 	private MediaPlayer player;
 

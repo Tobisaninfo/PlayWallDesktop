@@ -11,7 +11,7 @@ import de.tobias.playpad.plugin.Module;
  * @author tobias
  *
  * @param <C>
- *            Component
+ *            Item
  * 
  * @since 5.1.0
  */
@@ -27,21 +27,29 @@ public interface Registry<C> extends WriteOnlyRegistry<C> {
 	 * @throws NoSuchComponentException
 	 *             Wird geworfen, wenn die Komponente nicht existiert.
 	 */
-	public C getComponent(String id) throws NoSuchComponentException;
+	C getFactory(String id) throws NoSuchComponentException;
+
+	/**
+	 * Get a Components for a Class Type
+	 * @param clazz type
+	 * @return component
+	 * @throws NoSuchComponentException no component found
+	 */
+	C getFactory(Class<?> clazz) throws NoSuchComponentException;
 
 	/**
 	 * Listet alle Type ID auf, die registriert wurden.
 	 * 
 	 * @return Liste mit IDs
 	 */
-	public Set<String> getTypes();
+	Set<String> getTypes();
 
 	/**
 	 * Listet alle Implementierungen auf.
 	 * 
 	 * @return Implementierungen
 	 */
-	public Collection<C> getComponents();
+	Collection<C> getComponents();
 
 	/**
 	 * Gibt das Module zurück.
@@ -50,5 +58,5 @@ public interface Registry<C> extends WriteOnlyRegistry<C> {
 	 *            id der Komponente.
 	 * @return Module
 	 */
-	public Module getModule(String id);
+	Module getModule(String id);
 }

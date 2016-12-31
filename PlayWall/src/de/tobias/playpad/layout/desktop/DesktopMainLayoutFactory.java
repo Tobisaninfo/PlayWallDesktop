@@ -6,9 +6,10 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -20,27 +21,16 @@ import javafx.beans.property.SimpleObjectProperty;
  *
  * @since 5.1.0
  */
-public class DesktopMainLayoutConnect implements MainLayoutConnect {
-
-	private static final String TYPE = "Desktop";
+public class DesktopMainLayoutFactory extends MainLayoutFactory {
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
 	private ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
 
 	private Stack<IPadView> recyclingStack;
 
-	public DesktopMainLayoutConnect() {
+	public DesktopMainLayoutFactory(String type) {
+		super(type);
 		recyclingStack = new Stack<>();
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
-	}
-
-	@Override
-	public String name() {
-		return Localization.getString(Strings.MainLayout_Desktop);
 	}
 
 	@Override

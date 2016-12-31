@@ -7,7 +7,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -133,7 +133,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	// Event Handler
 	@FXML
 	void closeMenuItemHandler(ActionEvent event) {
-		MainLayoutConnect defaultLayout = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault();
+		MainLayoutFactory defaultLayout = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault();
 
 		Profile.currentProfile().getProfileSettings().setMainLayoutType(defaultLayout.getType());
 		mainViewController.setMainLayout(defaultLayout);

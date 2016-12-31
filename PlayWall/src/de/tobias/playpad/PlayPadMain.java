@@ -111,7 +111,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+			}
 
 			/*
 			 * Setup
@@ -119,19 +120,21 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			updater = new PlayPadUpdater();
 			UpdateRegistery.registerUpdateable(updater);
 
-			impl.startup(uiResourceBundle);
+			impl.startup(Localization.getBundle());
 
 			// Load Plugin Path
-			Path pluginFolder;
-			if (getParameters().getNamed().containsKey("plugin")) {
-				String pluginParam = getParameters().getNamed().get("plugin");
-				for (String part : pluginParam.split(":")) {
-					pluginFolder = Paths.get(part);
+			if (!getParameters().getRaw().contains("noplugins")) {
+				Path pluginFolder;
+				if (getParameters().getNamed().containsKey("plugin")) {
+					String pluginParam = getParameters().getNamed().get("plugin");
+					for (String part : pluginParam.split(":")) {
+						pluginFolder = Paths.get(part);
+						setupPlugins(pluginFolder);
+					}
+				} else {
+					pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
 					setupPlugins(pluginFolder);
 				}
-			} else {
-				pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
-				setupPlugins(pluginFolder);
 			}
 
 			/*
@@ -232,9 +235,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	/**
 	 * Gibt die Implementierung des Peers für Plugins zurück.
-	 * 
+	 *
 	 * @return Schnittstelle
-	 * 
 	 * @see PlayPad
 	 */
 	public static PlayPadImpl getProgramInstance() {

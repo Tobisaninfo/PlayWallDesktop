@@ -6,6 +6,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -13,31 +14,8 @@ import javafx.scene.Node;
 
 public class DuplicateDragMode extends PadDragMode {
 
-	private static final String TYPE = "duplicate";
-
-	private FontIcon icon;
-	private StringProperty displayProperty;
-
-	public DuplicateDragMode() {
-		icon = new FontIcon(FontAwesomeType.COPY);
-		icon.setSize(30);
-
-		displayProperty = new SimpleStringProperty(Localization.getString(Strings.DnDMode_Duplicate));
-	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return displayProperty;
-	}
-
-	@Override
-	public Node getGraphics() {
-		return icon;
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
+	public DuplicateDragMode(String type) {
+		super(type);
 	}
 
 	@Override

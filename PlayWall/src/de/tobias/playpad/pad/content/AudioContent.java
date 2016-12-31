@@ -35,7 +35,7 @@ import javafx.util.Duration;
 
 public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent, IVolume {
 
-	private static final String TYPE = "audio";
+	private final String type;
 
 	private Path path;
 	private AudioHandler audioHandler;
@@ -47,10 +47,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	private Fading fading;
 
-	private transient Transition transition;
-
-	public AudioContent(Pad pad) {
+	public AudioContent(String type, Pad pad) {
 		super(pad);
+		this.type = type;
+		fading = new Fading(this);
+
 		// Pad Volume Listener
 		volumeListener = (a, b, c) -> updateVolume();
 	}
@@ -79,7 +80,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public String getType() {
-		return TYPE;
+		return type;
 	}
 
 	@Override
@@ -103,20 +104,17 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public void fadeIn() {
 		Pad pad = getPad();
 
-		if (pad.getPadSettings().getFade().getFadeIn().toMillis() > 0) {
-			fading.fadeIn(pad.getPadSettings().getFade().getFadeIn());
+		Duration fadeIn = pad.getPadSettings().getFade().getFadeIn();
+		if (fadeIn.toMillis() > 0) {
+			fading.fadeIn(fadeIn);
 		}
 	}
 
 	@Override
 	public void fadeOut(Runnable onFinish) {
-		if (transition != null) {
-			transition.stop();
-		}
-
-		if (getPad().getPadSettings().getFade().getFadeOut().toMillis() > 0) {
-			fading.fadeOut(getPad().getPadSettings().getFade().getFadeOut(), () ->
-			{
+		Duration fadeOut = getPad().getPadSettings().getFade().getFadeOut();
+		if (fadeOut.toMillis() > 0) {
+			fading.fadeOut(fadeOut, () -> {
 				onFinish.run();
 				updateVolume();
 			});
@@ -127,10 +125,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public boolean isFading() {
-		if (transition != null) {
-			return true;
-		}
-		return false;
+		return fading.isFading();
 	}
 
 	@Override
@@ -180,10 +175,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
 
-		fading = new Fading(this);
-
 		if (Files.exists(path)) {
-			audioHandler.loadMedia(new Path[] { path });
+			audioHandler.loadMedia(new Path[]{path});
 
 			durationProperty.bind(audioHandler.durationProperty());
 			positionProperty.bind(audioHandler.positionProperty());

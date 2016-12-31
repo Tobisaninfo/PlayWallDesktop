@@ -1,11 +1,14 @@
 package de.tobias.playpad.action.mapper;
 
 import de.tobias.playpad.Strings;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
 
-public class KeyboardMapperConnect extends MapperConnect {
+public class KeyboardMapperFactory extends MapperFactory {
 
-	public static final String TYPE = "KEYBOARD";
+	public KeyboardMapperFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public MapperViewController getQuickSettingsViewController(Mapper mapper) {
@@ -14,14 +17,10 @@ public class KeyboardMapperConnect extends MapperConnect {
 
 	@Override
 	public Mapper createNewMapper() {
-		return new KeyboardMapper();
+		return new KeyboardMapper(getType());
 	}
 
-	@Override
-	public String getType() {
-		return TYPE;
-	}
-
+	// TODO Remove
 	@Override
 	public String toString() {
 		return Localization.getString(Strings.Mapper_Keyboard_Name);

@@ -5,7 +5,7 @@ import java.util.List;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.ui.NotificationHandler;
@@ -123,10 +123,10 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	/**
 	 * Setzt das MainLayout des Hauptfensters.
 	 * 
-	 * @param mainLayoutConnect
+	 * @param mainLayoutFactory
 	 *            Neues Layout
 	 */
-	public void setMainLayout(MainLayoutConnect mainLayoutConnect);
+	public void setMainLayout(MainLayoutFactory mainLayoutFactory);
 
 	/**
 	 * Führt eine Aktion für das Hauptfenster aus. Beispielsweise MenuItem in MenuToolbarController hinzufügen. Zudem wird diese Aktion

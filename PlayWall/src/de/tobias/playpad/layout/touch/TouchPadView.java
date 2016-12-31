@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
@@ -113,7 +113,7 @@ public class TouchPadView implements IPadView {
 			PadContent content = pad.getContent();
 			if (content != null) {
 				try {
-					PadContentConnect connect = PlayPadPlugin.getRegistryCollection().getPadContents().getComponent(content.getType());
+					ContentFactory connect = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(content.getType());
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 

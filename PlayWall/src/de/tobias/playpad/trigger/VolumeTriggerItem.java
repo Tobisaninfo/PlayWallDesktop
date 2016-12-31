@@ -19,9 +19,16 @@ public class VolumeTriggerItem extends TriggerItem {
 	private transient static VolumeTriggerItem currentRunningTrigger;
 	private transient static double currentValue = 1.0;
 
+	private String type;
+
+	public VolumeTriggerItem(String type) {
+		super();
+		this.type = type;
+	}
+
 	@Override
 	public String getType() {
-		return VolumeTriggerItemConnect.TYPE;
+		return type;
 	}
 
 	public double getVolume() {

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.nawin.audio.NativeAudioWinHandlerConnect;
+import de.tobias.playpad.nawin.audio.NativeAudioWinHandlerFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.App;
@@ -41,7 +41,9 @@ public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 
 			if (OS.isWindows()) {
 				AudioRegistry registry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-				registry.registerComponent(new NativeAudioWinHandlerConnect(), "NativeWin", module);
+				NativeAudioWinHandlerFactory nativeWin = new NativeAudioWinHandlerFactory("NativeWin");
+				nativeWin.setName("NativeWin");
+				registry.registerComponent(nativeWin, module);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

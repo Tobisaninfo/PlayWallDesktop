@@ -2,12 +2,15 @@ package de.tobias.playpad.viewcontroller.actions;
 
 import java.util.List;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import org.controlsfx.control.SegmentedButton;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.connect.CartActionConnect;
+import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
@@ -26,18 +29,20 @@ import javafx.scene.layout.VBox;
  * seitenauswahl (Carts ändern sich) und eine Scrollview für die Einstellungen. Die Einstellungen werden von der Class
  * CartActionViewController hier eingebettet. Dabei wird nicht jedes mal eine neue Instance erstellt, sondern die in CartAction vorhandene
  * Instance verwendet. Das geht, solange die View nur einmal verwendet wird.
- * 
- * @author tobias
  *
+ * @author tobias
  */
 public class CartActionsViewController extends ContentViewController {
 
-	@FXML private VBox buttonVbox;
+	@FXML
+	private VBox buttonVbox;
 
 	private ToggleGroup cartsToggle;
-	@FXML private GridPane gridPane;
+	@FXML
+	private GridPane gridPane;
 
-	@FXML private VBox cartActionContainer;
+	@FXML
+	private VBox cartActionContainer;
 
 	private Mapping mapping;
 	private IMappingTabViewController parentController;
@@ -86,7 +91,7 @@ public class CartActionsViewController extends ContentViewController {
 			for (int x = 0; x < settings.getColumns(); x++) {
 				ToggleButton button = new ToggleButton(String.valueOf(index++ + 1));
 				button.setMaxWidth(Double.MAX_VALUE);
-				button.setUserData(new int[] { x, y });
+				button.setUserData(new int[]{x, y});
 				button.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
 
 				// Show the right cart settings
@@ -97,14 +102,20 @@ public class CartActionsViewController extends ContentViewController {
 						int currentX = data[0];
 						int currentY = data[1];
 
-						List<CartAction> cartActions = mapping.getActions(CartActionConnect.TYPE);
-						for (CartAction action : cartActions) {
-							if (action.getX() == currentX && action.getY() == currentY) {
-								ContentViewController actionViewController = action.getSettingsViewController();
-								cartActionContainer.getChildren().setAll(actionViewController.getParent());
-								cartActionContainer.setVisible(true);
-								parentController.showMapperFor(action);
+						try {
+							ActionFactory actionFactory = PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class);
+
+							List<CartAction> cartActions = mapping.getActions(actionFactory);
+							for (CartAction action : cartActions) {
+								if (action.getX() == currentX && action.getY() == currentY) {
+									ContentViewController actionViewController = action.getSettingsViewController();
+									cartActionContainer.getChildren().setAll(actionViewController.getParent());
+									cartActionContainer.setVisible(true);
+									parentController.showMapperFor(action);
+								}
 							}
+						} catch (NoSuchComponentException e) {
+							e.printStackTrace();
 						}
 					} else {
 						cartActionContainer.setVisible(false);

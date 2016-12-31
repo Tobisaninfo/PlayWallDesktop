@@ -1,17 +1,13 @@
 package de.tobias.playpad.pad.content;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.profile.AudioTabViewController;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.util.Localization;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -20,26 +16,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class AudioContentConnect extends PadContentConnect {
+public class AudioContentFactory extends ContentFactory {
 
-	public static final String TYPE = "audio";
 	public static final String[] FILE_EXTENSION = { "*.mp3", "*.wav" };
 
-	private FontIcon icon;
-
-	public AudioContentConnect() {
-		icon = new FontIcon(FontAwesomeType.MUSIC);
-		icon.setSize(30);
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
+	public AudioContentFactory(String type) {
+		super(type);
 	}
 
 	@Override
 	public PadContent newInstance(Pad pad) {
-		return new AudioContent(pad);
+		return new AudioContent(getType(), pad);
 	}
 
 	@Override
@@ -90,16 +77,4 @@ public class AudioContentConnect extends PadContentConnect {
 			nameLabel.textProperty().unbind();
 		}
 	}
-
-	// UI - DnD
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(Localization.getString(Strings.Content_Audio_Name));
-	}
-
-	@Override
-	public Node getGraphics() {
-		return icon;
-	}
-
 }

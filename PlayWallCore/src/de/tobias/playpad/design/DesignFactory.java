@@ -1,12 +1,16 @@
 package de.tobias.playpad.design;
 
 import de.tobias.playpad.Displayable;
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
-public abstract class DesignConnect implements Displayable {
+public abstract class DesignFactory extends Component implements Displayable {
 
-	public abstract String getType();
+	public DesignFactory(String type) {
+		super(type);
+	}
 
 	public abstract CartDesign newCartDesign();
 

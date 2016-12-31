@@ -153,9 +153,9 @@ public class Strings {
 	public static final String Error_Fix_Delete = "Error.Fix.Delete";
 
 	// Error - Midi
-	public static final String Error_Midi_Settings_Unkown = "Error.Midi.Settings.Unkown";
+	public static final String Error_Midi_Settings_Unkown = "Error.Midi.Settings.Unknown";
 	public static final String Error_Midi_Device_Busy = "Error.Midi.Device.Busy";
-	public static final String Error_Midi_Device_Unavailible = "Error.Midi.Device.Unavailible";
+	public static final String Error_Midi_Device_Unavailible = "Error.Midi.Device.Unavailable";
 	public static final String Error_Midi_Record_Fail = "Error.Midi.Record.Fail";
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
@@ -273,4 +273,8 @@ public class Strings {
 	public static final String Tooltip_Page_Rename = "Tooltip.Page.Rename";
 	public static final String Tooltip_Page_Clone = "Tooltip.Page.Clone";
 	public static final String Tooltip_Page_Delete = "Tooltip.Page.Delete";
+
+	// AudioHandler
+	public static final String AudioHandler_JavaFX = "AudioHandler.JavaFX";
+	public static final String AudioHandler_TinySound = "AudioHandler.TinySound";
 }

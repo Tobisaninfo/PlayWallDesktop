@@ -8,12 +8,12 @@ import java.util.Set;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
-import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.listener.IPadPositionListener;
@@ -59,9 +59,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	private DesktopPadDragListener padDragListener;
 
-	private static DesktopMainLayoutConnect connect;
+	private static DesktopMainLayoutFactory connect;
 
-	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutConnect connect) {
+	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutFactory connect) {
 		this.padView = padView;
 
 		if (DesktopPadViewController.connect != connect) // Set once
@@ -229,7 +229,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		if (file != null) {
 			Path path = file.toPath();
 
-			Set<PadContentConnect> connects = registry.getPadContentConnectsForFile(file.toPath());
+			Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 			if (!connects.isEmpty()) {
 				if (connects.size() > 1) {
 					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
@@ -241,7 +241,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 						}
 					});
 				} else {
-					PadContentConnect connect = connects.iterator().next();
+					ContentFactory connect = connects.iterator().next();
 					setNewPadContent(file, path, connect);
 				}
 			}
@@ -250,7 +250,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
-	private void setNewPadContent(File file, Path path, PadContentConnect connect) {
+	private void setNewPadContent(File file, Path path, ContentFactory connect) {
 		PadContent content = pad.getContent();
 		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
 			content = connect.newInstance(pad);

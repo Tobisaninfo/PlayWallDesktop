@@ -6,9 +6,8 @@ import javafx.util.Duration;
 
 /**
  * Fading utils.
- * 
+ *
  * @author tobias
- * 
  * @since 6.0.0
  */
 public class Fading {
@@ -20,14 +19,6 @@ public class Fading {
 
 	public Fading(IVolume iVolume) {
 		this.iVolume = iVolume;
-	}
-
-	public double getVelocity() {
-		return velocity;
-	}
-
-	public void setVelocity(double velocity) {
-		this.velocity = velocity;
 	}
 
 	public void fadeIn(Duration duration) {
@@ -48,6 +39,12 @@ public class Fading {
 
 	public boolean isFading() {
 		return currentFadeTransition != null;
+	}
+
+	public void stop() {
+		if (currentFadeTransition != null) {
+			currentFadeTransition.stop();
+		}
 	}
 
 	private void fade(double from, double to, Duration duration, Runnable onFinish) {

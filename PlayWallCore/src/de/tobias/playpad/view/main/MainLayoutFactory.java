@@ -2,8 +2,10 @@ package de.tobias.playpad.view.main;
 
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Dieses Interface beschreibt die Bestandteile des Layouts (GUI Elemente) des Main Views.
@@ -12,21 +14,11 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
  *
  * @since 5.1.0
  */
-public interface MainLayoutConnect {
+public abstract class  MainLayoutFactory extends Component {
 
-	/**
-	 * Gibt den Unique Identifier zurück.
-	 * 
-	 * @return ID
-	 */
-	public String getType();
-
-	/**
-	 * Gibt einen lesbaren (am besten Localized) Namen für den Nutzer zurück.
-	 * 
-	 * @return Name
-	 */
-	public String name();
+	public MainLayoutFactory(String type) {
+		super(type);
+	}
 
 	/**
 	 * Erstellt einen ViewController für die Menu/Toolbar Fläche.
@@ -36,7 +28,7 @@ public interface MainLayoutConnect {
 	 * 
 	 * @return Neuer ViewController mit View
 	 */
-	public MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef);
+	public abstract MenuToolbarViewController createMenuToolbar(IMainViewController mainViewRef);
 
 	/**
 	 * Erstellt ein neues Pad mit einem ViewController
@@ -46,7 +38,7 @@ public interface MainLayoutConnect {
 	 * @see IPadView notwendige Methoden für ein Pad
 	 * @see IPadViewController ViewController zum Pad
 	 */
-	public IPadView createPadView();
+	public abstract IPadView createPadView();
 
 	/**
 	 * Recycelt eine PadView, damit nicht immer neue erstellt werden müssen.
@@ -54,13 +46,13 @@ public interface MainLayoutConnect {
 	 * @param padView
 	 *            alte PadView
 	 */
-	public void recyclePadView(IPadView padView);
+	public abstract void recyclePadView(IPadView padView);
 
 	/**
 	 * Gibt das Layout sepzifische Stylesheet zurück.
 	 * 
 	 * @return path in jar
 	 */
-	public String getStylesheet();
+	public abstract String getStylesheet();
 
 }

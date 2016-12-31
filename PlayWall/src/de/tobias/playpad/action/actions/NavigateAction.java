@@ -5,7 +5,6 @@ import org.dom4j.Element;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
-import de.tobias.playpad.action.connect.NavigateActionConnect;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.project.Project;
@@ -28,13 +27,15 @@ public class NavigateAction extends Action {
 	}
 
 	private NavigationType action;
+	private String type; // reference from NavigateActionFactory
 
-	public NavigateAction() {
-		action = NavigationType.NEXT;
+	public NavigateAction(String type) {
+		this(type, NavigationType.NEXT);
 	}
 
-	public NavigateAction(NavigationType type) {
-		this.action = type;
+	public NavigateAction(String type, NavigationType action) {
+		this.action = action;
+		this.type = type;
 	}
 
 	public NavigationType getAction() {
@@ -47,7 +48,7 @@ public class NavigateAction extends Action {
 
 	@Override
 	public String getType() {
-		return NavigateActionConnect.TYPE;
+		return type;
 	}
 
 	@Override
@@ -81,6 +82,7 @@ public class NavigateAction extends Action {
 		return FeedbackType.SINGLE;
 	}
 
+	// Serialization
 	private static final String TYPE = "action";
 
 	@Override

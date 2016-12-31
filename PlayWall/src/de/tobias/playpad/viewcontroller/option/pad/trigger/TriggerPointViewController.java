@@ -6,7 +6,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
-import de.tobias.playpad.tigger.TriggerItemConnect;
+import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.trigger.TriggerDisplayable;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -39,7 +39,7 @@ public class TriggerPointViewController extends ContentViewController {
 		types.stream().sorted().forEach(item ->
 		{
 			try {
-				TriggerItemConnect conntect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getComponent(item);
+				TriggerItemFactory conntect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getFactory(item);
 				Button button = new Button(conntect.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 				button.setContentDisplay(ContentDisplay.TOP);
 				button.setPrefWidth(150);
@@ -61,7 +61,7 @@ public class TriggerPointViewController extends ContentViewController {
 
 	private void showTriggerItem(TriggerItem item) {
 		try {
-			TriggerItemConnect connect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getComponent(item.getType());
+			TriggerItemFactory connect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getFactory(item.getType());
 
 			VBox itemBox = new VBox(14);
 			ContentViewController contentViewController = connect.getSettingsController(item);

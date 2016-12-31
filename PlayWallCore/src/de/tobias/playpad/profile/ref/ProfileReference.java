@@ -34,10 +34,7 @@ public class ProfileReference implements Displayable {
 	 *            Name
 	 */
 	public ProfileReference(String name) {
-		this.name = name;
-		this.uuid = UUID.randomUUID();
-		requestedModules = new HashSet<>();
-		updateDisplayProperty();
+		this(UUID.randomUUID(), name);
 	}
 
 	/**

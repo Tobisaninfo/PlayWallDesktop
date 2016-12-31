@@ -7,10 +7,10 @@ import java.util.Set;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
-import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadView;
@@ -43,13 +43,13 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	private Pad currentPad;
 	private final Pane padView; // Node der PadView
 
-	private DesktopMainLayoutConnect connect;
+	private DesktopMainLayoutFactory connect;
 	private static Project project;
 
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	public DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutConnect connect) {
+	public DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutFactory connect) {
 		this.currentPad = currentPad;
 		this.connect = connect;
 
@@ -97,7 +97,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				// Build In Filesupport
 				try {
 					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
-					Set<PadContentConnect> connects = registry.getPadContentConnectsForFile(file.toPath());
+					Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 
 					if (!connects.isEmpty()) {
 						if (fileHud == null) {
@@ -153,7 +153,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 			success = true;
 			File file = db.getFiles().get(0);
 
-			PadContentConnect connect = fileHud.getSelectedConnect();
+			ContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
 				PadContent content = currentPad.getContent();
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {

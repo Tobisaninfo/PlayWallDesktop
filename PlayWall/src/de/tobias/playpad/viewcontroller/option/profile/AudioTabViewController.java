@@ -7,7 +7,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.audio.AudioCapability;
-import de.tobias.playpad.audio.AudioHandlerConnect;
+import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -78,7 +78,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		try {
-			AudioHandlerConnect audio = audioHandlerRegistry.getComponent(classID);
+			AudioHandlerFactory audio = audioHandlerRegistry.getFactory(classID);
 
 			for (AudioCapability audioCapability : AudioCapability.getFeatures()) {
 				options.getChildren().add(createCapabilityView(audio, audioCapability));
@@ -88,7 +88,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		}
 	}
 
-	private Parent createCapabilityView(AudioHandlerConnect audio, AudioCapability audioCapability) {
+	private Parent createCapabilityView(AudioHandlerFactory audio, AudioCapability audioCapability) {
 		HBox masterView = new HBox(14);
 		VBox detailView = new VBox(14);
 

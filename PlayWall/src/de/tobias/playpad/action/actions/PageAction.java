@@ -5,7 +5,6 @@ import org.dom4j.Element;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
-import de.tobias.playpad.action.connect.PageActionConnect;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.project.Project;
@@ -17,14 +16,16 @@ import javafx.beans.property.StringProperty;
 
 public class PageAction extends Action {
 
+	private final String type;
+
 	private int page;
 
-	public PageAction() {
-		this.page = 0;
+	public PageAction(String type) {
+		this(type, 0);
 	}
 
-	public PageAction(int page) {
-		super();
+	public PageAction(String type, int page) {
+		this.type = type;
 		this.page = page;
 	}
 
@@ -38,7 +39,7 @@ public class PageAction extends Action {
 
 	@Override
 	public String getType() {
-		return PageActionConnect.TYPE;
+		return type;
 	}
 
 	@Override

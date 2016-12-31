@@ -2,10 +2,10 @@ package de.tobias.playpad.layout.desktop.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
@@ -59,7 +59,7 @@ public class DesktopPadView implements IPadView {
 
 	private transient DesktopPadViewController controller; // Reference to its controller
 	
-	public DesktopPadView(DesktopMainLayoutConnect connect) {
+	public DesktopPadView(DesktopMainLayoutFactory connect) {
 		controller = new DesktopPadViewController(this, connect);
 		setupView();
 	}
@@ -138,7 +138,7 @@ public class DesktopPadView implements IPadView {
 			if (content != null) {
 				try {
 					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
-					PadContentConnect connect = registry.getComponent(content.getType());
+					ContentFactory connect = registry.getFactory(content.getType());
 
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();

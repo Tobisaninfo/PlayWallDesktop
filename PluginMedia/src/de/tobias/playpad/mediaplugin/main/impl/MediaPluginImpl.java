@@ -5,13 +5,13 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.MediaPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
@@ -66,9 +66,9 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 		// Load Content Types
 		try {
-			Registry<PadContentConnect> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			Registry<ContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module, bundle);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -95,9 +95,9 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 		}
 
 		try {
-			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader(), module);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistryCollection().getActions();
+			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader(), module, bundle);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		blindProperty.addListener(this);

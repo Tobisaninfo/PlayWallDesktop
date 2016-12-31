@@ -1,5 +1,6 @@
 package de.tobias.playpad.actionsplugin.muteaction;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;
@@ -23,7 +24,10 @@ public class MuteAction extends Action implements Displayable {
 
 	private ChangeListener<Boolean> muteListener;
 
-	public MuteAction() {
+	private String type;
+
+	public MuteAction(String type) {
+		this.type = type;
 		muteListener = (a, b, c) ->
 		{
 			if (c) {
@@ -64,7 +68,7 @@ public class MuteAction extends Action implements Displayable {
 
 	@Override
 	public String getType() {
-		return MuteActionConnect.TYPE;
+		return type;
 	}
 
 	@Override
@@ -81,6 +85,7 @@ public class MuteAction extends Action implements Displayable {
 		return super.equals(obj);
 	}
 
+	// TODO Remove
 	@Override
 	public StringProperty displayProperty() {
 		return new SimpleStringProperty(ActionsPluginImpl.getBundle().getString("muteaction.name"));

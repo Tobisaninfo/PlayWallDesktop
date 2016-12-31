@@ -17,15 +17,13 @@ import javafx.application.Platform;
 
 public class ImageContent extends PadContent {
 
+	private final String type;
+
 	private Path path;
 
-	public ImageContent(Pad pad) {
+	public ImageContent(String type, Pad pad) {
 		super(pad);
-	}
-
-	public ImageContent(Pad pad, Path path) {
-		this(pad);
-		this.path = path;
+		this.type = type;
 	}
 
 	public Path getPath() {
@@ -48,7 +46,7 @@ public class ImageContent extends PadContent {
 
 	@Override
 	public String getType() {
-		return ImageContentConntect.TYPE;
+		return type;
 	}
 
 	@Override

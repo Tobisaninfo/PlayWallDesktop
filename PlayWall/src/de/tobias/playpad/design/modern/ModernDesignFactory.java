@@ -1,29 +1,19 @@
 package de.tobias.playpad.design.modern;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernGlobalDesignViewController;
-import de.tobias.utils.util.Localization;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import de.tobias.utils.ui.icon.FontIconType;
 
-public class ModernDesignConnect extends DesignConnect {
+public class ModernDesignFactory extends DesignFactory {
 
-	private static final String TYPE = "modern";
 
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(Localization.getString(Strings.Layout_Modern_Name));
-	}
-
-	@Override
-	public String getType() {
-		return TYPE;
+	public ModernDesignFactory(String type) {
+		super(type);
 	}
 
 	@Override

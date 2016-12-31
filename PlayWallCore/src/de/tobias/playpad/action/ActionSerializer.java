@@ -44,7 +44,7 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 		String tpye = element.attributeValue(ACTION_TYPE);
 
 		try {
-			Action action = PlayPadPlugin.getRegistryCollection().getActions().getComponent(tpye).newInstance();
+			Action action = PlayPadPlugin.getRegistryCollection().getActions().getFactory(tpye).newInstance();
 			action.load(element);
 
 			boolean added = mapping.addActionIfNotContains(action);

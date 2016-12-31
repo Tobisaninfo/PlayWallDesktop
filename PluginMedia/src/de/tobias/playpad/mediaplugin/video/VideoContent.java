@@ -28,9 +28,9 @@ import javafx.util.Duration;
 
 public class VideoContent extends PadContent implements Pauseable, Durationable {
 
-	private static final String TYPE = "video";
 	public static final String VIDEO_LAST_FRAME = "Video.LastFrame";
 
+	private final String type;
 	private Media media;
 	private MediaPlayer player;
 
@@ -43,17 +43,13 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	private transient boolean holdLastFrame = false;
 
-	public VideoContent(Pad pad) {
+	public VideoContent(String type, Pad pad) {
 		super(pad);
+		this.type = type;
 		padVolumeListener = (a, b, c) ->
 		{
 			updateVolume();
 		};
-	}
-
-	public VideoContent(Pad pad, Path path) {
-		this(pad);
-		this.path = path;
 	}
 
 	public Path getPath() {
@@ -82,7 +78,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	@Override
 	public String getType() {
-		return TYPE;
+		return type;
 	}
 
 	@Override

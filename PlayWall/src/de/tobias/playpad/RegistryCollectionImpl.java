@@ -1,28 +1,28 @@
 package de.tobias.playpad;
 
-import de.tobias.playpad.action.ActionConnect;
-import de.tobias.playpad.action.mapper.MapperConnect;
+import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.DefaultComponentRegistry;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.tigger.TriggerItemConnect;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.tigger.TriggerItemFactory;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 
 public class RegistryCollectionImpl implements RegistryCollection {
 
-	private Registry<ActionConnect> actionRegistry;
+	private Registry<ActionFactory> actionRegistry;
 	private AudioRegistry audioHandlerRegistry;
 	private Registry<PadDragMode> dragModeRegistry;
-	private DefaultRegistry<DesignConnect> layoutRegistry;
-	private Registry<MapperConnect> mapperRegistry;
+	private DefaultRegistry<DesignFactory> layoutRegistry;
+	private Registry<MapperFactory> mapperRegistry;
 	private PadContentRegistry padContentRegistry;
-	private Registry<TriggerItemConnect> triggerItemRegistry;
-	private DefaultRegistry<MainLayoutConnect> mainLayoutRegistry;
+	private Registry<TriggerItemFactory> triggerItemRegistry;
+	private DefaultRegistry<MainLayoutFactory> mainLayoutRegistry;
 
 	public RegistryCollectionImpl() {
 		actionRegistry = new ComponentRegistry<>("Action");
@@ -36,7 +36,7 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	}
 
 	@Override
-	public Registry<ActionConnect> getActions() {
+	public Registry<ActionFactory> getActions() {
 		return actionRegistry;
 	}
 
@@ -51,12 +51,12 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	}
 
 	@Override
-	public DefaultRegistry<DesignConnect> getDesigns() {
+	public DefaultRegistry<DesignFactory> getDesigns() {
 		return layoutRegistry;
 	}
 
 	@Override
-	public Registry<MapperConnect> getMappers() {
+	public Registry<MapperFactory> getMappers() {
 		return mapperRegistry;
 	}
 
@@ -66,12 +66,12 @@ public class RegistryCollectionImpl implements RegistryCollection {
 	}
 
 	@Override
-	public Registry<TriggerItemConnect> getTriggerItems() {
+	public Registry<TriggerItemFactory> getTriggerItems() {
 		return triggerItemRegistry;
 	}
 	
 	@Override
-	public DefaultRegistry<MainLayoutConnect> getMainLayouts() {
+	public DefaultRegistry<MainLayoutFactory> getMainLayouts() {
 		return mainLayoutRegistry;
 	}
 

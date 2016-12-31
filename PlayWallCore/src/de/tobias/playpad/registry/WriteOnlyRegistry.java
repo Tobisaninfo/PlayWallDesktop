@@ -1,7 +1,9 @@
 package de.tobias.playpad.registry;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import org.dom4j.DocumentException;
 
@@ -13,7 +15,7 @@ import de.tobias.playpad.plugin.Module;
  * @author tobias
  *
  * @param <C>
- *            Component
+ *            Item
  * 
  * @since 5.1.0
  */
@@ -24,14 +26,12 @@ public interface WriteOnlyRegistry<C> {
 	 * 
 	 * @param component
 	 *            Komponente
-	 * @param id
-	 *            ID
 	 * @param module
 	 *            Module zu dem diese Komponente gehört
 	 * @throws IllegalArgumentException
 	 *             Die Komponete gibt es bereits.
 	 */
-	public void registerComponent(C component, String id, Module module) throws IllegalArgumentException;
+	void registerComponent(C component, Module module) throws IllegalArgumentException;
 
 	/**
 	 * Lädt aus einer XML Datei die Komponenten Deklaration und registriert diese automatisch.
@@ -53,16 +53,16 @@ public interface WriteOnlyRegistry<C> {
 	 * @throws InstantiationException
 	 *             Die Klasse konnte nicht instanziert werden
 	 */
-	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module)
-			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException;
+	void loadComponentsFromFile(URL url, ClassLoader loader, Module module, ResourceBundle resourceBundle)
+			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException;
 
-	public default void loadComponentsFromFile(String name, Module module)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
-		loadComponentsFromFile(getClass().getClassLoader().getResource(name), getClass().getClassLoader(), module);
+	default void loadComponentsFromFile(String name, Module module, ResourceBundle resourceBundle)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException, NoSuchMethodException, InvocationTargetException {
+		loadComponentsFromFile(getClass().getClassLoader().getResource(name), getClass().getClassLoader(), module, resourceBundle);
 	}
 
-	public default void loadComponentsFromFile(String name, ClassLoader loader, Module module)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException {
-		loadComponentsFromFile(loader.getResource(name), loader, module);
+	default void loadComponentsFromFile(String name, ClassLoader loader, Module module, ResourceBundle resourceBundle)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, DocumentException, NoSuchMethodException, InvocationTargetException {
+		loadComponentsFromFile(loader.getResource(name), loader, module, resourceBundle);
 	}
 }

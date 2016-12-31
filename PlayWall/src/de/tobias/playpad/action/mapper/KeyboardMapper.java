@@ -14,16 +14,17 @@ import javafx.scene.input.KeyCode;
 
 public class KeyboardMapper extends Mapper {
 
+	private final String type;
+
 	private KeyCode code;
 	private String key;
 
-	public KeyboardMapper() {
-		this.code = KeyCode.A;
-		this.key = "A";
-		updateDisplayProperty();
+	public KeyboardMapper(String type) {
+		this(type, KeyCode.A, "A");
 	}
 
-	public KeyboardMapper(KeyCode code, String key) {
+	public KeyboardMapper(String type, KeyCode code, String key) {
+		this.type = type;
 		this.code = code;
 		this.key = key;
 		updateDisplayProperty();
@@ -49,7 +50,7 @@ public class KeyboardMapper extends Mapper {
 
 	@Override
 	public String getType() {
-		return KeyboardMapperConnect.TYPE;
+		return type;
 	}
 
 	public String getReadableName() {

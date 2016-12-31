@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import de.tobias.playpad.audio.JavaFXHandlerFactory;
+import de.tobias.playpad.design.modern.ModernDesignFactory;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.action.mapper.MapperRegistry;
@@ -262,20 +264,20 @@ public class PlayPadImpl implements PlayPad {
 			// Load Components
 			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
 
-			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml", module);
-			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml", module);
-			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml", module);
-			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml", module);
-			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml", module);
-			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml", module);
-			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml", module);
-			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml", module);
+			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml", module, resourceBundle);
+			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml", module, resourceBundle);
+			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml", module, resourceBundle);
+			registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml", module, resourceBundle);
+			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml", module, resourceBundle);
+			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml", module, resourceBundle);
+			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml", module, resourceBundle);
+			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml", module, resourceBundle);
 
 			// Set Default
-			registryCollection.getAudioHandlers().setDefaultID(JavaFXAudioHandler.TYPE);
-			registryCollection.getDesigns().setDefaultID(ModernGlobalDesign.TYPE);
-		} catch (IllegalAccessException | ClassNotFoundException | InstantiationException | IOException | DocumentException
-				| NoSuchComponentException e) {
+			// TODO Set Default
+			registryCollection.getAudioHandlers().setDefaultID(JavaFXHandlerFactory.class);
+			registryCollection.getDesigns().setDefaultID(ModernDesignFactory.class);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

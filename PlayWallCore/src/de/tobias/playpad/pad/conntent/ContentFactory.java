@@ -2,18 +2,21 @@ package de.tobias.playpad.pad.conntent;
 
 import java.nio.file.Path;
 
-import de.tobias.playpad.Displayable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
 
-// COMMENT PadContentConnect
-public abstract class PadContentConnect implements Comparable<PadContentConnect>, Displayable {
+// COMMENT ContentFactory
+public abstract class ContentFactory extends Component implements Comparable<ContentFactory> {
 
-	public abstract String getType();
+	public ContentFactory(String type) {
+		super(type);
+	}
 
 	public abstract PadContent newInstance(Pad pad);
 
@@ -30,11 +33,11 @@ public abstract class PadContentConnect implements Comparable<PadContentConnect>
 	public abstract String[] getSupportedTypes();
 
 	@Override
-	public int compareTo(PadContentConnect o) {
+	public int compareTo(ContentFactory o) {
 		return getType().compareTo(o.getType());
 	}
 
-	public static boolean isFileSupported(Path path, PadContentConnect connect) {
+	public static boolean isFileTypeSupported(Path path, ContentFactory connect) {
 		String extension = FileUtils.getFileExtention(path);
 		for (String ex : connect.getSupportedTypes()) {
 			if (ex.endsWith(extension)) {

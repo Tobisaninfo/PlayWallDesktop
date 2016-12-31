@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller;
 
 import java.util.ResourceBundle;
 
-import de.tobias.playpad.audio.AudioHandlerConnect;
+import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.utils.ui.ContentViewController;
 
 /**
@@ -10,7 +10,7 @@ import de.tobias.utils.ui.ContentViewController;
  * 
  * @author tobias
  * 
- * @see AudioHandlerConnect
+ * @see AudioHandlerFactory
  */
 public abstract class AudioHandlerViewController extends ContentViewController {
 

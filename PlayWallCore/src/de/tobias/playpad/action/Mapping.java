@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperConnect;
+import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Registry;
@@ -65,12 +65,12 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Action> List<T> getActions(String type) {
+	public <T extends Action> List<T> getActions(ActionFactory type) {
 		return (List<T>) getActionsOfType(type);
 	}
 
-	public List<Action> getActionsOfType(String type) {
-		return mapping.keySet().stream().filter(i -> i.getType().equals(type)).collect(Collectors.toList());
+	public List<Action> getActionsOfType(ActionFactory actionFactory) {
+		return mapping.keySet().stream().filter(i -> i.getType().equals(actionFactory.getType())).collect(Collectors.toList());
 	}
 
 	public List<Action> getActionsForMapper(Mapper mapper) {
@@ -110,8 +110,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initActionType(Profile profile) {
-		Registry<ActionConnect> actions = PlayPadPlugin.getRegistryCollection().getActions();
-		for (ActionConnect component : actions.getComponents()) {
+		Registry<ActionFactory> actions = PlayPadPlugin.getRegistryCollection().getActions();
+		for (ActionFactory component : actions.getComponents()) {
 			component.initActionType(this, profile);
 		}
 	}
@@ -125,8 +125,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initFeedback() {
-		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
-		for (MapperConnect mapper : registry.getComponents()) {
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).initFeedbackType();
 			}
@@ -151,8 +151,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void clearFeedback() {
-		Registry<MapperConnect> registry = PlayPadPlugin.getRegistryCollection().getMappers();
-		for (MapperConnect mapper : registry.getComponents()) {
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).clearFeedbackType();
 			}

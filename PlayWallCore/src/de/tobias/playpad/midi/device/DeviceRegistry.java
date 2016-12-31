@@ -64,7 +64,7 @@ public class DeviceRegistry extends EventDispatcher {
 	}
 
 	/**
-	 * Instanz der Device Factory
+	 * Instanz der Device Component
 	 * 
 	 * @return instance
 	 */

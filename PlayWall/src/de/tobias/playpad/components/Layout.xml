@@ -1,4 +1,4 @@
 <Actions>
-	<Component id="Desktop" default="true">de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect</Component>
-	<Component id="Touch">de.tobias.playpad.layout.touch.TouchMainLayoutConnect</Component>
+	<Component id="Desktop" default="true" name="MainLayout.Desktop">de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory</Component>
+	<Component id="Touch" name="MainLayout.Touch">de.tobias.playpad.layout.touch.TouchMainLayoutFactory</Component>
 </Actions>

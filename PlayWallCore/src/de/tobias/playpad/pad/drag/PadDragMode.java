@@ -1,8 +1,9 @@
 package de.tobias.playpad.pad.drag;
 
-import de.tobias.playpad.Displayable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.registry.Component;
+import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Modus um ein Pad mit Drag and Drop zu verschieben.
@@ -11,9 +12,11 @@ import de.tobias.playpad.project.page.PadIndex;
  *
  * @since 6.0.0
  */
-public abstract class PadDragMode implements Displayable, Comparable<PadDragMode> {
+public abstract class PadDragMode extends Component implements Comparable<PadDragMode> {
 
-	public abstract String getType();
+	public PadDragMode(String type) {
+		super(type);
+	}
 
 	/**
 	 * Führt die Drag and Drop Aktion aus, ändert das Datenmodell.

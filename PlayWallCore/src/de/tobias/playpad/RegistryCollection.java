@@ -1,15 +1,15 @@
 package de.tobias.playpad;
 
-import de.tobias.playpad.action.ActionConnect;
-import de.tobias.playpad.action.mapper.MapperConnect;
+import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.tigger.TriggerItemConnect;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.tigger.TriggerItemFactory;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 
 /**
  * Schnittstelle für die einzelen Registry. Hier sind alle Registries gesammelt, damit Komponenten registriert werden können. Die
@@ -21,19 +21,19 @@ import de.tobias.playpad.view.main.MainLayoutConnect;
  */
 public interface RegistryCollection {
 
-	public Registry<ActionConnect> getActions();
+	Registry<ActionFactory> getActions();
 
-	public AudioRegistry getAudioHandlers();
+	AudioRegistry getAudioHandlers();
 
-	public Registry<PadDragMode> getDragModes();
+	Registry<PadDragMode> getDragModes();
 
-	public DefaultRegistry<DesignConnect> getDesigns();
+	DefaultRegistry<DesignFactory> getDesigns();
 
-	public Registry<MapperConnect> getMappers();
+	Registry<MapperFactory> getMappers();
 
-	public PadContentRegistry getPadContents();
+	PadContentRegistry getPadContents();
 
-	public Registry<TriggerItemConnect> getTriggerItems();
+	Registry<TriggerItemFactory> getTriggerItems();
 
-	public DefaultRegistry<MainLayoutConnect> getMainLayouts();
+	DefaultRegistry<MainLayoutFactory> getMainLayouts();
 }

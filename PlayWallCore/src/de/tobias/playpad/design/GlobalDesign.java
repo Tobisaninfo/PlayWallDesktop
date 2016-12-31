@@ -81,14 +81,14 @@ public interface GlobalDesign {
 			Document document = reader.read(Files.newInputStream(path));
 			Element root = document.getRootElement();
 
-			DefaultRegistry<DesignConnect> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
+			DefaultRegistry<DesignFactory> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
 
 			for (Object layoutObj : root.elements("Layout")) {
 				Element layoutElement = (Element) layoutObj;
 				String type = layoutElement.attributeValue("type");
 
 				try {
-					GlobalDesign layout = layouts2.getComponent(type).newGlobalDesign();
+					GlobalDesign layout = layouts2.getFactory(type).newGlobalDesign();
 					layout.load(layoutElement);
 					layouts.put(type, layout);
 				} catch (NoSuchComponentException e) {

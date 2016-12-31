@@ -7,9 +7,9 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.connect.CartActionConnect;
+import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -90,7 +90,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 			CartDesign layout = pad.getPadSettings().getLayout(layoutType);
 
-			DesignConnect component = PlayPadPlugin.getRegistryCollection().getDesigns().getComponent(layoutType);
+			DesignFactory component = PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType);
 			CartDesignViewController controller = component.getCartDesignViewController(layout);
 			setLayoutController(controller);
 		} catch (NoSuchComponentException e) {
@@ -108,11 +108,15 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 		mainViewController.loadUserCss();
 
-		// Mapping Auto Matched Colors
-		Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-		List<CartAction> actions = activeMapping.getActions(CartActionConnect.TYPE);
-		// Update die Mapper der CartAction
-		actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getIndex() == pad.getIndex())
-				.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
+		try {
+			// Mapping Auto Matched Colors
+			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class));
+			// Update die Mapper der CartAction
+			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getIndex() == pad.getIndex())
+					.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
+		} catch (NoSuchComponentException e) {
+			e.printStackTrace();
+		}
 	}
 }

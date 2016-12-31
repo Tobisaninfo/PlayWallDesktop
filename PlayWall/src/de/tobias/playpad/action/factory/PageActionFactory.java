@@ -1,11 +1,10 @@
-package de.tobias.playpad.action.connect;
+package de.tobias.playpad.action.factory;
 
 import java.util.Collections;
 import java.util.List;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
@@ -15,15 +14,14 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.util.Localization;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
-public class PageActionConnect extends ActionConnect implements ActionDisplayable {
+public class PageActionFactory extends ActionFactory implements ActionDisplayable {
 
-	public static final String TYPE = "PAGE";
+	public PageActionFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
@@ -51,19 +49,9 @@ public class PageActionConnect extends ActionConnect implements ActionDisplayabl
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
 		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
-			PageAction action = new PageAction(i);
+			PageAction action = new PageAction(getType(), i);
 			mapping.addActionIfNotContains(action);
 		}
-	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(Localization.getString(Strings.Action_Page_Name));
-	}
-
-	@Override
-	public Node getGraphics() {
-		return new FontIcon(FontAwesomeType.FILE_TEXT);
 	}
 
 	@Override
@@ -73,7 +61,7 @@ public class PageActionConnect extends ActionConnect implements ActionDisplayabl
 
 	@Override
 	public Action newInstance() {
-		return new PageAction();
+		return new PageAction(getType());
 	}
 
 	@Override
@@ -81,8 +69,4 @@ public class PageActionConnect extends ActionConnect implements ActionDisplayabl
 		return ActionType.CONTROL;
 	}
 
-	@Override
-	public String getType() {
-		return TYPE;
-	}
 }

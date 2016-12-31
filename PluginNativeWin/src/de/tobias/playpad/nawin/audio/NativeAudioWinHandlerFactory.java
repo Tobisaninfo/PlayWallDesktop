@@ -2,11 +2,16 @@ package de.tobias.playpad.nawin.audio;
 
 import de.tobias.playpad.audio.AudioCapability;
 import de.tobias.playpad.audio.AudioHandler;
-import de.tobias.playpad.audio.AudioHandlerConnect;
+import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
-public class NativeAudioWinHandlerConnect extends AudioHandlerConnect {
+public class NativeAudioWinHandlerFactory extends AudioHandlerFactory {
+
+	public NativeAudioWinHandlerFactory(String type) {
+		super(type);
+	}
 
 	@Override
 	public AudioHandler createAudioHandler(PadContent content) {
@@ -16,11 +21,6 @@ public class NativeAudioWinHandlerConnect extends AudioHandlerConnect {
 	@Override
 	public AudioHandlerViewController getAudioHandlerSettingsViewController() {
 		return null;
-	}
-
-	@Override
-	public String getType() {
-		return "NativeWin";
 	}
 	
 	@Override

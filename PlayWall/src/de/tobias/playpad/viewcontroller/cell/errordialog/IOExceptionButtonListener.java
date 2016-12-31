@@ -8,7 +8,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.PadContentConnect;
+import de.tobias.playpad.pad.conntent.ContentFactory;
 import de.tobias.playpad.pad.conntent.PadContentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.view.ExceptionButton;
@@ -38,9 +38,9 @@ public class IOExceptionButtonListener implements EventHandler<ActionEvent> {
 			PadContent content = item.getPad().getContent();
 			try {
 				PadContentRegistry padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-				PadContentConnect padContentConnect = padContents.getComponent(content.getType());
+				ContentFactory contentFactory = padContents.getFactory(content.getType());
 
-				if (Files.exists(path) && PadContentConnect.isFileSupported(path, padContentConnect)) {
+				if (Files.exists(path) && ContentFactory.isFileTypeSupported(path, contentFactory)) {
 					content.handlePath(path);
 					pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 					pad.removeException(item);

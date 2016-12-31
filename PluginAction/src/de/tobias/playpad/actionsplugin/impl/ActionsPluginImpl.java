@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionConnect;
+import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.actionsplugin.ActionsPlugin;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.WindowListener;
@@ -112,9 +112,9 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 		updater = new ActionsPluginUpdater();
 
 		try {
-			Registry<ActionConnect> padContents = PlayPadPlugin.getRegistryCollection().getActions();
-			padContents.loadComponentsFromFile("de/tobias/playpad/actionsplugin/assets/Actions.xml", getClass().getClassLoader(), module);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IOException | DocumentException e) {
+			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistryCollection().getActions();
+			padContents.loadComponentsFromFile("de/tobias/playpad/actionsplugin/assets/Actions.xml", getClass().getClassLoader(), module, bundle);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		muteProperty.addListener(this);

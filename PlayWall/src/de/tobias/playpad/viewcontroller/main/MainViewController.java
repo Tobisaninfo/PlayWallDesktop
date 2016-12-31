@@ -14,7 +14,7 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.GlobalDesign;
-import de.tobias.playpad.layout.desktop.DesktopMainLayoutConnect;
+import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
@@ -31,7 +31,7 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.main.MainLayoutConnect;
+import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
@@ -94,7 +94,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 	private Color gridColor;
 
 	// Layout
-	private MainLayoutConnect mainLayout;
+	private MainLayoutFactory mainLayout;
 	private List<MainLayoutHandler> layoutActions;
 
 	// Listener
@@ -119,7 +119,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 		initMapper(openProject);
 
 		// Default Layout
-		setMainLayout(new DesktopMainLayoutConnect());
+		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
 
 		Profile.registerListener(this);
 		reloadSettings(null, Profile.currentProfile());
@@ -187,16 +187,16 @@ public class MainViewController extends ViewController implements IMainViewContr
 	}
 
 	// main layout
-	public MainLayoutConnect getMainLayout() {
+	public MainLayoutFactory getMainLayout() {
 		return mainLayout;
 	}
 
 	@Override
-	public void setMainLayout(MainLayoutConnect mainLayoutConnect) {
+	public void setMainLayout(MainLayoutFactory mainLayoutFactory) {
 		removePadsFromView();
 		removePadViews();
 
-		this.mainLayout = mainLayoutConnect;
+		this.mainLayout = mainLayoutFactory;
 		initMainLayout();
 	}
 
@@ -567,8 +567,8 @@ public class MainViewController extends ViewController implements IMainViewContr
 		}
 
 		try {
-			DefaultRegistry<MainLayoutConnect> registry = PlayPadPlugin.getRegistryCollection().getMainLayouts();
-			MainLayoutConnect connect = registry.getComponent(currentProfile.getProfileSettings().getMainLayoutType());
+			DefaultRegistry<MainLayoutFactory> registry = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+			MainLayoutFactory connect = registry.getFactory(currentProfile.getProfileSettings().getMainLayoutType());
 			setMainLayout(connect);
 		} catch (NoSuchComponentException e) {
 			// TODO Error Handling

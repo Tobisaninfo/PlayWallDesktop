@@ -12,7 +12,7 @@ import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
-import de.tobias.playpad.design.DesignConnect;
+import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferences;
@@ -82,8 +82,8 @@ public class Profile {
 			return layouts.get(type);
 		} else {
 			try {
-				DefaultRegistry<DesignConnect> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
-				GlobalDesign layout = registry.getComponent(type).newGlobalDesign();
+				DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
+				GlobalDesign layout = registry.getFactory(type).newGlobalDesign();
 				layouts.put(type, layout);
 				return layout;
 			} catch (NoSuchComponentException e) { // -> Throw exception

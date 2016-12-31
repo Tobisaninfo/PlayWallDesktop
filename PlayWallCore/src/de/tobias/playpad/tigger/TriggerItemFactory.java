@@ -1,10 +1,14 @@
 package de.tobias.playpad.tigger;
 
+import de.tobias.playpad.registry.Component;
 import de.tobias.utils.ui.ContentViewController;
+import de.tobias.utils.ui.icon.FontIconType;
 
-public abstract class TriggerItemConnect {
+public abstract class TriggerItemFactory extends Component {
 
-	public abstract String getType();
+	public TriggerItemFactory(String type) {
+		super(type);
+	}
 
 	public abstract TriggerItem newInstance(Trigger trigger);
 
