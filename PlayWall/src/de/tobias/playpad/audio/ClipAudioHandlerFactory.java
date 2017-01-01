@@ -1,10 +1,10 @@
 package de.tobias.playpad.audio;
 
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.playpad.viewcontroller.audio.ClipSettingsViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
+@Deprecated
 public class ClipAudioHandlerFactory extends AudioHandlerFactory implements AutoCloseable {
 
 	public ClipAudioHandlerFactory(String type) {
@@ -17,17 +17,12 @@ public class ClipAudioHandlerFactory extends AudioHandlerFactory implements Auto
 	}
 
 	@Override
-	public AudioHandlerViewController getAudioHandlerSettingsViewController() {
-		return new ClipSettingsViewController();
-	}
-
-	@Override
 	public void close() throws Exception {
 		ClipAudioHandler.shutdown();
 	}
 
 	@Override
-	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+	public boolean isFeatureAvailable(AudioCapability audioCapability) {
 		for (Class<?> clazz : ClipAudioHandler.class.getInterfaces()) {
 			if (clazz.equals(audioCapability.getAudioFeature()))
 				return true;

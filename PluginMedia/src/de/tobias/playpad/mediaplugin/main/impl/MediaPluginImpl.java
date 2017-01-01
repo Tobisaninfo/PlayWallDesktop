@@ -5,7 +5,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-import de.tobias.playpad.pad.conntent.ContentFactory;
+import de.tobias.playpad.pad.content.ContentFactory;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;

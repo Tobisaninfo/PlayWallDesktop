@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad.conntent;
+package de.tobias.playpad.pad.content;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -6,11 +6,11 @@ import java.util.ResourceBundle;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.conntent.play.Equalizeable;
+import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
 import de.tobias.playpad.equalizerplugin.main.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.WindowListener;

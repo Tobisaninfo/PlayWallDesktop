@@ -1,6 +1,5 @@
-package de.tobias.playpad.audio;
+package de.tobias.playpad.pad.fade;
 
-import de.tobias.playpad.pad.conntent.play.FadeHandler;
 import javafx.animation.Transition;
 import javafx.util.Duration;
 
@@ -12,13 +11,13 @@ import javafx.util.Duration;
  */
 public class Fade {
 
-	private FadeHandler fadeHandler;
+	private FadeDelegate fadeDelegate;
 	private Transition currentFadeTransition;
 
 	private double velocity = 1;
 
-	public Fade(FadeHandler fadeHandler) {
-		this.fadeHandler = fadeHandler;
+	public Fade(FadeDelegate fadeDelegate) {
+		this.fadeDelegate = fadeDelegate;
 	}
 
 	public void fadeIn(Duration duration) {
@@ -63,11 +62,11 @@ public class Fade {
 				double diff = Math.abs(to - from);
 				if (from < to) { // Fade In
 					double fade = fadeInVolumeMultiplier(frac, velocity);
-					fadeHandler.setFadeLevel(from + fade * diff);
+					fadeDelegate.onFadeLevelChange(from + fade * diff);
 				} else { // Fade Out
 					double fade = fadeOutVolumeMultiplier(frac, velocity);
 					double newValue = to + fade * diff;
-					fadeHandler.setFadeLevel(newValue);
+					fadeDelegate.onFadeLevelChange(newValue);
 				}
 			}
 		};

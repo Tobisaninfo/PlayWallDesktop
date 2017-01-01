@@ -1,17 +1,10 @@
 package de.tobias.playpad.mediaplugin.image;
 
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
-import de.tobias.playpad.mediaplugin.main.impl.Strings;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.ContentFactory;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.icon.FontIconType;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.css.PseudoClass;

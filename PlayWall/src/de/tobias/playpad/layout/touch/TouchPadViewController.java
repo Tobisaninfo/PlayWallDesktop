@@ -3,7 +3,7 @@ package de.tobias.playpad.layout.touch;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.IPadPositionListener;
 import de.tobias.playpad.pad.listener.PadContentListener;
 import de.tobias.playpad.pad.listener.PadDurationListener;

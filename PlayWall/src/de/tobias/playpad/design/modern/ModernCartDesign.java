@@ -9,7 +9,7 @@ import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.FadeableColor;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;

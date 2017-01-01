@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad.conntent.play;
+package de.tobias.playpad.pad.content.play;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.util.Duration;

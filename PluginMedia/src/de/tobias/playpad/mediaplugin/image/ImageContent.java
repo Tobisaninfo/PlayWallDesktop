@@ -10,7 +10,7 @@ import org.dom4j.Element;
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;

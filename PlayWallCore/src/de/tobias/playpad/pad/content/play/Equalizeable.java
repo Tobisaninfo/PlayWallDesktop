@@ -1,4 +1,4 @@
-package de.tobias.playpad.pad.conntent.play;
+package de.tobias.playpad.pad.content.play;
 
 import de.tobias.playpad.audio.AudioFeature;
 import javafx.scene.media.AudioEqualizer;

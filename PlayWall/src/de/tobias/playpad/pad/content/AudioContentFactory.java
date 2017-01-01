@@ -1,13 +1,9 @@
 package de.tobias.playpad.pad.content;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.ContentFactory;
-import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.profile.AudioTabViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;

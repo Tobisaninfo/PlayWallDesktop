@@ -21,7 +21,7 @@ import javax.sound.sampled.Mixer;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.utils.util.FileUtils;
@@ -33,6 +33,7 @@ import javafx.util.Duration;
 import javazoom.jl.converter.Converter;
 import javazoom.jl.decoder.JavaLayerException;
 
+@Deprecated
 public class ClipAudioHandler extends AudioHandler {
 
 	private static final String MP3 = "mp3";

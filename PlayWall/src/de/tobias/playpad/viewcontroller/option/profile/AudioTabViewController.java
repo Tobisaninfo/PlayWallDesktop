@@ -99,7 +99,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		AudioHandlerViewController settingsViewController = null;
 
 		Label availableLabel;
-		if (audio.isFeatureAvaiable(audioCapability)) {
+		if (audio.isFeatureAvailable(audioCapability)) {
 			availableLabel = new FontIcon(FontAwesomeType.CHECK);
 
 			settingsViewController = audio.getAudioFeatureSettings(audioCapability);

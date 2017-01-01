@@ -6,7 +6,7 @@ import de.tobias.playpad.NativeAudio;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;

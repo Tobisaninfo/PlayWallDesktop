@@ -11,16 +11,15 @@ import org.dom4j.Element;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.pad.conntent.play.Equalizeable;
-import de.tobias.playpad.audio.Fade;
+import de.tobias.playpad.pad.content.play.Equalizeable;
+import de.tobias.playpad.pad.fade.Fade;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.path.SinglePathContent;
-import de.tobias.playpad.pad.conntent.play.Durationable;
-import de.tobias.playpad.pad.conntent.play.Fadeable;
-import de.tobias.playpad.pad.conntent.play.FadeHandler;
-import de.tobias.playpad.pad.conntent.play.Pauseable;
+import de.tobias.playpad.pad.content.path.SinglePathContent;
+import de.tobias.playpad.pad.content.play.Durationable;
+import de.tobias.playpad.pad.fade.Fadeable;
+import de.tobias.playpad.pad.fade.FadeDelegate;
+import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.volume.VolumeManager;
@@ -33,7 +32,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, SinglePathContent, FadeHandler {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, SinglePathContent, FadeDelegate {
 
 	private final String type;
 
@@ -128,7 +127,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void setFadeLevel(double level) {
+	public void onFadeLevelChange(double level) {
 		Pad pad = getPad();
 		VolumeManager manager = Pad.getVolumeManager();
 
@@ -175,7 +174,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
 
 		if (Files.exists(path)) {
-			audioHandler.loadMedia(new Path[]{path});
+			audioHandler.loadMedia(path);
 
 			durationProperty.bind(audioHandler.durationProperty());
 			positionProperty.bind(audioHandler.positionProperty());

@@ -2,13 +2,13 @@ package de.tobias.playpad.pad;
 
 import java.util.UUID;
 
-import de.tobias.playpad.pad.conntent.ContentFactory;
+import de.tobias.playpad.pad.content.ContentFactory;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignFactory;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;

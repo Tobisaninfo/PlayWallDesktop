@@ -10,7 +10,7 @@ import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.settings.Profile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;

@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.tobias.playpad.pad.conntent.ContentFactory;
+import de.tobias.playpad.pad.content.ContentFactory;
 import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadMain;

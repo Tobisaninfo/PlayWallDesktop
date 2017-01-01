@@ -1,6 +1,9 @@
 package de.tobias.playpad.audio;
 
-import de.tobias.playpad.pad.conntent.play.Equalizeable;
+import de.tobias.playpad.pad.content.play.Equalizeable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AudioCapability {
 
@@ -9,6 +12,14 @@ public class AudioCapability {
 
 	private String name;
 	private Class<? extends AudioFeature> clazz;
+
+	private static List<AudioCapability> audioCapabilityList;
+
+	static {
+		audioCapabilityList = new ArrayList<>();
+		audioCapabilityList.add(EQUALIZER);
+		audioCapabilityList.add(SOUNDCARD);
+	}
 
 	private AudioCapability(String name, Class<? extends AudioFeature> clazz) {
 		this.name = name;
@@ -23,7 +34,8 @@ public class AudioCapability {
 		return clazz;
 	}
 
-	public static AudioCapability[] getFeatures() {
-		return new AudioCapability[] { EQUALIZER, SOUNDCARD };
+	public static List<AudioCapability> getFeatures() {
+		return audioCapabilityList;
 	}
+
 }

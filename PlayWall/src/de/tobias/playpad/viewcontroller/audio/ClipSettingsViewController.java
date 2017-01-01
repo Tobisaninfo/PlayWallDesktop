@@ -27,6 +27,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
 
+@Deprecated
 public class ClipSettingsViewController extends AudioHandlerViewController implements Callback<ListView<Info>, ListCell<Info>> {
 
 	@FXML private ComboBox<Info> soundCardComboBox;

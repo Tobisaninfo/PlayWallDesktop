@@ -1,8 +1,7 @@
 package de.tobias.playpad.audio;
 
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
 public class JavaFXHandlerFactory extends AudioHandlerFactory {
 
@@ -14,14 +13,9 @@ public class JavaFXHandlerFactory extends AudioHandlerFactory {
 	public AudioHandler createAudioHandler(PadContent content) {
 		return new JavaFXAudioHandler(content);
 	}
-
-	@Override
-	public AudioHandlerViewController getAudioHandlerSettingsViewController() {
-		return null;
-	}
 	
 	@Override
-	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+	public boolean isFeatureAvailable(AudioCapability audioCapability) {
 		for (Class<?> clazz : JavaFXAudioHandler.class.getInterfaces()) {
 			if (clazz.equals(audioCapability.getAudioFeature()))
 				return true;

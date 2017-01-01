@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.pad.conntent.ContentFactory;
+import de.tobias.playpad.pad.content.ContentFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;

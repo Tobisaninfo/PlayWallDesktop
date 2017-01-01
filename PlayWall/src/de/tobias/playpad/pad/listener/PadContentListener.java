@@ -1,8 +1,8 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.play.Durationable;
+import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

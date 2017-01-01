@@ -9,9 +9,8 @@ import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.audio.Peakable.Channel;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.conntent.PadContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 import javafx.util.Duration;
 
 public class NativeAudioMacHandlerFactory extends AudioHandlerFactory implements NativeAudioDelegate {
@@ -29,11 +28,6 @@ public class NativeAudioMacHandlerFactory extends AudioHandlerFactory implements
 		NativeAudioMacHandler nativeAudioMacHandler = new NativeAudioMacHandler(content);
 		handlers.put(nativeAudioMacHandler.getId(), nativeAudioMacHandler);
 		return nativeAudioMacHandler;
-	}
-
-	@Override
-	public AudioHandlerViewController getAudioHandlerSettingsViewController() {
-		return null;
 	}
 
 	@Override
@@ -65,7 +59,7 @@ public class NativeAudioMacHandlerFactory extends AudioHandlerFactory implements
 	}
 
 	@Override
-	public boolean isFeatureAvaiable(AudioCapability audioCapability) {
+	public boolean isFeatureAvailable(AudioCapability audioCapability) {
 		return false;
 	}
 

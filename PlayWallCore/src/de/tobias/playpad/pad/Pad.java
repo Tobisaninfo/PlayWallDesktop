@@ -3,8 +3,8 @@ package de.tobias.playpad.pad;
 import java.nio.file.Path;
 import java.util.UUID;
 
-import de.tobias.playpad.pad.conntent.PadContent;
-import de.tobias.playpad.pad.conntent.play.Pauseable;
+import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
