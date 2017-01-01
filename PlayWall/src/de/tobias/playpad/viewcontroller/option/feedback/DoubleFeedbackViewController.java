@@ -42,9 +42,8 @@ public class DoubleFeedbackViewController extends ContentViewController {
 		super("doubleFeedback", "de/tobias/playpad/assets/view/option/feedback/", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
-		Optional<Device> deviceOptional = Midi.getInstance().getMidiDevice();
-		deviceOptional.ifPresent(device ->
-		{
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			DisplayableFeedbackColor colorDefault = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 			if (colorDefault != null) {
 				colorPreviewDefault.setFill(colorDefault.getPaint());
@@ -55,7 +54,7 @@ public class DoubleFeedbackViewController extends ContentViewController {
 				colorPreviewEvent.setFill(colorPlay.getPaint());
 				setColorChooseButtonColor(colorPlay.getPaint(), colorChooseEventButton);
 			}
-		});
+		}
 	}
 
 	@Override
@@ -75,8 +74,8 @@ public class DoubleFeedbackViewController extends ContentViewController {
 	private void colorChooseButtonHandler(ActionEvent event) {
 		if (colorChooser == null) {
 			colorChooser = new PopOver();
-			Midi.getInstance().getMidiDevice().ifPresent((device) ->
-			{
+			Device device = Midi.getInstance().getMidiDevice();
+			if (device != null) {
 				DisplayableFeedbackColor color = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 				if (event.getSource() == colorChooseDefaultButton) {
 					color = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
@@ -106,7 +105,7 @@ public class DoubleFeedbackViewController extends ContentViewController {
 				colorChooser.setCornerRadius(5);
 				colorChooser.setArrowLocation(ArrowLocation.LEFT_CENTER);
 				colorChooser.show((Node) event.getSource());
-			});
+			}
 		}
 
 	}

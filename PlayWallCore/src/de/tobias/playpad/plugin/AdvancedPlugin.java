@@ -10,7 +10,7 @@ import de.tobias.updater.client.Updatable;
  */
 public interface AdvancedPlugin extends net.xeoh.plugins.base.Plugin {
 
-	public Module getModule();
+	Module getModule();
 
-	public Updatable getUpdatable();
+	Updatable getUpdatable();
 }

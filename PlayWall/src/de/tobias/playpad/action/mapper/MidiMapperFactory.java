@@ -24,12 +24,14 @@ public class MidiMapperFactory extends MapperFactory implements MapperConnectFee
 
 	@Override
 	public void initFeedbackType() {
-		Midi.getInstance().getMidiDevice().ifPresent(Device::initDevice);
+		Device device = Midi.getInstance().getMidiDevice();
+		device.initDevice();
 	}
 
 	@Override
 	public void clearFeedbackType() {
-		Midi.getInstance().getMidiDevice().ifPresent(Device::clearFeedback);
+		Device device = Midi.getInstance().getMidiDevice();
+		device.clearFeedback();
 	}
 
 	// TODO Remove

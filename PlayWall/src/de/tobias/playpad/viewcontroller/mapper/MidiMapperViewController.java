@@ -10,6 +10,7 @@ import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.action.mapper.MidiMapper;
 import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
+import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
@@ -132,8 +133,8 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 
 		midiInputKeyLabel.setText(String.valueOf(mapper.getKey()));
 
-		Midi.getInstance().getMidiDevice().ifPresent(device ->
-		{
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			if (device.supportFeedback()) {
 				// remove old Elements
 				if (feedbackController != null) {
@@ -147,6 +148,6 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				}
 				showFeedback();
 			}
-		});
+		}
 	}
 }

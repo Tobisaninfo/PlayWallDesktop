@@ -1,8 +1,10 @@
 package de.tobias.playpad.audio;
 
+import de.tobias.playpad.pad.conntent.play.Equalizeable;
+
 public class AudioCapability {
 
-	public static final AudioCapability EQUALIZER = new AudioCapability("EQUALIZER", Equalizable.class);
+	public static final AudioCapability EQUALIZER = new AudioCapability("EQUALIZER", Equalizeable.class);
 	public static final AudioCapability SOUNDCARD = new AudioCapability("SOUNDCARD", Soundcardable.class);
 
 	private String name;

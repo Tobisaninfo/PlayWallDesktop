@@ -38,15 +38,14 @@ public class SingleFeedbackViewController extends ContentViewController {
 		super("singleFeedback", "de/tobias/playpad/assets/view/option/feedback/", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
-		Optional<Device> deviceOptional = Midi.getInstance().getMidiDevice();
-		deviceOptional.ifPresent(device ->
-		{
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			DisplayableFeedbackColor colorDefault = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 			if (colorDefault != null) {
 				colorPreviewDefault.setFill(colorDefault.getPaint());
 				setColorChooseButtonColor(colorDefault.getPaint(), colorChooseDefaultButton);
 			}
-		});
+		}
 	}
 
 	@Override
@@ -61,8 +60,8 @@ public class SingleFeedbackViewController extends ContentViewController {
 	private void colorChooseButtonHandler(ActionEvent event) {
 		if (colorChooser == null) {
 			colorChooser = new PopOver();
-			Midi.getInstance().getMidiDevice().ifPresent((device) ->
-			{
+			Device device = Midi.getInstance().getMidiDevice();
+			if (device != null) {
 				DisplayableFeedbackColor color = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 
 				ColorPickerView colorView = new ColorPickerView(color, device.getColors(), item ->
@@ -83,7 +82,7 @@ public class SingleFeedbackViewController extends ContentViewController {
 				colorChooser.setCornerRadius(5);
 				colorChooser.setArrowLocation(ArrowLocation.LEFT_CENTER);
 				colorChooser.show((Node) event.getSource());
-			});
+			}
 		}
 	}
 

@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.conntent.PadContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.util.Duration;
 
-// Mögliche Interfaces: Equalizable
+// Mögliche Interfaces: Equalizeable
 
 public abstract class AudioHandler {
 

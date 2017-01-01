@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.audio.Equalizable;
+import de.tobias.playpad.pad.conntent.play.Equalizeable;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
 import de.tobias.playpad.equalizerplugin.main.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
@@ -91,11 +91,11 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onPlay(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizable) {
+		if (content != null && content instanceof Equalizeable) {
 
 			// Equalizer
-			Equalizable equalizable = (Equalizable) content;
-			AudioEqualizer audioEqualizer = equalizable.getAudioEqualizer();
+			Equalizeable equalizeable = (Equalizeable) content;
+			AudioEqualizer audioEqualizer = equalizeable.getAudioEqualizer();
 			if (audioEqualizer != null) {
 				for (EqualizerBand band : audioEqualizer.getBands()) {
 					band.gainProperty().bind(Equalizer.getInstance().gainProperty((int) band.getBandwidth()));
@@ -108,11 +108,11 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onStop(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizable) {
+		if (content != null && content instanceof Equalizeable) {
 
 			// Equalizer
-			Equalizable equalizable = (Equalizable) content;
-			AudioEqualizer audioEqualizer = equalizable.getAudioEqualizer();
+			Equalizeable equalizeable = (Equalizeable) content;
+			AudioEqualizer audioEqualizer = equalizeable.getAudioEqualizer();
 			if (audioEqualizer != null) {
 				for (EqualizerBand band : audioEqualizer.getBands()) {
 					band.gainProperty().bind(Equalizer.getInstance().gainProperty((int) band.getBandwidth()));

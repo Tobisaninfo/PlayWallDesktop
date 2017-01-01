@@ -3,9 +3,9 @@ package de.tobias.playpad.pad.conntent.play;
 
 public interface Fadeable {
 
-	public void fadeIn();
+	void fadeIn();
+
+	void fadeOut(Runnable runnable);
 	
-	public void fadeOut(Runnable runnable);
-	
-	public boolean isFading();
+	boolean getFade();
 }

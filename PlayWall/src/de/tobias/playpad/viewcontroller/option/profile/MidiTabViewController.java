@@ -66,7 +66,7 @@ public class MidiTabViewController extends ProfileSettingsTabViewController {
 						profilSettings.setMidiDeviceName(device);
 
 						// UI Rückmeldung
-						if (midi.getInputDevice().isPresent()) {
+						if (midi.getInputDevice() != null) {
 							showInfoMessage(Localization.getString(Strings.Info_Midi_Device_Connected, device));
 						}
 					} catch (NullPointerException e) {

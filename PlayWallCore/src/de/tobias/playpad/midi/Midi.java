@@ -1,25 +1,16 @@
 package de.tobias.playpad.midi;
 
-import java.util.Optional;
-
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiDevice.Info;
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Receiver;
-import javax.sound.midi.ShortMessage;
-import javax.sound.midi.Transmitter;
-
 import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 
-public class Midi {
+import javax.sound.midi.*;
+import javax.sound.midi.MidiDevice.Info;
 
-	private Optional<MidiDevice> inputDevice = Optional.empty();
-	private Optional<MidiDevice> outputDevice = Optional.empty();
-	private Optional<Device> midiDeviceImpl = Optional.empty();
+public class Midi implements AutoCloseable {
+
+	private MidiDevice inputDevice;
+	private MidiDevice outputDevice;
+	private Device midiDeviceImpl;
 
 	private MidiListener listener;
 
@@ -32,7 +23,8 @@ public class Midi {
 		return instance;
 	}
 
-	private Midi() {}
+	private Midi() {
+	}
 
 	public MidiListener getListener() {
 		return listener;
@@ -43,19 +35,18 @@ public class Midi {
 	}
 
 	public static Info[] getMidiDevices() {
-		MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
-		return infos;
+		return MidiSystem.getMidiDeviceInfo();
 	}
 
-	public Optional<MidiDevice> getInputDevice() {
+	public MidiDevice getInputDevice() {
 		return inputDevice;
 	}
 
-	public Optional<MidiDevice> getOutputDevice() {
+	public MidiDevice getOutputDevice() {
 		return outputDevice;
 	}
 
-	public Optional<Device> getMidiDevice() {
+	public Device getMidiDevice() {
 		return midiDeviceImpl;
 	}
 
@@ -80,69 +71,56 @@ public class Midi {
 		setMidiDevice(input, output);
 	}
 
-	public void setMidiDevice(MidiDevice.Info input, MidiDevice.Info output) throws MidiUnavailableException, IllegalArgumentException {
-		MidiDevice inputDevice = MidiSystem.getMidiDevice(input);
-		MidiDevice outputDevice = MidiSystem.getMidiDevice(output);
+	private void setMidiDevice(Info input, Info output) throws MidiUnavailableException, IllegalArgumentException {
+		MidiDevice newInputDevice = MidiSystem.getMidiDevice(input);
+		MidiDevice newOutputDevice = MidiSystem.getMidiDevice(output);
 
-		if (this.inputDevice.isPresent() && this.outputDevice.isPresent())
-			if (this.inputDevice.get() == inputDevice && this.outputDevice.get() == outputDevice)
-				return;
-
-		this.inputDevice.ifPresent((device) ->
-		{
-			if (device.isOpen()) {
-				device.close();
-			}
-		});
-		this.outputDevice.ifPresent((device) ->
-		{
-			if (device.isOpen()) {
-				device.close();
-			}
-		});
-
-		if (inputDevice != null && outputDevice != null) {
-			this.inputDevice = Optional.of(inputDevice);
-			this.outputDevice = Optional.of(outputDevice);
-
-			// Hier wird die DeviceImpl aufgerufen
-			try {
-				this.midiDeviceImpl = Optional.of(DeviceRegistry.getFactoryInstance().getDevice(input.getName()));
-			} catch (InstantiationException | IllegalAccessException e) {
-				e.printStackTrace();
-				this.midiDeviceImpl = Optional.empty();
-			}
-
-			setupMidiDevice();
-		} else {
-			this.inputDevice = Optional.empty();
-			this.outputDevice = Optional.empty();
-			this.midiDeviceImpl = Optional.empty();
+		if (newInputDevice == null && newOutputDevice == null) {
+			return;
 		}
+
+		if (this.inputDevice == newInputDevice && this.outputDevice == newOutputDevice) {
+			return;
+		}
+
+		// Close Old Devices
+		close();
+
+		this.inputDevice = newInputDevice;
+		this.outputDevice = newOutputDevice;
+
+		// Hier wird die DeviceImpl aufgerufen
+		try {
+			this.midiDeviceImpl = DeviceRegistry.getFactoryInstance().getDevice(input.getName());
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		setupMidiDevice();
 	}
 
+
 	private void setupMidiDevice() throws MidiUnavailableException {
-		if (inputDevice.isPresent()) {
-			Transmitter trans = inputDevice.get().getTransmitter();
+		if (inputDevice != null) {
+			Transmitter trans = inputDevice.getTransmitter();
 			trans.setReceiver(new MidiInputReceiver());
 
 			// Belegt das Midi Gerät und macht es nutzbar
-			inputDevice.get().open();
-			if (outputDevice.isPresent()) {
-				outputDevice.get().open();
+			inputDevice.open();
+			if (outputDevice != null) {
+				outputDevice.open();
 			}
 		}
 	}
 
 	public void close() throws MidiUnavailableException {
 		try {
-			if (inputDevice.isPresent()) {
-				inputDevice.get().getTransmitter().close();
-				inputDevice.get().close();
+			if (inputDevice != null) {
+				inputDevice.getTransmitter().close();
+				inputDevice.close();
 			}
-			if (outputDevice.isPresent()) {
-				outputDevice.get().getReceiver().close();
-				outputDevice.get().close();
+			if (outputDevice != null) {
+				outputDevice.getReceiver().close();
+				outputDevice.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,11 +128,11 @@ public class Midi {
 	}
 
 	public void sendMessage(int midiCommand, int midiKey, int midiVelocity) throws MidiUnavailableException, InvalidMidiDataException {
-		if (outputDevice.isPresent()) {
+		if (outputDevice != null) {
 			if (midiCommand != 0) {
 				ShortMessage message = new ShortMessage(midiCommand, midiKey, midiVelocity);
 				// System.out.println("Send: " + Arrays.toString(message.getMessage()));
-				outputDevice.get().getReceiver().send(message, -1);
+				outputDevice.getReceiver().send(message, -1);
 			}
 		}
 	}
@@ -171,20 +149,18 @@ public class Midi {
 		}
 
 		@Override
-		public void close() {}
+		public void close() {
+		}
+
 	}
 
 	public boolean isOpen() {
-		if (inputDevice.isPresent() && outputDevice.isPresent()) {
-			return inputDevice.get().isOpen() && outputDevice.get().isOpen();
-		} else {
-			return false;
-		}
+		return inputDevice != null && outputDevice != null && inputDevice.isOpen() && outputDevice.isOpen();
 	}
 
 	public void sendClearCommand() throws InvalidMidiDataException, MidiUnavailableException {
-		if (midiDeviceImpl.isPresent()) {
-			midiDeviceImpl.get().clearFeedback();
+		if (midiDeviceImpl != null) {
+			midiDeviceImpl.clearFeedback();
 		}
 	}
 }

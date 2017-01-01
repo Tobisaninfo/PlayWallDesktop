@@ -1,22 +1,18 @@
 package de.tobias.playpad.audio;
 
-import java.nio.file.Path;
-
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.scene.media.AudioEqualizer;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-public class JavaFXAudioHandler extends AudioHandler implements Equalizable {
+import java.nio.file.Path;
+
+public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeable {
 
 	private Media media;
 	private MediaPlayer player;

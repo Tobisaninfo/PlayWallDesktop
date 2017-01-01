@@ -1,24 +1,24 @@
-package de.tobias.playpad.audio.fade;
+package de.tobias.playpad.audio;
 
-import de.tobias.playpad.pad.conntent.play.IVolume;
+import de.tobias.playpad.pad.conntent.play.FadeHandler;
 import javafx.animation.Transition;
 import javafx.util.Duration;
 
 /**
- * Fading utils.
+ * Fade utils.
  *
  * @author tobias
  * @since 6.0.0
  */
-public class Fading {
+public class Fade {
 
-	private IVolume iVolume;
+	private FadeHandler fadeHandler;
 	private Transition currentFadeTransition;
 
 	private double velocity = 1;
 
-	public Fading(IVolume iVolume) {
-		this.iVolume = iVolume;
+	public Fade(FadeHandler fadeHandler) {
+		this.fadeHandler = fadeHandler;
 	}
 
 	public void fadeIn(Duration duration) {
@@ -63,11 +63,11 @@ public class Fading {
 				double diff = Math.abs(to - from);
 				if (from < to) { // Fade In
 					double fade = fadeInVolumeMultiplier(frac, velocity);
-					iVolume.setFadeLevel(from + fade * diff);
+					fadeHandler.setFadeLevel(from + fade * diff);
 				} else { // Fade Out
 					double fade = fadeOutVolumeMultiplier(frac, velocity);
 					double newValue = to + fade * diff;
-					iVolume.setFadeLevel(newValue);
+					fadeHandler.setFadeLevel(newValue);
 				}
 			}
 		};
@@ -81,11 +81,11 @@ public class Fading {
 		currentFadeTransition.play();
 	}
 
-	protected double fadeInVolumeMultiplier(double time, double velocity) {
+	private double fadeInVolumeMultiplier(double time, double velocity) {
 		return Math.pow(Math.E, velocity * (time - 1)) * time;
 	}
 
-	protected double fadeOutVolumeMultiplier(double time, double velocity) {
+	private double fadeOutVolumeMultiplier(double time, double velocity) {
 		return Math.pow(Math.E, -velocity * time) * (1 - time);
 	}
 

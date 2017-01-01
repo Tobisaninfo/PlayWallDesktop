@@ -85,7 +85,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public void handleFeedback(FeedbackMessage type) {
-		Midi.getInstance().getMidiDevice().ifPresent(device -> device.handleFeedback(type, key, feedback));
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
+			device.handleFeedback(type, key, feedback);
+		}
 	}
 
 	@Override
@@ -96,9 +99,9 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	// Feedback, abhängig vom Device
 	@Override
 	public boolean supportFeedback() {
-		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice.isPresent()) {
-			return midiDevice.get().supportFeedback();
+		Device midiDevice = Midi.getInstance().getMidiDevice();
+		if (midiDevice != null) {
+			return midiDevice.supportFeedback();
 		}
 		return false;
 	}
@@ -114,9 +117,8 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor[] getColors() {
-		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice.isPresent()) {
-			Device device = midiDevice.get();
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			if (device instanceof DeviceColorAssociatorConnector) {
 				return ((DeviceColorAssociatorConnector) device).getColors();
 			}
@@ -126,9 +128,8 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor getDefaultEventColor() {
-		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice.isPresent()) {
-			Device device = midiDevice.get();
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			if (device instanceof DeviceColorAssociatorConnector) {
 				return ((DeviceColorAssociatorConnector) device).getDefaultEventColor();
 			}
@@ -138,9 +139,8 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor getDefaultStandardColor() {
-		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice.isPresent()) {
-			Device device = midiDevice.get();
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			if (device instanceof DeviceColorAssociatorConnector) {
 				return ((DeviceColorAssociatorConnector) device).getDefaultStandardColor();
 			}
@@ -150,9 +150,8 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	
 	@Override
 	public DisplayableFeedbackColor map(Color color) {
-		Optional<Device> midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice.isPresent()) {
-			Device device = midiDevice.get();
+		Device device = Midi.getInstance().getMidiDevice();
+		if (device != null) {
 			if (device instanceof DeviceColorAssociatorConnector) {
 				return ((DeviceColorAssociatorConnector) device).map(color);
 			}

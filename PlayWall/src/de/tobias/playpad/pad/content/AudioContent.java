@@ -5,26 +5,26 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import de.tobias.playpad.audio.AudioEqualizeable;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.audio.Equalizable;
-import de.tobias.playpad.audio.fade.Fading;
+import de.tobias.playpad.pad.conntent.play.Equalizeable;
+import de.tobias.playpad.audio.Fade;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.conntent.PadContent;
 import de.tobias.playpad.pad.conntent.path.SinglePathContent;
 import de.tobias.playpad.pad.conntent.play.Durationable;
 import de.tobias.playpad.pad.conntent.play.Fadeable;
-import de.tobias.playpad.pad.conntent.play.IVolume;
+import de.tobias.playpad.pad.conntent.play.FadeHandler;
 import de.tobias.playpad.pad.conntent.play.Pauseable;
 import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.utils.util.ZipFile;
-import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -33,7 +33,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizable, SinglePathContent, IVolume {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, SinglePathContent, FadeHandler {
 
 	private final String type;
 
@@ -45,12 +45,12 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	private ChangeListener<Number> volumeListener;
 
-	private Fading fading;
+	private Fade fade;
 
-	public AudioContent(String type, Pad pad) {
+	AudioContent(String type, Pad pad) {
 		super(pad);
 		this.type = type;
-		fading = new Fading(this);
+		fade = new Fade(this);
 
 		// Pad Volume Listener
 		volumeListener = (a, b, c) -> updateVolume();
@@ -106,7 +106,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 		Duration fadeIn = pad.getPadSettings().getFade().getFadeIn();
 		if (fadeIn.toMillis() > 0) {
-			fading.fadeIn(fadeIn);
+			fade.fadeIn(fadeIn);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public void fadeOut(Runnable onFinish) {
 		Duration fadeOut = getPad().getPadSettings().getFade().getFadeOut();
 		if (fadeOut.toMillis() > 0) {
-			fading.fadeOut(fadeOut, () -> {
+			fade.fadeOut(fadeOut, () -> {
 				onFinish.run();
 				updateVolume();
 			});
@@ -123,9 +123,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		}
 	}
 
-	@Override
-	public boolean isFading() {
-		return fading.isFading();
+	public boolean getFade() {
+		return fade.isFading();
 	}
 
 	@Override
@@ -138,8 +137,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public AudioEqualizer getAudioEqualizer() {
-		if (audioHandler instanceof Equalizable) {
-			return ((Equalizable) audioHandler).getAudioEqualizer();
+		if (audioHandler instanceof AudioEqualizeable) {
+			return ((AudioEqualizeable) audioHandler).getAudioEqualizer();
 		}
 		return null;
 	}

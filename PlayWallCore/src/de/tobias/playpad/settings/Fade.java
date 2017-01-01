@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.PadSettings;
 import javafx.util.Duration;
 
 /**
- * Einstellungen zum Fading, zusammengefasst in dieser Klasse.
+ * Einstellungen zum Fade, zusammengefasst in dieser Klasse.
  * 
  * @author tobias
  * 
@@ -27,14 +27,14 @@ public class Fade {
 	private boolean fadeOutStop;
 
 	/**
-	 * Erstellt ein neues Fading mit den Default Werten. (Fade Dauer: 0 sec)
+	 * Erstellt ein neues Fade mit den Default Werten. (Fade Dauer: 0 sec)
 	 */
 	public Fade() {
 		this(Duration.ZERO, Duration.ZERO);
 	}
 
 	/**
-	 * Erstellt einen neues Fading mit Custom Zeiten und Default Einstellungen für Play, Pause, Stop.
+	 * Erstellt einen neues Fade mit Custom Zeiten und Default Einstellungen für Play, Pause, Stop.
 	 * 
 	 * @param fadeIn
 	 *            Fade In Dauer
@@ -46,7 +46,7 @@ public class Fade {
 	}
 
 	/**
-	 * Erstellt ein Fading mit Custom Werten.
+	 * Erstellt ein Fade mit Custom Werten.
 	 * 
 	 * @param fadeIn
 	 *            Fade In Dauer

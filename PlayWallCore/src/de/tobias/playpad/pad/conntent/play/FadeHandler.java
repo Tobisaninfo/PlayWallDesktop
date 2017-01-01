@@ -7,7 +7,7 @@ package de.tobias.playpad.pad.conntent.play;
  * 
  * @since 6.0.0
  */
-public interface IVolume {
+public interface FadeHandler {
 
-	public void setFadeLevel(double level);
+	void setFadeLevel(double level);
 }
