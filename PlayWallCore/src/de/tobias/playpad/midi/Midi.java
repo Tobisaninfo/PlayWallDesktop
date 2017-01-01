@@ -1,6 +1,6 @@
 package de.tobias.playpad.midi;
 
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 
 import javax.sound.midi.*;
@@ -10,7 +10,7 @@ public class Midi implements AutoCloseable {
 
 	private MidiDevice inputDevice;
 	private MidiDevice outputDevice;
-	private Device midiDeviceImpl;
+	private MidiDeviceImpl midiMidiDeviceImplImpl;
 
 	private MidiListener listener;
 
@@ -46,8 +46,8 @@ public class Midi implements AutoCloseable {
 		return outputDevice;
 	}
 
-	public Device getMidiDevice() {
-		return midiDeviceImpl;
+	public MidiDeviceImpl getMidiDevice() {
+		return midiMidiDeviceImplImpl;
 	}
 
 	public void lookupMidiDevice(String name) throws IllegalArgumentException, MidiUnavailableException, NullPointerException {
@@ -91,7 +91,7 @@ public class Midi implements AutoCloseable {
 
 		// Hier wird die DeviceImpl aufgerufen
 		try {
-			this.midiDeviceImpl = DeviceRegistry.getFactoryInstance().getDevice(input.getName());
+			this.midiMidiDeviceImplImpl = DeviceRegistry.getFactoryInstance().getDevice(input.getName());
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -159,8 +159,8 @@ public class Midi implements AutoCloseable {
 	}
 
 	public void sendClearCommand() throws InvalidMidiDataException, MidiUnavailableException {
-		if (midiDeviceImpl != null) {
-			midiDeviceImpl.clearFeedback();
+		if (midiMidiDeviceImplImpl != null) {
+			midiMidiDeviceImplImpl.clearFeedback();
 		}
 	}
 }

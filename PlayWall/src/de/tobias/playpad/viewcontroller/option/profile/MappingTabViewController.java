@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.profile;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.tobias.playpad.PlayPadMain;
@@ -13,12 +12,10 @@ import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
-import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
@@ -49,7 +46,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private VBox detailView;
-	private IMapperOverviewViewController mapperOverviewViewController;
+	private BaseMapperOverviewViewController baseMapperOverviewViewController;
 
 	private Mapping oldMapping;
 	private Mapping mapping;
@@ -136,10 +133,10 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	public void showMapperFor(Action action) {
 		try {
 			if (action != null) {
-				mapperOverviewViewController = MapperRegistry.getOverviewViewControllerInstance();
-				mapperOverviewViewController.showAction(action, detailView);
+				baseMapperOverviewViewController = BaseMapperOverviewViewController.getInstance();
+				baseMapperOverviewViewController.showAction(action, detailView);
 			} else {
-				detailView.getChildren().remove(mapperOverviewViewController.getParent());
+				detailView.getChildren().remove(baseMapperOverviewViewController.getParent());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

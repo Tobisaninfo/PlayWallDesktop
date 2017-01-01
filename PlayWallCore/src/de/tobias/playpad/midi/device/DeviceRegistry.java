@@ -3,7 +3,7 @@ package de.tobias.playpad.midi.device;
 import java.util.HashMap;
 import java.util.List;
 
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;
 
@@ -25,7 +25,7 @@ public class DeviceRegistry extends EventDispatcher {
 	/**
 	 * Speicher für alle Geräte Implementierungen [Produktname, Implementierung]
 	 */
-	private HashMap<String, Class<? extends Device>> devices = new HashMap<>();
+	private HashMap<String, Class<? extends MidiDeviceImpl>> devices = new HashMap<>();
 
 	/**
 	 * Registriert eine neue Implementierung für ein Midi Gerät
@@ -35,9 +35,9 @@ public class DeviceRegistry extends EventDispatcher {
 	 * @param device
 	 *            Implementierung als Klasse, Instanz erstellt das Programm bei bei bedarf
 	 */
-	public void registerDevice(String id, Class<? extends Device> device) {
+	public void registerDevice(String id, Class<? extends MidiDeviceImpl> device) {
 		devices.put(id, device);
-		System.out.println("Register MIDI Device Impl: " + id);
+		System.out.println("Register MIDI MidiDeviceImpl Impl: " + id);
 	}
 
 	/**
@@ -45,26 +45,26 @@ public class DeviceRegistry extends EventDispatcher {
 	 * 
 	 * @param id
 	 *            Name des Geräts
-	 * @return Implementierung, DefaultDevice wenn keine vorhanden oder registriert über register
+	 * @return Implementierung, DefaultMidiDeviceImpl wenn keine vorhanden oder registriert über register
 	 * @throws InstantiationException
 	 *             Fehler beim instanzieren
 	 * @throws IllegalAccessException
 	 *             Fehler beim instanzieren
 	 * @see DeviceRegistry#registerDevice(String, Class)
-	 * @see DefaultDevice
+	 * @see DefaultMidiDeviceImpl
 	 */
-	public Device getDevice(String id) throws InstantiationException, IllegalAccessException {
+	public MidiDeviceImpl getDevice(String id) throws InstantiationException, IllegalAccessException {
 		if (devices.containsKey(id)) {
 			System.out.println("Recognize known MIDI device: " + id);
 			return devices.get(id).newInstance();
 		} else {
 			System.out.println("Use Default MIDI device");
-			return new DefaultDevice();
+			return new DefaultMidiDeviceImpl();
 		}
 	}
 
 	/**
-	 * Instanz der Device Component
+	 * Instanz der MidiDeviceImpl Component
 	 * 
 	 * @return instance
 	 */

@@ -20,9 +20,9 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
  * 
  * @since 5.0.0
  */
-public abstract class Device extends EventDispatcher implements Listener {
+public abstract class MidiDeviceImpl extends EventDispatcher implements Listener {
 
-	public Device() {
+	public MidiDeviceImpl() {
 		registerEventListener(this);
 	}
 
@@ -50,7 +50,7 @@ public abstract class Device extends EventDispatcher implements Listener {
 		if (listeners != null) {
 			for (ListenerHandler handler : listeners) {
 				handler.execute(event);
-				System.out.println("Dispatched Device Event: " + event);
+				System.out.println("Dispatched MidiDeviceImpl Event: " + event);
 			}
 		}
 		DeviceRegistry.getFactoryInstance().dispatchEvent(event);

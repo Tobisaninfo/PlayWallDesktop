@@ -2,10 +2,15 @@ package de.tobias.playpad.action.mapper;
 
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 
+/**
+ * Implement this interface to enable a mapper to receive feedback from an action
+ *
+ * @author tobias
+ */
 public interface MapperFeedbackable {
 
-	public abstract boolean supportFeedback();
+	boolean supportFeedback();
 
-	public abstract void handleFeedback(FeedbackMessage type);
+	void handleFeedback(FeedbackMessage message);
 
 }

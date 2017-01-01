@@ -32,7 +32,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="14.0">
                                        <children>
-                                          <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%settings.midi.label.device" />
+                                          <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%settings.midi.label.midiDeviceImpl" />
                                           <ComboBox fx:id="midiDeviceComboBox" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>

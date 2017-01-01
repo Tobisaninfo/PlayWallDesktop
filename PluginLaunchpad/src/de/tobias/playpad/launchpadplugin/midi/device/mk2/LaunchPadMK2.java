@@ -10,13 +10,13 @@ import javax.sound.midi.ShortMessage;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.launchpadplugin.impl.MapParser;
 import de.tobias.playpad.midi.Midi;
 import javafx.scene.paint.Color;
 
-public class LaunchPadMK2 extends Device implements DeviceColorAssociatorConnector {
+public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociatorConnector {
 
 	public static final String NAME = "Launchpad MK2";
 

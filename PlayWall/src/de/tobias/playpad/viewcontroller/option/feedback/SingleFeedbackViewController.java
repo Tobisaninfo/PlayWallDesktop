@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
-import java.util.Optional;
-
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
@@ -9,7 +8,6 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
-import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.utils.ui.ContentViewController;
@@ -38,9 +36,9 @@ public class SingleFeedbackViewController extends ContentViewController {
 		super("singleFeedback", "de/tobias/playpad/assets/view/option/feedback/", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			DisplayableFeedbackColor colorDefault = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			DisplayableFeedbackColor colorDefault = midiDeviceImpl.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 			if (colorDefault != null) {
 				colorPreviewDefault.setFill(colorDefault.getPaint());
 				setColorChooseButtonColor(colorDefault.getPaint(), colorChooseDefaultButton);
@@ -60,11 +58,11 @@ public class SingleFeedbackViewController extends ContentViewController {
 	private void colorChooseButtonHandler(ActionEvent event) {
 		if (colorChooser == null) {
 			colorChooser = new PopOver();
-			Device device = Midi.getInstance().getMidiDevice();
-			if (device != null) {
-				DisplayableFeedbackColor color = device.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
+			MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+			if (midiDeviceImpl != null) {
+				DisplayableFeedbackColor color = midiDeviceImpl.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 
-				ColorPickerView colorView = new ColorPickerView(color, device.getColors(), item ->
+				ColorPickerView colorView = new ColorPickerView(color, midiDeviceImpl.getColors(), item ->
 				{
 					colorChooser.hide();
 					if (item instanceof DisplayableFeedbackColor) {

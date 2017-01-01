@@ -1,9 +1,5 @@
 package de.tobias.playpad.view;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.Action;
@@ -12,7 +8,7 @@ import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.scene.Parent;
@@ -24,8 +20,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 // Diese Klasse zeigt die Mapper zu einer Action an
-public class MapperOverviewViewController implements IMapperOverviewViewController {
+public class MapperOverviewViewController extends BaseMapperOverviewViewController {
 
 	private VBox root;
 	private VBox mappingView;

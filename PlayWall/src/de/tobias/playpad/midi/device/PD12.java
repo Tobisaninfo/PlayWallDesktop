@@ -6,11 +6,11 @@ import javax.sound.midi.SysexMessage;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.settings.Profile;
 import javafx.application.Platform;
 
-public class PD12 extends Device {
+public class PD12 extends MidiDeviceImpl {
 
 	public static final String NAME = "PD 12";
 

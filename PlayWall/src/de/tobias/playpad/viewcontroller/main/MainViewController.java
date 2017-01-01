@@ -547,7 +547,7 @@ public class MainViewController extends ViewController implements IMainViewContr
 
 		// MIDI
 		if (profileSettings.isMidiActive() && profileSettings.getMidiDevice() != null) {
-			// Load known MIDI Device
+			// Load known MIDI MidiDeviceImpl
 			Worker.runLater(() ->
 			{
 				loadMidiDevice(profileSettings.getMidiDevice());
@@ -688,10 +688,10 @@ public class MainViewController extends ViewController implements IMainViewContr
 	}
 
 	/**
-	 * Init MIDI Device by using the Midi Class and show some feedback the user.
+	 * Init MIDI MidiDeviceImpl by using the Midi Class and show some feedback the user.
 	 * 
 	 * @param name
-	 *            Device Name
+	 *            MidiDeviceImpl Name
 	 * 
 	 * @see Midi#lookupMidiDevice(String)
 	 */

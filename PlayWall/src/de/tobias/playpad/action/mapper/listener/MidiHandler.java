@@ -7,7 +7,7 @@ import javax.sound.midi.MidiMessage;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.MappingUtils;
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.project.Project;
@@ -43,8 +43,8 @@ public class MidiHandler implements MidiListener {
 		int key = message.getMessage()[1];
 
 		// Custom Midi Listener
-		Device device = midi.getMidiDevice();
-		device.onMidiMessage(message);
+		MidiDeviceImpl midiDeviceImpl = midi.getMidiDevice();
+		midiDeviceImpl.onMidiMessage(message);
 
 		InputType type;
 		if (message.getMessage()[2] != 0) {

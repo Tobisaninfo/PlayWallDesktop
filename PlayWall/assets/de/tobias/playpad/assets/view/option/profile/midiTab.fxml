@@ -10,7 +10,7 @@
    <children>
       <HBox spacing="14.0">
          <children>
-            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.midi.label.device">
+            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.midi.label.midiDeviceImpl">
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin>

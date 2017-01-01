@@ -1,7 +1,6 @@
 package de.tobias.playpad.action.mapper;
 
-import java.util.Optional;
-
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Strings;
@@ -13,7 +12,6 @@ import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
-import de.tobias.playpad.action.mididevice.Device;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
@@ -33,11 +31,11 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	private Feedback feedback;
 	private FeedbackType feedbackType;
 
-	public MidiMapper(String type) {
+	MidiMapper(String type) {
 		this(type, 0, 0);
 	}
 
-	public MidiMapper(String type, int command, int key) {
+	MidiMapper(String type, int command, int key) {
 		this.type = type;
 		this.command = command;
 		this.key = key;
@@ -84,10 +82,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	}
 
 	@Override
-	public void handleFeedback(FeedbackMessage type) {
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			device.handleFeedback(type, key, feedback);
+	public void handleFeedback(FeedbackMessage message) {
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			midiDeviceImpl.handleFeedback(message, key, feedback);
 		}
 	}
 
@@ -96,12 +94,12 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 		return type;
 	}
 
-	// Feedback, abhängig vom Device
+	// Feedback, depends on MidiDeviceImpl
 	@Override
 	public boolean supportFeedback() {
-		Device midiDevice = Midi.getInstance().getMidiDevice();
-		if (midiDevice != null) {
-			return midiDevice.supportFeedback();
+		MidiDeviceImpl midiMidiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiMidiDeviceImpl != null) {
+			return midiMidiDeviceImpl.supportFeedback();
 		}
 		return false;
 	}
@@ -117,10 +115,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor[] getColors() {
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			if (device instanceof DeviceColorAssociatorConnector) {
-				return ((DeviceColorAssociatorConnector) device).getColors();
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			if (midiDeviceImpl instanceof DeviceColorAssociatorConnector) {
+				return ((DeviceColorAssociatorConnector) midiDeviceImpl).getColors();
 			}
 		}
 		return null;
@@ -128,10 +126,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor getDefaultEventColor() {
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			if (device instanceof DeviceColorAssociatorConnector) {
-				return ((DeviceColorAssociatorConnector) device).getDefaultEventColor();
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			if (midiDeviceImpl instanceof DeviceColorAssociatorConnector) {
+				return ((DeviceColorAssociatorConnector) midiDeviceImpl).getDefaultEventColor();
 			}
 		}
 		return null;
@@ -139,10 +137,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 
 	@Override
 	public DisplayableFeedbackColor getDefaultStandardColor() {
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			if (device instanceof DeviceColorAssociatorConnector) {
-				return ((DeviceColorAssociatorConnector) device).getDefaultStandardColor();
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			if (midiDeviceImpl instanceof DeviceColorAssociatorConnector) {
+				return ((DeviceColorAssociatorConnector) midiDeviceImpl).getDefaultStandardColor();
 			}
 		}
 		return null;
@@ -150,10 +148,10 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	
 	@Override
 	public DisplayableFeedbackColor map(Color color) {
-		Device device = Midi.getInstance().getMidiDevice();
-		if (device != null) {
-			if (device instanceof DeviceColorAssociatorConnector) {
-				return ((DeviceColorAssociatorConnector) device).map(color);
+		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
+		if (midiDeviceImpl != null) {
+			if (midiDeviceImpl instanceof DeviceColorAssociatorConnector) {
+				return ((DeviceColorAssociatorConnector) midiDeviceImpl).map(color);
 			}
 		}
 		return null;

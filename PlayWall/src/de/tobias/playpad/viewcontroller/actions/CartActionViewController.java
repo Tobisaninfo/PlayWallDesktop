@@ -4,9 +4,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
-import de.tobias.playpad.action.mapper.MapperRegistry;
 import de.tobias.playpad.action.mapper.MapperViewController;
-import de.tobias.playpad.viewcontroller.IMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
@@ -21,7 +20,7 @@ public class CartActionViewController extends ContentViewController {
 	@FXML private CheckBox autoColorCheckbox;
 
 	@FXML private VBox rootContainer;
-	private IMapperOverviewViewController mapperOverviewViewController;
+	private BaseMapperOverviewViewController baseMapperOverviewViewController;
 
 	private CartAction action;
 
@@ -43,8 +42,8 @@ public class CartActionViewController extends ContentViewController {
 		{
 			action.setAutoFeedbackColors(c);
 			// Disable Feedback Controls bei Automatischen Feedback für VORHANDENE MAPPER
-			if (mapperOverviewViewController != null) {
-				mapperOverviewViewController.getControllers().forEach(controller ->
+			if (baseMapperOverviewViewController != null) {
+				baseMapperOverviewViewController.getControllers().forEach(controller ->
 				{
 					toggleFeedbackVisablity(action, controller);
 				});
@@ -52,8 +51,8 @@ public class CartActionViewController extends ContentViewController {
 		});
 		VBox.setVgrow(rootContainer, Priority.ALWAYS);
 
-		mapperOverviewViewController = MapperRegistry.getOverviewViewControllerInstance();
-		mapperOverviewViewController.addMapperAddListener((mapper, controller) ->
+		baseMapperOverviewViewController = BaseMapperOverviewViewController.getInstance();
+		baseMapperOverviewViewController.addMapperAddListener((mapper, controller) ->
 		{
 			// Disable Feedback Controls bei Automatischen Feedback für NEUE MAPPER die erstellt werden
 			toggleFeedbackVisablity(action, controller);

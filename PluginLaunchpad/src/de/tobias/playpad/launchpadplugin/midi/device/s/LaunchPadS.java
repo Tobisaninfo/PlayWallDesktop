@@ -6,12 +6,12 @@ import javax.sound.midi.MidiUnavailableException;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.Device;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.midi.Midi;
 import javafx.scene.paint.Color;
 
-public class LaunchPadS extends Device implements DeviceColorAssociatorConnector {
+public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorConnector {
 
 	public static final String NAME = "Launchpad S";
 

@@ -18,11 +18,7 @@ import java.util.Set;
 
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.design.modern.ModernDesignFactory;
-import org.dom4j.DocumentException;
 
-import de.tobias.playpad.action.mapper.MapperRegistry;
-import de.tobias.playpad.audio.JavaFXAudioHandler;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.pad.Pad;
@@ -32,9 +28,9 @@ import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
@@ -76,7 +72,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private Set<Module> modules;
 
-	public PlayPadImpl(GlobalSettings globalSettings) {
+	PlayPadImpl(GlobalSettings globalSettings) {
 		App app = ApplicationUtils.getApplication();
 		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
 
@@ -252,7 +248,7 @@ public class PlayPadImpl implements PlayPad {
 		return currentProject;
 	}
 
-	public void startup(ResourceBundle resourceBundle) {
+	void startup(ResourceBundle resourceBundle) {
 		registerComponents(resourceBundle);
 	}
 
@@ -286,7 +282,7 @@ public class PlayPadImpl implements PlayPad {
 		Pad.getVolumeManager().addFilter(new PadVolume());
 
 		// Mapper
-		MapperRegistry.setOverviewViewController(new MapperOverviewViewController());
+		BaseMapperOverviewViewController.setInstance(new MapperOverviewViewController());
 
 	}
 

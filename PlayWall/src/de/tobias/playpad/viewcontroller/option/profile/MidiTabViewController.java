@@ -49,7 +49,7 @@ public class MidiTabViewController extends ProfileSettingsTabViewController {
 		});
 	}
 
-	// Midi Device und Presets Choose
+	// Midi MidiDeviceImpl und Presets Choose
 	@FXML
 	private void deviceHandler(ActionEvent event) {
 		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
