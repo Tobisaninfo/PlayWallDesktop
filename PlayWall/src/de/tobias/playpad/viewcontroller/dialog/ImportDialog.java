@@ -9,6 +9,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Importable;
 import de.tobias.playpad.project.ProfileChooseable;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -17,22 +18,23 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class ImportDialog implements Importable, ProfileChooseable {
 
 	private static ImportDialog instance;
-	private static Stage owner;
+	private static Window owner;
 
 	static {
 		instance = new ImportDialog();
 	}
 
-	public static ImportDialog getInstance(Stage stage) {
+	public static ImportDialog getInstance(Window stage) {
 		ImportDialog.owner = stage;
 		return instance;
 	}
 
-	private Stage getStage() {
+	private Window getStage() {
 		return owner;
 	}
 
@@ -120,7 +122,7 @@ public class ImportDialog implements Importable, ProfileChooseable {
 	public Profile getUnkownProfile() {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(getStage());
 
-		dialog.getStage().showAndWait();
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Profile profile = dialog.getProfile();
 		if (profile != null) {
 			return profile;

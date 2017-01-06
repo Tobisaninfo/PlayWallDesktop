@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.settings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.Fade;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
@@ -11,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
 
-public class FadeViewController extends ContentViewController {
+public class FadeViewController extends NVC {
 
 	@FXML private Slider fadeInSlider;
 	@FXML private Slider fadeOutSlider;
@@ -26,7 +27,7 @@ public class FadeViewController extends ContentViewController {
 	private Fade fade;
 
 	public FadeViewController() {
-		super("fadeView", "de/tobias/playpad/assets/settings/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/settings/", "fadeView", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

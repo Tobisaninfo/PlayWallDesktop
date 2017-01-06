@@ -10,6 +10,8 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
@@ -26,7 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class NewProfileDialog extends ViewController {
+public class NewProfileDialog extends NVC {
 
 	@FXML private TextField nameTextField;
 	@FXML private CheckBox activeCheckBox;
@@ -40,11 +42,13 @@ public class NewProfileDialog extends ViewController {
 
 	private Profile profile;
 
-	public NewProfileDialog(Window owner) {
-		super("newProfileDialog", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
+	NewProfileDialog(Window owner) {
+		load("de/tobias/playpad/assets/dialog/", "newProfileDialog", PlayPadMain.getUiResourceBundle());
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		nvcStage.getStage().sizeToScene();
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
 		midiDeviceComboBox.setDisable(!activeCheckBox.isSelected());
 
@@ -63,7 +67,6 @@ public class NewProfileDialog extends ViewController {
 				}
 			});
 		});
-		getStage().sizeToScene();
 	}
 
 	private boolean expand = false;
@@ -74,12 +77,19 @@ public class NewProfileDialog extends ViewController {
 		{
 			if (newHeight.doubleValue() > oldHeight.doubleValue()) {
 				if (accordionParent.getHeight() <= newHeight.doubleValue()) {
-					getStage().setHeight(getStage().getHeight() + newHeight.doubleValue());
+					getStageContainer().ifPresent(nvcStage -> {
+						Stage stage = nvcStage.getStage();
+						stage.setHeight(stage.getHeight() + newHeight.doubleValue());
+					});
 					expand = true;
 				}
 			} else {
-				if (expand)
-					getStage().setHeight(getStage().getHeight() - oldHeight.doubleValue());
+				if (expand) {
+					getStageContainer().ifPresent(nvcStage -> {
+						Stage stage = nvcStage.getStage();
+						stage.setHeight(stage.getHeight() - oldHeight.doubleValue());
+					});
+				}
 				expand = false;
 			}
 		});
@@ -97,8 +107,6 @@ public class NewProfileDialog extends ViewController {
 			}
 		});
 		finishButton.setDisable(true);
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -114,8 +122,10 @@ public class NewProfileDialog extends ViewController {
 
 		stage.setMaxWidth(500);
 
+		stage.initModality(Modality.WINDOW_MODAL);
+
 		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().currentLayout().applyCss(getStage());
+			Profile.currentProfile().currentLayout().applyCss(stage);
 		}
 	}
 
@@ -141,7 +151,7 @@ public class NewProfileDialog extends ViewController {
 			profile.getProfileSettings().setMidiDeviceName(midiDeviceComboBox.getSelectionModel().getSelectedItem());
 
 			profile.save();
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		} catch (Exception e) {
 			e.printStackTrace();
 			showErrorMessage(Localization.getString(Strings.Error_Profile_Create, e.getMessage()));
@@ -150,7 +160,7 @@ public class NewProfileDialog extends ViewController {
 
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	public Profile getProfile() {

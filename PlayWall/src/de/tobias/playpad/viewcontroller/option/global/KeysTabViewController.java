@@ -49,8 +49,8 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 	private Key currentKey;
 	private ObservableList<Key> keys = FXCollections.observableArrayList();
 
-	public KeysTabViewController() {
-		super("keysTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
+	KeysTabViewController() {
+		load("de/tobias/playpad/assets/view/option/global/", "keysTab", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override
@@ -147,14 +147,14 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 					Platform.runLater(() -> ((Stage) scene.getWindow()).close());
 				} else {
 					KeysConflictDialog dialog = new KeysConflictDialog(keyCollection.getConflicts(newKey), keyCollection);
-					dialog.initOwner(getStage());
+					dialog.initOwner(getContainingWindow());
 					dialog.showAndWait();
 				}
 			}
 		});
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.initOwner(getWindow());
+		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);

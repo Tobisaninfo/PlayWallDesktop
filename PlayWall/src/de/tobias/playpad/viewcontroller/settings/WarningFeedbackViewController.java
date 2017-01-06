@@ -5,6 +5,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
@@ -12,13 +13,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
 
-public class WarningFeedbackViewController extends ContentViewController {
+public class WarningFeedbackViewController extends NVC {
 
 	@FXML private Slider warningFeedbackTimeSlider;
 	@FXML private Label warningFeedbackTimeLabel;
 
 	public WarningFeedbackViewController() {
-		super("warningFeedbackSettingsView", "de/tobias/playpad/assets/settings/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/settings/", "warningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
 		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 
 		warningFeedbackTimeSlider.setValue(profilSettings.getWarningFeedback().toSeconds());
@@ -31,7 +32,7 @@ public class WarningFeedbackViewController extends ContentViewController {
 	}
 
 	public WarningFeedbackViewController(Pad pad) {
-		super("warningFeedbackSettingsView", "de/tobias/playpad/assets/settings/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/settings/", "warningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

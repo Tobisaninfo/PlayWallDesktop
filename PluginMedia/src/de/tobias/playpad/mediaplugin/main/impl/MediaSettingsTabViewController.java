@@ -35,7 +35,7 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 	private boolean changeSettings = false;
 
 	public MediaSettingsTabViewController(VideoSettings settings) {
-		super("settingsPane", "de/tobias/playpad/mediaplugin/assets/", MediaPluginImpl.getInstance().getBundle());
+		load("de/tobias/playpad/mediaplugin/assets/", "settingsPane", MediaPluginImpl.getInstance().getBundle());
 		this.settings = settings;
 		this.bundle = MediaPluginImpl.getInstance().getBundle();
 	}

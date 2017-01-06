@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.tobias.utils.nui.NVCStage;
 import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -479,7 +480,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		doAction(() ->
 		{
 			NewProjectDialog dialog = new NewProjectDialog(mainViewController.getStage());
-			dialog.getStage().showAndWait();
+			dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 			Project project = dialog.getProject();
 			if (project != null) {
@@ -543,7 +544,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		doAction(() ->
 		{
 			ProfileViewController controller = new ProfileViewController(mainViewController.getStage(), openProject);
-			controller.getStage().showAndWait();
+			controller.getStageContainer().ifPresent(NVCStage::showAndWait);
 			mainViewController.updateWindowTitle();
 		});
 	}
@@ -551,7 +552,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void printMenuHandler(ActionEvent event) {
 		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
-		dialog.getStage().show();
+		dialog.getStageContainer().ifPresent(NVCStage::show);
 	}
 
 	@FXML
@@ -584,7 +585,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		doAction(() ->
 		{
 			PluginViewController controller = new PluginViewController(mainViewController.getStage());
-			controller.getStage().showAndWait();
+			controller.getStageContainer().ifPresent(NVCStage::showAndWait);
 		});
 	}
 
@@ -600,9 +601,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, openProject, onFinish);
 
-			projectSettingsViewController.getStage().show();
-		} else if (projectSettingsViewController.getStage().isShowing()) {
-			projectSettingsViewController.getStage().toFront();
+			projectSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
+		} else if (projectSettingsViewController.getStageContainer().isPresent() && projectSettingsViewController.getStageContainer().get().getStage().isShowing()) {
+			projectSettingsViewController.getStageContainer().get().getStage().toFront();
 		}
 	}
 
@@ -629,9 +630,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, openProject,
 					onFinish);
 
-			profileSettingsViewController.getStage().show();
-		} else if (profileSettingsViewController.getStage().isShowing()) {
-			profileSettingsViewController.getStage().toFront();
+			profileSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
+		} else if (profileSettingsViewController.getStageContainer().isPresent() && profileSettingsViewController.getStageContainer().get().getStage().isShowing()) {
+			profileSettingsViewController.getStageContainer().get().getStage().toFront();
 		}
 	}
 
@@ -647,9 +648,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			};
 
 			globalSettingsViewController = new GlobalSettingsViewController(mainStage, onFinish);
-			globalSettingsViewController.getStage().show();
+			globalSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		} else {
-			globalSettingsViewController.getStage().toFront();
+			globalSettingsViewController.getStageContainer().get().getStage().toFront();
 		}
 	}
 

@@ -27,8 +27,8 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 	@FXML private ComboBox<DesignFactory> layoutTypeComboBox;
 	private GlobalDesignViewController globalLayoutViewController;
 
-	public DesignTabViewController() {
-		super("layoutTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+	DesignTabViewController() {
+		load("de/tobias/playpad/assets/view/option/profile/", "layoutTab", PlayPadMain.getUiResourceBundle());
 
 		String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
 		try {

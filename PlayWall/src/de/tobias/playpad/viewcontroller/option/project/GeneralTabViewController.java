@@ -28,8 +28,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	@FXML private TextField columnTextField;
 	@FXML private TextField rowTextField;
 
-	public GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
-		super("generalTab", "de/tobias/playpad/assets/view/option/project/", PlayPadMain.getUiResourceBundle());
+	GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
+		load("de/tobias/playpad/assets/view/option/project/", "generalTab", PlayPadMain.getUiResourceBundle());
 
 		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;

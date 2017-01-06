@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadMain;
@@ -36,7 +38,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProfileSettingsViewController extends ViewController implements IProfileSettingsViewController {
+public class ProfileSettingsViewController extends NVC implements IProfileSettingsViewController {
 
 	@FXML private TabPane tabPane;
 	@FXML private ToggleButton lockedButton;
@@ -47,7 +49,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 	private Runnable onFinish;
 
 	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		super("settingsView", "de/tobias/playpad/assets/view/option/profile/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/profile/", "settingsView",  PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasActivePlayers();
@@ -71,7 +73,10 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 			}
 		}
 
-		getStage().initOwner(owner);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		nvcStage.addCloseHook(this::onFinish);
+		addCloseKeyShortcut(() -> finishButton.fire());
 
 		// Show Current Settings
 		loadTabs();
@@ -80,9 +85,6 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 	@Override
 	public void init() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-
-		// KeyCode
-		addCloseKeyShortcut(() -> finishButton.fire());
 
 		// Look Button Listener
 		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
@@ -110,7 +112,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	/**
@@ -140,16 +142,11 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 		}
 	}
 
-	@Override
-	public boolean closeRequest() {
-		return onFinish();
-	}
-
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		onFinish();
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	/**
@@ -159,7 +156,7 @@ public class ProfileSettingsViewController extends ViewController implements IPr
 	 */
 	private boolean onFinish() {
 		for (ProfileSettingsTabViewController controller : tabs) {
-			if (controller.validSettings() == false) {
+			if (!controller.validSettings()) {
 				return false;
 			}
 		}

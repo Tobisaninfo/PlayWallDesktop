@@ -3,6 +3,8 @@ package de.tobias.playpad.viewcontroller.option.global;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadImpl;
@@ -31,21 +33,24 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class GlobalSettingsViewController extends ViewController implements IGlobalSettingsViewController {
+public class GlobalSettingsViewController extends NVC implements IGlobalSettingsViewController {
 
 	@FXML private TabPane tabPane;
 	@FXML private ToggleButton lockedButton;
 	@FXML private Button finishButton;
 
-	protected List<GlobalSettingsTabViewController> tabs = new ArrayList<>();
+	private List<GlobalSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Runnable onFinish;
 
 	public GlobalSettingsViewController(Window owner, Runnable onFinish) {
-		super("globalSettingsView", "de/tobias/playpad/assets/view/option/global/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/global/", "globalSettingsView",  PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
-		getStage().initOwner(owner);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		nvcStage.addCloseHook(this::onFinish);
+		addCloseKeyShortcut(() -> finishButton.fire());
 
 		addTab(new GeneralTabViewController(this));
 		addTab(new KeysTabViewController());
@@ -57,9 +62,6 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 
 	@Override
 	public void init() {
-		// KeyCode
-		addCloseKeyShortcut(() -> finishButton.fire());
-
 		finishButton.defaultButtonProperty().bind(finishButton.focusedProperty());
 	}
 
@@ -71,7 +73,7 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	/**
@@ -103,16 +105,11 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 		}
 	}
 
-	@Override
-	public boolean closeRequest() {
-		return onFinish();
-	}
-
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		onFinish();
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	/**
@@ -122,7 +119,7 @@ public class GlobalSettingsViewController extends ViewController implements IGlo
 	 */
 	private boolean onFinish() {
 		for (GlobalSettingsTabViewController controller : tabs) {
-			if (controller.validSettings() == false) {
+			if (!controller.validSettings()) {
 				return false;
 			}
 		}

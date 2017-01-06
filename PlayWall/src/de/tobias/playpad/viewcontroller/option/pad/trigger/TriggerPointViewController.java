@@ -8,6 +8,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.trigger.TriggerDisplayable;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -18,7 +19,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class TriggerPointViewController extends ContentViewController {
+public class TriggerPointViewController extends NVC {
 
 	@FXML private VBox itemView;
 	@FXML private HBox buttonBox;
@@ -26,7 +27,7 @@ public class TriggerPointViewController extends ContentViewController {
 	private TriggerDisplayable triggerWrapper;
 
 	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
-		super("triggerPoint", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/pad/trigger/", "triggerPoint", PlayPadMain.getUiResourceBundle());
 		this.triggerWrapper = triggerWrapper;
 
 		for (TriggerItem item : triggerWrapper.getTrigger().getItems())
@@ -64,11 +65,11 @@ public class TriggerPointViewController extends ContentViewController {
 			TriggerItemFactory connect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getFactory(item.getType());
 
 			VBox itemBox = new VBox(14);
-			ContentViewController contentViewController = connect.getSettingsController(item);
-			if (contentViewController != null) {
-				itemBox.getChildren().add(contentViewController.getParent());
+			NVC controller = connect.getSettingsController(item);
+			if (controller != null) {
+				itemBox.getChildren().add(controller.getParent());
 
-				ContentViewController timeViewController = new TriggerTimeViewController(item);
+				NVC timeViewController = new TriggerTimeViewController(item);
 				itemBox.getChildren().add(timeViewController.getParent());
 
 				Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));

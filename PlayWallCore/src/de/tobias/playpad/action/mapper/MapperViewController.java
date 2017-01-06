@@ -2,6 +2,7 @@ package de.tobias.playpad.action.mapper;
 
 import java.util.ResourceBundle;
 
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 
 /**
@@ -12,11 +13,7 @@ import de.tobias.utils.ui.ContentViewController;
  * @since 5.0.0
  *
  */
-public abstract class MapperViewController extends ContentViewController {
-
-	public MapperViewController(String name, String path, ResourceBundle localization) {
-		super(name, path, localization);
-	}
+public abstract class MapperViewController extends NVC {
 
 	public abstract void showFeedback();
 

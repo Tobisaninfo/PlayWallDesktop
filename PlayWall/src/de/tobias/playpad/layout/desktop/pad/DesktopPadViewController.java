@@ -1,10 +1,5 @@
 package de.tobias.playpad.layout.desktop.pad;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
@@ -12,16 +7,11 @@ import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.play.Durationable;
-import de.tobias.playpad.pad.listener.IPadPositionListener;
-import de.tobias.playpad.pad.listener.PadContentListener;
-import de.tobias.playpad.pad.listener.PadDurationListener;
-import de.tobias.playpad.pad.listener.PadLockedListener;
-import de.tobias.playpad.pad.listener.PadPositionListener;
-import de.tobias.playpad.pad.listener.PadStatusListener;
+import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -32,6 +22,7 @@ import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
@@ -42,6 +33,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Set;
 
 public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
@@ -280,14 +276,17 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			Stage owner = mvc.getStage();
 
 			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
-			padSettingsViewController.getStage().setOnHiding(ev ->
-			{
-				if (padView != null && pad != null)
-					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> {
+				nvcStage.addCloseHook(() -> {
+					if (padView != null && pad != null)
+						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+					return true;
+				});
 			});
-			padSettingsViewController.getStage().show();
+			padSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		}
 	}
+
 
 	@Override
 	public void updateTimeLabel() {
@@ -391,7 +390,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getNewButton().setDisable(true);
 			padView.getSettingsButton().setDisable(true);
 		}
-		
+
 		// Alles Desktivieren, wenn nicht Play Mode
 		if (connect.getEditMode() != DesktopEditMode.PLAY) {
 			padView.getPlayButton().setDisable(true);

@@ -2,6 +2,7 @@ package de.tobias.playpad.action;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 
 /**
@@ -25,7 +26,7 @@ public interface ActionDisplayable extends Displayable {
 	 *            Aktueller ViewController für das Mapping
 	 * @return ViewController für den ActionType
 	 */
-	public default ContentViewController getActionSettingsViewController(Mapping mapping, IMappingTabViewController controller) {
+	default NVC getActionSettingsViewController(Mapping mapping, IMappingTabViewController controller) {
 		return null;
 	}
 }

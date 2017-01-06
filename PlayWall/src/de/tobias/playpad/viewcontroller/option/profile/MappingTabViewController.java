@@ -23,6 +23,7 @@ import de.tobias.playpad.viewcontroller.dialog.MappingListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.concurrent.Task;
@@ -36,23 +37,19 @@ import javafx.scene.layout.VBox;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
-	@FXML
-	private ComboBox<Mapping> mappingComboBox;
-	@FXML
-	private Button editMappingsButton;
+	@FXML private ComboBox<Mapping> mappingComboBox;
+	@FXML private Button editMappingsButton;
 
-	@FXML
-	private TreeView<ActionDisplayable> treeView;
+	@FXML private TreeView<ActionDisplayable> treeView;
 
-	@FXML
-	private VBox detailView;
+	@FXML private VBox detailView;
 	private BaseMapperOverviewViewController baseMapperOverviewViewController;
 
 	private Mapping oldMapping;
 	private Mapping mapping;
 
-	public MappingTabViewController() {
-		super("mapping", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+	MappingTabViewController() {
+		load("de/tobias/playpad/assets/view/option/profile/", "mapping", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override
@@ -72,7 +69,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 			detailView.getChildren().clear();
 
 			if (c != null) {
-				ContentViewController controller = c.getValue().getSettingsViewController();
+				NVC controller = c.getValue().getSettingsViewController();
 				if (controller == null) {
 					controller = c.getValue().getActionSettingsViewController(mapping, this);
 				}
@@ -112,7 +109,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private void editMappingsHandler(ActionEvent event) {
-		MappingListViewController controller = new MappingListViewController(Profile.currentProfile().getMappings(), getWindow());
+		MappingListViewController controller = new MappingListViewController(Profile.currentProfile().getMappings(), getContainingWindow());
 		controller.getStage().showAndWait();
 		setMappingItemsToList();
 	}

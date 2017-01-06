@@ -18,6 +18,8 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -33,12 +35,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class PadSettingsViewController extends ViewController implements IPadSettingsViewController {
+public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
 	private Pad pad;
 
 	@FXML private TabPane tabPane;
-	protected List<PadSettingsTabViewController> tabs = new ArrayList<>();
+	private List<PadSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Control pathLookupButton;
 	private PathLookupListener pathLookupListener;
@@ -46,7 +48,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	@FXML private Button finishButton;
 
 	public PadSettingsViewController(Pad pad, Window owner) {
-		super("padSettingsView", "de/tobias/playpad/assets/view/option/pad/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/pad/", "padSettingsView", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
@@ -72,7 +74,10 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 
 		setupPathLookupButton();
 
-		getStage().initOwner(owner);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		nvcStage.addCloseHook(this::onFinish);
+		addCloseKeyShortcut(() -> finishButton.fire());
 
 		// Show Current Settings
 		showCurrentSettings();
@@ -127,16 +132,18 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	}
 
 	private void setTitle(Pad pad) {
+		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName()));
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName());
 		} else {
-			getStage().setTitle(Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable()));
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable());
 		}
+		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
 	}
 
 	@Override
 	public void init() {
-		addCloseKeyShortcut(() -> finishButton.fire());
+
 	}
 
 	@Override
@@ -146,7 +153,7 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	private void showCurrentSettings() {
@@ -168,11 +175,6 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 		return pad;
 	}
 
-	@Override
-	public boolean closeRequest() {
-		onFinish();
-		return true;
-	}
 
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
@@ -183,11 +185,12 @@ public class PadSettingsViewController extends ViewController implements IPadSet
 	 * Diese Methode wird aufgerufen, wenn das Fenster geschlossen wird (Per X oder Finish Button). Hier geschehen alle Aktionen zum
 	 * manuellen Speichern.
 	 */
-	private void onFinish() {
+	private boolean onFinish() {
 		// Speichern der einzelen Tabs
 		for (PadSettingsTabViewController controller : tabs) {
 			controller.saveSettings(pad);
 		}
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
+		return true;
 	}
 }

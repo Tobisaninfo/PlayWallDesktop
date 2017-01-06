@@ -5,20 +5,21 @@ import java.util.Optional;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.tigger.TriggerItem;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.TimeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
 
-public class TriggerTimeViewController extends ContentViewController {
+public class TriggerTimeViewController extends NVC {
 
 	@FXML private TextField timeTextField;
 
 	private TriggerItem item;
 
-	public TriggerTimeViewController(TriggerItem item) {
-		super("triggerTime", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
+	TriggerTimeViewController(TriggerItem item) {
+		load("de/tobias/playpad/assets/view/option/pad/trigger/", "triggerTime", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		timeTextField.setText(String.valueOf(item.getDurationFromPoint().toSeconds()));
@@ -29,9 +30,7 @@ public class TriggerTimeViewController extends ContentViewController {
 		timeTextField.textProperty().addListener((a, b, c) ->
 		{
 			Optional<Duration> duration = TimeUtils.parse(c);
-			if (duration.isPresent()) {
-				item.setDurationFromPoint(duration.get());
-			}
+			duration.ifPresent(item::setDurationFromPoint);
 			timeTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, !duration.isPresent());
 		});
 	}

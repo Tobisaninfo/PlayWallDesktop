@@ -1,5 +1,6 @@
 package de.tobias.playpad.action.cartaction;
 
+import de.tobias.utils.nui.NVC;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Strings;
@@ -260,7 +261,7 @@ public class CartAction extends Action implements ColorAdjustable {
 	private static CartActionViewController cartActionViewController;
 
 	@Override
-	public ContentViewController getSettingsViewController() {
+	public NVC getSettingsViewController() {
 		if (cartActionViewController == null) {
 			cartActionViewController = new CartActionViewController();
 		}

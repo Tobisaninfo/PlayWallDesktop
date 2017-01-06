@@ -20,7 +20,7 @@ public class KeyboardMapperViewController extends MapperViewController {
 	private KeyboardMapper mapper;
 
 	public KeyboardMapperViewController() {
-		super("keyboard", "de/tobias/playpad/assets/view/mapper/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/mapper/", "keyboard", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class KeyboardMapperViewController extends MapperViewController {
 		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.initOwner(getWindow());
+		alert.initOwner(getContainingWindow());
 		boolean result =  alert.showInputDialog();
 		setLabel();
 		return result;

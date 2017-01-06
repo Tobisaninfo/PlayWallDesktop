@@ -5,6 +5,7 @@ import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.CartTriggerViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontIconType;
 import de.tobias.utils.util.Localization;
@@ -21,7 +22,7 @@ public class CartTriggerItemFactory extends TriggerItemFactory {
 	}
 
 	@Override
-	public ContentViewController getSettingsController(TriggerItem item) {
+	public NVC getSettingsController(TriggerItem item) {
 		return new CartTriggerViewController((CartTriggerItem) item);
 	}
 

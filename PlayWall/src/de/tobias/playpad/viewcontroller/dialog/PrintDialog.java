@@ -18,6 +18,8 @@ import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.PageNameListCell;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
@@ -35,7 +37,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class PrintDialog extends ViewController {
+public class PrintDialog extends NVC {
 
 	@FXML private WebView webView;
 	@FXML private ComboBox<Integer> pageComboBox;
@@ -45,7 +47,7 @@ public class PrintDialog extends ViewController {
 	private Project project;
 
 	public PrintDialog(Project project, Window owner) {
-		super("printDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/project/", "printDialog", PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
 		int pages = project.getPages().size();
@@ -56,7 +58,9 @@ public class PrintDialog extends ViewController {
 		pageComboBox.setCellFactory(param -> new PageNameListCell());
 		pageComboBox.setButtonCell(new PageNameListCell());
 
-		getStage().initOwner(owner);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@Override
@@ -65,8 +69,6 @@ public class PrintDialog extends ViewController {
 		{
 			createPreview(c);
 		});
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -77,7 +79,7 @@ public class PrintDialog extends ViewController {
 		stage.setMinHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	private void createPreview(int pageIndex) {
@@ -132,7 +134,7 @@ public class PrintDialog extends ViewController {
 
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
@@ -142,10 +144,10 @@ public class PrintDialog extends ViewController {
 		PrinterJob job = PrinterJob.createPrinterJob(printer);
 		job.getJobSettings().setPageLayout(layout);
 		job.getJobSettings().setJobName(ApplicationUtils.getApplication().getInfo().getName());
-		if (job != null && job.showPrintDialog(getStage())) {
+		if (job.showPrintDialog(getContainingWindow())) {
 			webView.getEngine().print(job);
 			job.endJob();
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		}
 	}
 

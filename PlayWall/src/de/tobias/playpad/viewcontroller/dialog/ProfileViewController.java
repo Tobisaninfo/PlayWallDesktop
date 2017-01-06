@@ -2,6 +2,8 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import java.io.IOException;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
@@ -29,7 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProfileViewController extends ViewController implements ChangeListener<ProfileReference> {
+public class ProfileViewController extends NVC implements ChangeListener<ProfileReference> {
 
 	@FXML private ListView<ProfileReference> profileList;
 	@FXML private TextField nameTextField;
@@ -44,12 +46,13 @@ public class ProfileViewController extends ViewController implements ChangeListe
 	private Project project;
 
 	public ProfileViewController(Window owner, Project project) {
-		super("profileSettingsView", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/", "profileSettingsView", PlayPadMain.getUiResourceBundle());
 		profileList.getSelectionModel().select(Profile.currentProfile().getRef());
 		this.project = project;
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
 		if (ProfileReferences.getProfiles().size() == 1
 				|| profileList.getSelectionModel().getSelectedItem().equals(Profile.currentProfile().getRef())) {
@@ -81,8 +84,6 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		});
 
 		profileList.getSelectionModel().selectedItemProperty().addListener(this);
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -93,7 +94,8 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		stage.setMinWidth(375);
 		stage.setMinHeight(500);
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		stage.initModality(Modality.WINDOW_MODAL);
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	@FXML
@@ -106,13 +108,13 @@ public class ProfileViewController extends ViewController implements ChangeListe
 		} catch (ProfileNotFoundException | DocumentException | IOException e) {
 			e.printStackTrace();
 		}
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
 	private void newButtonHandler(ActionEvent event) {
-		NewProfileDialog dialog = new NewProfileDialog(getStage());
-		dialog.getStage().showAndWait();
+		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 		Profile profile = dialog.getProfile();
 
@@ -140,7 +142,7 @@ public class ProfileViewController extends ViewController implements ChangeListe
 	private void deleteButtonHandler() {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 
-		alert.initOwner(getStage());
+		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);

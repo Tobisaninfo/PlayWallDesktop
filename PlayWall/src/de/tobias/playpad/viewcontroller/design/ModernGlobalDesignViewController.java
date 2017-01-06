@@ -36,13 +36,11 @@ public class ModernGlobalDesignViewController extends GlobalDesignViewController
 	private PopOver colorChooser;
 
 	public ModernGlobalDesignViewController(GlobalDesign layout) {
-		super("modernLayoutGlobal", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
+		super(layout);
+		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutGlobal", PlayPadMain.getUiResourceBundle());
 
-		if (layout instanceof GlobalDesign) {
-			this.globalLayout = (ModernGlobalDesign) layout;
-
-			setLayout();
-		}
+		this.globalLayout = (ModernGlobalDesign) layout;
+		setLayout();
 	}
 
 	private void setLayout() {

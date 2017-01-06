@@ -27,8 +27,8 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 	private Pad pad;
 
-	public TriggerPadTabViewController(Pad pad) {
-		super("triggerTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
+	TriggerPadTabViewController(Pad pad) {
+		load("de/tobias/playpad/assets/view/option/pad/", "triggerTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 	}
 

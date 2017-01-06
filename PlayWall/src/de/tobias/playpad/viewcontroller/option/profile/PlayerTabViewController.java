@@ -25,8 +25,8 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	@FXML private VBox fadeContainer;
 	@FXML private ComboBox<TimeMode> timeDisplayComboBox;
 
-	public PlayerTabViewController() {
-		super("playerTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+	PlayerTabViewController() {
+		load("de/tobias/playpad/assets/view/option/profile/", "playerTab", PlayPadMain.getUiResourceBundle());
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();

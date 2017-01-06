@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
@@ -43,7 +45,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class LaunchDialog extends ViewController implements ProfileChooseable {
+public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	private static final String IMAGE = "icon.png";
 
@@ -58,8 +60,10 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	@FXML private Button deleteButton;
 
 	public LaunchDialog(Stage stage) {
-		super("launchDialog", "de/tobias/playpad/assets/dialog/", stage, null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
 		projectListView.getItems().addAll(ProjectReferences.getProjectsSorted());
+
+		applyViewControllerToStage(stage);
 	}
 
 	@Override
@@ -104,8 +108,8 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 	@Override
 	public void initStage(Stage stage) {
-		setCSS("style.css", "de/tobias/playpad/assets/");
-		setCSS("launchDialog_style.css", "de/tobias/playpad/assets/style/");
+		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style.css");
+		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style/launchDialog_style.css");
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
@@ -118,13 +122,13 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
-		NewProjectDialog dialog = new NewProjectDialog(getStage());
-		dialog.getStage().showAndWait();
+		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 		Project project = dialog.getProject();
 		if (project != null) {
 			PlayPadMain.getProgramInstance().openProject(project);
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		}
 	}
 
@@ -132,11 +136,11 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	private void importProfileButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
-		File file = chooser.showOpenDialog(getStage());
+		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
 			Path zipFile = file.toPath();
 			try {
-				ImportDialog importDialog = ImportDialog.getInstance(getStage());
+				ImportDialog importDialog = ImportDialog.getInstance(getContainingWindow());
 				ProjectReference ref = ProjectImporter.importProject(zipFile, importDialog, importDialog);
 				if (ref != null) {
 					launchProject(ref);
@@ -163,7 +167,7 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 
 			Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
 			PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
-			alert.initOwner(getStage());
+			alert.initOwner(getContainingWindow());
 			alert.initModality(Modality.WINDOW_MODAL);
 
 			alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
@@ -197,14 +201,14 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 		// Es fehlen Module
 		if (!ref.getMissedModules().isEmpty()) {
 			showInfoMessage(Localization.getString(Strings.Error_Plugins_Missing));
-			PluginViewController controller = new PluginViewController(getStage(), ref.getMissedModules());
-			controller.getStage().showAndWait();
+			PluginViewController controller = new PluginViewController(getContainingWindow(), ref.getMissedModules());
+			controller.getStageContainer().ifPresent(NVCStage::showAndWait);
 		}
 
 		try {
 			Project project = Project.load(ref, true, this);
 			PlayPadMain.getProgramInstance().openProject(project);
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
@@ -224,9 +228,9 @@ public class LaunchDialog extends ViewController implements ProfileChooseable {
 	// Zeigt dialog für das Ausfählen eines neuen Profiles.
 	@Override
 	public Profile getUnkownProfile() {
-		ProfileChooseDialog dialog = new ProfileChooseDialog(getStage());
+		ProfileChooseDialog dialog = new ProfileChooseDialog(getContainingWindow());
 
-		dialog.getStage().showAndWait();
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Profile profile = dialog.getProfile();
 		if (profile != null) {
 			return profile;

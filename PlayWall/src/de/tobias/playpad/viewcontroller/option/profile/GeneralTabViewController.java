@@ -51,7 +51,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
-		super("generalTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/global/", "generalTab", PlayPadMain.getUiResourceBundle());
 		this.alertable = alertable;
 
 		calcCacheSize();
@@ -88,7 +88,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	@FXML
 	private void cacheChooseHandler(ActionEvent event) {
 		DirectoryChooser chooser = new DirectoryChooser();
-		File folder = chooser.showDialog(getStage());
+		File folder = chooser.showDialog(getContainingWindow());
 		if (folder != null) {
 			Path folderPath = folder.toPath();
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();

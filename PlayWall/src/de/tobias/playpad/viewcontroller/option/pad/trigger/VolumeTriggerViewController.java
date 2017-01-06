@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.option.pad.trigger;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.trigger.VolumeTriggerItem;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
@@ -10,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
 
-public class VolumeTriggerViewController extends ContentViewController {
+public class VolumeTriggerViewController extends NVC {
 
 	@FXML private Slider volumeSlider;
 	@FXML private Label volumeLabel;
@@ -21,7 +22,7 @@ public class VolumeTriggerViewController extends ContentViewController {
 	private VolumeTriggerItem item;
 
 	public VolumeTriggerViewController(VolumeTriggerItem item) {
-		super("volumeTrigger", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/pad/trigger/", "volumeTrigger", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		volumeSlider.setValue(item.getVolume() * 100.0);

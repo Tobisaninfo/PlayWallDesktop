@@ -30,8 +30,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	private Pad pad;
 
-	public DesignPadTabViewController(Pad pad) {
-		super("layoutTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
+	DesignPadTabViewController(Pad pad) {
+		load("de/tobias/playpad/assets/view/option/pad/", "layoutTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 	}
 

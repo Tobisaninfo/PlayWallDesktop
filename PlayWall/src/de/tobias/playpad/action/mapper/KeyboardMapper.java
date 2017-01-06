@@ -1,5 +1,6 @@
 package de.tobias.playpad.action.mapper;
 
+import de.tobias.utils.nui.NVC;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Strings;
@@ -96,7 +97,7 @@ public class KeyboardMapper extends Mapper {
 	private KeyboardMapperViewController settingsViewController;
 
 	@Override
-	public ContentViewController getSettingsViewController() {
+	public NVC getSettingsViewController() {
 		if (settingsViewController == null) {
 			settingsViewController = new KeyboardMapperViewController();
 		}

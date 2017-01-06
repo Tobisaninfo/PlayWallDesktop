@@ -2,6 +2,8 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import java.io.IOException;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
@@ -20,7 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProfileChooseDialog extends ViewController {
+public class ProfileChooseDialog extends NVC {
 
 	@FXML private ComboBox<ProfileReference> profileComboBox;
 	@FXML private Button newProfileButton;
@@ -31,10 +33,10 @@ public class ProfileChooseDialog extends ViewController {
 	private Profile profile;
 
 	public ProfileChooseDialog(Window owner) {
-		super("profileChooseDialog", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/", "profileChooseDialog", PlayPadMain.getUiResourceBundle());
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
 
 		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
@@ -51,8 +53,10 @@ public class ProfileChooseDialog extends ViewController {
 		stage.setMinHeight(180);
 		stage.setMaxWidth(560);
 
+		stage.initModality(Modality.WINDOW_MODAL);
+
 		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().currentLayout().applyCss(getStage());
+			Profile.currentProfile().currentLayout().applyCss(stage);
 		}
 	}
 
@@ -61,7 +65,7 @@ public class ProfileChooseDialog extends ViewController {
 		try {
 			profile = Profile.load(profileComboBox.getSelectionModel().getSelectedItem());
 
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
 			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
 			e.printStackTrace();
@@ -70,13 +74,13 @@ public class ProfileChooseDialog extends ViewController {
 
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
-		NewProfileDialog dialog = new NewProfileDialog(getStage());
-		dialog.getStage().showAndWait();
+		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 		Profile profile = dialog.getProfile();
 

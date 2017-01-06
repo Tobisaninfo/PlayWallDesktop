@@ -7,6 +7,7 @@ import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -14,7 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class CartActionViewController extends ContentViewController {
+public class CartActionViewController extends NVC {
 
 	@FXML private ComboBox<ControlMode> controlMode;
 	@FXML private CheckBox autoColorCheckbox;
@@ -25,7 +26,7 @@ public class CartActionViewController extends ContentViewController {
 	private CartAction action;
 
 	public CartActionViewController() {
-		super("cartAction", "de/tobias/playpad/assets/view/actions/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/actions/", "cartAction", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 
 	private Alertable alertable;
 
-	public PathLookupListener(Alertable alertable) {
+	PathLookupListener(Alertable alertable) {
 		this.alertable = alertable;
 	}
 

@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
+import de.tobias.utils.nui.NVC;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
@@ -22,7 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
-public class SingleFeedbackViewController extends ContentViewController {
+public class SingleFeedbackViewController extends NVC {
 
 	@FXML private HBox defaultColorParent;
 	@FXML private Button colorChooseDefaultButton;
@@ -33,7 +34,7 @@ public class SingleFeedbackViewController extends ContentViewController {
 	private SingleMidiFeedback feedback;
 
 	public SingleFeedbackViewController(SingleMidiFeedback feedback, DisplayableFeedbackColor[] colors) {
-		super("singleFeedback", "de/tobias/playpad/assets/view/option/feedback/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/feedback/", "singleFeedback", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
 		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();

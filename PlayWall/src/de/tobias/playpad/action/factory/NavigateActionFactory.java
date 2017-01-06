@@ -11,6 +11,7 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.NavigateAction;
 import de.tobias.playpad.action.actions.NavigateAction.NavigationType;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.icon.MaterialDesignIcon;
@@ -52,7 +53,7 @@ public class NavigateActionFactory extends ActionFactory implements ActionDispla
 	}
 
 	@Override
-	public ContentViewController getSettingsViewController() {
+	public NVC getSettingsViewController() {
 		return null;
 	}
 

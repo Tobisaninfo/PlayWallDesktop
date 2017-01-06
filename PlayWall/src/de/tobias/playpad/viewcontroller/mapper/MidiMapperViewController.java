@@ -15,6 +15,7 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
 import de.tobias.playpad.viewcontroller.option.feedback.SingleFeedbackViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
@@ -38,10 +39,10 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 
 	private MidiMapper mapper;
 
-	private ContentViewController feedbackController;
+	private NVC feedbackController;
 
 	public MidiMapperViewController() {
-		super("midi", "de/tobias/playpad/assets/view/mapper/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/mapper/", "midi", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		alert.setTitle(Localization.getString(Strings.Mapper_Midi_Name));
 		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
-		alert.initOwner(getWindow());
+		alert.initOwner(getContainingWindow());
 		alert.showAndWait().ifPresent(result ->
 		{
 			if (result == ButtonType.CANCEL) {

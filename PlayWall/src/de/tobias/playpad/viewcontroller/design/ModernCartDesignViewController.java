@@ -30,13 +30,11 @@ public class ModernCartDesignViewController extends CartDesignViewController {
 	private PopOver colorChooser;
 
 	public ModernCartDesignViewController(CartDesign layout) {
-		super("modernLayoutCart", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
+		super(layout);
+		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutCart", PlayPadMain.getUiResourceBundle());
 
-		if (layout instanceof CartDesign) {
-			this.cartLayout = (ModernCartDesign) layout;
-
-			setLayout();
-		}
+		this.cartLayout = (ModernCartDesign) layout;
+		setLayout();
 	}
 
 	private void setLayout() {

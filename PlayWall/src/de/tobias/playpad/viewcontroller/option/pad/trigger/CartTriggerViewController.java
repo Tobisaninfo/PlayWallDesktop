@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import de.tobias.utils.nui.NVC;
 import org.controlsfx.control.textfield.TextFields;
 
 import de.tobias.playpad.PlayPadMain;
@@ -25,7 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 
-public class CartTriggerViewController extends ContentViewController {
+public class CartTriggerViewController extends NVC {
 
 	@FXML private ComboBox<PadStatus> statusComboBox;
 	@FXML private CheckBox allCartsCheckbox;
@@ -36,7 +37,7 @@ public class CartTriggerViewController extends ContentViewController {
 	private CartTriggerItem item;
 
 	public CartTriggerViewController(CartTriggerItem item) {
-		super("cartTrigger", "de/tobias/playpad/assets/view/option/pad/trigger/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/pad/trigger/", "cartTrigger", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		statusComboBox.setValue(item.getNewStatus());

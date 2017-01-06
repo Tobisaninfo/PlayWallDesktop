@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
@@ -39,7 +41,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProjectManagerDialog extends ViewController implements NotificationHandler {
+public class ProjectManagerDialog extends NVC implements NotificationHandler {
 
 	@FXML private ListView<ProjectReference> projectList;
 
@@ -67,13 +69,14 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	private boolean cancel = false;
 
 	public ProjectManagerDialog(Window owner, Project currentProject) {
-		super("openDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/project/", "openDialog", PlayPadMain.getUiResourceBundle());
+
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
+
 		this.currentProject = currentProject;
-
-		projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
-
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		this.projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
 	}
 
 	@Override
@@ -93,7 +96,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 				if (mouseEvent.getClickCount() == 2) {
 					if (!projectList.getSelectionModel().isEmpty()) {
-						getStage().close();
+						getStageContainer().ifPresent(NVCStage::close);
 					}
 				}
 			}
@@ -145,8 +148,6 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 		profileLabel.setText("-");
 		dateLabel.setText("-");
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -159,7 +160,9 @@ public class ProjectManagerDialog extends ViewController implements Notification
 		stage.setHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		stage.initModality(Modality.WINDOW_MODAL);
+
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	@FXML
@@ -171,7 +174,7 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 		Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
-		alert.initOwner(getStage());
+		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
@@ -188,12 +191,12 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
 		cancel = true;
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
 	private void openButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
@@ -220,8 +223,8 @@ public class ProjectManagerDialog extends ViewController implements Notification
 
 	@FXML
 	private void newButtonHandler(ActionEvent event) {
-		NewProjectDialog dialog = new NewProjectDialog(getStage());
-		dialog.getStage().showAndWait();
+		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 		Project project = dialog.getProject();
 		projectList.getItems().add(project.getProjectReference());
@@ -244,11 +247,11 @@ public class ProjectManagerDialog extends ViewController implements Notification
 	private void importButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
-		File file = chooser.showOpenDialog(getStage());
+		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
 			Path zipFile = file.toPath();
 			try {
-				ImportDialog inportDialog = ImportDialog.getInstance(getStage());
+				ImportDialog inportDialog = ImportDialog.getInstance(getContainingWindow());
 				ProjectReference ref = ProjectImporter.importProject(zipFile, inportDialog, inportDialog);
 				if (ref != null) {
 					projectList.getItems().add(ref);
@@ -277,12 +280,12 @@ public class ProjectManagerDialog extends ViewController implements Notification
 			}
 		}
 
-		ProjectExportDialog dialog = new ProjectExportDialog(selectedProject, getStage(), this);
-		dialog.getStage().show();
+		ProjectExportDialog dialog = new ProjectExportDialog(selectedProject, getContainingWindow(), this);
+		dialog.getStageContainer().ifPresent(NVCStage::show);
 	}
 
 	public Optional<ProjectReference> showAndWait() {
-		getStage().showAndWait();
+		getStageContainer().ifPresent(NVCStage::showAndWait);
 		if (!cancel) {
 			if (getSelecteItem() != null) {
 				if (currentProject.getProjectReference() != getSelecteItem()) {

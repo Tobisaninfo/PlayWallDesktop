@@ -23,8 +23,8 @@ public class MidiTabViewController extends ProfileSettingsTabViewController {
 	@FXML private CheckBox midiActiveCheckBox;
 	@FXML private ComboBox<String> deviceComboBox;
 
-	public MidiTabViewController() {
-		super("midiTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+	MidiTabViewController() {
+		load("de/tobias/playpad/assets/view/option/profile/", "midiTab", PlayPadMain.getUiResourceBundle());
 
 		Info[] data = Midi.getMidiDevices();
 		// Gerät anzeigen - Doppelte weg

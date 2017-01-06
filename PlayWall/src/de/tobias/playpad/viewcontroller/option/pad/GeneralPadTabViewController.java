@@ -34,8 +34,8 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 	private ChangeListener<Number> volumeListener;
 
-	public GeneralPadTabViewController(Pad pad) {
-		super("generalTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
+	GeneralPadTabViewController(Pad pad) {
+		load("de/tobias/playpad/assets/view/option/pad/", "generalTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
@@ -102,6 +102,6 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	@FXML
 	private void deleteButtonHandler(ActionEvent event) {
 		pad.clear();
-		((Stage) getStage()).close();
+		((Stage) getContainingWindow()).close();
 	}
 }

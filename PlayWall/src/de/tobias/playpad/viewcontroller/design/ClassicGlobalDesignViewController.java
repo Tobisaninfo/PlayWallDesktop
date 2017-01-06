@@ -44,7 +44,8 @@ public class ClassicGlobalDesignViewController extends GlobalDesignViewControlle
 	@FXML private Button resetButton;
 
 	public ClassicGlobalDesignViewController(GlobalDesign layout) {
-		super("classicLayoutGlobal", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
+		super(layout);
+		load("de/tobias/playpad/assets/view/option/layout/", "classicLayoutGlobal", PlayPadMain.getUiResourceBundle());
 		setLayout((ClassicGlobalDesign) layout);
 
 		ClassicGlobalDesign cl = (ClassicGlobalDesign) layout;
@@ -162,7 +163,6 @@ public class ClassicGlobalDesignViewController extends GlobalDesignViewControlle
 		setLayout(layout);
 	}
 
-	@Override
 	public void updateData() {
 		backgroundColorPicker.setValue(layout.getBackgroundColor());
 	}

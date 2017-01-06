@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.bukkit.configuration.MemorySection;
 
 import de.tobias.playpad.AppUserInfoStrings;
@@ -32,7 +34,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class PluginViewController extends ViewController {
+public class PluginViewController extends NVC {
 
 	@FXML private ListView<PluginDescription> pluginListView;
 	@FXML private Button finishButton;
@@ -42,10 +44,11 @@ public class PluginViewController extends ViewController {
 	}
 
 	public PluginViewController(Window owner, Set<Module> modules) {
-		super("pluginView", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/", "pluginView", PlayPadMain.getUiResourceBundle());
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
 		Worker.runLater(() ->
 		{
@@ -97,8 +100,6 @@ public class PluginViewController extends ViewController {
 	public void init() {
 		pluginListView.setCellFactory(list -> new PluginCell());
 		pluginListView.setPlaceholder(new Label(Localization.getString(Strings.UI_Placeholder_Plugins)));
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -110,13 +111,14 @@ public class PluginViewController extends ViewController {
 		stage.setMinHeight(500);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
+		stage.initModality(Modality.WINDOW_MODAL);
 
 		if (Profile.currentProfile() != null)
-			Profile.currentProfile().currentLayout().applyCss(getStage());
+			Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 }

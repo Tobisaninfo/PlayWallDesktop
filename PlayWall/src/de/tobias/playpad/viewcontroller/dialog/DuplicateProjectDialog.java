@@ -8,6 +8,7 @@ import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
@@ -16,13 +17,14 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class DuplicateProjectDialog extends TextInputDialog {
 
 	private ProjectReference ref;
 
-	public DuplicateProjectDialog(ViewController controller, ProjectReference cloneableProject) {
-		initOwner(controller.getStage());
+	public DuplicateProjectDialog(NVC controller, ProjectReference cloneableProject) {
+		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);

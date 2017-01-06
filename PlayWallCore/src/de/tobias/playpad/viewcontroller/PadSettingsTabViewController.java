@@ -1,14 +1,12 @@
 package de.tobias.playpad.viewcontroller;
 
-import java.util.ResourceBundle;
-
 import de.tobias.playpad.pad.Pad;
-import de.tobias.utils.ui.ContentViewController;
+import de.tobias.utils.nui.NVC;
 
-public abstract class PadSettingsTabViewController extends ContentViewController {
+public abstract class PadSettingsTabViewController extends NVC {
 
-	public PadSettingsTabViewController(String name, String path, ResourceBundle localization) {
-		super(name, path, localization);
+	public PadSettingsTabViewController() {
+
 	}
 
 	public abstract String getName();

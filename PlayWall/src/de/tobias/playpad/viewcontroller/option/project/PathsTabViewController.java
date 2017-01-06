@@ -44,14 +44,14 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	private transient Optional<Path> currentMediaPath = Optional.empty();
 	private transient Optional<Path> oldMediaPath = Optional.empty();
 
-	public PathsTabViewController() {
-		super("pathTab.fxml", "de/tobias/playpad/assets/view/option/project/", PlayPadMain.getUiResourceBundle());
+	PathsTabViewController() {
+		load("de/tobias/playpad/assets/view/option/project/", "pathTab", PlayPadMain.getUiResourceBundle());
 	}
 
 	@FXML
 	void mediaPathChooseHandler(ActionEvent event) {
 		DirectoryChooser chooser = new DirectoryChooser();
-		File folder = chooser.showDialog(getStage());
+		File folder = chooser.showDialog(getContainingWindow());
 		if (folder != null) {
 			Path path = folder.toPath();
 

@@ -26,8 +26,8 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 	private Pad pad;
 
-	public PlayerPadTabViewController(Pad pad) {
-		super("playerTab", "de/tobias/playpad/assets/view/option/pad/", PlayPadMain.getUiResourceBundle());
+	PlayerPadTabViewController(Pad pad) {
+		load("de/tobias/playpad/assets/view/option/pad/", "playerTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 	}
 

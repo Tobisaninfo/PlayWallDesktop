@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.utils.ui.AdvancedDialog;
+import de.tobias.utils.nui.AdvancedDialog;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;

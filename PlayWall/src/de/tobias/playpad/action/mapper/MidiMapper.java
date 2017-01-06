@@ -1,6 +1,7 @@
 package de.tobias.playpad.action.mapper;
 
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
+import de.tobias.utils.nui.NVC;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Strings;
@@ -209,7 +210,7 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 	private MidiMapperViewController settingsViewController;
 
 	@Override
-	public ContentViewController getSettingsViewController() {
+	public NVC getSettingsViewController() {
 		if (settingsViewController == null) {
 			settingsViewController = new MidiMapperViewController();
 		}

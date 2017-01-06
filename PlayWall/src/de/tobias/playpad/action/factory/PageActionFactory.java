@@ -11,6 +11,7 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.PageAction;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -55,7 +56,7 @@ public class PageActionFactory extends ActionFactory implements ActionDisplayabl
 	}
 
 	@Override
-	public ContentViewController getSettingsViewController() {
+	public NVC getSettingsViewController() {
 		return null;
 	}
 

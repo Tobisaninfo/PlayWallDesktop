@@ -3,6 +3,8 @@ package de.tobias.playpad.viewcontroller.option.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.controlsfx.control.TaskProgressView;
 
 import de.tobias.playpad.PlayPadMain;
@@ -30,7 +32,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProjectSettingsViewController extends ViewController implements IProjectSettingsViewController {
+public class ProjectSettingsViewController extends NVC implements IProjectSettingsViewController {
 
 	@FXML private TabPane tabPane;
 	@FXML private ToggleButton lockedButton;
@@ -42,7 +44,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 	private Runnable onFinish;
 
 	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		super("projectSettingsView", "de/tobias/playpad/assets/view/option/project/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/project/", "projectSettingsView", PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 		this.project = project;
 
@@ -51,7 +53,10 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		addTab(new GeneralTabViewController(currentScreen, this, activePlayer));
 		addTab(new PathsTabViewController());
 
-		getStage().initOwner(owner);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		nvcStage.addCloseHook(this::onFinish);
+		addCloseKeyShortcut(() -> finishButton.fire());
 
 		// Show Current Settings
 		loadTabs(project.getSettings());
@@ -59,9 +64,6 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 
 	@Override
 	public void init() {
-		// KeyCode
-		addCloseKeyShortcut(() -> finishButton.fire());
-
 		finishButton.defaultButtonProperty().bind(finishButton.focusedProperty());
 	}
 
@@ -73,7 +75,7 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		stage.setMinHeight(500);
 		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	/**
@@ -94,26 +96,21 @@ public class ProjectSettingsViewController extends ViewController implements IPr
 		}
 	}
 
-	@Override
-	public boolean closeRequest() {
-		return onFinish();
-	}
-
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		onFinish();
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	/**
 	 * Speichert alle Informationen.
-	 * 
+	 *
 	 * @return <code>true</code>Alle Einstellungen sind Valid.
 	 */
 	private boolean onFinish() {
 		for (ProjectSettingsTabViewController controller : tabs) {
-			if (controller.validSettings() == false) {
+			if (!controller.validSettings()) {
 				return false;
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.utils.nui.NVC;
 import org.controlsfx.control.SegmentedButton;
 
 import de.tobias.playpad.PlayPadMain;
@@ -32,23 +33,17 @@ import javafx.scene.layout.VBox;
  *
  * @author tobias
  */
-public class CartActionsViewController extends ContentViewController {
+public class CartActionTypeViewController extends NVC {
 
-	@FXML
-	private VBox buttonVbox;
-
-	private ToggleGroup cartsToggle;
-	@FXML
-	private GridPane gridPane;
-
-	@FXML
-	private VBox cartActionContainer;
+	@FXML private VBox buttonVbox;
+	@FXML private GridPane gridPane;
+	@FXML private VBox cartActionContainer;
 
 	private Mapping mapping;
 	private IMappingTabViewController parentController;
 
-	public CartActionsViewController(Mapping mapping, IMappingTabViewController parentController) {
-		super("cartActions", "de/tobias/playpad/assets/view/actions/", PlayPadMain.getUiResourceBundle());
+	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController) {
+		load("de/tobias/playpad/assets/view/actions/", "cartActions", PlayPadMain.getUiResourceBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
 
@@ -83,7 +78,7 @@ public class CartActionsViewController extends ContentViewController {
 			gridPane.getRowConstraints().add(c);
 		}
 
-		cartsToggle = new ToggleGroup();
+		ToggleGroup cartsToggle = new ToggleGroup();
 
 		int index = 0;
 
@@ -108,7 +103,7 @@ public class CartActionsViewController extends ContentViewController {
 							List<CartAction> cartActions = mapping.getActions(actionFactory);
 							for (CartAction action : cartActions) {
 								if (action.getX() == currentX && action.getY() == currentY) {
-									ContentViewController actionViewController = action.getSettingsViewController();
+									NVC actionViewController = action.getSettingsViewController();
 									cartActionContainer.getChildren().setAll(actionViewController.getParent());
 									cartActionContainer.setVisible(true);
 									parentController.showMapperFor(action);

@@ -25,7 +25,8 @@ public class ClassicCartDesignViewController extends CartDesignViewController {
 	@FXML private Button resetButton;
 
 	public ClassicCartDesignViewController(CartDesign layout) {
-		super("classicLayoutCart", "de/tobias/playpad/assets/view/option/layout/", PlayPadMain.getUiResourceBundle(), layout);
+		super(layout);
+		load("de/tobias/playpad/assets/view/option/layout/", "classicLayoutCart", PlayPadMain.getUiResourceBundle());
 		setLayout((ClassicCartDesign) layout);
 	}
 
@@ -88,7 +89,6 @@ public class ClassicCartDesignViewController extends CartDesignViewController {
 		setLayout(layout);
 	}
 
-	@Override
 	public void updateData() {
 		backgroundColorPicker.setValue(layout.getBackgroundColor());
 	}

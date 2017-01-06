@@ -7,6 +7,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
@@ -19,8 +20,8 @@ public class DuplicateProfileDialog extends TextInputDialog {
 
 	private ProfileReference newRef;
 
-	public DuplicateProfileDialog(ViewController controller, ProfileReference cloneableProfile) {
-		initOwner(controller.getStage());
+	public DuplicateProfileDialog(NVC controller, ProfileReference cloneableProfile) {
+		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);

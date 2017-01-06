@@ -49,8 +49,8 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private ProgressIndicator progressIndecator;
 	private Label placeholderLabel;
 
-	public UpdateTabViewController() {
-		super("updateTab", "de/tobias/playpad/assets/view/option/global/", PlayPadMain.getUiResourceBundle());
+	UpdateTabViewController() {
+		load("de/tobias/playpad/assets/view/option/global/", "updateTab", PlayPadMain.getUiResourceBundle());
 
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
@@ -117,12 +117,12 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	private void updateHandler(ActionEvent event) {
-		UpdaterDialog dialog = new UpdaterDialog(getStage());
+		UpdaterDialog dialog = new UpdaterDialog(getContainingWindow());
 		dialog.show();
 
 		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		settings.setIgnoreUpdate(false);
-		
+
 		Worker.runLater(() ->
 		{
 			try {

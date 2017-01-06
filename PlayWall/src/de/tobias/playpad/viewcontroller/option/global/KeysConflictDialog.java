@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class KeysConflictDialog extends Alert {
 
-	public KeysConflictDialog(List<Key> conflicts, KeyCollection collection) {
+	KeysConflictDialog(List<Key> conflicts, KeyCollection collection) {
 		super(AlertType.ERROR);
 
 		String keys = "";

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.UUID;
 
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
@@ -36,7 +38,7 @@ import javafx.stage.Window;
  * @author tobias
  *
  */
-public class NewProjectDialog extends ViewController {
+public class NewProjectDialog extends NVC {
 
 	@FXML private TextField nameTextField;
 	@FXML private ComboBox<ProfileReference> profileComboBox;
@@ -54,10 +56,11 @@ public class NewProjectDialog extends ViewController {
 	private Path newMediaPath; // Ausgewählter Ordner (temp)
 
 	public NewProjectDialog(Window owner) {
-		super("newProjectDialog", "de/tobias/playpad/assets/dialog/", null, PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/dialog/", "newProjectDialog", PlayPadMain.getUiResourceBundle());
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
 		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
@@ -88,8 +91,6 @@ public class NewProjectDialog extends ViewController {
 			}
 		});
 		mediaButtonChoose.setDisable(true);
-
-		addCloseKeyShortcut(() -> getStage().close());
 	}
 
 	@Override
@@ -105,8 +106,10 @@ public class NewProjectDialog extends ViewController {
 
 		stage.setMaxWidth(560);
 
+		stage.initModality(Modality.WINDOW_MODAL);
+
 		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().currentLayout().applyCss(getStage());
+			Profile.currentProfile().currentLayout().applyCss(stage);
 		}
 	}
 
@@ -114,7 +117,7 @@ public class NewProjectDialog extends ViewController {
 	private void mediaButtonHandler(ActionEvent event) {
 		if (mediaPathCheckbox.isSelected()) {
 			DirectoryChooser chooser = new DirectoryChooser();
-			File file = chooser.showDialog(getStage());
+			File file = chooser.showDialog(getContainingWindow());
 			if (file != null) {
 				newMediaPath = file.toPath();
 				mediaPathLabel.setText(newMediaPath.toString());
@@ -142,7 +145,7 @@ public class NewProjectDialog extends ViewController {
 
 			ProjectReferences.addProject(projectReference);
 
-			getStage().close();
+			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
 			showErrorMessage(Localization.getString(Strings.Error_Project_Create, e.getLocalizedMessage()));
 			e.printStackTrace();
@@ -151,13 +154,13 @@ public class NewProjectDialog extends ViewController {
 
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
-		NewProfileDialog dialog = new NewProfileDialog(getStage());
-		dialog.getStage().showAndWait();
+		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
 		Profile profile = dialog.getProfile();
 

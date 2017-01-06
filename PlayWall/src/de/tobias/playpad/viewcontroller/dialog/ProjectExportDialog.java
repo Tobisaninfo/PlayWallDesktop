@@ -10,9 +10,10 @@ import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.project.ProjectExporter.ExportView;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.NotificationHandler;
-import de.tobias.utils.ui.ViewController;
-import de.tobias.utils.ui.scene.BusyView;
+import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
@@ -27,7 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ProjectExportDialog extends ViewController implements ExportView {
+public class ProjectExportDialog extends NVC implements ExportView {
 
 	@FXML private CheckBox profileCheckBox;
 	@FXML private CheckBox mediaCheckBox;
@@ -40,13 +41,13 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 	private ProjectReference projectRef;
 	private NotificationHandler notificationHandler;
 
-	public ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
-		super("exportDialog", "de/tobias/playpad/assets/dialog/project/", null, PlayPadMain.getUiResourceBundle());
+	ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
+		load("de/tobias/playpad/assets/dialog/project/", "exportDialog", PlayPadMain.getUiResourceBundle());
 		this.projectRef = projectRef;
 		this.notificationHandler = notificationHandler;
 
-		getStage().initOwner(owner);
-		getStage().initModality(Modality.WINDOW_MODAL);
+		NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
 
 		busyView = new BusyView(this);
 	}
@@ -58,13 +59,14 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
 		stage.setWidth(375);
 		stage.setHeight(180);
+		stage.initModality(Modality.WINDOW_MODAL);
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	@FXML
@@ -76,7 +78,7 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
 		chooser.getExtensionFilters().add(extensionFilter);
 
-		File file = chooser.showSaveDialog(getStage());
+		File file = chooser.showSaveDialog(getContainingWindow());
 		if (file != null) {
 			cancelButton.setDisable(true);
 
@@ -94,7 +96,7 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 
 					Platform.runLater(() ->
 					{
-						getStage().close();
+						getStageContainer().ifPresent(NVCStage::close);
 
 						String notificationString = Localization.getString(Strings.Standard_File_Save);
 						notificationHandler.notify(notificationString, PlayPadMain.displayTimeMillis);
@@ -122,7 +124,7 @@ public class ProjectExportDialog extends ViewController implements ExportView {
 	@Override
 	public void tastComplete() {
 		if (!Platform.isFxApplicationThread()) {
-			Platform.runLater(() -> tastComplete());
+			Platform.runLater(this::tastComplete);
 			return;
 		}
 		complete++;

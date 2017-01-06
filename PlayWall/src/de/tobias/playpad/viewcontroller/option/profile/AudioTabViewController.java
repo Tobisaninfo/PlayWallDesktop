@@ -39,7 +39,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	private boolean changeAudioSettings;
 
 	public AudioTabViewController(boolean playerActive) {
-		super("audioTab", "de/tobias/playpad/assets/view/option/profile/", PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/profile/", "audioTab", PlayPadMain.getUiResourceBundle());
 
 		if (playerActive) {
 			audioTypeComboBox.setDisable(true);
