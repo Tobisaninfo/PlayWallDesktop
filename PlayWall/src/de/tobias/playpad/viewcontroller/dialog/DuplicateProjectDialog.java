@@ -29,17 +29,6 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
 
-		setResultConverter(button ->
-		{
-			String param = getEditor().getText();
-			if (!param.endsWith(PlayPadMain.projectType.substring(1))) {
-				param += PlayPadMain.projectType.substring(1);
-			}
-
-			ButtonData data = button == null ? null : button.getButtonData();
-			return data == ButtonData.OK_DONE ? param : null;
-		});
-
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{

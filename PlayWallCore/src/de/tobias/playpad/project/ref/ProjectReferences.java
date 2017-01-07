@@ -115,7 +115,7 @@ public final class ProjectReferences {
 
 		List<ProjectReference> items = new ArrayList<>();
 		projects.forEach(item -> items.add(item));
-		items.sort((o1, o2) -> Long.compare(o2.getLastMofied(), o1.getLastMofied()));
+		items.sort((o1, o2) -> Long.compare(o2.getLastModified(), o1.getLastModified()));
 		return items;
 	}
 }

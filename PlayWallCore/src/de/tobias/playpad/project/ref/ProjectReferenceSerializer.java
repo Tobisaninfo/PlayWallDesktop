@@ -41,7 +41,7 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		if (Files.exists(projectPath)) {
 			try {
-				ref.setLastMofied(Files.getLastModifiedTime(projectPath).toMillis());
+				ref.setLastModified(Files.getLastModifiedTime(projectPath).toMillis());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

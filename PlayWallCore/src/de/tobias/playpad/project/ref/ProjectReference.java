@@ -19,21 +19,18 @@ import javafx.beans.property.StringProperty;
 
 public class ProjectReference implements Displayable {
 
-	/**
-	 * Name + XML
-	 */
 	private UUID uuid;
 	private String name;
 
 	private ProfileReference profileReference;
 	private Set<Module> requestedModules;
 
-	private long lastMofied;
+	private long lastModified;
 
 	public ProjectReference(UUID uuid, String name, ProfileReference profileReference) {
 		this.uuid = uuid;
 		this.name = name;
-		this.lastMofied = System.currentTimeMillis();
+		this.lastModified = System.currentTimeMillis();
 		this.profileReference = profileReference;
 		requestedModules = new HashSet<>();
 
@@ -43,27 +40,27 @@ public class ProjectReference implements Displayable {
 	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, Set<Module> modules) {
 		this.uuid = uuid;
 		this.name = name;
-		this.lastMofied = System.currentTimeMillis();
+		this.lastModified = System.currentTimeMillis();
 		this.profileReference = profileReference;
 		requestedModules = modules;
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long lastMofied, ProfileReference profileReference) {
+	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference) {
 		this.uuid = uuid;
 		this.name = name;
-		this.lastMofied = lastMofied;
+		this.lastModified = lastModified;
 		this.profileReference = profileReference;
 		requestedModules = new HashSet<>();
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long lastMofied, ProfileReference profileReference, Set<Module> requestedModules) {
+	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, Set<Module> requestedModules) {
 		this.uuid = uuid;
 		this.name = name;
-		this.lastMofied = lastMofied;
+		this.lastModified = lastModified;
 		this.profileReference = profileReference;
 		this.requestedModules = requestedModules;
 
@@ -78,12 +75,12 @@ public class ProjectReference implements Displayable {
 		return name;
 	}
 
-	public void setLastMofied(long lastMofied) {
-		this.lastMofied = lastMofied;
+	public void setLastModified(long lastModified) {
+		this.lastModified = lastModified;
 	}
 
-	public long getLastMofied() {
-		return lastMofied;
+	public long getLastModified() {
+		return lastModified;
 	}
 
 	public void setName(String name) {

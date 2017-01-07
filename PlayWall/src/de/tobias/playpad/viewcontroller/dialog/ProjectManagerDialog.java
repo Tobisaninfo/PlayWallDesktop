@@ -19,7 +19,6 @@ import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.TimeUtils;
@@ -115,7 +114,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 				try {
 					ProfileReference profileRef = ref.getProfileReference();
 					profileLabel.setText(profileRef.getName());
-					dateLabel.setText(TimeUtils.getDfmLong().format(ref.getLastMofied()));
+					dateLabel.setText(TimeUtils.getDfmLong().format(ref.getLastModified()));
 				} catch (Exception e) {
 					profileLabel.setText("-");
 					dateLabel.setText("-");
@@ -234,6 +233,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 	private void duplicateButtonHandler(ActionEvent event) {
 		if (getSelecteItem() != null) {
 			DuplicateProjectDialog dialog = new DuplicateProjectDialog(this, getSelectedProject());
+
 
 			dialog.getName().ifPresent(ref ->
 			{
