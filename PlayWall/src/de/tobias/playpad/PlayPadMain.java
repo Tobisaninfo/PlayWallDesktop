@@ -1,14 +1,5 @@
 package de.tobias.playpad;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.UUID;
-
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReferences;
@@ -17,7 +8,6 @@ import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
-import de.tobias.playpad.viewcontroller.dialog.ChangelogDialog;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -35,6 +25,15 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.UUID;
 
 /*
  * TODOS
@@ -143,9 +142,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			ProfileReferences.loadProfiles();
 			ProjectReferences.loadProjects();
 
-			// Changelog nach Update anzeigen
-			ViewController.create(ChangelogDialog.class);
-
 			// Auto Open Project
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
@@ -156,8 +152,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				}
 			}
 
-			// Zeigt Launch Stage
-			ViewController.create(LaunchDialog.class, stage);
+			// Show Launch Stage
+			new LaunchDialog(stage);
 
 			// Check Updates
 			checkUpdates(impl.globalSettings, stage);
