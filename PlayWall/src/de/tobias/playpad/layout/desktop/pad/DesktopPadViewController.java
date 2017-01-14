@@ -57,7 +57,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	private static DesktopMainLayoutFactory connect;
 
-	public DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutFactory connect) {
+	DesktopPadViewController(DesktopPadView padView, DesktopMainLayoutFactory connect) {
 		this.padView = padView;
 
 		if (DesktopPadViewController.connect != connect) // Set once

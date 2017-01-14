@@ -7,9 +7,19 @@ import de.tobias.playpad.pad.Pad;
 
 public class VolumeManager {
 
+	private static final VolumeManager instance;
+
+	static {
+		instance = new VolumeManager();
+	}
+
+	public static VolumeManager getInstance() {
+		return instance;
+	}
+
 	private List<VolumeFilter> filters;
 
-	public VolumeManager() {
+	private VolumeManager() {
 		this.filters = new ArrayList<>();
 	}
 

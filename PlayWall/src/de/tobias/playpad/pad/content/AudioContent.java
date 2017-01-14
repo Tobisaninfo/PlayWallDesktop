@@ -73,7 +73,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public void updateVolume() {
-		double volume = Pad.getVolumeManager().computeVolume(getPad());
+		double volume = VolumeManager.getInstance().computeVolume(getPad());
 		audioHandler.setVolume(volume);
 	}
 
@@ -129,9 +129,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	@Override
 	public void onFadeLevelChange(double level) {
 		Pad pad = getPad();
-		VolumeManager manager = Pad.getVolumeManager();
-
-		audioHandler.setVolume(level * manager.computeVolume(pad));
+		audioHandler.setVolume(level * VolumeManager.getInstance().computeVolume(pad));
 	}
 
 	@Override

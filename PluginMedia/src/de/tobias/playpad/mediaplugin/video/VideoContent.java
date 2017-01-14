@@ -70,8 +70,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	@Override
 	public void updateVolume() {
 		if (player != null) {
-			VolumeManager manager = Pad.getVolumeManager();
-			double volume = manager.computeVolume(getPad());
+			double volume = VolumeManager.getInstance().computeVolume(getPad());
 			player.setVolume(volume);
 		}
 	}

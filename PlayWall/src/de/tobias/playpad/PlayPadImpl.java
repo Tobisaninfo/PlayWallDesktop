@@ -37,6 +37,7 @@ import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.playpad.volume.GlobalVolume;
 import de.tobias.playpad.volume.PadVolume;
+import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
@@ -278,8 +279,9 @@ public class PlayPadImpl implements PlayPad {
 		}
 
 		// Volume Management
-		Pad.getVolumeManager().addFilter(new GlobalVolume());
-		Pad.getVolumeManager().addFilter(new PadVolume());
+		VolumeManager volumeManager = VolumeManager.getInstance();
+		volumeManager.addFilter(new GlobalVolume());
+		volumeManager.addFilter(new PadVolume());
 
 		// Mapper
 		BaseMapperOverviewViewController.setInstance(new MapperOverviewViewController());

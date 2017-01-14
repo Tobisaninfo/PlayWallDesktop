@@ -1,8 +1,5 @@
 package de.tobias.playpad.pad;
 
-import java.nio.file.Path;
-import java.util.UUID;
-
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
@@ -12,22 +9,15 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.volume.VolumeManager;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
+import java.nio.file.Path;
+import java.util.UUID;
+
+/**
+ * Container for Media (PadContent). It represents a slot on a page.
+ */
 public class Pad implements Cloneable {
-
-	private static final VolumeManager volumeManager;
-
-	static {
-		volumeManager = new VolumeManager();
-	}
 
 	// Verwaltung
 	private UUID uuid;
@@ -177,7 +167,7 @@ public class Pad implements Cloneable {
 				return;
 			}
 		}
-		// Pause nur wenn Pause möglich
+		// Only set pause if pad supports pause
 		if (status == PadStatus.PAUSE && !(getContent() instanceof Pauseable)) {
 			return;
 		}
@@ -291,11 +281,6 @@ public class Pad implements Cloneable {
 
 	public String toReadableString() {
 		return (indexProperty.get() + 1) + " - " + nameProperty.get();
-	}
-
-	// Volume Manager
-	public static VolumeManager getVolumeManager() {
-		return volumeManager;
 	}
 
 	// Clone

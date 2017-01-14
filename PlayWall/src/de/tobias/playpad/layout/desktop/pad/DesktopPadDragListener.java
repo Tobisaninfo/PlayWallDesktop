@@ -57,13 +57,13 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	}
 
 	public void addListener() {
-		this.padView.setOnDragOver(event -> dragOver(event));
+		this.padView.setOnDragOver(this::dragOver);
 		this.padView.setOnDragExited(event -> dragExited());
-		this.padView.setOnDragDropped(event -> dragDropped(event));
-		this.padView.setOnDragDetected(event -> dragDetacted(event));
+		this.padView.setOnDragDropped(this::dragDropped);
+		this.padView.setOnDragDetected(this::dragDetacted);
 	}
 
-	public void removeListener() {
+	void removeListener() {
 		this.padView.setOnDragOver(null);
 		this.padView.setOnDragExited(null);
 		this.padView.setOnDragDropped(null);

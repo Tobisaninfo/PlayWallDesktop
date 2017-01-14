@@ -56,20 +56,20 @@ public class Project {
 
 	private final ProjectReference projectReference;
 	private ProjectSettings settings;
+	private IntegerProperty activePlayerProperty;
 
 	/**
 	 * Liste mit den aktuellen Laufzeitfehlern.
 	 */
 	private transient ObservableList<PadException> exceptions;
-	private transient IntegerProperty activePlayers;
 
 	public Project(ProjectReference ref) {
 		this.projectReference = ref;
 		this.pages = new ArrayList<>();
 		this.settings = new ProjectSettings();
+		this.activePlayerProperty = new SimpleIntegerProperty();
 
 		this.exceptions = FXCollections.observableArrayList();
-		this.activePlayers = new SimpleIntegerProperty();
 	}
 
 	public ProjectSettings getSettings() {
@@ -78,14 +78,6 @@ public class Project {
 
 	public ProjectReference getProjectReference() {
 		return projectReference;
-	}
-
-	public long getPlayedPlayers() {
-		return getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
-	}
-
-	public boolean hasPlayedPlayers() {
-		return getPlayedPlayers() != 0;
 	}
 
 	public Pad getPad(int x, int y, int page) {
@@ -222,24 +214,19 @@ public class Project {
 	}
 
 	public int getActivePlayers() {
-		return activePlayers.get();
+		return (int) getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
 	}
 
 	public boolean hasActivePlayers() {
 		return getActivePlayers() > 0;
 	}
 
-	public void increaseActivePlayers() {
-		activePlayers.set(getActivePlayers() + 1);
+	public IntegerProperty activePlayerProperty() {
+		return activePlayerProperty;
 	}
 
-	public void dereaseActivePlayers() {
-		if (activePlayers.greaterThan(0).get())
-			activePlayers.set(getActivePlayers() - 1);
-	}
-
-	public ReadOnlyIntegerProperty activePlayerProperty() {
-		return activePlayers;
+	public void updateActivePlayerProperty() {
+		activePlayerProperty.set(getActivePlayers());
 	}
 
 	// Exceptions
@@ -257,13 +244,7 @@ public class Project {
 			Platform.runLater(() -> removeExceptions(pad));
 			return;
 		}
-		Iterator<PadException> i = exceptions.iterator();
-		while (i.hasNext()) {
-			PadException exception = i.next();
-			if (exception.getPad().equals(pad)) {
-				i.remove();
-			}
-		}
+		exceptions.removeIf(exception -> exception.getPad().equals(pad));
 	}
 
 	public void removeException(PadException exception) {
