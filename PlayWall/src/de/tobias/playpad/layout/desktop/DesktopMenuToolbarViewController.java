@@ -484,7 +484,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Project project = dialog.getProject();
 			if (project != null) {
-				PlayPadMain.getProgramInstance().openProject(project);
+				PlayPadMain.getProgramInstance().openProject(project, null);
 			}
 		});
 	}
@@ -503,7 +503,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				try {
 					Project project = Project.load(result.get(), true, ImportDialog.getInstance(stage));
-					PlayPadMain.getProgramInstance().openProject(project);
+					PlayPadMain.getProgramInstance().openProject(project, null);
 
 					createRecentDocumentMenuItems();
 				} catch (ProfileNotFoundException e) {
@@ -764,7 +764,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
 					Project project = Project.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
-					PlayPadMain.getProgramInstance().openProject(project);
+					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();
 					mainViewController.showError(

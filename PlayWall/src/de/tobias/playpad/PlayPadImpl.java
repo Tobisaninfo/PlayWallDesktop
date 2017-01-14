@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.design.modern.ModernDesignFactory;
@@ -43,6 +44,7 @@ import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.SystemUtils;
 import de.tobias.utils.util.Worker;
@@ -237,12 +239,19 @@ public class PlayPadImpl implements PlayPad {
 		return globalSettings;
 	}
 
-	public void openProject(Project project) {
+	public void openProject(Project project, Consumer<NVC> onLoaded) {
 		if (mainViewController == null) {
-			mainViewController = new MainViewController(mainViewListeners);
+			mainViewController = new MainViewController(e -> {
+				currentProject = project;
+				mainViewController.openProject(project);
+				if (onLoaded != null) {
+					onLoaded.accept(e);
+				}
+			});
+		} else {
+			currentProject = project;
+			mainViewController.openProject(project);
 		}
-		currentProject = project;
-		mainViewController.openProject(project);
 	}
 
 	public Project getCurrentProject() {

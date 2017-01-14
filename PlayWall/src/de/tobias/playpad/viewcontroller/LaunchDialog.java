@@ -127,8 +127,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 		Project project = dialog.getProject();
 		if (project != null) {
-			PlayPadMain.getProgramInstance().openProject(project);
-			getStageContainer().ifPresent(NVCStage::close);
+			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		}
 	}
 
@@ -184,7 +183,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	/**
 	 * Gibt das ausgewählte Projekt zurück.
-	 * 
+	 *
 	 * @return Projekt
 	 */
 	private ProjectReference getSelectedProject() {
@@ -193,9 +192,8 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	/**
 	 * Öffnet ein Project und zeigt es im MainView an. Zudem wird as entsprechende Profile geladen und geprüft ob Module (Plugins) fehlen.
-	 * 
-	 * @param ref
-	 *            Project to launch
+	 *
+	 * @param ref Project to launch
 	 */
 	private void launchProject(ProjectReference ref) {
 		// Es fehlen Module
@@ -207,8 +205,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 		try {
 			Project project = Project.load(ref, true, this);
-			PlayPadMain.getProgramInstance().openProject(project);
-			getStageContainer().ifPresent(NVCStage::close);
+			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
