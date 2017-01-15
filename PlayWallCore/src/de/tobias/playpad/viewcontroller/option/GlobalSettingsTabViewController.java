@@ -33,8 +33,7 @@ public abstract class GlobalSettingsTabViewController extends NVC {
 	public abstract void saveSettings(GlobalSettings settings);
 
 	/**
-	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss. Der eigentliche Reload wird
-	 * in {@link #reload(Profile, Project, IMainViewController)} ausgeführt.
+	 * Gibt <code>true</code> zurück, wenn im Hauptprogramm etwas neu geladen werden muss.
 	 *
 	 * @return <code>true</code> Benötigt Reload
 	 */

@@ -24,13 +24,13 @@ public class Updates {
 	private static final String CACHE_FOLER = "Updates";
 
 	// Name der Updater Datei
-	private static String JAR_NAME = "PlayWallUp.jar";
-	private static String EXE_NAME = "PlayWallUp.exe";
+	private static final String JAR_NAME = "PlayWallUp.jar";
+	private static final String EXE_NAME = "PlayWallUp.exe";
 
 	/**
 	 * Sollte in einem Extra Thread gemacht werden, da der Updater gedownloaded wird.
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException Internal Error
 	 */
 	public static void startUpdate() throws IOException {
 		App app = ApplicationUtils.getApplication();
@@ -84,7 +84,7 @@ public class Updates {
 	private static void downloadUpdater(String updaterURL, Path path) throws IOException, MalformedURLException {
 		URL url = new URL(updaterURL);
 		InputStream iStr = url.openStream();
-		
+
 		if (Files.notExists(path)) {
 			Files.createDirectories(path.getParent());
 		}

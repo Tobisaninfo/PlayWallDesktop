@@ -23,13 +23,10 @@ import de.tobias.utils.settings.Storable;
 
 /**
  * Globale Einstellungen für das Programm. Eine Instanz von diesen Einstellungen wird in {@link PlayPad} verwaltet.
- * 
- * @author tobias
- * 
- * @since 5.1.0
- * 
- * @see PlayPad#getGlobalSettings()
  *
+ * @author tobias
+ * @see PlayPad#getGlobalSettings()
+ * @since 5.1.0
  */
 public class GlobalSettings {
 
@@ -161,12 +158,11 @@ public class GlobalSettings {
 
 	/**
 	 * Lädt eine neue Instanz der Globalen Einstellungen.
-	 * 
+	 *
+	 * @param savePath path to be saved
 	 * @return GlobalSettings
-	 * @throws DocumentException
-	 *             XML Fehler
-	 * @throws IOException
-	 *             Fehler bei IO
+	 * @throws DocumentException XML Fehler
+	 * @throws IOException       Fehler bei IO
 	 */
 	public static GlobalSettings load(Path savePath) throws DocumentException, IOException {
 		GlobalSettings settings = new GlobalSettings();
@@ -209,7 +205,7 @@ public class GlobalSettings {
 			if (root.element(CACHE_PATH_ELEMENT) != null) {
 				settings.setCachePath(Paths.get(root.element(CACHE_PATH_ELEMENT).getStringValue()));
 			}
-			
+
 			// Dialogs
 			if (root.element(IGNORE_SAVE_DIALOG_ELEMENT) != null) {
 				settings.setIgnoreSaveDialog(Boolean.valueOf(root.element(IGNORE_SAVE_DIALOG_ELEMENT).getStringValue()));
@@ -220,11 +216,9 @@ public class GlobalSettings {
 
 	/**
 	 * Speichert die Globalen Einstellungen
-	 * 
-	 * @throws UnsupportedEncodingException
-	 *             Fehler bei XML
-	 * @throws IOException
-	 *             Fehler bei IO
+	 *
+	 * @throws UnsupportedEncodingException Fehler bei XML
+	 * @throws IOException                  Fehler bei IO
 	 */
 	public void save() throws UnsupportedEncodingException, IOException {
 		Document document = DocumentHelper.createDocument();
@@ -252,7 +246,7 @@ public class GlobalSettings {
 
 		// Dialogs
 		root.addElement(IGNORE_SAVE_DIALOG_ELEMENT).addText(String.valueOf(ignoreSaveDialog));
-		
+
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());
 		writer.write(document);
 		writer.close();

@@ -22,7 +22,7 @@ import de.tobias.utils.util.ZipFile;
  */
 public abstract class PadContent implements Cloneable {
 
-	// Refrence
+	// reference
 	private Pad pad;
 
 	public PadContent(Pad pad) {
@@ -35,7 +35,7 @@ public abstract class PadContent implements Cloneable {
 
 	/**
 	 * Never use this. only for cloning
-	 * @param pad
+	 * @param pad cloned pad
 	 */
 	public void setPad(Pad pad) {
 		this.pad = pad;
@@ -100,27 +100,27 @@ public abstract class PadContent implements Cloneable {
 	/**
 	 * Gibt den richtigen Pfad einer Datei zurück, basierend auf den Einstellungen.
 	 * 
-	 * @param orrginal
+	 * @param original
 	 *            orginal path
 	 * @return new path
 	 * @throws IOException
 	 *             IO Fehler
 	 * @since 5.1.0
 	 */
-	public Path getRealPath(Path orginal) throws IOException {
+	public Path getRealPath(Path original) throws IOException {
 		ProjectSettings settings = getPad().getProject().getSettings();
 		if (settings.isUseMediaPath()) {
 			Path mediaFolder = settings.getMediaPath();
-			Path newPath = mediaFolder.resolve(orginal.getFileName());
+			Path newPath = mediaFolder.resolve(original.getFileName());
 
 			if (Files.notExists(mediaFolder)) {
 				Files.createDirectories(mediaFolder);
 			}
 
-			Files.copy(orginal, newPath, StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(original, newPath, StandardCopyOption.REPLACE_EXISTING);
 			return newPath;
 		}
-		return orginal;
+		return original;
 	}
 
 	@Override

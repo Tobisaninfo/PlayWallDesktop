@@ -15,111 +15,102 @@ import javafx.scene.image.Image;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
- * 
- * @author tobias
- * 
- * @since 5.0.0
  *
+ * @author tobias
+ * @since 5.0.0
  */
 public interface PlayPad {
 
 	/**
 	 * Fügt einen Listener für das Hauptfenster hinzu.
-	 * 
-	 * @param listener
-	 * 
+	 *
+	 * @param listener MainView Listener
 	 * @since 2.0.0
 	 */
-	public void addMainViewListener(WindowListener<IMainViewController> listener);
+	void addMainViewListener(WindowListener<IMainViewController> listener);
 
 	/**
 	 * Fügt einen Settings Listener hinzu.
-	 * 
-	 * @param listener
-	 * 
+	 *
+	 * @param listener Settings Listener
 	 * @since 2.0.0
 	 */
-	public void addSettingsListener(SettingsListener listener);
+	void addSettingsListener(SettingsListener listener);
 
 	/**
 	 * Entfernt einen Settings Listener.
-	 * 
-	 * @param listener
-	 * 
+	 *
+	 * @param listener Settings Listener
 	 * @since 2.0.0
 	 */
-	public void removeSettingsListener(SettingsListener listener);
+	void removeSettingsListener(SettingsListener listener);
 
 	/**
 	 * Gibt alle SettingListener zurück.
-	 * 
+	 *
 	 * @return Settingslistener
 	 */
-	public List<SettingsListener> getSettingsListener();
+	List<SettingsListener> getSettingsListener();
 
 	/**
 	 * Fügt ein PadListener zum System hinzu. Der Listener gilt für alle Pads.
-	 * 
-	 * @param listener
-	 *            Listener
+	 *
+	 * @param listener Listener
 	 * @since 5.0.0
 	 */
-	public void addPadListener(PadListener listener);
+	void addPadListener(PadListener listener);
 
 	/**
 	 * Entfernt ein Pad Listener.
-	 * 
-	 * @param listener
-	 *            Listener
+	 *
+	 * @param listener Listener
 	 */
-	public void removePadListener(PadListener listener);
+	void removePadListener(PadListener listener);
 
 	/**
 	 * Gibt alle PadListener zurück.
-	 * 
+	 *
 	 * @return PadListener
-	 * 
 	 */
-	public List<PadListener> getPadListener();
+	List<PadListener> getPadListener();
 
 	/**
 	 * Gibt eine Refernz auf das Hauptfenster zurück.
-	 * 
+	 *
 	 * @return Main ViewController
 	 */
-	public IMainViewController getMainViewController();
+	IMainViewController getMainViewController();
 
 	/**
 	 * Gibt das Programm Icon zurück.
-	 * 
+	 *
 	 * @return Programmicon
 	 */
-	public Optional<Image> getIcon();
+	Optional<Image> getIcon();
 
 	/**
 	 * Beendet PlayWall.
 	 */
-	public void shutdown();
+	void shutdown();
 
 	/**
 	 * Lädt ein Plugin sofort ins System.
-	 * 
-	 * @param uri
-	 *            Quelle des Plugin
+	 *
+	 * @param uri Quelle des Plugin
 	 */
-	public void loadPlugin(URI uri);
+	void loadPlugin(URI uri);
 
 	/**
 	 * Gibt die globalen Einstellungen zurück.
-	 * 
+	 *
 	 * @return Global Settings
 	 */
-	public GlobalSettings getGlobalSettings();
+	GlobalSettings getGlobalSettings();
 
 	/**
 	 * Gibt alle aktiven Module zurück.
-	 * 
+	 *
 	 * @return Module
 	 */
-	public Collection<Module> getModules();
+	Collection<Module> getModules();
 }

@@ -4,12 +4,10 @@ import de.tobias.playpad.pad.Pad;
 
 /**
  * Interface, um das Volume eines Pad zu beeinflussen. Es muss dem VolumeManager hinzugefügt werden.
- * 
- * @author tobias
  *
- * @sinve 6.0.0
- * 
+ * @author tobias
  * @see VolumeManager#addFilter(VolumeFilter)
+ * @since 6.0.0
  */
 @FunctionalInterface
 public interface VolumeFilter {

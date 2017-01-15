@@ -115,7 +115,7 @@ public class Key implements Displayable {
 	/**
 	 * Gibt die Tastenkombination als String für das Menü in JavaFX zurück.
 	 * 
-	 * @return
+	 * @return KeyCombination Readable
 	 */
 	public String getKeyCode() {
 		StringBuilder builder = new StringBuilder();
