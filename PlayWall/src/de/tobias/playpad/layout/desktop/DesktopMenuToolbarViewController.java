@@ -682,11 +682,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		NotificationPane pane = mainViewController.getNotificationPane();
 		pane.show("", box);
-
-		// Auto Complete
-		Set<String> names = openProject.getPads().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
-				.collect(Collectors.toSet());
-		TextFields.bindAutoCompletion(field, names);
 	}
 
 	@FXML
@@ -742,7 +737,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		});
 	}
 
-	private final int LAST_DOCUMENT_LIMIT = 3;
+	private static final int LAST_DOCUMENT_LIMIT = 3;
 
 	public void createRecentDocumentMenuItems() {
 		recentOpenMenu.getItems().clear();

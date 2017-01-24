@@ -323,7 +323,7 @@ public class Project {
 		List<Pad> result = new ArrayList<>();
 		for (Pad pad : getPads()) {
 			if (pad.getStatus() != PadStatus.EMPTY) {
-				if (pad.getName().startsWith(name)) {
+				if (pad.getName().toLowerCase().contains(name.toLowerCase())) {
 					result.add(pad);
 				}
 			}
