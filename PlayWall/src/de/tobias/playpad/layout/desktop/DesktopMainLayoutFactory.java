@@ -59,18 +59,20 @@ public class DesktopMainLayoutFactory extends MainLayoutFactory {
 		return null;
 	}
 
+
+	// Current Mode
 	public DesktopEditMode getEditMode() {
 		return editMode.get();
 	}
 
-	public void setEditMode(DesktopEditMode editMode) {
+	void setEditMode(DesktopEditMode editMode) {
 		if (editMode != DesktopEditMode.PLAY && Profile.currentProfile().getProfileSettings().isLocked()) {
 			return;
 		}
 		this.editMode.set(editMode);
 	}
 
-	public ObjectProperty<DesktopEditMode> editModeProperty() {
+	ObjectProperty<DesktopEditMode> editModeProperty() {
 		return editMode;
 	}
 }

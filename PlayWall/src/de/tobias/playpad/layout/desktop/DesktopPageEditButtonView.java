@@ -36,7 +36,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 	private transient Button pageButton;
 	private transient MenuToolbarViewController controller;
 
-	public DesktopPageEditButtonView(MenuToolbarViewController controller, Page page, Button pageButton) {
+	DesktopPageEditButtonView(MenuToolbarViewController controller, Page page, Button pageButton) {
 		this.page = page;
 		this.pageButton = pageButton;
 		this.controller = controller;
@@ -107,21 +107,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			}
 			event.consume();
 		} else if (event.getSource() == editTextButton) {
-			TextInputDialog dialog = new TextInputDialog();
-
-			dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Name_Header));
-			dialog.setContentText(Localization.getString(Strings.UI_Dialog_Page_Name_Content));
-			dialog.initOwner(controller.getStage());
-			dialog.initModality(Modality.WINDOW_MODAL);
-			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-
-			Optional<String> result = dialog.showAndWait();
-
-			result.filter(name -> name != null && !name.isEmpty()).ifPresent(name ->
-			{
-				page.setName(name);
-			});
+			showPageNameDialog(page);
 
 			// Update Page Button in Toolbar
 			String name = page.getName();
@@ -133,6 +119,10 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		} else if (event.getSource() == cloneButton) {
 			try {
 				Page clone = page.clone();
+
+				// Show Rename dialog for cloned page
+				showPageNameDialog(clone);
+
 				Project project = page.getProjectReference();
 				project.addPage(clone);
 
@@ -164,6 +154,20 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				event.consume();
 			});
 		}
+	}
+
+	private void showPageNameDialog(Page page) {
+		TextInputDialog dialog = new TextInputDialog(page.getName());
+
+		dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Name_Header));
+		dialog.setContentText(Localization.getString(Strings.UI_Dialog_Page_Name_Content));
+		dialog.initOwner(controller.getStage());
+		dialog.initModality(Modality.WINDOW_MODAL);
+		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+		Optional<String> result = dialog.showAndWait();
+		result.filter(name -> !name.isEmpty()).ifPresent(page::setName);
 	}
 
 }
