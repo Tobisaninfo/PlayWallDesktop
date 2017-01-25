@@ -35,21 +35,21 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @param color
 	 *            Neue Farbe
 	 */
-	public void setGridColor(Color color);
+	void setGridColor(Color color);
 
 	/**
 	 * Gibt die Stage des ViewControllers zurück.
 	 * 
 	 * @return Stage
 	 */
-	public Stage getStage();
+	Stage getStage();
 
 	/**
 	 * Gibt den Root Node der View zurück.
 	 * 
 	 * @return root node
 	 */
-	public Parent getParent();
+	Parent getParent();
 
 	/**
 	 * Registriert ein KeyEvent Listener für das Fenster.
@@ -59,38 +59,38 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @param listener
 	 *            Listener für Event
 	 */
-	public void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener);
+	void registerKeyboardListener(EventType<KeyEvent> eventType, EventHandler<KeyEvent> listener);
 
 	/**
 	 * Aktualisiert den Title des Fenster.
 	 */
-	public void updateWindowTitle();
+	void updateWindowTitle();
 
 	/**
 	 * Gibt den aktiven MenuToolbarController des Hauptfensters zurück. Dieser basiert auf dem aktuellen MainLayout.
 	 * 
 	 * @return Controller
 	 */
-	public MenuToolbarViewController getMenuToolbarController();
+	MenuToolbarViewController getMenuToolbarController();
 
 	/**
 	 * Gibt den Bildschirm zurück, wo das Fenster aktiv ist,
 	 * 
 	 * @return Screen
 	 */
-	public Screen getScreen();
+	Screen getScreen();
 
 	/**
 	 * Erstellt die Pad Views.
 	 */
-	public void createPadViews();
+	void createPadViews();
 
 	/**
 	 * Gibt die Nummer Aktuelle Seite zurück. (0, n)
 	 * 
 	 * @return Nummer der Seite
 	 */
-	public int getPage();
+	int getPage();
 
 	/**
 	 * Zeigt eine Seite. Sollte die Seite bereits offen sien, passiert nichts.
@@ -99,12 +99,12 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 *            Page Number
 	 * @return <code>false</code> Seite gibt es nicht.
 	 */
-	public boolean showPage(int page);
+	boolean showPage(int page);
 
 	/**
 	 * Lädt die CSS Files neu.
 	 */
-	public void loadUserCss();
+	void loadUserCss();
 
 	/**
 	 * Gibt die PadViews zurück.
@@ -118,7 +118,7 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * 
 	 * @return MIDI Handler
 	 */
-	public MidiListener getMidiHandler();
+	MidiListener getMidiHandler();
 
 	/**
 	 * Setzt das MainLayout des Hauptfensters.
@@ -126,7 +126,7 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @param mainLayoutFactory
 	 *            Neues Layout
 	 */
-	public void setMainLayout(MainLayoutFactory mainLayoutFactory);
+	void setMainLayout(MainLayoutFactory mainLayoutFactory);
 
 	/**
 	 * Führt eine Aktion für das Hauptfenster aus. Beispielsweise MenuItem in MenuToolbarController hinzufügen. Zudem wird diese Aktion
@@ -135,7 +135,7 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @param runnable
 	 *            Funktion
 	 */
-	public void performLayoutDependendAction(MainLayoutHandler runnable);
+	void performLayoutDependendAction(MainLayoutHandler runnable);
 
 	/**
 	 * Lädt die Tastenkombinationen für das Menü und co neu.
@@ -143,16 +143,16 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @param keys
 	 *            Einstellungen der Key Bindings
 	 */
-	public void loadKeybinding(KeyCollection keys);
+	void loadKeybinding(KeyCollection keys);
 
 	/**
 	 * Gibt das NotificationPane zurück.
 	 * 
 	 * @return NotificationPane
 	 */
-	public NotificationPane getNotificationPane();
+	NotificationPane getNotificationPane();
 
-	public <T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
+	<T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 	
-	public <T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
+	<T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 }

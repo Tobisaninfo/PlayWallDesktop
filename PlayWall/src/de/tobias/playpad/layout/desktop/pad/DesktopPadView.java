@@ -339,50 +339,36 @@ public class DesktopPadView implements IPadView {
 		Pad pad = getViewController().getPad();
 		PadIndex index = pad.getPadIndex();
 
-		superRoot.getStyleClass().removeAll("pad", "pad" + index);
+		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		indexLabel.getStyleClass().removeAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
-		timeLabel.getStyleClass().removeAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
-		loopLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		triggerLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		errorLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
+		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		timeLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		loopLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		triggerLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		errorLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		preview.getChildren().forEach(i -> i.getStyleClass().removeAll("pad-title", "pad" + index + "-title"));
+		preview.getChildren().forEach(i -> i.getStyleClass().removeIf( c -> c.startsWith("pad")));
 
-		playBar.getStyleClass().removeAll("pad-playbar", "pad" + index + "-playbar");
+		playBar.getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		playButton.getStyleClass().removeAll("pad-button", "pad" + index + "-button");
-		pauseButton.getStyleClass().removeAll("pad-button", "pad" + index + "-button");
-		stopButton.getStyleClass().removeAll("pad-button", "pad" + index + "-button");
-		newButton.getStyleClass().removeAll("pad-button", "pad" + index + "-button");
-		settingsButton.getStyleClass().removeAll("pad-button", "pad" + index + "-button");
+		playButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		pauseButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		stopButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		newButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		settingsButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		playButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		pauseButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		stopButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		newButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		settingsButton.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
+		playButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		pauseButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		stopButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		newButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		settingsButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		buttonBox.getStyleClass().add("pad-button-box");
-		root.getStyleClass().add("pad-root");
+		buttonBox.getStyleClass().remove("pad-button-box");
+		root.getStyleClass().remove("pad-root");
 	}
 
 	@Override
 	public void highlightView(int milliSecounds) {
-		// FadeableColor stopColor = new FadeableColor(ModernColor.GRAY1.getColorHi(), ModernColor.GRAY1.getColorLow());
-		// FadeableColor playColor = new FadeableColor(ModernColor.BLUE1.getColorHi(), ModernColor.BLUE1.getColorLow());
-		//
-		// ModernDesignAnimator.animateWarn(controller, stopColor, playColor, Duration.seconds(3));
-		// Pad pad = controller.getPad();
-		//
-		// Warning warning = pad.getWarning();
-		//
-		// if (pad.isCustomLayout()) {
-		// pad.getLayout().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
-		// } else {
-		// Profile.currentProfile().currentLayout().handleWarning(controller, warning);
-		// }
-
 		PulseTranslation pulseTranslation = new PulseTranslation(superRoot, null, 0.1);
 		pulseTranslation.play();
 	}

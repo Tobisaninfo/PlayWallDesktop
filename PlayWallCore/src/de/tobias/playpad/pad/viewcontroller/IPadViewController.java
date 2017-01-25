@@ -20,14 +20,14 @@ public interface IPadViewController {
 	 * 
 	 * @return Pad
 	 */
-	public Pad getPad();
+	Pad getPad();
 
 	/**
 	 * Gibt die View des Controllers zurück.
 	 * 
 	 * @return View
 	 */
-	public IPadView getView();
+	IPadView getView();
 
 	/**
 	 * Setzt ein Pad für ein View. Hier werden die Datein mittels ViewController der View bekannt gemacht.
@@ -35,18 +35,18 @@ public interface IPadViewController {
 	 * @param pad
 	 *            Neues Pad
 	 */
-	public void setupPad(Pad pad);
+	void setupPad(Pad pad);
 
 	/**
 	 * Entfertn des Verbundene Pad von der View.
 	 */
-	public void removePad();
+	void removePad();
 
-	public void updateTimeLabel();
+	void updateTimeLabel();
 
-	public void updateButtonDisable();
+	void updateButtonDisable();
 
-	public IPadPositionListener getPadPositionListener();
+	IPadPositionListener getPadPositionListener();
 
-	public ChangeListener<Duration> getPadDurationListener();
+	ChangeListener<Duration> getPadDurationListener();
 }

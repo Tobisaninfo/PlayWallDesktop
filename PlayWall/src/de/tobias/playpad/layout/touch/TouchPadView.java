@@ -253,19 +253,19 @@ public class TouchPadView implements IPadView {
 		Pad pad = getViewController().getPad();
 		PadIndex index = pad.getPadIndex();
 
-		superRoot.getStyleClass().removeAll("pad", "pad" + index);
+		superRoot.getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		indexLabel.getStyleClass().removeAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
-		timeLabel.getStyleClass().removeAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
-		loopLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		triggerLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
-		errorLabel.getGraphic().getStyleClass().removeAll("pad-icon", "pad" + index + "-icon");
+		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		timeLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		loopLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		triggerLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		errorLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		preview.getChildren().forEach(i -> i.getStyleClass().removeAll("pad-title", "pad" + index + "-title"));
+		preview.getChildren().forEach(i -> i.getStyleClass().removeIf( c -> c.startsWith("pad")));
 
-		playBar.getStyleClass().removeAll("pad-playbar", "pad" + index + "-playbar");
+		playBar.getStyleClass().removeIf( c -> c.startsWith("pad"));
 
-		root.getStyleClass().add("pad-root");
+		root.getStyleClass().remove("pad-root");
 	}
 
 	@Override
