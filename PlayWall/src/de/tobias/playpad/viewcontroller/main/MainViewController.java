@@ -22,9 +22,11 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
+import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
+import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.NotificationHandler;
@@ -42,11 +44,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -54,6 +60,7 @@ import javax.sound.midi.MidiUnavailableException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class MainViewController extends NVC implements IMainViewController, NotificationHandler, ProfileListener {
@@ -94,6 +101,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		load("de/tobias/playpad/assets/view/main/", "mainView", PlayPadMain.getUiResourceBundle(), e ->
 		{
 			NVCStage stage = e.applyViewControllerToStage();
+			stage.addCloseHook(this::closeRequest);
+
 			new ErrorSummaryDialog(stage.getStage());
 
 			// Init with existing stage
@@ -232,6 +241,85 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		createPadViews();
 		showPage(currentPageShowing);
 		loadUserCss();
+	}
+
+	private boolean closeRequest() {
+		ErrorSummaryDialog.getInstance().getStage().close();
+
+		if (Profile.currentProfile() != null) {
+			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+
+			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
+			// wenn ein Pad noch im Status Play ist
+			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
+
+				alert.initOwner(getStage());
+				alert.initModality(Modality.WINDOW_MODAL);
+				Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+				PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent())
+					if (result.get() != ButtonType.OK)
+						return false;
+			}
+
+			// Save Dialog
+			if (globalSettings.isIgnoreSaveDialog()) {
+				saveProject();
+			} else {
+				SaveDialog alert = new SaveDialog(getStage());
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.isPresent()) {
+					globalSettings.setIgnoreSaveDialog(alert.isSelected());
+					ButtonType buttonType = result.get();
+					if (buttonType.getButtonData() == ButtonBar.ButtonData.YES) {
+						// Projekt Speichern
+						saveProject();
+					} else if (buttonType.getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) {
+						return false;
+					}
+				}
+			}
+
+			// Save Config - Its unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
+			try {
+				if (Profile.currentProfile() != null)
+					Profile.currentProfile().save();
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Profile_Save));
+			}
+
+			// Mapper Clear Feedback
+			Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
+
+			// MIDI Shutdown
+			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
+			if (profilSettings.isMidiActive()) {
+				try {
+					midi.close();
+				} catch (MidiUnavailableException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return true;
+	}
+
+	private void saveProject() {
+		try {
+			if (openProject.getProjectReference() != null) {
+				openProject.save();
+				System.out.println("Saved Project: " + openProject);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+		}
 	}
 
 	public void openProject(Project project) {
@@ -495,9 +583,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	/**
 	 * Init MIDI Device by using the Midi Class and show some feedback the user.
 	 *
-	 * @param name
-	 *            Device Name
-	 *
+	 * @param name Device Name
 	 * @see Midi#lookupMidiDevice(String)
 	 */
 	private void loadMidiDevice(String name) {
