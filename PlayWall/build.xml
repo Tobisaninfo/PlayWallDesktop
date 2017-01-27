@@ -2,41 +2,19 @@
 
 	<taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="/Users/tobias/Documents/Programmieren/Java/ant/lib/appbundler-1.0.jar" />
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="/Users/tobias/Documents/Programmieren/Java/ant/lib/launch4j/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
-	<taskdef name="upload" classname="de.tobias.playwallpm.task.PlayWallPMTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/snakeyaml-1.11.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/guava-15.0.jar" />
-	<taskdef name="buildNumber" classname="de.tobias.playwallpm.task.BuildNumberTask" classpath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWallPackageManager/build/PlayWallPM.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/jsch/jsch-0.1.53.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/YAMLStorage.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/snakeyaml-1.11.jar:
-					/Users/tobias/Documents/Programmieren/Java/Libraries/File Parser/YAML/guava-15.0.jar" />
 
 	<target name="buildApp">
-		<bundleapp outputdirectory="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist" name="Play Wall" displayname="Play Wall" identifier="de.tobias.playwall" mainclassname="de.tobias.playpad.PlayPadMain" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.icns">
+		<bundleapp outputdirectory="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/out/dist" name="Play Wall" displayname="Play Wall" identifier="de.tobias.playwall" mainclassname="de.tobias.playpad.PlayPadMain" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.icns">
 			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.8.0_111.jdk/Contents/Home" />
-			<classpath file="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" />
+			<classpath file="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/out/artifacts/PlayWall.jar" />
 		</bundleapp>
 
 		<launch4j>
-			<config headerType="gui" outfile="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist/PlayWall.exe" dontWrapJar="false" jarPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.ico">
+			<config headerType="gui" outfile="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/out/dist/PlayWall.exe" dontWrapJar="false" jarPath="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/out/artifacts/PlayWall.jar" icon="/Users/tobias/Documents/Programmieren/Java/git/PlayWall/PlayWall/src/icon.ico">
 				<classPath mainClass="de.tobias.playpad.PlayPadMain" />
 				<jre minVersion="1.8.0">
 				</jre>
 			</config>
 		</launch4j>
-
-		<input addproperty="password">Enter password</input>
-
-		<upload username="p35947554-pw" password="${password}" host="p35947554.1and1-data.host">
-			<file type="program" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/PlayWall.jar" remotePath="/stable" remoteFileName="PlayWall.jar" />
-			<file type="exe" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/dist/PlayWall.exe" remotePath="/stable" remoteFileName="PlayWall.exe" />
-			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/ActionPlugin.jar" remotePath="/stable/plugins" remoteFileName="ActionPlugin.jar" />
-			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/AwakePlugin.jar" remotePath="/stable/plugins" remoteFileName="AwakePlugin.jar" />
-			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/EqualizerPlugin.jar" remotePath="/stable/plugins" remoteFileName="EqualizerPlugin.jar" />
-			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/LaunchPadPlugin.jar" remotePath="/stable/plugins" remoteFileName="LaunchPadPlugin.jar" />
-			<file type="plugin" localPath="/Users/tobias/Documents/Programmieren/Java/eclipse/PlayWall/build/MediaPlugin.jar" remotePath="/stable/plugins" remoteFileName="MediaPlugin.jar" />
-		</upload>
 	</target>
 </project>
