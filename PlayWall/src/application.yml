@@ -1,17 +1,17 @@
 name: PlayWall
-version: 6.0.1
-build: 37
+version: 6.1.0
+build: 38
 identifier: de.tobias.playpad.v6
 main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
 backup: false
 iconPath: icon
-updateURL: http://tobisan.no-ip.org/files/PlayWall
+updateURL: https://tobisan.ddns.net/playwall/resources/executables
 userInfo:
   Website: http://tobisan.no-ip.org/
   ErrorURL: http://tobisan.no-ip.org/upload.php
   PluginsURL: 
-     Stable: http://tobisan.no-ip.org/files/PlayWall/stable/plugins.yml
-     Beta: http://tobisan.no-ip.org/files/PlayWall/beta/plugins.yml
-  ChangelogURL: http://s522730663.online.de/programmer/roadmap/php/index.php?id=1
-  UpdaterProgram: http://tobisan.no-ip.org/files/Updater/
+     Stable: https://tobisan.ddns.net/playwall/resources/executables/stable/plugins.yml
+     Beta: https://tobisan.ddns.net/playwall/resources/executables/beta/plugins.yml
+  ChangelogURL: https://tobisan.ddns.net/roadmap/php/index.php?id=1
+  UpdaterProgram: https://tobisan.ddns.net/playwall/resources/executables/utils/
