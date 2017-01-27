@@ -202,6 +202,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		this.midiHandler = new MidiHandler(midi, this, project);
 		this.midi.setListener(midiHandler);
 		this.keyboardHandler = new KeyboardHandler(project, this);
+
+		// Request Focus for key listener
+		getParent().requestFocus();
 	}
 
 	private void initMainLayout() {

@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 
 public class KeyboardHandler implements EventHandler<KeyEvent> {
 
@@ -28,7 +29,7 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 	// KeyType ist nicht unterstützt.
 	@Override
 	public void handle(KeyEvent event) {
-		if (event.getTarget() instanceof Scene) {
+		if (event.getTarget() == mainViewController.getParent()) {
 			if (!event.isShortcutDown()) {
 				KeyCode code = null;
 				InputType type = null;
