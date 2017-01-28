@@ -44,6 +44,11 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	}
 
 	@Override
+	public void init() {
+		volumeSlider.focusedProperty().addListener(i -> mainViewController.getParent().requestFocus());
+	}
+
+	@Override
 	public void initPageButtons() {
 		pageHBox.getChildren().clear();
 

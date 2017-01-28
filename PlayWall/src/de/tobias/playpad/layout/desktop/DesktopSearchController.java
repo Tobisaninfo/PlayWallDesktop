@@ -50,6 +50,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 
 		if (searchResult.isEmpty()) {
 			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+			return;
 		}
 
 		if (currentIndex < searchResult.size()) {
