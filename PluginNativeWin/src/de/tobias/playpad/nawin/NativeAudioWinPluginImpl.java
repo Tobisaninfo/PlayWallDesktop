@@ -32,21 +32,23 @@ public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 
 	@PluginLoaded
 	public void onLoaded(NativeAudioWinPlugin plugin) {
-		module = new Module(NAME, IDENTIFIER);
-		updatable = new NativeAudioWinUpdater();
+		if (OS.getType() == OS.OSType.Windows) {
+			module = new Module(NAME, IDENTIFIER);
+			updatable = new NativeAudioWinUpdater();
 
-		try {
-			prepareBridging();
-			bridgeCsharp();
+			try {
+				prepareBridging();
+				bridgeCsharp();
 
-			if (OS.isWindows()) {
-				AudioRegistry registry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-				NativeAudioWinHandlerFactory nativeWin = new NativeAudioWinHandlerFactory("NativeWin");
-				nativeWin.setName("NativeWin");
-				registry.registerComponent(nativeWin, module);
+				if (OS.isWindows()) {
+					AudioRegistry registry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+					NativeAudioWinHandlerFactory nativeWin = new NativeAudioWinHandlerFactory("NativeWin");
+					nativeWin.setName("NativeWin");
+					registry.registerComponent(nativeWin, module);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
