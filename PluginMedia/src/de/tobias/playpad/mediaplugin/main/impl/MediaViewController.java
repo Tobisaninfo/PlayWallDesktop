@@ -17,6 +17,7 @@ import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -45,7 +46,7 @@ public class MediaViewController implements ProfileListener {
 
 	private Pad currentDisplayedPad;
 
-	public MediaViewController(VideoSettings settings) {
+	MediaViewController(VideoSettings settings) {
 		Profile.registerListener(this);
 		this.settings = settings;
 
@@ -80,40 +81,42 @@ public class MediaViewController implements ProfileListener {
 		if (OS.getType() == OSType.Windows)
 			stage.setAlwaysOnTop(true);
 
-		getStage().setOnCloseRequest(event -> event.consume());
+		getStage().setOnCloseRequest(Event::consume);
 		reloadSettings();
 	}
 
-	public void reloadSettings() {
-		if (stage.isFullScreen())
-			stage.setFullScreen(false);
+	void reloadSettings() {
+		Platform.runLater(() -> {
+			if (stage.isFullScreen())
+				stage.setFullScreen(false);
 
-		if (stage.isShowing())
-			stage.close();
+			if (stage.isShowing())
+				stage.close();
 
-		if (Screen.getScreens().size() > settings.getScreenId()) {
-			Screen screen = Screen.getScreens().get(settings.getScreenId());
+			if (Screen.getScreens().size() > settings.getScreenId()) {
+				Screen screen = Screen.getScreens().get(settings.getScreenId());
 
-			Rectangle2D bounds;
-			if (OS.getType() == OSType.Windows)
-				bounds = screen.getBounds();
-			else
-				bounds = screen.getVisualBounds();
+				Rectangle2D bounds;
+				if (OS.getType() == OSType.Windows)
+					bounds = screen.getBounds();
+				else
+					bounds = screen.getVisualBounds();
 
-			stage.setX(bounds.getMinX());
-			stage.setY(bounds.getMinY());
-			stage.setWidth(bounds.getWidth());
-			stage.setHeight(bounds.getHeight());
-		}
+				stage.setX(bounds.getMinX());
+				stage.setY(bounds.getMinY());
+				stage.setWidth(bounds.getWidth());
+				stage.setHeight(bounds.getHeight());
+			}
 
-		if (settings.isOpenAtLaunch() && !stage.isShowing())
-			stage.show();
+			if (settings.isOpenAtLaunch() && !stage.isShowing())
+				stage.show();
 
-		if (settings.isFullScreen() && !stage.isFullScreen())
-			stage.setFullScreen(true);
+			if (settings.isFullScreen() && !stage.isFullScreen())
+				stage.setFullScreen(true);
+		});
 	}
 
-	public Stage getStage() {
+	Stage getStage() {
 		return stage;
 	}
 
@@ -145,7 +148,7 @@ public class MediaViewController implements ProfileListener {
 
 	@Override
 	public void reloadSettings(Profile old, Profile currentProfile) {
-		Platform.runLater(() -> reloadSettings());
+		Platform.runLater(this::reloadSettings);
 	}
 
 	public boolean isFinish() {
@@ -176,7 +179,7 @@ public class MediaViewController implements ProfileListener {
 		return currentDisplayedPad;
 	}
 
-	public void blind(boolean blind) {
+	void blind(boolean blind) {
 		if (blind) {
 			this.imageView.setStyle("");
 			mediaView.setMediaPlayer(null);
