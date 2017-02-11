@@ -1,17 +1,9 @@
 package de.tobias.playpad.awakeplugin.impl;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.util.ResourceBundle;
-
-import org.dom4j.DocumentException;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.awakeplugin.AwakePlugin;
 import de.tobias.playpad.awakeplugin.AwakeSettings;
+import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
@@ -37,12 +29,20 @@ import javafx.scene.control.Label;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.ResourceBundle;
 
 @PluginImplementation
 public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
 	private static final String NAME = "AwakePlugin";
-	private static final String IDENTIFIER = "de.tobias.playpad.awakeplugin.impl.AwakePluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
 
 	private Module module;
 	private Updatable updatable;
@@ -66,7 +66,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		if (OS.getType() == OSType.Windows) {
 			try {
 				loadJNA();
-				PlayPadPlugin.getImplementation().loadPlugin(ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna").toUri());
+				ModernPluginManager.getInstance().loadFile(ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -8,4 +8,6 @@ public class AppUserInfoStrings {
 	public static final String ERROR_URL = "ErrorURL";
 	public static final String CHANGELOG_URL = "ChangelogURL";
 	public static final String UPDATER_PROGRAM = "UpdaterProgram";
+
+	public static final String SERVER = "Server";
 }

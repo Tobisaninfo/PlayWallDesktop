@@ -1,5 +1,6 @@
 package de.tobias.playpad;
 
+import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReferences;
@@ -12,7 +13,6 @@ import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.ConsoleUtils;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
@@ -207,10 +207,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {
 		// Delete old plugins
-		impl.deletePlugins();
+		ModernPluginManager.getInstance().deletePlugins();
 
 		// Load Plugins
-		impl.loadPlugin(pluginPath.toUri());
+		ModernPluginManager.getInstance().loadFile(pluginPath);
 	}
 
 	private void setupLocalization() {

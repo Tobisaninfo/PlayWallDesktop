@@ -1,17 +1,10 @@
 package de.tobias.playpad.mediaplugin.main.impl;
 
-import java.io.IOException;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.util.ResourceBundle;
-
-import de.tobias.playpad.pad.content.ContentFactory;
-import org.dom4j.DocumentException;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.MediaPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
+import de.tobias.playpad.pad.content.ContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
@@ -32,12 +25,18 @@ import javafx.scene.paint.Color;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.ResourceBundle;
 
 @PluginImplementation
 public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeListener<Boolean> {
 
 	private static final String NAME = "MediaPlugin";
-	private static final String IDENTIFIER = "de.tobias.playpad.videoplugin.main.impl.VideoPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
 
 	private static Module module;
 	private static MediaPluginUpdater updater;

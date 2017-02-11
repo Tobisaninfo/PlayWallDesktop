@@ -1,7 +1,5 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
-import java.util.ResourceBundle;
-
 import de.tobias.playpad.launchpadplugin.LaunchpadPlugin;
 import de.tobias.playpad.launchpadplugin.midi.device.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.device.s.LaunchPadS;
@@ -13,11 +11,13 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
 
+import java.util.ResourceBundle;
+
 @PluginImplementation
 public class LaunchpadPluginImpl implements LaunchpadPlugin {
 
 	private static final String NAME = "LaunchPadPlugin";
-	private static final String IDENTIFIER = "de.tobias.playpad.launchpadplugin.impl.LaunchpadPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.launchpad";
 
 	private static ResourceBundle bundle;
 	private LaunchPadPluginUpdater updater;
