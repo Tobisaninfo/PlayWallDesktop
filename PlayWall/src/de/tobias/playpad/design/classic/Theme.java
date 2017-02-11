@@ -12,7 +12,7 @@ public enum Theme {
 	private Color color;
 	private Color backgrond;
 
-	private Theme(String name, Color color, Color background) {
+	Theme(String name, Color color, Color background) {
 		this.name = name;
 		this.color = color;
 		this.backgrond = background;

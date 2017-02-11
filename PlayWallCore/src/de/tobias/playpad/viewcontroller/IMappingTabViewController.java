@@ -17,5 +17,5 @@ public interface IMappingTabViewController {
 	 * @param action
 	 *            Action
 	 */
-	public void showMapperFor(Action action);
+	void showMapperFor(Action action);
 }

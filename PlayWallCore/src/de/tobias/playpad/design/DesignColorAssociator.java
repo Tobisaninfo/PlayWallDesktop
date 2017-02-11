@@ -16,13 +16,13 @@ public interface DesignColorAssociator {
 	 * 
 	 * @return Farbe der Kachel
 	 */
-	public Color getAssociatedStandardColor();
+	Color getAssociatedStandardColor();
 
 	/**
 	 * Gibt die Eventfarbe (Kacheln mit Aktion) zurück.
 	 * 
 	 * @return Farbe der Kachel
 	 */
-	public Color getAssociatedEventColor();
+	Color getAssociatedEventColor();
 
 }

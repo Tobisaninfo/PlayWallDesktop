@@ -15,6 +15,6 @@ public interface IProjectSettingsViewController {
 	 * @param projectSettingsTabViewController
 	 *            tab
 	 */
-	public void addTab(ProjectSettingsTabViewController projectSettingsTabViewController);
+	void addTab(ProjectSettingsTabViewController projectSettingsTabViewController);
 
 }

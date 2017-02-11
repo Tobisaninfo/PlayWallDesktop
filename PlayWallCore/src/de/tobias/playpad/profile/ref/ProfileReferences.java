@@ -65,7 +65,7 @@ public final class ProfileReferences {
 	 * @throws IOException
 	 *             IO Fehler
 	 */
-	public static Profile newProfile(String name) throws UnsupportedEncodingException, IOException {
+	public static Profile newProfile(String name) throws IOException {
 		ProfileReference ref = new ProfileReference(UUID.randomUUID(), name);
 		ProfileReferences.addProfile(ref);
 
@@ -196,7 +196,7 @@ public final class ProfileReferences {
 	 * @throws IOException
 	 *             IO Fehler
 	 */
-	public static void saveProfiles() throws UnsupportedEncodingException, IOException {
+	public static void saveProfiles() throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement(ROOT_ELEMENT);
 

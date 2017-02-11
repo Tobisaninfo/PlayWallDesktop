@@ -49,10 +49,10 @@ public class NativeAudio {
 	}
 
 	public interface NativeAudioDelegate {
-		public void onFinish(int id);
+		void onFinish(int id);
 		
-		public void onPeakMeter(int id, float left, float right);
+		void onPeakMeter(int id, float left, float right);
 		
-		public void onPositionChanged(int id, double position);
+		void onPositionChanged(int id, double position);
 	}
 }

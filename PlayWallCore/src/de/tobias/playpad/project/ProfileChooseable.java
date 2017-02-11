@@ -16,5 +16,5 @@ public interface ProfileChooseable {
 	 * 
 	 * @return Neues Profile
 	 */
-	public Profile getUnkownProfile();
+	Profile getUnkownProfile();
 }

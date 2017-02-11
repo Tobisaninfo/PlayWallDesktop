@@ -146,7 +146,7 @@ public class Profile {
 		throw new ProfileNotFoundException(ref);
 	}
 
-	public void save() throws UnsupportedEncodingException, IOException {
+	public void save() throws IOException {
 		ref.getRequestedModules().clear();
 
 		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->

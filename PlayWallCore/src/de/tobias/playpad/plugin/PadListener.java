@@ -18,7 +18,7 @@ public interface PadListener {
 	 * @param pad
 	 *            Pad
 	 */
-	public void onPlay(Pad pad);
+	void onPlay(Pad pad);
 
 	/**
 	 * Wird aufgerufen, sobald ein Pad gestoppt wird.
@@ -26,6 +26,6 @@ public interface PadListener {
 	 * @param pad
 	 *            Pad
 	 */
-	public void onStop(Pad pad);
+	void onStop(Pad pad);
 
 }

@@ -1,17 +1,10 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.tobias.playpad.pad.content.ContentFactory;
-import de.tobias.utils.nui.NVC;
-import de.tobias.utils.nui.NVCStage;
-import org.controlsfx.control.TaskProgressView;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.pad.content.ContentFactory;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
@@ -20,7 +13,8 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
@@ -37,6 +31,10 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.controlsfx.control.TaskProgressView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileSettingsViewController extends NVC implements IProfileSettingsViewController {
 
@@ -44,7 +42,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	@FXML private ToggleButton lockedButton;
 	@FXML private Button finishButton;
 
-	protected List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
+	private List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Runnable onFinish;
 

@@ -14,7 +14,7 @@ public enum LaunchPadSColor implements DisplayableFeedbackColor {
 	private int midi;
 	private Color color;
 
-	private LaunchPadSColor(int midi, Color color) {
+	LaunchPadSColor(int midi, Color color) {
 		this.midi = midi;
 		this.color = color;
 	}

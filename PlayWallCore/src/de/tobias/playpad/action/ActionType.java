@@ -16,6 +16,6 @@ public enum ActionType {
 	/**
 	 * Einstellungen ändern, wie Mute.
 	 */
-	SETTINGS;
+	SETTINGS
 
 }

@@ -26,5 +26,5 @@ public enum FeedbackMessage {
 	/**
 	 * Wichtiger Hinweis auf dem Mapper.
 	 */
-	WARNING;
+	WARNING
 }

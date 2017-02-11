@@ -10,5 +10,5 @@ package de.tobias.playpad.audio;
  */
 public interface Soundcardable extends AudioFeature {
 
-	public void setOutputDevice(String name);
+	void setOutputDevice(String name);
 }

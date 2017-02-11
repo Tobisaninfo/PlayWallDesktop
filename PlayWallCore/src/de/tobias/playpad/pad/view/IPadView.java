@@ -21,7 +21,7 @@ public interface IPadView {
 	 * 
 	 * @return ContentView
 	 */
-	public IPadContentView getContentView();
+	IPadContentView getContentView();
 
 	/**
 	 * Setzt die Preview für den PadContent.
@@ -29,21 +29,21 @@ public interface IPadView {
 	 * @param pad
 	 *            Pad
 	 */
-	public void setContentView(Pad pad);
+	void setContentView(Pad pad);
 
 	/**
 	 * Gibt den zugehörigen ViewController zu einem Pad zurück.
 	 * 
 	 * @return ViewController des Pad
 	 */
-	public IPadViewController getViewController();
+	IPadViewController getViewController();
 
 	/**
 	 * Gibt das oberste GUI Element des Pads zurück, welche im MainView verwendet wird.
 	 * 
 	 * @return root node
 	 */
-	public Pane getRootNode();
+	Pane getRootNode();
 
 	/**
 	 * Schaltet den Design Modus für Drag And Drop ein.
@@ -51,7 +51,7 @@ public interface IPadView {
 	 * @param enable
 	 *            true eingeschaltet
 	 */
-	public void enableDragAndDropDesignMode(boolean enable);
+	void enableDragAndDropDesignMode(boolean enable);
 
 	/**
 	 * Zeigt ein BusyView über dem Padview an.
@@ -59,7 +59,7 @@ public interface IPadView {
 	 * @param enable
 	 *            true, wird angezeigt
 	 */
-	public void showBusyView(boolean enable);
+	void showBusyView(boolean enable);
 
 	/**
 	 * Aktiviert eine Pseudoclass für die View
@@ -69,7 +69,7 @@ public interface IPadView {
 	 * @param b
 	 *            <code>true</code> Aktiv
 	 */
-	public void pseudoClassState(PseudoClass playCalss, boolean b);
+	void pseudoClassState(PseudoClass playCalss, boolean b);
 
 	/**
 	 * Setzt den Style für den Root Node der PadView.
@@ -77,7 +77,7 @@ public interface IPadView {
 	 * @param string
 	 *            Style
 	 */
-	public void setStyle(String string);
+	void setStyle(String string);
 
 	/**
 	 * Hebt eine Kachel hervor (Beispiel mit einer Animation.
@@ -85,7 +85,7 @@ public interface IPadView {
 	 * @param milliSecounds
 	 *            Dauer in Millisekunden
 	 */
-	public void highlightView(int milliSecounds);
+	void highlightView(int milliSecounds);
 
 	/**
 	 * Aktiviert des Error Labels, damit es angezeigt wird.
@@ -93,7 +93,7 @@ public interface IPadView {
 	 * @param b
 	 *            <code>true</code> Sichtbar
 	 */
-	public void setErrorLabelActive(boolean b);
+	void setErrorLabelActive(boolean b);
 
 	/**
 	 * Setzt den Fortschritt auf der PlayBar
@@ -101,7 +101,7 @@ public interface IPadView {
 	 * @param value
 	 *            [0, 1]
 	 */
-	public void setPlayBarProgress(double value);
+	void setPlayBarProgress(double value);
 
 	/**
 	 * Setzt die Playbar sichtbar.
@@ -109,7 +109,7 @@ public interface IPadView {
 	 * @param visible
 	 *            <code>true</code> Sichtbar, <code>false</code> nicht sichtbar
 	 */
-	public void setPlaybarVisible(boolean visible);
+	void setPlaybarVisible(boolean visible);
 
 	/**
 	 * Fügt die Standart Elemente der PadView hinzu. Die GUI Element sind Abhängig vom Pad, und welchen Content es hat.
@@ -117,7 +117,7 @@ public interface IPadView {
 	 * @param pad
 	 *            Pad
 	 */
-	public void addDefaultElements(Pad pad);
+	void addDefaultElements(Pad pad);
 
 	/**
 	 * Fügt die StyleClasses der PadView hinzu. Die Methode wird vom Controller aufgerufen.
@@ -125,10 +125,10 @@ public interface IPadView {
 	 * @param index
 	 *            Index von der Kachel
 	 */
-	public void applyStyleClasses(PadIndex index);
+	void applyStyleClasses(PadIndex index);
 
 	/**
 	 * Entfernt die StyleClasses vom PadView. Die Methode wird vom Controller aufgerufen.
 	 */
-	public void removeStyleClasses();
+	void removeStyleClasses();
 }

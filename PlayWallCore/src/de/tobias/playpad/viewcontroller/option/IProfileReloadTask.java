@@ -15,5 +15,5 @@ import javafx.concurrent.Task;
  */
 public interface IProfileReloadTask {
 
-	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller);
+	Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller);
 }

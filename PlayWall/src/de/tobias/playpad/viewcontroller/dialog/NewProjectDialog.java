@@ -1,14 +1,5 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.UUID;
-
-import de.tobias.utils.nui.NVC;
-import de.tobias.utils.nui.NVCStage;
-import org.dom4j.DocumentException;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -18,19 +9,22 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.dom4j.DocumentException;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.UUID;
 
 /**
  * Create an new project and adds it to the project reference list

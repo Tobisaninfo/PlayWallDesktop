@@ -31,8 +31,7 @@ public class ServerImpl implements Server {
 	public List<ModernPlugin> getPlugins() throws IOException {
 		URL url = new URL(server + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream());
-		Type listType = new TypeToken<List<ModernPlugin>>() {
-		}.getType();
+		Type listType = new TypeToken<List<ModernPlugin>>() {}.getType();
 
 		Gson gson = new Gson();
 		return gson.fromJson(reader, listType);

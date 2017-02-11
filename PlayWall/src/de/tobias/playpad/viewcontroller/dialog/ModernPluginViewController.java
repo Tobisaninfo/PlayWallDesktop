@@ -55,7 +55,6 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		Worker.runLater(() -> {
 			try {
 				List<ModernPlugin> plugins = ServerHandler.getServer().getPlugins();
-
 				Platform.runLater(() -> pluginList.getItems().setAll(plugins));
 			} catch (IOException e) {
 				e.printStackTrace();

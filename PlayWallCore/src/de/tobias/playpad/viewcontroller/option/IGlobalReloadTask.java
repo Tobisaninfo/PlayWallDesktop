@@ -14,5 +14,5 @@ import javafx.concurrent.Task;
  */
 public interface IGlobalReloadTask {
 
-	public Task<Void> getTask(GlobalSettings settings, IMainViewController controller);
+	Task<Void> getTask(GlobalSettings settings, IMainViewController controller);
 }

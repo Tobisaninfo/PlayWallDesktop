@@ -20,5 +20,5 @@ public enum InputType {
 	/**
 	 * Mapper is typed (e.g. key on the keyboard is typed - somewhere in between of pressed and released)
 	 */
-	TYPED;
+	TYPED
 }

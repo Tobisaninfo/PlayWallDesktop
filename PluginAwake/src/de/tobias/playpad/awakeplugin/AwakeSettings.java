@@ -30,7 +30,7 @@ public class AwakeSettings {
 		return settings;
 	}
 
-	public void save(Path path) throws UnsupportedEncodingException, IOException {
+	public void save(Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement("Settings");
 

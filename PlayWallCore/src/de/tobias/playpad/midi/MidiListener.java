@@ -4,6 +4,6 @@ import javax.sound.midi.MidiMessage;
 
 public interface MidiListener {
 
-	public void onMidiAction(MidiMessage message);
+	void onMidiAction(MidiMessage message);
 
 }

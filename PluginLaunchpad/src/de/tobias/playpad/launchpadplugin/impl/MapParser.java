@@ -19,7 +19,6 @@ public class MapParser {
 				items.put(color, val);
 			}
 		}
-		;
 		return items;
 	}
 }

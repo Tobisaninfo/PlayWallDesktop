@@ -137,7 +137,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 		ColorXMLUtils.save(titleLabelElement.addElement("Color"), titleLabelColor);
 	}
 
-	public void save(Path path) throws UnsupportedEncodingException, IOException {
+	public void save(Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement("layout");
 		save(rootElement);

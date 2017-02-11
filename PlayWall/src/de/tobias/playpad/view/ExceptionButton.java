@@ -41,9 +41,9 @@ public class ExceptionButton<T> {
 				}
 			});
 
-	public static interface Handler<T> {
+	public interface Handler<T> {
 
-		public T handle(Pad pad, Window owner);
+		T handle(Pad pad, Window owner);
 	}
 
 	private String title;

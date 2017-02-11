@@ -16,13 +16,13 @@ public interface ColorAdjustable {
 	 * 
 	 * @return <code>true</code> Active
 	 */
-	public boolean isAutoFeedbackColors();
+	boolean isAutoFeedbackColors();
 
 	/**
 	 * Kachel, die mit dieser Action verkünpft ist.
 	 * 
 	 * @return Pad
 	 */
-	public Pad getPad();
+	Pad getPad();
 
 }

@@ -15,6 +15,6 @@ public interface IProfileSettingsViewController {
 	 * @param profileSettingsTabViewController
 	 *            tab
 	 */
-	public void addTab(ProfileSettingsTabViewController profileSettingsTabViewController);
+	void addTab(ProfileSettingsTabViewController profileSettingsTabViewController);
 
 }

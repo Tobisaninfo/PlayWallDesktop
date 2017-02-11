@@ -4,6 +4,6 @@ import de.tobias.playpad.DisplayableColor;
 
 public interface DisplayableFeedbackColor extends DisplayableColor {
 
-	public int mapperFeedbackValue();
+	int mapperFeedbackValue();
 
 }

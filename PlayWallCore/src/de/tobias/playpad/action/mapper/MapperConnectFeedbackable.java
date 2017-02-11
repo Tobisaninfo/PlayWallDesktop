@@ -8,7 +8,7 @@ package de.tobias.playpad.action.mapper;
  */
 public interface MapperConnectFeedbackable {
 
-	public void clearFeedbackType();
+	void clearFeedbackType();
 
-	public void initFeedbackType();
+	void initFeedbackType();
 }

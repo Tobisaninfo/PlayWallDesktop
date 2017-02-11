@@ -129,10 +129,10 @@ public class ProjectExporter {
 		}
 	}
 
-	public static interface ExportView {
+	public interface ExportView {
 
-		public void tastComplete();
+		void tastComplete();
 
-		public void setTasks(int vlaue);
+		void setTasks(int vlaue);
 	}
 }

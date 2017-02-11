@@ -108,10 +108,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		int columns = Integer.valueOf(columnTextField.getText());
 		int rows = Integer.valueOf(rowTextField.getText());
 
-		if (settings.getColumns() != columns || settings.getRows() != rows)
-			changeSettings = true;
-		else
-			changeSettings = false;
+		changeSettings = settings.getColumns() != columns || settings.getRows() != rows;
 
 		// Copy Settings
 		settings.setColumns(columns);

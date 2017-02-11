@@ -66,7 +66,7 @@ public enum ModernColor implements DisplayableColor {
 	private final String playbarColor;
 	private final String playbarTrackColor;
 
-	private ModernColor(String colorHi, String colorLow, String fontColor, String buttonColor, String playbarColor, String playbarTrackColor) {
+	ModernColor(String colorHi, String colorLow, String fontColor, String buttonColor, String playbarColor, String playbarTrackColor) {
 		this.colorHi = colorHi;
 		this.colorLow = colorLow;
 		this.fontColor = fontColor;

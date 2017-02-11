@@ -30,12 +30,16 @@ import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewContro
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
+import de.tobias.utils.util.Worker;
+import de.tobias.utils.util.net.FileUpload;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,8 +48,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -54,6 +59,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
@@ -670,7 +676,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		String message = Localization.getString(Strings.UI_Dialog_Info_Content, info.getVersion(), info.getBuild(), info.getAuthor());
 		if (mainViewController instanceof Alertable) {
-			((Alertable) mainViewController).showInfoMessage(message, Localization.getString(Strings.UI_Dialog_Info_Header, info.getName()),
+			mainViewController.showInfoMessage(message, Localization.getString(Strings.UI_Dialog_Info_Header, info.getName()),
 					PlayPadMain.stageIcon.orElse(null));
 		}
 	}

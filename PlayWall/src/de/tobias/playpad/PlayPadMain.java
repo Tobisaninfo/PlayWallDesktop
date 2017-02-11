@@ -205,7 +205,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		System.exit(0);
 	}
 
-	private void setupPlugins(Path pluginPath) throws IOException, MalformedURLException {
+	private void setupPlugins(Path pluginPath) throws IOException {
 		// Delete old plugins
 		ModernPluginManager.getInstance().deletePlugins();
 

@@ -49,9 +49,7 @@ public class PadIndex implements Serializable {
 		PadIndex other = (PadIndex) obj;
 		if (id != other.id)
 			return false;
-		if (page != other.page)
-			return false;
-		return true;
+		return page == other.page;
 	}
 
 	@Override

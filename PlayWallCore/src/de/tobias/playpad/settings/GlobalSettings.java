@@ -220,7 +220,7 @@ public class GlobalSettings {
 	 * @throws UnsupportedEncodingException Fehler bei XML
 	 * @throws IOException                  Fehler bei IO
 	 */
-	public void save() throws UnsupportedEncodingException, IOException {
+	public void save() throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement("Config");
 
