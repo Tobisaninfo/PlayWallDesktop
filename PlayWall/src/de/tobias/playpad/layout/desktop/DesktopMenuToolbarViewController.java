@@ -701,29 +701,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		}
 	}
 
-	@FXML
-	void sendErrorMenuItem(ActionEvent event) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.initOwner(mainViewController.getStage());
-		alert.initModality(Modality.WINDOW_MODAL);
-		Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
-		alert.setContentText(Localization.getString(Strings.UI_Dialog_Feedback_Content));
-		alert.show();
-
-		Worker.runLater(() ->
-		{
-			try {
-				String response = FileUpload.fileUpload(
-						ApplicationUtils.getApplication().getInfo().getUserInfo().getString(AppUserInfoStrings.ERROR_URL),
-						ApplicationUtils.getApplication().getPath(PathType.LOG, "err.log").toFile());
-				Platform.runLater(() -> alert.setContentText(response));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-	}
-
 	private static final int LAST_DOCUMENT_LIMIT = 3;
 
 	public void createRecentDocumentMenuItems() {
