@@ -1,5 +1,6 @@
 package de.tobias.playpad.server;
 
+import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.updater.client.UpdateChannel;
 
@@ -14,4 +15,23 @@ public interface Server {
 	List<ModernPlugin> getPlugins() throws IOException;
 
 	void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException;
+
+	/**
+	 * Connect to sync server with key.
+	 *
+	 * @param key auth key
+	 */
+	void connect(String key) throws IOException, WebSocketException;
+
+	/**
+	 * Disconnect from sync server.
+	 */
+	void disconnect();
+
+	/**
+	 * Send data upstream to server.
+	 *
+	 * @param data data
+	 */
+	void push(String data);
 }

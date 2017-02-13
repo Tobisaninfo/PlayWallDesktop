@@ -5,6 +5,7 @@ import javafx.beans.property.*;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -26,7 +27,7 @@ public class ObjectHandler {
 
 			Stream.of(object.getClass().getDeclaredFields())
 					.filter(field -> field.isAnnotationPresent(Sync.class))
-					.filter(field -> isClassValid(field.getType()))
+					.filter(field -> isPropertyClass(field.getType()))
 					.forEach(field -> {
 						try {
 							field.setAccessible(true);
@@ -36,14 +37,19 @@ public class ObjectHandler {
 							property.addListener((observable, oldValue, newValue) -> {
 								// Get Id
 								try {
-									Optional<Number> idOptional = getId(object);
+									Optional<Object> idOptional = getId(object);
 									if (idOptional.isPresent()) {
-										Number id = idOptional.get();
+										Object id = idOptional.get();
 
 										JsonObject json = new JsonObject();
 										json.addProperty("class", name);
 										json.addProperty("field", fieldName);
-										json.addProperty("id", id);
+
+										if (id instanceof Number) {
+											json.addProperty("id", (Number) id);
+										} else if (id instanceof UUID || id instanceof String) {
+											json.addProperty("id", id.toString());
+										}
 
 										if (newValue instanceof Number) {
 											json.addProperty("value", (Number) newValue);
@@ -69,7 +75,7 @@ public class ObjectHandler {
 		}
 	}
 
-	private static Optional<Number> getId(Object object) throws IllegalAccessException {
+	private static Optional<Object> getId(Object object) throws IllegalAccessException {
 		Optional<Field> f = Stream.of(object.getClass().getDeclaredFields())
 				.filter(field -> field.isAnnotationPresent(Sync.class))
 				.filter(field -> field.isAnnotationPresent(Id.class))
@@ -79,17 +85,22 @@ public class ObjectHandler {
 		if (f.isPresent()) {
 			Field field = f.get();
 			field.setAccessible(true);
-			Property<?> property = (Property<?>) field.get(object);
-			Object value = property.getValue();
-			if (value instanceof Number) {
-				return Optional.of((Number) value);
-			}
+			return Optional.of(getValue(field, object));
 		}
 		return Optional.empty();
 	}
 
 	// TODO Enum Support
 	private static boolean isClassValid(Class<?> clazz) {
+		if (isPropertyClass(clazz)) {
+			return true;
+		} else if (clazz == UUID.class) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean isPropertyClass(Class<?> clazz) {
 		if (clazz == IntegerProperty.class) {
 			return true;
 		} else if (clazz == DoubleProperty.class) {
@@ -104,5 +115,14 @@ public class ObjectHandler {
 			return true;
 		}
 		return false;
+	}
+
+	private static Object getValue(Field field, Object obj) throws IllegalAccessException {
+		if (isPropertyClass(field.getType())) {
+			Property<?> property = (Property<?>) field.get(obj);
+			return property.getValue();
+		} else {
+			return field.get(obj);
+		}
 	}
 }
