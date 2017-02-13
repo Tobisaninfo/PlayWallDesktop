@@ -1,18 +1,13 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.io.IOException;
-
-import de.tobias.utils.nui.NVC;
-import de.tobias.utils.nui.NVCStage;
-import org.dom4j.DocumentException;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +16,9 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
 
 public class ProfileChooseDialog extends NVC {
 

@@ -23,7 +23,7 @@ public class NavigateAction extends Action {
 		@Override
 		public String toString() {
 			return Localization.getString(Strings.NavigationType_BaseName + name());
-		};
+		}
 	}
 
 	private NavigationType action;

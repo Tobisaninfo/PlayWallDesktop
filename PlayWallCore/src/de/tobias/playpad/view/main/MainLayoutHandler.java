@@ -24,6 +24,6 @@ public interface MainLayoutHandler {
 	 * @param newToolbar
 	 *            Neue Toolbar
 	 */
-	public void handle(MenuToolbarViewController oldToolbar, MenuToolbarViewController newToolbar);
+	void handle(MenuToolbarViewController oldToolbar, MenuToolbarViewController newToolbar);
 
 }

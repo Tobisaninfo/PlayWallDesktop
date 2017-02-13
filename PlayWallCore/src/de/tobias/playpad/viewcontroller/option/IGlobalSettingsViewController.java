@@ -15,6 +15,6 @@ public interface IGlobalSettingsViewController {
 	 * @param globalSettingsTabViewController
 	 *            tab
 	 */
-	public void addTab(GlobalSettingsTabViewController globalSettingsTabViewController);
+	void addTab(GlobalSettingsTabViewController globalSettingsTabViewController);
 
 }

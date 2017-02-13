@@ -25,39 +25,39 @@ import javafx.util.Duration;
 
 public interface GlobalDesign {
 
-	public void applyCss(Stage stage);
+	void applyCss(Stage stage);
 
-	public void applyCssMainView(IMainViewController controller, Stage stage, Project project);
-
-	/*
-	 * Root: <CartLayout type=Classic>
-	 */
-	public void load(Element rootElement);
+	void applyCssMainView(IMainViewController controller, Stage stage, Project project);
 
 	/*
 	 * Root: <CartLayout type=Classic>
 	 */
-	public void save(Element rootElement);
+	void load(Element rootElement);
 
-	public double getMinWidth(int column);
+	/*
+	 * Root: <CartLayout type=Classic>
+	 */
+	void save(Element rootElement);
 
-	public double getMinHeight(int rows);
+	double getMinWidth(int column);
 
-	public double getPadWidth();
+	double getMinHeight(int rows);
 
-	public double getPadHeight();
+	double getPadWidth();
+
+	double getPadHeight();
 
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	public void handleWarning(IPadViewController controller, Duration warning);
+	void handleWarning(IPadViewController controller, Duration warning);
 
-	public default void stopWarning(IPadViewController controller) {}
+	default void stopWarning(IPadViewController controller) {}
 
-	public void reset();
+	void reset();
 
 	// Utils
-	public static void saveGlobal(HashMap<String, GlobalDesign> layouts, Path path) throws UnsupportedEncodingException, IOException {
+	static void saveGlobal(HashMap<String, GlobalDesign> layouts, Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement("Layouts");
 		for (String key : layouts.keySet()) {
@@ -73,7 +73,7 @@ public interface GlobalDesign {
 		writer.close();
 	}
 
-	public static HashMap<String, GlobalDesign> loadGlobalLayout(Path path) throws DocumentException, IOException {
+	static HashMap<String, GlobalDesign> loadGlobalLayout(Path path) throws DocumentException, IOException {
 		HashMap<String, GlobalDesign> layouts = new HashMap<>();
 
 		if (Files.exists(path)) {

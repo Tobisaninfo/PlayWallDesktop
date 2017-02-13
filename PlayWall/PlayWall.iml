@@ -31,5 +31,6 @@
     <orderEntry type="library" exported="" name="Updater" level="project" />
     <orderEntry type="library" exported="" name="Json" level="project" />
     <orderEntry type="library" exported="" name="scala-sdk-2.12.1" level="application" />
+    <orderEntry type="library" exported="" name="GSON" level="project" />
   </component>
 </module>

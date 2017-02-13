@@ -1,22 +1,14 @@
 package de.tobias.playpad.action.factory;
 
-import java.util.Collections;
-import java.util.List;
-
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.action.ActionDisplayable;
-import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.*;
 import de.tobias.playpad.action.actions.NavigateAction;
 import de.tobias.playpad.action.actions.NavigateAction.NavigationType;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.icon.MaterialDesignIcon;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+
+import java.util.Collections;
+import java.util.List;
 
 public class NavigateActionFactory extends ActionFactory implements ActionDisplayable {
 

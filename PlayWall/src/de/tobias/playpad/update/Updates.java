@@ -81,7 +81,7 @@ public class Updates {
 		return false;
 	}
 
-	private static void downloadUpdater(String updaterURL, Path path) throws IOException, MalformedURLException {
+	private static void downloadUpdater(String updaterURL, Path path) throws IOException {
 		URL url = new URL(updaterURL);
 		InputStream iStr = url.openStream();
 

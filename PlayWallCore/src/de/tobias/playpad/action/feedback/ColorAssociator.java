@@ -15,21 +15,21 @@ public interface ColorAssociator {
 	 * 
 	 * @return Liste an Farben
 	 */
-	public DisplayableFeedbackColor[] getColors();
+	DisplayableFeedbackColor[] getColors();
 
 	/**
 	 * Standardfarbe, falls nichts passendes gefunden wurde.
 	 * 
 	 * @return Standardfarbe
 	 */
-	public DisplayableFeedbackColor getDefaultStandardColor();
+	DisplayableFeedbackColor getDefaultStandardColor();
 
 	/**
 	 * Eventfarbe, falls nichts passendes gefunden wurde.
 	 * 
 	 * @return Eventfarbe
 	 */
-	public DisplayableFeedbackColor getDefaultEventColor();
+	DisplayableFeedbackColor getDefaultEventColor();
 
 	/**
 	 * Setzt die Feedback Farbe für die Instanz des Mappers.
@@ -39,7 +39,7 @@ public interface ColorAssociator {
 	 * @param color
 	 *            Matched Color
 	 */
-	public void setColor(FeedbackMessage feedbackMessage, DisplayableFeedbackColor color);
+	void setColor(FeedbackMessage feedbackMessage, DisplayableFeedbackColor color);
 
 	/**
 	 * Sucht zu einer {@link Color} die passende FeedbackColor, falls vorhanden.
@@ -48,5 +48,5 @@ public interface ColorAssociator {
 	 *            Kachel Farbe
 	 * @return Feedback Farbe oder null.
 	 */
-	public DisplayableFeedbackColor map(Color color);
+	DisplayableFeedbackColor map(Color color);
 }

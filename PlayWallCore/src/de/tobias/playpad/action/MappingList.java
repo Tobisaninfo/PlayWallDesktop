@@ -89,7 +89,7 @@ public class MappingList extends ArrayList<Mapping> {
 		return mappings;
 	}
 
-	public void save(Path path) throws UnsupportedEncodingException, IOException {
+	public void save(Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 
 		Element rootElement = document.addElement(LIST);

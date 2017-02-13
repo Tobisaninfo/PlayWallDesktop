@@ -4,13 +4,13 @@ import javafx.beans.property.DoubleProperty;
 
 public interface Peakable {
 
-	public enum Channel {
+	enum Channel {
 
 		LEFT,
-		RIGHT;
+		RIGHT
 	}
 	
-	public DoubleProperty audioLevelProperty(Channel channel);
+	DoubleProperty audioLevelProperty(Channel channel);
 	
-	public double getAudioLevel(Channel channel);
+	double getAudioLevel(Channel channel);
 }

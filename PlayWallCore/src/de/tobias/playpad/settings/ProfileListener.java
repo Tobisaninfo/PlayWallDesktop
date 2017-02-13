@@ -8,5 +8,5 @@ package de.tobias.playpad.settings;
  */
 public interface ProfileListener {
 
-	public void reloadSettings(Profile oldProfile, Profile currentProfile);
+	void reloadSettings(Profile oldProfile, Profile currentProfile);
 }

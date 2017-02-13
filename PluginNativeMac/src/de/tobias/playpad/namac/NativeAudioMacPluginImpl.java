@@ -1,9 +1,5 @@
 package de.tobias.playpad.namac;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.plugin.Module;
@@ -17,13 +13,17 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @PluginImplementation
 public class NativeAudioMacPluginImpl implements NativeAudioMacPlugin {
 
 	private static final String ASSETS = "de/tobias/playpad/";
 
 	private static final String NAME = "NativeAudioMac";
-	private static final String IDENTIFIER = "de.tobias.playpad.namac.NativeAudioMacPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.nativemac";
 
 	private Module module;
 	private Updatable updatable;

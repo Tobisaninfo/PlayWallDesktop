@@ -4,9 +4,9 @@ import de.tobias.playpad.settings.Profile;
 
 public interface SettingsListener {
 
-	public default void onLoad(Profile profile) {}
+	default void onLoad(Profile profile) {}
 
-	public default void onSave(Profile profile) {}
+	default void onSave(Profile profile) {}
 
-	public default void onChange(Profile profile) {}
+	default void onChange(Profile profile) {}
 }

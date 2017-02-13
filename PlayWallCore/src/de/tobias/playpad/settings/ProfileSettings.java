@@ -254,7 +254,7 @@ public class ProfileSettings implements SettingsSerializable {
 		return profileSettings;
 	}
 
-	public void save(Path path) throws UnsupportedEncodingException, IOException {
+	public void save(Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement("Config");
 

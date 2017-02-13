@@ -5,11 +5,11 @@ import javafx.scene.paint.Color;
 
 public interface DeviceColorAssociatorConnector {
 
-	public DisplayableFeedbackColor getDefaultStandardColor();
+	DisplayableFeedbackColor getDefaultStandardColor();
 
-	public DisplayableFeedbackColor getDefaultEventColor();
+	DisplayableFeedbackColor getDefaultEventColor();
 
-	public DisplayableFeedbackColor[] getColors();
+	DisplayableFeedbackColor[] getColors();
 	
-	public DisplayableFeedbackColor map(Color color);
+	DisplayableFeedbackColor map(Color color);
 }

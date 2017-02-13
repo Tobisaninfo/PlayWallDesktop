@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.updater.client.Updatable;
@@ -11,6 +9,8 @@ import de.tobias.utils.util.Localization;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Window;
+
+import java.util.Set;
 
 public class AutoUpdateDialog extends AdvancedDialog {
 

@@ -4,8 +4,8 @@ import de.tobias.playpad.pad.Pad;
 
 public interface IPadSettingsViewController {
 
-	public Pad getPad();
+	Pad getPad();
 
-	public void addTab(PadSettingsTabViewController controller);
+	void addTab(PadSettingsTabViewController controller);
 
 }

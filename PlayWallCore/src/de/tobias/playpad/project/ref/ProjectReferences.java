@@ -35,7 +35,7 @@ public final class ProjectReferences {
 		return null;
 	}
 
-	public static void addProject(ProjectReference item) throws UnsupportedEncodingException, IOException {
+	public static void addProject(ProjectReference item) throws IOException {
 		if (!projects.contains(item)) {
 			projects.add(item);
 		}
@@ -90,7 +90,7 @@ public final class ProjectReferences {
 		loadedProjectOverview = true;
 	}
 
-	public static void saveProjects() throws UnsupportedEncodingException, IOException {
+	public static void saveProjects() throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element root = document.addElement(ROOT_ELEMENT);
 

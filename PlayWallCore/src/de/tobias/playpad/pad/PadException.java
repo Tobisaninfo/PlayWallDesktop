@@ -26,7 +26,7 @@ public class PadException extends Exception {
 		FILE_FORMAT_NOT_SUPPORTED,
 		CONVERT_NOT_SUPPORTED,
 		UNKOWN_CONTENT_TYPE,
-		UNKOWN;
+		UNKOWN
 	}
 
 	public PadException(Pad pad, Path path, Exception ex) {

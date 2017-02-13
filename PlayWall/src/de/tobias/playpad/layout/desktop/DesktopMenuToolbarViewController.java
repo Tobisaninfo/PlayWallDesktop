@@ -1,17 +1,5 @@
 package de.tobias.playpad.layout.desktop;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import de.tobias.utils.nui.NVCStage;
-import org.controlsfx.control.SegmentedButton;
-import org.controlsfx.control.textfield.TextFields;
-
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -19,8 +7,6 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -36,13 +22,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
-import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
-import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
-import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
-import de.tobias.playpad.viewcontroller.dialog.PluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
-import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
-import de.tobias.playpad.viewcontroller.dialog.ProjectManagerDialog;
+import de.tobias.playpad.viewcontroller.dialog.*;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
@@ -51,6 +31,7 @@ import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewContro
 import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -67,23 +48,27 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.SegmentedButton;
+import org.controlsfx.control.textfield.TextFields;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Optional;
 
 public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
 		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
@@ -586,7 +571,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void pluginMenuItemHandler(ActionEvent event) {
 		doAction(() ->
 		{
-			PluginViewController controller = new PluginViewController(mainViewController.getStage());
+			ModernPluginViewController controller = new ModernPluginViewController(mainViewController.getStage());
 			controller.getStageContainer().ifPresent(NVCStage::showAndWait);
 		});
 	}
@@ -691,7 +676,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		String message = Localization.getString(Strings.UI_Dialog_Info_Content, info.getVersion(), info.getBuild(), info.getAuthor());
 		if (mainViewController instanceof Alertable) {
-			((Alertable) mainViewController).showInfoMessage(message, Localization.getString(Strings.UI_Dialog_Info_Header, info.getName()),
+			mainViewController.showInfoMessage(message, Localization.getString(Strings.UI_Dialog_Info_Header, info.getName()),
 					PlayPadMain.stageIcon.orElse(null));
 		}
 	}

@@ -1,30 +1,22 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import de.tobias.utils.nui.NVC;
-import org.controlsfx.control.textfield.TextFields;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
-import de.tobias.utils.ui.ContentViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Callback;
+import org.controlsfx.control.textfield.TextFields;
+
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class CartTriggerViewController extends NVC {
 

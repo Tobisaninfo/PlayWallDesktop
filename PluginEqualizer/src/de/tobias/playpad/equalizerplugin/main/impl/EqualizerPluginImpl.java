@@ -34,7 +34,7 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
 	private static final String NAME = "Equalizer";
-	private static final String IDENTIFIER = "de.tobias.playpad.videoplugin.main.impl.EqualizerPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
 
 	private Module module;
 	private Updatable updatable;

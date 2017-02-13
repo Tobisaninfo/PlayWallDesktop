@@ -13,7 +13,7 @@ import javafx.scene.Node;
  */
 public interface ColorModeHandler {
 
-	public Node getColorInterface(Consumer<DisplayableColor> onSelection);
+	Node getColorInterface(Consumer<DisplayableColor> onSelection);
 
-	public void setColor(CartDesign design, DisplayableColor color);
+	void setColor(CartDesign design, DisplayableColor color);
 }

@@ -1,17 +1,14 @@
 package de.tobias.playpad;
 
-import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
-import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -94,23 +91,10 @@ public interface PlayPad {
 	void shutdown();
 
 	/**
-	 * Lädt ein Plugin sofort ins System.
-	 *
-	 * @param uri Quelle des Plugin
-	 */
-	void loadPlugin(URI uri);
-
-	/**
 	 * Gibt die globalen Einstellungen zurück.
 	 *
 	 * @return Global Settings
 	 */
 	GlobalSettings getGlobalSettings();
 
-	/**
-	 * Gibt alle aktiven Module zurück.
-	 *
-	 * @return Module
-	 */
-	Collection<Module> getModules();
 }

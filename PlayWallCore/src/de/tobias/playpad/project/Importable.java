@@ -18,7 +18,7 @@ public interface Importable {
 	 *            Alter name
 	 * @return Neuer Name oder null (dann wird nichts importiert)
 	 */
-	public String replaceProfile(String name);
+	String replaceProfile(String name);
 
 	/**
 	 * Wenn ein Projekt bereits vorhanden ist, wird hier nach einem neuen Namen gefragt.
@@ -27,12 +27,12 @@ public interface Importable {
 	 *            Alter name
 	 * @return Neuer Name oder null (dann wird nichts importiert)
 	 */
-	public String replaceProject(String name);
+	String replaceProject(String name);
 
 	/**
 	 * Frage nach dem Ordner für die Mediendateien.
 	 * 
 	 * @return Ordner zum Import.
 	 */
-	public Path mediaFolder();
+	Path mediaFolder();
 }

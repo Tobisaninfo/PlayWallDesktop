@@ -5,11 +5,11 @@ import javafx.util.Duration;
 
 public interface Durationable {
 
-	public Duration getDuration();
+	Duration getDuration();
 
-	public Duration getPosition();
+	Duration getPosition();
 
-	public ReadOnlyObjectProperty<Duration> durationProperty();
+	ReadOnlyObjectProperty<Duration> durationProperty();
 
-	public ReadOnlyObjectProperty<Duration> positionProperty();
+	ReadOnlyObjectProperty<Duration> positionProperty();
 }

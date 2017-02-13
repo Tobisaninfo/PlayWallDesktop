@@ -25,7 +25,7 @@ public class NativeAudioWinPluginImpl implements NativeAudioWinPlugin {
 	private static final String ASSETS = "de/tobias/playpad/nawin/assets/";
 
 	private static final String NAME = "NativeAudioWin";
-	private static final String IDENTIFIER = "de.tobias.playpad.nawin.NativeAudioWinPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.nativewin";
 
 	private Module module;
 	private Updatable updatable;

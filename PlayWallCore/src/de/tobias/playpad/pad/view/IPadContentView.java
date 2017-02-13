@@ -17,10 +17,10 @@ public interface IPadContentView {
 	 * 
 	 * @return GUI Element
 	 */
-	public Node getNode();
+	Node getNode();
 
 	/**
 	 * Deinitialisiert die View. Hier können mögliche Bindings und Listener entfernt werden.
 	 */
-	public void deinit();
+	void deinit();
 }

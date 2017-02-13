@@ -1,13 +1,7 @@
 package de.tobias.playpad.project.ref;
 
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import de.tobias.playpad.Displayable;
-import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
@@ -16,6 +10,12 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class ProjectReference implements Displayable {
 
@@ -98,7 +98,7 @@ public class ProjectReference implements Displayable {
 
 	public Set<Module> getMissedModules() {
 		Set<Module> missedModules = new HashSet<>();
-		Collection<Module> activeModules = PlayPadPlugin.getImplementation().getModules();
+		Collection<Module> activeModules = ModernPluginManager.getInstance().getModules();
 		for (Module requested : requestedModules) {
 			if (!activeModules.contains(requested)) {
 				missedModules.add(requested);

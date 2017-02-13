@@ -1,16 +1,15 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
-import java.util.Optional;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.TimeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;
+
+import java.util.Optional;
 
 public class TriggerTimeViewController extends NVC {
 

@@ -28,3 +28,7 @@
 	-fx-border-color: white;
 	-fx-border-radius:10px;
 }
+
+.plugin-headline {
+    -fx-font-size: 20px;
+}

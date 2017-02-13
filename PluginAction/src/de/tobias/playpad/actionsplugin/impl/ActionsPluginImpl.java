@@ -37,7 +37,7 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>, ProfileListener {
 
 	private static final String NAME = "ActionsPlugin";
-	private static final String IDENTIFIER = "de.tobias.playpad.actions.impl.ActionsPluginImpl";
+	private static final String IDENTIFIER = "de.tobias.playwall.plugin.action";
 
 	private static Module module;
 	private static ActionsPluginUpdater updater;

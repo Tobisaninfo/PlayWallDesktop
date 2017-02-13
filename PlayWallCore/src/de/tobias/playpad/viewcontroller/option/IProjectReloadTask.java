@@ -15,5 +15,5 @@ import javafx.concurrent.Task;
  */
 public interface IProjectReloadTask {
 
-	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller);
+	Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller);
 }

@@ -16,5 +16,6 @@
     <orderEntry type="library" name="YML" level="project" />
     <orderEntry type="library" name="libUtils" level="project" />
     <orderEntry type="library" name="Updater" level="project" />
+    <orderEntry type="library" name="GSON" level="project" />
   </component>
 </module>
