@@ -17,5 +17,6 @@
     <orderEntry type="library" name="libUtils" level="project" />
     <orderEntry type="library" name="Updater" level="project" />
     <orderEntry type="library" name="GSON" level="project" />
+    <orderEntry type="library" name="Websocket Client" level="project" />
   </component>
 </module>

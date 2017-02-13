@@ -26,10 +26,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.cert.X509Certificate;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,11 +62,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	private static ResourceBundle uiResourceBundle;
 
 	private static PlayPadImpl impl;
-	private static PlayPadUpdater updater;
 
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
+
+	public static SSLContext sslContext;
 
 	public static void main(String[] args) throws Exception {
 		// Verhindert einen Bug unter Windows 10 mit comboboxen
@@ -83,6 +88,28 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
 
+		// Init SSLContext
+		if (app.isDebug()) {
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
+
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			}};
+
+			// Install the all-trusting trust manager
+			sslContext = SSLContext.getInstance("SSL");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> hostname.equals("localhost"));
+		}
+
 		// Localization
 		setupLocalization();
 
@@ -92,7 +119,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
-		impl = new PlayPadImpl(globalSettings);
+		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 
@@ -110,13 +137,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			try {
 				Image stageIcon = new Image(iconPath);
 				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 
 			/*
 			 * Setup
 			 */
-			updater = new PlayPadUpdater();
+			PlayPadUpdater updater = new PlayPadUpdater();
 			UpdateRegistery.registerUpdateable(updater);
 
 			impl.startup(Localization.getBundle());
