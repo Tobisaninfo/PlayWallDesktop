@@ -35,36 +35,39 @@ public class ObjectHandler {
 
 							Property<?> property = (Property<?>) field.get(object);
 							property.addListener((observable, oldValue, newValue) -> {
-								// Get Id
-								try {
-									Optional<Object> idOptional = getId(object);
-									if (idOptional.isPresent()) {
-										Object id = idOptional.get();
+								if (checkStackTrace()) {
 
-										JsonObject json = new JsonObject();
-										json.addProperty("class", name);
-										json.addProperty("field", fieldName);
+									// Get Id
+									try {
+										Optional<Object> idOptional = getId(object);
+										if (idOptional.isPresent()) {
+											Object id = idOptional.get();
 
-										if (id instanceof Number) {
-											json.addProperty("id", (Number) id);
-										} else if (id instanceof UUID || id instanceof String) {
-											json.addProperty("id", id.toString());
+											JsonObject json = new JsonObject();
+											json.addProperty("class", name);
+											json.addProperty("field", fieldName);
+
+											if (id instanceof Number) {
+												json.addProperty("id", (Number) id);
+											} else if (id instanceof UUID || id instanceof String) {
+												json.addProperty("id", id.toString());
+											}
+
+											if (newValue instanceof Number) {
+												json.addProperty("value", (Number) newValue);
+											} else if (newValue instanceof String) {
+												json.addProperty("value", (String) newValue);
+											} else if (newValue instanceof Boolean) {
+												json.addProperty("value", (Boolean) newValue);
+											}
+											json.addProperty("type", newValue.getClass().getName());
+											json.addProperty("operation", "update");
+
+											listener.accept(json.toString());
 										}
-
-										if (newValue instanceof Number) {
-											json.addProperty("value", (Number) newValue);
-										} else if (newValue instanceof String) {
-											json.addProperty("value", (String) newValue);
-										} else if (newValue instanceof Boolean) {
-											json.addProperty("value", (Boolean) newValue);
-										}
-										json.addProperty("type", newValue.getClass().getName());
-										json.addProperty("operation", "update");
-
-										listener.accept(json.toString());
+									} catch (IllegalAccessException e) {
+										e.printStackTrace();
 									}
-								} catch (IllegalAccessException e) {
-									e.printStackTrace();
 								}
 							});
 						} catch (IllegalAccessException e) {
@@ -73,6 +76,21 @@ public class ObjectHandler {
 					});
 
 		}
+	}
+
+	private static boolean checkStackTrace() {
+		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+		for (StackTraceElement element : stackTrace) {
+			try {
+				Class<?> clazz = Class.forName(element.getClassName());
+				if (clazz.isAnnotationPresent(ServerListener.class)) {
+					return false;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return true;
 	}
 
 	private static Optional<Object> getId(Object object) throws IllegalAccessException {
