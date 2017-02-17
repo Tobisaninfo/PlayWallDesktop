@@ -1,11 +1,15 @@
 package de.tobias.playpad;
 
+import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.design.modern.ModernDesignFactory;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.server.ObjectHandler;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.ServerHandler;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
@@ -22,6 +26,7 @@ import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.SystemUtils;
 import de.tobias.utils.util.Worker;
+import javafx.application.Application;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -29,6 +34,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class PlayPadImpl implements PlayPad {
+
+	private Application.Parameters parameters;
 
 	protected List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
 	protected List<WindowListener<IProfileSettingsViewController>> settingsViewListeners = new ArrayList<>();
@@ -42,13 +49,13 @@ public class PlayPadImpl implements PlayPad {
 
 	protected GlobalSettings globalSettings;
 
-	PlayPadImpl(GlobalSettings globalSettings) {
-		App app = ApplicationUtils.getApplication();
-		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
-
+	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
+		this.parameters = parameters;
 		this.globalSettings = globalSettings;
 
-		ModernPluginManager.getInstance().addModule(module); // Add Main Module
+		App app = ApplicationUtils.getApplication();
+		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
+		ModernPluginManager.getInstance().addModule(module);
 	}
 
 	@Override
@@ -115,6 +122,8 @@ public class PlayPadImpl implements PlayPad {
 			}
 		});
 
+		ServerHandler.getServer().disconnect();
+
 		try {
 			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
 		} catch (IOException e) {
@@ -152,6 +161,7 @@ public class PlayPadImpl implements PlayPad {
 
 	void startup(ResourceBundle resourceBundle) {
 		registerComponents(resourceBundle);
+		configureServer();
 	}
 
 	private void registerComponents(ResourceBundle resourceBundle) {
@@ -186,6 +196,21 @@ public class PlayPadImpl implements PlayPad {
 
 		// Mapper
 		BaseMapperOverviewViewController.setInstance(new MapperOverviewViewController());
+	}
 
+	public Application.Parameters getParameters() {
+		return parameters;
+	}
+
+	private void configureServer() {
+		ObjectHandler.setListener(ServerHandler.getServer()::push);
+
+		// Connect to Server TODO
+		Server server = ServerHandler.getServer();
+		try {
+			server.connect("3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
+		} catch (IOException | WebSocketException e) {
+			e.printStackTrace();
+		}
 	}
 }

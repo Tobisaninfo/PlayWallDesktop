@@ -2,6 +2,12 @@ package de.tobias.playpad.server;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
@@ -12,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -21,16 +28,17 @@ import java.util.List;
  */
 public class ServerImpl implements Server {
 
-	private String server;
+	private String host;
+	private WebSocket websocket;
 
-	ServerImpl(String server) {
-		this.server = server;
+	ServerImpl(String host) {
+		this.host = host;
 	}
 
 	@Override
 	public List<ModernPlugin> getPlugins() throws IOException {
-		URL url = new URL(server + "/plugins");
-		Reader reader = new InputStreamReader(url.openStream());
+		URL url = new URL("https://" + host + "/plugins");
+		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
 		Type listType = new TypeToken<List<ModernPlugin>>() {}.getType();
 
 		Gson gson = new Gson();
@@ -39,8 +47,29 @@ public class ServerImpl implements Server {
 
 	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
-		URL url = new URL(server + "/" + channel + plugin.getPath());
+		URL url = new URL("https://" + host + "/" + channel + plugin.getPath());
 		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 		Files.copy(url.openStream(), path);
+	}
+
+	@Override
+	public void connect(String key) throws IOException, WebSocketException {
+		WebSocketFactory webSocketFactory = new WebSocketFactory();
+		if (PlayPadMain.sslContext != null) {
+			webSocketFactory.setSSLContext(PlayPadMain.sslContext);
+		}
+		websocket = webSocketFactory.createSocket("wss://" + host + "/project");
+		websocket.addHeader("key", key);
+		websocket.connect();
+	}
+
+	@Override
+	public void disconnect() {
+		websocket.disconnect();
+	}
+
+	@Override
+	public void push(String data) {
+		websocket.sendText(data);
 	}
 }

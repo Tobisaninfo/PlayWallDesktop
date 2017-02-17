@@ -86,7 +86,7 @@ public class ObjectHandler {
 				if (clazz.isAnnotationPresent(ServerListener.class)) {
 					return false;
 				}
-			} catch (ClassNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
