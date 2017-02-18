@@ -1,10 +1,16 @@
 package de.tobias.playpad.server;
 
-import com.google.gson.JsonObject;
+import de.tobias.playpad.server.listener.SimplePropertyListener;
+import de.tobias.playpad.server.listener.SimpleSetListener;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -14,17 +20,29 @@ import java.util.stream.Stream;
  */
 public class ObjectHandler {
 
+	private static Set<Integer> listenered = new HashSet<>();
+
 	private static Consumer<String> listener;
+
+	public static Consumer<String> getListener() {
+		return listener;
+	}
 
 	public static void setListener(Consumer<String> listener) {
 		ObjectHandler.listener = listener;
 	}
 
 	public static void initializeObjectHandler(Object object) throws IllegalAccessException {
+		if (listenered.contains(object.hashCode())) {
+			return;
+		}
+		listenered.add(object.hashCode());
+
 		// Get Table Name
 		if (object.getClass().isAnnotationPresent(Name.class)) {
-			String name = object.getClass().getAnnotation(Name.class).value();
+			String className = object.getClass().getAnnotation(Name.class).value();
 
+			// Handle Simple Properties Listener
 			Stream.of(object.getClass().getDeclaredFields())
 					.filter(field -> field.isAnnotationPresent(Sync.class))
 					.filter(field -> isPropertyClass(field.getType()))
@@ -34,42 +52,22 @@ public class ObjectHandler {
 							String fieldName = field.getAnnotation(Sync.class).value();
 
 							Property<?> property = (Property<?>) field.get(object);
-							property.addListener((observable, oldValue, newValue) -> {
-								if (checkStackTrace()) {
+							property.addListener(new SimplePropertyListener<>(object, className, fieldName));
+						} catch (IllegalAccessException e) {
+							e.printStackTrace();
+						}
+					});
 
-									// Get Id
-									try {
-										Optional<Object> idOptional = getId(object);
-										if (idOptional.isPresent()) {
-											Object id = idOptional.get();
+			// Add Set Listener
+			Stream.of(object.getClass().getDeclaredFields())
+					.filter(field -> field.isAnnotationPresent(Sync.class))
+					.filter(field -> isSetClass(field.getType()))
+					.forEach(field -> {
+						try {
+							field.setAccessible(true);
 
-											JsonObject json = new JsonObject();
-											json.addProperty("class", name);
-											json.addProperty("field", fieldName);
-
-											if (id instanceof Number) {
-												json.addProperty("id", (Number) id);
-											} else if (id instanceof UUID || id instanceof String) {
-												json.addProperty("id", id.toString());
-											}
-
-											if (newValue instanceof Number) {
-												json.addProperty("value", (Number) newValue);
-											} else if (newValue instanceof String) {
-												json.addProperty("value", (String) newValue);
-											} else if (newValue instanceof Boolean) {
-												json.addProperty("value", (Boolean) newValue);
-											}
-											json.addProperty("type", newValue.getClass().getName());
-											json.addProperty("operation", "update");
-
-											listener.accept(json.toString());
-										}
-									} catch (IllegalAccessException e) {
-										e.printStackTrace();
-									}
-								}
-							});
+							ObservableSet<?> set = (ObservableSet<?>) field.get(object);
+							set.addListener(new SimpleSetListener<>(object, className));
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();
 						}
@@ -78,7 +76,7 @@ public class ObjectHandler {
 		}
 	}
 
-	private static boolean checkStackTrace() {
+	public static boolean checkStackTrace() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		for (StackTraceElement element : stackTrace) {
 			try {
@@ -93,7 +91,7 @@ public class ObjectHandler {
 		return true;
 	}
 
-	private static Optional<Object> getId(Object object) throws IllegalAccessException {
+	public static Optional<Object> getId(Object object) throws IllegalAccessException {
 		Optional<Field> f = Stream.of(object.getClass().getDeclaredFields())
 				.filter(field -> field.isAnnotationPresent(Sync.class))
 				.filter(field -> field.isAnnotationPresent(Id.class))
@@ -109,7 +107,7 @@ public class ObjectHandler {
 	}
 
 	// TODO Enum Support
-	private static boolean isClassValid(Class<?> clazz) {
+	public static boolean isClassValid(Class<?> clazz) {
 		if (isPropertyClass(clazz)) {
 			return true;
 		} else if (clazz == UUID.class) {
@@ -118,7 +116,7 @@ public class ObjectHandler {
 		return false;
 	}
 
-	private static boolean isPropertyClass(Class<?> clazz) {
+	public static boolean isPropertyClass(Class<?> clazz) {
 		if (clazz == IntegerProperty.class) {
 			return true;
 		} else if (clazz == DoubleProperty.class) {
@@ -135,7 +133,19 @@ public class ObjectHandler {
 		return false;
 	}
 
-	private static Object getValue(Field field, Object obj) throws IllegalAccessException {
+	public static boolean isSetClass(Class<?> clazz) {
+		return clazz == ObservableSet.class;
+	}
+
+	public static boolean isListClass(Class<?> clazz) {
+		return clazz == ObservableList.class;
+	}
+
+	public static boolean isMapClass(Class<?> clazz) {
+		return clazz == ObservableMap.class;
+	}
+
+	public static Object getValue(Field field, Object obj) throws IllegalAccessException {
 		if (isPropertyClass(field.getType())) {
 			Property<?> property = (Property<?>) field.get(obj);
 			return property.getValue();
