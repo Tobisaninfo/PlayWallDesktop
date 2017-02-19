@@ -5,10 +5,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.neovisionaries.ws.client.*;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
-import de.tobias.playpad.server.sync.listener.downstream.ProjectListener;
+import de.tobias.playpad.server.sync.listener.downstream.ProjectUpdateListener;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -60,19 +59,7 @@ public class ServerImpl implements Server {
 		}
 		websocket = webSocketFactory.createSocket("wss://" + host + "/project");
 		websocket.addHeader("key", key);
-		websocket.addListener(new WebSocketAdapter(){
-			@Override
-			public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-				System.err.println("Disconnected: " + clientCloseFrame);
-			}
-
-			@Override
-			public void onTextMessage(WebSocket websocket, String text) throws Exception {
-				JsonParser parser = new JsonParser();
-				JsonElement element = parser.parse(text);
-				new ProjectListener().listen(element);
-			}
-		});
+		websocket.addListener(new ServerSyncListener());
 		websocket.connect();
 	}
 

@@ -163,7 +163,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 			alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 			{
 				try {
-					ProjectReferences.removeDocument(ref);
+					ProjectReferences.removeProject(ref);
 					projectListView.getItems().remove(ref); // VIEW
 				} catch (DocumentException | IOException e) {
 					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));

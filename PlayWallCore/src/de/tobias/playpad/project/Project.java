@@ -9,7 +9,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
-import de.tobias.playpad.server.sync.listener.upstream.ProjectListener;
+import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -44,7 +44,7 @@ public class Project {
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
-	private transient ProjectListener syncListener;
+	private transient ProjectUpdateListener syncListener;
 
 	Project(ProjectReference ref) {
 		this.projectReference = ref;
@@ -53,7 +53,7 @@ public class Project {
 		this.activePlayerProperty = new SimpleIntegerProperty();
 
 		if (ref.isSync()) {
-			syncListener = new ProjectListener(this);
+			syncListener = new ProjectUpdateListener(this);
 		}
 	}
 

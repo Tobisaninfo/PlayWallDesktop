@@ -5,24 +5,24 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.server.sync.listener.ListenerUtils;
+import de.tobias.playpad.server.sync.listener.ServerUtils;
 import de.tobias.playpad.server.sync.listener.PropertyDef;
 import javafx.beans.value.ChangeListener;
 
 /**
  * Listen to the properties of Project to send changes to the server.
  */
-public class ProjectListener {
+public class ProjectUpdateListener {
 
 	private Project project;
 
 	private ChangeListener<String> nameListener;
 
-	public ProjectListener(Project project) {
+	public ProjectUpdateListener(Project project) {
 		this.project = project;
 
 		nameListener = (observable, oldValue, newValue) -> {
-			if (ListenerUtils.isNewValueComingFromServer()) {
+			if (ServerUtils.isNewValueComingFromServer()) {
 				return;
 			}
 			JsonObject json = new JsonObject();

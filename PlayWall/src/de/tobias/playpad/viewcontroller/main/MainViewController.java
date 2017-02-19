@@ -37,6 +37,7 @@ import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -97,6 +98,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
+	private InvalidationListener projectTitleListener;
 
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("de/tobias/playpad/assets/view/main/", "mainView", PlayPadMain.getUiResourceBundle(), e ->
@@ -147,6 +149,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+		projectTitleListener = observable -> updateWindowTitle();
 
 		// Default Layout
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
@@ -327,9 +330,16 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	public void openProject(Project project) {
+		// Remove old listener
+		if (this.openProject != null) {
+			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
+			this.openProject.close();
+		}
+
 		removePadContentsFromView();
 
 		openProject = project;
+		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);

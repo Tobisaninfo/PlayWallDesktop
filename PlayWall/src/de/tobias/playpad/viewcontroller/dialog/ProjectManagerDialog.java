@@ -180,7 +180,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 		{
 			try {
-				ProjectReferences.removeDocument(ref);
+				ProjectReferences.removeProject(ref);
 				projectList.getItems().remove(ref); // VIEW
 			} catch (Exception e) {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));

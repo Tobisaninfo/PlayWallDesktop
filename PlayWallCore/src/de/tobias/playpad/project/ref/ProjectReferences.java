@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -42,11 +45,14 @@ public final class ProjectReferences {
 		saveProjects();
 	}
 
-	public static void removeDocument(ProjectReference projectReference) throws DocumentException, IOException {
+	public static void removeProject(ProjectReference projectReference) throws DocumentException, IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + Project.FILE_EXTENSION);
 
 		Files.deleteIfExists(path); // DIRVE
 		projects.remove(projectReference); // MODEL
+		if (projectReference.isSync()) {
+			ProjectRemoveCommand.removeProject(projectReference); // CLOUD
+		}
 		saveProjects();
 	}
 
