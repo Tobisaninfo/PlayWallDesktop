@@ -1,9 +1,9 @@
 package de.tobias.playpad.server;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.plugin.ModernPlugin;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.updater.client.UpdateChannel;
 
 import java.io.IOException;
@@ -17,6 +17,8 @@ public interface Server {
 	List<ModernPlugin> getPlugins() throws IOException;
 
 	void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException;
+
+	List<ProjectReference> getSyncedProjects() throws IOException;
 
 	/**
 	 * Connect to sync server with key.

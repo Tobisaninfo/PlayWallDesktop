@@ -1,13 +1,13 @@
 package de.tobias.playpad.server;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.neovisionaries.ws.client.*;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
-import de.tobias.playpad.server.sync.listener.downstream.ProjectUpdateListener;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -20,7 +20,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by tobias on 10.02.17.
@@ -49,6 +51,27 @@ public class ServerImpl implements Server {
 		URL url = new URL("https://" + host + "/" + channel + plugin.getPath());
 		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 		Files.copy(url.openStream(), path);
+	}
+
+	@Override
+	public List<ProjectReference> getSyncedProjects() throws IOException {
+		URL url = new URL("https://" + host + "/projects?session=3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
+		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+
+		List<ProjectReference> projects = new ArrayList<>();
+		JsonArray array = (JsonArray) new JsonParser().parse(reader);
+		for (JsonElement element : array) {
+			if (element instanceof JsonObject) {
+				JsonObject json = (JsonObject) element;
+
+				UUID uuid = UUID.fromString(json.get("uuid").getAsString());
+				String name = json.get("name").getAsString();
+
+				ProjectReference ref = new ProjectReference(uuid, name);
+				projects.add(ref);
+			}
+		}
+		return projects;
 	}
 
 	@Override

@@ -29,6 +29,17 @@ public class ProjectReference implements Displayable {
 
 	private long lastModified;
 
+	/**
+	 * Create a project reference withput profile and with sync option
+	 *
+	 * @param uuid uuid
+	 * @param name name
+	 */
+	public ProjectReference(UUID uuid, String name) {
+		this(uuid, name, null, true);
+		updateDisplayProperty();
+	}
+
 	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, boolean sync) {
 		this(uuid, name, System.currentTimeMillis(), profileReference, new HashSet<>(), sync);
 		updateDisplayProperty();
@@ -41,7 +52,7 @@ public class ProjectReference implements Displayable {
 
 	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, boolean sync) {
 		this(uuid, name, lastModified, profileReference, new HashSet<>(), sync);
- 		updateDisplayProperty();
+		updateDisplayProperty();
 	}
 
 	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, Set<Module> requestedModules, boolean sync) {
