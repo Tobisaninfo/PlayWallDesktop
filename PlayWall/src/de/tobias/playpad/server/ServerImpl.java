@@ -60,6 +60,7 @@ public class ServerImpl implements Server {
 		}
 		websocket = webSocketFactory.createSocket("wss://" + host + "/project");
 		websocket.addHeader("key", key);
+		websocket.addListener(new PadListener());
 		websocket.connect();
 	}
 

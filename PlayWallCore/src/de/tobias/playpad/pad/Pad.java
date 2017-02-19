@@ -63,6 +63,7 @@ public class Pad implements Cloneable {
 		this.padSettings = new PadSettings();
 
 		setIndex(index);
+		setPage(page);
 		setStatus(PadStatus.EMPTY);
 
 		initPadListener();
