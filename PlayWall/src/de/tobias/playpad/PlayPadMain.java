@@ -3,6 +3,7 @@ package de.tobias.playpad;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
@@ -173,7 +174,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = Project.load(ProjectReferences.getProject(uuid), true, null);
+					Project project = ProjectSerializer.load(ProjectReferences.getProject(uuid), true, null);
 					impl.openProject(project, null);
 					return;
 				}

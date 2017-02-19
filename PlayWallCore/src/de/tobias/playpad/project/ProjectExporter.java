@@ -98,7 +98,7 @@ public class ProjectExporter {
 	 * 
 	 * @param ref
 	 *            Project to export
-	 * @param des
+	 * @param zip
 	 *            Destination zip file
 	 * @throws DocumentException
 	 * @throws IOException
@@ -109,7 +109,7 @@ public class ProjectExporter {
 		Document document = reader.read(Files.newInputStream(projectPath));
 
 		Element rootElement = document.getRootElement();
-		List<?> elements = rootElement.elements(Project.PAD_ELEMENT);
+		List<?> elements = rootElement.elements(ProjectSerializer.PAD_ELEMENT);
 
 		view.setTasks(elements.size());
 

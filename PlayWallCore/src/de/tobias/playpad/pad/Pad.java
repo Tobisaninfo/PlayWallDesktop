@@ -253,26 +253,6 @@ public class Pad implements Cloneable {
 			contentProperty.get().unloadMedia();
 		setContent(null);
 		setStatus(PadStatus.EMPTY);
-
-		if (project != null) {
-			// TODO Remove Exceptions refer to pad
-		}
-	}
-
-	public void throwException(Path path, Exception exception) {
-		if (project != null)
-			project.addException(this, path, exception);
-		setStatus(PadStatus.ERROR);
-	}
-
-	public void removeExceptionsForPad() {
-		if (project != null)
-			project.removeExceptions(this);
-	}
-
-	public void removeException(PadException exception) {
-		if (project != null)
-			project.removeException(exception);
 	}
 
 	@Override

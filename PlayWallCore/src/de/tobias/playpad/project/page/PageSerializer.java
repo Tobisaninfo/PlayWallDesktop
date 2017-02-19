@@ -2,6 +2,7 @@ package de.tobias.playpad.project.page;
 
 import java.util.List;
 
+import de.tobias.playpad.project.ProjectSerializer;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
@@ -34,7 +35,7 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 		String name = element.attributeValue(NAME_ATTR);
 
 		XMLHandler<Pad> handler = new XMLHandler<>(element);
-		List<Pad> pads = handler.loadElements(Project.PAD_ELEMENT, new PadSerializer(project));
+		List<Pad> pads = handler.loadElements(ProjectSerializer.PAD_ELEMENT, new PadSerializer(project));
 
 		Page page = new Page(id, name, project);
 		for (Pad pad : pads) {
@@ -51,6 +52,6 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 		newElement.addAttribute(NAME_ATTR, data.getName());
 
 		XMLHandler<Pad> handler = new XMLHandler<>(newElement);
-		handler.saveElements(Project.PAD_ELEMENT, data.getPads(), new PadSerializer(project));
+		handler.saveElements(ProjectSerializer.PAD_ELEMENT, data.getPads(), new PadSerializer(project));
 	}
 }

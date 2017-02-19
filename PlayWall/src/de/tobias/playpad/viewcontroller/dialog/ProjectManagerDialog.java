@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import org.dom4j.DocumentException;
@@ -273,7 +274,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
 		if (currentProject.getProjectReference().equals(selectedProject)) {
 			try {
-				currentProject.save();
+				ProjectSerializer.save(currentProject);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

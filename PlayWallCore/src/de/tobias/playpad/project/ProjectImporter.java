@@ -161,7 +161,7 @@ public class ProjectImporter {
 		Document document = reader.read(Files.newInputStream(projectPath));
 
 		Element rootElement = document.getRootElement();
-		for (Object padObj : rootElement.elements(Project.PAD_ELEMENT)) {
+		for (Object padObj : rootElement.elements(ProjectSerializer.PAD_ELEMENT)) {
 			if (padObj instanceof Element) {
 				Element padElement = (Element) padObj;
 

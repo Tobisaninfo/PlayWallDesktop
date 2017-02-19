@@ -5,6 +5,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
@@ -135,7 +136,7 @@ public class NewProjectDialog extends NVC {
 			project = new Project(projectReference);
 			project.getSettings().setUseMediaPath(mediaPathCheckbox.isSelected());
 			project.getSettings().setMediaPath(newMediaPath);
-			project.save();
+			ProjectSerializer.save(project);
 
 			ProjectReferences.addProject(projectReference);
 

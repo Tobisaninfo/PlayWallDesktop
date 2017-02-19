@@ -10,6 +10,7 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
@@ -489,7 +490,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = result.get();
 
 				try {
-					Project project = Project.load(result.get(), true, ImportDialog.getInstance(stage));
+					Project project = ProjectSerializer.load(result.get(), true, ImportDialog.getInstance(stage));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 
 					createRecentDocumentMenuItems();
@@ -518,7 +519,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
 		try {
-			openProject.save();
+			ProjectSerializer.save(openProject);
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
@@ -732,7 +733,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = (ProjectReference) item.getUserData();
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
-					Project project = Project.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
+					Project project = ProjectSerializer.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();

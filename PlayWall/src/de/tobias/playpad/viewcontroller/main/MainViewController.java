@@ -13,6 +13,7 @@ import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.DefaultRegistry;
@@ -316,7 +317,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				openProject.save();
+				ProjectSerializer.save(openProject);
 				System.out.println("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {

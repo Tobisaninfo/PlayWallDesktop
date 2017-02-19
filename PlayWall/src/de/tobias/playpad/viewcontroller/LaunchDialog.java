@@ -2,10 +2,7 @@ package de.tobias.playpad.viewcontroller;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.ProfileChooseable;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectImporter;
-import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.settings.Profile;
@@ -199,7 +196,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		}
 
 		try {
-			Project project = Project.load(ref, true, this);
+			Project project = ProjectSerializer.load(ref, true, this);
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();

@@ -43,7 +43,7 @@ public class IOExceptionButtonListener implements EventHandler<ActionEvent> {
 				if (Files.exists(path) && ContentFactory.isFileTypeSupported(path, contentFactory)) {
 					content.handlePath(path);
 					pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
-					pad.removeException(item);
+					// TODO pad.removeException(item);
 				}
 			} catch (NoSuchComponentException | IOException e) {
 				// TODO Auto-generated catch block
