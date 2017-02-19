@@ -9,7 +9,7 @@ import de.tobias.playpad.server.sync.command.Commands;
 /**
  * Created by tobias on 19.02.17.
  */
-public class ProjectAdd {
+public class ProjectAddCommand {
 
 	public static void addProject(Project project) {
 		JsonObject json = new JsonObject();

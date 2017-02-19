@@ -8,6 +8,8 @@ import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
+import de.tobias.playpad.server.sync.listener.upstream.ProjectListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
@@ -42,12 +44,17 @@ public class Project {
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
+	private transient ProjectListener syncListener;
 
 	Project(ProjectReference ref) {
 		this.projectReference = ref;
 		this.pages = new ArrayList<>();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
+
+		if (ref.isSync()) {
+			syncListener = new ProjectListener(this);
+		}
 	}
 
 	public static Project create(String name, ProfileReference reference, boolean sync) throws IOException {
@@ -59,13 +66,17 @@ public class Project {
 
 		// Save To Cloud
 		if (ref.isSync()) {
-
+			ProjectAddCommand.addProject(project);
 		}
 
 		// Add to Project List
 		ProjectReferences.addProject(ref);
 
 		return project;
+	}
+
+	public void close() {
+		syncListener.removeListener();
 	}
 
 	public ProjectSettings getSettings() {

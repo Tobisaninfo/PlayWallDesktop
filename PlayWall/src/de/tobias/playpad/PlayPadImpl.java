@@ -155,6 +155,7 @@ public class PlayPadImpl implements PlayPad {
 		}
 	}
 
+	@Override
 	public Project getCurrentProject() {
 		return currentProject;
 	}
