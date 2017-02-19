@@ -5,5 +5,6 @@ package de.tobias.playpad.server.sync.command;
  */
 public class Commands {
 	public static final String PROJECT_ADD = "pro-add";
+	public static final String PROJECT_UPDATE = "pro-update";
 }
 

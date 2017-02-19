@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.ListenerUtils;
 import de.tobias.playpad.server.sync.listener.PropertyDef;
 import javafx.beans.value.ChangeListener;
@@ -25,11 +26,11 @@ public class ProjectListener {
 				return;
 			}
 			JsonObject json = new JsonObject();
-			json.addProperty("project_id", project.getProjectReference().getUuid().toString());
+			json.addProperty("id", project.getProjectReference().getUuid().toString());
 			json.addProperty("value", project.getProjectReference().getName());
 
 			json.addProperty("field", PropertyDef.PROJECT_NAME);
-			json.addProperty("cmd", "pro-update");
+			json.addProperty("cmd", Commands.PROJECT_UPDATE);
 
 			Server server = PlayPadPlugin.getServerHandler().getServer();
 			server.push(json);

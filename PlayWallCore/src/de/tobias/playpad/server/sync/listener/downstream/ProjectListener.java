@@ -18,7 +18,7 @@ public class ProjectListener implements ServerListener {
 		if (element instanceof JsonObject) {
 			JsonObject json = (JsonObject) element;
 
-			UUID uuid = UUID.fromString(json.get("project_id").getAsString());
+			UUID uuid = UUID.fromString(json.get("id").getAsString());
 			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
 
 			// Check if right project is open
