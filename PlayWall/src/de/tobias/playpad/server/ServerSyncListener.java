@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
-import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.Commands;
 import de.tobias.playpad.server.sync.listener.downstream.ProjectAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.ProjectRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.ProjectUpdateListener;

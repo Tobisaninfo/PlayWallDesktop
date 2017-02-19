@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.server.sync.PropertyDef;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ public class ProjectRemoveListener implements ServerListener {
 		if (element instanceof JsonObject) {
 			JsonObject json = (JsonObject) element;
 
-			UUID uuid = UUID.fromString(json.get("id").getAsString());
+			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 			ProjectReference ref = ProjectReferences.getProject(uuid);
 			try {
 				ProjectReferences.removeProject(ref);

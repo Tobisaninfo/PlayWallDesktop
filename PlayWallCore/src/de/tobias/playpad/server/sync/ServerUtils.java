@@ -1,4 +1,4 @@
-package de.tobias.playpad.server.sync.listener;
+package de.tobias.playpad.server.sync;
 
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
 

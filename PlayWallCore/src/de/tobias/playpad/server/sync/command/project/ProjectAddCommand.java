@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.server.sync.listener.ServerUtils;
+import de.tobias.playpad.server.sync.Commands;
+import de.tobias.playpad.server.sync.PropertyDef;
+import de.tobias.playpad.server.sync.ServerUtils;
 
 /**
  * Created by tobias on 19.02.17.
@@ -17,11 +18,11 @@ public class ProjectAddCommand {
 			return;
 		}
 		JsonObject json = new JsonObject();
-		json.addProperty("cmd", Commands.PROJECT_ADD);
+		json.addProperty(PropertyDef.CMD, Commands.PROJECT_ADD);
 
 		// Add Data
-		json.addProperty("id", project.getProjectReference().getUuid().toString());
-		json.addProperty("name", project.getProjectReference().getName());
+		json.addProperty(PropertyDef.ID, project.getProjectReference().getUuid().toString());
+		json.addProperty(PropertyDef.PROJECT_NAME, project.getProjectReference().getName());
 
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		server.push(json);

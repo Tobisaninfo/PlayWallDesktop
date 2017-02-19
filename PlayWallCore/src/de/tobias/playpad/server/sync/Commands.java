@@ -1,4 +1,4 @@
-package de.tobias.playpad.server.sync.command;
+package de.tobias.playpad.server.sync;
 
 /**
  * Created by tobias on 19.02.17.
