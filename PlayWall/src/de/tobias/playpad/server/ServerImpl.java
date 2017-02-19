@@ -83,6 +83,9 @@ public class ServerImpl implements Server {
 
 	@Override
 	public void push(String data) {
+		if (ApplicationUtils.getApplication().isDebug()) {
+			System.out.println("Send: " + data);
+		}
 		websocket.sendText(data);
 	}
 

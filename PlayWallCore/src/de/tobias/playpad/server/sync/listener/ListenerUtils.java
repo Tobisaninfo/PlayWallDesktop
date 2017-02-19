@@ -10,14 +10,13 @@ public class ListenerUtils {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		for (StackTraceElement element : stackTrace) {
 			try {
-				Class<?> clazz = Class.forName(element.getClassName());
-				if (clazz == ServerListener.class) {
-					return false;
+				if (element.getClassName().equals(ServerListener.class.getName())) {
+					return true;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return true;
+		return false;
 	}
 }

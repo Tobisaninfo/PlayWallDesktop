@@ -133,7 +133,7 @@ public class NewProjectDialog extends NVC {
 			String name = nameTextField.getText();
 			boolean sync = syncCheckbox.isSelected();
 
-			Project project = Project.create(name, profile.getRef(), sync);
+			project = Project.create(name, profile.getRef(), sync);
 
 			project.getSettings().setUseMediaPath(mediaPathCheckbox.isSelected());
 			project.getSettings().setMediaPath(newMediaPath);
