@@ -5,6 +5,7 @@ import de.tobias.playpad.profile.ref.ProfileReferences;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
@@ -123,6 +124,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
+		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
 
 		// Console
 		if (!app.isDebug()) {

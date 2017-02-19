@@ -1,5 +1,7 @@
 package de.tobias.playpad.server;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.updater.client.UpdateChannel;
@@ -34,4 +36,10 @@ public interface Server {
 	 * @param data data
 	 */
 	void push(String data);
+
+	/**
+	 * Send datat upstream to server.
+	 * @param json data
+	 */
+	void push(JsonElement json);
 }

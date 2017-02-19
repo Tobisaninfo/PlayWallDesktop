@@ -51,7 +51,7 @@ public final class ProjectReferences {
 	}
 
 	public static ProjectReference duplicate(ProjectReference currentProject, String name) throws IOException {
-		ProjectReference newProjectReference = new ProjectReference(UUID.randomUUID(), name, currentProject.getProfileReference());
+		ProjectReference newProjectReference = new ProjectReference(UUID.randomUUID(), name, currentProject.getProfileReference(), true); // TODO Sync Property
 		addProject(newProjectReference);
 
 		duplicateFiles(currentProject, newProjectReference);

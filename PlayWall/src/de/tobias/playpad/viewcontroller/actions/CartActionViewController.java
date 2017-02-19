@@ -8,7 +8,6 @@ import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

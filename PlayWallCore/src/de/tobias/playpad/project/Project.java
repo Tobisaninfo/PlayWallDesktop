@@ -2,13 +2,16 @@ package de.tobias.playpad.project;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,11 +43,29 @@ public class Project {
 
 	private transient IntegerProperty activePlayerProperty;
 
-	public Project(ProjectReference ref) {
+	Project(ProjectReference ref) {
 		this.projectReference = ref;
 		this.pages = new ArrayList<>();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
+	}
+
+	public static Project create(String name, ProfileReference reference, boolean sync) throws IOException {
+		ProjectReference ref = new ProjectReference(UUID.randomUUID(), name, reference, sync);
+		Project project = new Project(ref);
+
+		// Save To Disk
+		ProjectSerializer.save(project);
+
+		// Save To Cloud
+		if (ref.isSync()) {
+
+		}
+
+		// Add to Project List
+		ProjectReferences.addProject(ref);
+
+		return project;
 	}
 
 	public ProjectSettings getSettings() {
@@ -91,7 +112,7 @@ public class Project {
 
 	public Collection<Pad> getPads() {
 		List<Pad> pads = new ArrayList<>();
-		pages.stream().map(page -> page.getPads()).forEach(pads::addAll);
+		pages.stream().map(Page::getPads).forEach(pads::addAll);
 		return pads;
 	}
 

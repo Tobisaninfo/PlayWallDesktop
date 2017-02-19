@@ -9,7 +9,7 @@ import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.ObjectHandler;
 import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.ServerHandler;
+import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
@@ -122,7 +122,7 @@ public class PlayPadImpl implements PlayPad {
 			}
 		});
 
-		ServerHandler.getServer().disconnect();
+		PlayPadPlugin.getServerHandler().getServer().disconnect();
 
 		try {
 			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
@@ -203,10 +203,8 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	private void configureServer() {
-		ObjectHandler.setListener(ServerHandler.getServer()::push);
-
 		// Connect to Server TODO
-		Server server = ServerHandler.getServer();
+		Server server = PlayPadPlugin.getServerHandler().getServer();
 		try {
 			server.connect("3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
 		} catch (IOException | WebSocketException e) {

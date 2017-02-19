@@ -36,6 +36,7 @@ import java.util.UUID;
 public class NewProjectDialog extends NVC {
 
 	@FXML private TextField nameTextField;
+	@FXML private CheckBox syncCheckbox;
 	@FXML private ComboBox<ProfileReference> profileComboBox;
 	@FXML private Button newProfileButton;
 
@@ -130,15 +131,12 @@ public class NewProjectDialog extends NVC {
 		try {
 			Profile profile = Profile.load(profileComboBox.getSelectionModel().getSelectedItem());
 			String name = nameTextField.getText();
-			UUID uuid = UUID.randomUUID();
+			boolean sync = syncCheckbox.isSelected();
 
-			ProjectReference projectReference = new ProjectReference(uuid, name, profile.getRef());
-			project = new Project(projectReference);
+			Project project = Project.create(name, profile.getRef(), sync);
+
 			project.getSettings().setUseMediaPath(mediaPathCheckbox.isSelected());
 			project.getSettings().setMediaPath(newMediaPath);
-			ProjectSerializer.save(project);
-
-			ProjectReferences.addProject(projectReference);
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {

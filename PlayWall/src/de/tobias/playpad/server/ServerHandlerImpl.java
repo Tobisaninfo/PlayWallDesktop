@@ -11,13 +11,13 @@ import java.util.Map;
 /**
  * Created by tobias on 10.02.17.
  */
-public class ServerHandler {
+public class ServerHandlerImpl implements ServerHandler {
 
 	private static final String SERVER_PARAM = "server";
 
-	private static Server server;
+	private Server server;
 
-	public static Server getServer() {
+	public Server getServer() {
 		if (server == null) {
 			String url = ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.SERVER).toString();
 

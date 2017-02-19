@@ -1,6 +1,7 @@
 package de.tobias.playpad.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -72,5 +73,10 @@ public class ServerImpl implements Server {
 	@Override
 	public void push(String data) {
 		websocket.sendText(data);
+	}
+
+	@Override
+	public void push(JsonElement json) {
+		push(json.toString());
 	}
 }

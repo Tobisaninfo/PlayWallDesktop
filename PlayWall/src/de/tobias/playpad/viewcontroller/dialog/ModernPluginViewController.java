@@ -1,12 +1,13 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.server.ServerHandler;
+import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVC;
@@ -54,7 +55,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		loadView(owner);
 		Worker.runLater(() -> {
 			try {
-				List<ModernPlugin> plugins = ServerHandler.getServer().getPlugins();
+				List<ModernPlugin> plugins = PlayPadPlugin.getServerHandler().getServer().getPlugins();
 				Platform.runLater(() -> pluginList.getItems().setAll(plugins));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -66,7 +67,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		loadView(owner);
 		Worker.runLater(() -> {
 			try {
-				List<ModernPlugin> plugins = ServerHandler.getServer().getPlugins().stream()
+				List<ModernPlugin> plugins = PlayPadPlugin.getServerHandler().getServer().getPlugins().stream()
 						.filter(p -> missedModules.parallelStream().anyMatch(m -> m.identifier.equals(p.getName())))
 						.collect(Collectors.toList());
 
@@ -121,7 +122,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 			if (!ModernPluginManager.getInstance().isActive(plugin)) {
 				try {
 					GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
-					ServerHandler.getServer().loadPlugin(plugin, settings.getUpdateChannel());
+					PlayPadPlugin.getServerHandler().getServer().loadPlugin(plugin, settings.getUpdateChannel());
 					ModernPluginManager.getInstance().loadPlugin(plugin);
 				} catch (IOException e) {
 					e.printStackTrace(); // TODO Error handling

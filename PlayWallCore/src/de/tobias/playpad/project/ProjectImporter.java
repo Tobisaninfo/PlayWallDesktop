@@ -128,7 +128,7 @@ public class ProjectImporter {
 				}
 
 				ProjectReference projectRef = new ProjectReference(localProjectUUID, projectName,
-						ProfileReferences.getReference(localProfileUUID));
+						ProfileReferences.getReference(localProfileUUID), true); // TODO Sync Property
 				ProjectReferences.addProject(projectRef);
 
 				// Import Media

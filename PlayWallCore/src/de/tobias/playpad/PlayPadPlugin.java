@@ -1,9 +1,12 @@
 package de.tobias.playpad;
 
+import de.tobias.playpad.server.ServerHandler;
+
 public final class PlayPadPlugin {
 
 	private static PlayPad implementation;
 	private static RegistryCollection registryCollection;
+	private static ServerHandler serverHandler;
 
 	public static PlayPad getImplementation() {
 		return implementation;
@@ -22,7 +25,15 @@ public final class PlayPadPlugin {
 		return registryCollection;
 	}
 
-	protected static void setRegistryCollection(RegistryCollection registryCollection) {
+	static void setRegistryCollection(RegistryCollection registryCollection) {
 		PlayPadPlugin.registryCollection = registryCollection;
+	}
+
+	public static ServerHandler getServerHandler() {
+		return serverHandler;
+	}
+
+	static void setServerHandler(ServerHandler handler) {
+		serverHandler = handler;
 	}
 }

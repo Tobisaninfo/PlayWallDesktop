@@ -25,43 +25,57 @@ public class ProjectReference implements Displayable {
 	private ProfileReference profileReference;
 	private Set<Module> requestedModules;
 
+	private boolean sync;
+
 	private long lastModified;
 
-	public ProjectReference(UUID uuid, String name, ProfileReference profileReference) {
+	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, boolean sync) {
 		this.uuid = uuid;
 		this.name = name;
+		this.sync = sync;
+
 		this.lastModified = System.currentTimeMillis();
 		this.profileReference = profileReference;
-		requestedModules = new HashSet<>();
+
+		this.requestedModules = new HashSet<>();
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, Set<Module> modules) {
+	public ProjectReference(UUID uuid, String name, ProfileReference profileReference, Set<Module> modules, boolean sync) {
 		this.uuid = uuid;
 		this.name = name;
+		this.sync = sync;
+
 		this.lastModified = System.currentTimeMillis();
 		this.profileReference = profileReference;
-		requestedModules = modules;
+
+		this.requestedModules = modules;
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference) {
+	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, boolean sync) {
 		this.uuid = uuid;
 		this.name = name;
+		this.sync = sync;
+
 		this.lastModified = lastModified;
 		this.profileReference = profileReference;
-		requestedModules = new HashSet<>();
+
+		this.requestedModules = new HashSet<>();
 
 		updateDisplayProperty();
 	}
 
-	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, Set<Module> requestedModules) {
+	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, Set<Module> requestedModules, boolean sync) {
 		this.uuid = uuid;
 		this.name = name;
+		this.sync = sync;
+
 		this.lastModified = lastModified;
 		this.profileReference = profileReference;
+
 		this.requestedModules = requestedModules;
 
 		updateDisplayProperty();
@@ -75,17 +89,25 @@ public class ProjectReference implements Displayable {
 		return name;
 	}
 
-	public void setLastModified(long lastModified) {
+	public void setName(String name) {
+		this.name = name;
+		updateDisplayProperty();
+	}
+
+	public boolean isSync() {
+		return sync;
+	}
+
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+
+	void setLastModified(long lastModified) {
 		this.lastModified = lastModified;
 	}
 
 	public long getLastModified() {
 		return lastModified;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-		updateDisplayProperty();
 	}
 
 	public Set<Module> getRequestedModules() {
@@ -128,16 +150,17 @@ public class ProjectReference implements Displayable {
 		return name;
 	}
 
+	// File Path Handling
 	public String getFileName() {
 		return uuid + Project.FILE_EXTENSION;
 	}
 
 	public Path getProjectPath() {
 		App application = ApplicationUtils.getApplication();
-		Path projectPath = application.getPath(PathType.DOCUMENTS, getFileName());
-		return projectPath;
+		return application.getPath(PathType.DOCUMENTS, getFileName());
 	}
 
+	// Display
 	private StringProperty displayProperty = new SimpleStringProperty(toString());
 
 	@Override
