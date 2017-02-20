@@ -207,7 +207,7 @@ public class Page implements Cloneable {
 		} else {
 			pads.put(id, pad);
 			pad.setPage(getPosition());
-			pad.setIndex(id);
+			pad.setPosition(id);
 		}
 	}
 

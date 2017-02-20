@@ -50,7 +50,7 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 		Page page = new Page(uuid, id, name, project);
 		for (Pad pad : pads) {
 			pad.setPage(id);
-			page.setPad(pad.getIndex(), pad);
+			page.setPad(pad.getPosition(), pad);
 		}
 
 		return page;

@@ -1,16 +1,15 @@
 package de.tobias.playpad.pad.content;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.util.ZipFile;
+import org.dom4j.Element;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Verarbeitet den Inhalt eines Pads. Die Einstellungen und der Status ist in Pad ausgelagert.
@@ -107,7 +106,7 @@ public abstract class PadContent implements Cloneable {
 	 *             IO Fehler
 	 * @since 5.1.0
 	 */
-	public Path getRealPath(Path original) throws IOException {
+	protected Path getRealPath(Path original) throws IOException {
 		ProjectSettings settings = getPad().getProject().getSettings();
 		if (settings.isUseMediaPath()) {
 			Path mediaFolder = settings.getMediaPath();
@@ -125,8 +124,7 @@ public abstract class PadContent implements Cloneable {
 
 	@Override
 	public PadContent clone() throws CloneNotSupportedException {
-		PadContent clone = (PadContent) super.clone();
-		return clone;
+		return (PadContent) super.clone();
 	}
 
 }

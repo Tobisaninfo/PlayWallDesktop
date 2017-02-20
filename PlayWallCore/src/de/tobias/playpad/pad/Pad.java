@@ -11,7 +11,6 @@ import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.beans.property.*;
 
-import java.nio.file.Path;
 import java.util.UUID;
 
 /**
@@ -21,7 +20,7 @@ public class Pad implements Cloneable {
 
 	// Verwaltung
 	private UUID uuid;
-	private IntegerProperty indexProperty = new SimpleIntegerProperty();
+	private IntegerProperty positionProperty = new SimpleIntegerProperty();
 	private IntegerProperty pageProperty = new SimpleIntegerProperty();
 
 	private StringProperty nameProperty = new SimpleStringProperty();
@@ -62,7 +61,7 @@ public class Pad implements Cloneable {
 		this.uuid = UUID.randomUUID();
 		this.padSettings = new PadSettings();
 
-		setIndex(index);
+		setPosition(index);
 		setPage(page);
 		setStatus(PadStatus.EMPTY);
 
@@ -109,8 +108,8 @@ public class Pad implements Cloneable {
 	}
 
 	// Accessor Methods
-	public int getIndex() {
-		return indexProperty.get();
+	public int getPosition() {
+		return positionProperty.get();
 	}
 
 	public UUID getUuid() {
@@ -126,15 +125,15 @@ public class Pad implements Cloneable {
 	}
 
 	public int getIndexReadable() {
-		return indexProperty.get() + 1;
+		return positionProperty.get() + 1;
 	}
 
-	public void setIndex(int index) {
-		this.indexProperty.set(index);
+	public void setPosition(int position) {
+		this.positionProperty.set(position);
 	}
 
-	public ReadOnlyIntegerProperty indexProperty() {
-		return indexProperty;
+	public ReadOnlyIntegerProperty positionProperty() {
+		return positionProperty;
 	}
 
 	public void setPage(int page) {
@@ -142,7 +141,7 @@ public class Pad implements Cloneable {
 	}
 
 	public PadIndex getPadIndex() {
-		return new PadIndex(getIndex(), getPage());
+		return new PadIndex(getPosition(), getPage());
 	}
 
 	public String getName() {
@@ -257,11 +256,11 @@ public class Pad implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Pad: " + indexProperty.get() + " - " + nameProperty.get();
+		return "Pad: " + positionProperty.get() + " - " + nameProperty.get();
 	}
 
 	public String toReadableString() {
-		return (indexProperty.get() + 1) + " - " + nameProperty.get();
+		return (positionProperty.get() + 1) + " - " + nameProperty.get();
 	}
 
 	// Clone
@@ -270,16 +269,16 @@ public class Pad implements Cloneable {
 		Pad clone = (Pad) super.clone();
 
 		clone.uuid = UUID.randomUUID();
-		clone.indexProperty = new SimpleIntegerProperty(getIndex());
+		clone.positionProperty = new SimpleIntegerProperty(getPosition());
 		clone.pageProperty = new SimpleIntegerProperty(getPage());
 
 		clone.nameProperty = new SimpleStringProperty(getName());
-		clone.statusProperty = new SimpleObjectProperty<PadStatus>(getStatus());
+		clone.statusProperty = new SimpleObjectProperty<>(getStatus());
 		if (getContent() != null) {
-			clone.contentProperty = new SimpleObjectProperty<PadContent>(getContent().clone());
+			clone.contentProperty = new SimpleObjectProperty<>(getContent().clone());
 			clone.getContent().setPad(clone);
 		} else {
-			clone.contentProperty = new SimpleObjectProperty<PadContent>();
+			clone.contentProperty = new SimpleObjectProperty<>();
 		}
 
 		clone.padSettings = padSettings.clone();

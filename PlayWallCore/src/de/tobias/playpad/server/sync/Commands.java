@@ -11,5 +11,9 @@ public class Commands {
 	public static final String PAGE_ADD = "page-add";
 	public static final String PAGE_UPDATE = "page-update";
 	public static final String PAGE_REMOVE = "page-rm";
+
+	public static final String PAD_ADD = "pad-add";
+	public static final String PAD_UPDATE = "pad-update";
+	public static final String PAD_REMOVE = "pad-rm";
 }
 

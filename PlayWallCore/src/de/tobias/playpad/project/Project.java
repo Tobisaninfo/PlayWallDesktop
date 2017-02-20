@@ -116,7 +116,7 @@ public class Project {
 			// Remove Pad from old location
 			if (pad.getPage() != index.getPage()) {
 				Page oldPage = getPage(pad.getPage());
-				if (oldPage.getPad(pad.getIndex()).equals(pad)) {
+				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
 					oldPage.removePad(index.getId());
 				}
 			}

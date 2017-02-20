@@ -113,7 +113,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class));
 			// Update die Mapper der CartAction
-			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getIndex() == pad.getIndex())
+			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
 					.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
 		} catch (NoSuchComponentException e) {
 			e.printStackTrace();
