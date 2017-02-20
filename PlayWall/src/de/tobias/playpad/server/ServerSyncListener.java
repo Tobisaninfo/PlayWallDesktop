@@ -7,9 +7,12 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import de.tobias.playpad.server.sync.Commands;
-import de.tobias.playpad.server.sync.listener.downstream.ProjectAddListener;
-import de.tobias.playpad.server.sync.listener.downstream.ProjectRemoveListener;
-import de.tobias.playpad.server.sync.listener.downstream.ProjectUpdateListener;
+import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
+import de.tobias.playpad.server.sync.listener.downstream.page.PageUpdateListener;
+import de.tobias.playpad.server.sync.listener.downstream.project.ProjectAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.project.ProjectRemoveListener;
+import de.tobias.playpad.server.sync.listener.downstream.project.ProjectUpdateListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,10 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PROJECT_ADD, new ProjectAddListener());
 		commands.put(Commands.PROJECT_UPDATE, new ProjectUpdateListener());
 		commands.put(Commands.PROJECT_REMOVE, new ProjectRemoveListener());
+
+		commands.put(Commands.PAGE_ADD, new PageAddListener());
+		commands.put(Commands.PAGE_UPDATE, new PageUpdateListener());
+		commands.put(Commands.PAGE_REMOVE, new PageRemoveListener());
 	}
 
 	@Override

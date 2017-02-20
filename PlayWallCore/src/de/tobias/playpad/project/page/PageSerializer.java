@@ -1,6 +1,7 @@
 package de.tobias.playpad.project.page;
 
 import java.util.List;
+import java.util.UUID;
 
 import de.tobias.playpad.project.ProjectSerializer;
 import org.dom4j.Element;
@@ -14,8 +15,9 @@ import de.tobias.utils.xml.XMLSerializer;
 
 public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page> {
 
-	private static final String ID_ATTR = "id";
+	private static final String POSITION_ATTR = "id";
 	private static final String NAME_ATTR = "name";
+	private static final String UUID_ATTR = "uuid";
 
 	private Project project;
 
@@ -31,13 +33,21 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 
 	@Override
 	public Page loadElement(Element element) {
-		int id = Integer.valueOf(element.attributeValue(ID_ATTR));
+		int id = Integer.valueOf(element.attributeValue(POSITION_ATTR));
 		String name = element.attributeValue(NAME_ATTR);
+
+		String uuidValue = element.attributeValue(UUID_ATTR);
+		UUID uuid;
+		if (uuidValue == null) {
+			uuid = UUID.randomUUID();
+		} else {
+			uuid = UUID.fromString(uuidValue);
+		}
 
 		XMLHandler<Pad> handler = new XMLHandler<>(element);
 		List<Pad> pads = handler.loadElements(ProjectSerializer.PAD_ELEMENT, new PadSerializer(project));
 
-		Page page = new Page(id, name, project);
+		Page page = new Page(uuid, id, name, project);
 		for (Pad pad : pads) {
 			pad.setPage(id);
 			page.setPad(pad.getIndex(), pad);
@@ -48,7 +58,8 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 
 	@Override
 	public void saveElement(Element newElement, Page data) {
-		newElement.addAttribute(ID_ATTR, String.valueOf(data.getId()));
+		newElement.addAttribute(UUID_ATTR, data.getId().toString());
+		newElement.addAttribute(POSITION_ATTR, String.valueOf(data.getPosition()));
 		newElement.addAttribute(NAME_ATTR, data.getName());
 
 		XMLHandler<Pad> handler = new XMLHandler<>(newElement);

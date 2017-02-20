@@ -8,5 +8,8 @@ public class Commands {
 	public static final String PROJECT_UPDATE = "pro-update";
 	public static final String PROJECT_REMOVE = "pro-rm";
 
+	public static final String PAGE_ADD = "page-add";
+	public static final String PAGE_UPDATE = "page-update";
+	public static final String PAGE_REMOVE = "page-rm";
 }
 

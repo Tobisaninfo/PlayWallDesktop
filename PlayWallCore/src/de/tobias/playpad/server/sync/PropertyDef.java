@@ -11,4 +11,8 @@ public class PropertyDef {
 	public static final String VALUE = "value";
 
 	public static final String PROJECT_NAME = "name";
+
+	public static final String PAGE_POSITION = "position";
+	public static final String PAGE_NAME = "name";
+	public static final String PAGE_PROJECT = "project";
 }

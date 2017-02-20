@@ -8,10 +8,14 @@ import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.page.PageAddCommand;
+import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +25,8 @@ import java.util.UUID;
 
 /**
  * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
- * 
- * @author tobias
  *
+ * @author tobias
  * @since 6.0.0
  */
 public class Project {
@@ -38,7 +41,7 @@ public class Project {
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
-	final List<Page> pages;
+	final ObservableList<Page> pages;
 
 	ProjectSettings settings;
 	final ProjectReference projectReference;
@@ -48,12 +51,13 @@ public class Project {
 
 	Project(ProjectReference ref) {
 		this.projectReference = ref;
-		this.pages = new ArrayList<>();
+		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
 
+		syncListener = new ProjectUpdateListener(this);
 		if (ref.isSync()) {
-			syncListener = new ProjectUpdateListener(this);
+			syncListener.addListener();
 		}
 	}
 
@@ -113,7 +117,7 @@ public class Project {
 			if (pad.getPage() != index.getPage()) {
 				Page oldPage = getPage(pad.getPage());
 				if (oldPage.getPad(pad.getIndex()).equals(pad)) {
-					oldPage.removePade(index.getId());
+					oldPage.removePad(index.getId());
 				}
 			}
 		}
@@ -128,15 +132,25 @@ public class Project {
 	}
 
 	// Pages
-	public Page getPage(int index) {
-		if (index >= pages.size() && index < ProjectSettings.MAX_PAGES) {
-			pages.add(new Page(index, this));
+	public Page getPage(int psotion) {
+		if (psotion >= pages.size() && psotion < ProjectSettings.MAX_PAGES) {
+			addPage(new Page(psotion, this));
 		}
-		return pages.get(index);
+		return pages.get(psotion);
 	}
 
-	public Collection<Page> getPages() {
-		// Create new page if all is empty (automaticlly)
+
+	public Page getPage(UUID uuid) {
+		for (Page page : pages) {
+			if (page.getId().equals(uuid)) {
+				return page;
+			}
+		}
+		return null;
+	}
+
+	public ObservableList<Page> getPages() {
+		// Create new page if all is empty (automatic)
 		if (pages.isEmpty()) {
 			pages.add(new Page(0, this));
 		}
@@ -144,8 +158,11 @@ public class Project {
 	}
 
 	public void setPage(int index, Page page) {
-		pages.set(index, page);
-		page.setId(index);
+		if (pages.contains(page))
+			pages.remove(page);
+
+		pages.add(index, page);
+		page.setPosition(index);
 	}
 
 	public int getActivePlayers() {
@@ -172,7 +189,6 @@ public class Project {
 				pad.loadContent();
 			} catch (NoSuchComponentException e) {
 				e.printStackTrace();
-				// TODO handle exception withon project
 			}
 		});
 	}
@@ -191,17 +207,26 @@ public class Project {
 	}
 
 	public void removePage(Page page) {
-		pages.remove(page.getId());
-		// Neue Interne Indies für die Pages
-		for (int i = page.getId(); i < pages.size(); i++) {
+		if (projectReference.isSync()) {
+			// Remove remote new page
+			PageRemoveCommand.removePage(page);
+
+			// Remove sync listener
+			page.removeSyncListener();
+		}
+
+		pages.remove(page.getPosition());
+		// Reindex all pages
+		for (int i = page.getPosition(); i < pages.size(); i++) {
 			Page tempPage = pages.get(i);
-			tempPage.setId(i);
+			tempPage.setPosition(i);
 		}
 	}
 
 	public boolean addPage() {
 		int index = pages.size();
-		return addPage(new Page(index, this));
+		Page page = new Page(index, this);
+		return addPage(page);
 	}
 
 	public boolean addPage(Page page) {
@@ -211,7 +236,13 @@ public class Project {
 
 		int newIndex = pages.size();
 
-		page.setId(newIndex);
+		page.setPosition(newIndex);
+
+		if (projectReference.isSync()) {
+			// Add remote new page
+			PageAddCommand.addPage(page);
+		}
+
 		pages.add(page);
 
 		return true;
@@ -219,9 +250,8 @@ public class Project {
 
 	/**
 	 * Find pads, which name starts with a given string
-	 * 
-	 * @param name
-	 *            search key
+	 *
+	 * @param name search key
 	 * @return found pads in project
 	 */
 	public List<Pad> findPads(String name) {

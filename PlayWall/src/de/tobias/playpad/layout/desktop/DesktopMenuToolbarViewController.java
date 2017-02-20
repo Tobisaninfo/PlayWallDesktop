@@ -42,6 +42,7 @@ import de.tobias.utils.util.Worker;
 import de.tobias.utils.util.net.FileUpload;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -308,13 +309,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
+			Button button = new Button();
 
-			String name = page.getName();
-			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
-			}
-
-			Button button = new Button(name);
+			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
+					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.otherwise(page.nameProperty());
+			button.textProperty().bind(nameBinding);
 			button.setUserData(i);
 			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
 			button.setFocusTraversable(false);

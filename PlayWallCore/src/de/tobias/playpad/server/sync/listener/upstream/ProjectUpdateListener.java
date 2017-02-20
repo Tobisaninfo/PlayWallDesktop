@@ -27,15 +27,17 @@ public class ProjectUpdateListener {
 			}
 			JsonObject json = new JsonObject();
 			json.addProperty(PropertyDef.ID, project.getProjectReference().getUuid().toString());
-			json.addProperty(PropertyDef.FIELD, project.getProjectReference().getName());
+			json.addProperty(PropertyDef.FIELD, PropertyDef.PROJECT_NAME);
 
-			json.addProperty(PropertyDef.VALUE, PropertyDef.PROJECT_NAME);
+			json.addProperty(PropertyDef.VALUE, project.getProjectReference().getName());
 			json.addProperty(PropertyDef.CMD, Commands.PROJECT_UPDATE);
 
 			Server server = PlayPadPlugin.getServerHandler().getServer();
 			server.push(json);
 		};
+	}
 
+	public void addListener() {
 		project.getProjectReference().nameProperty().addListener(nameListener);
 	}
 

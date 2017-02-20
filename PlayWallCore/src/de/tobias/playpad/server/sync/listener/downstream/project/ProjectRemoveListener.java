@@ -1,34 +1,31 @@
-package de.tobias.playpad.server.sync.listener.downstream;
+package de.tobias.playpad.server.sync.listener.downstream.project;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.server.sync.PropertyDef;
-import javafx.application.Platform;
+import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
+import org.dom4j.DocumentException;
 
+import java.io.IOException;
 import java.util.UUID;
 
 /**
- * Handles incoming changes on project from server and set the right property.
+ * Created by tobias on 19.02.17.
  */
-public class ProjectUpdateListener implements ServerListener {
-
+public class ProjectRemoveListener implements ServerListener {
 	@Override
 	public void listen(JsonElement element) {
 		if (element instanceof JsonObject) {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-
-			// Check if right project is open
 			ProjectReference ref = ProjectReferences.getProject(uuid);
-			if (ref != null) {
-				String field = json.get(PropertyDef.FIELD).getAsString();
-				if (field.equals(PropertyDef.PROJECT_NAME)) {
-					String name = json.get(PropertyDef.VALUE).getAsString();
-					Platform.runLater(() -> ref.setName(name));
-				}
+			try {
+				ProjectReferences.removeProject(ref);
+			} catch (IOException | DocumentException e) {
+				e.printStackTrace();
 			}
 		}
 	}

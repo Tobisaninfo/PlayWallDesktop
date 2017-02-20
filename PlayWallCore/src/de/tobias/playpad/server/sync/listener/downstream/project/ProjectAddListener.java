@@ -1,10 +1,11 @@
-package de.tobias.playpad.server.sync.listener.downstream;
+package de.tobias.playpad.server.sync.listener.downstream.project;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.server.sync.PropertyDef;
+import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
 
 import java.io.IOException;
 import java.util.UUID;

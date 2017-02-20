@@ -98,7 +98,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
+
+	// Sync Listener
 	private InvalidationListener projectTitleListener;
+	private InvalidationListener pagesListener;
 
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("de/tobias/playpad/assets/view/main/", "mainView", PlayPadMain.getUiResourceBundle(), e ->
@@ -149,7 +152,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+
+		// Sync Listener
 		projectTitleListener = observable -> updateWindowTitle();
+		pagesListener = observable -> {
+			getMenuToolbarController().initPageButtons();
+			showPage(0);
+		};
 
 		// Default Layout
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
@@ -333,13 +342,17 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		// Remove old listener
 		if (this.openProject != null) {
 			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
+			this.openProject.getPages().removeListener(pagesListener);
 			this.openProject.close();
 		}
 
 		removePadContentsFromView();
 
 		openProject = project;
+
+		// Add new Listener
 		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
+		openProject.getPages().addListener(pagesListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);

@@ -13,6 +13,8 @@ import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -59,12 +61,12 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
-			String name = page.getName(); 
-			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
-			}
-			
-			Button button = new Button(name);
+
+			Button button = new Button();
+			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
+					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.otherwise(page.nameProperty());
+			button.textProperty().bind(nameBinding);
 			button.setUserData(i);
 			button.setFocusTraversable(false);
 			button.setOnAction(this);
