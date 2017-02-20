@@ -152,7 +152,7 @@ public class Project {
 	public ObservableList<Page> getPages() {
 		// Create new page if all is empty (automatic)
 		if (pages.isEmpty()) {
-			pages.add(new Page(0, this));
+			addPage(new Page(0, this));
 		}
 		return pages;
 	}

@@ -9,6 +9,7 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import javafx.beans.property.*;
 
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class Pad implements Cloneable {
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();
 	private IntegerProperty pageProperty = new SimpleIntegerProperty();
 
-	private StringProperty nameProperty = new SimpleStringProperty();
+	private StringProperty nameProperty = new SimpleStringProperty("");
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
 	// Content
@@ -67,6 +68,10 @@ public class Pad implements Cloneable {
 
 		initPadListener();
 		padSettings.updateTrigger();
+
+		if (project.getProjectReference().isSync()) {
+			PadAddCommand.addPad(this);
+		}
 	}
 
 	public Pad(Project project, PadIndex index) {

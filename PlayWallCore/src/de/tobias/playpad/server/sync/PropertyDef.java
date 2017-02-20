@@ -18,5 +18,5 @@ public class PropertyDef {
 
 	public static final String PAD_POSITION = "position";
 	public static final String PAD_NAME = "name";
-	public static final String PAD_PAGE = "project";
+	public static final String PAD_PAGE = "page";
 }

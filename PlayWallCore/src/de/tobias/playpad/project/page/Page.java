@@ -1,15 +1,15 @@
 package de.tobias.playpad.project.page;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.UUID;
-
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Manage a page in the project and the pads inside the page.
@@ -174,7 +174,8 @@ public class Page implements Cloneable {
 
 		if (!pads.containsKey(id)) {
 			// Create new pad for positionProperty
-			setPad(id, new Pad(projectReference, id, getPosition()));
+			Pad pad = new Pad(projectReference, id, getPosition());
+			setPad(id, pad);
 		}
 		return pads.get(id);
 	}
