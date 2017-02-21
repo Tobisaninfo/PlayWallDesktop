@@ -80,9 +80,9 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 
 	@Override
 	public void loadComponentsFromFile(URL url, ClassLoader loader, Module module, ResourceBundle resourceBundle)
-			throws IOException, DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+			throws DocumentException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		if (url == null) {
-			throw new IOException("URL not found: " + url);
+			throw new IllegalArgumentException("URL is null");
 		}
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(url);

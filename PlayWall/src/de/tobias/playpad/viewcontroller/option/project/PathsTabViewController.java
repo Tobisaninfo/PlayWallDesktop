@@ -134,12 +134,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 								Platform.runLater(() ->
 								{
-									try {
-										content.handlePath(copiedFile);
-									} catch (NoSuchComponentException | IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
+									// content.handlePath(copiedFile); TODO Media Path Handler
 								});
 							} else if (content instanceof MultiPathContent) {
 								MultiPathContent pathHandler = (MultiPathContent) content;
@@ -152,7 +147,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 									Path copiedFile = newMediaPath.resolve(path.getFileName());
 
 									Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
-									content.handlePath(copiedFile);
+									// content.handlePath(copiedFile); TODO Media Path Handler
 								}
 							}
 						}

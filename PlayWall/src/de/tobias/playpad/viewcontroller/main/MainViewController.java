@@ -24,10 +24,8 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
-import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -109,8 +107,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		{
 			NVCStage stage = e.applyViewControllerToStage();
 			stage.addCloseHook(this::closeRequest);
-
-			new ErrorSummaryDialog(stage.getStage());
 
 			// Init with existing stage
 			initMapper(openProject);
@@ -261,8 +257,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	private boolean closeRequest() {
-		ErrorSummaryDialog.getInstance().getStage().close();
-
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
@@ -363,7 +357,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		DesktopPadDragListener.setProject(project);
-		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
 

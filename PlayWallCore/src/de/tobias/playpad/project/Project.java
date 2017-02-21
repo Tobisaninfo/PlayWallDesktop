@@ -183,14 +183,7 @@ public class Project {
 
 	// Utils
 	public void loadPadsContent() {
-		getPads().forEach(pad ->
-		{
-			try {
-				pad.loadContent();
-			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
-			}
-		});
+		getPads().forEach(Pad::loadContent);
 	}
 
 	@Override

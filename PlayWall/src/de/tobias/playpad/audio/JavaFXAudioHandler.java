@@ -97,7 +97,7 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 			getContent().stop();
 		}
 
-		Path path = ((AudioContent) getContent()).getPath();
+		Path path = getContent().getPad().getPath();
 		media = new Media(path.toFile().toURI().toString());
 		player = new MediaPlayer(media);
 

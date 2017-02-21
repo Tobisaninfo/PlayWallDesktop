@@ -169,7 +169,7 @@ public class ProjectImporter {
 				Pad pad = serializer.loadElement(padElement);
 
 				if (pad.getContent() != null) {
-					pad.getContent().importMedia(destination, zip, padElement.element(PadSerializer.CONTENT_ELEMENT));
+					//pad.getContent().importMedia(destination, zip, padElement.element(PadSerializer.CONTENT_ELEMENT)); TODO Import Media
 				}
 			}
 		}

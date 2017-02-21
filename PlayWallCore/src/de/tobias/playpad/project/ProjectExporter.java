@@ -121,7 +121,7 @@ public class ProjectExporter {
 				Pad pad = serializer.loadElement(padElement);
 
 				if (pad.getContent() != null) {
-					pad.getContent().exportMedia(zip, padElement.element(PadSerializer.CONTENT_ELEMENT));
+					//pad.getContent().exportMedia(zip, padElement.element(PadSerializer.CONTENT_ELEMENT)); TODO Media Export
 				}
 			}
 

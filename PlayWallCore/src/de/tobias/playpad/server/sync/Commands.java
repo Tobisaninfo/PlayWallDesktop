@@ -15,5 +15,9 @@ public class Commands {
 	public static final String PAD_ADD = "pad-add";
 	public static final String PAD_UPDATE = "pad-update";
 	public static final String PAD_REMOVE = "pad-rm";
+
+	public static final String PATH_ADD = "path-add";
+	public static final String PATH_UPDATE = "path-update";
+	public static final String PATH_REMOVE = "path-rm";
 }
 

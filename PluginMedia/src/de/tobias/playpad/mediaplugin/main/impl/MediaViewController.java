@@ -190,7 +190,7 @@ public class MediaViewController implements ProfileListener {
 					mediaView.setMediaPlayer(content.getPlayer());
 				} else if (currentDisplayedPad.getContent() instanceof ImageContent) {
 					ImageContent content = (ImageContent) currentDisplayedPad.getContent();
-					URI uri = content.getPath().toUri();
+					URI uri = currentDisplayedPad.getPath().toUri();
 					setImage(uri.toString(), currentDisplayedPad);
 				}
 			}

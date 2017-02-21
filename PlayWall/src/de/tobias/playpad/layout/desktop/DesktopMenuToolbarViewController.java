@@ -565,7 +565,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void errorMenuHandler(ActionEvent event) {
-		ErrorSummaryDialog.getInstance().getStage().show();
+		// TODO Error Handling dialog
 	}
 
 	@FXML

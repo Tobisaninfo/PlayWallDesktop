@@ -227,18 +227,18 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 			Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 			if (!connects.isEmpty()) {
-				if (connects.size() > 1) {
+				if (connects.size() > 1) { // Multiple content types possible
 					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
 					hud.showDropOptions(connects, connect ->
 					{
 						if (connect != null) {
-							setNewPadContent(file, path, connect);
+							setNewPadContent(path, connect);
 							hud.hide();
 						}
 					});
 				} else {
 					ContentFactory connect = connects.iterator().next();
-					setNewPadContent(file, path, connect);
+					setNewPadContent(path, connect);
 				}
 			}
 
@@ -246,19 +246,12 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
-	private void setNewPadContent(File file, Path path, ContentFactory connect) {
-		PadContent content = pad.getContent();
+	private void setNewPadContent(Path path, ContentFactory connect) {
 		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
-			content = connect.newInstance(pad);
-			this.pad.setContent(content);
+			this.pad.setContentType(connect.getType());
 		}
 
-		try {
-			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pad.setPath(path);
 		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 	}
 
@@ -276,13 +269,11 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			Stage owner = mvc.getStage();
 
 			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
-			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> {
-				nvcStage.addCloseHook(() -> {
-					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
-					return true;
-				});
-			});
+			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
+				if (padView != null && pad != null)
+					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+				return true;
+			}));
 			padSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		}
 	}
@@ -328,12 +319,11 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		padView.setTime(null);
 	}
 
-	public String durationToString(Duration value) {
+	private String durationToString(Duration value) {
 		if (value != null) {
-			int secounds = (int) ((value.toMillis() / 1000) % 60);
+			int seconds = (int) ((value.toMillis() / 1000) % 60);
 			int minutes = (int) ((value.toMillis() / (1000 * 60)) % 60);
-			String time = String.format(DURATION_FORMAT, minutes, secounds);
-			return time;
+			return String.format(DURATION_FORMAT, minutes, seconds);
 		} else {
 			return null;
 		}

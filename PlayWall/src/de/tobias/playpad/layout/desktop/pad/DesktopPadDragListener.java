@@ -150,23 +150,15 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 		// File Handling
 		if (db.hasFiles()) {
-			success = true;
 			File file = db.getFiles().get(0);
 
 			ContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
-				PadContent content = currentPad.getContent();
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
-					content = connect.newInstance(currentPad);
+					currentPad.setContentType(connect.getType());
 				}
 
-				try {
-					content.handlePath(file.toPath());
-				} catch (NoSuchComponentException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				this.currentPad.setContent(content);
+				this.currentPad.setPath(file.toPath());
 				this.currentPad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
 				if (currentPad.getController() != null) {
@@ -194,12 +186,11 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				// Update der Pad Views nach dem DnD
 				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 				mainViewController.showPage(mainViewController.getPage());
-
-				// Event Completion
-				event.setDropCompleted(success);
-				event.consume();
 			}
 		}
+		// Event Completion
+		event.setDropCompleted(success);
+		event.consume();
 	}
 
 	private void dragDetacted(MouseEvent event) {

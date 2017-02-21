@@ -1,5 +1,7 @@
 package de.tobias.playpad.pad;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import de.tobias.playpad.pad.content.ContentFactory;
@@ -21,6 +23,7 @@ import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLSerializer;
 import javafx.util.Duration;
+import org.dom4j.QName;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
@@ -47,6 +50,10 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 	public static final String CONTENT_ELEMENT = "Content";
 	private static final String CONTENT_TYPE_ATTR = "type";
+	private static final String CONTENT_PATHS_ELEMENT = "Paths";
+	private static final String CONTENT_PATH_ELEMENT = "Path";
+	private static final String CONTENT_PATH_UUID = "id";
+	private static final String CONTENT_PATH_PATH = "path";
 
 	private Project project;
 
@@ -143,16 +150,18 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		Element contentElement = element.element(CONTENT_ELEMENT);
 		if (contentElement != null) {
 			String contentType = contentElement.attributeValue(CONTENT_TYPE_ATTR);
-			try {
-				Registry<ContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-				PadContent content = padContents.getFactory(contentType).newInstance(pad);
+			pad.setContentType(contentType);
 
-				content.load(contentElement);
-				pad.setContent(content);
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				// pad.throwException(null, e); TODO Throw exception to user
+			Element pathsElement = contentElement.element(CONTENT_PATHS_ELEMENT);
+			for (Object obj : pathsElement.elements(CONTENT_PATH_ELEMENT)) {
+				if (obj instanceof Element) {
+					Element pathElement = (Element) obj;
+					UUID uuid = UUID.fromString(pathElement.attributeValue(CONTENT_PATH_UUID));
+					Path path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
+
+					MediaPath mediaPath = new MediaPath(uuid, path, pad);
+					pad.addPath(mediaPath);
+				}
 			}
 		}
 
@@ -213,7 +222,14 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		if (content != null) {
 			Element contentElement = element.addElement(CONTENT_ELEMENT);
 			contentElement.addAttribute(CONTENT_TYPE_ATTR, content.getType());
-			content.save(contentElement);
+
+
+			Element pathsElement = contentElement.addElement(CONTENT_PATHS_ELEMENT);
+			for (MediaPath mediaPath: data.getPaths()) {
+				Element pathElement = pathsElement.addElement(CONTENT_PATH_ELEMENT);
+				pathElement.addAttribute(CONTENT_PATH_UUID, mediaPath.getId().toString());
+				pathElement.addAttribute(CONTENT_PATH_PATH, mediaPath.getPath().toString());
+			}
 
 			Module module = PlayPadPlugin.getRegistryCollection().getPadContents().getModule(content.getType());
 			// Für verschiedene Pad Typen wird hier das Modul gespeichert, damit das Projekt weis, welche notwendig sien beim öffnen

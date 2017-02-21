@@ -17,11 +17,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class ImageContentConntect extends ContentFactory {
+public class ImageContentConnect extends ContentFactory {
 
-	public static final String[] FILE_EXTENSION = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" };
+	private static final String[] FILE_EXTENSION = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" };
 
-	public ImageContentConntect(String type) {
+	public ImageContentConnect(String type) {
 		super(type);
 	}
 
@@ -52,7 +52,7 @@ public class ImageContentConntect extends ContentFactory {
 		private Label imageLabel;
 		private Pad pad;
 
-		public ImageContentView(Pad pad, Pane parentNode) {
+		ImageContentView(Pad pad, Pane parentNode) {
 			this.pad = pad;
 			nameLabel = new Label();
 			nameLabel.textProperty().bind(pad.nameProperty());
@@ -109,10 +109,9 @@ public class ImageContentConntect extends ContentFactory {
 		}
 
 		void setImage() {
-			ImageContent content = (ImageContent) pad.getContent();
 
-			if (content.getPath() != null)
-				imageLabel.setStyle("-fx-background-image: url(\"" + content.getPath().toUri().toString()
+			if (pad.getPath() != null)
+				imageLabel.setStyle("-fx-background-image: url(\"" + pad.getPath().toUri().toString()
 						+ "\"); -fx-background-size: contain; -fx-background-repeat: no-repeat; -fx-background-position: center; -fx-opacity: 0.3;");
 		}
 	}

@@ -42,7 +42,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
 	public static final String SOUND_CARD = "SoundCard";
 
-	public static final String TYPE = "TinyAudio";
+	static final String TYPE = "TinyAudio";
 	public static final String NAME = "Java Audiostream";
 	private static final String MP3 = "mp3";
 
@@ -98,7 +98,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException | ConcurrentModificationException ignored) {} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -118,7 +118,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
 	private BooleanProperty loadedProperty;
 
-	public TinyAudioHandler(PadContent content) {
+	TinyAudioHandler(PadContent content) {
 		super(content);
 
 		duration = new SimpleObjectProperty<>();
@@ -225,7 +225,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
 		executorService.submit(() ->
 		{
-			Path path = ((AudioContent) getContent()).getPath();
+			Path path = getContent().getPad().getPath();
 			try {
 				URL url = path.toUri().toURL();
 
@@ -327,7 +327,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 		}
 	}
 
-	public static void shutdown() {
+	static void shutdown() {
 		executorService.shutdown();
 		positionThread.interrupt();
 	}
