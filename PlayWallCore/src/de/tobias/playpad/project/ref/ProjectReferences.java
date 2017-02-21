@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import org.dom4j.Document;
@@ -93,6 +94,32 @@ public final class ProjectReferences {
 			XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
 			projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
 		}
+
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		try {
+			List<ProjectReference> syncedProjects = server.getSyncedProjects();
+
+			// Add new synced projects in cline
+			for (ProjectReference project : syncedProjects) {
+				if (projects.contains(project)) {
+					project.setSync(true);
+				} else {
+					addProject(project);
+				}
+			}
+
+			// Remove old projects from client
+			for (ProjectReference project : projects) {
+				if (project.isSync()) {
+					if (!syncedProjects.contains(project)) {
+						removeProject(project);
+					}
+				}
+			}
+		} catch (LoginException e) {
+			e.printStackTrace();
+		}
+
 		loadedProjectOverview = true;
 	}
 

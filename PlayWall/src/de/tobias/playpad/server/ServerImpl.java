@@ -13,12 +13,15 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -48,7 +51,8 @@ public class ServerImpl implements Server {
 	public List<ModernPlugin> getPlugins() throws IOException {
 		URL url = new URL("https://" + host + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
-		Type listType = new TypeToken<List<ModernPlugin>>() {}.getType();
+		Type listType = new TypeToken<List<ModernPlugin>>() {
+		}.getType();
 
 		Gson gson = new Gson();
 		return gson.fromJson(reader, listType);
@@ -56,9 +60,14 @@ public class ServerImpl implements Server {
 
 	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
-		URL url = new URL("https://" + host + "/" + channel + plugin.getPath());
-		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-		Files.copy(url.openStream(), path);
+		String url = "https://" + host + "/" + channel + plugin.getPath();
+		try {
+			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
+			Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+			Files.copy(response.getBody(), path);
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -67,9 +76,10 @@ public class ServerImpl implements Server {
 		try {
 			HttpResponse<JsonNode> response = Unirest.post(url)
 					.queryString("username", username)
-					.queryString("password", password).asJson();
-
+					.queryString("password", password)
+					.asJson();
 			JSONObject object = response.getBody().getObject();
+
 			// Account Error
 			if (!object.getString("status").equals(OK)) {
 				throw new LoginException(object.getString("message"));
@@ -82,29 +92,51 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public List<ProjectReference> getSyncedProjects() throws IOException {
-		URL url = new URL("https://" + host + "/projects?session=3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
-		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+	public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
+		String url = "https://" + host + "/projects";
+		try {
+			Session session = PlayPadMain.getProgramInstance().getSession();
+			HttpResponse<JsonNode> request = Unirest.get(url)
+					.queryString("session", session.getKey())
+					.asJson();
+			JsonNode body = request.getBody();
 
-		List<ProjectReference> projects = new ArrayList<>();
-		JsonArray array = (JsonArray) new JsonParser().parse(reader);
-		for (JsonElement element : array) {
-			if (element instanceof JsonObject) {
-				JsonObject json = (JsonObject) element;
+			if (body.isArray()) {
+				JSONArray array = body.getArray();
 
-				UUID uuid = UUID.fromString(json.get("uuid").getAsString());
-				String name = json.get("name").getAsString();
+				List<ProjectReference> projects = new ArrayList<>();
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject object = array.getJSONObject(i);
+					UUID uuid = UUID.fromString(object.getString("uuid"));
+					String name = object.getString("name");
 
-				ProjectReference ref = new ProjectReference(uuid, name);
-				projects.add(ref);
+					ProjectReference ref = new ProjectReference(uuid, name);
+					projects.add(ref);
+				}
+				return projects;
+			} else {
+				throw new LoginException(body.getObject().getString("message"));
 			}
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
 		}
-		return projects;
 	}
 
 	@Override
 	public Project getProject(ProjectReference ref) throws IOException {
-		return null;
+		String url = "https://" + host + "/projects/" + ref.getUuid();
+		Session session = PlayPadMain.getProgramInstance().getSession();
+		try {
+			HttpResponse<JsonNode> response = Unirest.get(url)
+					.queryString("session", session.getKey())
+					.asJson();
+
+			JSONObject object = response.getBody().getObject();
+			ProjectReader reader = new ProjectReader();
+			return reader.read(ref, object);
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
+		}
 	}
 
 	@Override

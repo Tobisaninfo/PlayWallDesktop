@@ -31,7 +31,11 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 	public ProjectReference loadElement(Element element) {
 		UUID uuid = UUID.fromString(element.attributeValue(UUID_ATTR));
 		String name = element.attributeValue(NAME_ATTR);
-		UUID profile = UUID.fromString(element.attributeValue(PROFILE_ATTR));
+
+		UUID profile = null;
+		if (element.attributeValue(PROFILE_ATTR) != null) {
+			profile  = UUID.fromString(element.attributeValue(PROFILE_ATTR));
+		}
 		boolean sync = Boolean.valueOf(element.attributeValue(SYNC_ATTR));
 
 		XMLHandler<Module> handler = new XMLHandler<>(element);
@@ -56,7 +60,9 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 		newElement.addAttribute(UUID_ATTR, data.getUuid().toString());
 		newElement.addAttribute(NAME_ATTR, data.getName());
 		newElement.addAttribute(SYNC_ATTR, String.valueOf(data.isSync()));
-		newElement.addAttribute(PROFILE_ATTR, data.getProfileReference().getUuid().toString());
+		if (data.getProfileReference() != null) {
+			newElement.addAttribute(PROFILE_ATTR, data.getProfileReference().getUuid().toString());
+		}
 
 		XMLHandler<Module> handler = new XMLHandler<>(newElement);
 		handler.saveElements(MODULE_ELEMENT, data.getRequestedModules(), new ModuleSerializer());

@@ -37,6 +37,10 @@ public final class ProfileReferences {
 	 * @return ProfileReferenz für die UUID
 	 */
 	public static ProfileReference getReference(UUID profile) {
+		if (profile == null) {
+			return null;
+		}
+
 		for (ProfileReference ref : profiles) {
 			if (ref.getUuid().equals(profile)) {
 				return ref;

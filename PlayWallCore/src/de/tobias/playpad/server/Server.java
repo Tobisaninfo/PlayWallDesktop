@@ -47,7 +47,7 @@ public interface Server {
 	 * @return synced projects
 	 * @throws IOException notwork error
 	 */
-	List<ProjectReference> getSyncedProjects() throws IOException;
+	List<ProjectReference> getSyncedProjects() throws IOException, LoginException;
 
 	/**
 	 * Load the project from the server.

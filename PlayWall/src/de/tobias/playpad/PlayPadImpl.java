@@ -219,4 +219,8 @@ public class PlayPadImpl implements PlayPad {
 			e.printStackTrace();
 		}
 	}
+
+	public Session getSession() {
+		return session;
+	}
 }

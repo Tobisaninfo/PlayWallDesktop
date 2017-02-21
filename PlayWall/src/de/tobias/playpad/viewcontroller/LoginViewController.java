@@ -66,6 +66,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		stage.setResizable(false);
 		stage.setWidth(650);
 		stage.setHeight(300);
+		stage.centerOnScreen();
 	}
 
 	@FXML
