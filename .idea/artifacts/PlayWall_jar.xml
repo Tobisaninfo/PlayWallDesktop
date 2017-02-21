@@ -1,0 +1,42 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PlayWall:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PlayWall_jar</output-path>
+    <root id="archive" name="PlayWall.jar">
+      <element id="module-output" name="PlayWall" />
+      <element id="module-output" name="PlayWallCore" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JLayer1.0.1/jl1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/XML/dom4j-1.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/jspf/dist/jspf.core-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JNA/jna-4.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JNA/jna-platform-4.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="/usr/local/Cellar/scala/2.12.1/idea/lib/scala-library.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="/usr/local/Cellar/scala/2.12.1/idea/lib/scala-parser-combinators_2.12-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="/usr/local/Cellar/scala/2.12.1/idea/lib/scala-reflect.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="/usr/local/Cellar/scala/2.12.1/idea/lib/scala-swing_2.12-2.0.0-M2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="/usr/local/Cellar/scala/2.12.1/idea/lib/scala-xml_2.12-1.0.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/tinysound-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/jorbis-0.0.17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/tritonus_share.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/tinysound/lib/vorbisspi1.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$APPLICATION_HOME_DIR$/lib/junit-4.12.jar" path-in-jar="/" />
+      <element id="library" level="project" name="libUtils" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/JavaFX/controlsfx-8/controlsfx-8.40.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/Websocket/nv-websocket-client-1.31.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Updater" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/Json/json-smart-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/guava-15.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/snakeyaml-1.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/YAML/YAMLStorage.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/HTML/gagawa-1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/unirest-java-1.4.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/httpasyncclient-4.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/httpclient-4.3.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/httpmime-4.3.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/json-20140107.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/httpcore-4.4.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/httpcore-nio-4.4.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/unirest-http/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Libraries/File Parser/GSON/gson-2.8.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
