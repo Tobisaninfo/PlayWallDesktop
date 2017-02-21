@@ -38,7 +38,7 @@ import static de.tobias.utils.util.Localization.getString;
 
 public class LaunchDialog extends NVC implements ProfileChooseable {
 
-	private static final String IMAGE = "icon.png";
+	public static final String IMAGE = "icon.png";
 
 	@FXML private Label infoLabel;
 	@FXML private ImageView imageView;

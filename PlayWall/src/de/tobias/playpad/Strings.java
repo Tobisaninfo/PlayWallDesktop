@@ -18,6 +18,7 @@ public class Strings {
 
 	// UI - Window - Titles
 	public static final String UI_Dialog_Launch_Title = "UI.Dialog.Launch.Title";
+	public static final String UI_Dialog_Login_Title = "UI.Dialog.Login.Title";
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";

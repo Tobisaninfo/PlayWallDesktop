@@ -2,15 +2,21 @@ package de.tobias.playpad.server;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,6 +34,8 @@ import java.util.UUID;
  * Created by tobias on 10.02.17.
  */
 public class ServerImpl implements Server {
+
+	private static final String OK = "OK";
 
 	private String host;
 	private WebSocket websocket;
@@ -54,6 +62,26 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
+	public String getSession(String username, String password) throws IOException, LoginException {
+		String url = "https://" + host + "/sessions";
+		try {
+			HttpResponse<JsonNode> response = Unirest.post(url)
+					.queryString("username", username)
+					.queryString("password", password).asJson();
+
+			JSONObject object = response.getBody().getObject();
+			// Account Error
+			if (!object.getString("status").equals(OK)) {
+				throw new LoginException(object.getString("message"));
+			}
+			// Session Key
+			return object.getString("key");
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
+		}
+	}
+
+	@Override
 	public List<ProjectReference> getSyncedProjects() throws IOException {
 		URL url = new URL("https://" + host + "/projects?session=3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
@@ -72,6 +100,11 @@ public class ServerImpl implements Server {
 			}
 		}
 		return projects;
+	}
+
+	@Override
+	public Project getProject(ProjectReference ref) throws IOException {
+		return null;
 	}
 
 	@Override

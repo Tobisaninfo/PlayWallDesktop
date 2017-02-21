@@ -7,9 +7,7 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.ObjectHandler;
-import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.ServerHandlerImpl;
+import de.tobias.playpad.server.*;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
@@ -48,6 +46,8 @@ public class PlayPadImpl implements PlayPad {
 	private static Module module;
 
 	protected GlobalSettings globalSettings;
+
+	protected Session session;
 
 	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
 		this.parameters = parameters;
@@ -160,9 +160,9 @@ public class PlayPadImpl implements PlayPad {
 		return currentProject;
 	}
 
-	void startup(ResourceBundle resourceBundle) {
+	void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
 		registerComponents(resourceBundle);
-		configureServer();
+		configureServer(delegate);
 	}
 
 	private void registerComponents(ResourceBundle resourceBundle) {
@@ -203,7 +203,14 @@ public class PlayPadImpl implements PlayPad {
 		return parameters;
 	}
 
-	private void configureServer() {
+	private void configureServer(SessionDelegate delegate) {
+		// Load Server session key
+		session = Session.load();
+
+		if (session == null) {
+			session = delegate.getSession();
+		}
+
 		// Connect to Server TODO
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		try {

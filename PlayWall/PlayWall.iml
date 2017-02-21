@@ -33,5 +33,6 @@
     <orderEntry type="library" exported="" name="scala-sdk-2.12.1" level="application" />
     <orderEntry type="library" exported="" name="GSON" level="project" />
     <orderEntry type="library" name="Websocket Client" level="project" />
+    <orderEntry type="library" name="unirest" level="project" />
   </component>
 </module>

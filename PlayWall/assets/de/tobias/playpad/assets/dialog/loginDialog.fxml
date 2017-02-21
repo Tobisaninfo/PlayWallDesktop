@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="345.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" layoutX="24.0" layoutY="5.0" prefWidth="250.0" spacing="7.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <ImageView fx:id="imageView" fitHeight="144.0" fitWidth="140.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="infoLabel" alignment="CENTER" layoutX="24.0" layoutY="212.0" prefHeight="39.0" prefWidth="310.0" AnchorPane.leftAnchor="24.0" AnchorPane.rightAnchor="266.0" AnchorPane.topAnchor="212.0">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <VBox layoutX="109.0" layoutY="259.0" spacing="14.0">
+               <children>
+                  <Button fx:id="importProfileButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loginHandler" text="%login.button.login" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="importProfileButton1" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#registerHandler" text="%login.button.create" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="388.0" layoutY="50.0" spacing="28.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="150.0" prefWidth="150.0" text="%login.label.username" />
+                  <TextField fx:id="usernameTextField" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="150.0" prefWidth="150.0" text="%login.label.password" />
+                  <PasswordField fx:id="passwordTextField" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

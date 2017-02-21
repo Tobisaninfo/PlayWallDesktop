@@ -9,4 +9,5 @@ public class AppUserInfoStrings {
 	public static final String UPDATER_PROGRAM = "UpdaterProgram";
 
 	public static final String SERVER = "Server";
+	public static final String ACCOUNT_REGISTER = "AccountRegister";
 }
