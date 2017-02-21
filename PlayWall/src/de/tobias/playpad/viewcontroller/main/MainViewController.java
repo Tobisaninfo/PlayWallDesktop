@@ -16,6 +16,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -378,6 +379,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	@Override
 	public int getPage() {
 		return currentPageShowing;
+	}
+
+	@Override
+	public boolean showPage(Page page) {
+		return showPage(page.getPosition());
 	}
 
 	@Override

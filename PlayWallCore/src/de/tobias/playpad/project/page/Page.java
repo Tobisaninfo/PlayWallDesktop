@@ -103,14 +103,10 @@ public class Page implements Cloneable {
 	 * @param position position.
 	 */
 	public void setPosition(int position) {
-		if (position < 0) {
+		if (position < 0)
 			return;
-		}
 
 		this.positionProperty.set(position);
-		for (Pad pad : pads.values()) {
-			pad.setPage(position);
-		}
 	}
 
 	/**
@@ -174,7 +170,7 @@ public class Page implements Cloneable {
 
 		if (!pads.containsKey(id)) {
 			// Create new pad for positionProperty
-			Pad pad = new Pad(projectReference, id, getPosition());
+			Pad pad = new Pad(projectReference, id, this);
 			setPad(id, pad);
 		}
 		return pads.get(id);
@@ -207,7 +203,7 @@ public class Page implements Cloneable {
 			pads.remove(id);
 		} else {
 			pads.put(id, pad);
-			pad.setPage(getPosition());
+			pad.setPage(this);
 			pad.setPosition(id);
 		}
 	}

@@ -25,9 +25,7 @@ public class PadAddCommand {
 
 		// Add Data
 		json.addProperty(PropertyDef.ID, pad.getUuid().toString());
-		UUID pageID = pad.getProject().getPage(pad.getPage()).getId();
-
-		json.addProperty(PropertyDef.PAD_PAGE, pageID.toString());
+		json.addProperty(PropertyDef.PAD_PAGE, pad.getPage().getId().toString());
 		json.addProperty(PropertyDef.PAD_POSITION, pad.getPosition());
 		json.addProperty(PropertyDef.PAD_NAME, pad.getName());
 

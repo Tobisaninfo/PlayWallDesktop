@@ -70,7 +70,7 @@ public class ErrorSummaryDialog extends ViewController {
 			try {
 				if (padException.getType() == PadExceptionType.UNKOWN_CONTENT_TYPE)
 					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
-							padException.getPad().getIndexReadable());
+							padException.getPad().getPositionReadable());
 				else
 					string = Localization.getString(Strings.Error_Pad_BaseName + padException.getType().name(),
 							padException.getPath().toString());

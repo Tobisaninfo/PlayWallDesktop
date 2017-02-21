@@ -8,6 +8,7 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import javafx.beans.property.*;
@@ -22,7 +23,7 @@ public class Pad implements Cloneable {
 	// Verwaltung
 	private UUID uuid;
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();
-	private IntegerProperty pageProperty = new SimpleIntegerProperty();
+	private ObjectProperty<Page> pageProperty = new SimpleObjectProperty<>();
 
 	private StringProperty nameProperty = new SimpleStringProperty("");
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
@@ -57,7 +58,7 @@ public class Pad implements Cloneable {
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
 	}
 
-	public Pad(Project project, int index, int page) {
+	public Pad(Project project, int index, Page page) {
 		this.project = project;
 		this.uuid = UUID.randomUUID();
 		this.padSettings = new PadSettings();
@@ -74,18 +75,14 @@ public class Pad implements Cloneable {
 		}
 	}
 
-	public Pad(Project project, PadIndex index) {
-		this(project, index.getId(), index.getPage());
-	}
-
-	public Pad(Project project, int index, int page, String name, PadContent content) {
+	public Pad(Project project, int index, Page page, String name, PadContent content) {
 		this(project, index, page);
 		setName(name);
 		setContent(content);
 	}
 
 	private void initPadListener() {
-		// Remov eold listener from propeties
+		// Remove old listener from properties
 		if (padStatusListener != null && statusProperty != null) {
 			statusProperty.removeListener(padStatusListener);
 		}
@@ -113,9 +110,6 @@ public class Pad implements Cloneable {
 	}
 
 	// Accessor Methods
-	public int getPosition() {
-		return positionProperty.get();
-	}
 
 	public UUID getUuid() {
 		return uuid;
@@ -125,12 +119,20 @@ public class Pad implements Cloneable {
 		this.uuid = uuid;
 	}
 
-	public int getPage() {
+	public Page getPage() {
 		return pageProperty.get();
 	}
 
-	public int getIndexReadable() {
+	public void setPage(Page page) {
+		pageProperty.set(page);
+	}
+
+	public int getPositionReadable() {
 		return positionProperty.get() + 1;
+	}
+
+	public int getPosition() {
+		return positionProperty.get();
 	}
 
 	public void setPosition(int position) {
@@ -141,12 +143,8 @@ public class Pad implements Cloneable {
 		return positionProperty;
 	}
 
-	public void setPage(int page) {
-		pageProperty.set(page);
-	}
-
 	public PadIndex getPadIndex() {
-		return new PadIndex(getPosition(), getPage());
+		return new PadIndex(getPosition(), getPage().getPosition());
 	}
 
 	public String getName() {
@@ -275,7 +273,7 @@ public class Pad implements Cloneable {
 
 		clone.uuid = UUID.randomUUID();
 		clone.positionProperty = new SimpleIntegerProperty(getPosition());
-		clone.pageProperty = new SimpleIntegerProperty(getPage());
+		clone.pageProperty = new SimpleObjectProperty<>(getPage());
 
 		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.statusProperty = new SimpleObjectProperty<>(getStatus());

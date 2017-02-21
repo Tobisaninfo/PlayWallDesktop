@@ -96,7 +96,7 @@ public class Project {
 	}
 
 	public Pad getPad(PadIndex index) {
-		Page page = pages.get(index.getPage());
+		Page page = pages.get(index.getPagePosition());
 		return page.getPad(index.getId());
 	}
 
@@ -114,14 +114,14 @@ public class Project {
 	public void setPad(PadIndex index, Pad pad) {
 		if (pad != null) {
 			// Remove Pad from old location
-			if (pad.getPage() != index.getPage()) {
-				Page oldPage = getPage(pad.getPage());
+			if (pad.getPage().getPosition() != index.getPagePosition()) {
+				Page oldPage = pad.getPage();
 				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
 					oldPage.removePad(index.getId());
 				}
 			}
 		}
-		Page page = pages.get(index.getPage());
+		Page page = pages.get(index.getPagePosition());
 		page.setPad(index.getId(), pad);
 	}
 

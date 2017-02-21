@@ -93,7 +93,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 		try {
 			// Settings
-			padView.setIndex(pad.getIndexReadable());
+			padView.setIndex(pad.getPositionReadable());
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 

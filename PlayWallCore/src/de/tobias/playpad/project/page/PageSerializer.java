@@ -48,8 +48,10 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 		List<Pad> pads = handler.loadElements(ProjectSerializer.PAD_ELEMENT, new PadSerializer(project));
 
 		Page page = new Page(uuid, id, name, project);
+
+		// Set page reference to pads
 		for (Pad pad : pads) {
-			pad.setPage(id);
+			pad.setPage(page);
 			page.setPad(pad.getPosition(), pad);
 		}
 
