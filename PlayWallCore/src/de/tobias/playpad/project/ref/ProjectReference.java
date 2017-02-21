@@ -158,4 +158,14 @@ public class ProjectReference implements Displayable {
 	private void updateDisplayProperty() {
 		displayProperty.set(toString());
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		ProjectReference that = (ProjectReference) o;
+
+		return uuid != null ? uuid.equals(that.uuid) : that.uuid == null;
+	}
 }

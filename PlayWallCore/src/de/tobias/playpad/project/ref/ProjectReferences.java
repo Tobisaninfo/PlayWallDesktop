@@ -109,13 +109,19 @@ public final class ProjectReferences {
 			}
 
 			// Remove old projects from client
+			List<ProjectReference> removeProjects = new ArrayList<>();
+
 			for (ProjectReference project : projects) {
 				if (project.isSync()) {
 					if (!syncedProjects.contains(project)) {
-						removeProject(project);
+						removeProjects.add(project);
 					}
 				}
 			}
+			for (ProjectReference project : removeProjects) {
+				removeProject(project);
+			}
+
 		} catch (LoginException e) {
 			e.printStackTrace();
 		}
