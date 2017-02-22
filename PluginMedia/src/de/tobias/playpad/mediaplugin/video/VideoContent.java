@@ -1,12 +1,9 @@
 package de.tobias.playpad.mediaplugin.video;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import de.tobias.playpad.pad.MediaPath;
-import org.dom4j.Element;
 
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
@@ -15,9 +12,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.content.play.Pauseable;
-import de.tobias.playpad.project.ProjectExporter;
 import de.tobias.playpad.volume.VolumeManager;
-import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

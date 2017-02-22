@@ -1,13 +1,10 @@
 package de.tobias.playpad.pad.content;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import de.tobias.playpad.audio.AudioEqualizeable;
 import de.tobias.playpad.pad.MediaPath;
-import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
@@ -16,15 +13,11 @@ import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.pad.fade.Fade;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.path.SinglePathContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.pad.fade.FadeDelegate;
 import de.tobias.playpad.pad.content.play.Pauseable;
-import de.tobias.playpad.project.ProjectExporter;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.volume.VolumeManager;
-import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;

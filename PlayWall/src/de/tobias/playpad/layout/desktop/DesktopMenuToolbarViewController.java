@@ -8,6 +8,7 @@ import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectSerializer;
@@ -468,7 +469,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			// TODO Redo
 			ProjectReference projectRef = dialog.getProject();
 			try {
-				Project project = ProjectSerializer.load(projectRef, true, null);
+				Project project = ProjectReferenceManager.loadProject(projectRef, null);
 				if (project != null)
 					PlayPadMain.getProgramInstance().openProject(project, null);
 			} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
@@ -490,7 +491,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = result.get();
 
 				try {
-					Project project = ProjectSerializer.load(result.get(), true, ImportDialog.getInstance(stage));
+					Project project = ProjectReferenceManager.loadProject(result.get(), ImportDialog.getInstance(stage));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 
 					createRecentDocumentMenuItems();
@@ -503,8 +504,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					mainViewController.showError(errorMessage);
 
 					// Neues Profile wählen
-					Profile profile = ImportDialog.getInstance(stage).getUnkownProfile();
-					ref.setProfileReference(profile.getRef());
+					ProfileReference profile = ImportDialog.getInstance(stage).getProfileReference();
+					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();
 					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
@@ -733,7 +734,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = (ProjectReference) item.getUserData();
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
-					Project project = ProjectSerializer.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
+					Project project = ProjectReferenceManager.loadProject(ref, ImportDialog.getInstance(mainViewController.getStage()));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();
@@ -741,8 +742,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 							Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 					// Neues Profile wählen
-					Profile profile = ImportDialog.getInstance(mainViewController.getStage()).getUnkownProfile();
-					ref.setProfileReference(profile.getRef());
+					ProfileReference profile = ImportDialog.getInstance(mainViewController.getStage()).getProfileReference();
+					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();
 					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));

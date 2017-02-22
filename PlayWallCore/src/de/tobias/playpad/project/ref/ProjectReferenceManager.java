@@ -1,7 +1,6 @@
 package de.tobias.playpad.project.ref;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -11,17 +10,18 @@ import java.util.UUID;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.ProjectSerializer;
+import de.tobias.playpad.project.*;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
+import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.utils.util.Worker;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.tobias.playpad.project.Project;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLHandler;
@@ -53,6 +53,18 @@ public final class ProjectReferenceManager {
 			}
 		}
 		return null;
+	}
+
+	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+		ProjectReader reader;
+		if (projectReference.isSync()) { // TODO Check if connected to server
+			reader = new ProjectSyncReader();
+		} else {
+			reader = new ProjectSerializer();
+		}
+		Project project = reader.read(projectReference, delegate);
+		Worker.runLater(project::loadPadsContent);
+		return project;
 	}
 
 	/**

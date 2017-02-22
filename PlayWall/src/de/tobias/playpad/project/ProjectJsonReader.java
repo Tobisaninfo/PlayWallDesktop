@@ -14,9 +14,15 @@ import java.util.UUID;
 /**
  * Created by tobias on 21.02.17.
  */
-public class ProjectReader {
+public class ProjectJsonReader {
 
-	public Project read(ProjectReference ref, JSONObject object) {
+	private JSONObject object;
+
+	public ProjectJsonReader(JSONObject data) {
+		this.object = data;
+	}
+
+	public Project read(ProjectReference ref) {
 		Project project = new Project(ref);
 
 		JSONArray jsonPages = object.getJSONArray("pages");
@@ -48,9 +54,13 @@ public class ProjectReader {
 		UUID id = UUID.fromString(object.getString("id"));
 		String name = object.getString("name");
 		int position = object.getInt("position");
-		String contentType = object.getString("contentType");
 
-		Pad pad = new Pad(project, position, page, name, contentType);
+		String contentType = null;
+		if (!object.isNull("contentType")) {
+			contentType = object.getString("contentType");
+		}
+
+		Pad pad = new Pad(project, id, position, page, name, contentType);
 
 		JSONArray jsonPaths = object.getJSONArray("paths");
 		for (int i = 0; i < jsonPaths.length(); i++) {

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 /**
  * Created by tobias on 19.02.17.
  */
-public class ProjectSettingsSerializer {
+class ProjectSettingsSerializer {
 
 	private static final String ROWS_ELEMENT = "Rows";
 	private static final String COLUMNS_ELEMENT = "Columns";

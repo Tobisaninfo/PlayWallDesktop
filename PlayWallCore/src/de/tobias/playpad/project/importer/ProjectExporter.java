@@ -1,4 +1,4 @@
-package de.tobias.playpad.project;
+package de.tobias.playpad.project.importer;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import de.tobias.playpad.project.ProjectSerializer;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

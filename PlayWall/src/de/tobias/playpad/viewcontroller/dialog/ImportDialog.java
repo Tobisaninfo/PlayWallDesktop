@@ -6,7 +6,9 @@ import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.Importable;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.importer.Importable;
 import de.tobias.playpad.project.ProfileChooseable;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVCStage;
@@ -20,7 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class ImportDialog implements Importable, ProfileChooseable {
+public class ImportDialog implements Importable, ProjectReader.ProjectReaderDelegate {
 
 	private static ImportDialog instance;
 	private static Window owner;
@@ -119,13 +121,13 @@ public class ImportDialog implements Importable, ProfileChooseable {
 	}
 
 	@Override
-	public Profile getUnkownProfile() {
+	public ProfileReference getProfileReference() {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(getStage());
 
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Profile profile = dialog.getProfile();
 		if (profile != null) {
-			return profile;
+			return profile.getRef();
 		}
 		return null;
 	}

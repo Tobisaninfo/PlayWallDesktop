@@ -9,6 +9,7 @@ import de.tobias.playpad.settings.Profile;
  *
  * @since 5.0.0
  */
+@Deprecated
 public interface ProfileChooseable {
 
 	/**

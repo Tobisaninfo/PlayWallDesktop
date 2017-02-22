@@ -90,16 +90,17 @@ public class Pad implements Cloneable {
 
 		initPadListener();
 		padSettings.updateTrigger();
-
-		if (project.getProjectReference().isSync()) {
-			PadAddCommand.addPad(this);
-		}
 	}
 
 	public Pad(Project project, int index, Page page, String name, String contentType) {
 		this(project, index, page);
 		setName(name);
 		setContentType(contentType);
+	}
+
+	public Pad(Project project, UUID uuid, int index, Page page, String name, String contentType) {
+		this(project, index, page, name, contentType);
+		setUuid(uuid);
 	}
 
 	private void initPadListener() {
@@ -378,9 +379,13 @@ public class Pad implements Cloneable {
 			oldContent.unloadMedia();
 		}
 
-		ContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
-		PadContent newContent = factory.newInstance(this);
-		contentProperty.set(newContent);
+		if (contentType != null) {
+			ContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
+			PadContent newContent = factory.newInstance(this);
+			contentProperty.set(newContent);
+		} else {
+			contentProperty.set(null);
+		}
 	}
 
 	/**

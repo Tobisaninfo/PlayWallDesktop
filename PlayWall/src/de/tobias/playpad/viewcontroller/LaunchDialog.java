@@ -2,7 +2,9 @@ package de.tobias.playpad.viewcontroller;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
@@ -36,7 +38,7 @@ import java.nio.file.Path;
 
 import static de.tobias.utils.util.Localization.getString;
 
-public class LaunchDialog extends NVC implements ProfileChooseable {
+public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDelegate {
 
 	public static final String IMAGE = "icon.png";
 
@@ -119,9 +121,8 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 		ProjectReference projectRef = dialog.getProject();
 		try {
-			Project project = ProjectSerializer.load(projectRef, true, this);
-			if (project != null)
-				PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+			Project project = ProjectReferenceManager.loadProject(projectRef, this);
+			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -129,7 +130,8 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	@FXML
 	private void importProfileButtonHandler(ActionEvent event) {
-		FileChooser chooser = new FileChooser();
+		// TODO Import Projects
+		/*FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
 		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
@@ -144,7 +146,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 				showErrorMessage(getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 
 	@FXML
@@ -201,15 +203,15 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		}
 
 		try {
-			Project project = ProjectSerializer.load(ref, true, this);
+			Project project = ProjectReferenceManager.loadProject(ref, this);
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
-			// Neues Profile wählen
-			Profile profile = getUnkownProfile();
-			ref.setProfileReference(profile.getRef());
+			// Choose new profile
+			ProfileReference profile = getProfileReference();
+			ref.setProfileReference(profile);
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
@@ -221,13 +223,13 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	// Zeigt dialog für das Ausfählen eines neuen Profiles.
 	@Override
-	public Profile getUnkownProfile() {
+	public ProfileReference getProfileReference() {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(getContainingWindow());
 
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Profile profile = dialog.getProfile();
 		if (profile != null) {
-			return profile;
+			return profile.getRef();
 		}
 		return null;
 	}

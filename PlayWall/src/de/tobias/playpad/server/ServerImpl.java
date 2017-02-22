@@ -13,7 +13,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -132,8 +132,8 @@ public class ServerImpl implements Server {
 					.asJson();
 
 			JSONObject object = response.getBody().getObject();
-			ProjectReader reader = new ProjectReader();
-			return reader.read(ref, object);
+			ProjectJsonReader reader = new ProjectJsonReader(object);
+			return reader.read(ref);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
 		}

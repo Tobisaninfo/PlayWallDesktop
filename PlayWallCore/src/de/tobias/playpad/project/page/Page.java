@@ -3,6 +3,7 @@ package de.tobias.playpad.project.page;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
 
@@ -172,6 +173,11 @@ public class Page implements Cloneable {
 			// Create new pad for positionProperty
 			Pad pad = new Pad(projectReference, id, this);
 			setPad(id, pad);
+
+
+			if (projectReference.getProjectReference().isSync()) {
+				PadAddCommand.addPad(pad);
+			}
 		}
 		return pads.get(id);
 	}

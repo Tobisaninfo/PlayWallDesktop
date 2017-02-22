@@ -189,7 +189,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = ProjectSerializer.load(ProjectReferenceManager.getProject(uuid), true, null);
+					Project project = ProjectReferenceManager.loadProject(ProjectReferenceManager.getProject(uuid), null);
 					impl.openProject(project, null);
 					return;
 				}

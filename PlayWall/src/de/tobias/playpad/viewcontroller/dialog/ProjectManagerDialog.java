@@ -14,7 +14,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectImporter;
+import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
@@ -246,7 +246,8 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 
 	@FXML
 	private void importButtonHandler(ActionEvent event) {
-		FileChooser chooser = new FileChooser();
+		// TODO Import Projects
+		/*FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(new ExtensionFilter(Localization.getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
 		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
@@ -264,7 +265,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
 				e.printStackTrace();
 			}
-		}
+		}*/
 	}
 
 	@FXML

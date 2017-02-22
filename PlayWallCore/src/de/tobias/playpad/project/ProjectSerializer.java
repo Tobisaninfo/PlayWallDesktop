@@ -1,10 +1,9 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.page.PageSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.xml.XMLHandler;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * Created by tobias on 19.02.17.
  */
-public class ProjectSerializer {
+public class ProjectSerializer implements ProjectReader {
 
 
 	private static final String ROOT_ELEMENT = "Project";
@@ -30,48 +29,41 @@ public class ProjectSerializer {
 	public static final String PAD_ELEMENT = "Pad";
 	private static final String SETTINGS_ELEMENT = "Settings";
 
-	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
-			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException, NoSuchComponentException {
-		Path projectPath = ref.getProjectPath();
-
-		if (Files.exists(projectPath)) {
-			if (ref.getProfileReference() != null) {
-				// Lädt das entsprechende Profile und aktiviert es
-				Profile.load(ref.getProfileReference());
-			} else {
-				// Lädt Profile / Erstellt neues und hat es gleich im Speicher
-				Profile profile = profileChooseable.getUnkownProfile();
-				ref.setProfileReference(profile.getRef());
-			}
-
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(projectPath));
-			Element rootElement = document.getRootElement();
-
-			Project project = new Project(ref);
-
-			// Load Pages
-			XMLHandler<Page> handler = new XMLHandler<>(rootElement);
-			List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
-			for (Page page : pages) {
-				project.pages.add(page);
-			}
-
-			// Load Settings
-			Element settingsElement = rootElement.element(SETTINGS_ELEMENT);
-			if (settingsElement != null)
-				project.settings = ProjectSettingsSerializer.load(settingsElement);
-
-			// TODO Externalize, damit beim Start user feedback verbessert wird.
-			for (Pad pad : project.getPads()) {
-				if (loadMedia)
-					pad.loadContent();
-			}
-
-			return project;
-		} else {
-			throw new ProjectNotFoundException(ref);
+	@Override
+	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException {
+		Path projectPath = projectReference.getProjectPath();
+		if (Files.notExists(projectPath)) {
+			throw new ProjectNotFoundException(projectReference);
 		}
+
+		// TODO Why should the profile be loaded first
+		if (projectReference.getProfileReference() == null) {
+			// Lädt Profile / Erstellt neues und hat es gleich im Speicher
+			ProfileReference profile = delegate.getProfileReference();
+			projectReference.setProfileReference(profile);
+		}
+
+		// Lädt das entsprechende Profile und aktiviert es
+		Profile.load(projectReference.getProfileReference());
+
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(Files.newInputStream(projectPath));
+		Element rootElement = document.getRootElement();
+
+		Project project = new Project(projectReference);
+
+		// Load Pages
+		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
+		List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
+		for (Page page : pages) {
+			project.pages.add(page);
+		}
+
+		// Load Settings
+		Element settingsElement = rootElement.element(SETTINGS_ELEMENT);
+		if (settingsElement != null)
+			project.settings = ProjectSettingsSerializer.load(settingsElement);
+		return project;
 	}
 
 	public static void save(Project project) throws IOException {

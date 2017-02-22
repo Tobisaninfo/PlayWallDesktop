@@ -1,4 +1,4 @@
-package de.tobias.playpad.project;
+package de.tobias.playpad.project.importer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import de.tobias.playpad.project.ProfileChooseable;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSerializer;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
