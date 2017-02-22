@@ -17,9 +17,9 @@ import org.dom4j.io.XMLWriter;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -72,7 +72,7 @@ public class ProjectImporter {
 			UUID localProfileUUID = null;
 			if (includeProfile) {
 				// Dieser Dialog wird aufgerufen, wenn das Profile bereits existiert, wenn nicht wird es direkt importiert
-				if (ProfileReferences.getProfiles().contains(profileName)) {
+				if (ProfileReferenceManager.getProfiles().contains(profileName)) {
 					profileName = importable.replaceProfile(profileName);
 				}
 
@@ -100,7 +100,7 @@ public class ProjectImporter {
 					});
 
 					ProfileReference profileRef = new ProfileReference(localProfileUUID, profileName);
-					ProfileReferences.addProfile(profileRef);
+					ProfileReferenceManager.addProfile(profileRef);
 				} else {
 					Profile profile = chooseable.getUnkownProfile();
 					if (profile != null) {
@@ -123,13 +123,12 @@ public class ProjectImporter {
 
 				zip.getFile(projectFile, localFile);
 
-				if (ProjectReferences.getProjects().contains(projectName)) {
+				if (ProjectReferenceManager.getProjects().contains(projectName)) {
 					projectName = importable.replaceProject(projectName);
 				}
 
-				ProjectReference projectRef = new ProjectReference(localProjectUUID, projectName,
-						ProfileReferences.getReference(localProfileUUID), true); // TODO Sync Property
-				ProjectReferences.addProject(projectRef);
+				ProfileReference profileReference = ProfileReferenceManager.getReference(localProfileUUID);
+				ProjectReference projectRef = ProjectReferenceManager.addProject(projectName, profileReference, true); // TODO Sync Property
 
 				// Import Media
 				if (includeMedia) {

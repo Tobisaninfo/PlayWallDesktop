@@ -25,23 +25,6 @@
          </children>
       </HBox>
       <Separator prefWidth="200.0" />
-      <HBox spacing="14.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProject.label.media" />
-            <VBox spacing="14.0">
-               <children>
-                  <CheckBox fx:id="mediaPathCheckbox" mnemonicParsing="false" text="%newProject.checkbox.mediafolder" />
-                  <HBox alignment="CENTER_LEFT" spacing="14.0">
-                     <children>
-                        <Button fx:id="mediaButtonChoose" minWidth="-Infinity" mnemonicParsing="false" onAction="#mediaButtonHandler" text="%newProject.button.media" />
-                        <Label fx:id="mediaPathLabel" textOverrun="CENTER_ELLIPSIS" HBox.hgrow="ALWAYS" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-      <Separator prefWidth="200.0" />
       <HBox alignment="CENTER_LEFT" spacing="14.0">
          <children>
             <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProject.label.profile" HBox.hgrow="NEVER" />

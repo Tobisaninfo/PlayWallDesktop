@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
@@ -52,7 +52,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	public LaunchDialog(Stage stage) {
 		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
-		projectListView.getItems().addAll(ProjectReferences.getProjectsSorted());
+		projectListView.getItems().addAll(ProjectReferenceManager.getProjectsSorted());
 
 		applyViewControllerToStage(stage);
 	}
@@ -117,9 +117,13 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
-		Project project = dialog.getProject();
-		if (project != null) {
-			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+		ProjectReference projectRef = dialog.getProject();
+		try {
+			Project project = ProjectSerializer.load(projectRef, true, this);
+			if (project != null)
+				PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+		} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -164,9 +168,9 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 			alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 			{
 				try {
-					ProjectReferences.removeProject(ref);
+					ProjectReferenceManager.removeProject(ref);
 					projectListView.getItems().remove(ref); // VIEW
-				} catch (DocumentException | IOException e) {
+				} catch (IOException e) {
 					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
 				}
 			});

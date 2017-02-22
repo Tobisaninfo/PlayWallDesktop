@@ -10,8 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -23,13 +26,26 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLHandler;
 
-public final class ProjectReferences {
+/**
+ * List of all projects. Manage adding or removing projects.
+ *
+ * @author tobias
+ * @version 6.2.0
+ */
+public final class ProjectReferenceManager {
 
-	private ProjectReferences() {}
+	private ProjectReferenceManager() {
+	}
 
 	private static List<ProjectReference> projects = new ProjectReferenceList();
 	private static boolean loadedProjectOverview = false;
 
+	/**
+	 * Get a project reference with a uuid given.
+	 *
+	 * @param project project uuid
+	 * @return project metadata
+	 */
 	public static ProjectReference getProject(UUID project) {
 		for (ProjectReference ref : projects) {
 			if (ref.getUuid().equals(project)) {
@@ -39,29 +55,67 @@ public final class ProjectReferences {
 		return null;
 	}
 
-	public static void addProject(ProjectReference item) throws IOException {
-		if (!projects.contains(item)) {
-			projects.add(item);
+	/**
+	 * Add a new project with a given name and profile reference.
+	 *
+	 * @param name             project name
+	 * @param profileReference linked profile
+	 * @param sync             project sync property
+	 * @return created projected reference
+	 * @throws IOException Failed to save changes to disk
+	 */
+	public static ProjectReference addProject(String name, ProfileReference profileReference, boolean sync) throws IOException {
+		ProjectReference ref = new ProjectReference(UUID.randomUUID(), name, profileReference, sync);
+		Project project = new Project(ref);
+
+		// Save To Disk
+		ProjectSerializer.save(project);
+
+		// Save To Cloud
+		if (ref.isSync()) {
+			ProjectAddCommand.addProject(project);
+		}
+
+		// Add to Project List
+		if (!projects.contains(ref)) {
+			projects.add(ref);
 		}
 		saveProjects();
+
+		return ref;
 	}
 
-	public static void removeProject(ProjectReference projectReference) throws DocumentException, IOException {
+	/**
+	 * Remove a given project and it's files from disk and cloud.
+	 *
+	 * @param projectReference project reference
+	 * @throws IOException Failed to save changes to disk
+	 */
+	public static void removeProject(ProjectReference projectReference) throws IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + Project.FILE_EXTENSION);
 
-		Files.deleteIfExists(path); // DIRVE
-		projects.remove(projectReference); // MODEL
+		Files.deleteIfExists(path); // Drive
+		projects.remove(projectReference); // Model
 		if (projectReference.isSync()) {
-			ProjectRemoveCommand.removeProject(projectReference); // CLOUD
+			ProjectRemoveCommand.removeProject(projectReference); // Cloud
 		}
 		saveProjects();
 	}
 
-	public static ProjectReference duplicate(ProjectReference currentProject, String name) throws IOException {
-		ProjectReference newProjectReference = new ProjectReference(UUID.randomUUID(), name, currentProject.getProfileReference(), true); // TODO Sync Property
-		addProject(newProjectReference);
+	/**
+	 * Duplicate a given project.
+	 *
+	 * @param baseProject given project
+	 * @param name        new name
+	 * @return duplicated project
+	 * @throws IOException Failed to save changes to disk
+	 */
+	public static ProjectReference duplicate(ProjectReference baseProject, String name) throws IOException {
+		ProjectReference newProjectReference = new ProjectReference(UUID.randomUUID(), name, baseProject.getProfileReference(), baseProject.isSync());
+		projects.add(newProjectReference);
+		saveProjects();
 
-		duplicateFiles(currentProject, newProjectReference);
+		duplicateFiles(baseProject, newProjectReference); // Copy Files
 
 		saveProjects();
 		return newProjectReference;
@@ -73,6 +127,11 @@ public final class ProjectReferences {
 		Files.copy(oldPath, newPath, StandardCopyOption.COPY_ATTRIBUTES);
 	}
 
+	/**
+	 * Load all project references from disk and cloud.
+	 *
+	 * @return project references
+	 */
 	public static List<ProjectReference> getProjects() {
 		if (!loadedProjectOverview)
 			try {
@@ -99,12 +158,12 @@ public final class ProjectReferences {
 		try {
 			List<ProjectReference> syncedProjects = server.getSyncedProjects();
 
-			// Add new synced projects in cline
+			// Add new synced projects in client
 			for (ProjectReference project : syncedProjects) {
 				if (projects.contains(project)) {
 					project.setSync(true);
 				} else {
-					addProject(project);
+					projects.add(project);
 				}
 			}
 
@@ -126,6 +185,7 @@ public final class ProjectReferences {
 			e.printStackTrace();
 		}
 
+		saveProjects();
 		loadedProjectOverview = true;
 	}
 

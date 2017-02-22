@@ -3,7 +3,7 @@ package de.tobias.playpad.server.sync.listener.downstream.project;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
 
@@ -22,9 +22,8 @@ public class ProjectAddListener implements ServerListener {
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 			String name = json.get(PropertyDef.PROJECT_NAME).getAsString();
 
-			ProjectReference ref = new ProjectReference(uuid, name, null, true); // No Profile Selected
 			try {
-				ProjectReferences.addProject(ref);
+				ProjectReferenceManager.addProject(name, null, true);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

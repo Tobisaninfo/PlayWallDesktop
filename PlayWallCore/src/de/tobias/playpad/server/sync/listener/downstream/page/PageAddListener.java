@@ -5,13 +5,10 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
 import javafx.application.Platform;
 
-import java.io.IOException;
 import java.util.UUID;
 
 /**

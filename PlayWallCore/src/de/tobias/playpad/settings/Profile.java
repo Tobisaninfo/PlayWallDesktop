@@ -1,7 +1,6 @@
 package de.tobias.playpad.settings;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import de.tobias.playpad.action.MappingList;
 import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
@@ -41,7 +40,7 @@ public class Profile {
 	private HashMap<String, GlobalDesign> layouts;
 
 	/**
-	 * Use {@link ProfileReferences#addProfile(ProfileReference)} instead
+	 * Use {@link ProfileReferenceManager#addProfile(ProfileReference)} instead
 	 * 
 	 * @param ref
 	 *            Ref

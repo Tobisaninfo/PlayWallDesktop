@@ -3,11 +3,10 @@ package de.tobias.playpad.viewcontroller.dialog;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.nui.NVC;
@@ -16,16 +15,12 @@ import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.dom4j.DocumentException;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.UUID;
 
 /**
  * Create an new project and adds it to the project reference list
@@ -40,16 +35,10 @@ public class NewProjectDialog extends NVC {
 	@FXML private ComboBox<ProfileReference> profileComboBox;
 	@FXML private Button newProfileButton;
 
-	// Media Path
-	@FXML private CheckBox mediaPathCheckbox;
-	@FXML private Button mediaButtonChoose;
-	@FXML private Label mediaPathLabel;
-
 	@FXML private Button finishButton;
 	@FXML private Button cancelButton;
 
-	private Project project;
-	private Path newMediaPath; // Ausgewählter Ordner (temp)
+	private ProjectReference project;
 
 	public NewProjectDialog(Window owner) {
 		load("de/tobias/playpad/assets/dialog/", "newProjectDialog", PlayPadMain.getUiResourceBundle());
@@ -58,7 +47,7 @@ public class NewProjectDialog extends NVC {
 		nvcStage.initOwner(owner);
 		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
-		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
+		profileComboBox.getItems().addAll(ProfileReferenceManager.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
 	}
 
@@ -69,7 +58,7 @@ public class NewProjectDialog extends NVC {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProjectReferences.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+				if (ProjectReferenceManager.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -77,16 +66,6 @@ public class NewProjectDialog extends NVC {
 			}
 		});
 		finishButton.setDisable(true);
-
-		mediaPathCheckbox.selectedProperty().addListener((a, b, c) ->
-		{
-			mediaButtonChoose.setDisable(!c);
-			if (!c) {
-				mediaPathLabel.setText("");
-				newMediaPath = null;
-			}
-		});
-		mediaButtonChoose.setDisable(true);
 	}
 
 	@Override
@@ -110,33 +89,13 @@ public class NewProjectDialog extends NVC {
 	}
 
 	@FXML
-	private void mediaButtonHandler(ActionEvent event) {
-		if (mediaPathCheckbox.isSelected()) {
-			DirectoryChooser chooser = new DirectoryChooser();
-			File file = chooser.showDialog(getContainingWindow());
-			if (file != null) {
-				newMediaPath = file.toPath();
-				mediaPathLabel.setText(newMediaPath.toString());
-			}
-		}
-	}
-
-	@FXML
 	private void finishButtonHandler(ActionEvent evenet) {
-		if (mediaPathCheckbox.isSelected() && newMediaPath == null) {
-			showInfoMessage(Localization.getString(Strings.UI_Dialog_NewProject_Content));
-			return;
-		}
-
 		try {
 			Profile profile = Profile.load(profileComboBox.getSelectionModel().getSelectedItem());
 			String name = nameTextField.getText();
 			boolean sync = syncCheckbox.isSelected();
 
-			project = Project.create(name, profile.getRef(), sync);
-
-			project.getSettings().setUseMediaPath(mediaPathCheckbox.isSelected());
-			project.getSettings().setMediaPath(newMediaPath);
+			project = ProjectReferenceManager.addProject(name, profile.getRef(), sync);
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
@@ -164,7 +123,7 @@ public class NewProjectDialog extends NVC {
 		}
 	}
 
-	public Project getProject() {
+	public ProjectReference getProject() {
 		return project;
 	}
 

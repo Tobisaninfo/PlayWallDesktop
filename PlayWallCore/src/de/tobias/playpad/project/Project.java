@@ -6,8 +6,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
-import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
@@ -49,7 +48,7 @@ public class Project {
 	private transient IntegerProperty activePlayerProperty;
 	private transient ProjectUpdateListener syncListener;
 
-	Project(ProjectReference ref) {
+	public Project(ProjectReference ref) {
 		this.projectReference = ref;
 		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
@@ -59,24 +58,6 @@ public class Project {
 		if (ref.isSync()) {
 			syncListener.addListener();
 		}
-	}
-
-	public static Project create(String name, ProfileReference reference, boolean sync) throws IOException {
-		ProjectReference ref = new ProjectReference(UUID.randomUUID(), name, reference, sync);
-		Project project = new Project(ref);
-
-		// Save To Disk
-		ProjectSerializer.save(project);
-
-		// Save To Cloud
-		if (ref.isSync()) {
-			ProjectAddCommand.addProject(project);
-		}
-
-		// Add to Project List
-		ProjectReferences.addProject(ref);
-
-		return project;
 	}
 
 	public void close() {

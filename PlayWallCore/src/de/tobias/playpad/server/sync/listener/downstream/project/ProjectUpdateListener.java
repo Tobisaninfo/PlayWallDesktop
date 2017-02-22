@@ -3,7 +3,7 @@ package de.tobias.playpad.server.sync.listener.downstream.project;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
 import javafx.application.Platform;
@@ -23,7 +23,7 @@ public class ProjectUpdateListener implements ServerListener {
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 
 			// Check if right project is open
-			ProjectReference ref = ProjectReferences.getProject(uuid);
+			ProjectReference ref = ProjectReferenceManager.getProject(uuid);
 			if (ref != null) {
 				String field = json.get(PropertyDef.FIELD).getAsString();
 				if (field.equals(PropertyDef.PROJECT_NAME)) {

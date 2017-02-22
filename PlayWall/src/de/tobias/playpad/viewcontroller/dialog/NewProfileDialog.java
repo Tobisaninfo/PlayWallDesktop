@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -93,7 +93,7 @@ public class NewProfileDialog extends NVC {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProfileReferences.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+				if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -132,14 +132,14 @@ public class NewProfileDialog extends NVC {
 	private void finishButtonHandler(ActionEvent event) {
 		String name = nameTextField.getText();
 		try {
-			List<ProfileReference> profiles = ProfileReferences.getProfiles();
+			List<ProfileReference> profiles = ProfileReferenceManager.getProfiles();
 
 			if (profiles.contains(name) || !name.matches(Profile.profileNameEx)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 				return;
 			}
 
-			profile = ProfileReferences.newProfile(name);
+			profile = ProfileReferenceManager.newProfile(name);
 
 			profile.getProfileSettings().setMidiActive(activeCheckBox.isSelected());
 			profile.getProfileSettings().setMidiDeviceName(midiDeviceComboBox.getSelectionModel().getSelectedItem());

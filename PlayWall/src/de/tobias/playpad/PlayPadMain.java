@@ -2,10 +2,10 @@ package de.tobias.playpad;
 
 import com.mashape.unirest.http.Unirest;
 import de.tobias.playpad.plugin.ModernPluginManager;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSerializer;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
@@ -182,14 +182,14 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			/*
 			 * Load Data
 			 */
-			ProfileReferences.loadProfiles();
-			ProjectReferences.loadProjects();
+			ProfileReferenceManager.loadProfiles();
+			ProjectReferenceManager.loadProjects();
 
 			// Auto Open Project
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = ProjectSerializer.load(ProjectReferences.getProject(uuid), true, null);
+					Project project = ProjectSerializer.load(ProjectReferenceManager.getProject(uuid), true, null);
 					impl.openProject(project, null);
 					return;
 				}
@@ -235,8 +235,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
-			ProfileReferences.saveProfiles();
-			ProjectReferences.saveProjects();
+			ProfileReferenceManager.saveProfiles();
+			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler

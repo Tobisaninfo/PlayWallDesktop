@@ -16,7 +16,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.ui.NotificationHandler;
@@ -76,7 +76,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
 		this.currentProject = currentProject;
-		this.projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
+		this.projectList.getItems().setAll(ProjectReferenceManager.getProjectsSorted());
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 		{
 			try {
-				ProjectReferences.removeProject(ref);
+				ProjectReferenceManager.removeProject(ref);
 				projectList.getItems().remove(ref); // VIEW
 			} catch (Exception e) {
 				showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
@@ -206,13 +206,13 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 
 		try {
 			String newProjectName = nameTextField.getText();
-			if (ProjectReferences.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReferenceManager.getProjects().contains(newProjectName) || !nameTextField.getText().matches(Project.PROJECT_NAME_PATTERN)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, nameTextField.getText()));
 				return;
 			}
 
 			projectReference.setName(newProjectName);
-			projectList.getItems().setAll(ProjectReferences.getProjectsSorted());
+			projectList.getItems().setAll(ProjectReferenceManager.getProjectsSorted());
 
 			selectProject(projectReference);
 		} catch (Exception e) {
@@ -226,8 +226,8 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
-		Project project = dialog.getProject();
-		projectList.getItems().add(project.getProjectReference());
+		ProjectReference projectReference = dialog.getProject();
+		projectList.getItems().add(projectReference);
 	}
 
 	@FXML

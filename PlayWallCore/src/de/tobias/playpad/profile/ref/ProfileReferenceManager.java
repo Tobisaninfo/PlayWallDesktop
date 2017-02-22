@@ -20,9 +20,9 @@ import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.FileUtils.FileActionAdapter;
 import de.tobias.utils.xml.XMLHandler;
 
-public final class ProfileReferences {
+public final class ProfileReferenceManager {
 
-	private ProfileReferences() {}
+	private ProfileReferenceManager() {}
 
 	/**
 	 * Liste mit allen Referenzen
@@ -71,7 +71,7 @@ public final class ProfileReferences {
 	 */
 	public static Profile newProfile(String name) throws IOException {
 		ProfileReference ref = new ProfileReference(UUID.randomUUID(), name);
-		ProfileReferences.addProfile(ref);
+		ProfileReferenceManager.addProfile(ref);
 
 		Profile profile = new Profile(ref);
 		profile.save();
@@ -174,20 +174,20 @@ public final class ProfileReferences {
 	 *             XML Fehler
 	 */
 	public static void loadProfiles() throws IOException, DocumentException {
-		ProfileReferences.profiles.clear();
+		ProfileReferenceManager.profiles.clear();
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
 
 		if (Files.exists(path)) {
 			// Load data from xml
 			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
-			ProfileReferences.profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
-			System.out.println("Find Profile: " + ProfileReferences.profiles);
+			ProfileReferenceManager.profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
+			System.out.println("Find Profile: " + ProfileReferenceManager.profiles);
 		}
 
 		// Add Default Element if list is empty
-		if (ProfileReferences.profiles.isEmpty()) {
-			Profile profile = ProfileReferences.newProfile(DEFAULT_PROFILE_NAME);
+		if (ProfileReferenceManager.profiles.isEmpty()) {
+			Profile profile = ProfileReferenceManager.newProfile(DEFAULT_PROFILE_NAME);
 			profile.save();
 		}
 	}
@@ -206,7 +206,7 @@ public final class ProfileReferences {
 
 		// Save data to xml
 		XMLHandler<ProfileReference> handler = new XMLHandler<>(root);
-		handler.saveElements(PROFILE_ELEMENT, ProfileReferences.profiles, new ProfileReferenceSerializer());
+		handler.saveElements(PROFILE_ELEMENT, ProfileReferenceManager.profiles, new ProfileReferenceSerializer());
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
 		if (Files.notExists(path)) {
