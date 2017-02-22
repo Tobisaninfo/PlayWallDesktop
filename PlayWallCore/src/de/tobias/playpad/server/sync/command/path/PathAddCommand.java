@@ -9,6 +9,8 @@ import de.tobias.playpad.server.sync.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.ServerUtils;
 
+import java.nio.file.Path;
+
 /**
  * Created by tobias on 19.02.17.
  */
@@ -25,7 +27,11 @@ public class PathAddCommand {
 		// Add Data
 		json.addProperty(PropertyDef.ID, mediaPath.getId().toString());
 		json.addProperty(PropertyDef.PATH_PAD, mediaPath.getPad().getUuid().toString());
-		json.addProperty(PropertyDef.PATH_PATH, mediaPath.getPath().toString());
+
+		Path path = mediaPath.getPath();
+		if (path != null) {
+			json.addProperty(PropertyDef.PATH_PATH, path.toString());
+		}
 
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		server.push(json);

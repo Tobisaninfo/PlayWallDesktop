@@ -157,7 +157,10 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 				if (obj instanceof Element) {
 					Element pathElement = (Element) obj;
 					UUID uuid = UUID.fromString(pathElement.attributeValue(CONTENT_PATH_UUID));
-					Path path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
+					Path path = null;
+					if (pathElement.attributeValue(CONTENT_PATH_PATH) != null) {
+						path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
+					}
 
 					MediaPath mediaPath = new MediaPath(uuid, path, pad);
 					pad.addPath(mediaPath);
@@ -225,10 +228,12 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 
 			Element pathsElement = contentElement.addElement(CONTENT_PATHS_ELEMENT);
-			for (MediaPath mediaPath: data.getPaths()) {
+			for (MediaPath mediaPath : data.getPaths()) {
 				Element pathElement = pathsElement.addElement(CONTENT_PATH_ELEMENT);
 				pathElement.addAttribute(CONTENT_PATH_UUID, mediaPath.getId().toString());
-				pathElement.addAttribute(CONTENT_PATH_PATH, mediaPath.getPath().toString());
+				if (mediaPath.getPath() != null) {
+					pathElement.addAttribute(CONTENT_PATH_PATH, mediaPath.getPath().toString());
+				}
 			}
 
 			Module module = PlayPadPlugin.getRegistryCollection().getPadContents().getModule(content.getType());

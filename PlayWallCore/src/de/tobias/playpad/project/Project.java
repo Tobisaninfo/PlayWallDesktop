@@ -1,5 +1,6 @@
 package de.tobias.playpad.project;
 
+import de.tobias.playpad.pad.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -238,5 +239,16 @@ public class Project {
 			}
 		}
 		return result;
+	}
+
+	public MediaPath getMediaPath(UUID uuid) {
+		for (Pad pad : getPads()) {
+			for (MediaPath path : pad.getPaths()) {
+				if (path.getId().equals(uuid)) {
+					return path;
+				}
+			}
+		}
+		return null;
 	}
 }

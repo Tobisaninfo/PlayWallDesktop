@@ -49,7 +49,7 @@ public class ImageContent extends PadContent {
 	@Override
 	public void loadMedia() {
 		Path path = getPad().getPath();
-		if (Files.exists(path)) {
+		if (path != null && Files.exists(path)) {
 			getPad().setStatus(PadStatus.READY);
 			loaded = true;
 		} else {

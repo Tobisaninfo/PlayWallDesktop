@@ -19,6 +19,7 @@ public class PropertyDef {
 	public static final String PAD_POSITION = "position";
 	public static final String PAD_NAME = "name";
 	public static final String PAD_PAGE = "page";
+	public static final String PAD_CONTENT_TYPE = "contentType";
 
 	public static final String PATH_PATH = "path";
 	public static final String PATH_PAD = "pad";

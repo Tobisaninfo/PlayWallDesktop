@@ -150,7 +150,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 		Path path = getPad().getPath();
 
-		if (Files.exists(path)) {
+		if (path != null && Files.exists(path)) {
 			audioHandler.loadMedia(path);
 
 			durationProperty.bind(audioHandler.durationProperty());
@@ -180,7 +180,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		if (audioHandler != null)
 			audioHandler.unloadMedia();
 
-		Platform.runLater(() -> getPad().setStatus(PadStatus.EMPTY));
+		Platform.runLater(() -> {
+			if (getPad() != null) {
+				getPad().setStatus(PadStatus.EMPTY);
+			}
+		});
 	}
 
 	@Override

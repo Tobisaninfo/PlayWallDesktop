@@ -8,27 +8,20 @@ import de.tobias.playpad.server.sync.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.ServerUtils;
 
-import java.util.UUID;
-
 /**
  * Created by tobias on 19.02.17.
  */
-public class PadAddCommand {
+public class PadClearCommand {
 
-	public static void addPad(Pad pad) {
+	public static void clearPad(Pad pad) {
 		if (ServerUtils.isNewValueComingFromServer()) {
 			return;
 		}
-
 		JsonObject json = new JsonObject();
-		json.addProperty(PropertyDef.CMD, Commands.PAD_ADD);
+		json.addProperty(PropertyDef.CMD, Commands.PAD_CLEAR);
 
 		// Add Data
 		json.addProperty(PropertyDef.ID, pad.getUuid().toString());
-		json.addProperty(PropertyDef.PAD_PAGE, pad.getPage().getId().toString());
-		json.addProperty(PropertyDef.PAD_POSITION, pad.getPosition());
-		json.addProperty(PropertyDef.PAD_NAME, pad.getName());
-		json.addProperty(PropertyDef.PAD_CONTENT_TYPE, pad.getContentType());
 
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		server.push(json);

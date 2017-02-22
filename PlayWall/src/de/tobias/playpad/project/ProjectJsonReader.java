@@ -43,7 +43,8 @@ public class ProjectJsonReader {
 
 		JSONArray jsonPads = object.getJSONArray("pads");
 		for (int i = 0; i < jsonPads.length(); i++) {
-			Pad pad = readPad(project, page, jsonPads.getJSONObject(i));
+			JSONObject jsonObject = jsonPads.getJSONObject(i);
+			Pad pad = readPad(project, page, jsonObject);
 			page.setPad(pad.getPosition(), pad);
 		}
 
@@ -73,7 +74,10 @@ public class ProjectJsonReader {
 
 	private MediaPath readPath(Pad pad, JSONObject object) {
 		UUID id = UUID.fromString(object.getString("id"));
-		Path path = Paths.get(object.getString("path"));
+		Path path = null;
+		if (!object.isNull("path")) {
+			path = Paths.get(object.getString("path"));
+		}
 
 		return new MediaPath(id, path, pad);
 	}

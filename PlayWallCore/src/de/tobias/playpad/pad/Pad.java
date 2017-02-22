@@ -14,7 +14,11 @@ import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
+import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
+import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.path.PathAddCommand;
+import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
+import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,6 +73,7 @@ public class Pad implements Cloneable {
 
 	private transient IPadViewController controller;
 	private transient Project project;
+	private transient PadUpdateListener padListener;
 
 	public Pad(Project project) {
 		this.project = project;
@@ -77,12 +82,12 @@ public class Pad implements Cloneable {
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
+
+		padListener = new PadUpdateListener(this);
 	}
 
 	public Pad(Project project, int index, Page page) {
-		this.project = project;
-		this.uuid = UUID.randomUUID();
-		this.padSettings = new PadSettings();
+		this(project);
 
 		setPosition(index);
 		setPage(page);
@@ -129,6 +134,14 @@ public class Pad implements Cloneable {
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
+	}
+
+	public void addSyncListener() {
+		padListener.addListener();
+	}
+
+	public void removeSyncListener() {
+		padListener.removeListener();
 	}
 
 	// Accessor Methods
@@ -250,10 +263,11 @@ public class Pad implements Cloneable {
 
 	public void setPath(Path path) {
 		if (mediaPaths.isEmpty()) {
-			createMediaPath();
+			createMediaPath(path);
+		} else {
+			final MediaPath mediaPath = mediaPaths.get(0);
+			mediaPath.setPath(path);
 		}
-		final MediaPath mediaPath = mediaPaths.get(0);
-		mediaPath.setPath(path);
 	}
 
 	public ObservableList<MediaPath> getPaths() {
@@ -272,18 +286,32 @@ public class Pad implements Cloneable {
 		first.ifPresent(mediaPath -> mediaPath.setPath(path));
 	}
 
-	private void createMediaPath() {
-		final MediaPath mediaPath = new MediaPath(this);
-		mediaPaths.add(mediaPath);
+	private void createMediaPath(Path path) {
+		final MediaPath mediaPath = new MediaPath(path, this);
 
 		// Sync to cloud
+		addPath(mediaPath);
+	}
+
+	public void addPath(MediaPath mediaPath) {
+		mediaPaths.add(mediaPath);
+
 		if (project.getProjectReference().isSync()) {
 			PathAddCommand.addPath(mediaPath);
 		}
+
+		PadContent content = getContent();
+		if (content != null) {
+			content.loadMedia(mediaPath);
+		}
 	}
 
-	void addPath(MediaPath mediaPath) {
-		mediaPaths.add(mediaPath);
+	public void removePath(MediaPath path) {
+		mediaPaths.remove(path);
+
+		if (project.getProjectReference().isSync()) {
+			PathRemoveCommand.removePath(path);
+		}
 	}
 
 	/**
@@ -383,6 +411,7 @@ public class Pad implements Cloneable {
 			ContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
 			PadContent newContent = factory.newInstance(this);
 			contentProperty.set(newContent);
+			newContent.loadMedia();
 		} else {
 			contentProperty.set(null);
 		}
@@ -471,6 +500,15 @@ public class Pad implements Cloneable {
 		setContentType(null);
 		contentProperty.set(null);
 		setStatus(PadStatus.EMPTY);
+
+		if (project.getProjectReference().isSync()) {
+			mediaPaths.forEach(MediaPath::removeSyncListener);
+			mediaPaths.forEach(PathRemoveCommand::removePath);
+
+			PadClearCommand.clearPad(this);
+		}
+
+		mediaPaths.clear();
 	}
 
 	@Override

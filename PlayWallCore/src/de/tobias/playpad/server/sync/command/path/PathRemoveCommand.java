@@ -1,8 +1,9 @@
-package de.tobias.playpad.server.sync.command.pad;
+package de.tobias.playpad.server.sync.command.path;
 
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
@@ -11,17 +12,17 @@ import de.tobias.playpad.server.sync.ServerUtils;
 /**
  * Created by tobias on 19.02.17.
  */
-public class PadRemoveCommand {
+public class PathRemoveCommand {
 
-	public static void removePad(Pad pad) {
+	public static void removePath(MediaPath path) {
 		if (ServerUtils.isNewValueComingFromServer()) {
 			return;
 		}
 		JsonObject json = new JsonObject();
-		json.addProperty(PropertyDef.CMD, Commands.PAD_REMOVE);
+		json.addProperty(PropertyDef.CMD, Commands.PATH_REMOVE);
 
 		// Add Data
-		json.addProperty(PropertyDef.ID, pad.getUuid().toString());
+		json.addProperty(PropertyDef.ID, path.getId().toString());
 
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		server.push(json);

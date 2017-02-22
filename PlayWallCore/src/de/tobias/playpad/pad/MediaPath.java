@@ -2,6 +2,7 @@ package de.tobias.playpad.pad;
 
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.server.sync.listener.upstream.PathUpdateListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -21,6 +22,8 @@ public class MediaPath {
 	private ObjectProperty<Path> path;
 	private Pad pad;
 
+	private PathUpdateListener pathListener;
+
 	public MediaPath(Pad pad) {
 		this(null, pad);
 	}
@@ -33,6 +36,11 @@ public class MediaPath {
 		this.id = id;
 		this.path = new SimpleObjectProperty<>(path);
 		this.pad = pad;
+
+		pathListener = new PathUpdateListener(this);
+		if (pad.getProject().getProjectReference().isSync()) {
+			addSyncListener();
+		}
 	}
 
 	public UUID getId() {
@@ -92,5 +100,13 @@ public class MediaPath {
 			}
 		}
 		return original;
+	}
+
+	public void addSyncListener() {
+		pathListener.addListener();
+	}
+
+	public void removeSyncListener() {
+		pathListener.removeListener();
 	}
 }

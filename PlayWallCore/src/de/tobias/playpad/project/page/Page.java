@@ -78,6 +78,7 @@ public class Page implements Cloneable {
 	 */
 	public void removeSyncListener() {
 		syncListener.removeListener();
+		pads.values().forEach(Pad::removeSyncListener);
 	}
 
 	/**
@@ -174,7 +175,6 @@ public class Page implements Cloneable {
 			Pad pad = new Pad(projectReference, id, this);
 			setPad(id, pad);
 
-
 			if (projectReference.getProjectReference().isSync()) {
 				PadAddCommand.addPad(pad);
 			}
@@ -206,11 +206,19 @@ public class Page implements Cloneable {
 	 */
 	public void setPad(int id, Pad pad) {
 		if (pad == null) {
+			Pad temp = pads.get(id);
+			if (temp != null) {
+				temp.removeSyncListener();
+			}
 			pads.remove(id);
 		} else {
 			pads.put(id, pad);
 			pad.setPage(this);
 			pad.setPosition(id);
+
+			if (projectReference.getProjectReference().isSync()) {
+				pad.addSyncListener();
+			}
 		}
 	}
 

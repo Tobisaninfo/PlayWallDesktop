@@ -125,7 +125,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	@Override
 	public void loadMedia() {
 		Path path = getPad().getPath();
-		if (Files.exists(path)) {
+		if (path != null && Files.exists(path)) {
 			Platform.runLater(() ->
 			{
 				if (getPad().isPadVisible()) {
