@@ -9,13 +9,10 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
-import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.path.PathAddCommand;
 import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
@@ -24,10 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,7 +40,7 @@ public class Pad implements Cloneable {
 	private StringProperty nameProperty = new SimpleStringProperty("");
 	private ObjectProperty<PadStatus> statusProperty = new SimpleObjectProperty<>(PadStatus.EMPTY);
 
-	private SimpleStringProperty contentType = new SimpleStringProperty();
+	private SimpleStringProperty contentTypeProperty = new SimpleStringProperty();
 	private ObservableList<MediaPath> mediaPaths = FXCollections.observableArrayList();
 
 	// Content
@@ -391,7 +385,7 @@ public class Pad implements Cloneable {
 	 * @return content type
 	 */
 	public String getContentType() {
-		return contentType.get();
+		return contentTypeProperty.get();
 	}
 
 	/**
@@ -400,7 +394,7 @@ public class Pad implements Cloneable {
 	 * @param contentType content type
 	 */
 	public void setContentType(String contentType) throws NoSuchComponentException {
-		this.contentType.set(contentType);
+		this.contentTypeProperty.set(contentType);
 
 		PadContent oldContent = getContent();
 		if (oldContent != null) {
@@ -423,7 +417,7 @@ public class Pad implements Cloneable {
 	 * @return content type
 	 */
 	public SimpleStringProperty contentTypeProperty() {
-		return contentType;
+		return contentTypeProperty;
 	}
 
 	/**
@@ -520,6 +514,16 @@ public class Pad implements Cloneable {
 		return (positionProperty.get() + 1) + " - " + nameProperty.get();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Pad pad = (Pad) o;
+
+		return uuid != null ? uuid.equals(pad.uuid) : pad.uuid == null;
+	}
+
 	// Clone
 	@Override
 	public Pad clone() throws CloneNotSupportedException {
@@ -531,11 +535,20 @@ public class Pad implements Cloneable {
 
 		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.statusProperty = new SimpleObjectProperty<>(getStatus());
+
+		clone.contentTypeProperty = new SimpleStringProperty(getContentType());
 		if (getContent() != null) {
 			clone.contentProperty = new SimpleObjectProperty<>(getContent().clone());
 			clone.getContent().setPad(clone);
 		} else {
 			clone.contentProperty = new SimpleObjectProperty<>();
+		}
+
+		clone.mediaPaths = FXCollections.observableArrayList();
+		for (MediaPath path : mediaPaths) {
+			MediaPath clonedPath = path.clone();
+			clonedPath.setPad(clone);
+			clone.mediaPaths.add(clonedPath);
 		}
 
 		clone.padSettings = padSettings.clone();

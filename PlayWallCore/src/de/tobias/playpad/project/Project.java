@@ -99,7 +99,7 @@ public class Project {
 			if (pad.getPage().getPosition() != index.getPagePosition()) {
 				Page oldPage = pad.getPage();
 				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
-					oldPage.removePad(index.getId());
+					oldPage.setPad(index.getId(), null);
 				}
 			}
 		}
@@ -115,7 +115,7 @@ public class Project {
 
 	public void removePad(PadIndex index) {
 		Page page = getPage(index.getPagePosition());
-		page.removePad(index.getId());
+		page.removePad(index.getId(), true);
 	}
 
 	// Pages

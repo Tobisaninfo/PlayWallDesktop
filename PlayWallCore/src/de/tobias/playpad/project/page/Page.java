@@ -8,10 +8,7 @@ import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Manage a page in the project and the pads inside the page.
@@ -24,7 +21,7 @@ public class Page implements Cloneable {
 	private final UUID id;
 	private IntegerProperty positionProperty;
 	private StringProperty nameProperty;
-	private HashMap<Integer, Pad> pads;
+	private Set<Pad> pads;
 
 	private transient Project projectReference;
 	private transient PageUpdateListener syncListener;
@@ -62,7 +59,7 @@ public class Page implements Cloneable {
 		this.id = id;
 		this.positionProperty = new SimpleIntegerProperty(position);
 		this.nameProperty = new SimpleStringProperty(name);
-		this.pads = new HashMap<>();
+		this.pads = new HashSet<>();
 
 		this.projectReference = project;
 
@@ -79,7 +76,7 @@ public class Page implements Cloneable {
 	 */
 	public void removeSyncListener() {
 		syncListener.removeListener();
-		pads.values().forEach(Pad::removeSyncListener);
+		pads.forEach(Pad::removeSyncListener);
 	}
 
 	/**
@@ -171,7 +168,7 @@ public class Page implements Cloneable {
 			throw new IllegalArgumentException("Illegal index: index is " + id + " but it must in a range of 0 to " + maxId);
 		}
 
-		if (!pads.containsKey(id)) {
+		if (pads.stream().noneMatch(p -> p.getPosition() == id)) {
 			// Create new pad for positionProperty
 			Pad pad = new Pad(projectReference, id, this);
 			setPad(id, pad);
@@ -180,7 +177,8 @@ public class Page implements Cloneable {
 				PadAddCommand.addPad(pad);
 			}
 		}
-		return pads.get(id);
+		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
+		return padOptional.orElse(null);
 	}
 
 	/**
@@ -207,9 +205,9 @@ public class Page implements Cloneable {
 	 */
 	public void setPad(int id, Pad pad) {
 		if (pad == null) {
-			pads.remove(id);
+			pads.removeIf(p -> p.getPosition() == id);
 		} else {
-			pads.put(id, pad);
+			pads.add(pad);
 			pad.setPage(this);
 			pad.setPosition(id);
 
@@ -225,7 +223,7 @@ public class Page implements Cloneable {
 	 * @return pads
 	 */
 	public Collection<Pad> getPads() {
-		return Collections.unmodifiableCollection(pads.values());
+		return Collections.unmodifiableCollection(pads);
 	}
 
 	/**
@@ -233,15 +231,16 @@ public class Page implements Cloneable {
 	 *
 	 * @param id index of the pad
 	 */
-	public void removePad(int id) {
-		if (projectReference.getProjectReference().isSync()) {
-			Pad temp = pads.get(id);
+	public void removePad(int id, boolean deleteRemote) {
+		if (projectReference.getProjectReference().isSync() && deleteRemote) {
+			Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
+			Pad temp = padOptional.orElse(null);
 			if (temp != null) {
 				temp.removeSyncListener();
 				PadRemoveCommand.removePad(temp);
 			}
 		}
-		pads.remove(id);
+		pads.removeIf(p -> p.getPosition() == id);
 	}
 
 	@Override
@@ -255,10 +254,11 @@ public class Page implements Cloneable {
 		clone.positionProperty = positionProperty;
 		clone.nameProperty = nameProperty;
 		clone.projectReference = projectReference;
-		clone.pads = new HashMap<>();
-		for (int key : pads.keySet()) {
-			Pad padClone = pads.get(key).clone();
-			clone.pads.put(key, padClone);
+		clone.pads = new HashSet<>();
+		for (Pad pad : pads) {
+			Pad padClone = pad.clone();
+			clone.pads.add(padClone);
+			padClone.setPage(clone);
 		}
 		return clone;
 	}

@@ -7,9 +7,7 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import de.tobias.playpad.server.sync.Commands;
-import de.tobias.playpad.server.sync.listener.downstream.pad.PadAddListener;
-import de.tobias.playpad.server.sync.listener.downstream.pad.PadClearListener;
-import de.tobias.playpad.server.sync.listener.downstream.pad.PadUpdateListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.*;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageUpdateListener;
@@ -44,6 +42,8 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PAD_ADD, new PadAddListener());
 		commands.put(Commands.PAD_UPDATE, new PadUpdateListener());
 		commands.put(Commands.PAD_CLEAR, new PadClearListener());
+		commands.put(Commands.PAD_REMOVE, new PadRemoveListener());
+		commands.put(Commands.PAD_MOVE, new PadMoveListener());
 
 		commands.put(Commands.PATH_ADD, new PathAddListener());
 		commands.put(Commands.PATH_UPDATE, new PathUpdateListener());

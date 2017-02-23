@@ -17,6 +17,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.pad.PadMoveCommand;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
@@ -49,7 +50,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	public DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutFactory connect) {
+	DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutFactory connect) {
 		this.currentPad = currentPad;
 		this.connect = connect;
 
@@ -186,6 +187,10 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				// Update der Pad Views nach dem DnD
 				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 				mainViewController.showPage(mainViewController.getPage());
+
+				if (project.getProjectReference().isSync()) {
+					PadMoveCommand.moved();
+				}
 			}
 		}
 		// Event Completion

@@ -10,13 +10,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 /**
  * Created by tobias on 21.02.17.
  */
-public class MediaPath {
+public class MediaPath implements Cloneable {
 
 	private UUID id;
 	private ObjectProperty<Path> path;
@@ -74,6 +75,9 @@ public class MediaPath {
 		return pad;
 	}
 
+	void setPad(Pad pad) {
+		this.pad = pad;
+	}
 
 	/**
 	 * Convert a path into the settings based path. If the media folder is used the path is converted.
@@ -102,11 +106,19 @@ public class MediaPath {
 		return original;
 	}
 
-	public void addSyncListener() {
+	private void addSyncListener() {
 		pathListener.addListener();
 	}
 
-	public void removeSyncListener() {
+	void removeSyncListener() {
 		pathListener.removeListener();
+	}
+
+	@Override
+	public MediaPath clone() throws CloneNotSupportedException {
+		MediaPath path = (MediaPath) super.clone();
+		path.path = new SimpleObjectProperty<>(Paths.get(getPath().toUri()));
+		path.pad = pad;
+		return path;
 	}
 }
