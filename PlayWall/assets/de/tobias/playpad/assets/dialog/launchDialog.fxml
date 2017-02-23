@@ -32,5 +32,10 @@
             <Button fx:id="openButton" layoutX="568.0" layoutY="305.0" mnemonicParsing="false" onAction="#openButtonHandler" text="%launch.button.open" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children>
       </HBox>
+      <HBox layoutX="-57.0" layoutY="295.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0">
+         <children>
+            <Label fx:id="cloudLabel" text="" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

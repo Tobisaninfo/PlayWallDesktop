@@ -6,6 +6,7 @@ import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.updater.client.UpdateChannel;
+import javafx.beans.property.ObjectProperty;
 
 import java.io.IOException;
 import java.util.List;
@@ -83,4 +84,18 @@ public interface Server {
 	 * @param json data
 	 */
 	void push(JsonElement json);
+
+	/**
+	 * Get the connection state of the websocket connection.
+	 *
+	 * @return state
+	 */
+	ConnectionState getConnectionState();
+
+	/**
+	 * Get the connection state property of the websocket connection.
+	 *
+	 * @return state property
+	 */
+	ObjectProperty<ConnectionState> connectionSateProperty();
 }

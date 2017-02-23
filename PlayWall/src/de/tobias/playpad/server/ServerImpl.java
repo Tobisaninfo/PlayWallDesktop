@@ -17,6 +17,7 @@ import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import javafx.beans.property.ObjectProperty;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,6 +43,7 @@ public class ServerImpl implements Server {
 
 	private String host;
 	private WebSocket websocket;
+	private ServerSyncListener syncListener;
 
 	ServerImpl(String host) {
 		this.host = host;
@@ -140,15 +142,20 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
-	public void connect(String key) throws IOException, WebSocketException {
-		WebSocketFactory webSocketFactory = new WebSocketFactory();
-		if (PlayPadMain.sslContext != null) {
-			webSocketFactory.setSSLContext(PlayPadMain.sslContext);
+	public void connect(String key) {
+		try {
+			WebSocketFactory webSocketFactory = new WebSocketFactory();
+			if (PlayPadMain.sslContext != null) {
+				webSocketFactory.setSSLContext(PlayPadMain.sslContext);
+			}
+			websocket = webSocketFactory.createSocket("wss://" + host + "/project");
+			websocket.addHeader("key", key);
+			syncListener = new ServerSyncListener();
+			websocket.addListener(syncListener);
+			websocket.connect();
+		} catch (WebSocketException | IOException e) {
+			System.err.println("Failed to connect to server: " + e.getMessage());
 		}
-		websocket = webSocketFactory.createSocket("wss://" + host + "/project");
-		websocket.addHeader("key", key);
-		websocket.addListener(new ServerSyncListener());
-		websocket.connect();
 	}
 
 	@Override
@@ -167,5 +174,15 @@ public class ServerImpl implements Server {
 	@Override
 	public void push(JsonElement json) {
 		push(json.toString());
+	}
+
+	@Override
+	public ConnectionState getConnectionState() {
+		return syncListener.connectionStateProperty().get();
+	}
+
+	@Override
+	public ObjectProperty<ConnectionState> connectionSateProperty() {
+		return null;
 	}
 }

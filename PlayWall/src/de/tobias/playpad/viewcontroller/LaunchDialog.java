@@ -1,12 +1,14 @@
 package de.tobias.playpad.viewcontroller;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.Server;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
@@ -18,6 +20,8 @@ import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +30,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -51,6 +56,8 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	@FXML private Button importProfileButton;
 	@FXML private Button openButton;
 	@FXML private Button deleteButton;
+
+	@FXML private Label cloudLabel;
 
 	public LaunchDialog(Stage stage) {
 		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
@@ -97,6 +104,16 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 				}
 			}
 		});
+
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		FontIcon icon = new FontIcon(FontAwesomeType.CLOUD);
+		switch (server.getConnectionState()) {
+			case CONNECTED: icon.setColor(Color.BLACK);
+				break;
+			case CONNECTION_LOST: icon.setColor(Color.LIGHTGRAY);
+				break;
+		}
+		cloudLabel.setGraphic(icon);
 	}
 
 	@Override

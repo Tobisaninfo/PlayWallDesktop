@@ -17,6 +17,8 @@ import de.tobias.playpad.server.sync.listener.downstream.path.PathUpdateListener
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectUpdateListener;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,8 @@ import java.util.Map;
  * Created by tobias on 19.02.17.
  */
 public class ServerSyncListener extends WebSocketAdapter {
+
+	private ObjectProperty<ConnectionState> connectionStateProperty;
 
 	private Map<String, de.tobias.playpad.server.sync.listener.downstream.ServerListener> commands;
 
@@ -48,16 +52,20 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PATH_ADD, new PathAddListener());
 		commands.put(Commands.PATH_UPDATE, new PathUpdateListener());
 		commands.put(Commands.PATH_REMOVE, new PathRemoveListener());
+
+		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.CONNECTION_LOST);
 	}
 
 	@Override
 	public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
 		System.out.println("Connected");
+		connectionStateProperty.set(ConnectionState.CONNECTED);
 	}
 
 	@Override
 	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
 		System.out.println("Disconnected: " + clientCloseFrame.getCloseReason());
+		connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
 	}
 
 	@Override
@@ -69,5 +77,9 @@ public class ServerSyncListener extends WebSocketAdapter {
 			String cmd = json.get("cmd").getAsString();
 			commands.get(cmd).listen(json);
 		}
+	}
+
+	ObjectProperty<ConnectionState> connectionStateProperty() {
+		return connectionStateProperty;
 	}
 }
