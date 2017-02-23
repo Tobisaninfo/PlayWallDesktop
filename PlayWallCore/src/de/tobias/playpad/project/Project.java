@@ -3,21 +3,17 @@ package de.tobias.playpad.project;
 import de.tobias.playpad.pad.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
-import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -113,9 +109,10 @@ public class Project {
 		return pads;
 	}
 
-	public void removePad(PadIndex index) {
-		Page page = getPage(index.getPagePosition());
-		page.removePad(index.getId(), true);
+	public void removePad(UUID id) {
+		Pad pad = getPad(id);
+		pad.clear();
+		pad.getPage().removePad(id, true);
 	}
 
 	// Pages

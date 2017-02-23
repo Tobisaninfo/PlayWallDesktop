@@ -5,6 +5,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
+import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
 
@@ -18,7 +19,7 @@ import java.util.*;
  */
 public class Page implements Cloneable {
 
-	private final UUID id;
+	private UUID id;
 	private IntegerProperty positionProperty;
 	private StringProperty nameProperty;
 	private Set<Pad> pads;
@@ -229,18 +230,18 @@ public class Page implements Cloneable {
 	/**
 	 * Removes a pad from a page and from the cloud.
 	 *
-	 * @param id index of the pad
+	 * @param uuid id of the pad
 	 */
-	public void removePad(int id, boolean deleteRemote) {
+	public void removePad(UUID uuid, boolean deleteRemote) {
 		if (projectReference.getProjectReference().isSync() && deleteRemote) {
-			Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
+			Optional<Pad> padOptional = pads.stream().filter(p -> p.getUuid().equals(uuid)).findFirst();
 			Pad temp = padOptional.orElse(null);
 			if (temp != null) {
 				temp.removeSyncListener();
 				PadRemoveCommand.removePad(temp);
 			}
 		}
-		pads.removeIf(p -> p.getPosition() == id);
+		pads.removeIf(p -> p.getUuid().equals(uuid));
 	}
 
 	@Override
@@ -251,14 +252,21 @@ public class Page implements Cloneable {
 	@Override
 	public Page clone() throws CloneNotSupportedException {
 		Page clone = (Page) super.clone();
-		clone.positionProperty = positionProperty;
-		clone.nameProperty = nameProperty;
+		clone.id = UUID.randomUUID();
+		clone.positionProperty = new SimpleIntegerProperty(getPosition());
+		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.projectReference = projectReference;
+
+		if (projectReference.getProjectReference().isSync()) {
+			PageAddCommand.addPage(clone);
+			clone.syncListener = new PageUpdateListener(clone);
+			clone.syncListener.addListener();
+		}
+
 		clone.pads = new HashSet<>();
 		for (Pad pad : pads) {
-			Pad padClone = pad.clone();
+			Pad padClone = pad.clone(clone);
 			clone.pads.add(padClone);
-			padClone.setPage(clone);
 		}
 		return clone;
 	}

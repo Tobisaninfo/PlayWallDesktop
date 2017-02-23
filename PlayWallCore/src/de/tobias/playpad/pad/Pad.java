@@ -12,6 +12,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
 import de.tobias.playpad.server.sync.command.path.PathAddCommand;
 import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
@@ -525,13 +526,13 @@ public class Pad implements Cloneable {
 	}
 
 	// Clone
-	@Override
-	public Pad clone() throws CloneNotSupportedException {
+	public Pad clone(Page page) throws CloneNotSupportedException {
 		Pad clone = (Pad) super.clone();
 
 		clone.uuid = UUID.randomUUID();
 		clone.positionProperty = new SimpleIntegerProperty(getPosition());
 		clone.pageProperty = new SimpleObjectProperty<>(getPage());
+		clone.setPage(page);
 
 		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.statusProperty = new SimpleObjectProperty<>(getStatus());
@@ -544,10 +545,15 @@ public class Pad implements Cloneable {
 			clone.contentProperty = new SimpleObjectProperty<>();
 		}
 
+		if (project.getProjectReference().isSync()) {
+			PadAddCommand.addPad(clone);
+			clone.padListener = new PadUpdateListener(clone);
+			clone.addSyncListener();
+		}
+
 		clone.mediaPaths = FXCollections.observableArrayList();
 		for (MediaPath path : mediaPaths) {
-			MediaPath clonedPath = path.clone();
-			clonedPath.setPad(clone);
+			MediaPath clonedPath = path.clone(clone);
 			clone.mediaPaths.add(clonedPath);
 		}
 

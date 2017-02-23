@@ -4,7 +4,6 @@ import com.mashape.unirest.http.Unirest;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;

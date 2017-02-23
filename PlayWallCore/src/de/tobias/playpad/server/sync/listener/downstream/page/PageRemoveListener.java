@@ -7,6 +7,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
+import javafx.application.Platform;
 
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class PageRemoveListener implements ServerListener {
 			if (project != null) {
 				Page page = project.getPage(uuid);
 				if (page != null) {
-					project.removePage(page);
+					Platform.runLater(() -> project.removePage(page));
 				}
 			}
 		}

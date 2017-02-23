@@ -25,12 +25,16 @@ public class PadAddListener implements ServerListener {
 			UUID pageId = UUID.fromString(json.get(PropertyDef.PAD_PAGE).getAsString());
 			String name = json.get(PropertyDef.PAD_NAME).getAsString();
 			int position = json.get(PropertyDef.PAD_POSITION).getAsInt();
+			String contentType = null;
+			if (!json.get(PropertyDef.PAD_CONTENT_TYPE).isJsonNull()) {
+				contentType = json.get(PropertyDef.PAD_CONTENT_TYPE).getAsString();
+			}
 
 			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
 			if (project != null) {
 				Page page = project.getPage(pageId);
 				if (page != null) {
-					Pad pad = new Pad(project, uuid, position, page, name, null);
+					Pad pad = new Pad(project, uuid, position, page, name, contentType);
 					Platform.runLater(() -> page.setPad(position, pad));
 				}
 			}

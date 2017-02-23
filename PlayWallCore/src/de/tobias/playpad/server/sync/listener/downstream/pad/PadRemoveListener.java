@@ -5,9 +5,9 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
+import javafx.application.Platform;
 
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ public class PadRemoveListener implements ServerListener {
 			if (project != null) {
 				Pad pad = project.getPad(uuid);
 				if (pad != null) {
-					project.removePad(pad.getPadIndex());
+					Platform.runLater(() -> project.removePad(pad.getUuid()));
 				}
 			}
 		}

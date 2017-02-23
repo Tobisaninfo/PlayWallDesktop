@@ -13,8 +13,9 @@ public class ReplaceDragMode extends PadDragMode {
 	@Override
 	public boolean handle(PadIndex oldPad, PadIndex newPad, Project project) {
 		Pad srcPad = project.getPad(oldPad);
+		Pad desPad = project.getPad(newPad);
 
-		project.removePad(newPad);
+		project.removePad(desPad.getUuid());
 		project.setPad(newPad, srcPad);
 		return true;
 	}
