@@ -47,11 +47,17 @@ public class PathUpdateListener {
 		server.push(json);
 	}
 
+	private boolean added;
+
 	public void addListener() {
-		path.pathProperty().addListener(pathChangeListener);
+		if (!added) {
+			added = true;
+			path.pathProperty().addListener(pathChangeListener);
+		}
 	}
 
 	public void removeListener() {
+		added = false;
 		path.pathProperty().removeListener(pathChangeListener);
 	}
 }

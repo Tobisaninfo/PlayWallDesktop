@@ -54,12 +54,18 @@ public class PageUpdateListener {
 		server.push(json);
 	}
 
+	private boolean added;
+
 	public void addListener() {
-		page.nameProperty().addListener(nameListener);
-		page.positionProperty().addListener(positionListener);
+		if (!added) {
+			added = true;
+			page.nameProperty().addListener(nameListener);
+			page.positionProperty().addListener(positionListener);
+		}
 	}
 
 	public void removeListener() {
+		added = false;
 		page.nameProperty().addListener(nameListener);
 		page.positionProperty().removeListener(positionListener);
 	}

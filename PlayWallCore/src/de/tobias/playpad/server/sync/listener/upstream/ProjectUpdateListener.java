@@ -37,11 +37,17 @@ public class ProjectUpdateListener {
 		};
 	}
 
+	private boolean added;
+
 	public void addListener() {
-		project.getProjectReference().nameProperty().addListener(nameListener);
+		if (!added) {
+			added = true;
+			project.getProjectReference().nameProperty().addListener(nameListener);
+		}
 	}
 
 	public void removeListener() {
+		added = false;
 		project.getProjectReference().nameProperty().addListener(nameListener);
 	}
 }

@@ -22,10 +22,7 @@ public class ReplaceDragMode extends PadDragMode {
 	public boolean handle(PadIndex oldPad, PadIndex newPad, Project project) {
 		Pad srcPad = project.getPad(oldPad);
 
-		// Alte Pads entfernen, damit keine Nebenabhängigkeiten entstehen in den verschiedenen Seiten
-		project.setPad(oldPad, null);
-		project.setPad(newPad, null);
-
+		project.removePad(oldPad);
 		project.setPad(newPad, srcPad);
 		return true;
 	}

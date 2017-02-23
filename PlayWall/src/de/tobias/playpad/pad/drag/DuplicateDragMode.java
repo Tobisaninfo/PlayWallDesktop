@@ -24,10 +24,7 @@ public class DuplicateDragMode extends PadDragMode {
 		try {
 			Pad copyPad = oldPad.clone();
 
-			// Alte Pads entfernen, damit keine Nebenabhängigkeiten entstehen in den verschiedenen Seiten
-			project.setPad(newIndex, null);
-
-			// Neue Pads in die Seiten einfügen
+			project.removePad(newIndex);
 			project.setPad(newIndex, copyPad);
 			return true;
 		} catch (CloneNotSupportedException e) {

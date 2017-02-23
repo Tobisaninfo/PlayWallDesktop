@@ -4,6 +4,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
+import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
 
@@ -206,10 +207,6 @@ public class Page implements Cloneable {
 	 */
 	public void setPad(int id, Pad pad) {
 		if (pad == null) {
-			Pad temp = pads.get(id);
-			if (temp != null) {
-				temp.removeSyncListener();
-			}
 			pads.remove(id);
 		} else {
 			pads.put(id, pad);
@@ -232,11 +229,18 @@ public class Page implements Cloneable {
 	}
 
 	/**
-	 * Removes a pad from a page.
+	 * Removes a pad from a page and from the cloud.
 	 *
 	 * @param id index of the pad
 	 */
 	public void removePad(int id) {
+		if (projectReference.getProjectReference().isSync()) {
+			Pad temp = pads.get(id);
+			if (temp != null) {
+				temp.removeSyncListener();
+				PadRemoveCommand.removePad(temp);
+			}
+		}
 		pads.remove(id);
 	}
 

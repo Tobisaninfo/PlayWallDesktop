@@ -62,13 +62,19 @@ public class PadUpdateListener {
 		server.push(json);
 	}
 
+	private boolean added;
+
 	public void addListener() {
-		pad.nameProperty().addListener(nameListener);
-		pad.positionProperty().addListener(positionListener);
-		pad.contentTypeProperty().addListener(contentTypeListener);
+		if (!added) {
+			added = true;
+			pad.nameProperty().addListener(nameListener);
+			pad.positionProperty().addListener(positionListener);
+			pad.contentTypeProperty().addListener(contentTypeListener);
+		}
 	}
 
 	public void removeListener() {
+		added = false;
 		pad.nameProperty().addListener(nameListener);
 		pad.positionProperty().removeListener(positionListener);
 		pad.contentTypeProperty().removeListener(contentTypeListener);

@@ -113,6 +113,11 @@ public class Project {
 		return pads;
 	}
 
+	public void removePad(PadIndex index) {
+		Page page = getPage(index.getPagePosition());
+		page.removePad(index.getId());
+	}
+
 	// Pages
 	public Page getPage(int psotion) {
 		if (psotion >= pages.size() && psotion < ProjectSettings.MAX_PAGES) {
