@@ -1,6 +1,6 @@
 package de.tobias.playpad.server.sync;
 
-import de.tobias.playpad.server.sync.listener.downstream.ServerListener;
+import de.tobias.playpad.server.sync.listener.ServerListener;
 
 /**
  * Created by tobias on 19.02.17.

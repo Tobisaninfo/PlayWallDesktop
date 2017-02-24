@@ -3,9 +3,8 @@ package de.tobias.playpad.project.page;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
-import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
-import de.tobias.playpad.server.sync.command.page.PageAddCommand;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
 import javafx.beans.property.*;
 
@@ -175,7 +174,7 @@ public class Page implements Cloneable {
 			setPad(id, pad);
 
 			if (projectReference.getProjectReference().isSync()) {
-				PadAddCommand.addPad(pad);
+				CommandManager.execute(Commands.PAD_ADD, pad);
 			}
 		}
 		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
@@ -238,7 +237,7 @@ public class Page implements Cloneable {
 			Pad temp = padOptional.orElse(null);
 			if (temp != null) {
 				temp.removeSyncListener();
-				PadRemoveCommand.removePad(temp);
+				CommandManager.execute(Commands.PAD_REMOVE, temp);
 			}
 		}
 		pads.removeIf(p -> p.getUuid().equals(uuid));
@@ -258,7 +257,7 @@ public class Page implements Cloneable {
 		clone.projectReference = projectReference;
 
 		if (projectReference.getProjectReference().isSync()) {
-			PageAddCommand.addPage(clone);
+			CommandManager.execute(Commands.PAGE_ADD, clone);
 			clone.syncListener = new PageUpdateListener(clone);
 			clone.syncListener.addListener();
 		}

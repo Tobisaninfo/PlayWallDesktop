@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.sync.Commands;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.ServerUtils;
 import javafx.beans.value.ChangeListener;

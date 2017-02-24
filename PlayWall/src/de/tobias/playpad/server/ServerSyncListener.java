@@ -6,7 +6,7 @@ import com.google.gson.JsonParser;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
-import de.tobias.playpad.server.sync.Commands;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.downstream.pad.*;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
@@ -31,7 +31,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 
 	private ObjectProperty<ConnectionState> connectionStateProperty;
 
-	private Map<String, de.tobias.playpad.server.sync.listener.downstream.ServerListener> commands;
+	private Map<String, de.tobias.playpad.server.sync.listener.ServerListener> commands;
 
 	ServerSyncListener() {
 		commands = new HashMap<>();

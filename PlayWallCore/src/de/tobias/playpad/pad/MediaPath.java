@@ -2,7 +2,8 @@ package de.tobias.playpad.pad;
 
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.server.sync.command.path.PathAddCommand;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PathUpdateListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -122,7 +123,7 @@ public class MediaPath implements Cloneable {
 		clone.pad = pad;
 
 		if (pad.getProject().getProjectReference().isSync()) {
-			PathAddCommand.addPath(clone);
+			CommandManager.execute(Commands.PATH_ADD, clone);
 			clone.pathListener = new PathUpdateListener(clone);
 			clone.addSyncListener();
 		}

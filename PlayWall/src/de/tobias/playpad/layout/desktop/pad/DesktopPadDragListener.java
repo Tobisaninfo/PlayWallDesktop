@@ -17,6 +17,8 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.command.pad.PadMoveCommand;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -189,7 +191,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				mainViewController.showPage(mainViewController.getPage());
 
 				if (project.getProjectReference().isSync()) {
-					PadMoveCommand.moved();
+					CommandManager.execute(Commands.PAD_MOVE);
 				}
 			}
 		}

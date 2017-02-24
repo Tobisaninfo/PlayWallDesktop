@@ -1,5 +1,22 @@
 package de.tobias.playpad.project.ref;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.project.*;
+import de.tobias.playpad.server.LoginException;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.Worker;
+import de.tobias.utils.xml.XMLHandler;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,24 +24,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.*;
-import de.tobias.playpad.server.LoginException;
-import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
-import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
-import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.utils.util.Worker;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.xml.XMLHandler;
 
 /**
  * List of all projects. Manage adding or removing projects.
@@ -85,7 +84,7 @@ public final class ProjectReferenceManager {
 
 		// Save To Cloud
 		if (ref.isSync()) {
-			ProjectAddCommand.addProject(project);
+			CommandManager.execute(Commands.PROJECT_ADD, project);
 		}
 
 		// Add to Project List
@@ -109,7 +108,7 @@ public final class ProjectReferenceManager {
 		Files.deleteIfExists(path); // Drive
 		projects.remove(projectReference); // Model
 		if (projectReference.isSync()) {
-			ProjectRemoveCommand.removeProject(projectReference); // Cloud
+			CommandManager.execute(Commands.PROJECT_REMOVE, projectReference); // Cloud
 		}
 		saveProjects();
 	}

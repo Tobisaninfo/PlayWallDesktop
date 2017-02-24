@@ -6,8 +6,8 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.server.sync.command.page.PageAddCommand;
-import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -186,7 +186,7 @@ public class Project {
 	public void removePage(Page page) {
 		if (projectReference.isSync()) {
 			// Remove remote new page
-			PageRemoveCommand.removePage(page);
+			CommandManager.execute(Commands.PAGE_REMOVE, page);
 
 			// Remove sync listener
 			page.removeSyncListener();
@@ -217,7 +217,7 @@ public class Project {
 
 		if (projectReference.isSync()) {
 			// Add remote new page
-			PageAddCommand.addPage(page);
+			CommandManager.execute(Commands.PAGE_ADD, page);
 		}
 
 		pages.add(page);

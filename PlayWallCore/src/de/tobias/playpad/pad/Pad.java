@@ -12,10 +12,8 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
-import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
-import de.tobias.playpad.server.sync.command.path.PathAddCommand;
-import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -292,7 +290,7 @@ public class Pad implements Cloneable {
 		mediaPaths.add(mediaPath);
 
 		if (project.getProjectReference().isSync()) {
-			PathAddCommand.addPath(mediaPath);
+			CommandManager.execute(Commands.PATH_ADD, mediaPath);
 		}
 
 		PadContent content = getContent();
@@ -305,7 +303,7 @@ public class Pad implements Cloneable {
 		mediaPaths.remove(path);
 
 		if (project.getProjectReference().isSync()) {
-			PathRemoveCommand.removePath(path);
+			CommandManager.execute(Commands.PATH_REMOVE, path);
 		}
 	}
 
@@ -498,9 +496,9 @@ public class Pad implements Cloneable {
 
 		if (project.getProjectReference().isSync()) {
 			mediaPaths.forEach(MediaPath::removeSyncListener);
-			mediaPaths.forEach(PathRemoveCommand::removePath);
+			mediaPaths.forEach(path -> CommandManager.execute(Commands.PATH_REMOVE, path));
 
-			PadClearCommand.clearPad(this);
+			CommandManager.execute(Commands.PAD_CLEAR, this);
 		}
 
 		mediaPaths.clear();
@@ -546,7 +544,7 @@ public class Pad implements Cloneable {
 		}
 
 		if (project.getProjectReference().isSync()) {
-			PadAddCommand.addPad(clone);
+			CommandManager.execute(Commands.PAD_ADD, clone);
 			clone.padListener = new PadUpdateListener(clone);
 			clone.addSyncListener();
 		}

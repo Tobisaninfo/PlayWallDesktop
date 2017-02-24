@@ -14,6 +14,15 @@ import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ProjectJsonReader;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
+import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
+import de.tobias.playpad.server.sync.command.pad.PadMoveCommand;
+import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
+import de.tobias.playpad.server.sync.command.page.PageAddCommand;
+import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
+import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -47,6 +56,26 @@ public class ServerImpl implements Server {
 
 	ServerImpl(String host) {
 		this.host = host;
+	}
+
+	private void registerCommands() {
+		CommandManager.register(Commands.PROJECT_ADD, new ProjectAddCommand());
+		//CommandManager.register(Commands.PROJECT_UPDATE, new Project);
+		CommandManager.register(Commands.PROJECT_REMOVE, new PadAddCommand());
+
+		CommandManager.register(Commands.PAGE_ADD, new PageAddCommand());
+		//CommandManager.register(Commands.PAGE_UPDATE, new PadAddCommand());
+		CommandManager.register(Commands.PAGE_REMOVE, new PageRemoveCommand());
+
+		CommandManager.register(Commands.PAD_ADD, new PadAddCommand());
+		//CommandManager.register(Commands.PAD_UPDATE, new PadAddCommand());
+		CommandManager.register(Commands.PAD_CLEAR, new PadClearCommand());
+		CommandManager.register(Commands.PAD_REMOVE, new PadRemoveCommand());
+		CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
+
+		//CommandManager.register(Commands.DESIGN_ADD, new PadAddCommand());
+		//CommandManager.register(Commands.DESIGN_UPDATE, new PadAddCommand());
+		//CommandManager.register(Commands.DESIGN_REMOVE, new PadAddCommand());
 	}
 
 	@Override
