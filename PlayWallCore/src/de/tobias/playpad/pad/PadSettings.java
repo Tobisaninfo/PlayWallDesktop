@@ -175,7 +175,7 @@ public class PadSettings implements Cloneable {
 			try {
 				CartDesign design = registry.getFactory(type).newCartDesign(pad);
 				CommandManager.execute(Commands.DESIGN_ADD, design);
-				layouts.put(type, design);
+				setDesign(design, type);
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
