@@ -278,4 +278,8 @@ public class Strings {
 	// AudioHandler
 	public static final String AudioHandler_JavaFX = "AudioHandler.JavaFX";
 	public static final String AudioHandler_TinySound = "AudioHandler.TinySound";
+
+	// Server
+	public static final String Server_Connected = "Server.Connected";
+	public static final String Server_Disconnected = "Server.Disconnected";
 }

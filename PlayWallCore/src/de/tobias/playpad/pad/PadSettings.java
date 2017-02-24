@@ -186,6 +186,7 @@ public class PadSettings implements Cloneable {
 
 	public void setDesign(CartDesign layout, String type) {
 		this.layouts.put(type, layout);
+		layout.addListener();
 	}
 
 	public HashMap<String, Object> getCustomSettings() {

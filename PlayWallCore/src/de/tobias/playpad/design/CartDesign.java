@@ -8,6 +8,12 @@ import javafx.util.Duration;
 
 public interface CartDesign {
 
+	/**
+	 * Add any necessary listener to the cart design.
+	 */
+	default void addListener() {
+	}
+
 	String convertToCss(String classSufix, boolean fullCss);
 
 	/*

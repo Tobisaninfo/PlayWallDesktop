@@ -51,10 +51,9 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		this.playColor = new SimpleObjectProperty<>(playColor);
 
 		syncListener = new DesignUpdateListener(this);
-		if (pad.getProject().getProjectReference().isSync()) {
-			addListener();
-		}
 	}
+
+
 
 	public UUID getId() {
 		return uuid;
@@ -88,6 +87,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		return playColor;
 	}
 
+	@Override
 	public void addListener() {
 		syncListener.addListener();
 	}

@@ -161,7 +161,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 					}
 
 					MediaPath mediaPath = new MediaPath(uuid, path, pad);
-					pad.addPath(mediaPath);
+					pad.getPaths().add(mediaPath);
 				}
 			}
 		}

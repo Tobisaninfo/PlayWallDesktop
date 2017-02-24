@@ -3,6 +3,7 @@ package de.tobias.playpad.project.ref;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.*;
+import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandManager;
@@ -55,8 +56,10 @@ public final class ProjectReferenceManager {
 	}
 
 	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+
 		ProjectReader reader;
-		if (projectReference.isSync()) { // TODO Check if connected to server
+		if (projectReference.isSync() && server.getConnectionState() == ConnectionState.CONNECTED) {
 			reader = new ProjectSyncReader();
 		} else {
 			reader = new ProjectSerializer();

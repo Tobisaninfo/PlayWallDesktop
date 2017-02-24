@@ -108,9 +108,13 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		FontIcon icon = new FontIcon(FontAwesomeType.CLOUD);
 		switch (server.getConnectionState()) {
-			case CONNECTED: icon.setColor(Color.BLACK);
+			case CONNECTED:
+				icon.setColor(Color.BLACK);
+				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
 				break;
-			case CONNECTION_LOST: icon.setColor(Color.LIGHTGRAY);
+			case CONNECTION_LOST:
+				icon.setColor(Color.GRAY);
+				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
 				break;
 		}
 		cloudLabel.setGraphic(icon);

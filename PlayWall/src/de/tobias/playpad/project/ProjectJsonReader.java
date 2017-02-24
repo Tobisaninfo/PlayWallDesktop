@@ -93,7 +93,6 @@ public class ProjectJsonReader {
 	}
 
 	private ModernCartDesign readModernCartDesign(Pad pad, JSONObject object) {
-		System.out.println(object);
 		if (!object.isNull("id")) {
 			UUID id = UUID.fromString(object.getString("id"));
 			ModernColor backgroundColor = ModernColor.valueOf(object.getString("background_color"));
