@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-import de.tobias.playpad.pad.content.ContentFactory;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -15,7 +14,6 @@ import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
@@ -23,7 +21,6 @@ import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLSerializer;
 import javafx.util.Duration;
-import org.dom4j.QName;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
@@ -94,11 +91,11 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			}
 		}
 
-		// Laoyut
+		// Layout
 		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
 		if (layoutsElement != null) {
 			if (layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR) != null) {
-				padSettings.setCustomLayout(Boolean.valueOf(layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR)));
+				padSettings.setCustomDesign(Boolean.valueOf(layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR)));
 			}
 
 			for (Object layoutObj : layoutsElement.elements(LAYOUT_ELEMENT)) {
@@ -108,10 +105,10 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 					try {
 						DefaultRegistry<DesignFactory> layouts = PlayPadPlugin.getRegistryCollection().getDesigns();
-						CartDesign layout = layouts.getFactory(type).newCartDesign();
+						CartDesign layout = layouts.getFactory(type).newCartDesign(pad);
 						layout.load(layoutElement);
 
-						padSettings.setLayout(layout, type);
+						padSettings.setDesign(layout, type);
 					} catch (NoSuchComponentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -197,12 +194,12 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 		// Layout
 		Element layoutsElement = settingsElement.addElement(LAYOUTS_ELEMENT);
-		layoutsElement.addAttribute(LAYOUT_ACTIVE_ATTR, String.valueOf(padSettings.isCustomLayout()));
-		for (String layoutType : padSettings.getLayouts().keySet()) {
+		layoutsElement.addAttribute(LAYOUT_ACTIVE_ATTR, String.valueOf(padSettings.isCustomDesign()));
+		for (String layoutType : padSettings.getDesigns().keySet()) {
 			Element layoutElement = layoutsElement.addElement(LAYOUT_ELEMENT);
 			layoutElement.addAttribute(LAYOUT_TYPE_ATTR, layoutType);
 
-			CartDesign cartLayout = padSettings.getLayouts().get(layoutType);
+			CartDesign cartLayout = padSettings.getDesigns().get(layoutType);
 			cartLayout.save(layoutElement);
 		}
 

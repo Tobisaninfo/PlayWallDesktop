@@ -22,7 +22,7 @@ public class PadAddListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			UUID pageId = UUID.fromString(json.get(PropertyDef.PAD_PAGE).getAsString());
+			UUID pageId = UUID.fromString(json.get(PropertyDef.PAD_PAGE_REF).getAsString());
 			String name = json.get(PropertyDef.PAD_NAME).getAsString();
 			int position = json.get(PropertyDef.PAD_POSITION).getAsInt();
 			String contentType = null;

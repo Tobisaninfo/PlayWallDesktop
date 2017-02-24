@@ -45,7 +45,7 @@ public class PageUpdateListener {
 		}
 		JsonObject json = new JsonObject();
 		json.addProperty(PropertyDef.ID, page.getId().toString());
-		json.addProperty(PropertyDef.PAGE_PROJECT, page.getProject().getProjectReference().getUuid().toString());
+		json.addProperty(PropertyDef.PAGE_PROJECT_REF, page.getProject().getProjectReference().getUuid().toString());
 		json.addProperty(PropertyDef.CMD, Commands.PAGE_UPDATE);
 
 		handler.accept(json);

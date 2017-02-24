@@ -38,7 +38,7 @@ public class PathUpdateListener {
 		}
 		JsonObject json = new JsonObject();
 		json.addProperty(PropertyDef.ID, path.getId().toString());
-		json.addProperty(PropertyDef.PATH_PAD, path.getPad().getUuid().toString());
+		json.addProperty(PropertyDef.PATH_PAD_REF, path.getPad().getUuid().toString());
 		json.addProperty(PropertyDef.CMD, Commands.PATH_UPDATE);
 
 		handler.accept(json);

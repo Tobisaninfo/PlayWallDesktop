@@ -24,6 +24,5 @@ public class Commands {
 
 	public static final String DESIGN_ADD = "design-add";
 	public static final String DESIGN_UPDATE = "design-update";
-	public static final String DESIGN_REMOVE = "design-rm";
 }
 

@@ -1,6 +1,7 @@
 package de.tobias.playpad.server;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -12,10 +13,11 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ProjectJsonReader;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.command.design.DesignAddCommand;
 import de.tobias.playpad.server.sync.command.pad.PadAddCommand;
 import de.tobias.playpad.server.sync.command.pad.PadClearCommand;
 import de.tobias.playpad.server.sync.command.pad.PadMoveCommand;
@@ -56,6 +58,7 @@ public class ServerImpl implements Server {
 
 	ServerImpl(String host) {
 		this.host = host;
+		registerCommands();
 	}
 
 	private void registerCommands() {
@@ -73,9 +76,8 @@ public class ServerImpl implements Server {
 		CommandManager.register(Commands.PAD_REMOVE, new PadRemoveCommand());
 		CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
 
-		//CommandManager.register(Commands.DESIGN_ADD, new PadAddCommand());
+		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
 		//CommandManager.register(Commands.DESIGN_UPDATE, new PadAddCommand());
-		//CommandManager.register(Commands.DESIGN_REMOVE, new PadAddCommand());
 	}
 
 	@Override

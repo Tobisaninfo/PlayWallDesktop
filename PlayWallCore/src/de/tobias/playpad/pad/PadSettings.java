@@ -7,6 +7,8 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.Trigger;
@@ -22,6 +24,9 @@ import javafx.util.Duration;
 
 public class PadSettings implements Cloneable {
 
+	// Pad Reference
+	private Pad pad;
+
 	// Settings
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
@@ -29,12 +34,16 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 
-	private BooleanProperty customLayoutProperty = new SimpleBooleanProperty(false);
+	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private HashMap<String, CartDesign> layouts = new HashMap<>();
 
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
 
 	private HashMap<String, Object> customSettings = new HashMap<>();
+
+	public PadSettings(Pad pad) {
+		this.pad = pad;
+	}
 
 	public double getVolume() {
 		return volumeProperty.get();
@@ -140,31 +149,33 @@ public class PadSettings implements Cloneable {
 		return warningProperty;
 	}
 
-	public boolean isCustomLayout() {
-		return customLayoutProperty.get();
+	public boolean isCustomDesign() {
+		return customDesignProperty.get();
 	}
 
-	public void setCustomLayout(boolean customLayout) {
-		this.customLayoutProperty.set(customLayout);
+	public void setCustomDesign(boolean customLayout) {
+		this.customDesignProperty.set(customLayout);
 	}
 
-	public BooleanProperty customLayoutProperty() {
-		return customLayoutProperty;
+	public BooleanProperty customDesignProperty() {
+		return customDesignProperty;
 	}
 
 	public CartDesign getDesign() {
-		return getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
+		return getDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
 	}
 
-	HashMap<String, CartDesign> getLayouts() {
+	HashMap<String, CartDesign> getDesigns() {
 		return layouts;
 	}
 
-	public CartDesign getLayout(String type) {
+	public CartDesign getDesign(String type) {
 		if (!layouts.containsKey(type)) {
-			DefaultRegistry<DesignFactory> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
+			DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
 			try {
-				layouts.put(type, layouts2.getFactory(type).newCartDesign());
+				CartDesign design = registry.getFactory(type).newCartDesign(pad);
+				CommandManager.execute(Commands.DESIGN_ADD, design);
+				layouts.put(type, design);
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -173,7 +184,7 @@ public class PadSettings implements Cloneable {
 		return layouts.get(type);
 	}
 
-	public void setLayout(CartDesign layout, String type) {
+	public void setDesign(CartDesign layout, String type) {
 		this.layouts.put(type, layout);
 	}
 
@@ -206,8 +217,7 @@ public class PadSettings implements Cloneable {
 		return false;
 	}
 
-	@Override
-	public PadSettings clone() throws CloneNotSupportedException {
+	public PadSettings clone(Pad pad) throws CloneNotSupportedException {
 		PadSettings settings = (PadSettings) super.clone();
 		settings.volumeProperty = new SimpleDoubleProperty(getVolume());
 		settings.loopProperty = new SimpleBooleanProperty(isLoop());
@@ -227,10 +237,10 @@ public class PadSettings implements Cloneable {
 		else
 			settings.warningProperty = new SimpleObjectProperty<>();
 
-		settings.customLayoutProperty = new SimpleBooleanProperty(isCustomLayout());
+		settings.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
 		settings.layouts = new HashMap<>();
 		for (String key : layouts.keySet()) {
-			CartDesign clone = (CartDesign) layouts.get(key).clone();
+			CartDesign clone = layouts.get(key).clone(pad);
 			settings.layouts.put(key, clone);
 		}
 

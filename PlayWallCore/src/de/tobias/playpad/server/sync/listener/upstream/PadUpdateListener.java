@@ -53,7 +53,7 @@ public class PadUpdateListener {
 		}
 		JsonObject json = new JsonObject();
 		json.addProperty(PropertyDef.ID, pad.getUuid().toString());
-		json.addProperty(PropertyDef.PAD_PAGE, pad.getPage().getId().toString());
+		json.addProperty(PropertyDef.PAD_PAGE_REF, pad.getPage().getId().toString());
 		json.addProperty(PropertyDef.CMD, Commands.PAD_UPDATE);
 
 		handler.accept(json);

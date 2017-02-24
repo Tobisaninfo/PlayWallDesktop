@@ -1,5 +1,6 @@
 package de.tobias.playpad.design;
 
+import de.tobias.playpad.pad.Pad;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
@@ -30,5 +31,5 @@ public interface CartDesign {
 
 	void copyGlobalLayout(GlobalDesign globalLayout);
 	
-	Object clone() throws CloneNotSupportedException;
+	CartDesign clone(Pad pad) throws CloneNotSupportedException;
 }

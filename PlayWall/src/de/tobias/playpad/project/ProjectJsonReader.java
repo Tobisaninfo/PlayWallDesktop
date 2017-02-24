@@ -1,5 +1,8 @@
 package de.tobias.playpad.project;
 
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.page.Page;
@@ -69,6 +72,14 @@ public class ProjectJsonReader {
 			pad.getPaths().add(path); // TODO Use addPath Method in right scope
 		}
 
+		if (!object.isNull("design")) {
+			ModernCartDesign design = readModernCartDesign(pad, object.getJSONObject("design"));
+			if (design != null) {
+				pad.getPadSettings().setDesign(design, ModernCartDesign.TYPE);
+				pad.getPadSettings().setCustomDesign(true); // TODO Sync
+			}
+		}
+
 		return pad;
 	}
 
@@ -80,5 +91,17 @@ public class ProjectJsonReader {
 		}
 
 		return new MediaPath(id, path, pad);
+	}
+
+	private ModernCartDesign readModernCartDesign(Pad pad, JSONObject object) {
+		System.out.println(object);
+		if (!object.isNull("id")) {
+			UUID id = UUID.fromString(object.getString("id"));
+			ModernColor backgroundColor = ModernColor.valueOf(object.getString("background_color"));
+			ModernColor playColor = ModernColor.valueOf(object.getString("play_color"));
+
+			return new ModernCartDesign(pad, id, backgroundColor, playColor);
+		}
+		return null;
 	}
 }

@@ -71,7 +71,7 @@ public class Pad implements Cloneable {
 	public Pad(Project project) {
 		this.project = project;
 		this.uuid = UUID.randomUUID();
-		this.padSettings = new PadSettings();
+		this.padSettings = new PadSettings(this);
 
 		initPadListener();
 		// Update Trigger ist nicht notwendig, da es in load(Element) ausgerufen wird
@@ -555,7 +555,7 @@ public class Pad implements Cloneable {
 			clone.mediaPaths.add(clonedPath);
 		}
 
-		clone.padSettings = padSettings.clone();
+		clone.padSettings = padSettings.clone(clone);
 
 		clone.controller = null;
 		clone.project = project;

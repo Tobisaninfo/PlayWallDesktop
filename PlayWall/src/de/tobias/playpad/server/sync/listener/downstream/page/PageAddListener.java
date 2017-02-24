@@ -21,7 +21,7 @@ public class PageAddListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			UUID project_id = UUID.fromString(json.get(PropertyDef.PAGE_PROJECT).getAsString());
+			UUID project_id = UUID.fromString(json.get(PropertyDef.PAGE_PROJECT_REF).getAsString());
 			String name = json.get(PropertyDef.PAGE_NAME).getAsString();
 			int position = json.get(PropertyDef.PAGE_POSITION).getAsInt();
 

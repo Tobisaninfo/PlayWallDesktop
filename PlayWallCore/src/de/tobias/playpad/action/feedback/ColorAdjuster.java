@@ -58,7 +58,7 @@ public class ColorAdjuster {
 			Color layoutStdColor = null;
 			Color layoutEvColor = null;
 
-			if (pad.getPadSettings().isCustomLayout()) {
+			if (pad.getPadSettings().isCustomDesign()) {
 				CartDesign layout = pad.getPadSettings().getDesign();
 				if (layout instanceof DesignColorAssociator) {
 					DesignColorAssociator associator = (DesignColorAssociator) layout;

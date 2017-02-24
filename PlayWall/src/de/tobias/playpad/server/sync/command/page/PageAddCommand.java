@@ -25,7 +25,7 @@ public class PageAddCommand implements Command {
 			// Add Data
 			json.addProperty(PropertyDef.ID, page.getId().toString());
 			UUID projectUuid = page.getProject().getProjectReference().getUuid();
-			json.addProperty(PropertyDef.PAGE_PROJECT, projectUuid.toString());
+			json.addProperty(PropertyDef.PAGE_PROJECT_REF, projectUuid.toString());
 			json.addProperty(PropertyDef.PAGE_POSITION, page.getPosition());
 			json.addProperty(PropertyDef.PAGE_NAME, page.getName());
 

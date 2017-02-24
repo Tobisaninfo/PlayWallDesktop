@@ -7,6 +7,8 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.downstream.design.DesignAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.pad.*;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
@@ -52,6 +54,9 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PATH_ADD, new PathAddListener());
 		commands.put(Commands.PATH_UPDATE, new PathUpdateListener());
 		commands.put(Commands.PATH_REMOVE, new PathRemoveListener());
+
+		commands.put(Commands.DESIGN_ADD, new DesignAddListener());
+		commands.put(Commands.DESIGN_UPDATE, new DesignUpdateListener());
 
 		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.CONNECTION_LOST);
 	}

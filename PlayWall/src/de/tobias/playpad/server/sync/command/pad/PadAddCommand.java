@@ -23,7 +23,7 @@ public class PadAddCommand implements Command {
 
 			// Add Data
 			json.addProperty(PropertyDef.ID, pad.getUuid().toString());
-			json.addProperty(PropertyDef.PAD_PAGE, pad.getPage().getId().toString());
+			json.addProperty(PropertyDef.PAD_PAGE_REF, pad.getPage().getId().toString());
 			json.addProperty(PropertyDef.PAD_POSITION, pad.getPosition());
 			json.addProperty(PropertyDef.PAD_NAME, pad.getName());
 			json.addProperty(PropertyDef.PAD_CONTENT_TYPE, pad.getContentType());

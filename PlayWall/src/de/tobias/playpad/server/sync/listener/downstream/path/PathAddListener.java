@@ -23,7 +23,7 @@ public class PathAddListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			UUID pad_id = UUID.fromString(json.get(PropertyDef.PATH_PAD).getAsString());
+			UUID pad_id = UUID.fromString(json.get(PropertyDef.PATH_PAD_REF).getAsString());
 			String path = json.get(PropertyDef.PATH_PATH).getAsString();
 
 			Project project = PlayPadPlugin.getImplementation().getCurrentProject();

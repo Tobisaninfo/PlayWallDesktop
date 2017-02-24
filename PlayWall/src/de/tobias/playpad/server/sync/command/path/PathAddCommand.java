@@ -25,7 +25,7 @@ public class PathAddCommand implements Command {
 
 			// Add Data
 			json.addProperty(PropertyDef.ID, mediaPath.getId().toString());
-			json.addProperty(PropertyDef.PATH_PAD, mediaPath.getPad().getUuid().toString());
+			json.addProperty(PropertyDef.PATH_PAD_REF, mediaPath.getPad().getUuid().toString());
 
 			Path path = mediaPath.getPath();
 			if (path != null) {
