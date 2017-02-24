@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -82,9 +82,9 @@ public class FileDragOptionView {
 		return parallelTransition;
 	}
 
-	private ContentFactory selectedConnect;
+	private PadContentFactory selectedConnect;
 
-	public void showDropOptions(Set<ContentFactory> options) {
+	public void showDropOptions(Set<PadContentFactory> options) {
 		if (!parent.getChildren().contains(optionPane)) {
 			selectedConnect = null;
 
@@ -131,7 +131,7 @@ public class FileDragOptionView {
 
 	}
 
-	public void showDropOptions(Set<ContentFactory> options, Consumer<ContentFactory> onFinish) {
+	public void showDropOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
 		showDropOptions(options);
 
 		for (Node node : optionPane.getChildren()) {
@@ -139,7 +139,7 @@ public class FileDragOptionView {
 				Label label = (Label) node;
 				label.setOnMouseClicked(ev ->
 				{
-					onFinish.accept((ContentFactory) label.getUserData());
+					onFinish.accept((PadContentFactory) label.getUserData());
 				});
 				label.setOnMouseEntered(e ->
 				{
@@ -153,7 +153,7 @@ public class FileDragOptionView {
 		}
 	}
 
-	public ContentFactory getSelectedConnect() {
+	public PadContentFactory getSelectedConnect() {
 		return selectedConnect;
 	}
 

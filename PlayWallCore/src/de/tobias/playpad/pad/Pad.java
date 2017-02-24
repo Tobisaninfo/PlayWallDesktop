@@ -1,12 +1,13 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
@@ -401,7 +402,7 @@ public class Pad implements Cloneable {
 		}
 
 		if (contentType != null) {
-			ContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
+			PadContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
 			PadContent newContent = factory.newInstance(this);
 			contentProperty.set(newContent);
 			newContent.loadMedia();

@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import de.tobias.playpad.audio.AudioEqualizeable;
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;

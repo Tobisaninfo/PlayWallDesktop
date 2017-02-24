@@ -3,7 +3,7 @@ package de.tobias.playpad.server.sync.listener.downstream.path;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.sync.PropertyDef;

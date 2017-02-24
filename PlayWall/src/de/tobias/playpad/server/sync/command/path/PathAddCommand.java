@@ -2,7 +2,7 @@ package de.tobias.playpad.server.sync.command.path;
 
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;

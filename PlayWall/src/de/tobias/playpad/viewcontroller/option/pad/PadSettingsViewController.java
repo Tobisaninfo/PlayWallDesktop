@@ -9,7 +9,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.path.MultiPathContent;
@@ -61,8 +61,8 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 				String type = pad.getContent().getType();
 				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
 
-				ContentFactory contentFactory = registry.getFactory(type);
-				PadSettingsTabViewController contentTab = contentFactory.getSettingsViewController(pad);
+				PadContentFactory padContentFactory = registry.getFactory(type);
+				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
 
 				if (contentTab != null)
 					addTab(contentTab);

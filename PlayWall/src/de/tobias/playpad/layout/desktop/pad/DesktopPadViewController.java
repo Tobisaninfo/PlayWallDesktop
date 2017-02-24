@@ -7,8 +7,7 @@ import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.content.ContentFactory;
-import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
@@ -35,7 +34,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -225,7 +223,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		if (file != null) {
 			Path path = file.toPath();
 
-			Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+			Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 			if (!connects.isEmpty()) {
 				if (connects.size() > 1) { // Multiple content types possible
 					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
@@ -237,7 +235,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 						}
 					});
 				} else {
-					ContentFactory connect = connects.iterator().next();
+					PadContentFactory connect = connects.iterator().next();
 					setNewPadContent(path, connect);
 				}
 			}
@@ -246,7 +244,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
-	private void setNewPadContent(Path path, ContentFactory connect) {
+	private void setNewPadContent(Path path, PadContentFactory connect) {
 		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
 			this.pad.setContentType(connect.getType());
 		}

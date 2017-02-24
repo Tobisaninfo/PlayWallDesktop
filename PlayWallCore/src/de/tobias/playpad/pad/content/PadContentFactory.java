@@ -10,10 +10,10 @@ import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
 
-// COMMENT ContentFactory
-public abstract class ContentFactory extends Component implements Comparable<ContentFactory> {
+// COMMENT PadContentFactory
+public abstract class PadContentFactory extends Component implements Comparable<PadContentFactory> {
 
-	public ContentFactory(String type) {
+	public PadContentFactory(String type) {
 		super(type);
 	}
 
@@ -32,11 +32,11 @@ public abstract class ContentFactory extends Component implements Comparable<Con
 	public abstract String[] getSupportedTypes();
 
 	@Override
-	public int compareTo(ContentFactory o) {
+	public int compareTo(PadContentFactory o) {
 		return getType().compareTo(o.getType());
 	}
 
-	public static boolean isFileTypeSupported(Path path, ContentFactory connect) {
+	public static boolean isFileTypeSupported(Path path, PadContentFactory connect) {
 		String extension = FileUtils.getFileExtention(path);
 		for (String ex : connect.getSupportedTypes()) {
 			if (ex.endsWith(extension)) {

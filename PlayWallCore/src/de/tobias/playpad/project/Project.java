@@ -1,6 +1,6 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.page.PadIndex;

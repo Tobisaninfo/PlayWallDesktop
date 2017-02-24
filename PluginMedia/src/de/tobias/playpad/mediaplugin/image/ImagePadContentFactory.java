@@ -1,7 +1,7 @@
 package de.tobias.playpad.mediaplugin.image;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -17,11 +17,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class ImageContentConnect extends ContentFactory {
+public class ImagePadContentFactory extends PadContentFactory {
 
 	private static final String[] FILE_EXTENSION = { "*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif" };
 
-	public ImageContentConnect(String type) {
+	public ImagePadContentFactory(String type) {
 		super(type);
 	}
 

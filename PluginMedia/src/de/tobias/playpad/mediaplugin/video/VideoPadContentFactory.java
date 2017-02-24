@@ -4,7 +4,7 @@ import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.mediaplugin.main.impl.MediaSettingsTabViewController;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
@@ -16,11 +16,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class VideoContentConntect extends ContentFactory {
+public class VideoPadContentFactory extends PadContentFactory {
 
 	public static final String[] FILE_EXTENSION = { "*.mp4", "*.mov" };
 
-	public VideoContentConntect(String type) {
+	public VideoPadContentFactory(String type) {
 		super(type);
 	}
 

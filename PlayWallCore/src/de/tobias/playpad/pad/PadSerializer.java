@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;

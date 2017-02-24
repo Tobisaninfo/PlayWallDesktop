@@ -1,5 +1,6 @@
-package de.tobias.playpad.pad;
+package de.tobias.playpad.pad.mediapath;
 
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.server.sync.command.CommandManager;
@@ -112,7 +113,7 @@ public class MediaPath implements Cloneable {
 		pathListener.addListener();
 	}
 
-	void removeSyncListener() {
+	public void removeSyncListener() {
 		pathListener.removeListener();
 	}
 

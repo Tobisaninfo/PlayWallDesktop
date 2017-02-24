@@ -1,16 +1,7 @@
 package de.tobias.playpad.pad.content;
 
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.utils.util.ZipFile;
-import org.dom4j.Element;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Verarbeitet den Inhalt eines Pads. Die Einstellungen und der Status ist in Pad ausgelagert.

@@ -3,7 +3,7 @@ package de.tobias.playpad.mediaplugin.video;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import de.tobias.playpad.pad.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;

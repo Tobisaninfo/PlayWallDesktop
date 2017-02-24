@@ -12,11 +12,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
-public class AudioContentFactory extends ContentFactory {
+public class AudioPadContentFactory extends PadContentFactory {
 
 	public static final String[] FILE_EXTENSION = { "*.mp3", "*.wav" };
 
-	public AudioContentFactory(String type) {
+	public AudioPadContentFactory(String type) {
 		super(type);
 	}
 
