@@ -1,5 +1,7 @@
 package de.tobias.playpad.design.modern;
 
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.DesignUpdateListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -258,6 +260,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		syncListener = new DesignUpdateListener(clone);
 		if (pad.getProject().getProjectReference().isSync()) {
 			addListener();
+			CommandManager.execute(Commands.DESIGN_ADD, clone);
 		}
 
 		return clone;
