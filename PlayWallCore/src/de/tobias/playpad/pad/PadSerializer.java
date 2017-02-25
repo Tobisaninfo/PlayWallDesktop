@@ -46,7 +46,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
 	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
 
-	public static final String CONTENT_ELEMENT = "Content";
+	private static final String CONTENT_ELEMENT = "Content";
 	private static final String CONTENT_TYPE_ATTR = "type";
 	private static final String CONTENT_PATHS_ELEMENT = "Paths";
 	private static final String CONTENT_PATH_ELEMENT = "Path";
