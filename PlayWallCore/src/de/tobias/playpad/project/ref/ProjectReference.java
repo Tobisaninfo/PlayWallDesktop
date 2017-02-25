@@ -36,7 +36,7 @@ public class ProjectReference implements Displayable {
 	 * @param name name
 	 */
 	public ProjectReference(UUID uuid, String name) {
-		this(uuid, name, null, true);
+		this(uuid, name, null, false);
 		updateDisplayProperty();
 	}
 

@@ -25,6 +25,7 @@ import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
+import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -64,7 +65,7 @@ public class ServerImpl implements Server {
 	private void registerCommands() {
 		CommandManager.register(Commands.PROJECT_ADD, new ProjectAddCommand());
 		//CommandManager.register(Commands.PROJECT_UPDATE, new Project);
-		CommandManager.register(Commands.PROJECT_REMOVE, new PadAddCommand());
+		CommandManager.register(Commands.PROJECT_REMOVE, new ProjectRemoveCommand());
 
 		CommandManager.register(Commands.PAGE_ADD, new PageAddCommand());
 		//CommandManager.register(Commands.PAGE_UPDATE, new PadAddCommand());

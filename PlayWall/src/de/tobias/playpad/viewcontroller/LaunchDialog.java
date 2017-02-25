@@ -5,9 +5,11 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.importer.ConverterV6;
 import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.project.ref.ProjectReferenceSerializer;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -18,6 +20,7 @@ import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -35,11 +38,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static de.tobias.utils.util.Localization.getString;
 
@@ -52,8 +63,10 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 
 	@FXML private ListView<ProjectReference> projectListView;
 
-	@FXML private Button newProfileButton;
-	@FXML private Button importProfileButton;
+	@FXML private Button newProjectButton;
+	@FXML private Button importProjectButton;
+	@FXML private Button convertProjectButton;
+
 	@FXML private Button openButton;
 	@FXML private Button deleteButton;
 
@@ -61,9 +74,13 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 
 	public LaunchDialog(Stage stage) {
 		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
-		projectListView.getItems().addAll(ProjectReferenceManager.getProjectsSorted());
+		setProjectListValues();
 
 		applyViewControllerToStage(stage);
+	}
+
+	private void setProjectListValues() {
+		projectListView.getItems().setAll(ProjectReferenceManager.getProjectsSorted());
 	}
 
 	@Override
@@ -72,11 +89,7 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 
 		// Setup launchscreen labels and image
 		infoLabel.setText(getString(Strings.UI_Dialog_Launch_Info, app.getInfo().getName(), app.getInfo().getVersion()));
-		try {
-			imageView.setImage(new Image(IMAGE));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		imageView.setImage(new Image(IMAGE));
 
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
@@ -87,15 +100,13 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 		projectListView.setCellFactory(list -> new ProjectCell(true));
 
 		// List selection listener
-		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
-		{
+		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
 			openButton.setDisable(c == null);
 			deleteButton.setDisable(c == null);
 		});
 
 		// Mouse Double Click on list
-		projectListView.setOnMouseClicked(mouseEvent ->
-		{
+		projectListView.setOnMouseClicked(mouseEvent -> {
 			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 				if (mouseEvent.getClickCount() == 2) {
 					if (!projectListView.getSelectionModel().isEmpty()) {
@@ -105,6 +116,7 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 			}
 		});
 
+		// Cloud Info Label
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		FontIcon icon = new FontIcon(FontAwesomeType.CLOUD);
 		switch (server.getConnectionState()) {
@@ -136,7 +148,7 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	}
 
 	@FXML
-	private void newProfileButtonHandler(ActionEvent event) {
+	private void newProjectButtonHandler(ActionEvent event) {
 		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
@@ -150,7 +162,7 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	}
 
 	@FXML
-	private void importProfileButtonHandler(ActionEvent event) {
+	private void importProjectButtonHandler(ActionEvent event) {
 		// TODO Import Projects
 		/*FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
@@ -168,6 +180,37 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 				e.printStackTrace();
 			}
 		}*/
+	}
+
+	@FXML
+	private void convertProjectButtonHandler(ActionEvent event) {
+		try {
+			List<ProjectReference> projects = ConverterV6.loadProjectReferences();
+			ChoiceDialog<ProjectReference> dialog = new ChoiceDialog<>(null, projects);
+
+			dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Project_Convert_Header));
+			dialog.setContentText(Localization.getString(Strings.UI_Dialog_Project_Convert_Content));
+
+			dialog.initOwner(getContainingWindow());
+			dialog.initModality(Modality.WINDOW_MODAL);
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+			Optional<ProjectReference> result = dialog.showAndWait();
+			result.ifPresent((ref) -> {
+				try {
+					ConverterV6.convert(ref.getUuid(), ref.getName());
+					ProjectReferenceManager.addProjectReference(ref);
+					setProjectListValues();
+				} catch (IOException | DocumentException e) {
+					e.printStackTrace();
+					showErrorMessage(Localization.getString(Strings.Error_Project_Convert));
+				}
+			});
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Standard_Gen));
+		}
 	}
 
 	@FXML

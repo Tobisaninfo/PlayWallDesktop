@@ -89,6 +89,10 @@ public class Strings {
 	// UI - Dialog - ProjectManager
 	public static final String UI_Dialog_ProjectManager_Delete_Content = "UI.Dialog.ProjectManager.Delete.Content";
 
+	// UI - Dialog - Project Convert
+	public static final String UI_Dialog_Project_Convert_Header = "UI.Dialog.Project.Convert.Header";
+	public static final String UI_Dialog_Project_Convert_Content = "UI.Dialog.Project.Convert.Content";
+
 	// UI - Dialog - Profile
 	public static final String UI_Dialog_Profile_Delete_Content = "UI.Dialog.Profile.Delete.Content";
 
@@ -137,6 +141,7 @@ public class Strings {
 
 	// Error - Project
 	public static final String Error_Project_Create = "Error.Project.Create";
+	public static final String Error_Project_Convert = "Error.Project.Convert";
 	public static final String Error_Project_NotFound = "Error.Project.NotFound";
 	public static final String Error_Project_Open = "Error.Project.Open";
 	public static final String Error_Project_Save = "Error.Project.Save";

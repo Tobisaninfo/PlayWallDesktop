@@ -90,13 +90,17 @@ public final class ProjectReferenceManager {
 			CommandManager.execute(Commands.PROJECT_ADD, project);
 		}
 
+		addProjectReference(ref);
+
+		return ref;
+	}
+
+	public static void addProjectReference(ProjectReference ref) throws IOException {
 		// Add to Project List
 		if (!projects.contains(ref)) {
 			projects.add(ref);
 		}
 		saveProjects();
-
-		return ref;
 	}
 
 	/**
@@ -158,7 +162,7 @@ public final class ProjectReferenceManager {
 
 	// Load and Save
 	private static final String FILE_NAME = "Projects.xml";
-	private static final String PROJECT_ELEMENT = "Project";
+	public static final String PROJECT_ELEMENT = "Project";
 	private static final String ROOT_ELEMENT = "Settings";
 
 	public static void loadProjects() throws DocumentException, IOException {

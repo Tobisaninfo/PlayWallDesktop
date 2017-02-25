@@ -1,6 +1,7 @@
 package de.tobias.playpad.project.importer;
 
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import org.dom4j.Document;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -46,11 +49,12 @@ public class ConverterV6 {
 					String type = contentElement.attributeValue("type");
 					String path = contentElement.getStringValue();
 
-					contentElement.addAttribute(CONTENT_TYPE_ATTR, type);
-
+					// Remove Old
 					padElement.remove(contentElement);
 
+					// Add New
 					contentElement = padElement.addElement("Content");
+					contentElement.addAttribute(CONTENT_TYPE_ATTR, type);
 
 					Element pathsElement = contentElement.addElement(CONTENT_PATHS_ELEMENT);
 
@@ -63,6 +67,27 @@ public class ConverterV6 {
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(desPath), OutputFormat.createPrettyPrint());
 		writer.write(document);
 		writer.close();
+	}
+
+	public static List<ProjectReference> loadProjectReferences() throws IOException, DocumentException {
+		List<ProjectReference> projects = new ArrayList<>();
+		Path projectReferencesPath = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION).resolve("../../de.tobias.playpad.v6/Config/Projects.xml");
+		if (Files.exists(projectReferencesPath)) {
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(Files.newInputStream(projectReferencesPath));
+			for (Object object : document.getRootElement().elements(ProjectReferenceManager.PROJECT_ELEMENT)) {
+				if (object instanceof Element) {
+					Element element = (Element) object;
+
+					UUID uuid = UUID.fromString(element.attributeValue("uuid"));
+					String name = element.attributeValue("name");
+
+					ProjectReference ref = new ProjectReference(uuid, name);
+					projects.add(ref);
+				}
+			}
+		}
+		return projects;
 	}
 
 }
