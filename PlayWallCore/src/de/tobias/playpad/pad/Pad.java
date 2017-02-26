@@ -429,6 +429,15 @@ public class Pad implements Cloneable {
 		return padSettings;
 	}
 
+	/**
+	 * Set the settings of a pad. Be careful.
+	 *
+	 * @param padSettings new settings
+	 */
+	public void setPadSettings(PadSettings padSettings) {
+		this.padSettings = padSettings;
+	}
+
 	/*
 	 * Utils
 	 */

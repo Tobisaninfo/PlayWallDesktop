@@ -178,7 +178,9 @@ public class PadSettings implements Cloneable {
 			DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
 			try {
 				CartDesign design = registry.getFactory(type).newCartDesign(pad);
-				CommandManager.execute(Commands.DESIGN_ADD, design);
+				if (pad.getProject().getProjectReference().isSync()) {
+					CommandManager.execute(Commands.DESIGN_ADD, design);
+				}
 				setDesign(design, type);
 			} catch (NoSuchComponentException e) {
 				// TODO Auto-generated catch block
@@ -190,7 +192,9 @@ public class PadSettings implements Cloneable {
 
 	public void setDesign(CartDesign layout, String type) {
 		this.layouts.put(type, layout);
-		layout.addListener();
+		if (pad.getProject().getProjectReference().isSync()) {
+			layout.addListener();
+		}
 	}
 
 	public HashMap<String, Object> getCustomSettings() {

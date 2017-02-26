@@ -66,11 +66,16 @@ public final class ProjectReferenceManager {
 
 		ProjectReader reader;
 		if (projectReference.isSync() && server.getConnectionState() == ConnectionState.CONNECTED) {
-			reader = new ProjectSyncReader();
+			reader = new ProjectSyncSerializer();
 		} else {
 			reader = new ProjectSerializer();
 		}
 		return reader.read(projectReference, delegate);
+	}
+
+	public static void saveProject(Project project) throws IOException {
+		ProjectWriter writer = new ProjectSerializer();
+		writer.write(project);
 	}
 
 	/**
@@ -87,7 +92,7 @@ public final class ProjectReferenceManager {
 		Project project = new Project(ref);
 
 		// Save To Disk
-		ProjectSerializer.save(project);
+		saveProject(project);
 
 		// Save To Cloud
 		if (ref.isSync()) {

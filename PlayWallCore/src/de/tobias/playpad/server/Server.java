@@ -51,7 +51,7 @@ public interface Server {
 	List<ProjectReference> getSyncedProjects() throws IOException, LoginException;
 
 	/**
-	 * Load the project from the server.
+	 * Load the project from the server without local additional settings. To Load the full project you must use the {@link de.tobias.playpad.project.ProjectSyncSerializer}
 	 *
 	 * @param ref project reference
 	 * @return project

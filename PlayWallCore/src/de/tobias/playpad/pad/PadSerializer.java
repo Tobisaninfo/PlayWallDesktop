@@ -25,26 +25,12 @@ import javafx.util.Duration;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
-	private static final String UUID_ATTR = "uuid";
+	public static final String UUID_ATTR = "uuid";
 	private static final String INDEX_ATTR = "index";
 	private static final String NAME_ATTR = "name";
 	private static final String STATUS_ATTR = "status";
 
-	private static final String SETTINGS_ELEMENT = "Settings";
-	private static final String VOLUME_ELEMENT = "Volume";
-	private static final String LOOP_ELEMENT = "Loop";
-	private static final String TIMEMODE_ELEMENT = "TimeMode";
-	private static final String FADE_ELEMENT = "Fade";
-	private static final String WARNING_ELEMENT = "Warning";
-
-	private static final String LAYOUTS_ELEMENT = "Layouts";
-	private static final String LAYOUT_ACTIVE_ATTR = "active";
-	private static final String LAYOUT_TYPE_ATTR = "type";
-	private static final String LAYOUT_ELEMENT = "Layout";
-
-	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
-	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
-	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
+	public static final String SETTINGS_ELEMENT = "Settings";
 
 	private static final String CONTENT_ELEMENT = "Content";
 	private static final String CONTENT_TYPE_ATTR = "type";
@@ -73,76 +59,9 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 		// Settings
 		Element settingsElement = element.element(SETTINGS_ELEMENT);
-		PadSettings padSettings = pad.getPadSettings();
-
-		if (settingsElement.element(VOLUME_ELEMENT) != null)
-			padSettings.setVolume(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
-		if (settingsElement.element(LOOP_ELEMENT) != null)
-			padSettings.setLoop(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
-		if (settingsElement.element(TIMEMODE_ELEMENT) != null)
-			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIMEMODE_ELEMENT).getStringValue()));
-		if (settingsElement.element(FADE_ELEMENT) != null)
-			padSettings.setFade(Fade.load(settingsElement.element(FADE_ELEMENT)));
-		if (settingsElement.element(WARNING_ELEMENT) != null) {
-			try {
-				Duration duration = Duration.valueOf(settingsElement.element(WARNING_ELEMENT).getStringValue().replace(" ", ""));
-				padSettings.setWarning(duration);
-			} catch (Exception e) {
-				padSettings.setWarning(Duration.seconds(5));
-			}
-		}
-
-		// Layout
-		Element layoutsElement = settingsElement.element(LAYOUTS_ELEMENT);
-		if (layoutsElement != null) {
-			if (layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR) != null) {
-				padSettings.setCustomDesign(Boolean.valueOf(layoutsElement.attributeValue(LAYOUT_ACTIVE_ATTR)));
-			}
-
-			for (Object layoutObj : layoutsElement.elements(LAYOUT_ELEMENT)) {
-				if (layoutObj instanceof Element) {
-					Element layoutElement = (Element) layoutObj;
-					String type = layoutElement.attributeValue(LAYOUT_TYPE_ATTR);
-
-					try {
-						DefaultRegistry<DesignFactory> layouts = PlayPadPlugin.getRegistryCollection().getDesigns();
-						CartDesign layout = layouts.getFactory(type).newCartDesign(pad);
-						layout.load(layoutElement);
-
-						padSettings.setDesign(layout, type);
-					} catch (NoSuchComponentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		Element userInfoElement = settingsElement.element(CUSTOM_SETTINGS_ELEMENT);
-		if (userInfoElement != null) {
-			for (Object object : userInfoElement.elements()) {
-				if (object instanceof Element) {
-					Element item = (Element) object;
-					String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
-					Object data = UserDefaults.loadElement(item);
-					padSettings.getCustomSettings().put(key, data);
-				}
-			}
-		}
-
-		// Trigger
-		Element triggersElement = element.element("Triggers"); // TODO Externalize
-		if (triggersElement != null) {
-			for (Object triggerObj : triggersElement.elements("Trigger")) {
-				if (triggerObj instanceof Element) {
-					Element triggerElement = (Element) triggerObj;
-					Trigger trigger = new Trigger();
-					trigger.load(triggerElement);
-					padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
-				}
-			}
-		}
-		padSettings.updateTrigger(); // Damit alle Points da sind
+		PadSettingsSerializer padSettingsSerializer = new PadSettingsSerializer();
+		PadSettings settings = padSettingsSerializer.loadElement(settingsElement, pad);
+		pad.setPadSettings(settings);
 
 		// Content
 		Element contentElement = element.element(CONTENT_ELEMENT);
@@ -182,41 +101,9 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 		// Settings
 		Element settingsElement = element.addElement(SETTINGS_ELEMENT);
-		PadSettings padSettings = data.getPadSettings();
-
-		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(padSettings.getVolume()));
-		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(padSettings.isLoop()));
-		if (padSettings.isCustomTimeMode())
-			settingsElement.addElement(TIMEMODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
-		if (padSettings.isCustomWarning())
-			settingsElement.addElement(WARNING_ELEMENT).addText(padSettings.getWarning().toString());
-		if (padSettings.isCustomFade())
-			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
-
-		// Layout
-		Element layoutsElement = settingsElement.addElement(LAYOUTS_ELEMENT);
-		layoutsElement.addAttribute(LAYOUT_ACTIVE_ATTR, String.valueOf(padSettings.isCustomDesign()));
-		for (String layoutType : padSettings.getDesigns().keySet()) {
-			Element layoutElement = layoutsElement.addElement(LAYOUT_ELEMENT);
-			layoutElement.addAttribute(LAYOUT_TYPE_ATTR, layoutType);
-
-			CartDesign cartLayout = padSettings.getDesigns().get(layoutType);
-			cartLayout.save(layoutElement);
-		}
-
-		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
-		for (String key : padSettings.getCustomSettings().keySet()) {
-			Element itemElement = userInfoElement.addElement(CUSTOM_SETTINGS_ITEM_ELEMENT);
-			UserDefaults.save(itemElement, padSettings.getCustomSettings().get(key), key);
-		}
-
-		// Trigger
-		Element triggersElement = element.addElement("Triggers");
-		for (TriggerPoint point : padSettings.getTriggers().keySet()) {
-			Trigger trigger = padSettings.getTriggers().get(point);
-			Element triggerElement = triggersElement.addElement("Trigger");
-			trigger.save(triggerElement);
-		}
+		PadSettings settings = data.getPadSettings();
+		PadSettingsSerializer serializer = new PadSettingsSerializer();
+		serializer.saveElement(settingsElement, settings);
 
 		// Content
 		PadContent content = data.getContent();

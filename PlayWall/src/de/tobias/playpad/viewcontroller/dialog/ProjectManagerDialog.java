@@ -270,7 +270,7 @@ public class ProjectManagerDialog extends NVC implements NotificationHandler {
 		// Speicher das Aktuelle Projekt erst, damit es in der Exportmethode seperat neu geladen werden kann
 		if (currentProject.getProjectReference().equals(selectedProject)) {
 			try {
-				ProjectSerializer.save(currentProject);
+				ProjectReferenceManager.saveProject(currentProject);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

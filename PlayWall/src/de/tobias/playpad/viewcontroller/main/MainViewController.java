@@ -17,6 +17,7 @@ import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -279,7 +280,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			}
 
 			// Save Dialog
-			if (globalSettings.isIgnoreSaveDialog()) {
+			if (globalSettings.isIgnoreSaveDialog() || openProject.getProjectReference().isSync()) {
 				saveProject();
 			} else {
 				SaveDialog alert = new SaveDialog(getStage());
@@ -324,7 +325,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				ProjectSerializer.save(openProject);
+				ProjectReferenceManager.saveProject(openProject);
 				System.out.println("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {

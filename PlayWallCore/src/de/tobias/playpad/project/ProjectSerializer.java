@@ -21,13 +21,13 @@ import java.util.List;
 /**
  * Created by tobias on 19.02.17.
  */
-public class ProjectSerializer implements ProjectReader {
+public class ProjectSerializer implements ProjectReader, ProjectWriter {
 
 
 	private static final String ROOT_ELEMENT = "Project";
-	private static final String PAGE_ELEMENT = "Page";
+	static final String PAGE_ELEMENT = "Page";
 	public static final String PAD_ELEMENT = "Pad";
-	private static final String SETTINGS_ELEMENT = "Settings";
+	static final String SETTINGS_ELEMENT = "Settings";
 
 	@Override
 	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException {
@@ -66,7 +66,8 @@ public class ProjectSerializer implements ProjectReader {
 		return project;
 	}
 
-	public static void save(Project project) throws IOException {
+	@Override
+	public void write(Project project) throws IOException {
 		Path projectPath = project.projectReference.getProjectPath();
 
 		// Modules clearen und beim Speichern der pads neu setzen, damit alte Modules, die nicht gebracht werden, entfernt werden können.

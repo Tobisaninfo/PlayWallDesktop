@@ -521,7 +521,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
 		try {
-			ProjectSerializer.save(openProject);
+			ProjectReferenceManager.saveProject(openProject);
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
