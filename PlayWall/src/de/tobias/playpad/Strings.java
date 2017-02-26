@@ -87,6 +87,7 @@ public class Strings {
 	public static final String UI_Dialog_Import_ReplaceMedia_Skip = "UI.Dialog.Import.ReplaceMedia.Skip";
 
 	// UI - Dialog - ProjectManager
+	public static final String UI_Dialog_ProjectManager_Delete_Header = "UI.Dialog.ProjectManager.Delete.Header";
 	public static final String UI_Dialog_ProjectManager_Delete_Content = "UI.Dialog.ProjectManager.Delete.Content";
 
 	// UI - Dialog - Project Convert
@@ -150,6 +151,7 @@ public class Strings {
 	public static final String Error_Project_Export = "Error.Project.Export";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 	public static final String Error_Project_PageCount = "Error.Project.PageCount";
+	public static final String Error_Project_Sync_Change = "Error.Project.Sync.Change";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";

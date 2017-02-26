@@ -202,7 +202,7 @@ public class ModernGlobalDesign extends Design implements GlobalDesign, DesignCo
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomDesign()) {
-				CartDesign layoutOpt = padSettings.getDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
+				CartDesign layoutOpt = padSettings.getOrCreateDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
 				css += "\n" + layoutOpt.convertToCss(pad.getPadIndex().toString(), true);
 			}
 		}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ListView fx:id="projectList" />
+      <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+         <children>
+            <Label text="Projektdetails:" underline="true" />
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="Name:" />
+                  <TextField fx:id="nameTextfield" maxWidth="200.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="Profil:" />
+                  <ComboBox fx:id="profileCombobox" maxWidth="200.0" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <Label text="Cloud:" underline="true" />
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="Status:" />
+                  <CheckBox fx:id="syncCheckbox" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Synchronisieren" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Button fx:id="syncSettingsButton" mnemonicParsing="false" onAction="#syncSettingsHandler" prefWidth="200.0" text="Cloud Einstellungen" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="114.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <Label text="Verwalten:" underline="true" />
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="Teilen:" />
+                  <Button fx:id="projectExportButton" mnemonicParsing="false" onAction="#projectExportHandler" prefWidth="200.0" text="Projekt exportieren" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="14.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="Löschen:" />
+                  <Button fx:id="projectDeleteButton" mnemonicParsing="false" onAction="#projectDeleteHandler" prefWidth="200.0" text="Löschen" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Separator prefWidth="200.0" />
+            <HBox spacing="14.0">
+               <children>
+                  <Label minWidth="100.0" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelHandler" prefWidth="93.0" text="Abbrechen" />
+                  <Button fx:id="openButton" mnemonicParsing="false" onAction="#openHandler" prefWidth="93.0" text="Öffnen" />
+               </children>
+            </HBox>
+         </children>
+         <HBox.margin>
+            <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+         </HBox.margin>
+      </VBox>
+   </children>
+</HBox>

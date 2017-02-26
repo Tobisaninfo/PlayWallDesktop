@@ -61,10 +61,9 @@ public class ProjectCell extends ListCell<ProjectReference> {
 				HBox.setHgrow(nameBox, Priority.ALWAYS);
 				rootBox.getChildren().add(nameBox);
 
-				if (ref.isSync()) {
-					FontIcon graphics = new FontIcon(FontAwesomeType.CLOUD);
-					rootBox.getChildren().add(graphics);
-				}
+				FontIcon cloudGraphics = new FontIcon(FontAwesomeType.CLOUD);
+				cloudGraphics.visibleProperty().bind(ref.syncProperty());
+				rootBox.getChildren().add(cloudGraphics);
 
 				// File not Exists
 				Path path = ref.getProjectPath();

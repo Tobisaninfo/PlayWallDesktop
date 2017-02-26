@@ -55,7 +55,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 					padSettings.setCustomDesign(true);
 
 					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartDesign layout = padSettings.getDesign(layoutType);
+					CartDesign layout = padSettings.getOrCreateDesign(layoutType);
 					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
 
 					setLayoutViewController(pad);
@@ -88,7 +88,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	private void setLayoutViewController(Pad pad) {
 		try {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartDesign layout = pad.getPadSettings().getDesign(layoutType);
+			CartDesign layout = pad.getPadSettings().getOrCreateDesign(layoutType);
 
 			DesignFactory component = PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType);
 			CartDesignViewController controller = component.getCartDesignViewController(layout);

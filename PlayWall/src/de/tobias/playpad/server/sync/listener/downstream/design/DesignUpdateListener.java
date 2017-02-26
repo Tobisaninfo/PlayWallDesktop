@@ -32,7 +32,7 @@ public class DesignUpdateListener implements ServerListener {
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {
-					CartDesign design = pad.getPadSettings().getDesign(ModernCartDesign.TYPE);
+					CartDesign design = pad.getPadSettings().getOrCreateDesign(ModernCartDesign.TYPE);
 					if (design != null && design instanceof ModernCartDesign) {
 						ModernCartDesign modernCartDesign = (ModernCartDesign) design;
 						if (modernCartDesign.getId().equals(uuid)) {

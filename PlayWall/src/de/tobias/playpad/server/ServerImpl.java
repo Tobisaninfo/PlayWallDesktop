@@ -14,6 +14,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectJsonReader;
+import de.tobias.playpad.project.ProjectJsonWriter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
@@ -170,6 +171,25 @@ public class ServerImpl implements Server {
 			return reader.read(ref);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void postProject(Project project) throws IOException {
+		String url = "https://" + host + "/projects";
+		Session session = PlayPadMain.getProgramInstance().getSession();
+		try {
+			ProjectJsonWriter writer = new ProjectJsonWriter();
+
+			String value = writer.write(project).toString();
+			System.out.println(value);
+
+			Unirest.post(url)
+					.queryString("session", session.getKey())
+					.queryString("project", value)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage(), e);
 		}
 	}
 

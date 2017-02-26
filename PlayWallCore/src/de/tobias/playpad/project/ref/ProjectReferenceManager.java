@@ -56,6 +56,12 @@ public final class ProjectReferenceManager {
 	}
 
 	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+		Project project = loadProjectImpl(projectReference, delegate);
+		Worker.runLater(project::loadPadsContent);
+		return project;
+	}
+
+	private static Project loadProjectImpl(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException {
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 
 		ProjectReader reader;
@@ -64,9 +70,7 @@ public final class ProjectReferenceManager {
 		} else {
 			reader = new ProjectSerializer();
 		}
-		Project project = reader.read(projectReference, delegate);
-		Worker.runLater(project::loadPadsContent);
-		return project;
+		return reader.read(projectReference, delegate);
 	}
 
 	/**
@@ -87,7 +91,7 @@ public final class ProjectReferenceManager {
 
 		// Save To Cloud
 		if (ref.isSync()) {
-			CommandManager.execute(Commands.PROJECT_ADD, project);
+			CommandManager.execute(Commands.PROJECT_ADD, ref);
 		}
 
 		addProjectReference(ref);
@@ -235,5 +239,19 @@ public final class ProjectReferenceManager {
 		projects.forEach(items::add);
 		items.sort((o1, o2) -> Long.compare(o2.getLastModified(), o1.getLastModified()));
 		return items;
+	}
+
+	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+
+		if (newValue) {
+			Project project = loadProjectImpl(reference, null); // TODO null for delegate
+			CommandManager.execute(Commands.PROJECT_ADD, reference);
+			server.postProject(project);
+		} else {
+			CommandManager.execute(Commands.PROJECT_REMOVE, reference);
+		}
+
+		reference.setSync(newValue);
 	}
 }

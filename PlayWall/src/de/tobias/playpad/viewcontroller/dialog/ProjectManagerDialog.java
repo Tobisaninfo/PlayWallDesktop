@@ -35,6 +35,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+@Deprecated
 public class ProjectManagerDialog extends NVC implements NotificationHandler {
 
 	@FXML private ListView<ProjectReference> projectList;

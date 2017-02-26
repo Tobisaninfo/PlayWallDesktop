@@ -8,8 +8,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.nio.file.Path;
 import java.util.Collection;
@@ -25,7 +24,7 @@ public class ProjectReference implements Displayable {
 	private ProfileReference profileReference;
 	private Set<Module> requestedModules;
 
-	private boolean sync;
+	private BooleanProperty sync;
 
 	private long lastModified;
 
@@ -58,7 +57,7 @@ public class ProjectReference implements Displayable {
 	public ProjectReference(UUID uuid, String name, long lastModified, ProfileReference profileReference, Set<Module> requestedModules, boolean sync) {
 		this.uuid = uuid;
 		this.nameProperty = new SimpleStringProperty(name);
-		this.sync = sync;
+		this.sync = new SimpleBooleanProperty(sync);
 
 		this.lastModified = lastModified;
 		this.profileReference = profileReference;
@@ -85,12 +84,21 @@ public class ProjectReference implements Displayable {
 		return nameProperty;
 	}
 
+	/**
+	 * Get the sync property of the project reference. Set the sync property by using the {@link ProjectReferenceManager#setSync(ProjectReference, boolean)}
+	 *
+	 * @return sync
+	 */
 	public boolean isSync() {
-		return sync;
+		return sync.get();
 	}
 
-	public void setSync(boolean sync) {
-		this.sync = sync;
+	void setSync(boolean sync) {
+		this.sync.set(sync);
+	}
+
+	public ReadOnlyBooleanProperty syncProperty() {
+		return sync;
 	}
 
 	void setLastModified(long lastModified) {

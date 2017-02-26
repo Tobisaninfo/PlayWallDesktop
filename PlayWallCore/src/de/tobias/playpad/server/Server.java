@@ -60,6 +60,14 @@ public interface Server {
 	Project getProject(ProjectReference ref) throws IOException;
 
 	/**
+	 * Post a project to the server.
+	 *
+	 * @param project project
+	 * @throws IOException network error
+	 */
+	void postProject(Project project) throws IOException;
+
+	/**
 	 * Connect to sync server with key.
 	 *
 	 * @param key auth key

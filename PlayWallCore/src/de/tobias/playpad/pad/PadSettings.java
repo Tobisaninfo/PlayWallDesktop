@@ -162,7 +162,7 @@ public class PadSettings implements Cloneable {
 	}
 
 	public CartDesign getDesign() {
-		return getDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
+		return getOrCreateDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
 	}
 
 	HashMap<String, CartDesign> getDesigns() {
@@ -170,6 +170,10 @@ public class PadSettings implements Cloneable {
 	}
 
 	public CartDesign getDesign(String type) {
+		return layouts.get(type);
+	}
+
+	public CartDesign getOrCreateDesign(String type) {
 		if (!layouts.containsKey(type)) {
 			DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
 			try {
