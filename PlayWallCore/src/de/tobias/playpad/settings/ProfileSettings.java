@@ -1,7 +1,6 @@
 package de.tobias.playpad.settings;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;

@@ -1,9 +1,6 @@
 package de.tobias.playpad.project;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.dom4j.Element;
 
 import de.tobias.utils.settings.Storable;
 

@@ -14,7 +14,6 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.actions.CartActionTypeViewController;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.control.TreeItem;
 
 public class CartActionFactory extends ActionFactory implements ActionDisplayable {

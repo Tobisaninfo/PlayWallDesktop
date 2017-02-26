@@ -9,10 +9,8 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
 
 public class KeyboardHandler implements EventHandler<KeyEvent> {
 

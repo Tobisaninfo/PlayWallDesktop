@@ -14,7 +14,6 @@ import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.actions.CartActionViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

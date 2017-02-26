@@ -1,6 +1,5 @@
 package de.tobias.playpad.actionsplugin.muteaction;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import org.dom4j.Element;
 
 import de.tobias.playpad.Displayable;

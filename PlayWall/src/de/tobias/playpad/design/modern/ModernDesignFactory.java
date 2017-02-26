@@ -8,7 +8,6 @@ import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernGlobalDesignViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
 public class ModernDesignFactory extends DesignFactory {
 

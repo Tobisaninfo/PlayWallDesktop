@@ -8,12 +8,10 @@ import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.ServerListener;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.application.Platform;
-import scala.annotation.meta.field;
 
 import java.util.UUID;
 

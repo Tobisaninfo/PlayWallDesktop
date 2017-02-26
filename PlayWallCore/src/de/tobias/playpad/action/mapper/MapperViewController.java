@@ -1,9 +1,6 @@
 package de.tobias.playpad.action.mapper;
 
-import java.util.ResourceBundle;
-
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 
 /**
  * Übersicht über die Mapper zu einer Action.s

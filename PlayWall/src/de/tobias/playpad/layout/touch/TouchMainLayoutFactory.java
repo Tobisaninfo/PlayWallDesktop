@@ -2,13 +2,10 @@ package de.tobias.playpad.layout.touch;
 
 import java.util.Stack;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
-import de.tobias.utils.ui.icon.FontIconType;
-import de.tobias.utils.util.Localization;
 
 /**
  * Touch Implementierung des Main Layout.

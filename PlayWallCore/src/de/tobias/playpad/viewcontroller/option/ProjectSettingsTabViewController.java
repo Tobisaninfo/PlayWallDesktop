@@ -1,13 +1,7 @@
 package de.tobias.playpad.viewcontroller.option;
 
-import java.util.ResourceBundle;
-
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 
 /**
  * Abstracter Tab für Project Einstellungen.

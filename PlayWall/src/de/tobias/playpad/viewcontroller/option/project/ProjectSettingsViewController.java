@@ -16,7 +16,6 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import javafx.beans.Observable;

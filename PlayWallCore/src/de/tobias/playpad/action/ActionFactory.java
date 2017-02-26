@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.utils.ui.icon.FontIconType;
 import javafx.scene.control.TreeItem;
 
 /**

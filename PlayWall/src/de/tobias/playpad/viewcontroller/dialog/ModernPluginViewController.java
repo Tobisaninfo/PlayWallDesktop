@@ -1,13 +1,11 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVC;

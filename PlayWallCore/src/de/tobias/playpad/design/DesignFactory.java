@@ -5,7 +5,6 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
 public abstract class DesignFactory extends Component implements Displayable {
 

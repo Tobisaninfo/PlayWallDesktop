@@ -28,6 +28,7 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -116,7 +117,6 @@ public class PlayPadImpl implements PlayPad {
 				try {
 					((AutoCloseable) i).close();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -125,9 +125,9 @@ public class PlayPadImpl implements PlayPad {
 		PlayPadPlugin.getServerHandler().getServer().disconnect();
 
 		try {
-			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
+			Path applicationSupportPath = SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain");
+			FileUtils.deleteDirectory(applicationSupportPath);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -211,10 +211,10 @@ public class PlayPadImpl implements PlayPad {
 			session = delegate.getSession();
 		}
 
-		// Connect to Server TODO
+		// Connect to Server
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		try {
-			server.connect("3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
+			server.connect(session.getKey());
 		} catch (IOException | WebSocketException e) {
 			e.printStackTrace();
 		}

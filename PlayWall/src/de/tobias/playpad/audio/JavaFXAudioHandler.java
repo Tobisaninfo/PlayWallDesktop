@@ -2,7 +2,6 @@ package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.pad.content.AudioContent;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.media.AudioEqualizer;

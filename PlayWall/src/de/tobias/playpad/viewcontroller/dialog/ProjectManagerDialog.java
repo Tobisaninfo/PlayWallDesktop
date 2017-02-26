@@ -1,20 +1,16 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Optional;
 
 import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
@@ -35,8 +31,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
