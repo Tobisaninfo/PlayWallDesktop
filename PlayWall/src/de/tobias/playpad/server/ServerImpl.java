@@ -30,7 +30,10 @@ import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.Worker;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,14 +46,13 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 
 /**
  * Created by tobias on 10.02.17.
  */
-public class ServerImpl implements Server {
+public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
 
@@ -58,8 +60,18 @@ public class ServerImpl implements Server {
 	private WebSocket websocket;
 	private ServerSyncListener syncListener;
 
+	private Queue<String> dataQueue;
+
 	ServerImpl(String host) {
 		this.host = host;
+		this.syncListener = new ServerSyncListener();
+		this.syncListener.connectionStateProperty().addListener(this);
+
+		dataQueue = new LinkedList<>();
+
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Server.json");
+		loadDataQueue(path);
+
 		registerCommands();
 	}
 
@@ -202,7 +214,7 @@ public class ServerImpl implements Server {
 			}
 			websocket = webSocketFactory.createSocket("wss://" + host + "/project");
 			websocket.addHeader("key", key);
-			syncListener = new ServerSyncListener();
+
 			websocket.addListener(syncListener);
 			websocket.connect();
 		} catch (WebSocketException | IOException e) {
@@ -212,7 +224,12 @@ public class ServerImpl implements Server {
 
 	@Override
 	public void disconnect() {
+		System.out.println("Disconnect from Server");
 		websocket.disconnect();
+
+		// Save Data Queue
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Server.json");
+		saveDataQueue(path);
 	}
 
 	@Override
@@ -220,7 +237,11 @@ public class ServerImpl implements Server {
 		if (ApplicationUtils.getApplication().isDebug()) {
 			System.out.println("Send: " + data);
 		}
-		websocket.sendText(data);
+		if (websocket.isOpen()) {
+			websocket.sendText(data);
+		} else {
+			dataQueue.add(data);
+		}
 	}
 
 	@Override
@@ -229,12 +250,52 @@ public class ServerImpl implements Server {
 	}
 
 	@Override
+	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
+		if (newValue == ConnectionState.CONNECTION_LOST) {
+			Worker.runLater(() -> {
+				boolean connected = false;
+				int count = 0;
+				while (!connected && count < 20) {
+					count++;
+					try {
+						Thread.sleep(30 * 1000);
+						websocket = websocket.recreate().connect();
+						connected = true;
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						break;
+					} catch (WebSocketException | IOException ignored) {
+					}
+				}
+			});
+		}
+	}
+
+	@Override
 	public ConnectionState getConnectionState() {
 		return syncListener.connectionStateProperty().get();
 	}
 
 	@Override
-	public ObjectProperty<ConnectionState> connectionSateProperty() {
-		return null;
+	public ObjectProperty<ConnectionState> connectionStateProperty() {
+		return syncListener.connectionStateProperty();
+	}
+
+	private void loadDataQueue(Path path) {
+		if (Files.exists(path)) {
+			try {
+				dataQueue.addAll(Files.readAllLines(path));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void saveDataQueue(Path path) {
+		try {
+			Files.write(path, dataQueue, StandardOpenOption.CREATE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

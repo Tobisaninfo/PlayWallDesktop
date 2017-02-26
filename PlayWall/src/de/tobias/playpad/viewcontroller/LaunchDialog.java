@@ -8,6 +8,7 @@ import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.importer.ConverterV6;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -22,6 +23,9 @@ import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -40,7 +44,7 @@ import java.util.Optional;
 
 import static de.tobias.utils.util.Localization.getString;
 
-public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDelegate {
+public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDelegate, ChangeListener<ConnectionState> {
 
 	public static final String IMAGE = "icon.png";
 
@@ -57,6 +61,7 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	@FXML private Button deleteButton;
 
 	@FXML private Label cloudLabel;
+	private FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
 		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
@@ -103,19 +108,12 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 		});
 
 		// Cloud Info Label
+		cloudIcon = new FontIcon(FontAwesomeType.CLOUD);
+		cloudLabel.setGraphic(cloudIcon);
+		setCloudState();
+
 		Server server = PlayPadPlugin.getServerHandler().getServer();
-		FontIcon icon = new FontIcon(FontAwesomeType.CLOUD);
-		switch (server.getConnectionState()) {
-			case CONNECTED:
-				icon.setColor(Color.BLACK);
-				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
-				break;
-			case CONNECTION_LOST:
-				icon.setColor(Color.GRAY);
-				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
-				break;
-		}
-		cloudLabel.setGraphic(icon);
+		server.connectionStateProperty().addListener(this);
 	}
 
 	@Override
@@ -131,6 +129,25 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 		stage.setHeight(400);
 		stage.centerOnScreen();
 		stage.show();
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
+		Platform.runLater(this::setCloudState);
+	}
+
+	private void setCloudState() {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		switch (server.getConnectionState()) {
+			case CONNECTED:
+				cloudIcon .setColor(Color.BLACK);
+				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
+				break;
+			case CONNECTION_LOST:
+				cloudIcon .setColor(Color.GRAY);
+				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
+				break;
+		}
 	}
 
 	@FXML
@@ -244,6 +261,9 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	 * @param ref Project to launch
 	 */
 	private void launchProject(ProjectReference ref) {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		server.connectionStateProperty().removeListener(this);
+
 		// Es fehlen Module
 		if (!ref.getMissedModules().isEmpty()) {
 			showInfoMessage(Localization.getString(Strings.Error_Plugins_Missing));

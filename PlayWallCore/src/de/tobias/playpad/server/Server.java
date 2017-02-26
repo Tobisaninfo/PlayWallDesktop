@@ -105,5 +105,5 @@ public interface Server {
 	 *
 	 * @return state property
 	 */
-	ObjectProperty<ConnectionState> connectionSateProperty();
+	ObjectProperty<ConnectionState> connectionStateProperty();
 }
