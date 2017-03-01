@@ -186,7 +186,7 @@ public class Project {
 	public void removePage(Page page) {
 		if (projectReference.isSync()) {
 			// Remove remote new page
-			CommandManager.execute(Commands.PAGE_REMOVE, page);
+			CommandManager.execute(Commands.PAGE_REMOVE, projectReference, page);
 
 			// Remove sync listener
 			page.removeSyncListener();
@@ -217,7 +217,7 @@ public class Project {
 
 		if (projectReference.isSync()) {
 			// Add remote new page
-			CommandManager.execute(Commands.PAGE_ADD, page);
+			CommandManager.execute(Commands.PAGE_ADD, projectReference, page);
 		}
 
 		pages.add(page);

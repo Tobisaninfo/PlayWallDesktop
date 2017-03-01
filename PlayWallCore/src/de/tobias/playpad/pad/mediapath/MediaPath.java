@@ -124,7 +124,7 @@ public class MediaPath implements Cloneable {
 		clone.pad = pad;
 
 		if (pad.getProject().getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PATH_ADD, clone);
+			CommandManager.execute(Commands.PATH_ADD, pad.getProject().getProjectReference(), clone);
 			clone.pathListener = new PathUpdateListener(clone);
 			clone.addSyncListener();
 		}

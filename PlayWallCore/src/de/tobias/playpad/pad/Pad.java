@@ -291,7 +291,7 @@ public class Pad implements Cloneable {
 		mediaPaths.add(mediaPath);
 
 		if (project.getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PATH_ADD, mediaPath);
+			CommandManager.execute(Commands.PATH_ADD, project.getProjectReference(), mediaPath);
 		}
 
 		PadContent content = getContent();
@@ -304,7 +304,7 @@ public class Pad implements Cloneable {
 		mediaPaths.remove(path);
 
 		if (project.getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PATH_REMOVE, path);
+			CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path);
 		}
 	}
 
@@ -506,9 +506,9 @@ public class Pad implements Cloneable {
 
 		if (project.getProjectReference().isSync()) {
 			mediaPaths.forEach(MediaPath::removeSyncListener);
-			mediaPaths.forEach(path -> CommandManager.execute(Commands.PATH_REMOVE, path));
+			mediaPaths.forEach(path -> CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path));
 
-			CommandManager.execute(Commands.PAD_CLEAR, this);
+			CommandManager.execute(Commands.PAD_CLEAR, project.getProjectReference(), this);
 		}
 
 		mediaPaths.clear();
@@ -554,7 +554,7 @@ public class Pad implements Cloneable {
 		}
 
 		if (project.getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PAD_ADD, clone);
+			CommandManager.execute(Commands.PAD_ADD, project.getProjectReference(), clone);
 			clone.padListener = new PadUpdateListener(clone);
 			clone.addSyncListener();
 		}

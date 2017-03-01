@@ -96,7 +96,7 @@ public final class ProjectReferenceManager {
 
 		// Save To Cloud
 		if (ref.isSync()) {
-			CommandManager.execute(Commands.PROJECT_ADD, ref);
+			CommandManager.execute(Commands.PROJECT_ADD, ref, ref);
 		}
 
 		addProjectReference(ref);
@@ -124,7 +124,7 @@ public final class ProjectReferenceManager {
 		Files.deleteIfExists(path); // Drive
 		projects.remove(projectReference); // Model
 		if (projectReference.isSync()) {
-			CommandManager.execute(Commands.PROJECT_REMOVE, projectReference); // Cloud
+			CommandManager.execute(Commands.PROJECT_REMOVE, projectReference, projectReference); // Cloud
 		}
 		saveProjects();
 	}
@@ -251,10 +251,10 @@ public final class ProjectReferenceManager {
 
 		if (newValue) {
 			Project project = loadProjectImpl(reference, null); // TODO null for delegate
-			CommandManager.execute(Commands.PROJECT_ADD, reference);
+			CommandManager.execute(Commands.PROJECT_ADD, reference, reference);
 			server.postProject(project);
 		} else {
-			CommandManager.execute(Commands.PROJECT_REMOVE, reference);
+			CommandManager.execute(Commands.PROJECT_REMOVE, reference, reference);
 		}
 
 		reference.setSync(newValue);

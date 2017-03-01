@@ -174,7 +174,7 @@ public class Page implements Cloneable {
 			setPad(id, pad);
 
 			if (projectReference.getProjectReference().isSync()) {
-				CommandManager.execute(Commands.PAD_ADD, pad);
+				CommandManager.execute(Commands.PAD_ADD, projectReference.getProjectReference(), pad);
 			}
 		}
 		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
@@ -237,7 +237,7 @@ public class Page implements Cloneable {
 			Pad temp = padOptional.orElse(null);
 			if (temp != null) {
 				temp.removeSyncListener();
-				CommandManager.execute(Commands.PAD_REMOVE, temp);
+				CommandManager.execute(Commands.PAD_REMOVE, projectReference.getProjectReference(), temp);
 			}
 		}
 		pads.removeIf(p -> p.getUuid().equals(uuid));
@@ -257,7 +257,7 @@ public class Page implements Cloneable {
 		clone.projectReference = projectReference;
 
 		if (projectReference.getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PAGE_ADD, clone);
+			CommandManager.execute(Commands.PAGE_ADD, projectReference.getProjectReference(), clone);
 			clone.syncListener = new PageUpdateListener(clone);
 			clone.syncListener.addListener();
 		}

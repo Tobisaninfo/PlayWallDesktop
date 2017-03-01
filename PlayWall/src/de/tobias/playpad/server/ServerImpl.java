@@ -25,6 +25,8 @@ import de.tobias.playpad.server.sync.command.pad.PadMoveCommand;
 import de.tobias.playpad.server.sync.command.pad.PadRemoveCommand;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
+import de.tobias.playpad.server.sync.command.path.PathAddCommand;
+import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.updater.client.UpdateChannel;
@@ -89,6 +91,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		CommandManager.register(Commands.PAD_CLEAR, new PadClearCommand());
 		CommandManager.register(Commands.PAD_REMOVE, new PadRemoveCommand());
 		CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
+
+		CommandManager.register(Commands.PATH_ADD, new PathAddCommand());
+		CommandManager.register(Commands.PATH_REMOVE, new PathRemoveCommand());
 
 		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
 		//CommandManager.register(Commands.DESIGN_UPDATE, new PadAddCommand());

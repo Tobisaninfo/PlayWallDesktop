@@ -1,5 +1,7 @@
 package de.tobias.playpad.server.sync.command;
 
+import com.google.gson.JsonObject;
+
 /**
  * Created by tobias on 24.02.17.
  */
@@ -10,5 +12,5 @@ public interface Command {
 	 *
 	 * @param data optional data parameter
 	 */
-	void execute(Object data);
+	JsonObject execute(Object data);
 }

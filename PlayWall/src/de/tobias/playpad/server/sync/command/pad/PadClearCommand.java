@@ -1,9 +1,7 @@
 package de.tobias.playpad.server.sync.command.pad;
 
 import com.google.gson.JsonObject;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Command;
@@ -14,7 +12,7 @@ import de.tobias.playpad.server.sync.command.Command;
 public class PadClearCommand implements Command {
 
 	@Override
-	public void execute(Object data) {
+	public JsonObject execute(Object data) {
 		if (data instanceof Pad) {
 			Pad pad = (Pad) data;
 			JsonObject json = new JsonObject();
@@ -23,8 +21,7 @@ public class PadClearCommand implements Command {
 			// Add Data
 			json.addProperty(PropertyDef.ID, pad.getUuid().toString());
 
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			server.push(json);
+			return json;
 		} else {
 			throw new IllegalArgumentException("Argument mismatch");
 		}

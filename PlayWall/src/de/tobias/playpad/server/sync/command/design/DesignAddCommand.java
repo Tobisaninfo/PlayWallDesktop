@@ -16,7 +16,7 @@ import java.util.UUID;
 public class DesignAddCommand implements Command {
 
 	@Override
-	public void execute(Object data) {
+	public JsonObject execute(Object data) {
 		if (data instanceof ModernCartDesign) {
 			ModernCartDesign design = (ModernCartDesign) data;
 
@@ -30,8 +30,7 @@ public class DesignAddCommand implements Command {
 			json.addProperty(PropertyDef.DESIGN_BACKGROUND_COLOR, design.getBackgroundColor().name());
 			json.addProperty(PropertyDef.DESIGN_PLAY_COLOR, design.getPlayColor().name());
 
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			server.push(json);
+			return json;
 		} else {
 			throw new IllegalArgumentException("Argument mismatch");
 		}

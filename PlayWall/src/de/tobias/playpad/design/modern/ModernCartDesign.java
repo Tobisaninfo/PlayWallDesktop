@@ -260,7 +260,7 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 		syncListener = new DesignUpdateListener(clone);
 		if (pad.getProject().getProjectReference().isSync()) {
 			addListener();
-			CommandManager.execute(Commands.DESIGN_ADD, clone);
+			CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), clone);
 		}
 
 		return clone;

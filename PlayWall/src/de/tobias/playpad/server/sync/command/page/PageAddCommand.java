@@ -1,9 +1,7 @@
 package de.tobias.playpad.server.sync.command.page;
 
 import com.google.gson.JsonObject;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Command;
@@ -16,7 +14,7 @@ import java.util.UUID;
 public class PageAddCommand implements Command {
 
 	@Override
-	public void execute(Object data) {
+	public JsonObject execute(Object data) {
 		if (data instanceof Page) {
 			Page page = (Page) data;
 			JsonObject json = new JsonObject();
@@ -29,8 +27,7 @@ public class PageAddCommand implements Command {
 			json.addProperty(PropertyDef.PAGE_POSITION, page.getPosition());
 			json.addProperty(PropertyDef.PAGE_NAME, page.getName());
 
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			server.push(json);
+			return json;
 		} else {
 			throw new IllegalArgumentException("Argument mismatch");
 		}
