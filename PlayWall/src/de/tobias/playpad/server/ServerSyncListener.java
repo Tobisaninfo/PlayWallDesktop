@@ -65,6 +65,8 @@ public class ServerSyncListener extends WebSocketAdapter {
 	public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
 		System.out.println("Connected");
 		connectionStateProperty.set(ConnectionState.CONNECTED);
+
+		// Handle Conflicts
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package de.tobias.playpad.server;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
@@ -10,12 +12,15 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.playpad.project.ProjectJsonWriter;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.command.design.DesignAddCommand;
@@ -51,6 +56,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by tobias on 10.02.17.
@@ -68,6 +74,11 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		this.syncListener = new ServerSyncListener();
 		this.syncListener.connectionStateProperty().addListener(this);
 
+		try {
+			loadStoredFiles();
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO Error Handling
+		}
 		registerCommands();
 	}
 
@@ -226,21 +237,30 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	public void disconnect() {
 		System.out.println("Disconnect from Server");
 		websocket.disconnect();
+
+		try {
+			saveStoredCommands();
+		} catch (IOException e) {
+			e.printStackTrace(); // TODO Error Handling
+		}
 	}
 
 	@Override
-	public void push(String data) {
-		if (ApplicationUtils.getApplication().isDebug()) {
-			System.out.println("Send: " + data);
-		}
+	public boolean push(String data) {
 		if (websocket.isOpen()) {
+			if (ApplicationUtils.getApplication().isDebug()) {
+				System.out.println("Send: " + data);
+			}
+			// Send to Server
 			websocket.sendText(data);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
-	public void push(JsonElement json) {
-		push(json.toString());
+	public boolean push(JsonElement json) {
+		return push(json.toString());
 	}
 
 	@Override
@@ -275,4 +295,38 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		return syncListener.connectionStateProperty();
 	}
 
+	private void loadStoredFiles() throws IOException {
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+		if (Files.exists(path)) {
+			for (Path file : Files.newDirectoryStream(path)) {
+				loadStoredFile(file);
+			}
+		}
+	}
+
+	private void loadStoredFile(Path path) throws IOException {
+		List<String> lines = Files.readAllLines(path);
+
+		JsonParser parser = new JsonParser();
+		List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
+
+		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		executor.setStoredCommands(path.getFileName().toString(), commands);
+	}
+
+	private void saveStoredCommands() throws IOException {
+		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+
+		if (Files.notExists(folder)) {
+			Files.createDirectories(folder);
+		}
+
+		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
+		for (UUID key : storedCommands.keySet()) {
+			Path file = folder.resolve(key.toString());
+			List<String> lines = storedCommands.get(key).stream().map(JsonElement::toString).collect(Collectors.toList());
+			Files.write(file, lines, StandardOpenOption.CREATE);
+		}
+	}
 }

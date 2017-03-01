@@ -6,8 +6,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.ServerUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by tobias on 01.03.17.
@@ -15,6 +14,7 @@ import java.util.Map;
 public class CommandExecutorImpl implements CommandExecutor {
 
 	private Map<String, Command> commandMap = new HashMap<>();
+	private Map<UUID, List<JsonObject>> storedCommands = new HashMap<>();
 
 	@Override
 	public void register(String name, Command command) {
@@ -42,6 +42,24 @@ public class CommandExecutorImpl implements CommandExecutor {
 		JsonObject sendData = command.execute(data);
 
 		Server server = PlayPadPlugin.getServerHandler().getServer();
-		server.push(sendData);
+		boolean send = server.push(sendData);
+
+		// Store local if server is disconnected
+		if (!send) {
+			UUID uuid = projectReference.getUuid();
+			if (!storedCommands.containsKey(uuid)) {
+				storedCommands.put(uuid, new ArrayList<>());
+			}
+			storedCommands.get(uuid).add(sendData);
+		}
+	}
+
+	public void setStoredCommands(String id, List<JsonObject> commands) {
+		UUID uuid = UUID.fromString(id);
+		storedCommands.put(uuid, commands);
+	}
+
+	public Map<UUID, List<JsonObject>> getStoredCommands() {
+		return storedCommands;
 	}
 }

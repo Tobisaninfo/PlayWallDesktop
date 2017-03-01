@@ -12,15 +12,18 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by tobias on 10.02.17.
+ * Interface for server communication.
+ *
+ * @author tobias
+ * @version 6.2.0
  */
 public interface Server {
 
 	/**
 	 * Load the list of available plugins from the server
 	 *
-	 * @return
-	 * @throws IOException
+	 * @return plugins
+	 * @throws IOException network error
 	 */
 	List<ModernPlugin> getPlugins() throws IOException;
 
@@ -83,15 +86,17 @@ public interface Server {
 	 * Send data upstream to server.
 	 *
 	 * @param data data
+	 * @return success
 	 */
-	void push(String data);
+	boolean push(String data);
 
 	/**
-	 * Send datat upstream to server.
+	 * Send data upstream to server.
 	 *
 	 * @param json data
+	 * @return success
 	 */
-	void push(JsonElement json);
+	boolean push(JsonElement json);
 
 	/**
 	 * Get the connection state of the websocket connection.
