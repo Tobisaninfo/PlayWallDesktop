@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.Change;
+import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.ServerUtils;
 import de.tobias.playpad.server.sync.PropertyDef;
@@ -22,18 +24,8 @@ public class ProjectUpdateListener {
 		this.project = project;
 
 		nameListener = (observable, oldValue, newValue) -> {
-			if (ServerUtils.isNewValueComingFromServer()) {
-				return;
-			}
-			JsonObject json = new JsonObject();
-			json.addProperty(PropertyDef.ID, project.getProjectReference().getUuid().toString());
-			json.addProperty(PropertyDef.FIELD, PropertyDef.PROJECT_NAME);
-
-			json.addProperty(PropertyDef.VALUE, project.getProjectReference().getName());
-			json.addProperty(PropertyDef.CMD, Commands.PROJECT_UPDATE);
-
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			server.push(json);
+			Change change = new Change(PropertyDef.PAGE_POSITION, newValue, project);
+			CommandManager.execute(Commands.PAGE_UPDATE, project.getProjectReference(), change);
 		};
 	}
 

@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.command.Change;
+import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.ServerUtils;
@@ -26,40 +28,19 @@ public class PadUpdateListener {
 		this.pad = pad;
 
 		nameListener = (observable, oldValue, newValue) -> {
-			handleInvalidation(json -> {
-				json.addProperty(PropertyDef.FIELD, PropertyDef.PAD_NAME);
-				json.addProperty(PropertyDef.VALUE, newValue);
-			});
+			Change change = new Change(PropertyDef.PAD_NAME, newValue, pad);
+			CommandManager.execute(Commands.PAD_UPDATE, pad.getProject().getProjectReference(), change);
 		};
 
 		positionListener = (observable, oldValue, newValue) -> {
-			handleInvalidation(json -> {
-				json.addProperty(PropertyDef.FIELD, PropertyDef.PAD_POSITION);
-				json.addProperty(PropertyDef.VALUE, newValue);
-			});
+			Change change = new Change(PropertyDef.PAD_POSITION, newValue, pad);
+			CommandManager.execute(Commands.PAD_UPDATE, pad.getProject().getProjectReference(), change);
 		};
 
 		contentTypeListener = (observable, oldValue, newValue) -> {
-			handleInvalidation(json -> {
-				json.addProperty(PropertyDef.FIELD, PropertyDef.PAD_CONTENT_TYPE);
-				json.addProperty(PropertyDef.VALUE, newValue);
-			});
+			Change change = new Change(PropertyDef.PAD_CONTENT_TYPE, newValue, pad);
+			CommandManager.execute(Commands.PAD_UPDATE, pad.getProject().getProjectReference(), change);
 		};
-	}
-
-	private void handleInvalidation(Consumer<JsonObject> handler) {
-		if (ServerUtils.isNewValueComingFromServer()) {
-			return;
-		}
-		JsonObject json = new JsonObject();
-		json.addProperty(PropertyDef.ID, pad.getUuid().toString());
-		json.addProperty(PropertyDef.PAD_PAGE_REF, pad.getPage().getId().toString());
-		json.addProperty(PropertyDef.CMD, Commands.PAD_UPDATE);
-
-		handler.accept(json);
-
-		Server server = PlayPadPlugin.getServerHandler().getServer();
-		server.push(json);
 	}
 
 	private boolean added;
