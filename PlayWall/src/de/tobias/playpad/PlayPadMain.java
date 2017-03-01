@@ -6,6 +6,9 @@ import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
+import de.tobias.playpad.server.sync.command.CommandExecutor;
+import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
+import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
@@ -133,10 +136,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
+		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
+		PlayPadPlugin.setCommandExecutorHandler(CommandExecutorImpl::new);
 
 		// Console
 		if (!app.isDebug()) {

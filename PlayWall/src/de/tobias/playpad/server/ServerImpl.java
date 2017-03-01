@@ -63,17 +63,10 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	private WebSocket websocket;
 	private ServerSyncListener syncListener;
 
-	private Queue<String> dataQueue;
-
 	ServerImpl(String host) {
 		this.host = host;
 		this.syncListener = new ServerSyncListener();
 		this.syncListener.connectionStateProperty().addListener(this);
-
-		dataQueue = new LinkedList<>();
-
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Server.json");
-		loadDataQueue(path);
 
 		registerCommands();
 	}
@@ -233,10 +226,6 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	public void disconnect() {
 		System.out.println("Disconnect from Server");
 		websocket.disconnect();
-
-		// Save Data Queue
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Server.json");
-		saveDataQueue(path);
 	}
 
 	@Override
@@ -246,8 +235,6 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		}
 		if (websocket.isOpen()) {
 			websocket.sendText(data);
-		} else {
-			dataQueue.add(data);
 		}
 	}
 
@@ -288,21 +275,4 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		return syncListener.connectionStateProperty();
 	}
 
-	private void loadDataQueue(Path path) {
-		if (Files.exists(path)) {
-			try {
-				dataQueue.addAll(Files.readAllLines(path));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void saveDataQueue(Path path) {
-		try {
-			Files.write(path, dataQueue, StandardOpenOption.CREATE);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
