@@ -334,6 +334,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 	}
 
+	@Override
 	public void openProject(Project project) {
 		// Remove old listener
 		if (this.openProject != null) {

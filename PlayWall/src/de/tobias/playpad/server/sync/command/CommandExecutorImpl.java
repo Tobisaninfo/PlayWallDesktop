@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Created by tobias on 01.03.17.
  */
-public class CommandExecutorImpl implements CommandExecutor {
+public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 
 	private Map<String, Command> commandMap = new HashMap<>();
 	private Map<UUID, List<JsonObject>> storedCommands = new HashMap<>();
@@ -54,12 +54,24 @@ public class CommandExecutorImpl implements CommandExecutor {
 		}
 	}
 
+	@Override
 	public void setStoredCommands(String id, List<JsonObject> commands) {
 		UUID uuid = UUID.fromString(id);
 		storedCommands.put(uuid, commands);
 	}
 
+	@Override
 	public Map<UUID, List<JsonObject>> getStoredCommands() {
 		return storedCommands;
+	}
+
+	@Override
+	public List<JsonObject> getStoredCommands(UUID uuid) {
+		return storedCommands.get(uuid);
+	}
+
+	@Override
+	public void clearStoredCommands(UUID uuid) {
+		storedCommands.remove(uuid);
 	}
 }

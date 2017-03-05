@@ -12,16 +12,16 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
-import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.playpad.project.ProjectJsonWriter;
+import de.tobias.playpad.project.ProjectModification;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.CommandStore;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.command.design.DesignAddCommand;
 import de.tobias.playpad.server.sync.command.design.DesignUpdateCommand;
@@ -55,7 +55,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -64,6 +67,7 @@ import java.util.stream.Collectors;
 public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
+	public static final String CACHE_FOLDER = "Cache";
 
 	private String host;
 	private WebSocket websocket;
@@ -217,6 +221,24 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
+	public ProjectModification getLastProjectModification(ProjectReference ref) throws IOException {
+		String url = "https://" + host + "/projects/modification/" + ref.getUuid();
+		Session session = PlayPadMain.getProgramInstance().getSession();
+		try {
+			HttpResponse<JsonNode> response = Unirest.get(url)
+					.queryString("session", session.getKey())
+					.asJson();
+
+			JSONObject object = response.getBody().getObject();
+			String remoteSession = object.getString("session");
+			long time = object.getLong("time");
+			return new ProjectModification(remoteSession, time);
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
+		}
+	}
+
+	@Override
 	public void connect(String key) {
 		try {
 			WebSocketFactory webSocketFactory = new WebSocketFactory();
@@ -296,7 +318,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	private void loadStoredFiles() throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, CACHE_FOLDER);
 		if (Files.exists(path)) {
 			for (Path file : Files.newDirectoryStream(path)) {
 				loadStoredFile(file);
@@ -310,18 +332,18 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		JsonParser parser = new JsonParser();
 		List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		executor.setStoredCommands(path.getFileName().toString(), commands);
 	}
 
 	private void saveStoredCommands() throws IOException {
-		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, CACHE_FOLDER);
 
 		if (Files.notExists(folder)) {
 			Files.createDirectories(folder);
 		}
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
 		for (UUID key : storedCommands.keySet()) {
 			Path file = folder.resolve(key.toString());
