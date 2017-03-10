@@ -276,13 +276,11 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			Stage owner = mvc.getStage();
 
 			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
-			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> {
-				nvcStage.addCloseHook(() -> {
-					if (padView != null && pad != null)
-						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
-					return true;
-				});
-			});
+			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
+				if (padView != null && pad != null)
+					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+				return true;
+			}));
 			padSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		}
 	}
@@ -328,12 +326,11 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		padView.setTime(null);
 	}
 
-	public String durationToString(Duration value) {
+	private String durationToString(Duration value) {
 		if (value != null) {
 			int secounds = (int) ((value.toMillis() / 1000) % 60);
 			int minutes = (int) ((value.toMillis() / (1000 * 60)) % 60);
-			String time = String.format(DURATION_FORMAT, minutes, secounds);
-			return time;
+			return String.format(DURATION_FORMAT, minutes, secounds);
 		} else {
 			return null;
 		}

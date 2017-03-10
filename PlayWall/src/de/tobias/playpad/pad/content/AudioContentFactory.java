@@ -33,9 +33,7 @@ public class AudioContentFactory extends ContentFactory {
 	@Override
 	public IPadContentView getPadContentPreview(Pad pad, Pane parentNode) {
 		if (pad.getContent() != null) {
-			AudioContentView view = new AudioContentView(pad, parentNode);
-
-			return view;
+			return new AudioContentView(pad, parentNode);
 		} else {
 			return null;
 		}
@@ -50,7 +48,7 @@ public class AudioContentFactory extends ContentFactory {
 
 		private Label nameLabel;
 
-		public AudioContentView(Pad pad, Pane parentNode) {
+		AudioContentView(Pad pad, Pane parentNode) {
 			nameLabel = new Label();
 			nameLabel.textProperty().bind(pad.nameProperty());
 
