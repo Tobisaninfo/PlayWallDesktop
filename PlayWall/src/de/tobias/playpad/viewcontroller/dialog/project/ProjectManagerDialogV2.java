@@ -161,8 +161,11 @@ public class ProjectManagerDialogV2 extends NVC {
 
 	@FXML
 	private void projectExportHandler(ActionEvent event) {
-		// TODO Implement Project Export
-		showInfoMessage("Easter Egg");
+		ProjectReference reference = getSelectedItem();
+		if (reference != null) {
+			ProjectExportDialog dialog = new ProjectExportDialog(reference, getContainingWindow());
+			dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
+		}
 	}
 
 	@FXML

@@ -27,6 +27,7 @@ import de.tobias.utils.util.FileUtils.FileAction;
 import de.tobias.utils.util.ZipFile;
 import de.tobias.utils.util.ZipFile.FileMode;
 
+@Deprecated
 public class ProjectExporter {
 
 	public static final String mediaFolder = "Media";

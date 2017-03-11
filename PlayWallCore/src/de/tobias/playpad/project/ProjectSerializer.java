@@ -36,16 +36,6 @@ public class ProjectSerializer implements ProjectReader, ProjectWriter {
 			throw new ProjectNotFoundException(projectReference);
 		}
 
-		// TODO Why should the profile be loaded first
-		if (projectReference.getProfileReference() == null) {
-			// Lädt Profile / Erstellt neues und hat es gleich im Speicher
-			ProfileReference profile = delegate.getProfileReference();
-			projectReference.setProfileReference(profile);
-		}
-
-		// Lädt das entsprechende Profile und aktiviert es
-		Profile.load(projectReference.getProfileReference());
-
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(Files.newInputStream(projectPath));
 		Element rootElement = document.getRootElement();

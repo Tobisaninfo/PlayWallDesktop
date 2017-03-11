@@ -8,6 +8,7 @@ import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -56,8 +57,27 @@ public final class ProjectReferenceManager {
 	}
 
 	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+		return loadProject(projectReference, delegate, true, true);
+	}
+
+	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate, boolean loadMedia, boolean loadProfile) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+		// Load Profile
+		if (loadProfile) {
+			// TODO Why should the profile be loaded first
+			if (projectReference.getProfileReference() == null) {
+				// Lädt Profile / Erstellt neues und hat es gleich im Speicher
+				ProfileReference profile = delegate.getProfileReference();
+				projectReference.setProfileReference(profile);
+			}
+
+			// Lädt das entsprechende Profile und aktiviert es
+			Profile.load(projectReference.getProfileReference());
+		}
+
+
 		Project project = loadProjectImpl(projectReference, delegate);
-		Worker.runLater(project::loadPadsContent);
+		if (loadMedia)
+			Worker.runLater(project::loadPadsContent);
 		return project;
 	}
 

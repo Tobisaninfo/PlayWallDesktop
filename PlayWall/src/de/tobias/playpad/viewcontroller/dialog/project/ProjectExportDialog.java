@@ -1,19 +1,15 @@
-package de.tobias.playpad.viewcontroller.dialog;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
+package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.importer.ProjectExporter;
-import de.tobias.playpad.project.importer.ProjectExporter.ExportView;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.export.ProjectExporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.NotificationHandler;
-import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
@@ -27,9 +23,13 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.dom4j.DocumentException;
 
-@Deprecated
-public class ProjectExportDialog extends NVC implements ExportView {
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
+public class ProjectExportDialog extends NVC implements ProjectExporterDelegate {
 
 	@FXML private CheckBox profileCheckBox;
 	@FXML private CheckBox mediaCheckBox;
@@ -40,12 +40,10 @@ public class ProjectExportDialog extends NVC implements ExportView {
 	private BusyView busyView;
 
 	private ProjectReference projectRef;
-	private NotificationHandler notificationHandler;
 
-	public ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
+	ProjectExportDialog(ProjectReference projectRef, Window owner) {
 		load("de/tobias/playpad/assets/dialog/project/", "exportDialog", PlayPadMain.getUiResourceBundle());
 		this.projectRef = projectRef;
-		this.notificationHandler = notificationHandler;
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -74,7 +72,7 @@ public class ProjectExportDialog extends NVC implements ExportView {
 	private void saveButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 
-		// Extensionfilter in FileChooser
+		// Extension Filter in FileChooser
 		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
 		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
 		chooser.getExtensionFilters().add(extensionFilter);
@@ -90,23 +88,23 @@ public class ProjectExportDialog extends NVC implements ExportView {
 			{
 				try {
 					Path path = file.toPath();
-					boolean includeProject = profileCheckBox.isSelected();
+					boolean includeProfile = profileCheckBox.isSelected();
 					boolean includeMedia = mediaCheckBox.isSelected();
 
-					ProjectExporter.exportProject(projectRef, path, includeProject, includeMedia, this);
+					de.tobias.playpad.project.export.ProjectExporter exporter = new de.tobias.playpad.project.export.ProjectExporter(this);
+					exporter.export(path, projectRef, includeProfile, includeMedia);
 
 					Platform.runLater(() ->
 					{
 						getStageContainer().ifPresent(NVCStage::close);
-
-						String notificationString = Localization.getString(Strings.Standard_File_Save);
-						notificationHandler.notify(notificationString, PlayPadMain.displayTimeMillis);
 					});
 				} catch (IOException e) {
 					busyView.showProgress(false);
 
 					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
 					showErrorMessage(errorMessage, PlayPadMain.stageIcon);
+					e.printStackTrace();
+				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {
 					e.printStackTrace();
 				}
 			});
@@ -123,9 +121,9 @@ public class ProjectExportDialog extends NVC implements ExportView {
 	}
 
 	@Override
-	public void tastComplete() {
+	public void taskComplete() {
 		if (!Platform.isFxApplicationThread()) {
-			Platform.runLater(this::tastComplete);
+			Platform.runLater(this::taskComplete);
 			return;
 		}
 		complete++;

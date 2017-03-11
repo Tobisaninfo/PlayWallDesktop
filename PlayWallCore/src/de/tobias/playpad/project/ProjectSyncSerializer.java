@@ -27,16 +27,6 @@ public class ProjectSyncSerializer implements ProjectReader {
 
 	@Override
 	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException {
-		// TODO Why should the profile be loaded first
-		if (projectReference.getProfileReference() == null) {
-			// Lädt Profile / Erstellt neues und hat es gleich im Speicher
-			ProfileReference profile = delegate.getProfileReference();
-			projectReference.setProfileReference(profile);
-		}
-
-		// Lädt das entsprechende Profile und aktiviert es
-		Profile.load(projectReference.getProfileReference());
-
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		Project project = server.getProject(projectReference);
 
