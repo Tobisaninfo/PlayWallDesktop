@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.ContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
@@ -273,7 +274,11 @@ public class DesktopPadView implements IPadView {
 		if (pad != null) {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
-					buttonBox.getChildren().setAll(playButton, pauseButton, stopButton, newButton, settingsButton);
+					if (pad.getStatus() == PadStatus.PLAY) {
+						buttonBox.getChildren().setAll(pauseButton, stopButton, newButton, settingsButton);
+					} else {
+						buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+					}
 				} else {
 					buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
 				}

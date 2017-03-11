@@ -342,6 +342,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			return;
 		}
 		if (pad.getContent() != null) {
+			padView.addDefaultElements(pad);
+			
 			if (pad.getStatus() == PadStatus.PLAY) {
 				padView.getPlayButton().setDisable(true);
 				padView.getPauseButton().setDisable(false);
