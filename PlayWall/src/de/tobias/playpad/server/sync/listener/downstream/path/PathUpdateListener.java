@@ -31,7 +31,7 @@ public class PathUpdateListener implements ServerListener {
 					String field = json.get(PropertyDef.FIELD).getAsString();
 					if (field.equals(PropertyDef.PATH_PATH)) {
 						String path = json.get(PropertyDef.VALUE).getAsString();
-						Platform.runLater(() -> mediaPath.setPath(Paths.get(path)));
+						Platform.runLater(() -> mediaPath.setPath(Paths.get(path), true));
 					}
 				}
 			}

@@ -55,7 +55,7 @@ public class MediaPath implements Cloneable {
 		return path.get();
 	}
 
-	public void setPath(Path path) {
+	public void setPath(Path path, boolean load) {
 		PadContent content = pad.getContent();
 		if (content != null) {
 			content.unloadMedia(this);
@@ -64,9 +64,11 @@ public class MediaPath implements Cloneable {
 		Path finalPath = getRealPath(path);
 		this.path.set(finalPath);
 
-		content = pad.getContent();
-		if (content != null) {
-			content.loadMedia(this);
+		if (load) {
+			content = pad.getContent();
+			if (content != null) {
+				content.loadMedia(this);
+			}
 		}
 	}
 

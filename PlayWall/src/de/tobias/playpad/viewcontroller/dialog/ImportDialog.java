@@ -21,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+@Deprecated
 public class ImportDialog implements Importable, ProjectReader.ProjectReaderDelegate {
 
 	private static ImportDialog instance;

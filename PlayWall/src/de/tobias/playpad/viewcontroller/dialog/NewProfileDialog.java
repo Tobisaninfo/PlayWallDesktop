@@ -107,7 +107,7 @@ public class NewProfileDialog extends NVC {
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProile_Title));
+		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProfile_Title));
 		stage.setWidth(400);
 		stage.setHeight(200);
 

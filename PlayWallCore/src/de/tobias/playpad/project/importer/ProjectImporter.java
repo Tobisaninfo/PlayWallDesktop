@@ -1,15 +1,12 @@
 package de.tobias.playpad.project.importer;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
-
-import de.tobias.playpad.project.ProfileChooseable;
-import de.tobias.playpad.project.Project;
+import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.project.ProjectSerializer;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.util.ZipFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -17,21 +14,14 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadSerializer;
-import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.ZipFile;
-import de.tobias.utils.util.ZipFile.FileMode;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+@Deprecated
 public class ProjectImporter {
 
+	/*
 	public static ProjectReference importProject(Path zipFile, ProfileChooseable chooseable, Importable importable)
 			throws IOException, DocumentException {
 		ZipFile zip = new ZipFile(zipFile, FileMode.READ);
@@ -145,7 +135,7 @@ public class ProjectImporter {
 		}
 		return null;
 	}
-
+	*/
 	/**
 	 * Load an project internal, so that each PadContent cloud import the needed medai from the zip filesystems. Each PadContent must
 	 * override the path saves in the Element Object.

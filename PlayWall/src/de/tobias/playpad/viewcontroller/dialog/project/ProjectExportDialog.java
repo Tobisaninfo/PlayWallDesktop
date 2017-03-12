@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.export.ProjectExporter;
 import de.tobias.playpad.project.export.ProjectExporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
@@ -91,13 +92,10 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 					boolean includeProfile = profileCheckBox.isSelected();
 					boolean includeMedia = mediaCheckBox.isSelected();
 
-					de.tobias.playpad.project.export.ProjectExporter exporter = new de.tobias.playpad.project.export.ProjectExporter(this);
+					ProjectExporter exporter = new ProjectExporter(this);
 					exporter.export(path, projectRef, includeProfile, includeMedia);
 
-					Platform.runLater(() ->
-					{
-						getStageContainer().ifPresent(NVCStage::close);
-					});
+					Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 				} catch (IOException e) {
 					busyView.showProgress(false);
 

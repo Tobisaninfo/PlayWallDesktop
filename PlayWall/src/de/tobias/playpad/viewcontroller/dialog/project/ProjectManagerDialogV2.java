@@ -18,11 +18,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.dom4j.DocumentException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -40,6 +42,7 @@ public class ProjectManagerDialogV2 extends NVC {
 	@FXML private Button syncSettingsButton;
 
 	@FXML private Button projectExportButton;
+	@FXML private Button projectImportButton;
 	@FXML private Button projectDeleteButton;
 
 	@FXML private Button cancelButton;
@@ -133,9 +136,9 @@ public class ProjectManagerDialogV2 extends NVC {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(600);
-		stage.setMinHeight(400);
+		stage.setMinHeight(500);
 		stage.setWidth(600);
-		stage.setHeight(400);
+		stage.setHeight(500);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
 
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -160,6 +163,27 @@ public class ProjectManagerDialogV2 extends NVC {
 	}
 
 	@FXML
+	private void projectImportHandler(ActionEvent event) {
+		FileChooser chooser = new FileChooser();
+
+		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		chooser.getExtensionFilters().add(extensionFilter);
+
+		File file = chooser.showOpenDialog(getContainingWindow());
+
+		if (file != null) {
+			try {
+				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
+				Optional<ProjectReference> importedProject = dialog.showAndWait();
+				importedProject.ifPresent(projectList.getItems()::add);
+			} catch (IOException | DocumentException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@FXML
 	private void projectExportHandler(ActionEvent event) {
 		ProjectReference reference = getSelectedItem();
 		if (reference != null) {
@@ -173,11 +197,12 @@ public class ProjectManagerDialogV2 extends NVC {
 		ProjectReference reference = getSelectedItem();
 		if (reference != null) {
 
-			Alert dialog = new ProjectDeleteDialog(getContainingWindow());
+			Alert dialog = new ProjectDeleteDialog(reference, getContainingWindow());
 			Optional<ButtonType> result = dialog.showAndWait();
-			result.filter(t -> t == ButtonType.YES).ifPresent(t -> {
+			result.filter(t -> t == ButtonType.OK).ifPresent(t -> {
 				try {
 					ProjectReferenceManager.removeProject(reference);
+					projectList.getItems().remove(reference);
 				} catch (IOException e) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
 					e.printStackTrace();

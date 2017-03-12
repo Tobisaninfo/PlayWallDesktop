@@ -260,7 +260,7 @@ public class Pad implements Cloneable {
 			createMediaPath(path);
 		} else {
 			final MediaPath mediaPath = mediaPaths.get(0);
-			mediaPath.setPath(path);
+			mediaPath.setPath(path, true);
 		}
 	}
 
@@ -271,13 +271,17 @@ public class Pad implements Cloneable {
 	public void setPath(Path path, int id) {
 		if (mediaPaths.size() > id && id >= 0) {
 			final MediaPath mediaPath = mediaPaths.get(id);
-			mediaPath.setPath(path);
+			mediaPath.setPath(path,true);
 		}
 	}
 
 	public void setPath(Path path, UUID id) {
+		setPath(path, id, true);
+	}
+
+	public void setPath(Path path, UUID id, boolean load) {
 		final Optional<MediaPath> first = mediaPaths.stream().filter(mediaPath -> mediaPath.getId().equals(id)).findFirst();
-		first.ifPresent(mediaPath -> mediaPath.setPath(path));
+		first.ifPresent(mediaPath -> mediaPath.setPath(path, load));
 	}
 
 	private void createMediaPath(Path path) {

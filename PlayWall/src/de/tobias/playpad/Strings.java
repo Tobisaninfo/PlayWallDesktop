@@ -28,8 +28,9 @@ public class Strings {
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
+	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
 	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
-	public static final String UI_Dialog_NewProile_Title = "UI.Dialog.NewProfile.Title";
+	public static final String UI_Dialog_NewProfile_Title = "UI.Dialog.NewProfile.Title";
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
 	public static final String UI_Dialog_ProjectManager_Title = "UI.Dialog.ProjectManager.Title";

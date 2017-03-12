@@ -267,11 +267,12 @@ public final class ProjectReferenceManager {
 	}
 
 	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
-		Server server = PlayPadPlugin.getServerHandler().getServer();
-
 		if (newValue) {
 			Project project = loadProjectImpl(reference, null); // TODO null for delegate
+
 			CommandManager.execute(Commands.PROJECT_ADD, reference, reference);
+
+			Server server = PlayPadPlugin.getServerHandler().getServer();
 			server.postProject(project);
 		} else {
 			CommandManager.execute(Commands.PROJECT_REMOVE, reference, reference);
