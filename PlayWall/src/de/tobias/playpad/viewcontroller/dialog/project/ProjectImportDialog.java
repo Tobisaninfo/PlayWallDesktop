@@ -72,6 +72,21 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 
 		// Init Busy View
 		busyView = new BusyView(this);
+
+		if (importer.isIncludeMedia()) {
+			importButton.setDisable(true);
+		}
+	}
+
+	@Override
+	public void init() {
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue && mediaPath == null) {
+				importButton.setDisable(true);
+			} else {
+				importButton.setDisable(false);
+			}
+		});
 	}
 
 	public Optional<ProjectReference> showAndWait() {
@@ -106,6 +121,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		if (folder != null) {
 			mediaPath = folder.toPath();
 			mediaPathLabel.setText(mediaPath.toString());
+
+			importButton.setDisable(false);
 		}
 	}
 
@@ -121,11 +138,6 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 	void importHandler(ActionEvent event) {
 		busyView.getIndicator().setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 		busyView.showProgress(true);
-
-		// Check Valid Settings
-		if (shouldImportMedia() && mediaPath == null) {
-			showInfoMessage("Medienornder wählen");
-		}
 
 		Worker.runLater(() -> {
 			try {

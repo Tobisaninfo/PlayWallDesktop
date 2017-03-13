@@ -13,17 +13,17 @@
    <children>
       <VBox spacing="14.0">
          <children>
-            <Label text="Projekt:" underline="true" />
+            <Label text="%project.import.label.project" underline="true" />
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="Name:" />
+                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%project.import.label.name" />
                   <TextField fx:id="projectNameTextField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="Synchonisieren:" />
-                  <CheckBox fx:id="syncCheckbox" mnemonicParsing="false" text="Aktiv" />
+                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%project.import.label.sync" />
+                  <CheckBox fx:id="syncCheckbox" mnemonicParsing="false" text="%project.import.checkbox,sync" />
                </children>
             </HBox>
          </children>
@@ -31,10 +31,10 @@
       <Separator prefWidth="200.0" />
       <VBox fx:id="profileSection" spacing="14.0">
          <children>
-            <Label text="Profil:" underline="true" />
+            <Label text="%project.import.label.profile" underline="true" />
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
-                  <CheckBox fx:id="profileImportCheckbox" mnemonicParsing="false" text="Profil importieren">
+                  <CheckBox fx:id="profileImportCheckbox" mnemonicParsing="false" text="%project.import.checkbox.profile">
                      <HBox.margin>
                         <Insets left="114.0" />
                      </HBox.margin></CheckBox>
@@ -42,7 +42,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
-                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="Name:" />
+                  <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%project.import.label.name" />
                   <TextField fx:id="profileNameTextField" />
                </children>
             </HBox>
@@ -51,10 +51,10 @@
       <Separator prefWidth="200.0" />
       <VBox fx:id="mediaSection" spacing="14.0">
          <children>
-            <Label text="Mediendateien:" underline="true" />
+            <Label text="%project.import.label.media" underline="true" />
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
-                  <CheckBox fx:id="mediaImportCheckbox" mnemonicParsing="false" text="Medien importieren">
+                  <CheckBox fx:id="mediaImportCheckbox" mnemonicParsing="false" text="%project.import.checkbox.media">
                      <HBox.margin>
                         <Insets left="114.0" />
                      </HBox.margin></CheckBox>
@@ -64,8 +64,8 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="14.0">
                      <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="Pfad:" />
-                        <Button fx:id="mediaPathButton" mnemonicParsing="false" onAction="#mediaPathHandler" text="Wählen" />
+                        <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%project.import.label.path" />
+                        <Button fx:id="mediaPathButton" mnemonicParsing="false" onAction="#mediaPathHandler" text="%project.import.button.choose" />
                      </children>
                   </HBox>
                   <Label fx:id="mediaPathLabel" minWidth="100.0" textOverrun="CENTER_ELLIPSIS">
@@ -80,8 +80,8 @@
       <Separator prefWidth="200.0" />
       <HBox alignment="BOTTOM_RIGHT" spacing="14.0">
          <children>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelHandler" text="Abbrechen" />
-            <Button fx:id="importButton" mnemonicParsing="false" onAction="#importHandler" text="Importieren" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelHandler" text="%project.import.button.cancel" />
+            <Button fx:id="importButton" mnemonicParsing="false" onAction="#importHandler" text="%project.import.button.import" />
          </children>
       </HBox>
    </children>
