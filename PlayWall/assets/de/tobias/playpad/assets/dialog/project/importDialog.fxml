@@ -23,7 +23,7 @@
             <HBox alignment="CENTER_LEFT" spacing="14.0">
                <children>
                   <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%project.import.label.sync" />
-                  <CheckBox fx:id="syncCheckbox" mnemonicParsing="false" text="%project.import.checkbox,sync" />
+                  <CheckBox fx:id="syncCheckbox" mnemonicParsing="false" text="%project.import.checkbox.sync" />
                </children>
             </HBox>
          </children>
