@@ -16,6 +16,7 @@ import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
@@ -34,10 +35,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.dom4j.DocumentException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -166,23 +169,23 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 
 	@FXML
 	private void importProjectButtonHandler(ActionEvent event) {
-		// TODO Import Projects
-		/*FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
+		FileChooser chooser = new FileChooser();
+
+		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		chooser.getExtensionFilters().add(extensionFilter);
+
 		File file = chooser.showOpenDialog(getContainingWindow());
+
 		if (file != null) {
-			Path zipFile = file.toPath();
 			try {
-				ImportDialog importDialog = ImportDialog.getInstance(getContainingWindow());
-				ProjectReference ref = ProjectImporter.importProject(zipFile, importDialog, importDialog);
-				if (ref != null) {
-					launchProject(ref);
-				}
-			} catch (DocumentException | IOException e) {
-				showErrorMessage(getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
+				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
+				Optional<ProjectReference> importedProject = dialog.showAndWait();
+				importedProject.ifPresent(projectListView.getItems()::add);
+			} catch (IOException | DocumentException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 
 	@FXML
@@ -247,9 +250,9 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	}
 
 	/**
-	 * Gibt das ausgewählte Projekt zurück.
+	 * Returns the selected project from the list view
 	 *
-	 * @return Projekt
+	 * @return Project
 	 */
 	private ProjectReference getSelectedProject() {
 		return projectListView.getSelectionModel().getSelectedItem();

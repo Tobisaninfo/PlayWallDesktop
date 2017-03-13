@@ -54,7 +54,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 	private ProjectImporter importer;
 	private Path mediaPath;
 
-	ProjectImportDialog(Path path, Window owner) throws IOException, DocumentException {
+	public ProjectImportDialog(Path path, Window owner) throws IOException, DocumentException {
 		load("de/tobias/playpad/assets/dialog/project/", "importDialog", PlayPadMain.getUiResourceBundle());
 		applyViewControllerToStage().initOwner(owner);
 
@@ -94,7 +94,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		if (Profile.currentProfile() != null)
+			Profile.currentProfile().currentLayout().applyCss(stage);
 	}
 
 	// ActionHandler
