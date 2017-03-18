@@ -1,13 +1,20 @@
 package de.tobias.playpad;
 
+import com.mashape.unirest.http.Unirest;
 import de.tobias.playpad.plugin.ModernPluginManager;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.ServerHandlerImpl;
+import de.tobias.playpad.server.sync.command.CommandExecutor;
+import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
+import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
+import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
+import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
@@ -25,6 +32,11 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -108,6 +120,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> hostname.equals("localhost"));
+
+			// Unirest
+			SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+			CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+			Unirest.setHttpClient(httpclient);
 		}
 
 		// Localization
@@ -119,9 +137,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
+		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
+		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
+		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
 
 		// Console
 		if (!app.isDebug()) {
@@ -146,7 +167,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			PlayPadUpdater updater = new PlayPadUpdater();
 			UpdateRegistery.registerUpdateable(updater);
 
-			impl.startup(Localization.getBundle());
+			impl.startup(Localization.getBundle(), new LoginViewController());
 
 			// Load Plugin Path
 			if (!getParameters().getRaw().contains("noplugins")) {
@@ -166,14 +187,14 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			/*
 			 * Load Data
 			 */
-			ProfileReferences.loadProfiles();
-			ProjectReferences.loadProjects();
+			ProfileReferenceManager.loadProfiles();
+			ProjectReferenceManager.loadProjects();
 
 			// Auto Open Project
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = Project.load(ProjectReferences.getProject(uuid), true, null);
+					Project project = ProjectReferenceManager.loadProject(ProjectReferenceManager.getProject(uuid), null);
 					impl.openProject(project, null);
 					return;
 				}
@@ -219,8 +240,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
-			ProfileReferences.saveProfiles();
-			ProjectReferences.saveProjects();
+			ProfileReferenceManager.saveProfiles();
+			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler

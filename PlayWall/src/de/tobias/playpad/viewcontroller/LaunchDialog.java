@@ -1,25 +1,32 @@
 package de.tobias.playpad.viewcontroller;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.ProfileChooseable;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectImporter;
-import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.importer.ConverterV6;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.ConnectionState;
+import de.tobias.playpad.server.Server;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
-import de.tobias.playpad.viewcontroller.dialog.ImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -27,37 +34,47 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 
 import static de.tobias.utils.util.Localization.getString;
 
-public class LaunchDialog extends NVC implements ProfileChooseable {
+public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDelegate, ChangeListener<ConnectionState> {
 
-	private static final String IMAGE = "icon.png";
+	public static final String IMAGE = "icon.png";
 
 	@FXML private Label infoLabel;
 	@FXML private ImageView imageView;
 
 	@FXML private ListView<ProjectReference> projectListView;
 
-	@FXML private Button newProfileButton;
-	@FXML private Button importProfileButton;
+	@FXML private Button newProjectButton;
+	@FXML private Button importProjectButton;
+	@FXML private Button convertProjectButton;
+
 	@FXML private Button openButton;
 	@FXML private Button deleteButton;
 
+	@FXML private Label cloudLabel;
+	private FontIcon cloudIcon;
+
 	public LaunchDialog(Stage stage) {
 		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
-		projectListView.getItems().addAll(ProjectReferences.getProjectsSorted());
+		setProjectListValues();
 
 		applyViewControllerToStage(stage);
+	}
+
+	private void setProjectListValues() {
+		projectListView.getItems().setAll(ProjectReferenceManager.getProjectsSorted());
 	}
 
 	@Override
@@ -66,11 +83,7 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 		// Setup launchscreen labels and image
 		infoLabel.setText(getString(Strings.UI_Dialog_Launch_Info, app.getInfo().getName(), app.getInfo().getVersion()));
-		try {
-			imageView.setImage(new Image(IMAGE));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		imageView.setImage(new Image(IMAGE));
 
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
@@ -81,15 +94,13 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		projectListView.setCellFactory(list -> new ProjectCell(true));
 
 		// List selection listener
-		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
-		{
+		projectListView.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> {
 			openButton.setDisable(c == null);
 			deleteButton.setDisable(c == null);
 		});
 
 		// Mouse Double Click on list
-		projectListView.setOnMouseClicked(mouseEvent ->
-		{
+		projectListView.setOnMouseClicked(mouseEvent -> {
 			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
 				if (mouseEvent.getClickCount() == 2) {
 					if (!projectListView.getSelectionModel().isEmpty()) {
@@ -98,6 +109,14 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 				}
 			}
 		});
+
+		// Cloud Info Label
+		cloudIcon = new FontIcon(FontAwesomeType.CLOUD);
+		cloudLabel.setGraphic(cloudIcon);
+		setCloudState();
+
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		server.connectionStateProperty().addListener(this);
 	}
 
 	@Override
@@ -111,37 +130,92 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		stage.setResizable(false);
 		stage.setWidth(650);
 		stage.setHeight(400);
+		stage.centerOnScreen();
 		stage.show();
 	}
 
-	@FXML
-	private void newProfileButtonHandler(ActionEvent event) {
-		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
+	@Override
+	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
+		Platform.runLater(this::setCloudState);
+	}
 
-		Project project = dialog.getProject();
-		if (project != null) {
-			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+	private void setCloudState() {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		switch (server.getConnectionState()) {
+			case CONNECTED:
+				cloudIcon .setColor(Color.BLACK);
+				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
+				break;
+			case CONNECTION_LOST:
+				cloudIcon .setColor(Color.GRAY);
+				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
+				break;
 		}
 	}
 
 	@FXML
-	private void importProfileButtonHandler(ActionEvent event) {
+	private void newProjectButtonHandler(ActionEvent event) {
+		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
+		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
+
+		ProjectReference projectRef = dialog.getProject();
+		try {
+			Project project = ProjectReferenceManager.loadProject(projectRef, this);
+			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+		} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void importProjectButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
+
+		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		chooser.getExtensionFilters().add(extensionFilter);
+
 		File file = chooser.showOpenDialog(getContainingWindow());
+
 		if (file != null) {
-			Path zipFile = file.toPath();
 			try {
-				ImportDialog importDialog = ImportDialog.getInstance(getContainingWindow());
-				ProjectReference ref = ProjectImporter.importProject(zipFile, importDialog, importDialog);
-				if (ref != null) {
-					launchProject(ref);
-				}
-			} catch (DocumentException | IOException e) {
-				showErrorMessage(getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
+				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
+				Optional<ProjectReference> importedProject = dialog.showAndWait();
+				importedProject.ifPresent(projectListView.getItems()::add);
+			} catch (IOException | DocumentException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	@FXML
+	private void convertProjectButtonHandler(ActionEvent event) {
+		try {
+			List<ProjectReference> projects = ConverterV6.loadProjectReferences();
+			ChoiceDialog<ProjectReference> dialog = new ChoiceDialog<>(null, projects);
+
+			dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Project_Convert_Header));
+			dialog.setContentText(Localization.getString(Strings.UI_Dialog_Project_Convert_Content));
+
+			dialog.initOwner(getContainingWindow());
+			dialog.initModality(Modality.WINDOW_MODAL);
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+			Optional<ProjectReference> result = dialog.showAndWait();
+			result.ifPresent((ref) -> {
+				try {
+					ConverterV6.convert(ref.getUuid(), ref.getName());
+					ProjectReferenceManager.addProjectReference(ref);
+					setProjectListValues();
+				} catch (IOException | DocumentException e) {
+					e.printStackTrace();
+					showErrorMessage(Localization.getString(Strings.Error_Project_Convert));
+				}
+			});
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Standard_Gen));
 		}
 	}
 
@@ -166,9 +240,9 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 			alert.showAndWait().filter(item -> item == ButtonType.OK).ifPresent(item ->
 			{
 				try {
-					ProjectReferences.removeDocument(ref);
+					ProjectReferenceManager.removeProject(ref);
 					projectListView.getItems().remove(ref); // VIEW
-				} catch (DocumentException | IOException e) {
+				} catch (IOException e) {
 					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
 				}
 			});
@@ -176,9 +250,9 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 	}
 
 	/**
-	 * Gibt das ausgewählte Projekt zurück.
+	 * Returns the selected project from the list view
 	 *
-	 * @return Projekt
+	 * @return Project
 	 */
 	private ProjectReference getSelectedProject() {
 		return projectListView.getSelectionModel().getSelectedItem();
@@ -190,6 +264,9 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 	 * @param ref Project to launch
 	 */
 	private void launchProject(ProjectReference ref) {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		server.connectionStateProperty().removeListener(this);
+
 		// Es fehlen Module
 		if (!ref.getMissedModules().isEmpty()) {
 			showInfoMessage(Localization.getString(Strings.Error_Plugins_Missing));
@@ -199,15 +276,15 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 		}
 
 		try {
-			Project project = Project.load(ref, true, this);
+			Project project = ProjectReferenceManager.loadProject(ref, this);
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
-			// Neues Profile wählen
-			Profile profile = getUnkownProfile();
-			ref.setProfileReference(profile.getRef());
+			// Choose new profile
+			ProfileReference profile = getProfileReference();
+			ref.setProfileReference(profile);
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
@@ -219,13 +296,13 @@ public class LaunchDialog extends NVC implements ProfileChooseable {
 
 	// Zeigt dialog für das Ausfählen eines neuen Profiles.
 	@Override
-	public Profile getUnkownProfile() {
+	public ProfileReference getProfileReference() {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(getContainingWindow());
 
 		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Profile profile = dialog.getProfile();
 		if (profile != null) {
-			return profile;
+			return profile.getRef();
 		}
 		return null;
 	}

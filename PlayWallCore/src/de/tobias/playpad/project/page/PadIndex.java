@@ -25,7 +25,7 @@ public class PadIndex implements Serializable {
 		return id;
 	}
 
-	public int getPage() {
+	public int getPagePosition() {
 		return page;
 	}
 

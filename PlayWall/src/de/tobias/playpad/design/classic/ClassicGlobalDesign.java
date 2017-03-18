@@ -321,14 +321,14 @@ public class ClassicGlobalDesign extends Design implements GlobalDesign {
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "custom_style.css");
 
-		// Globale CSS -> Immer Akzent, und wenn isCustomLayout dann alles
+		// Globale CSS -> Immer Akzent, und wenn isCustomDesign dann alles
 		String css = convertToCSS("", isCustomLayout());
 
 		// Pad Spezelles Layout immer
 		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
 
-			if (padSettings.isCustomLayout()) {
+			if (padSettings.isCustomDesign()) {
 				CartDesign layoutOpt = padSettings.getDesign();
 				css += "\n" + layoutOpt.convertToCss(pad.getPadIndex().toString(), true);
 			}

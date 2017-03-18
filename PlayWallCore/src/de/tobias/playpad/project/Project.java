@@ -1,43 +1,28 @@
 package de.tobias.playpad.project;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
-
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadException;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.project.page.PageSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.utils.xml.XMLHandler;
-import javafx.application.Platform;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 /**
  * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
- * 
- * @author tobias
  *
+ * @author tobias
  * @since 6.0.0
  */
 public class Project {
@@ -52,24 +37,28 @@ public class Project {
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
-	private final List<Page> pages;
+	final ObservableList<Page> pages;
 
-	private final ProjectReference projectReference;
-	private ProjectSettings settings;
-	private IntegerProperty activePlayerProperty;
+	ProjectSettings settings;
+	final ProjectReference projectReference;
 
-	/**
-	 * Liste mit den aktuellen Laufzeitfehlern.
-	 */
-	private transient ObservableList<PadException> exceptions;
+	private transient IntegerProperty activePlayerProperty;
+	private transient ProjectUpdateListener syncListener;
 
 	public Project(ProjectReference ref) {
 		this.projectReference = ref;
-		this.pages = new ArrayList<>();
+		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
 
-		this.exceptions = FXCollections.observableArrayList();
+		syncListener = new ProjectUpdateListener(this);
+		if (ref.isSync()) {
+			syncListener.addListener();
+		}
+	}
+
+	public void close() {
+		syncListener.removeListener();
 	}
 
 	public ProjectSettings getSettings() {
@@ -85,7 +74,7 @@ public class Project {
 	}
 
 	public Pad getPad(PadIndex index) {
-		Page page = pages.get(index.getPage());
+		Page page = pages.get(index.getPagePosition());
 		return page.getPad(index.getId());
 	}
 
@@ -103,114 +92,61 @@ public class Project {
 	public void setPad(PadIndex index, Pad pad) {
 		if (pad != null) {
 			// Remove Pad from old location
-			if (pad.getPage() != index.getPage()) {
-				Page oldPage = getPage(pad.getPage());
-				if (oldPage.getPad(pad.getIndex()).equals(pad)) {
-					oldPage.removePade(index.getId());
+			if (pad.getPage().getPosition() != index.getPagePosition()) {
+				Page oldPage = pad.getPage();
+				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
+					oldPage.setPad(index.getId(), null);
 				}
 			}
 		}
-		Page page = pages.get(index.getPage());
+		Page page = pages.get(index.getPagePosition());
 		page.setPad(index.getId(), pad);
 	}
 
 	public Collection<Pad> getPads() {
 		List<Pad> pads = new ArrayList<>();
-		pages.stream().map(page -> page.getPads()).forEach(pads::addAll);
+		pages.stream().map(Page::getPads).forEach(pads::addAll);
 		return pads;
 	}
 
-	// Pages
-	public Page getPage(int index) {
-		if (index >= pages.size() && index < ProjectSettings.MAX_PAGES) {
-			pages.add(new Page(index, this));
-		}
-		return pages.get(index);
+	public void removePad(UUID id) {
+		Pad pad = getPad(id);
+		pad.clear();
+		pad.getPage().removePad(id, true);
 	}
 
-	public Collection<Page> getPages() {
-		// Create new page if all is empty (automaticlly)
+	// Pages
+	public Page getPage(int psotion) {
+		if (psotion >= pages.size() && psotion < ProjectSettings.MAX_PAGES) {
+			addPage(new Page(psotion, this));
+		}
+		return pages.get(psotion);
+	}
+
+
+	public Page getPage(UUID uuid) {
+		for (Page page : pages) {
+			if (page.getId().equals(uuid)) {
+				return page;
+			}
+		}
+		return null;
+	}
+
+	public ObservableList<Page> getPages() {
+		// Create new page if all is empty (automatic)
 		if (pages.isEmpty()) {
-			pages.add(new Page(0, this));
+			addPage(new Page(0, this));
 		}
 		return pages;
 	}
 
 	public void setPage(int index, Page page) {
-		pages.set(index, page);
-		page.setId(index);
-	}
+		if (pages.contains(page))
+			pages.remove(page);
 
-	private static final String ROOT_ELEMENT = "Project";
-	public static final String PAGE_ELEMENT = "Page";
-	public static final String PAD_ELEMENT = "Pad";
-	private static final String SETTINGS_ELEMENT = "Settings";
-
-	public static Project load(ProjectReference ref, boolean loadMedia, ProfileChooseable profileChooseable)
-			throws DocumentException, IOException, ProfileNotFoundException, ProjectNotFoundException, NoSuchComponentException {
-		Path projectPath = ref.getProjectPath();
-
-		if (Files.exists(projectPath)) {
-			if (ref.getProfileReference() != null) {
-				// Lädt das entsprechende Profile und aktiviert es
-				Profile.load(ref.getProfileReference());
-			} else {
-				// Lädt Profile / Erstellt neues und hat es gleich im Speicher
-				Profile profile = profileChooseable.getUnkownProfile();
-				ref.setProfileReference(profile.getRef());
-			}
-
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(projectPath));
-			Element rootElement = document.getRootElement();
-
-			Project project = new Project(ref);
-
-			// Lädt die Pages und somti auch die Pages
-			XMLHandler<Page> handler = new XMLHandler<>(rootElement);
-			List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
-			for (Page page : pages) {
-				project.pages.add(page);
-			}
-
-			// Lädt die Einstellungen
-			Element settingsElement = rootElement.element(SETTINGS_ELEMENT);
-			if (settingsElement != null)
-				project.settings = ProjectSettings.load(settingsElement);
-
-			// TODO Externalize, damit beim Start user feedback verbessert wird.
-			for (Pad pad : project.getPads()) {
-				if (loadMedia)
-					pad.loadContent();
-			}
-
-			return project;
-		} else {
-			throw new ProjectNotFoundException(ref);
-		}
-	}
-
-	public void save() throws IOException {
-		Path projectPath = projectReference.getProjectPath();
-		// Modules clearen und beim Speichern der pads neu setzen, damit alte Modules, die nicht gebracht werden, entfernt werden können.
-		projectReference.getRequestedModules().clear();
-
-		Document document = DocumentHelper.createDocument();
-		Element rootElement = document.addElement(ROOT_ELEMENT);
-
-		// Speichern der Pads
-		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
-		handler.saveElements(PAGE_ELEMENT, pages, new PageSerializer(this));
-
-		// Speichern der Settings
-		Element settingsElement = rootElement.addElement(SETTINGS_ELEMENT);
-		settings.save(settingsElement);
-
-		if (Files.notExists(projectPath)) {
-			Files.createDirectories(projectPath.getParent());
-			Files.createFile(projectPath);
-		}
-		XMLHandler.save(projectPath, document);
+		pages.add(index, page);
+		page.setPosition(index);
 	}
 
 	public int getActivePlayers() {
@@ -229,47 +165,9 @@ public class Project {
 		activePlayerProperty.set(getActivePlayers());
 	}
 
-	// Exceptions
-	public void addException(Pad pad, Path path, Exception exception) {
-		if (!Platform.isFxApplicationThread()) {
-			Platform.runLater(() -> addException(pad, path, exception));
-			return;
-		}
-		PadException padException = new PadException(pad, path, exception);
-		exceptions.add(padException);
-	}
-
-	public void removeExceptions(Pad pad) {
-		if (!Platform.isFxApplicationThread()) {
-			Platform.runLater(() -> removeExceptions(pad));
-			return;
-		}
-		exceptions.removeIf(exception -> exception.getPad().equals(pad));
-	}
-
-	public void removeException(PadException exception) {
-		if (!Platform.isFxApplicationThread()) {
-			Platform.runLater(() -> removeException(exception));
-			return;
-		}
-		exceptions.remove(exception);
-	}
-
-	public ObservableList<PadException> getExceptions() {
-		return exceptions;
-	}
-
 	// Utils
 	public void loadPadsContent() {
-		getPads().forEach(pad ->
-		{
-			try {
-				pad.loadContent();
-			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
-				// TODO handle exception withon project
-			}
-		});
+		getPads().forEach(Pad::loadContent);
 	}
 
 	@Override
@@ -286,17 +184,26 @@ public class Project {
 	}
 
 	public void removePage(Page page) {
-		pages.remove(page.getId());
-		// Neue Interne Indies für die Pages
-		for (int i = page.getId(); i < pages.size(); i++) {
+		if (projectReference.isSync()) {
+			// Remove remote new page
+			CommandManager.execute(Commands.PAGE_REMOVE, projectReference, page);
+
+			// Remove sync listener
+			page.removeSyncListener();
+		}
+
+		pages.remove(page.getPosition());
+		// Reindex all pages
+		for (int i = page.getPosition(); i < pages.size(); i++) {
 			Page tempPage = pages.get(i);
-			tempPage.setId(i);
+			tempPage.setPosition(i);
 		}
 	}
 
 	public boolean addPage() {
 		int index = pages.size();
-		return addPage(new Page(index, this));
+		Page page = new Page(index, this);
+		return addPage(page);
 	}
 
 	public boolean addPage(Page page) {
@@ -306,7 +213,13 @@ public class Project {
 
 		int newIndex = pages.size();
 
-		page.setId(newIndex);
+		page.setPosition(newIndex);
+
+		if (projectReference.isSync()) {
+			// Add remote new page
+			CommandManager.execute(Commands.PAGE_ADD, projectReference, page);
+		}
+
 		pages.add(page);
 
 		return true;
@@ -314,9 +227,8 @@ public class Project {
 
 	/**
 	 * Find pads, which name starts with a given string
-	 * 
-	 * @param name
-	 *            search key
+	 *
+	 * @param name search key
 	 * @return found pads in project
 	 */
 	public List<Pad> findPads(String name) {
@@ -329,5 +241,16 @@ public class Project {
 			}
 		}
 		return result;
+	}
+
+	public MediaPath getMediaPath(UUID uuid) {
+		for (Pad pad : getPads()) {
+			for (MediaPath path : pad.getPaths()) {
+				if (path.getId().equals(uuid)) {
+					return path;
+				}
+			}
+		}
+		return null;
 	}
 }

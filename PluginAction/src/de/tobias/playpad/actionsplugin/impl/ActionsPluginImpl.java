@@ -1,10 +1,7 @@
 package de.tobias.playpad.actionsplugin.impl;
 
-import java.io.IOException;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import org.dom4j.DocumentException;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;

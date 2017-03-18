@@ -18,7 +18,6 @@ import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.IGlobalReloadTask;
 import de.tobias.playpad.viewcontroller.option.IGlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.GeneralTabViewController;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
 import javafx.beans.Observable;

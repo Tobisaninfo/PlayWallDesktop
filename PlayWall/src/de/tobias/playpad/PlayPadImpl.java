@@ -7,9 +7,7 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.ObjectHandler;
-import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.ServerHandler;
+import de.tobias.playpad.server.*;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
@@ -30,6 +28,7 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -48,6 +47,8 @@ public class PlayPadImpl implements PlayPad {
 	private static Module module;
 
 	protected GlobalSettings globalSettings;
+
+	protected Session session;
 
 	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
 		this.parameters = parameters;
@@ -116,18 +117,17 @@ public class PlayPadImpl implements PlayPad {
 				try {
 					((AutoCloseable) i).close();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
 
-		ServerHandler.getServer().disconnect();
+		PlayPadPlugin.getServerHandler().getServer().disconnect();
 
 		try {
-			FileUtils.deleteDirectory(SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain"));
+			Path applicationSupportPath = SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain");
+			FileUtils.deleteDirectory(applicationSupportPath);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -155,13 +155,14 @@ public class PlayPadImpl implements PlayPad {
 		}
 	}
 
+	@Override
 	public Project getCurrentProject() {
 		return currentProject;
 	}
 
-	void startup(ResourceBundle resourceBundle) {
+	void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
 		registerComponents(resourceBundle);
-		configureServer();
+		configureServer(delegate);
 	}
 
 	private void registerComponents(ResourceBundle resourceBundle) {
@@ -202,15 +203,24 @@ public class PlayPadImpl implements PlayPad {
 		return parameters;
 	}
 
-	private void configureServer() {
-		ObjectHandler.setListener(ServerHandler.getServer()::push);
+	private void configureServer(SessionDelegate delegate) {
+		// Load Server session key
+		session = Session.load();
 
-		// Connect to Server TODO
-		Server server = ServerHandler.getServer();
+		if (session == null) {
+			session = delegate.getSession();
+		}
+
+		// Connect to Server
+		Server server = PlayPadPlugin.getServerHandler().getServer();
 		try {
-			server.connect("3pRogQ63Bd1YTXNOBNM3uyujDv2EPjaIZwXcxT9TzHHGm9TKNIDEBqSlnWo0e25HEtiOvzR4H2nKx7uLvs0MM1z7g2XCvoiqxGo3");
+			server.connect(session.getKey());
 		} catch (IOException | WebSocketException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Session getSession() {
+		return session;
 	}
 }

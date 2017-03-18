@@ -9,7 +9,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.path.MultiPathContent;
@@ -20,7 +20,6 @@ import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -62,8 +61,8 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 				String type = pad.getContent().getType();
 				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
 
-				ContentFactory contentFactory = registry.getFactory(type);
-				PadSettingsTabViewController contentTab = contentFactory.getSettingsViewController(pad);
+				PadContentFactory padContentFactory = registry.getFactory(type);
+				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
 
 				if (contentTab != null)
 					addTab(contentTab);
@@ -134,9 +133,9 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName());
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getPositionReadable(), pad.getName());
 		} else {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable());
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
 	}

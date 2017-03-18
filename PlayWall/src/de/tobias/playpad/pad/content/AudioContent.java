@@ -1,12 +1,10 @@
 package de.tobias.playpad.pad.content;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import de.tobias.playpad.audio.AudioEqualizeable;
-import org.dom4j.Element;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.AudioHandler;
@@ -15,15 +13,11 @@ import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.pad.fade.Fade;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.path.SinglePathContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.pad.fade.FadeDelegate;
 import de.tobias.playpad.pad.content.play.Pauseable;
-import de.tobias.playpad.project.ProjectExporter;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.volume.VolumeManager;
-import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -32,11 +26,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, SinglePathContent, FadeDelegate {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate {
 
 	private final String type;
 
-	private Path path;
 	private AudioHandler audioHandler;
 
 	private ObjectProperty<Duration> durationProperty = new SimpleObjectProperty<>();
@@ -53,22 +46,6 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 		// Pad Volume Listener
 		volumeListener = (a, b, c) -> updateVolume();
-	}
-
-	@Override
-	public Path getPath() {
-		return path;
-	}
-
-	@Override
-	public void handlePath(Path path) throws NoSuchComponentException, IOException {
-		// handle old media
-		unloadMedia();
-
-		this.path = getRealPath(path);
-
-		// handle new media
-		loadMedia();
 	}
 
 	@Override
@@ -171,7 +148,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
 
-		if (Files.exists(path)) {
+		Path path = getPad().getPath();
+
+		if (path != null && Files.exists(path)) {
 			audioHandler.loadMedia(path);
 
 			durationProperty.bind(audioHandler.durationProperty());
@@ -181,6 +160,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		} else {
 			// getPad().throwException(path, new FileNotFoundException()); TODO Error Handling User
 		}
+	}
+
+	@Override
+	public void loadMedia(MediaPath mediaPath) {
+		loadMedia();
 	}
 
 	@Override
@@ -196,8 +180,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		if (audioHandler != null)
 			audioHandler.unloadMedia();
 
-		Platform.runLater(() -> // TODO Platform.runLater ?
-		{
+		Platform.runLater(() -> {
 			if (getPad() != null) {
 				getPad().setStatus(PadStatus.EMPTY);
 			}
@@ -205,53 +188,13 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void load(Element element) {
-		path = Paths.get(element.getStringValue());
-	}
-
-	@Override
-	public void save(Element element) {
-		element.addText(path.toString());
-	}
-
-	@Override
-	public void importMedia(Path mediaFolder, ZipFile zip, Element element) {
-		String fileName = Paths.get(element.getStringValue()).getFileName().toString();
-		Path mediaFile = Paths.get(ProjectExporter.mediaFolder, fileName);
-
-		Path desFile = mediaFolder.resolve(fileName);
-
-		try {
-			if (Files.notExists(desFile.getParent())) {
-				Files.createDirectories(desFile.getParent());
-			}
-
-			if (Files.notExists(desFile))
-				zip.getFile(mediaFile, desFile);
-
-			element.setText(desFile.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void exportMedia(ZipFile zip, Element element) {
-		Path desPath = Paths.get(ProjectExporter.mediaFolder, path.getFileName().toString());
-		try {
-			if (Files.notExists(desPath.getParent())) {
-				Files.createDirectories(desPath.getParent());
-			}
-			zip.addFile(path, desPath);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void unloadMedia(MediaPath mediaPath) {
+		unloadMedia();
 	}
 
 	@Override
 	public PadContent clone() throws CloneNotSupportedException {
 		AudioContent clone = (AudioContent) super.clone();
-		clone.path = Paths.get(path.toUri());
 
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
 		clone.audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);

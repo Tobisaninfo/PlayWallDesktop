@@ -18,7 +18,6 @@ import de.tobias.playpad.pad.content.path.MultiPathContent;
 import de.tobias.playpad.pad.content.path.SinglePathContent;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
@@ -134,12 +133,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 								Platform.runLater(() ->
 								{
-									try {
-										content.handlePath(copiedFile);
-									} catch (NoSuchComponentException | IOException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
+									// content.handlePath(copiedFile); TODO Media Path Handler
 								});
 							} else if (content instanceof MultiPathContent) {
 								MultiPathContent pathHandler = (MultiPathContent) content;
@@ -152,7 +146,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 									Path copiedFile = newMediaPath.resolve(path.getFileName());
 
 									Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
-									content.handlePath(copiedFile);
+									// content.handlePath(copiedFile); TODO Media Path Handler
 								}
 							}
 						}

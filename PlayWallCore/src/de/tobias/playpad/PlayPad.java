@@ -3,6 +3,7 @@ package de.tobias.playpad;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
@@ -97,4 +98,10 @@ public interface PlayPad {
 	 */
 	GlobalSettings getGlobalSettings();
 
+	/**
+	 * Return the current project.
+	 *
+	 * @return project
+	 */
+	Project getCurrentProject();
 }

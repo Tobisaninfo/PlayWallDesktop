@@ -9,11 +9,13 @@ import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.Profile;
@@ -24,6 +26,7 @@ import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.*;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialogV2;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
@@ -38,6 +41,7 @@ import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -45,8 +49,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -58,6 +62,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
+import org.dom4j.DocumentException;
 
 import java.awt.*;
 import java.io.IOException;
@@ -330,13 +335,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
+			Button button = new Button();
 
-			String name = page.getName();
-			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
-			}
-
-			Button button = new Button(name);
+			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
+					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.otherwise(page.nameProperty());
+			button.textProperty().bind(nameBinding);
 			button.setUserData(i);
 			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
 			button.setFocusTraversable(false);
@@ -489,9 +493,14 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			NewProjectDialog dialog = new NewProjectDialog(mainViewController.getStage());
 			dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 
-			Project project = dialog.getProject();
-			if (project != null) {
-				PlayPadMain.getProgramInstance().openProject(project, null);
+			// TODO Redo
+			ProjectReference projectRef = dialog.getProject();
+			try {
+				Project project = ProjectReferenceManager.loadProject(projectRef, null);
+				if (project != null)
+					PlayPadMain.getProgramInstance().openProject(project, null);
+			} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -502,14 +511,14 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		{
 			Stage stage = mainViewController.getStage();
 
-			ProjectManagerDialog view = new ProjectManagerDialog(stage, openProject);
+			ProjectManagerDialogV2 view = new ProjectManagerDialogV2(stage, openProject);
 			Optional<ProjectReference> result = view.showAndWait();
 
 			if (result.isPresent()) {
 				ProjectReference ref = result.get();
 
 				try {
-					Project project = Project.load(result.get(), true, ImportDialog.getInstance(stage));
+					Project project = ProjectReferenceManager.loadProject(result.get(), ImportDialog.getInstance(stage));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 
 					createRecentDocumentMenuItems();
@@ -522,8 +531,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					mainViewController.showError(errorMessage);
 
 					// Neues Profile wählen
-					Profile profile = ImportDialog.getInstance(stage).getUnkownProfile();
-					ref.setProfileReference(profile.getRef());
+					ProfileReference profile = ImportDialog.getInstance(stage).getProfileReference();
+					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();
 					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
@@ -538,7 +547,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
 		try {
-			openProject.save();
+			ProjectReferenceManager.saveProject(openProject);
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
@@ -584,7 +593,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void errorMenuHandler(ActionEvent event) {
-		ErrorSummaryDialog.getInstance().getStage().show();
+		// TODO Error Handling dialog
 	}
 
 	@FXML
@@ -728,7 +737,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		String project = openProject.getProjectReference().getName();
 
-		ProjectReferences.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
+		ProjectReferenceManager.getProjectsSorted().stream().filter(item -> !item.getName().equals(project)).limit(LAST_DOCUMENT_LIMIT).forEach(item ->
 		{
 			MenuItem menuItem = new MenuItem(item.toString());
 			menuItem.setUserData(item);
@@ -752,7 +761,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReference ref = (ProjectReference) item.getUserData();
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
-					Project project = Project.load(ref, true, ImportDialog.getInstance(mainViewController.getStage()));
+					Project project = ProjectReferenceManager.loadProject(ref, ImportDialog.getInstance(mainViewController.getStage()));
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();
@@ -760,8 +769,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 							Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 					// Neues Profile wählen
-					Profile profile = ImportDialog.getInstance(mainViewController.getStage()).getUnkownProfile();
-					ref.setProfileReference(profile.getRef());
+					ProfileReference profile = ImportDialog.getInstance(mainViewController.getStage()).getProfileReference();
+					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();
 					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));

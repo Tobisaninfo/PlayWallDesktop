@@ -1,12 +1,10 @@
 package de.tobias.playpad.viewcontroller;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperViewController;
-import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;

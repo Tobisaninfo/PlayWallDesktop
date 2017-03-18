@@ -6,7 +6,7 @@ import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
@@ -139,7 +139,7 @@ public class DesktopPadView implements IPadView {
 			if (content != null) {
 				try {
 					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
-					ContentFactory connect = registry.getFactory(content.getType());
+					PadContentFactory connect = registry.getFactory(content.getType());
 
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();

@@ -20,7 +20,6 @@ import de.tobias.playpad.viewcontroller.cell.PageNameListCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

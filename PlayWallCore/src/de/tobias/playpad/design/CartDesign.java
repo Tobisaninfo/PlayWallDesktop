@@ -1,11 +1,18 @@
 package de.tobias.playpad.design;
 
+import de.tobias.playpad.pad.Pad;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import javafx.util.Duration;
 
 public interface CartDesign {
+
+	/**
+	 * Add any necessary listener to the cart design.
+	 */
+	default void addListener() {
+	}
 
 	String convertToCss(String classSufix, boolean fullCss);
 
@@ -30,5 +37,5 @@ public interface CartDesign {
 
 	void copyGlobalLayout(GlobalDesign globalLayout);
 	
-	Object clone() throws CloneNotSupportedException;
+	CartDesign clone(Pad pad) throws CloneNotSupportedException;
 }

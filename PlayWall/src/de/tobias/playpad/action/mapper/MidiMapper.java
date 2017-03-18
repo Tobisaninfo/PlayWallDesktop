@@ -16,7 +16,6 @@ import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
-import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

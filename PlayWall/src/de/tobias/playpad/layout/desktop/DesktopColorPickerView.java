@@ -66,11 +66,11 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 				PadSettings padSettings = pad.getPadSettings();
 
 				if (event.getButton() == MouseButton.PRIMARY) {
-					padSettings.setCustomLayout(true);
+					padSettings.setCustomDesign(true);
 					CartDesign design = padSettings.getDesign();
 					colorModeHandler.setColor(design, selectedColor);
 				} else if (event.getButton() == MouseButton.SECONDARY) {
-					padSettings.setCustomLayout(false);
+					padSettings.setCustomDesign(false);
 				}
 				PlayPadMain.getProgramInstance().getMainViewController().loadUserCss();
 			}

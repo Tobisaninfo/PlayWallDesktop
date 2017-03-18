@@ -6,7 +6,6 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

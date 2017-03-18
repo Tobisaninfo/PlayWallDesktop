@@ -13,8 +13,11 @@ import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -22,10 +25,8 @@ import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileListener;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
-import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -36,6 +37,7 @@ import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -97,13 +99,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
 
+	// Sync Listener
+	private InvalidationListener projectTitleListener;
+	private InvalidationListener pagesListener;
+
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("de/tobias/playpad/assets/view/main/", "mainView", PlayPadMain.getUiResourceBundle(), e ->
 		{
 			NVCStage stage = e.applyViewControllerToStage();
 			stage.addCloseHook(this::closeRequest);
-
-			new ErrorSummaryDialog(stage.getStage());
 
 			// Init with existing stage
 			initMapper(openProject);
@@ -147,6 +151,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+
+		// Sync Listener
+		projectTitleListener = observable -> updateWindowTitle();
+		pagesListener = observable -> {
+			getMenuToolbarController().initPageButtons();
+			showPage(0);
+		};
 
 		// Default Layout
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
@@ -247,8 +258,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	private boolean closeRequest() {
-		ErrorSummaryDialog.getInstance().getStage().close();
-
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
@@ -271,7 +280,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			}
 
 			// Save Dialog
-			if (globalSettings.isIgnoreSaveDialog()) {
+			if (globalSettings.isIgnoreSaveDialog() || openProject.getProjectReference().isSync()) {
 				saveProject();
 			} else {
 				SaveDialog alert = new SaveDialog(getStage());
@@ -316,7 +325,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				openProject.save();
+				ProjectReferenceManager.saveProject(openProject);
 				System.out.println("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {
@@ -326,9 +335,20 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	public void openProject(Project project) {
+		// Remove old listener
+		if (this.openProject != null) {
+			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
+			this.openProject.getPages().removeListener(pagesListener);
+			this.openProject.close();
+		}
+
 		removePadContentsFromView();
 
 		openProject = project;
+
+		// Add new Listener
+		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
+		openProject.getPages().addListener(pagesListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
@@ -338,7 +358,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		DesktopPadDragListener.setProject(project);
-		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -354,6 +373,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	@Override
 	public int getPage() {
 		return currentPageShowing;
+	}
+
+	@Override
+	public boolean showPage(Page page) {
+		return showPage(page.getPosition());
 	}
 
 	@Override

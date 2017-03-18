@@ -1,6 +1,6 @@
 package de.tobias.playpad.registry;
 
-public class NoSuchComponentException extends Exception {
+public class NoSuchComponentException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

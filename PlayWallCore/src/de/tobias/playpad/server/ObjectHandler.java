@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 /**
  * Created by tobias on 13.02.17.
  */
+@Deprecated
 public class ObjectHandler {
 
 	private static Set<Integer> listenered = new HashSet<>();

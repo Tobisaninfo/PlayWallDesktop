@@ -199,7 +199,7 @@ public class ClipAudioHandler extends AudioHandler {
 		try {
 			clip = (Clip) mixer.getLine(info);
 
-			Path path = ((AudioContent) getContent()).getPath();
+			Path path = getContent().getPad().getPath();
 			URL url = path.toUri().toURL();
 
 			// Convert wenn mp3

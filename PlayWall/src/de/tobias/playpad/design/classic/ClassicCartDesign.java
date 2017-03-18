@@ -1,10 +1,10 @@
 package de.tobias.playpad.design.classic;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import de.tobias.playpad.pad.Pad;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -148,7 +148,7 @@ public class ClassicCartDesign extends Design implements CartDesign {
 	}
 
 	@Override
-	public CartDesign clone() throws CloneNotSupportedException {
+	public CartDesign clone(Pad pad) throws CloneNotSupportedException {
 		ClassicCartDesign layout = (ClassicCartDesign) super.clone();
 
 		layout.backgroundColor = Color.color(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue(),

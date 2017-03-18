@@ -10,16 +10,16 @@ import java.util.Set;
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 
-public class PadContentRegistry extends ComponentRegistry<ContentFactory> {
+public class PadContentRegistry extends ComponentRegistry<PadContentFactory> {
 
 	public PadContentRegistry(String name) {
 		super(name);
 	}
 
-	public Set<ContentFactory> getPadContentConnectsForFile(Path path) throws NoSuchComponentException {
-		Set<ContentFactory> connects = new HashSet<>();
+	public Set<PadContentFactory> getPadContentConnectsForFile(Path path) throws NoSuchComponentException {
+		Set<PadContentFactory> connects = new HashSet<>();
 		for (String type : getTypes()) {
-			ContentFactory connect = getFactory(type);
+			PadContentFactory connect = getFactory(type);
 			for (String extension : connect.getSupportedTypes()) {
 				if (path.getFileName().toString().toLowerCase().matches("." + extension)) {
 					connects.add(connect);
@@ -32,7 +32,7 @@ public class PadContentRegistry extends ComponentRegistry<ContentFactory> {
 	public String[] getSupportedFileTypes() throws NoSuchComponentException {
 		List<String> extensions = new ArrayList<>();
 		for (String type : getTypes()) {
-			ContentFactory connect = getFactory(type);
+			PadContentFactory connect = getFactory(type);
 			String[] fileExtensions = connect.getSupportedTypes();
 			Collections.addAll(extensions, fileExtensions);
 		}

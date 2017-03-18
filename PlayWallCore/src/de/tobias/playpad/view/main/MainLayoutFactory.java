@@ -5,7 +5,6 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Dieses Interface beschreibt die Bestandteile des Layouts (GUI Elemente) des Main Views.

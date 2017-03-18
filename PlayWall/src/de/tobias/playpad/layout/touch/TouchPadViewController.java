@@ -70,7 +70,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 
 		try {
 			// Settings
-			padView.setIndex(pad.getIndexReadable());
+			padView.setIndex(pad.getPositionReadable());
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 

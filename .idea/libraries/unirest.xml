@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="unirest">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/unirest-java-1.4.9.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/httpasyncclient-4.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/httpclient-4.3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/httpmime-4.3.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/json-20140107.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/httpcore-4.4.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/httpcore-nio-4.4.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Libraries/unirest-http/commons-logging-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

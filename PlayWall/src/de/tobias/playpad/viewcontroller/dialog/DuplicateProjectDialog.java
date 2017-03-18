@@ -4,20 +4,17 @@ import java.util.Optional;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class DuplicateProjectDialog extends TextInputDialog {
 
@@ -32,7 +29,7 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReferences.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProjectReferenceManager.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
@@ -43,12 +40,12 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
-				if (ProfileReferences.getProfiles().contains(name)) {
+				if (ProfileReferenceManager.getProfiles().contains(name)) {
 					controller.showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 					return;
 				}
 
-				ref = ProjectReferences.duplicate(cloneableProject, name);
+				ref = ProjectReferenceManager.duplicate(cloneableProject, name);
 			} catch (Exception e) {
 				e.printStackTrace();
 				controller.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));

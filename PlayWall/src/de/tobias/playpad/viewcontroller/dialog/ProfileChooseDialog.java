@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.nui.NVC;
@@ -36,7 +36,7 @@ public class ProfileChooseDialog extends NVC {
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
 
-		profileComboBox.getItems().addAll(ProfileReferences.getProfiles());
+		profileComboBox.getItems().addAll(ProfileReferenceManager.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
 	}
 

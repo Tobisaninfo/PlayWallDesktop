@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -48,7 +48,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		nvcStage.initOwner(owner);
 		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 
-		if (ProfileReferences.getProfiles().size() == 1
+		if (ProfileReferenceManager.getProfiles().size() == 1
 				|| profileList.getSelectionModel().getSelectedItem().equals(Profile.currentProfile().getRef())) {
 			deleteButton.setDisable(true);
 		}
@@ -56,14 +56,14 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 	@Override
 	public void init() {
-		profileList.getItems().setAll(ProfileReferences.getProfiles());
+		profileList.getItems().setAll(ProfileReferenceManager.getProfiles());
 		profileList.setCellFactory(list -> new DisplayableCell<>());
 
 		nameTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c != null) {
 				try {
-					if ((ProfileReferences.getProfiles().contains(c) && !profileList.getSelectionModel().getSelectedItem().equals(c))
+					if ((ProfileReferenceManager.getProfiles().contains(c) && !profileList.getSelectionModel().getSelectedItem().equals(c))
 							&& !c.equals(profileList.getSelectionModel().getSelectedItem().getName())) {
 						nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 					} else {
@@ -147,7 +147,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		alert.showAndWait().filter(button -> button == ButtonType.OK).ifPresent(button ->
 		{
 			try {
-				ProfileReferences.removeProfile(ref);
+				ProfileReferenceManager.removeProfile(ref);
 				profileList.getItems().remove(ref);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -161,7 +161,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 		try {
 			String newProfileName = nameTextField.getText();
-			if (ProfileReferences.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
+			if (ProfileReferenceManager.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, newProfileName));
 				return;
 			}
@@ -187,7 +187,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		chooseButton.setDisable(newValue == null);
 		duplicateButton.setDisable(newValue == null);
 
-		if (ProfileReferences.getProfiles().size() == 1 || profileList.getSelectionModel().getSelectedItem() == null
+		if (ProfileReferenceManager.getProfiles().size() == 1 || profileList.getSelectionModel().getSelectedItem() == null
 				|| profileList.getSelectionModel().getSelectedItem().equals(Profile.currentProfile().getRef())) {
 			deleteButton.setDisable(true);
 		} else {

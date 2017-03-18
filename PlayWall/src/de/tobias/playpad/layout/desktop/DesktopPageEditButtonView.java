@@ -73,12 +73,12 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() == leftMoveButton) {
-			Project project = page.getProjectReference();
-			if (page.getId() > 0) {
-				Page leftPage = project.getPage(page.getId() - 1);
+			Project project = page.getProject();
+			if (page.getPosition() > 0) {
+				Page leftPage = project.getPage(page.getPosition() - 1);
 
-				int leftIndex = leftPage.getId();
-				int rightIndex = page.getId();
+				int leftIndex = leftPage.getPosition();
+				int rightIndex = page.getPosition();
 
 				project.setPage(rightIndex, leftPage);
 				project.setPage(leftIndex, page);
@@ -90,12 +90,12 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			}
 			event.consume();
 		} else if (event.getSource() == rightMoveButton) {
-			Project project = page.getProjectReference();
-			if (page.getId() < project.getPages().size()) {
-				Page rightPage = project.getPage(page.getId() + 1);
+			Project project = page.getProject();
+			if (page.getPosition() < project.getPages().size()) {
+				Page rightPage = project.getPage(page.getPosition() + 1);
 
-				int rightIndex = rightPage.getId();
-				int leftIndex = page.getId();
+				int rightIndex = rightPage.getPosition();
+				int leftIndex = page.getPosition();
 
 				project.setPage(leftIndex, rightPage);
 				project.setPage(rightIndex, page);
@@ -109,12 +109,6 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		} else if (event.getSource() == editTextButton) {
 			showPageNameDialog(page);
 
-			// Update Page Button in Toolbar
-			String name = page.getName();
-			if (name.isEmpty())
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (page.getId() + 1)); // Default Text
-			pageButton.setText(name);
-
 			event.consume();
 		} else if (event.getSource() == cloneButton) {
 			try {
@@ -123,11 +117,11 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				// Show Rename dialog for cloned page
 				showPageNameDialog(clone);
 
-				Project project = page.getProjectReference();
+				Project project = page.getProject();
 				project.addPage(clone);
 
 				controller.initPageButtons();
-				controller.highlightPageButton(page.getId());
+				controller.highlightPageButton(page.getPosition());
 				event.consume();
 			} catch (CloneNotSupportedException e) {
 				// TODO Auto-generated catch block
@@ -146,7 +140,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			Optional<ButtonType> result = alert.showAndWait();
 			result.filter(r -> r == ButtonType.OK).ifPresent(r ->
 			{
-				Project project = page.getProjectReference();
+				Project project = page.getProject();
 				project.removePage(page);
 				PlayPadMain.getProgramInstance().getMainViewController().showPage(0);
 				controller.initPageButtons();
@@ -167,7 +161,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		Optional<String> result = dialog.showAndWait();
-		result.filter(name -> !name.isEmpty()).ifPresent(page::setName);
+		result.ifPresent(page::setName);
 	}
 
 }

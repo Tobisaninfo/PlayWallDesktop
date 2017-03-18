@@ -2,7 +2,6 @@ package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.pad.content.AudioContent;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.media.AudioEqualizer;
@@ -97,7 +96,7 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 			getContent().stop();
 		}
 
-		Path path = ((AudioContent) getContent()).getPath();
+		Path path = getContent().getPad().getPath();
 		media = new Media(path.toFile().toURI().toString());
 		player = new MediaPlayer(media);
 

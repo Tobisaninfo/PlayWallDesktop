@@ -1,36 +1,24 @@
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import de.tobias.playpad.project.importer.ConverterV6;
+import de.tobias.utils.application.App;
+import de.tobias.utils.application.ApplicationUtils;
+import org.dom4j.DocumentException;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.DataLine.Info;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
+import java.io.IOException;
+import java.util.UUID;
 
 public class TestPlayPad {
 
-	public static void main(String[] args) throws LineUnavailableException {
-		Mixer mixer = AudioSystem.getMixer(AudioSystem.getMixerInfo()[0]);
-
-		DataLine.Info info = new Info(Clip.class, null);
+	public static void main(String[] args) {
 		try {
-			Clip clip = (Clip) mixer.getLine(info);
-
-			Path path = Paths.get("/Users/tobias/Downloads/TURN ALL THE LIGHTS ON.wav");
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path.toFile());
-
-			clip.open(audioInputStream);
-			clip.start();
-
-			do {
-				Thread.sleep(50);
-			} while (clip.isActive());
-
-			clip.close();
-			mixer.close();
+			App app = ApplicationUtils.registerMainApplication(TestPlayPad.class);
+			app.start(args);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			ConverterV6.convert(UUID.fromString("3bbd88d2-c6ed-40dd-b138-2ff9bf132ca3"), "Test");
+		} catch (IOException | DocumentException e) {
 			e.printStackTrace();
 		}
 	}

@@ -15,7 +15,6 @@ import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;

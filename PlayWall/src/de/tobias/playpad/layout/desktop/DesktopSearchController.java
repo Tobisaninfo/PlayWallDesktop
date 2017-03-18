@@ -12,7 +12,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 
-// TODO Search Pads
 public class DesktopSearchController implements EventHandler<ActionEvent> {
 
 	private static final int HIGHLIGHT_DURATION = 3;
@@ -22,7 +21,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 	private TextField textField;
 	private IMainViewController mainView;
 
-	public DesktopSearchController(Project project, TextField textField, IMainViewController mainView) {
+	DesktopSearchController(Project project, TextField textField, IMainViewController mainView) {
 		this.currentProject = project;
 
 		this.textField = textField;

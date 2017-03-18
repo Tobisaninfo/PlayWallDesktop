@@ -174,8 +174,10 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 
 	@Override
 	public void unloadMedia() {
-		audioHandler.unload();
-		audioHandler = null;
+		if (audioHandler != null) {
+			audioHandler.unload();
+			audioHandler = null;
+		}
 	}
 
 	@Override

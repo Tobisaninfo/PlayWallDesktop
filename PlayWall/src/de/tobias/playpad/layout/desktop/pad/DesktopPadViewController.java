@@ -7,8 +7,7 @@ import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.content.ContentFactory;
-import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
@@ -35,7 +34,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -93,7 +91,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 		try {
 			// Settings
-			padView.setIndex(pad.getIndexReadable());
+			padView.setIndex(pad.getPositionReadable());
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
@@ -225,20 +223,20 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		if (file != null) {
 			Path path = file.toPath();
 
-			Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+			Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 			if (!connects.isEmpty()) {
-				if (connects.size() > 1) {
+				if (connects.size() > 1) { // Multiple content types possible
 					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
 					hud.showDropOptions(connects, connect ->
 					{
 						if (connect != null) {
-							setNewPadContent(file, path, connect);
+							setNewPadContent(path, connect);
 							hud.hide();
 						}
 					});
 				} else {
-					ContentFactory connect = connects.iterator().next();
-					setNewPadContent(file, path, connect);
+					PadContentFactory connect = connects.iterator().next();
+					setNewPadContent(path, connect);
 				}
 			}
 
@@ -246,19 +244,12 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
-	private void setNewPadContent(File file, Path path, ContentFactory connect) {
-		PadContent content = pad.getContent();
+	private void setNewPadContent(Path path, PadContentFactory connect) {
 		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
-			content = connect.newInstance(pad);
-			this.pad.setContent(content);
+			this.pad.setContentType(connect.getType());
 		}
 
-		try {
-			content.handlePath(file.toPath());
-		} catch (NoSuchComponentException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		pad.setPath(path);
 		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 	}
 
@@ -328,9 +319,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 	private String durationToString(Duration value) {
 		if (value != null) {
-			int secounds = (int) ((value.toMillis() / 1000) % 60);
+			int seconds = (int) ((value.toMillis() / 1000) % 60);
 			int minutes = (int) ((value.toMillis() / (1000 * 60)) % 60);
-			return String.format(DURATION_FORMAT, minutes, secounds);
+			return String.format(DURATION_FORMAT, minutes, seconds);
 		} else {
 			return null;
 		}
@@ -343,7 +334,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 		if (pad.getContent() != null) {
 			padView.addDefaultElements(pad);
-			
+
 			if (pad.getStatus() == PadStatus.PLAY) {
 				padView.getPlayButton().setDisable(true);
 				padView.getPauseButton().setDisable(false);

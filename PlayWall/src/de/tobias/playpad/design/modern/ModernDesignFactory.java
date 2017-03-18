@@ -3,11 +3,11 @@ package de.tobias.playpad.design.modern;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.design.ModernGlobalDesignViewController;
-import de.tobias.utils.ui.icon.FontIconType;
 
 public class ModernDesignFactory extends DesignFactory {
 
@@ -17,8 +17,8 @@ public class ModernDesignFactory extends DesignFactory {
 	}
 
 	@Override
-	public CartDesign newCartDesign() {
-		return new ModernCartDesign();
+	public CartDesign newCartDesign(Pad pad) {
+		return new ModernCartDesign(pad);
 	}
 
 	@Override

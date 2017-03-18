@@ -8,7 +8,6 @@ import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.utils.ui.icon.FontIconType;
 import javafx.scene.control.TreeItem;
 
 public class StopActionFactory extends ActionFactory {

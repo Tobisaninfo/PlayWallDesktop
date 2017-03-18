@@ -6,8 +6,8 @@ import java.nio.file.Path;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.project.ProjectExporter;
-import de.tobias.playpad.project.ProjectExporter.ExportView;
+import de.tobias.playpad.project.importer.ProjectExporter;
+import de.tobias.playpad.project.importer.ProjectExporter.ExportView;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.utils.nui.NVC;
@@ -28,6 +28,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+@Deprecated
 public class ProjectExportDialog extends NVC implements ExportView {
 
 	@FXML private CheckBox profileCheckBox;
@@ -41,7 +42,7 @@ public class ProjectExportDialog extends NVC implements ExportView {
 	private ProjectReference projectRef;
 	private NotificationHandler notificationHandler;
 
-	ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
+	public ProjectExportDialog(ProjectReference projectRef, Window owner, NotificationHandler notificationHandler) {
 		load("de/tobias/playpad/assets/dialog/project/", "exportDialog", PlayPadMain.getUiResourceBundle());
 		this.projectRef = projectRef;
 		this.notificationHandler = notificationHandler;

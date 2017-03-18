@@ -18,6 +18,7 @@ public class Strings {
 
 	// UI - Window - Titles
 	public static final String UI_Dialog_Launch_Title = "UI.Dialog.Launch.Title";
+	public static final String UI_Dialog_Login_Title = "UI.Dialog.Login.Title";
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
 	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
@@ -27,8 +28,9 @@ public class Strings {
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
+	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
 	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
-	public static final String UI_Dialog_NewProile_Title = "UI.Dialog.NewProfile.Title";
+	public static final String UI_Dialog_NewProfile_Title = "UI.Dialog.NewProfile.Title";
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
 	public static final String UI_Dialog_ProjectManager_Title = "UI.Dialog.ProjectManager.Title";
@@ -86,7 +88,12 @@ public class Strings {
 	public static final String UI_Dialog_Import_ReplaceMedia_Skip = "UI.Dialog.Import.ReplaceMedia.Skip";
 
 	// UI - Dialog - ProjectManager
+	public static final String UI_Dialog_ProjectManager_Delete_Header = "UI.Dialog.ProjectManager.Delete.Header";
 	public static final String UI_Dialog_ProjectManager_Delete_Content = "UI.Dialog.ProjectManager.Delete.Content";
+
+	// UI - Dialog - Project Convert
+	public static final String UI_Dialog_Project_Convert_Header = "UI.Dialog.Project.Convert.Header";
+	public static final String UI_Dialog_Project_Convert_Content = "UI.Dialog.Project.Convert.Content";
 
 	// UI - Dialog - Profile
 	public static final String UI_Dialog_Profile_Delete_Content = "UI.Dialog.Profile.Delete.Content";
@@ -136,6 +143,7 @@ public class Strings {
 
 	// Error - Project
 	public static final String Error_Project_Create = "Error.Project.Create";
+	public static final String Error_Project_Convert = "Error.Project.Convert";
 	public static final String Error_Project_NotFound = "Error.Project.NotFound";
 	public static final String Error_Project_Open = "Error.Project.Open";
 	public static final String Error_Project_Save = "Error.Project.Save";
@@ -144,6 +152,7 @@ public class Strings {
 	public static final String Error_Project_Export = "Error.Project.Export";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 	public static final String Error_Project_PageCount = "Error.Project.PageCount";
+	public static final String Error_Project_Sync_Change = "Error.Project.Sync.Change";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
@@ -277,4 +286,8 @@ public class Strings {
 	// AudioHandler
 	public static final String AudioHandler_JavaFX = "AudioHandler.JavaFX";
 	public static final String AudioHandler_TinySound = "AudioHandler.TinySound";
+
+	// Server
+	public static final String Server_Connected = "Server.Connected";
+	public static final String Server_Disconnected = "Server.Disconnected";
 }

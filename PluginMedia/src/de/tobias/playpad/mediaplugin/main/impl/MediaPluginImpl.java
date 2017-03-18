@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.MediaPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
@@ -65,7 +65,7 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 		// Load Content Types
 		try {
-			Registry<ContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
 			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();

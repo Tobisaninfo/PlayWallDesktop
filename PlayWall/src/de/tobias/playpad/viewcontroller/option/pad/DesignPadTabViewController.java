@@ -50,12 +50,12 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		enableLayoutCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
 			PadSettings padSettings = pad.getPadSettings();
-			if (c && !padSettings.isCustomLayout()) {
+			if (c && !padSettings.isCustomDesign()) {
 				try {
-					padSettings.setCustomLayout(true);
+					padSettings.setCustomDesign(true);
 
 					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartDesign layout = padSettings.getLayout(layoutType);
+					CartDesign layout = padSettings.getOrCreateDesign(layoutType);
 					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
 
 					setLayoutViewController(pad);
@@ -63,8 +63,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
 					e.printStackTrace();
 				}
-			} else if (!c && padSettings.isCustomLayout()) {
-				padSettings.setCustomLayout(false);
+			} else if (!c && padSettings.isCustomDesign()) {
+				padSettings.setCustomDesign(false);
 				setLayoutController(null);
 			}
 		});
@@ -79,8 +79,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	public void loadSettings(Pad pad) {
 		PadSettings padSettings = pad.getPadSettings();
 
-		enableLayoutCheckBox.setSelected(padSettings.isCustomLayout());
-		if (padSettings.isCustomLayout()) {
+		enableLayoutCheckBox.setSelected(padSettings.isCustomDesign());
+		if (padSettings.isCustomDesign()) {
 			setLayoutViewController(pad);
 		}
 	}
@@ -88,7 +88,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	private void setLayoutViewController(Pad pad) {
 		try {
 			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartDesign layout = pad.getPadSettings().getLayout(layoutType);
+			CartDesign layout = pad.getPadSettings().getOrCreateDesign(layoutType);
 
 			DesignFactory component = PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType);
 			CartDesignViewController controller = component.getCartDesignViewController(layout);
@@ -113,7 +113,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class));
 			// Update die Mapper der CartAction
-			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getIndex() == pad.getIndex())
+			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
 					.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
 		} catch (NoSuchComponentException e) {
 			e.printStackTrace();
