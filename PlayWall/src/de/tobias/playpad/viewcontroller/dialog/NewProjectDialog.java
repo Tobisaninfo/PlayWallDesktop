@@ -8,35 +8,42 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.dom4j.DocumentException;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Create an new project and adds it to the project reference list
- * 
- * @author tobias
  *
+ * @author tobias
  */
 public class NewProjectDialog extends NVC {
 
-	@FXML private TextField nameTextField;
-	@FXML private CheckBox syncCheckbox;
-	@FXML private ComboBox<ProfileReference> profileComboBox;
-	@FXML private Button newProfileButton;
+	@FXML
+	private TextField nameTextField;
+	@FXML
+	private CheckBox syncCheckbox;
+	@FXML
+	private ComboBox<ProfileReference> profileComboBox;
+	@FXML
+	private Button newProfileButton;
 
-	@FXML private Button finishButton;
-	@FXML private Button cancelButton;
+	@FXML
+	private Button finishButton;
+	@FXML
+	private Button cancelButton;
 
 	private ProjectReference project;
 
@@ -53,18 +60,7 @@ public class NewProjectDialog extends NVC {
 
 	@Override
 	public void init() {
-		nameTextField.textProperty().addListener((a, b, c) ->
-		{
-			if (c.isEmpty()) {
-				finishButton.setDisable(true);
-			} else {
-				if (ProjectReferenceManager.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
-					finishButton.setDisable(true);
-					return;
-				}
-				finishButton.setDisable(false);
-			}
-		});
+		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(validateNameInput(c)));
 		finishButton.setDisable(true);
 	}
 
@@ -88,17 +84,23 @@ public class NewProjectDialog extends NVC {
 		}
 	}
 
+	public Optional<ProjectReference> showAndWait() {
+		getStageContainer().ifPresent(NVCStage::showAndWait);
+		return Optional.ofNullable(project);
+	}
+
 	@FXML
 	private void finishButtonHandler(ActionEvent evenet) {
 		try {
-			Profile profile = Profile.load(profileComboBox.getSelectionModel().getSelectedItem());
+			ProfileReference profileReference = profileComboBox.getSelectionModel().getSelectedItem();
+
 			String name = nameTextField.getText();
 			boolean sync = syncCheckbox.isSelected();
 
-			project = ProjectReferenceManager.addProject(name, profile.getRef(), sync);
+			project = ProjectReferenceManager.addProject(name, profileReference, sync);
 
 			getStageContainer().ifPresent(NVCStage::close);
-		} catch (IOException | DocumentException | ProfileNotFoundException e) {
+		} catch (IOException e) {
 			showErrorMessage(Localization.getString(Strings.Error_Project_Create, e.getLocalizedMessage()));
 			e.printStackTrace();
 		}
@@ -112,19 +114,20 @@ public class NewProjectDialog extends NVC {
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
 		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-
-		Profile profile = dialog.getProfile();
-
-		// In GUI hinzufügen (am Ende) und auswählen
-		if (profile != null) {
+		dialog.showAndWait().ifPresent(profile -> {
+			// Add new Profile to combo box and select it
 			profileComboBox.getItems().add(profile.getRef());
 			profileComboBox.getSelectionModel().selectLast();
-		}
+		});
 	}
 
-	public ProjectReference getProject() {
-		return project;
+	/**
+	 * Validate the name input for a project name
+	 *
+	 * @param name project name to test
+	 * @return <code>true</code> valid
+	 */
+	private boolean validateNameInput(String name) {
+		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name) || !name.matches(Project.PROJECT_NAME_PATTERN));
 	}
-
 }

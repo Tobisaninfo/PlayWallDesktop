@@ -21,6 +21,7 @@ import javafx.stage.Window;
 
 import javax.sound.midi.MidiDevice.Info;
 import java.util.List;
+import java.util.Optional;
 
 public class NewProfileDialog extends NVC {
 
@@ -61,6 +62,11 @@ public class NewProfileDialog extends NVC {
 				}
 			});
 		});
+	}
+
+	public Optional<Profile> showAndWait() {
+		getStageContainer().ifPresent(NVCStage::showAndWait);
+		return Optional.ofNullable(profile);
 	}
 
 	private boolean expand = false;
@@ -155,9 +161,5 @@ public class NewProfileDialog extends NVC {
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
 		getStageContainer().ifPresent(NVCStage::close);
-	}
-
-	public Profile getProfile() {
-		return profile;
 	}
 }

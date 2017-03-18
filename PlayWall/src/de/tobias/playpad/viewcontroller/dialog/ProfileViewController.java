@@ -27,15 +27,22 @@ import java.io.IOException;
 
 public class ProfileViewController extends NVC implements ChangeListener<ProfileReference> {
 
-	@FXML private ListView<ProfileReference> profileList;
-	@FXML private TextField nameTextField;
+	@FXML
+	private ListView<ProfileReference> profileList;
+	@FXML
+	private TextField nameTextField;
 
-	@FXML private Button newButton;
-	@FXML private Button duplicateButton;
-	@FXML private Button deleteButton;
-	@FXML private Button renameButton;
+	@FXML
+	private Button newButton;
+	@FXML
+	private Button duplicateButton;
+	@FXML
+	private Button deleteButton;
+	@FXML
+	private Button renameButton;
 
-	@FXML private Button chooseButton;
+	@FXML
+	private Button chooseButton;
 
 	private Project project;
 
@@ -108,15 +115,11 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	@FXML
 	private void newButtonHandler(ActionEvent event) {
 		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-
-		Profile profile = dialog.getProfile();
-
-		if (profile != null) {
+		dialog.showAndWait().ifPresent(profile -> {
 			ProfileReference ref = profile.getRef();
 			profileList.getItems().add(ref);
 			selectProfile(ref);
-		}
+		});
 	}
 
 	@FXML

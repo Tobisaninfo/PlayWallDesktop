@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import java.util.Optional;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -15,11 +13,13 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public class DuplicateProfileDialog extends TextInputDialog {
 
 	private ProfileReference newRef;
 
-	public DuplicateProfileDialog(NVC controller, ProfileReference cloneableProfile) {
+	DuplicateProfileDialog(NVC controller, ProfileReference cloneableProfile) {
 		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
