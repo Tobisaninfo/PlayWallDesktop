@@ -1,10 +1,5 @@
 package de.tobias.playpad.layout.desktop;
 
-import java.util.function.Consumer;
-
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
-
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.CartDesign;
@@ -17,6 +12,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
+
+import java.util.function.Consumer;
 
 public class DesktopColorPickerView implements Consumer<DisplayableColor>, EventHandler<MouseEvent> {
 
@@ -25,7 +24,7 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 
 	private PopOver colorChooser;
 
-	public DesktopColorPickerView(ColorModeHandler colorModeHandler) {
+	DesktopColorPickerView(ColorModeHandler colorModeHandler) {
 		this.colorModeHandler = colorModeHandler;
 
 		Node node = colorModeHandler.getColorInterface(this);
