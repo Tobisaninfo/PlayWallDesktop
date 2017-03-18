@@ -111,6 +111,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 			// Init with existing stage
 			initMapper(openProject);
+			reloadSettings(null, Profile.currentProfile());
 			onFinish.accept(e);
 
 			// Min Size of window
@@ -162,7 +163,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
 
 		Profile.registerListener(this);
-		reloadSettings(null, Profile.currentProfile());
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
 		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen

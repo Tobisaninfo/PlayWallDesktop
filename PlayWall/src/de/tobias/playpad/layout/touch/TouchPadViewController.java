@@ -36,7 +36,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 	private PadDurationListener padDurationListener;
 	private IPadPositionListener padPositionListener;
 
-	public TouchPadViewController(TouchPadView padView) {
+	TouchPadViewController(TouchPadView padView) {
 		this.padView = padView;
 
 		padLockedListener = new PadLockedListener(this);
@@ -198,12 +198,11 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 		padView.setTime(null);
 	}
 
-	public String durationToString(Duration value) {
+	private String durationToString(Duration value) {
 		if (value != null) {
-			int secounds = (int) ((value.toMillis() / 1000) % 60);
+			int seconds = (int) ((value.toMillis() / 1000) % 60);
 			int minutes = (int) ((value.toMillis() / (1000 * 60)) % 60);
-			String time = String.format(DURATION_FORMAT, minutes, secounds);
-			return time;
+			return String.format(DURATION_FORMAT, minutes, seconds);
 		} else {
 			return null;
 		}

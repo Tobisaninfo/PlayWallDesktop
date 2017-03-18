@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
@@ -191,11 +192,7 @@ public class DesktopPadView implements IPadView {
 		this.indexLabel.setText(text);
 	}
 
-	public void setProgress(double progress) {
-		this.playBar.setProgress(progress);
-	}
-
-	public ProgressBar getPlayBar() {
+	ProgressBar getPlayBar() {
 		return playBar;
 	}
 
@@ -256,15 +253,15 @@ public class DesktopPadView implements IPadView {
 		indexLabel.setText(String.valueOf(indexReadable));
 	}
 
-	public Property<Boolean> loopLabelVisibleProperty() {
+	Property<Boolean> loopLabelVisibleProperty() {
 		return loopLabel.visibleProperty();
 	}
 
-	public void setTriggerLabelActive(boolean hasTriggerItems) {
+	void setTriggerLabelActive(boolean hasTriggerItems) {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	public void setTime(String time) {
+	void setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
 		} else {
@@ -277,7 +274,11 @@ public class DesktopPadView implements IPadView {
 		if (pad != null) {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
-					buttonBox.getChildren().setAll(playButton, pauseButton, stopButton, newButton, settingsButton);
+					if (pad.getStatus() == PadStatus.PLAY) {
+						buttonBox.getChildren().setAll(pauseButton, stopButton, newButton, settingsButton);
+					} else {
+						buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+					}
 				} else {
 					buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
 				}
@@ -336,9 +337,6 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void removeStyleClasses() {
-		Pad pad = getViewController().getPad();
-		PadIndex index = pad.getPadIndex();
-
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
@@ -368,20 +366,20 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public void highlightView(int milliSecounds) {
+	public void highlightView(int milliSeconds) {
 		PulseTranslation pulseTranslation = new PulseTranslation(superRoot, null, 0.1);
 		pulseTranslation.play();
 	}
 
-	public void clearIndexLabel() {
+	void clearIndexLabel() {
 		indexLabel.setText("");
 	}
 
-	public void clearTimeLabel() {
+	void clearTimeLabel() {
 		timeLabel.setText("");
 	}
 
-	public void clearPreviewContentView() {
+	void clearPreviewContentView() {
 		if (previewContent != null) {
 			previewContent.deinit();
 		}

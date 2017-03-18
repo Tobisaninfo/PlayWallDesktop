@@ -6,6 +6,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -75,43 +76,64 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	// TODO Page Buttons gleicher Margin wie pads
 
 	// meuBar
-	@FXML protected MenuBar menuBar;
+	@FXML
+	private MenuBar menuBar;
 
-	@FXML protected MenuItem newProjectMenuItem;
-	@FXML protected MenuItem openProjectMenuItem;
-	@FXML protected MenuItem saveProjectMenuItem;
-	@FXML protected MenuItem profileMenu;
-	@FXML protected MenuItem printProjectMenuItem;
+	@FXML
+	private MenuItem newProjectMenuItem;
+	@FXML
+	private MenuItem openProjectMenuItem;
+	@FXML
+	private MenuItem saveProjectMenuItem;
+	@FXML
+	private MenuItem profileMenu;
+	@FXML
+	private MenuItem printProjectMenuItem;
 
-	@FXML protected MenuItem playMenu;
-	@FXML protected MenuItem dragMenu;
-	@FXML protected MenuItem pageMenu;
-	@FXML protected MenuItem colorMenu;
+	@FXML
+	private MenuItem playMenu;
+	@FXML
+	private MenuItem dragMenu;
+	@FXML
+	private MenuItem pageMenu;
+	@FXML
+	private MenuItem colorMenu;
 
-	@FXML protected MenuItem errorMenu;
-	@FXML protected MenuItem pluginMenu;
+	@FXML
+	private MenuItem pluginMenu;
 
-	@FXML protected MenuItem projectSettingsMenuItem;
-	@FXML protected MenuItem profileSettingsMenuItem;
-	@FXML protected MenuItem globalSettingsMenuItem;
+	@FXML
+	private MenuItem projectSettingsMenuItem;
+	@FXML
+	private MenuItem profileSettingsMenuItem;
+	@FXML
+	private MenuItem globalSettingsMenuItem;
 
-	@FXML protected CheckMenuItem fullScreenMenuItem;
-	@FXML protected CheckMenuItem alwaysOnTopItem;
-	@FXML protected MenuItem searchPadMenuItem;
+	@FXML
+	private CheckMenuItem fullScreenMenuItem;
+	@FXML
+	private CheckMenuItem alwaysOnTopItem;
+	@FXML
+	private MenuItem searchPadMenuItem;
 
-	@FXML protected Menu layoutMenu;
+	@FXML
+	private Menu layoutMenu;
 
-	@FXML protected Menu extensionMenu;
-	@FXML protected Menu infoMenu;
-	@FXML protected Menu helpMenu;
+	@FXML
+	private Menu extensionMenu;
+	@FXML
+	protected Menu infoMenu;
+	@FXML
+	private Menu helpMenu;
 
-	@FXML protected Label liveLabel;
+	@FXML
+	private Label liveLabel;
 
-	protected SegmentedButton editButtons;
-	protected ToggleButton playButton;
-	protected ToggleButton dragButton;
-	protected ToggleButton pageButton;
-	protected ToggleButton colorButton;
+	private SegmentedButton editButtons;
+	private ToggleButton playButton;
+	private ToggleButton dragButton;
+	private ToggleButton pageButton;
+	private ToggleButton colorButton;
 	private Button addPageButton;
 
 	private IMainViewController mainViewController;
@@ -119,11 +141,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private transient ProjectSettingsViewController projectSettingsViewController;
 	private transient ProfileSettingsViewController profileSettingsViewController;
 	private transient GlobalSettingsViewController globalSettingsViewController;
+
 	private transient DesktopColorPickerView colorPickerView;
+	private transient PadRemoveMouseListener padRemoveMouseListener;
 
 	private DesktopMainLayoutFactory connect;
 
-	public DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
+	DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
 		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 		this.connect = connect;
@@ -162,20 +186,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
 		colorButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_ColorButton)));
 		colorButton.setFocusTraversable(false);
-		// Zeigt die Farbauswahl
-		colorButton.setOnAction(e ->
-		{
-			GlobalDesign design = Profile.currentProfile().currentLayout();
-			if (design instanceof ColorModeHandler) {
-				if (colorPickerView == null) {
-					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
-
-					// Add Listener for Pads
-					mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
-				}
-				colorPickerView.show(colorButton);
-			}
-		});
 		editButtons.getButtons().addAll(playButton, dragButton, pageButton, colorButton);
 		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
 		{
@@ -220,6 +230,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
+			mainViewController.addListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
 		} else if (oldValue == DesktopEditMode.PAGE) {
 			highlightPageButton(currentSelectedPageButton);
 			iconHbox.getChildren().remove(addPageButton);
@@ -241,6 +252,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				connect.setEditMode(oldValue);
 				return;
 			}
+
+			// Add Pad Remove Listener
+			if (padRemoveMouseListener == null) {
+				padRemoveMouseListener = new PadRemoveMouseListener();
+			}
+			mainViewController.addListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
+
 			// Drag and Drop Aktivieren
 			dragButton.setSelected(true);
 			for (IPadView view : mainViewController.getPadViews()) {
@@ -252,6 +270,17 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			highlightPageButton(currentSelectedPageButton);
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
+
+			GlobalDesign design = Profile.currentProfile().currentLayout();
+			if (design instanceof ColorModeHandler) {
+				if (colorPickerView == null) {
+					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
+
+					// Add Listener for Pads
+					mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
+				}
+				colorPickerView.show(colorButton);
+			}
 		}
 
 		mainViewController.getPadViews().forEach(i -> i.getViewController().updateButtonDisable());
@@ -332,7 +361,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		setKeyBindingForMenu(pageMenu, keys.getKey("page"));
 		setKeyBindingForMenu(colorMenu, keys.getKey("color"));
 
-		setKeyBindingForMenu(errorMenu, keys.getKey("errors"));
 		setKeyBindingForMenu(pluginMenu, keys.getKey("plugins"));
 		setKeyBindingForMenu(projectSettingsMenuItem, keys.getKey("project_settings"));
 		setKeyBindingForMenu(profileSettingsMenuItem, keys.getKey("profile_settings"));
@@ -352,7 +380,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		pageMenu.setDisable(false);
 		colorMenu.setDisable(false);
 
-		errorMenu.setDisable(false);
 		pluginMenu.setDisable(false);
 		projectSettingsMenuItem.setDisable(false);
 		profileSettingsMenuItem.setDisable(false);
@@ -413,7 +440,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		pageMenu.setDisable(true);
 		colorMenu.setDisable(true);
 
-		errorMenu.setDisable(true);
 		pluginMenu.setDisable(true);
 		projectSettingsMenuItem.setDisable(true);
 		profileSettingsMenuItem.setDisable(true);

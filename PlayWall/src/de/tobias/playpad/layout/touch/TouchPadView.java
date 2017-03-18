@@ -49,7 +49,7 @@ public class TouchPadView implements IPadView {
 
 	private transient TouchPadViewController controller; // Reference to its controller
 
-	public TouchPadView() {
+	TouchPadView() {
 		controller = new TouchPadViewController(this);
 		setupView();
 	}
@@ -117,7 +117,7 @@ public class TouchPadView implements IPadView {
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
-					node.getStyleClass().addAll("pad-title", "pad" + pad.getPosition() + "-title");
+					node.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
 
 					// Copy Pseudoclasses
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
@@ -134,7 +134,7 @@ public class TouchPadView implements IPadView {
 		}
 		EmptyPadView view = new EmptyPadView(preview);
 		if (pad != null) {
-			view.getStyleClass().addAll("pad-title", "pad" + pad.getPosition() + "-title");
+			view.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
 		} else {
 			view.getStyleClass().addAll("pad-title");
 		}
@@ -165,11 +165,7 @@ public class TouchPadView implements IPadView {
 		this.indexLabel.setText(text);
 	}
 
-	public void setProgress(double progress) {
-		this.playBar.setProgress(progress);
-	}
-
-	public ProgressBar getPlayBar() {
+	ProgressBar getPlayBar() {
 		return playBar;
 	}
 
@@ -203,15 +199,15 @@ public class TouchPadView implements IPadView {
 		indexLabel.setText(String.valueOf(indexReadable));
 	}
 
-	public Property<Boolean> loopLabelVisibleProperty() {
+	Property<Boolean> loopLabelVisibleProperty() {
 		return loopLabel.visibleProperty();
 	}
 
-	public void setTriggerLabelActive(boolean hasTriggerItems) {
+	void setTriggerLabelActive(boolean hasTriggerItems) {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	public void setTime(String time) {
+	void setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
 		} else {
@@ -250,9 +246,6 @@ public class TouchPadView implements IPadView {
 
 	@Override
 	public void removeStyleClasses() {
-		Pad pad = getViewController().getPad();
-		PadIndex index = pad.getPadIndex();
-
 		superRoot.getStyleClass().removeIf( c -> c.startsWith("pad"));
 
 		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
@@ -273,15 +266,15 @@ public class TouchPadView implements IPadView {
 		
 	}
 	
-	public void clearIndex() {
+	void clearIndex() {
 		indexLabel.setText("");
 	}
 
-	public void clearTime() {
+	void clearTime() {
 		timeLabel.setText("");
 	}
 
-	public void clearPreviewContent() {
+	void clearPreviewContent() {
 		if (previewContent != null) {
 			previewContent.deinit();
 		}
