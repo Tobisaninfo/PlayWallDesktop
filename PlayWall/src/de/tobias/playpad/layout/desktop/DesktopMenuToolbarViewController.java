@@ -27,7 +27,7 @@ import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.*;
-import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialogV2;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -511,7 +511,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		{
 			Stage stage = mainViewController.getStage();
 
-			ProjectManagerDialogV2 view = new ProjectManagerDialogV2(stage, openProject);
+			ProjectManagerDialog view = new ProjectManagerDialog(stage, openProject);
 			Optional<ProjectReference> result = view.showAndWait();
 
 			if (result.isPresent()) {

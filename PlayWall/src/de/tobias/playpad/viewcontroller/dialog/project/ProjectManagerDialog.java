@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * Created by tobias on 26.02.17.
  */
-public class ProjectManagerDialogV2 extends NVC {
+public class ProjectManagerDialog extends NVC {
 
 	@FXML private ListView<ProjectReference> projectList;
 
@@ -48,7 +48,7 @@ public class ProjectManagerDialogV2 extends NVC {
 	@FXML private Button cancelButton;
 	@FXML private Button openButton;
 
-	public ProjectManagerDialogV2(Window owner, Project currentProject) {
+	public ProjectManagerDialog(Window owner, Project currentProject) {
 		load("de/tobias/playpad/assets/dialog/project", "projectManagementDialog.fxml", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();

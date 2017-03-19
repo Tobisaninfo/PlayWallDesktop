@@ -16,9 +16,11 @@ public interface ProjectReader {
 	}
 
 	interface ProjectReaderListener {
-		void readProject();
+		void startReadProject();
+		void finishReadProject();
 		void readMedia(String name);
 		void totalMedia(int size);
+		void finish();
 	}
 
 	Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProjectNotFoundException;

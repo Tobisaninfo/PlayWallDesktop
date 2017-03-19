@@ -18,6 +18,7 @@ import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -282,6 +283,9 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		try {
 			ProjectLoader loader = new ProjectLoader(ref);
 			loader.setDelegate(delegate);
+
+			loader.setListener(new ProjectLoadDialog());
+
 			Project project = loader.load();
 
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));

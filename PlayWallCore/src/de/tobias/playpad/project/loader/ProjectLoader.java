@@ -88,13 +88,22 @@ public class ProjectLoader {
 			Profile.load(projectReference.getProfileReference());
 		}
 
+		if (listener != null)
+			listener.startReadProject();
 
 		Project project = loadProjectImpl(projectReference, delegate);
-		if (listener != null)
-			listener.readProject();
 
-		if (loadMedia)
-			Worker.runLater(() -> loadMedia(project));
+		if (listener != null)
+			listener.finishReadProject();
+
+		Worker.runLater(() -> {
+			if (loadMedia) {
+				loadMedia(project);
+			}
+			if (listener != null) {
+				listener.finish();
+			}
+		});
 		return project;
 	}
 
