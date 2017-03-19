@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.SimpleStringProperty;

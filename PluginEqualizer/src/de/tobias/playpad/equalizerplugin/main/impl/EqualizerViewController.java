@@ -7,7 +7,7 @@ import java.util.List;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.ViewController;

@@ -10,7 +10,7 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.cartaction.CartAction;
 import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.actions.CartActionTypeViewController;
 import de.tobias.utils.nui.NVC;

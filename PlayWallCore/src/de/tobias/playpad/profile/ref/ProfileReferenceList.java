@@ -26,9 +26,9 @@ final class ProfileReferenceList extends UniqList<ProfileReference> {
 			}
 		} else if (o instanceof ProfileReference) {
 			for (ProfileReference reference : this) {
-				if (reference.getName() == o) {
+				if (reference == o) {
 					return true;
-				} else if (reference.getName() == ((ProfileReference) o).getName()) {
+				} else if (reference.getName().equals(((ProfileReference) o).getName())) {
 					return true;
 				}
 			}

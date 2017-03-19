@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings;
 
+import de.tobias.playpad.profile.ProfileSettings;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.PadSettings;

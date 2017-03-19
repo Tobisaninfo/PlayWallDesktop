@@ -14,7 +14,7 @@ import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

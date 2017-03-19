@@ -1,10 +1,11 @@
-package de.tobias.playpad.settings;
+package de.tobias.playpad.profile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import de.tobias.playpad.settings.Fade;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

@@ -11,7 +11,7 @@ import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLHandler;

@@ -19,15 +19,14 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
-import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
@@ -129,8 +128,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private Menu extensionMenu;
 	@FXML
 	protected Menu infoMenu;
-	@FXML
-	private Menu helpMenu;
 
 	@FXML
 	private Label liveLabel;
@@ -173,10 +170,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		// Hide Extension menu then no items are in there
 		extensionMenu.visibleProperty().bind(Bindings.size(extensionMenu.getItems()).greaterThan(0));
-
-		// Help Menu --> HIDDEN TODO
-		helpMenu.setVisible(false);
-		helpMenu.getItems().add(new HelpMenuItem(helpMenu));
 
 		// Edit Mode Buttons
 		editButtons = new SegmentedButton();
@@ -618,10 +611,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (projectSettingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
-			Runnable onFinish = () ->
-			{
-				projectSettingsViewController = null;
-			};
+			Runnable onFinish = () -> projectSettingsViewController = null;
 
 			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, openProject, onFinish);
 
@@ -740,7 +730,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	private static final int LAST_DOCUMENT_LIMIT = 3;
 
-	public void createRecentDocumentMenuItems() {
+	private void createRecentDocumentMenuItems() {
 		recentOpenMenu.getItems().clear();
 
 		String project = openProject.getProjectReference().getName();

@@ -1,13 +1,10 @@
-package de.tobias.playpad.viewcontroller.dialog;
-
-import java.util.Optional;
+package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
@@ -16,11 +13,13 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class DuplicateProjectDialog extends TextInputDialog {
+import java.util.Optional;
 
-	private ProjectReference ref;
+public class DuplicateProfileDialog extends TextInputDialog {
 
-	public DuplicateProjectDialog(NVC controller, ProjectReference cloneableProject) {
+	private ProfileReference newRef;
+
+	public DuplicateProfileDialog(NVC controller, ProfileReference cloneableProfile) {
 		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
@@ -29,14 +28,14 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReferenceManager.getProjects().contains(c) || !c.matches(Project.PROJECT_NAME_PATTERN)) {
+			if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
 			}
 		});
 
-		setContentText(Localization.getString(Strings.UI_Dialog_NewProject_Content));
+		setContentText(Localization.getString(Strings.UI_Dialog_NewProfile_Content));
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
@@ -45,17 +44,19 @@ public class DuplicateProjectDialog extends TextInputDialog {
 					return;
 				}
 
-				ref = ProjectReferenceManager.duplicate(cloneableProject, name);
+				newRef = new ProfileReference(name);
+				ProfileReferenceManager.duplicate(cloneableProfile, newRef);
+
 			} catch (Exception e) {
 				e.printStackTrace();
-				controller.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));
+				controller.showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getMessage()));
 			}
 		});
 	}
 
-	public Optional<ProjectReference> getName() {
-		if (ref != null) {
-			return Optional.of(ref);
+	public Optional<ProfileReference> getName() {
+		if (newRef != null) {
+			return Optional.of(newRef);
 		} else {
 			return Optional.empty();
 		}

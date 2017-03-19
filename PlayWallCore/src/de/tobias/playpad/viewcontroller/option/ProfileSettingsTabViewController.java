@@ -1,6 +1,6 @@
 package de.tobias.playpad.viewcontroller.option;
 
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 
 /**

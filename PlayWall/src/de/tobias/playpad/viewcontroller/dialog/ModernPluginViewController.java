@@ -7,7 +7,7 @@ import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;

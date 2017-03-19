@@ -2,8 +2,8 @@ package de.tobias.playpad.mediaplugin.main.impl;
 
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;

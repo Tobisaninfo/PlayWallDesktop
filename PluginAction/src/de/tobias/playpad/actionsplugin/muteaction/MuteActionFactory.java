@@ -7,7 +7,7 @@ import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import javafx.scene.control.TreeItem;
 
 public class MuteActionFactory extends ActionFactory {

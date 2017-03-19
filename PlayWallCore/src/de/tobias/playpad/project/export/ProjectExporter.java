@@ -7,7 +7,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;

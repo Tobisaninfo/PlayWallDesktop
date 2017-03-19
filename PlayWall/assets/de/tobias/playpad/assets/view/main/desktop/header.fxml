@@ -147,7 +147,6 @@
                                   text="%main.menuitem.website"/>
                     </items>
                 </Menu>
-                <Menu fx:id="helpMenu" mnemonicParsing="false" text="%main.menu.help"/>
             </menus>
         </MenuBar>
         <ToolBar fx:id="toolbar" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8"

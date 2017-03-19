@@ -13,7 +13,7 @@ import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;

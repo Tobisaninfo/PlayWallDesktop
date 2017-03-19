@@ -14,7 +14,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;

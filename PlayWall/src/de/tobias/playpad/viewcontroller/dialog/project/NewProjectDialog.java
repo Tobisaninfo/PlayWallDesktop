@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.dialog;
+package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
@@ -7,7 +7,8 @@ import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;

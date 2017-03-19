@@ -1,11 +1,11 @@
-package de.tobias.playpad.viewcontroller.dialog;
+package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
