@@ -172,7 +172,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	@Override
 	public void saveSettings(GlobalSettings settings) {
 		settings.setOpenLastDocument(openLastDocumentCheckbox.isSelected());
-		
+
 		settings.setLiveMode(liveModeCheckBox.isSelected());
 		settings.setCachePath(Paths.get(cacheTextField.getText()));
 

@@ -13,6 +13,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -494,7 +495,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			NewProjectDialog dialog = new NewProjectDialog(mainViewController.getStage());
 			dialog.showAndWait().ifPresent(projectReference -> {
 				try {
-					Project project = ProjectReferenceManager.loadProject(projectReference, null);
+					ProjectLoader loader = new ProjectLoader(projectReference);
+					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
 					e.printStackTrace();
@@ -517,7 +519,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(stage);
 				try {
-					Project project = ProjectReferenceManager.loadProject(result.get(), delegate);
+					ProjectLoader loader = new ProjectLoader(result.get());
+					loader.setDelegate(delegate);
+					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 
 					createRecentDocumentMenuItems();
@@ -762,7 +766,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getWindow());
 				try {
 					// Speichern das alte Project in mvc.setProject(Project)
-					Project project = ProjectReferenceManager.loadProject(ref, delegate);
+					ProjectLoader loader = new ProjectLoader(ref);
+					loader.setDelegate(delegate);
+					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {
 					e.printStackTrace();

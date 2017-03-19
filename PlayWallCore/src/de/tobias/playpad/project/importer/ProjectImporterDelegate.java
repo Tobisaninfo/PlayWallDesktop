@@ -1,4 +1,4 @@
-package de.tobias.playpad.project.importer2;
+package de.tobias.playpad.project.importer;
 
 import java.nio.file.Path;
 

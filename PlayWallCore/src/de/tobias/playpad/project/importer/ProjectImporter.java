@@ -1,4 +1,4 @@
-package de.tobias.playpad.project.importer2;
+package de.tobias.playpad.project.importer;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
@@ -6,6 +6,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.ProfileNotFoundException;
@@ -146,7 +147,11 @@ public class ProjectImporter {
 	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
 		Path folder = delegate.getMediaPath();
 
-		Project project = ProjectReferenceManager.loadProject(importedProjectReference, null, false, false);
+		ProjectLoader loader = new ProjectLoader(importedProjectReference);
+		loader.setLoadMedia(false);
+		loader.setLoadMedia(false);
+		Project project = loader.load();
+
 		for (Pad pad : project.getPads()) {
 			for (MediaPath path : pad.getPaths()) {
 				Path fileName = path.getPath().getFileName();

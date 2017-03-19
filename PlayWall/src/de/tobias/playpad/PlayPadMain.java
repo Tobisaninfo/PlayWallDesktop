@@ -4,6 +4,7 @@ import com.mashape.unirest.http.Unirest;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
@@ -203,7 +204,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
 				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
 				if (value != null) {
-					Project project = ProjectReferenceManager.loadProject(ProjectReferenceManager.getProject(value), null);
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
 				}
@@ -213,7 +215,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			if (getParameters().getRaw().size() > 0) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = ProjectReferenceManager.loadProject(ProjectReferenceManager.getProject(uuid), null);
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
+					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
 				}
