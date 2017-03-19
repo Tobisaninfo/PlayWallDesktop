@@ -1,11 +1,10 @@
 package de.tobias.playpad.settings;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
+import de.tobias.playpad.PlayPad;
+import de.tobias.playpad.settings.keys.KeyCollection;
+import de.tobias.updater.client.UpdateChannel;
+import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -14,12 +13,11 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import de.tobias.playpad.PlayPad;
-import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.updater.client.UpdateChannel;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.settings.Storable;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Globale Einstellungen für das Programm. Eine Instanz von diesen Einstellungen wird in {@link PlayPad} verwaltet.
@@ -41,17 +39,20 @@ public class GlobalSettings {
 	private UpdateChannel updateChannel = UpdateChannel.STABLE;
 
 	// Live Mode
-	@Storable private boolean liveMode = true;
-	@Storable private boolean liveModePage = true;
-	@Storable private boolean liveModeDrag = true;
-	@Storable private boolean liveModeFile = true;
-	@Storable private boolean liveModeSettings = true;
+	private boolean liveMode = false;
+	private boolean liveModePage = false;
+	private boolean liveModeDrag = false;
+	private boolean liveModeFile = false;
+	private boolean liveModeSettings = false;
 
 	// Paths
-	@Storable private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
+	private Path cachePath = ApplicationUtils.getApplication().getPath(PathType.CACHE);
 
 	// Dialogs
-	@Storable private boolean ignoreSaveDialog = false;
+	private boolean ignoreSaveDialog = false;
+
+	// Behaviour
+	private boolean openLastDocument = false;
 
 	public GlobalSettings() {
 	}
@@ -101,6 +102,10 @@ public class GlobalSettings {
 		return ignoreSaveDialog;
 	}
 
+	public boolean isOpenLastDocument() {
+		return openLastDocument;
+	}
+
 	// Setter
 	public void setAutoUpdate(boolean autoUpdate) {
 		this.autoUpdate = autoUpdate;
@@ -142,6 +147,10 @@ public class GlobalSettings {
 		this.ignoreSaveDialog = ignoreSaveDialog;
 	}
 
+	public void setOpenLastDocument(boolean openLastDocument) {
+		this.openLastDocument = openLastDocument;
+	}
+
 	// Save & Load Data
 
 	public static final String KEYS_ELEMENT = "Keys";
@@ -155,6 +164,7 @@ public class GlobalSettings {
 	private static final String LIVE_MODE_SETTINGS_ATTR = "settings";
 	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
 	private static final String IGNORE_SAVE_DIALOG_ELEMENT = "IgnoreSaveDialog";
+	private static final String OPEN_LAST_DOCUMENT_ELEMENT = "OpenLastDocument";
 
 	/**
 	 * Lädt eine neue Instanz der Globalen Einstellungen.
@@ -210,15 +220,20 @@ public class GlobalSettings {
 			if (root.element(IGNORE_SAVE_DIALOG_ELEMENT) != null) {
 				settings.setIgnoreSaveDialog(Boolean.valueOf(root.element(IGNORE_SAVE_DIALOG_ELEMENT).getStringValue()));
 			}
+
+			// Behaviour
+			if (root.element(OPEN_LAST_DOCUMENT_ELEMENT) != null) {
+				settings.setOpenLastDocument(Boolean.valueOf(root.element(OPEN_LAST_DOCUMENT_ELEMENT).getStringValue()));
+			}
 		}
 		return settings;
 	}
 
 	/**
-	 * Speichert die Globalen Einstellungen
+	 * Save the global settings into a file.
 	 *
-	 * @throws UnsupportedEncodingException Fehler bei XML
-	 * @throws IOException                  Fehler bei IO
+	 * @throws UnsupportedEncodingException XML write error
+	 * @throws IOException                  IO error
 	 */
 	public void save() throws IOException {
 		Document document = DocumentHelper.createDocument();
@@ -246,6 +261,9 @@ public class GlobalSettings {
 
 		// Dialogs
 		root.addElement(IGNORE_SAVE_DIALOG_ELEMENT).addText(String.valueOf(ignoreSaveDialog));
+
+		// Behaviour
+		root.addElement(OPEN_LAST_DOCUMENT_ELEMENT).addText(String.valueOf(openLastDocument));
 
 		XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());
 		writer.write(document);
