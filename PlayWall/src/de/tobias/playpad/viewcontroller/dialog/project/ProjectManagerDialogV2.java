@@ -94,9 +94,11 @@ public class ProjectManagerDialogV2 extends NVC {
 
 		// Name Change Listener
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
-			ProjectReference reference = getSelectedItem();
-			if (reference != null) {
-				reference.setName(newValue);
+			if (Project.validateNameInput(newValue)) {
+				ProjectReference reference = getSelectedItem();
+				if (reference != null) {
+					reference.setName(newValue);
+				}
 			}
 		});
 

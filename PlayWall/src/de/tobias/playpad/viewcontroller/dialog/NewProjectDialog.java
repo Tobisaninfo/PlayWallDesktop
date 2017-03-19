@@ -60,7 +60,7 @@ public class NewProjectDialog extends NVC {
 
 	@Override
 	public void init() {
-		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(validateNameInput(c)));
+		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(!Project.validateNameInput(c)));
 		finishButton.setDisable(true);
 	}
 
@@ -119,15 +119,5 @@ public class NewProjectDialog extends NVC {
 			profileComboBox.getItems().add(profile.getRef());
 			profileComboBox.getSelectionModel().selectLast();
 		});
-	}
-
-	/**
-	 * Validate the name input for a project name
-	 *
-	 * @param name project name to test
-	 * @return <code>true</code> valid
-	 */
-	private boolean validateNameInput(String name) {
-		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name) || !name.matches(Project.PROJECT_NAME_PATTERN));
 	}
 }

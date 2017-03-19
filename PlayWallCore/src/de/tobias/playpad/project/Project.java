@@ -1,11 +1,12 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
@@ -28,18 +29,27 @@ import java.util.UUID;
 public class Project {
 
 	/**
-	 * Pattern für den Namen des Projekts
+	 * Pattern for the project name.
 	 */
-	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9][\\p{L}\\s-_0-9]*";
 
 	/**
-	 * Dateiendung für eine projekt Datei
+	 * Project file extension.
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
+	/**
+	 * List of pages in the project.
+	 */
 	final ObservableList<Page> pages;
 
+	/**
+	 * Project Settings.
+	 */
 	ProjectSettings settings;
+	/**
+	 * Project Metadata.
+	 */
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
@@ -252,5 +262,15 @@ public class Project {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Validate the name input for a project name
+	 *
+	 * @param name project name to test
+	 * @return <code>true</code> valid
+	 */
+	public static boolean validateNameInput(String name) {
+		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name) || !name.matches(PROJECT_NAME_PATTERN));
 	}
 }
