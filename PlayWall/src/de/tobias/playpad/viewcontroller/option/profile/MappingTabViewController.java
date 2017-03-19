@@ -1,17 +1,9 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.action.ActionDisplayable;
-import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
@@ -25,7 +17,6 @@ import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.Localization;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,6 +24,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
@@ -157,22 +152,15 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	}
 
 	@Override
-	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
-		return new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				updateTitle(name());
-				updateProgress(-1, -1);
+	public Runnable getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		return () -> {
+			Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
 
-				Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
+			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 
-				Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-
-				oldMapping.clearFeedback();
-				activeMapping.showFeedback(project);
-				activeMapping.initFeedback();
-				return null;
-			}
+			oldMapping.clearFeedback();
+			activeMapping.showFeedback(project);
+			activeMapping.initFeedback();
 		};
 	}
 

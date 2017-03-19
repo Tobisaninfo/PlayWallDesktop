@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.option;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import javafx.concurrent.Task;
 
 /**
  * * Schnittstelle, um das ein Task zum Laden der Einstellungen angezeigt werden kann.
@@ -15,5 +14,5 @@ import javafx.concurrent.Task;
  */
 public interface IProfileReloadTask {
 
-	Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller);
+	Runnable getTask(ProfileSettings settings, Project project, IMainViewController controller);
 }

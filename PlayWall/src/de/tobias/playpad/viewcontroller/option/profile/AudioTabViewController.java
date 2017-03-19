@@ -1,26 +1,25 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.audio.AudioCapability;
 import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.audio.AudioRegistry;
+import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -28,6 +27,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AudioTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
@@ -135,24 +139,28 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	@Override
 	public boolean needReload() {
-		if (audioViewController.stream().filter(c -> c.isChanged()).count() > 0) {
+		if (audioViewController.stream().filter(AudioHandlerViewController::isChanged).count() > 0) {
 			changeAudioSettings = true;
 		}
 		return changeAudioSettings;
 	}
 
 	@Override
-	public Task<Void> getTask(ProfileSettings settings, Project project, IMainViewController controller) {
-		return new Task<Void>() {
+	public Runnable getTask(ProfileSettings settings, Project project, IMainViewController controller) {
+		ProjectLoadDialog listener = new ProjectLoadDialog();
 
-			@Override
-			protected Void call() throws Exception {
-				updateTitle(name());
-				updateProgress(-1, -1);
+		return () -> {
+			Collection<Pad> pads = project.getPads();
+			List<Pad> filteredPads = pads.parallelStream().filter(pad -> pad.getStatus() != PadStatus.EMPTY).collect(Collectors.toList());
+			long padContentCount = filteredPads.size();
 
-				project.loadPadsContent();
-				return null;
+			listener.totalMedia((int) padContentCount);
+
+			for (Pad pad : filteredPads) {
+				listener.readMedia(pad.getName());
+				pad.loadContent();
 			}
+			listener.finish();
 		};
 	}
 

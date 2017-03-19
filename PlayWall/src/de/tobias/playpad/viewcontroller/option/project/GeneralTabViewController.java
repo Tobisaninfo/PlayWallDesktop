@@ -13,20 +13,21 @@ import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 
 public class GeneralTabViewController extends ProjectSettingsTabViewController implements IProjectReloadTask {
 
-	private static final String DIGIT_POSITIV = "^[1-9]\\d*$";
+	private static final String DIGIT_POSITIVE = "^[1-9]\\d*$";
 
 	private Screen mainWindowScreen;
 	private Alertable parentController; // Für Benachrichtungen
 
-	@FXML private TextField columnTextField;
-	@FXML private TextField rowTextField;
+	@FXML
+	private TextField columnTextField;
+	@FXML
+	private TextField rowTextField;
 
 	GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
 		load("de/tobias/playpad/assets/view/option/project/", "generalTab", PlayPadMain.getUiResourceBundle());
@@ -45,7 +46,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	public void init() {
 		columnTextField.textProperty().addListener((a, b, c) ->
 		{
-			if (c.matches(DIGIT_POSITIV) && !c.isEmpty()) {
+			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
 				if (screenValid()) {
 					columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false); // Zahl ok
 				} else {
@@ -58,7 +59,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 		rowTextField.textProperty().addListener((a, b, c) ->
 		{
-			if (c.matches(DIGIT_POSITIV) && !c.isEmpty()) {
+			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
 				if (screenValid()) {
 					rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false); // Zahl ok
 				} else {
@@ -82,7 +83,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 			if (neededHeight <= height && neededWidth <= width)
 				return true;
-		} catch (NumberFormatException e) {}
+		} catch (NumberFormatException ignored) {
+		}
 		return false;
 	}
 
@@ -144,22 +146,12 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	}
 
 	@Override
-	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller) {
-		return new Task<Void>() {
-
-			@Override
-			protected Void call() throws Exception {
-				updateTitle(name());
-				updateProgress(-1, -1);
-
-				Platform.runLater(() ->
-				{
-					controller.getMenuToolbarController().initPageButtons();
-					controller.createPadViews();
-					controller.showPage(controller.getPage());
-				});
-				return null;
-			}
-		};
+	public Runnable getTask(ProjectSettings settings, Project project, IMainViewController controller) {
+		return () -> Platform.runLater(() ->
+		{
+			controller.getMenuToolbarController().initPageButtons();
+			controller.createPadViews();
+			controller.showPage(controller.getPage());
+		});
 	}
 }
