@@ -249,6 +249,10 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			this.pad.setContentType(connect.getType());
 		}
 
+		if (pad.isPadVisible()) {
+			pad.getController().getView().showBusyView(true);
+		}
+
 		pad.setPath(path);
 		this.pad.setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
 	}
