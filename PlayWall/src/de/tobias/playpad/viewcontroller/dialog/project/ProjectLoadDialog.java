@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Created by tobias on 19.03.17.
@@ -34,15 +35,19 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
 		stage.setWidth(400);
 		stage.setHeight(100);
+
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initStyle(StageStyle.UNDECORATED);
+
+		stage.setAlwaysOnTop(true);
+		stage.centerOnScreen();
 	}
 
 	@Override
 	public void startReadProject() {
-		statusLabel.setText("Lade Projekt...");
+		statusLabel.setText(Localization.getString(Strings.UI_Dialog_ProjectLoad_StartProject));
 	}
 
 	@Override
@@ -57,7 +62,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	public void readMedia(String name) {
 		currentCount++;
 		Platform.runLater(() -> {
-			statusLabel.setText(name);
+			statusLabel.setText(Localization.getString(Strings.UI_Dialog_ProjectLoad_StartPad, name));
 			progressbar.setProgress(currentCount / (double) itemCount);
 		});
 	}

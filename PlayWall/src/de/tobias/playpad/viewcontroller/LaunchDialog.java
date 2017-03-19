@@ -283,11 +283,9 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		try {
 			ProjectLoader loader = new ProjectLoader(ref);
 			loader.setDelegate(delegate);
-
 			loader.setListener(new ProjectLoadDialog());
 
 			Project project = loader.load();
-
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();

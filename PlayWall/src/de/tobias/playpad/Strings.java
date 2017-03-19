@@ -53,6 +53,10 @@ public class Strings {
 	// UI - Dialog - Launch
 	public static final String UI_Dialog_Launch_Info = "UI.Dialog.Launch.Info";
 
+	// UI - Dialog - ProjeczLoad
+	public static final String UI_Dialog_ProjectLoad_StartProject = "UI.Dialof.ProjectLoad.StartProject";
+	public static final String UI_Dialog_ProjectLoad_StartPad = "UI.Dialof.ProjectLoad.StartPad";
+
 	// UI - Window - Settings
 	public static final String UI_Window_Settings_Gen_Title = "UI.Window.Settings.Gen.Title";
 	public static final String UI_Window_Settings_Gen_CacheSize = "UI.Window.Settings.Gen.CacheSize";

@@ -26,7 +26,11 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.HelpMenuItem;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
-import de.tobias.playpad.viewcontroller.dialog.*;
+import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
+import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
+import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
@@ -521,6 +525,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				try {
 					ProjectLoader loader = new ProjectLoader(result.get());
 					loader.setDelegate(delegate);
+					loader.setListener(new ProjectLoadDialog());
 					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 
@@ -768,6 +773,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					// Speichern das alte Project in mvc.setProject(Project)
 					ProjectLoader loader = new ProjectLoader(ref);
 					loader.setDelegate(delegate);
+					loader.setListener(new ProjectLoadDialog());
 					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (ProfileNotFoundException e) {

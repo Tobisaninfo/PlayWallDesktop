@@ -15,6 +15,7 @@ import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
@@ -205,6 +206,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
 				if (value != null) {
 					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+					loader.setListener(new ProjectLoadDialog());
 					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
