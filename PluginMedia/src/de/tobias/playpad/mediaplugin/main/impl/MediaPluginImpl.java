@@ -8,7 +8,7 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontAwesomeType;

@@ -1,13 +1,4 @@
-package de.tobias.playpad.settings;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.dom4j.DocumentException;
+package de.tobias.playpad.profile;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
@@ -20,6 +11,14 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Profile {
 
@@ -106,6 +105,9 @@ public class Profile {
 	}
 
 	public static Profile load(ProfileReference ref) throws DocumentException, IOException, ProfileNotFoundException {
+		if (ref == null) {
+			throw new ProfileNotFoundException(null);
+		}
 		// Altes Speichern bevor neues Geladen
 		if (currentProfile != null)
 			currentProfile.save();

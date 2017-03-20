@@ -6,7 +6,7 @@ import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.MappingUtils;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;

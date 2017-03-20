@@ -1,11 +1,11 @@
-package de.tobias.playpad.viewcontroller.dialog;
+package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
@@ -19,6 +19,7 @@ import javafx.stage.Window;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ProfileChooseDialog extends NVC {
 
@@ -38,6 +39,11 @@ public class ProfileChooseDialog extends NVC {
 
 		profileComboBox.getItems().addAll(ProfileReferenceManager.getProfiles());
 		profileComboBox.getSelectionModel().selectFirst();
+	}
+
+	public Optional<Profile> showAndWait() {
+		getStageContainer().ifPresent(NVCStage::showAndWait);
+		return Optional.ofNullable(profile);
 	}
 
 	@Override
@@ -78,19 +84,10 @@ public class ProfileChooseDialog extends NVC {
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
 		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-
-		Profile profile = dialog.getProfile();
-
-		// In GUI hinzufügen (am Ende) und auswählen
-		if (profile != null) {
+		dialog.showAndWait().ifPresent(profile -> {
+			// Add new Profile to combo box and select it
 			profileComboBox.getItems().add(profile.getRef());
 			profileComboBox.getSelectionModel().selectLast();
-		}
+		});
 	}
-
-	public Profile getProfile() {
-		return profile;
-	}
-
 }

@@ -8,8 +8,8 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -31,7 +31,7 @@ import java.util.Optional;
 /**
  * Created by tobias on 26.02.17.
  */
-public class ProjectManagerDialogV2 extends NVC {
+public class ProjectManagerDialog extends NVC {
 
 	@FXML private ListView<ProjectReference> projectList;
 
@@ -48,7 +48,7 @@ public class ProjectManagerDialogV2 extends NVC {
 	@FXML private Button cancelButton;
 	@FXML private Button openButton;
 
-	public ProjectManagerDialogV2(Window owner, Project currentProject) {
+	public ProjectManagerDialog(Window owner, Project currentProject) {
 		load("de/tobias/playpad/assets/dialog/project", "projectManagementDialog.fxml", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
@@ -94,9 +94,11 @@ public class ProjectManagerDialogV2 extends NVC {
 
 		// Name Change Listener
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
-			ProjectReference reference = getSelectedItem();
-			if (reference != null) {
-				reference.setName(newValue);
+			if (Project.validateNameInput(newValue)) {
+				ProjectReference reference = getSelectedItem();
+				if (reference != null) {
+					reference.setName(newValue);
+				}
 			}
 		});
 

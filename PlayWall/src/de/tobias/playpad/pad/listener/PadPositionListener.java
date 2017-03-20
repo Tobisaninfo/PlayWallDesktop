@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 

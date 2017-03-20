@@ -6,9 +6,11 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
+import de.tobias.playpad.viewcontroller.dialog.profile.DuplicateProfileDialog;
+import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
@@ -27,15 +29,22 @@ import java.io.IOException;
 
 public class ProfileViewController extends NVC implements ChangeListener<ProfileReference> {
 
-	@FXML private ListView<ProfileReference> profileList;
-	@FXML private TextField nameTextField;
+	@FXML
+	private ListView<ProfileReference> profileList;
+	@FXML
+	private TextField nameTextField;
 
-	@FXML private Button newButton;
-	@FXML private Button duplicateButton;
-	@FXML private Button deleteButton;
-	@FXML private Button renameButton;
+	@FXML
+	private Button newButton;
+	@FXML
+	private Button duplicateButton;
+	@FXML
+	private Button deleteButton;
+	@FXML
+	private Button renameButton;
 
-	@FXML private Button chooseButton;
+	@FXML
+	private Button chooseButton;
 
 	private Project project;
 
@@ -108,15 +117,11 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	@FXML
 	private void newButtonHandler(ActionEvent event) {
 		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-
-		Profile profile = dialog.getProfile();
-
-		if (profile != null) {
+		dialog.showAndWait().ifPresent(profile -> {
 			ProfileReference ref = profile.getRef();
 			profileList.getItems().add(ref);
 			selectProfile(ref);
-		}
+		});
 	}
 
 	@FXML

@@ -1,6 +1,6 @@
 package de.tobias.playpad.plugin;
 
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 
 public interface SettingsListener {
 

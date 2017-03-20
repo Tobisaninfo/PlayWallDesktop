@@ -1,4 +1,4 @@
-package de.tobias.playpad.settings;
+package de.tobias.playpad.profile;
 
 import de.tobias.playpad.profile.ref.ProfileReference;
 

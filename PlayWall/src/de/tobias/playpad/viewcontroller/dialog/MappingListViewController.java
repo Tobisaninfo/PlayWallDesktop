@@ -8,7 +8,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.MappingList;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;

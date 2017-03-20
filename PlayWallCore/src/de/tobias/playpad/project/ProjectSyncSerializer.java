@@ -5,11 +5,8 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSerializer;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadSettingsSerializer;
-import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.Server;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -26,7 +23,7 @@ import java.util.UUID;
 public class ProjectSyncSerializer implements ProjectReader {
 
 	@Override
-	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException {
+	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException {
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		Project project = server.getProject(projectReference);
 

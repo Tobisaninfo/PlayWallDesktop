@@ -1,11 +1,11 @@
-package de.tobias.playpad.viewcontroller.dialog;
+package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
@@ -21,6 +21,7 @@ import javafx.stage.Window;
 
 import javax.sound.midi.MidiDevice.Info;
 import java.util.List;
+import java.util.Optional;
 
 public class NewProfileDialog extends NVC {
 
@@ -36,7 +37,7 @@ public class NewProfileDialog extends NVC {
 
 	private Profile profile;
 
-	NewProfileDialog(Window owner) {
+	public NewProfileDialog(Window owner) {
 		load("de/tobias/playpad/assets/dialog/", "newProfileDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
@@ -61,6 +62,11 @@ public class NewProfileDialog extends NVC {
 				}
 			});
 		});
+	}
+
+	public Optional<Profile> showAndWait() {
+		getStageContainer().ifPresent(NVCStage::showAndWait);
+		return Optional.ofNullable(profile);
 	}
 
 	private boolean expand = false;
@@ -155,9 +161,5 @@ public class NewProfileDialog extends NVC {
 	@FXML
 	private void cancelButtonHandler(ActionEvent event) {
 		getStageContainer().ifPresent(NVCStage::close);
-	}
-
-	public Profile getProfile() {
-		return profile;
 	}
 }

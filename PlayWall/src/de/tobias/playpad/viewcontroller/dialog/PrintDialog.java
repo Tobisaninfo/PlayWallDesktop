@@ -15,7 +15,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.cell.PageNameListCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;

@@ -5,9 +5,9 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -94,7 +94,11 @@ public class ProjectExporter {
 	}
 
 	private void exportMedia(ZipFile zip, ProjectReference reference) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
-		Project project = ProjectReferenceManager.loadProject(reference, null, false, false);
+		ProjectLoader loader = new ProjectLoader(reference);
+		loader.setLoadMedia(false);
+		loader.setLoadProfile(false);
+		Project project = loader.load();
+
 		Collection<Pad> pads = project.getPads();
 
 		delegate.setTasks(pads.size());

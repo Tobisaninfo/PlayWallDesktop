@@ -1,9 +1,5 @@
 package de.tobias.playpad.layout.desktop.pad;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
@@ -18,7 +14,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -26,14 +22,13 @@ import de.tobias.utils.util.FileUtils;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
 
 public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
@@ -156,6 +151,10 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 			if (connect != null) {
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
 					currentPad.setContentType(connect.getType());
+				}
+
+				if (currentPad.isPadVisible()) {
+					currentPad.getController().getView().showBusyView(true);
 				}
 
 				this.currentPad.setPath(file.toPath());

@@ -15,8 +15,8 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
@@ -247,6 +247,10 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	private void setNewPadContent(Path path, PadContentFactory connect) {
 		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
 			this.pad.setContentType(connect.getType());
+		}
+
+		if (pad.isPadVisible()) {
+			pad.getController().getView().showBusyView(true);
 		}
 
 		pad.setPath(path);

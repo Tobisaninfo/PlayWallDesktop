@@ -9,7 +9,7 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
