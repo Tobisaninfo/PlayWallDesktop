@@ -31,7 +31,7 @@ public class Fade {
 	 * Erstellt ein neues Fade mit den Default Werten. (Fade Dauer: 0 sec)
 	 */
 	public Fade() {
-		this(Duration.ZERO, Duration.ZERO);
+		this(Duration.ONE, Duration.ONE);
 	}
 
 	/**
