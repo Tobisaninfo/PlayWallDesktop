@@ -11,6 +11,7 @@ import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
@@ -26,6 +27,7 @@ import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
+import de.tobias.playpad.viewcontroller.dialog.NotFoundDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.playpad.viewcontroller.main.listener.LayoutChangedListener;
 import de.tobias.playpad.viewcontroller.main.listener.LockedListener;
@@ -367,6 +369,12 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		showPage(FIRST_PAGE);
 		loadUserCss();
 		updateWindowTitle();
+
+		// Show Path Mapping dialog if needed
+		if (!project.getPads(p -> p.getStatus() == PadStatus.NOT_FOUND).isEmpty()) {
+			NotFoundDialog dialog = new NotFoundDialog(project, getStage());
+			dialog.showAndWait();
+		}
 	}
 
 	/*
