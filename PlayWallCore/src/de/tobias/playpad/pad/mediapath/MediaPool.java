@@ -126,6 +126,10 @@ public class MediaPool {
 
 	void setPath(MediaPath path, Path localPath) {
 		if (connection != null) {
+			if (getPath(path) == null) {
+				create(path);
+			}
+
 			PreparedStatement stmt = null;
 			try {
 				stmt = connection.prepareStatement("UPDATE Path SET path = ? WHERE id = ?");

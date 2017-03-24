@@ -9,15 +9,12 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -85,6 +82,7 @@ public class NotFoundActionCell extends TableCell<NotFoundDialog.TempMediaPath, 
 				if (file != null) {
 					Path path = file.toPath();
 					currentItem.setLocalPath(path);
+					currentItem.setSelected(true);
 
 					// Search for new local paths
 					parentDialog.find(true);

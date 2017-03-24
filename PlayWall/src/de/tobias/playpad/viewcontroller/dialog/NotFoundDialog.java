@@ -194,12 +194,21 @@ public class NotFoundDialog extends NVC {
 						.stream()
 						.map(Pad::getPaths)
 						.forEach(legalPaths::addAll);
+
 				Collection<Path> folders = legalPaths.stream()
 						.filter(mediaPath -> mediaPath.getPath() != null)
 						.filter(mediaPath -> Files.exists(mediaPath.getPath()))
 						.map(mediaPath -> mediaPath.getPath().getParent())
 						.filter(path -> !searchHistory.contains(path))
 						.collect(Collectors.toSet());
+
+				// New Client Folders
+				mediaPaths.stream()
+						.filter(TempMediaPath::isMatched)
+						.filter(mediaPath -> Files.exists(mediaPath.getLocalPath()))
+						.map(mediaPath -> mediaPath.getLocalPath().getParent())
+						.filter(path -> !searchHistory.contains(path))
+						.forEach(folders::add);
 
 				for (Path folder : folders) {
 					searchHistory.add(folder);

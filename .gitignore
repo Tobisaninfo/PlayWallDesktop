@@ -2,3 +2,4 @@
 /out/
 .idea/workspace.xml
 .idea/dictionaries/*
+kotlinc.xml
