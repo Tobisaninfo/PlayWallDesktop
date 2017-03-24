@@ -330,6 +330,9 @@ public class Pad implements Cloneable {
 	 * @param status status
 	 */
 	public void setStatus(PadStatus status) {
+		if (status == PadStatus.NOT_FOUND)
+			Thread.dumpStack();
+
 		// Play, Pause & Stop only if the pad isn't empty
 		if (status == PadStatus.PLAY || status == PadStatus.STOP || status == PadStatus.PAUSE) {
 			if (this.statusProperty.get() == PadStatus.EMPTY) {

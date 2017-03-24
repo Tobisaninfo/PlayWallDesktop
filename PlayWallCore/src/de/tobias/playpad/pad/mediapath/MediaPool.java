@@ -52,7 +52,7 @@ public class MediaPool {
 			connection = DriverManager.getConnection("jdbc:sqlite:" + path.toString());
 
 			PreparedStatement subjectCreateStmt = connection.prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `Path` (`id` VARCHAR NOT NULL PRIMARY KEY, `path` TEXT DEFAULT NULL);");
+					"CREATE TABLE IF NOT EXISTS `Path` (`id` VARCHAR NOT NULL PRIMARY KEY, `project` VARCHAR NOT NULL, `path` TEXT DEFAULT NULL);");
 			subjectCreateStmt.execute();
 			subjectCreateStmt.close();
 		} catch (SQLException e) {
@@ -106,9 +106,10 @@ public class MediaPool {
 		if (connection != null) {
 			PreparedStatement stmt = null;
 			try {
-				stmt = connection.prepareStatement("INSERT INTO Path VALUES (?, ?)");
+				stmt = connection.prepareStatement("INSERT INTO Path VALUES (?, ?, ?)");
 				stmt.setString(1, path.getId().toString());
-				stmt.setString(2, localPath != null ? localPath.toString(): null);
+				stmt.setString(2, path.getPad().getProject().getProjectReference().getUuid().toString());
+				stmt.setString(3, localPath != null ? localPath.toString(): null);
 				stmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
