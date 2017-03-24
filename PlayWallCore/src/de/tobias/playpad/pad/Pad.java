@@ -330,9 +330,6 @@ public class Pad implements Cloneable {
 	 * @param status status
 	 */
 	public void setStatus(PadStatus status) {
-		if (status == PadStatus.NOT_FOUND)
-			Thread.dumpStack();
-
 		// Play, Pause & Stop only if the pad isn't empty
 		if (status == PadStatus.PLAY || status == PadStatus.STOP || status == PadStatus.PAUSE) {
 			if (this.statusProperty.get() == PadStatus.EMPTY) {
@@ -415,7 +412,9 @@ public class Pad implements Cloneable {
 			PadContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
 			PadContent newContent = factory.newInstance(this);
 			contentProperty.set(newContent);
-			newContent.loadMedia();
+			if (!getPaths().isEmpty()) {
+				newContent.loadMedia();
+			}
 		} else {
 			contentProperty.set(null);
 		}

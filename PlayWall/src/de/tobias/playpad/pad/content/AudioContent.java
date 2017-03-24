@@ -158,7 +158,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
 		} else {
-			getPad().setStatus(PadStatus.NOT_FOUND);
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 

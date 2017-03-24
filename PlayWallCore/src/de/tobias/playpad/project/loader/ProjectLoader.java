@@ -69,9 +69,8 @@ public class ProjectLoader {
 		return loadProfile;
 	}
 
-	public ProjectLoader setLoadProfile(boolean loadProfile) {
+	public void setLoadProfile(boolean loadProfile) {
 		this.loadProfile = loadProfile;
-		return this;
 	}
 
 	public Project load() throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {

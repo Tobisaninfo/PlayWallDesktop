@@ -53,7 +53,7 @@ public class ImageContent extends PadContent {
 			getPad().setStatus(PadStatus.READY);
 			loaded = true;
 		} else {
-			getPad().setStatus(PadStatus.NOT_FOUND);
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 

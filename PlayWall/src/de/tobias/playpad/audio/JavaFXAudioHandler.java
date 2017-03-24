@@ -117,7 +117,6 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 				}
 			});
 			loadedProperty.set(false);
-			// getContent().getPad().throwException(path, player.getError()); TODO Error Handling User
 		});
 		player.setOnEndOfMedia(() ->
 		{

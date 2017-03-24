@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
+import de.tobias.utils.util.Worker;
 import javafx.scene.media.MediaPlayer;
 import org.dom4j.Element;
 
@@ -70,6 +71,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 		Element contentElement = element.element(CONTENT_ELEMENT);
 		if (contentElement != null) {
 			String contentType = contentElement.attributeValue(CONTENT_TYPE_ATTR);
+			pad.setContentType(contentType);
 
 			Element pathsElement = contentElement.element(CONTENT_PATHS_ELEMENT);
 			for (Object obj : pathsElement.elements(CONTENT_PATH_ELEMENT)) {
@@ -97,7 +99,6 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 					pad.getPaths().add(mediaPath);
 				}
 			}
-			pad.setContentType(contentType);
 		}
 
 		return pad;
