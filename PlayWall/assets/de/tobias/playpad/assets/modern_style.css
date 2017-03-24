@@ -98,6 +98,15 @@
 	-fx-border-radius: 10px;
 }
 
+.pad-notfound {
+    -fx-text-fill: red !important;
+}
+
+.fonticon-notfound:pressed {
+    -fx-text-fill: lightgray;
+}
+
+/* Needed ? */
 .font-icon:selected {
 	-fx-text-fill: red;
 }

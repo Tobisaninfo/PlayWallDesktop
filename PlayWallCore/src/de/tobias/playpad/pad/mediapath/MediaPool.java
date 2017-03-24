@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by tobias on 20.03.17.
@@ -68,7 +70,11 @@ public class MediaPool {
 				result = stmt.executeQuery();
 
 				if (result.next()) {
-					return Paths.get(result.getString("path"));
+					String localPath = result.getString("path");
+					if (localPath == null) {
+						return null;
+					}
+					return Paths.get(localPath);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -93,12 +99,16 @@ public class MediaPool {
 	}
 
 	public void create(MediaPath path) {
+		create(path, null);
+	}
+
+	public void create(MediaPath path, Path localPath) {
 		if (connection != null) {
 			PreparedStatement stmt = null;
 			try {
 				stmt = connection.prepareStatement("INSERT INTO Path VALUES (?, ?)");
 				stmt.setString(1, path.getId().toString());
-				stmt.setString(2, path.getPath().toString());
+				stmt.setString(2, localPath != null ? localPath.toString(): null);
 				stmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -114,12 +124,13 @@ public class MediaPool {
 		}
 	}
 
-	public void setPath(MediaPath path) {
+	void setPath(MediaPath path, Path localPath) {
 		if (connection != null) {
 			PreparedStatement stmt = null;
 			try {
-				stmt = connection.prepareStatement("UPDATE Path SET path = ?");
-				stmt.setString(1, path.getId().toString());
+				stmt = connection.prepareStatement("UPDATE Path SET path = ? WHERE id = ?");
+				stmt.setString(1, localPath.toString());
+				stmt.setString(2, path.getId().toString());
 				stmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -143,5 +154,22 @@ public class MediaPool {
 		} finally {
 			connection = null;
 		}
+	}
+
+	// Find algorithm
+	public static Path find(String filename, Path baseFolder, boolean includeSubdirectories) throws IOException {
+		List<Path> result = new ArrayList<>();
+		Files.newDirectoryStream(baseFolder).forEach(path -> {
+			if (path.getFileName().toString().equals(filename)) {
+				result.add(path);
+			} else if (Files.isDirectory(path) && includeSubdirectories) {
+				try {
+					result.add(find(filename, path, false));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		return result.isEmpty() ? null : result.get(0);
 	}
 }

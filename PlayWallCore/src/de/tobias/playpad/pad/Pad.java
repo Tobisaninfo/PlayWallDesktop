@@ -255,12 +255,18 @@ public class Pad implements Cloneable {
 		return mediaPaths.get(0).getPath();
 	}
 
+	public String getFileName() {
+		if (mediaPaths.isEmpty()) {
+			return null;
+		}
+		return mediaPaths.get(0).getFileName();
+	}
+
 	public void setPath(Path path) {
 		if (mediaPaths.isEmpty()) {
 			createMediaPath(path);
 		} else {
-			final MediaPath mediaPath = mediaPaths.get(0);
-			mediaPath.setPath(path, true);
+			setPath(path, 0);
 		}
 	}
 
@@ -271,21 +277,18 @@ public class Pad implements Cloneable {
 	public void setPath(Path path, int id) {
 		if (mediaPaths.size() > id && id >= 0) {
 			final MediaPath mediaPath = mediaPaths.get(id);
-			mediaPath.setPath(path,true);
+			removePath(mediaPath);
+
+			createMediaPath(path);
 		}
 	}
 
-	public void setPath(Path path, UUID id) {
-		setPath(path, id, true);
-	}
-
-	public void setPath(Path path, UUID id, boolean load) {
-		final Optional<MediaPath> first = mediaPaths.stream().filter(mediaPath -> mediaPath.getId().equals(id)).findFirst();
-		first.ifPresent(mediaPath -> mediaPath.setPath(path, load));
+	public void updatePath(MediaPath mediaPath, Path localPath) {
+		mediaPath.setPath(localPath, true);
 	}
 
 	private void createMediaPath(Path path) {
-		final MediaPath mediaPath = new MediaPath(path, this);
+		final MediaPath mediaPath = MediaPath.create(this, path);
 
 		// Sync to cloud
 		addPath(mediaPath);
@@ -509,7 +512,6 @@ public class Pad implements Cloneable {
 		setStatus(PadStatus.EMPTY);
 
 		if (project.getProjectReference().isSync()) {
-			mediaPaths.forEach(MediaPath::removeSyncListener);
 			mediaPaths.forEach(path -> CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path));
 
 			CommandManager.execute(Commands.PAD_CLEAR, project.getProjectReference(), this);

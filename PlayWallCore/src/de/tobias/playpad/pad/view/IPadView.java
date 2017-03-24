@@ -131,4 +131,10 @@ public interface IPadView {
 	 * Entfernt die StyleClasses vom PadView. Die Methode wird vom Controller aufgerufen.
 	 */
 	void removeStyleClasses();
+
+	/**
+	 * Shows the not found icon overlay
+	 * @param show
+	 */
+	void showNotFoundIcon(boolean show);
 }

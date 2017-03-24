@@ -38,6 +38,8 @@ public class TouchPadView implements IPadView {
 	private HBox infoBox;
 	private Label timeLabel;
 
+	private FontIcon notFoundLabel;
+
 	private HBox preview;
 	private IPadContentView previewContent;
 
@@ -86,8 +88,17 @@ public class TouchPadView implements IPadView {
 		playBar = new ProgressBar(0);
 		playBar.prefWidthProperty().bind(root.widthProperty());
 
+		// Not Found Label
+		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		notFoundLabel.getStyleClass().add("pad-notfound");
+		notFoundLabel.setOpacity(0.5);
+		notFoundLabel.setSize(50);
+		notFoundLabel.setMouseTransparent(true);
+
+		notFoundLabel.setVisible(false);
+
 		root.getChildren().addAll(infoBox, preview, playBar);
-		superRoot.getChildren().addAll(root);
+		superRoot.getChildren().addAll(root, notFoundLabel);
 
 		if (OS.isWindows() && User32X.isTouchAvailable()) {
 			superRoot.setOnTouchPressed(controller);
@@ -289,5 +300,10 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void setPlayBarProgress(double value) {
 		playBar.setProgress(value);
+	}
+
+	@Override
+	public void showNotFoundIcon(boolean show) {
+		notFoundLabel.setVisible(show);
 	}
 }

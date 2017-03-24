@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
@@ -114,9 +116,13 @@ public class Project {
 	}
 
 	public Collection<Pad> getPads() {
+		return getPads(p -> true);
+	}
+
+	public Collection<Pad> getPads(Predicate<Pad> predicate) {
 		List<Pad> pads = new ArrayList<>();
 		pages.stream().map(Page::getPads).forEach(pads::addAll);
-		return pads;
+		return pads.parallelStream().filter(predicate).collect(Collectors.toList());
 	}
 
 	public void removePad(UUID id) {
@@ -173,11 +179,6 @@ public class Project {
 
 	public void updateActivePlayerProperty() {
 		activePlayerProperty.set(getActivePlayers());
-	}
-
-	// Utils
-	public void loadPadsContent() {
-		getPads().forEach(Pad::loadContent);
 	}
 
 	@Override

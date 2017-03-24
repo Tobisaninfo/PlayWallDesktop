@@ -18,58 +18,72 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
+
+		// Reset
 		controller.getView().setErrorLabelActive(false);
+		controller.getView().showNotFoundIcon(false);
 
 		switch (newValue) {
-		case PLAY:
-			// Reset Warning Feedback for UI
-			controller.getPadPositionListener().setSend(false);
+			case PLAY:
+				// Reset Warning Feedback for UI
+				controller.getPadPositionListener().setSend(false);
 
-			// UI Styling
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, true);
-			break;
+				// UI Styling
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, true);
+				break;
 
-		case PAUSE:
-			controller.getPadPositionListener().stopWaning();
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			break;
+			case PAUSE:
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				break;
 
-		case STOP:
-			controller.getPadPositionListener().stopWaning();
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getView().setStyle("");
-			break;
+			case STOP:
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				controller.getView().setStyle("");
+				break;
 
-		case READY:
-			controller.getPadPositionListener().stopWaning();
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getView().setStyle(""); // Cleanup from warning UI
-			break;
-		case ERROR:
-			controller.getView().setErrorLabelActive(true);
+			case READY:
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				controller.getView().setStyle(""); // Cleanup from warning UI
+				break;
 
-			controller.getPadPositionListener().stopWaning();
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getView().setStyle(""); // Cleanup from warning UI
-			break;
+			case ERROR:
+				controller.getView().setErrorLabelActive(true);
 
-		case EMPTY:
-			controller.getPadPositionListener().stopWaning();
-			controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
-			controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-			controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-			controller.getView().setStyle(""); // Cleanup from warning UI
-			break;
-		default:
-			break;
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				controller.getView().setStyle(""); // Cleanup from warning UI
+				break;
+
+			case NOT_FOUND:
+				controller.getView().showNotFoundIcon(true);
+
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				controller.getView().setStyle(""); // Cleanup from warning UI
+				break;
+
+			case EMPTY:
+				controller.getPadPositionListener().stopWaning();
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
+				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
+				controller.getView().setStyle(""); // Cleanup from warning UI
+				break;
+			default:
+				break;
 		}
 	}
 }

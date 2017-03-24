@@ -5,15 +5,12 @@ import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.server.sync.listener.upstream.PathUpdateListener;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
@@ -23,28 +20,31 @@ import java.util.UUID;
 public class MediaPath implements Cloneable {
 
 	private UUID id;
-	private ObjectProperty<Path> path;
+	private StringProperty fileName;
 	private Pad pad;
-
-	private PathUpdateListener pathListener;
-
-	public MediaPath(Pad pad) {
-		this(null, pad);
-	}
-
-	public MediaPath(Path path, Pad pad) {
-		this(UUID.randomUUID(), path, pad);
-	}
 
 	public MediaPath(UUID id, Path path, Pad pad) {
 		this.id = id;
-		this.path = new SimpleObjectProperty<>(path);
+		this.fileName = new SimpleStringProperty(path.getFileName().toString());
 		this.pad = pad;
+	}
 
-		pathListener = new PathUpdateListener(this);
-		if (pad.getProject().getProjectReference().isSync()) {
-			addSyncListener();
-		}
+	public MediaPath(UUID id, String filename, Pad pad) {
+		this.id = id;
+		this.fileName = new SimpleStringProperty(filename);
+		this.pad = pad;
+	}
+
+	public static MediaPath create(Pad pad, Path localPath) {
+		MediaPath mediaPath = new MediaPath(UUID.randomUUID(), localPath, pad);
+		MediaPool.getInstance().create(mediaPath, localPath);
+		return mediaPath;
+	}
+
+	public static MediaPath create(Pad pad, String filename) {
+		MediaPath mediaPath = new MediaPath(UUID.randomUUID(), filename, pad);
+		MediaPool.getInstance().create(mediaPath);
+		return mediaPath;
 	}
 
 	public UUID getId() {
@@ -52,7 +52,7 @@ public class MediaPath implements Cloneable {
 	}
 
 	public Path getPath() {
-		return path.get();
+		return MediaPool.getInstance().getPath(this);
 	}
 
 	public void setPath(Path path, boolean load) {
@@ -62,7 +62,7 @@ public class MediaPath implements Cloneable {
 		}
 
 		Path finalPath = getRealPath(path);
-		this.path.set(finalPath);
+		MediaPool.getInstance().setPath(this, finalPath);
 
 		if (load) {
 			content = pad.getContent();
@@ -72,8 +72,8 @@ public class MediaPath implements Cloneable {
 		}
 	}
 
-	public ReadOnlyObjectProperty<Path> pathProperty() {
-		return path;
+	public String getFileName() {
+		return fileName.get();
 	}
 
 	public Pad getPad() {
@@ -111,26 +111,24 @@ public class MediaPath implements Cloneable {
 		return original;
 	}
 
-	private void addSyncListener() {
-		pathListener.addListener();
-	}
-
-	public void removeSyncListener() {
-		pathListener.removeListener();
-	}
-
 	public MediaPath clone(Pad pad) throws CloneNotSupportedException {
 		MediaPath clone = (MediaPath) super.clone();
 		clone.id = UUID.randomUUID();
-		clone.path = new SimpleObjectProperty<>(Paths.get(getPath().toUri()));
+		clone.fileName = new SimpleStringProperty(fileName.get());
 		clone.pad = pad;
 
 		if (pad.getProject().getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_ADD, pad.getProject().getProjectReference(), clone);
-			clone.pathListener = new PathUpdateListener(clone);
-			clone.addSyncListener();
 		}
 
 		return clone;
+	}
+
+	@Override
+	public String toString() {
+		return "MediaPath{" +
+				"id=" + id +
+				", fileName=" + fileName.get() +
+				'}';
 	}
 }

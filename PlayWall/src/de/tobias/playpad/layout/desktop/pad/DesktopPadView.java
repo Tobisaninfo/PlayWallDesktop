@@ -32,6 +32,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class DesktopPadView implements IPadView {
 
@@ -46,6 +47,8 @@ public class DesktopPadView implements IPadView {
 	private HBox preview;
 	private IPadContentView previewContent;
 
+	private FontIcon notFoundLabel;
+
 	private ProgressBar playBar;
 	private Button playButton;
 	private Button pauseButton;
@@ -59,7 +62,7 @@ public class DesktopPadView implements IPadView {
 	private BusyView busyView;
 
 	private transient DesktopPadViewController controller; // Reference to its controller
-	
+
 	public DesktopPadView(DesktopMainLayoutFactory connect) {
 		controller = new DesktopPadViewController(this, connect);
 		setupView();
@@ -114,11 +117,20 @@ public class DesktopPadView implements IPadView {
 		settingsButton.setFocusTraversable(false);
 		settingsButton.setOnAction(controller);
 
+		// Not Found Label
+		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		notFoundLabel.getStyleClass().add("pad-notfound");
+		notFoundLabel.setOpacity(0.25);
+		notFoundLabel.setSize(80);
+		notFoundLabel.setMouseTransparent(true);
+
+		notFoundLabel.setVisible(false);
+
 		// Button HBOX
 		buttonBox = new HBox(); // childern in addDefaultButton()
 
 		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
-		superRoot.getChildren().addAll(root);
+		superRoot.getChildren().addAll(root, notFoundLabel);
 	}
 
 	@Override
@@ -129,7 +141,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setContentView(Pad pad) {
 		superRoot.setUserData(pad);
-		
+
 		if (previewContent != null) {
 			previewContent.deinit();
 		}
@@ -339,27 +351,27 @@ public class DesktopPadView implements IPadView {
 	public void removeStyleClasses() {
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		timeLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		loopLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		triggerLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		errorLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		loopLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		triggerLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		errorLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		preview.getChildren().forEach(i -> i.getStyleClass().removeIf( c -> c.startsWith("pad")));
+		preview.getChildren().forEach(i -> i.getStyleClass().removeIf(c -> c.startsWith("pad")));
 
-		playBar.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playBar.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		playButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		pauseButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		stopButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		newButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		settingsButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		pauseButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		stopButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		newButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		settingsButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		playButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		pauseButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		stopButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		newButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		settingsButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		pauseButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		stopButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		newButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		settingsButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		buttonBox.getStyleClass().remove("pad-button-box");
 		root.getStyleClass().remove("pad-root");
@@ -394,5 +406,10 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setPlayBarProgress(double value) {
 		playBar.setProgress(value);
+	}
+
+	@Override
+	public void showNotFoundIcon(boolean show) {
+		notFoundLabel.setVisible(show);
 	}
 }
