@@ -5,7 +5,7 @@ public enum PadStatus {
 	EMPTY,
 	ERROR,
 	READY,
-	// Diese Trigger werden über den Listener PadStatusListener realisiert.
+	// Diese Trigger werden über den Listener PadStatusControlListener realisiert.
 	/**
 	 * Trigger the player to start playing.
 	 */

@@ -4,6 +4,8 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.listener.PadStatusControlListener;
+import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
@@ -22,7 +24,6 @@ import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,8 @@ public class Pad implements Cloneable {
 	 */
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
-	private transient PadStatusListener padStatusListener;
+	private transient PadStatusControlListener padStatusControlListener;
+	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -104,8 +106,8 @@ public class Pad implements Cloneable {
 
 	private void initPadListener() {
 		// Remove old listener from properties
-		if (padStatusListener != null && statusProperty != null) {
-			statusProperty.removeListener(padStatusListener);
+		if (padStatusControlListener != null && statusProperty != null) {
+			statusProperty.removeListener(padStatusControlListener);
 		}
 		if (padTriggerStatusListener != null && statusProperty != null) {
 			statusProperty.removeListener(padTriggerStatusListener);
@@ -116,8 +118,11 @@ public class Pad implements Cloneable {
 		}
 
 		// init new listener for properties
-		padStatusListener = new PadStatusListener(this);
-		statusProperty.addListener(padStatusListener);
+		padStatusControlListener = new PadStatusControlListener(this);
+		statusProperty.addListener(padStatusControlListener);
+
+		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
+		statusProperty.addListener(padStatusNotFoundListener);
 
 		padTriggerStatusListener = new PadTriggerStatusListener(this);
 		statusProperty.addListener(padTriggerStatusListener);

@@ -55,6 +55,7 @@ public class Project {
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
+	private transient IntegerProperty notFoundMediaProperty;
 	private transient ProjectUpdateListener syncListener;
 
 	public Project(ProjectReference ref) {
@@ -62,6 +63,7 @@ public class Project {
 		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
+		this.notFoundMediaProperty = new SimpleIntegerProperty();
 
 		syncListener = new ProjectUpdateListener(this);
 		if (ref.isSync()) {
@@ -166,7 +168,7 @@ public class Project {
 	}
 
 	public int getActivePlayers() {
-		return (int) getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
+		return getPads(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).size();
 	}
 
 	public boolean hasActivePlayers() {
@@ -180,6 +182,19 @@ public class Project {
 	public void updateActivePlayerProperty() {
 		activePlayerProperty.set(getActivePlayers());
 	}
+
+	public int getNotFoundMedia() {
+		return notFoundMediaProperty.get();
+	}
+
+	public IntegerProperty notFoundMediaProperty() {
+		return notFoundMediaProperty;
+	}
+
+	public void updateNotFoundProperty() {
+		notFoundMediaProperty.set(getPads(p -> p.getStatus() == PadStatus.NOT_FOUND).size());
+	}
+
 
 	@Override
 	public String toString() {

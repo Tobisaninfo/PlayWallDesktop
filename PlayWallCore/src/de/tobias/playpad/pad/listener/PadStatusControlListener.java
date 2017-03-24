@@ -1,6 +1,9 @@
-package de.tobias.playpad.pad;
+package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.profile.Profile;
@@ -8,14 +11,14 @@ import de.tobias.playpad.profile.ProfileSettings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-public class PadStatusListener implements ChangeListener<PadStatus> {
+public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
 	private Pad pad;
 
 	// Utils für Single Pad Playing
 	private static Pad currentPlayingPad; // Nur wenn ProfileSettings.isMultiplePlayer == false
 
-	PadStatusListener(Pad pad) {
+	public PadStatusControlListener(Pad pad) {
 		this.pad = pad;
 	}
 
