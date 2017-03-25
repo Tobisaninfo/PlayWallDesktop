@@ -15,6 +15,9 @@ import de.tobias.utils.application.container.PathType;
 
 public class NativeAudioWinUpdater implements Updatable {
 
+	private static final int BUILD = 2;
+	private static final String CODE = "1.1";
+
 	private int newBuild;
 	private String newVersion;
 	private URL remotePath;
@@ -24,12 +27,12 @@ public class NativeAudioWinUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 2;
+		return BUILD;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "1.1";
+		return CODE;
 	}
 
 	@Override

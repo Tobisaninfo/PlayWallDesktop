@@ -15,6 +15,9 @@ import de.tobias.utils.application.container.PathType;
 
 public class AwakePluginUpdater implements Updatable {
 
+	private static final int BUILD = 3;
+	private static final String CODE = "2.1";
+
 	private int newBuild;
 	private String newVersion;
 	private URL remotePath;
@@ -24,12 +27,12 @@ public class AwakePluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 3;
+		return BUILD;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "2.1";
+		return CODE;
 	}
 
 	@Override

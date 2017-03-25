@@ -15,6 +15,9 @@ import de.tobias.utils.application.container.PathType;
 
 public class NativeAudioMacUpdater implements Updatable {
 
+	private static final int BUILD = 1;
+	private static final String CODE = "1.0";
+
 	private int newBuild;
 	private String newVersion;
 	private URL remotePath;
@@ -24,12 +27,12 @@ public class NativeAudioMacUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 1;
+		return BUILD;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "1.0";
+		return CODE;
 	}
 
 	@Override

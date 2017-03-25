@@ -15,6 +15,9 @@ import de.tobias.utils.application.container.PathType;
 
 public class LaunchPadPluginUpdater implements Updatable {
 
+	private static final int BUILD = 4;
+	private static final String CODE = "3.1";
+
 	private int newBuild;
 	private String newVersion;
 	private URL remotePath;
@@ -24,12 +27,12 @@ public class LaunchPadPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 4;
+		return BUILD;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "3.1";
+		return CODE;
 	}
 
 	@Override

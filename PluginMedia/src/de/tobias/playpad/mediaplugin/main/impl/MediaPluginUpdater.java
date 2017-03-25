@@ -15,6 +15,9 @@ import de.tobias.utils.application.container.PathType;
 
 public class MediaPluginUpdater implements Updatable {
 
+	private static final int BUILD = 8;
+	private static final String CODE = "4.2.2";
+
 	private int newBuild;
 	private String newVersion;
 	private URL remotePath;
@@ -24,12 +27,12 @@ public class MediaPluginUpdater implements Updatable {
 
 	@Override
 	public int getCurrentBuild() {
-		return 8;
+		return BUILD;
 	}
 
 	@Override
 	public String getCurrentVersion() {
-		return "4.2.2";
+		return CODE;
 	}
 
 	@Override
