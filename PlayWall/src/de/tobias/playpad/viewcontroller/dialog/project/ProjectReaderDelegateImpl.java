@@ -29,7 +29,6 @@ public class ProjectReaderDelegateImpl implements ProjectReader.ProjectReaderDel
 	public ProfileReference getProfileReference() {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(owner);
 
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
 		Optional<Profile> profile = dialog.showAndWait();
 		return profile.map(Profile::getRef).orElse(null);
 	}
