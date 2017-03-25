@@ -12,12 +12,12 @@ import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.updater.client.Updatable;
+import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.AwakeUtils;
-import de.tobias.utils.util.IOUtils;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
@@ -32,7 +32,6 @@ import net.xeoh.plugins.base.annotations.events.Shutdown;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -88,16 +87,15 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	public void onDisable() {
 		System.out.println("Disable Awake Plugin");
 	}
-// TODO Server path anpassen mit UpdateChannel
+
 	private Path loadLibMac() throws IOException {
-		Path folder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "awakelib.dylib");
-		if (Files.notExists(folder)) {
-			Files.createFile(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/libAwake/libAwakeLib.dylib");
-			System.out.println("Download " + url);
-			IOUtils.copy(url.openStream(), folder);
+		Path localPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "awakelib.dylib");
+		if (Files.notExists(localPath)) {
+			Files.createFile(localPath);
+			System.out.println("Download: /plugins/libAwake/libAwakeLib.dylib");
+			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/libAwakeLib.dylib", UpdateChannel.STABLE, localPath);
 		}
-		return folder;
+		return localPath;
 	}
 
 	private void loadJNA() throws IOException {
@@ -107,17 +105,15 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		Path jnaPlatformFile = folder.resolve("jna-platform.jar");
 
 		if (Files.notExists(jnaFile)) {
-			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna.jar");
-			System.out.println("Download " + url);
-			IOUtils.copy(url.openStream(), jnaFile);
+			Files.createFile(jnaFile);
+			System.out.println("Download: /plugins/libAwake/jna.jar");
+			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna.jar", UpdateChannel.STABLE, jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
-			Files.createDirectories(folder);
-			URL url = new URL(ApplicationUtils.getApplication().getInfo().getUpdateURL() + "/stable/plugins/jna/jna-platform.jar");
-			System.out.println("Download " + url);
-			IOUtils.copy(url.openStream(), jnaPlatformFile);
+			Files.createFile(jnaPlatformFile);
+			System.out.println("Download: /plugins/libAwake/jna-platform.jar");
+			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna-platform.jar", UpdateChannel.STABLE, jnaPlatformFile);
 		}
 	}
 
@@ -156,7 +152,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		activeMenu.setText(bundle.getString("menutitle"));
 		activeMenu.setSelected(settings.active);
 
-		t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+		t.performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (oldToolbar != null)
 				oldToolbar.removeMenuItem(activeMenu);

@@ -80,7 +80,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
 		eqMenuItem.setOnAction(this);
 
-		t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+		t.performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (oldToolbar != null)
 				oldToolbar.removeMenuItem(eqMenuItem);

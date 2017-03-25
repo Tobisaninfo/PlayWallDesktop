@@ -82,7 +82,7 @@ public class ActionsPluginImpl implements ActionsPlugin, ChangeListener<Boolean>
 
 				@Override
 				public void onInit(IMainViewController t) {
-					t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+					t.performLayoutDependedAction((oldToolbar, newToolbar) ->
 					{
 						if (oldToolbar != null)
 							oldToolbar.getVolumeSlider().valueChangingProperty().removeListener(listener);

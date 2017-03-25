@@ -136,7 +136,7 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 *
 	 * @param runnable Funktion
 	 */
-	void performLayoutDependendAction(MainLayoutHandler runnable);
+	void performLayoutDependedAction(MainLayoutHandler runnable);
 
 	/**
 	 * Lädt die Tastenkombinationen für das Menü und co neu.

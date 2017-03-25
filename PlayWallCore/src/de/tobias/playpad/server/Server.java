@@ -9,6 +9,7 @@ import de.tobias.updater.client.UpdateChannel;
 import javafx.beans.property.ObjectProperty;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -35,6 +36,16 @@ public interface Server {
 	 * @throws IOException network error
 	 */
 	void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException;
+
+	/**
+	 * Load a source from the servers update channel.
+	 *
+	 * @param path        server path
+	 * @param channel     update channel
+	 * @param destination local path
+	 * @throws IOException network error
+	 */
+	void loadSource(String path, UpdateChannel channel, Path destination) throws IOException;
 
 	/**
 	 * Create a session on the server side and return the private key for the communication.

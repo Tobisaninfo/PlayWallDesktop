@@ -54,6 +54,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,11 +119,17 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
-		String url = "https://" + host + "/" + channel + plugin.getPath();
+		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+		loadSource(plugin.getPath(), channel, path);
+	}
+
+	@Override
+	public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
+		String url = "https://" + host + "/" + channel + path;
+		System.out.println(url);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
-			Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-			Files.copy(response.getBody(), path);
+			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
 		}
