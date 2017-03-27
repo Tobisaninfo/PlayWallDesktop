@@ -11,7 +11,7 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.viewcontroller.cell.NotFoundActionCell;
+import de.tobias.playpad.viewcontroller.cell.PathMatchActionCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 /**
  * Created by tobias on 24.03.17.
  */
-public class NotFoundDialog extends NVC {
+public class PathMatchDialog extends NVC {
 
 	public class TempMediaPath {
 		private MediaPath mediaPath;
@@ -63,7 +63,7 @@ public class NotFoundDialog extends NVC {
 			return mediaPath;
 		}
 
-		Path getLocalPath() {
+		public Path getLocalPath() {
 			return localPath.get();
 		}
 
@@ -104,7 +104,7 @@ public class NotFoundDialog extends NVC {
 					'}';
 		}
 
-		boolean isMatched() {
+		public boolean isMatched() {
 			return localPath.isNotNull().get();
 		}
 	}
@@ -131,7 +131,7 @@ public class NotFoundDialog extends NVC {
 	private Project project;
 	private List<TempMediaPath> mediaPaths;
 
-	public NotFoundDialog(Project project, Window owner) {
+	public PathMatchDialog(Project project, Window owner) {
 		load("de/tobias/playpad/assets/dialog/", "notFoundDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage stage = applyViewControllerToStage();
@@ -171,7 +171,7 @@ public class NotFoundDialog extends NVC {
 		});
 
 		selectColumn.setCellFactory(table -> new CheckBoxTableCell<>());
-		actionColumn.setCellFactory(table -> new NotFoundActionCell(this));
+		actionColumn.setCellFactory(table -> new PathMatchActionCell(this));
 
 		selectColumn.setCellValueFactory(param -> param.getValue().selectedProperty());
 		filenameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMediaPath().getFileName()));

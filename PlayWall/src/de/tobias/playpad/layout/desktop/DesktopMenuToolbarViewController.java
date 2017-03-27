@@ -28,7 +28,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.NotFoundDialog;
+import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
@@ -599,7 +599,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void notFoundMenuHandler(ActionEvent event) {
-		NotFoundDialog dialog = new NotFoundDialog(openProject, mainViewController.getStage());
+		PathMatchDialog dialog = new PathMatchDialog(openProject, mainViewController.getStage());
 		dialog.showAndWait();
 	}
 
