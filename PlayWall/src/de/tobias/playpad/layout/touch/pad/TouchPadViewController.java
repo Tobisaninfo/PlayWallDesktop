@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.touch;
+package de.tobias.playpad.layout.touch.pad;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;

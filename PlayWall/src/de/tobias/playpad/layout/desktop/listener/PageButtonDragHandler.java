@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.listener;
 
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.EventHandler;

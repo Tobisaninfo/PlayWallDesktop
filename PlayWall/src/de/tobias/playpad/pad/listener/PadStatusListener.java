@@ -21,7 +21,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 
 		// Reset
 		controller.getView().setErrorLabelActive(false);
-		controller.getView().showNotFoundIcon(false);
+		controller.getView().showNotFoundIcon(controller.getPad(), false);
 
 		switch (newValue) {
 			case PLAY:
@@ -66,7 +66,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				break;
 
 			case NOT_FOUND:
-				controller.getView().showNotFoundIcon(true);
+				controller.getView().showNotFoundIcon(controller.getPad(), true);
 
 				controller.getPadPositionListener().stopWaning();
 				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);

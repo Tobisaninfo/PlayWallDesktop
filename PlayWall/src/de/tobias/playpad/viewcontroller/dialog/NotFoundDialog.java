@@ -1,14 +1,18 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.pad.DesktopPadViewController;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.cell.NotFoundActionCell;
+import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
@@ -16,15 +20,15 @@ import de.tobias.utils.util.Worker;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.MouseButton;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,21 +51,28 @@ public class NotFoundDialog extends NVC {
 			this.mediaPath = mediaPath;
 			this.localPath = new SimpleObjectProperty<>();
 			this.selected = new SimpleBooleanProperty(false);
+
+			this.selected.addListener((observable, oldValue, newValue) -> {
+				if (!isMatched() && newValue) {
+					this.selected.set(false);
+				}
+			});
 		}
 
 		MediaPath getMediaPath() {
 			return mediaPath;
 		}
 
-		public Path getLocalPath() {
+		Path getLocalPath() {
 			return localPath.get();
 		}
 
-		public void setLocalPath(Path localPath) {
+		void setLocalPath(Path localPath) {
 			this.localPath.set(localPath);
+			setStatusLabel();
 		}
 
-		ObjectProperty<Path> localPathProperty() {
+		ReadOnlyObjectProperty<Path> localPathProperty() {
 			return localPath;
 		}
 
@@ -141,10 +152,24 @@ public class NotFoundDialog extends NVC {
 		find(false);
 
 		table.getItems().setAll(mediaPaths);
+		setStatusLabel();
 	}
 
 	@Override
 	public void init() {
+		table.setRowFactory(table -> {
+			TableRow<TempMediaPath> row = new TableRow<>();
+			row.setOnMouseClicked(e -> {
+				if (e.getClickCount() == 2 && e.getButton() == MouseButton.PRIMARY) {
+					TempMediaPath item = row.getItem();
+					if (item != null) {
+						showFileChooser(item);
+					}
+				}
+			});
+			return row;
+		});
+
 		selectColumn.setCellFactory(table -> new CheckBoxTableCell<>());
 		actionColumn.setCellFactory(table -> new NotFoundActionCell(this));
 
@@ -183,9 +208,44 @@ public class NotFoundDialog extends NVC {
 		getStageContainer().ifPresent(NVCStage::close);
 	}
 
+	private int getUnmatchedTracks() {
+		return (int) mediaPaths.stream().filter(p -> !p.isMatched()).count();
+	}
+
+	private void setStatusLabel() {
+		statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks()));
+	}
+
+	public void showFileChooser(TempMediaPath item) {
+		FileChooser chooser = new FileChooser();
+		PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+
+		// File Extension
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
+				registry.getSupportedFileTypes());
+		chooser.getExtensionFilters().add(extensionFilter);
+
+		// Last Folder
+		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(DesktopPadViewController.OPEN_FOLDER);
+		if (openFolder != null) {
+			File folder = new File(openFolder.toString());
+			chooser.setInitialDirectory(folder);
+		}
+
+		File file = chooser.showOpenDialog(getContainingWindow());
+		if (file != null) {
+			Path path = file.toPath();
+			item.setLocalPath(path);
+			item.setSelected(true);
+
+			// Search for new local paths
+			find(true);
+		}
+	}
+
 	private List<Path> searchHistory = new ArrayList<>();
 
-	public void find(boolean subdirs) {
+	private void find(boolean subdirs) {
 		// Check Project
 		Worker.runLater(() -> {
 			if (!mediaPaths.isEmpty()) {
@@ -216,7 +276,7 @@ public class NotFoundDialog extends NVC {
 					for (TempMediaPath mediaPath : this.mediaPaths) {
 						if (!mediaPath.isMatched()) {
 							try {
-								Path result = MediaPool.find(mediaPath.getMediaPath().getFileName(), folder, false);
+								Path result = MediaPool.find(mediaPath.getMediaPath().getFileName(), folder, subdirs);
 								mediaPath.setLocalPath(result);
 								if (result != null) {
 									mediaPath.setSelected(true);

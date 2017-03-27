@@ -2,6 +2,8 @@ package de.tobias.playpad.layout.desktop.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -14,6 +16,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -119,8 +122,8 @@ public class DesktopPadView implements IPadView {
 
 		// Not Found Label
 		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
-		notFoundLabel.getStyleClass().add("pad-notfound");
-		notFoundLabel.setOpacity(0.25);
+		notFoundLabel.getStyleClass().clear();
+		notFoundLabel.setOpacity(0.75);
 		notFoundLabel.setSize(80);
 		notFoundLabel.setMouseTransparent(true);
 
@@ -409,7 +412,19 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public void showNotFoundIcon(boolean show) {
+	public void showNotFoundIcon(Pad pad, boolean show) {
+		if (show) {
+			CartDesign design = pad.getPadSettings().getDesign();
+			if (design instanceof DesignColorAssociator) {
+				DesignColorAssociator associator = (DesignColorAssociator) design;
+				Color color = associator.getAssociatedStandardColor();
+
+				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
+			} else {
+				notFoundLabel.setColor(Color.RED);
+			}
+		}
 		notFoundLabel.setVisible(show);
+		root.setOpacity(show ? 0.5 : 1.0);
 	}
 }

@@ -275,6 +275,9 @@ public class Strings {
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
 
+	// UI - Dialog - PathMatch
+	public static final String UI_Dialog_PathMatch_Status = "UI.Dialog.PathMatch.Status";
+
 	// Tooltip
 	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
 	public static final String Tooltip_DragButton = "Tooltip.DragButton";

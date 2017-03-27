@@ -14,12 +14,12 @@
             <items>
                 <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="586.0" spacing="14.0">
                     <children>
+                        <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS" />
                         <HBox fx:id="notFoundContainer" alignment="CENTER" spacing="7.0">
                             <children>
                                 <Label fx:id="notFoundLabel" />
                             </children>
                         </HBox>
-                        <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS" />
                         <HBox fx:id="iconHbox" alignment="CENTER" spacing="14.0">
                             <children>
                                 <Label fx:id="liveLabel" text="%main.label.live" textFill="RED">

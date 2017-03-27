@@ -1,7 +1,9 @@
-package de.tobias.playpad.layout.touch;
+package de.tobias.playpad.layout.touch.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
@@ -10,6 +12,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -27,6 +30,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class TouchPadView implements IPadView {
 
@@ -51,7 +55,7 @@ public class TouchPadView implements IPadView {
 
 	private transient TouchPadViewController controller; // Reference to its controller
 
-	TouchPadView() {
+	public TouchPadView() {
 		controller = new TouchPadViewController(this);
 		setupView();
 	}
@@ -303,7 +307,19 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public void showNotFoundIcon(boolean show) {
+	public void showNotFoundIcon(Pad pad, boolean show) {
+		if (show) {
+			CartDesign design = pad.getPadSettings().getDesign();
+			if (design instanceof DesignColorAssociator) {
+				DesignColorAssociator associator = (DesignColorAssociator) design;
+				Color color = associator.getAssociatedStandardColor();
+
+				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
+			} else {
+				notFoundLabel.setColor(Color.RED);
+			}
+		}
 		notFoundLabel.setVisible(show);
+		root.setOpacity(show ? 0.5 : 1.0);
 	}
 }

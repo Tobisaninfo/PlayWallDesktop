@@ -1,4 +1,4 @@
-package de.tobias.playpad.layout.desktop;
+package de.tobias.playpad.layout.desktop.listener;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 	private TextField textField;
 	private IMainViewController mainView;
 
-	DesktopSearchController(Project project, TextField textField, IMainViewController mainView) {
+	public DesktopSearchController(Project project, TextField textField, IMainViewController mainView) {
 		this.currentProject = project;
 
 		this.textField = textField;
