@@ -4,12 +4,14 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.util.ColorUtils;
@@ -309,11 +311,21 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
 		if (show) {
-			CartDesign design = pad.getPadSettings().getDesign();
-			if (design instanceof DesignColorAssociator) {
-				DesignColorAssociator associator = (DesignColorAssociator) design;
-				Color color = associator.getAssociatedStandardColor();
+			DesignColorAssociator associator = null;
+			if (pad.getPadSettings().isCustomDesign()) {
+				CartDesign design = pad.getPadSettings().getDesign();
+				if (design instanceof DesignColorAssociator) {
+					associator = (DesignColorAssociator) design;
+				}
+			} else {
+				GlobalDesign design = Profile.currentProfile().currentLayout();
+				if (design instanceof DesignColorAssociator) {
+					associator = (DesignColorAssociator) design;
+				}
+			}
 
+			if (associator != null) {
+				Color color = associator.getAssociatedStandardColor();
 				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
 			} else {
 				notFoundLabel.setColor(Color.RED);
