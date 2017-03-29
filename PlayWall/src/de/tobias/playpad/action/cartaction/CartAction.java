@@ -83,11 +83,16 @@ public class CartAction extends Action implements ColorAdjustable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void init(Project project, IMainViewController controller) {
 		Pad pad = project.getPad(x, y, controller.getPage());
-
 		if (pad != null) {
 			setPad(pad);
+		}
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
+		if (pad != null) {
 			// init first feedback
 			padStatusFeedbackListener.changed(null, null, pad.getStatus());
 		}

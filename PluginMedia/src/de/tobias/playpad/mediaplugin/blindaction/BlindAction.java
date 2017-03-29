@@ -47,11 +47,16 @@ public class BlindAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void init(Project project, IMainViewController controller) {
 		// Listener für Eingaben
 		BooleanProperty blindProperty = MediaPluginImpl.blindProperty();
 		blindProperty.removeListener(blindFeedbackListener);
 		blindProperty.addListener(blindFeedbackListener);
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
+		BooleanProperty blindProperty = MediaPluginImpl.blindProperty();
 
 		// Handle Current Feedback
 		blindFeedbackListener.changed(blindProperty, null, blindProperty.getValue());

@@ -25,7 +25,7 @@ public class MuteAction extends Action implements Displayable {
 
 	private String type;
 
-	public MuteAction(String type) {
+	MuteAction(String type) {
 		this.type = type;
 		muteListener = (a, b, c) ->
 		{
@@ -50,11 +50,16 @@ public class MuteAction extends Action implements Displayable {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void init(Project project, IMainViewController controller) {
 		// Listener für Eingaben
 		BooleanProperty muteProperty = ActionsPluginImpl.muteProperty();
 		muteProperty.removeListener(muteListener);
 		muteProperty.addListener(muteListener);
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
+		BooleanProperty muteProperty = ActionsPluginImpl.muteProperty();
 
 		// Handle Current Feedback
 		muteListener.changed(muteProperty, null, muteProperty.getValue());

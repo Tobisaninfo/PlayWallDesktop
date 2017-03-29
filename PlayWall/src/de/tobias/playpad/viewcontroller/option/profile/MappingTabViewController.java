@@ -160,7 +160,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 			oldMapping.clearFeedback();
 			activeMapping.showFeedback(project);
-			activeMapping.initFeedback();
+			activeMapping.initFeedbackType();
 		};
 	}
 

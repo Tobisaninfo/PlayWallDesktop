@@ -504,12 +504,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			scene.getStylesheets().add(mainLayout.getStylesheet());
 		}
 
-		// design spezific css
+		// design specific css
 		if (openProject != null) {
 			Profile currentProfile = Profile.currentProfile();
 			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
 
+			// Mapping feedback
 			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			activeMapping.clearFeedback();
+			activeMapping.prepareFeedback(openProject);
 			activeMapping.adjustPadColorToMapper();
 			activeMapping.showFeedback(openProject);
 		}
@@ -584,7 +587,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				{
 					// Handle Mapper
 					if (currentProfile != null) {
-						activeMapping.initFeedback();
+						activeMapping.initFeedbackType();
 						if (openProject != null) {
 							activeMapping.showFeedback(openProject);
 							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
