@@ -2,6 +2,7 @@ package de.tobias.playpad;
 
 import de.tobias.playpad.server.ServerHandler;
 import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
+import de.tobias.playpad.server.sync.conflict.ConflictSolver;
 
 public final class PlayPadPlugin {
 

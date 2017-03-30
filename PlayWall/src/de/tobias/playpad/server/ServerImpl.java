@@ -18,7 +18,6 @@ import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.playpad.project.ProjectJsonWriter;
-import de.tobias.playpad.project.ProjectModification;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.CommandStore;
@@ -34,6 +33,7 @@ import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectUpdateCommand;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
-	public static final String CACHE_FOLDER = "Cache";
+	private static final String CACHE_FOLDER = "Cache";
 
 	private String host;
 	private WebSocket websocket;
@@ -219,7 +219,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
-	public ProjectModification getLastProjectModification(ProjectReference ref) throws IOException {
+	public Version getLastServerModification(ProjectReference ref) throws IOException {
 		String url = "https://" + host + "/projects/modification/" + ref.getUuid();
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
@@ -230,7 +230,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			JSONObject object = response.getBody().getObject();
 			String remoteSession = object.getString("session");
 			long time = object.getLong("time");
-			return new ProjectModification(remoteSession, time);
+			return new Version(time, remoteSession, false);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
 		}
@@ -283,6 +283,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		return push(json.toString());
 	}
 
+	// Reconnect
 	@Override
 	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
 		if (newValue == ConnectionState.CONNECTION_LOST) {

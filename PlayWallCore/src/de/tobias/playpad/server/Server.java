@@ -4,8 +4,8 @@ import com.google.gson.JsonElement;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectModification;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.updater.client.UpdateChannel;
 import javafx.beans.property.ObjectProperty;
 
@@ -77,7 +77,7 @@ public interface Server {
 	 * @param projectReference project reference
 	 * @return last modification
 	 */
-	ProjectModification getLastProjectModification(ProjectReference projectReference) throws IOException;
+	Version getLastServerModification(ProjectReference projectReference) throws IOException;
 
 	/**
 	 * Connect to sync server with key.

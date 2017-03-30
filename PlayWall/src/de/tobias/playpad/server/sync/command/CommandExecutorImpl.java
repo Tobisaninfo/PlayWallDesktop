@@ -3,8 +3,14 @@ package de.tobias.playpad.server.sync.command;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.ServerUtils;
+import de.tobias.playpad.server.sync.conflict.Conflict;
+import de.tobias.playpad.server.sync.conflict.ConflictSolver;
+import de.tobias.playpad.server.sync.conflict.ConflictSolverImpl;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 
 import java.util.*;
 
@@ -15,6 +21,13 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 
 	private Map<String, Command> commandMap = new HashMap<>();
 	private Map<UUID, List<JsonObject>> storedCommands = new HashMap<>();
+
+	private ConflictSolver solver;
+	private ListProperty<Conflict> conflicts;
+
+	CommandExecutorImpl() {
+		conflicts = new SimpleListProperty<>();
+	}
 
 	@Override
 	public void register(String name, Command command) {
@@ -51,6 +64,7 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 				storedCommands.put(uuid, new ArrayList<>());
 			}
 			storedCommands.get(uuid).add(sendData);
+			projectReference.setLastModified(System.currentTimeMillis());
 		}
 	}
 
@@ -73,5 +87,24 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 	@Override
 	public void clearStoredCommands(UUID uuid) {
 		storedCommands.remove(uuid);
+	}
+
+	@Override
+	public long getLastModification(UUID uuid) {
+		ProjectReference reference = ProjectReferenceManager.getProject(uuid);
+		return reference != null ? reference.getLastModified() : -1;
+	}
+
+	@Override
+	public ConflictSolver getConflictSolver() {
+		if (solver == null) {
+			solver = new ConflictSolverImpl();
+		}
+		return solver;
+	}
+
+	@Override
+	public ListProperty<Conflict> conflicts() {
+		return conflicts;
 	}
 }

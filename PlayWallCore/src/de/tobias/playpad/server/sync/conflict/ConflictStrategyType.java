@@ -5,10 +5,6 @@ package de.tobias.playpad.server.sync.conflict;
  */
 public enum ConflictStrategyType {
 	/**
-	 * Send client changes to server without asking user. (No conflicts).
-	 */
-	UPDATE,
-	/**
 	 * Push client changes to server with possible overwritten server data.
 	 */
 	UPGRADE,

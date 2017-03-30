@@ -5,6 +5,7 @@ import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -25,7 +26,6 @@ public class ProjectReference implements Displayable {
 	private Set<Module> requestedModules;
 
 	private BooleanProperty sync;
-
 	private long lastModified;
 
 	/**
@@ -101,7 +101,7 @@ public class ProjectReference implements Displayable {
 		return sync;
 	}
 
-	void setLastModified(long lastModified) {
+	public void setLastModified(long lastModified) {
 		this.lastModified = lastModified;
 	}
 
@@ -175,5 +175,9 @@ public class ProjectReference implements Displayable {
 		ProjectReference that = (ProjectReference) o;
 
 		return uuid != null ? uuid.equals(that.uuid) : that.uuid == null;
+	}
+
+	public Version getVersion() {
+		return new Version(lastModified, "Local", true); // TODO Localize
 	}
 }
