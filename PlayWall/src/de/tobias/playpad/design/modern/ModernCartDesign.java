@@ -25,9 +25,6 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 
 	public static final String TYPE = "modern";
 
-	public static final double minWidth = 205;
-	public static final double minHeight = 110;
-
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
 	private ObjectProperty<ModernColor> playColor;
