@@ -1,9 +1,11 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.listener.PadStatusControlListener;
+import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
@@ -22,7 +24,6 @@ import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -54,7 +55,8 @@ public class Pad implements Cloneable {
 	 */
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
-	private transient PadStatusListener padStatusListener;
+	private transient PadStatusControlListener padStatusControlListener;
+	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -104,8 +106,8 @@ public class Pad implements Cloneable {
 
 	private void initPadListener() {
 		// Remove old listener from properties
-		if (padStatusListener != null && statusProperty != null) {
-			statusProperty.removeListener(padStatusListener);
+		if (padStatusControlListener != null && statusProperty != null) {
+			statusProperty.removeListener(padStatusControlListener);
 		}
 		if (padTriggerStatusListener != null && statusProperty != null) {
 			statusProperty.removeListener(padTriggerStatusListener);
@@ -116,8 +118,11 @@ public class Pad implements Cloneable {
 		}
 
 		// init new listener for properties
-		padStatusListener = new PadStatusListener(this);
-		statusProperty.addListener(padStatusListener);
+		padStatusControlListener = new PadStatusControlListener(this);
+		statusProperty.addListener(padStatusControlListener);
+
+		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
+		statusProperty.addListener(padStatusNotFoundListener);
 
 		padTriggerStatusListener = new PadTriggerStatusListener(this);
 		statusProperty.addListener(padTriggerStatusListener);
@@ -255,12 +260,18 @@ public class Pad implements Cloneable {
 		return mediaPaths.get(0).getPath();
 	}
 
+	public String getFileName() {
+		if (mediaPaths.isEmpty()) {
+			return null;
+		}
+		return mediaPaths.get(0).getFileName();
+	}
+
 	public void setPath(Path path) {
 		if (mediaPaths.isEmpty()) {
 			createMediaPath(path);
 		} else {
-			final MediaPath mediaPath = mediaPaths.get(0);
-			mediaPath.setPath(path);
+			setPath(path, 0);
 		}
 	}
 
@@ -271,17 +282,18 @@ public class Pad implements Cloneable {
 	public void setPath(Path path, int id) {
 		if (mediaPaths.size() > id && id >= 0) {
 			final MediaPath mediaPath = mediaPaths.get(id);
-			mediaPath.setPath(path);
+			removePath(mediaPath);
+
+			createMediaPath(path);
 		}
 	}
 
-	public void setPath(Path path, UUID id) {
-		final Optional<MediaPath> first = mediaPaths.stream().filter(mediaPath -> mediaPath.getId().equals(id)).findFirst();
-		first.ifPresent(mediaPath -> mediaPath.setPath(path));
+	public void updatePath(MediaPath mediaPath, Path localPath) {
+		mediaPath.setPath(localPath, true);
 	}
 
 	private void createMediaPath(Path path) {
-		final MediaPath mediaPath = new MediaPath(path, this);
+		final MediaPath mediaPath = MediaPath.create(this, path);
 
 		// Sync to cloud
 		addPath(mediaPath);
@@ -405,7 +417,9 @@ public class Pad implements Cloneable {
 			PadContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
 			PadContent newContent = factory.newInstance(this);
 			contentProperty.set(newContent);
-			newContent.loadMedia();
+			if (!getPaths().isEmpty()) {
+				newContent.loadMedia();
+			}
 		} else {
 			contentProperty.set(null);
 		}
@@ -505,7 +519,6 @@ public class Pad implements Cloneable {
 		setStatus(PadStatus.EMPTY);
 
 		if (project.getProjectReference().isSync()) {
-			mediaPaths.forEach(MediaPath::removeSyncListener);
 			mediaPaths.forEach(path -> CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path));
 
 			CommandManager.execute(Commands.PAD_CLEAR, project.getProjectReference(), this);
@@ -573,4 +586,5 @@ public class Pad implements Cloneable {
 		clone.initPadListener();
 		return clone;
 	}
+
 }

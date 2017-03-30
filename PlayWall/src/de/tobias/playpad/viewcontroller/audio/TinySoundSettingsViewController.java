@@ -1,20 +1,7 @@
 package de.tobias.playpad.viewcontroller.audio;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer.Info;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.audio.TinyAudioHandler;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.audio.TinyAudioHandler;import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -26,6 +13,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
+
+import javax.sound.sampled.*;
+import javax.sound.sampled.Mixer.Info;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Deprecated
 public class TinySoundSettingsViewController extends AudioHandlerViewController implements Callback<ListView<Info>, ListCell<Info>> {

@@ -1,7 +1,5 @@
 package de.tobias.playpad.namac;
 
-import java.nio.file.Path;
-
 import de.tobias.playpad.NativeAudio;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
@@ -9,12 +7,10 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.util.Duration;
+
+import java.nio.file.Path;
 
 public class NativeAudioMacHandler extends AudioHandler implements Peakable {
 
@@ -92,12 +88,6 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable {
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() ->
-		{
-			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(true);
-			}
-		});
 		Worker.runLater(() ->
 		{
 			isLoaded = NativeAudio.load(id, paths[0].toString());

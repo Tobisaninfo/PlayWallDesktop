@@ -1,23 +1,23 @@
 package de.tobias.playpad.nawin.audio;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Duration;
 import nativeaudio.NativeAudio;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
 
 public class NativeAudioWinHandler extends AudioHandler implements Soundcardable {
 
@@ -149,12 +149,6 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() ->
-		{
-			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(true);
-			}
-		});
 		if (audioHandler == null)
 			audioHandler = new NativeAudio();
 		audioHandler.load(paths[0].toString());
@@ -174,8 +168,10 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 
 	@Override
 	public void unloadMedia() {
-		audioHandler.unload();
-		audioHandler = null;
+		if (audioHandler != null) {
+			audioHandler.unload();
+			audioHandler = null;
+		}
 	}
 
 	@Override

@@ -1,11 +1,8 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.page.PageSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
 import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -30,21 +27,11 @@ public class ProjectSerializer implements ProjectReader, ProjectWriter {
 	static final String SETTINGS_ELEMENT = "Settings";
 
 	@Override
-	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException {
+	public Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProjectNotFoundException {
 		Path projectPath = projectReference.getProjectPath();
 		if (Files.notExists(projectPath)) {
 			throw new ProjectNotFoundException(projectReference);
 		}
-
-		// TODO Why should the profile be loaded first
-		if (projectReference.getProfileReference() == null) {
-			// Lädt Profile / Erstellt neues und hat es gleich im Speicher
-			ProfileReference profile = delegate.getProfileReference();
-			projectReference.setProfileReference(profile);
-		}
-
-		// Lädt das entsprechende Profile und aktiviert es
-		Profile.load(projectReference.getProfileReference());
 
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(Files.newInputStream(projectPath));
@@ -55,9 +42,7 @@ public class ProjectSerializer implements ProjectReader, ProjectWriter {
 		// Load Pages
 		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
 		List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
-		for (Page page : pages) {
-			project.pages.add(page);
-		}
+		project.pages.addAll(pages);
 
 		// Load Settings
 		Element settingsElement = rootElement.element(SETTINGS_ELEMENT);

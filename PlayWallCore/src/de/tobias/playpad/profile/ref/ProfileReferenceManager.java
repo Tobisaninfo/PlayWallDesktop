@@ -13,7 +13,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.FileUtils;

@@ -15,7 +15,7 @@ import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.path.MultiPathContent;
 import de.tobias.playpad.pad.content.path.SinglePathContent;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.nui.NVC;

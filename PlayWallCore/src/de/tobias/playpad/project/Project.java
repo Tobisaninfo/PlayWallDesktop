@@ -1,11 +1,12 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
@@ -28,21 +31,31 @@ import java.util.UUID;
 public class Project {
 
 	/**
-	 * Pattern für den Namen des Projekts
+	 * Pattern for the project name.
 	 */
-	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9]{1}[\\p{L}\\s-_0-9]{0,}";
+	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9][\\p{L}\\s-_0-9]*";
 
 	/**
-	 * Dateiendung für eine projekt Datei
+	 * Project file extension.
 	 */
 	public static final String FILE_EXTENSION = ".xml";
 
+	/**
+	 * List of pages in the project.
+	 */
 	final ObservableList<Page> pages;
 
+	/**
+	 * Project Settings.
+	 */
 	ProjectSettings settings;
+	/**
+	 * Project Metadata.
+	 */
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
+	private transient IntegerProperty notFoundMediaProperty;
 	private transient ProjectUpdateListener syncListener;
 
 	public Project(ProjectReference ref) {
@@ -50,6 +63,7 @@ public class Project {
 		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
+		this.notFoundMediaProperty = new SimpleIntegerProperty();
 
 		syncListener = new ProjectUpdateListener(this);
 		if (ref.isSync()) {
@@ -104,9 +118,13 @@ public class Project {
 	}
 
 	public Collection<Pad> getPads() {
+		return getPads(p -> true);
+	}
+
+	public Collection<Pad> getPads(Predicate<Pad> predicate) {
 		List<Pad> pads = new ArrayList<>();
 		pages.stream().map(Page::getPads).forEach(pads::addAll);
-		return pads;
+		return pads.parallelStream().filter(predicate).collect(Collectors.toList());
 	}
 
 	public void removePad(UUID id) {
@@ -150,7 +168,7 @@ public class Project {
 	}
 
 	public int getActivePlayers() {
-		return (int) getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
+		return getPads(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).size();
 	}
 
 	public boolean hasActivePlayers() {
@@ -165,10 +183,18 @@ public class Project {
 		activePlayerProperty.set(getActivePlayers());
 	}
 
-	// Utils
-	public void loadPadsContent() {
-		getPads().forEach(Pad::loadContent);
+	public int getNotFoundMedia() {
+		return notFoundMediaProperty.get();
 	}
+
+	public IntegerProperty notFoundMediaProperty() {
+		return notFoundMediaProperty;
+	}
+
+	public void updateNotFoundProperty() {
+		notFoundMediaProperty.set(getPads(p -> p.getStatus() == PadStatus.NOT_FOUND).size());
+	}
+
 
 	@Override
 	public String toString() {
@@ -252,5 +278,15 @@ public class Project {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Validate the name input for a project name
+	 *
+	 * @param name project name to test
+	 * @return <code>true</code> valid
+	 */
+	public static boolean validateNameInput(String name) {
+		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name) || !name.matches(PROJECT_NAME_PATTERN));
 	}
 }

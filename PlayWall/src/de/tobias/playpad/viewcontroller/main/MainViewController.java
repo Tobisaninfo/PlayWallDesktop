@@ -13,7 +13,6 @@ import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectSerializer;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
@@ -21,13 +20,16 @@ import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileListener;
-import de.tobias.playpad.settings.ProfileSettings;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileListener;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
+import de.tobias.playpad.viewcontroller.main.listener.LayoutChangedListener;
+import de.tobias.playpad.viewcontroller.main.listener.LockedListener;
+import de.tobias.playpad.viewcontroller.main.listener.VolumeChangeListener;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.NotificationHandler;
@@ -39,6 +41,7 @@ import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -98,6 +101,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
+	private ChangeListener<Number> notFoundListener;
 
 	// Sync Listener
 	private InvalidationListener projectTitleListener;
@@ -111,6 +115,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 			// Init with existing stage
 			initMapper(openProject);
+			reloadSettings(null, Profile.currentProfile());
 			onFinish.accept(e);
 
 			// Min Size of window
@@ -150,6 +155,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+		notFoundListener = (observable, oldValue, newValue) -> {
+			if (menuToolbarViewController != null)
+				menuToolbarViewController.setNotFoundNumber(newValue.intValue());
+		};
 
 		// Sync Listener
 		projectTitleListener = observable -> updateWindowTitle();
@@ -162,7 +171,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
 
 		Profile.registerListener(this);
-		reloadSettings(null, Profile.currentProfile());
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
 		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
@@ -340,6 +348,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		if (this.openProject != null) {
 			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
 			this.openProject.getPages().removeListener(pagesListener);
+			this.openProject.notFoundMediaProperty().removeListener(notFoundListener);
 			this.openProject.close();
 		}
 
@@ -350,6 +359,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		// Add new Listener
 		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
 		openProject.getPages().addListener(pagesListener);
+		openProject.notFoundMediaProperty().addListener(notFoundListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
@@ -366,6 +376,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		showPage(FIRST_PAGE);
 		loadUserCss();
 		updateWindowTitle();
+
+		notFoundListener.changed(project.notFoundMediaProperty(), 0, project.getNotFoundMedia());
 	}
 
 	/*

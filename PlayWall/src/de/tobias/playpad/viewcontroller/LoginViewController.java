@@ -57,10 +57,9 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@Override
 	public void initStage(Stage stage) {
+		stage.setOnCloseRequest(e -> Platform.exit());
+
 		stage.setTitle(getString(Strings.UI_Dialog_Login_Title));
-		stage.setOnCloseRequest(e -> {
-			Platform.exit();
-		});
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setResizable(false);

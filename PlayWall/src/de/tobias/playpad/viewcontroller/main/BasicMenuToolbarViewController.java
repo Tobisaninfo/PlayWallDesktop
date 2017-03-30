@@ -33,6 +33,10 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	@FXML protected Slider volumeSlider;
 	@FXML protected Label volumeDownLabel;
 
+	@FXML private HBox notFoundContainer;
+	@FXML private Label notFoundLabel;
+
+
 	protected Project openProject; // REFERENCE zu MainViewController
 
 	public BasicMenuToolbarViewController(String name, String path, ResourceBundle localization) {
@@ -49,6 +53,18 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() - ev.getDeltaY() * 0.001);
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
+
+		FontIcon fontIcon = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		fontIcon.getStyleClass().add("pad-notfound");
+		fontIcon.setSize(20);
+
+		notFoundContainer.getChildren().add(0, fontIcon);
+	}
+
+	@Override
+	public void setNotFoundNumber(int count) {
+		notFoundContainer.setVisible(count > 0);
+		notFoundLabel.setText(String.valueOf(count));
 	}
 
 	// Utils

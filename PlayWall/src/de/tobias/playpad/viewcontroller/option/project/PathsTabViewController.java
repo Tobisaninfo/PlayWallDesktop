@@ -1,14 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.Optional;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -24,7 +15,6 @@ import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,12 +22,24 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
+
 public class PathsTabViewController extends ProjectSettingsTabViewController implements IProjectReloadTask {
 
 	// Media Path
-	@FXML private TextField mediaPathTextField;
-	@FXML private Button mediaPathChooseButton;
-	@FXML private CheckBox useMediaPath;
+	@FXML
+	private TextField mediaPathTextField;
+	@FXML
+	private Button mediaPathChooseButton;
+	@FXML
+	private CheckBox useMediaPath;
 
 	private transient boolean changedMediaPath = false;
 	private transient Optional<Path> currentMediaPath = Optional.empty();
@@ -111,58 +113,52 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	}
 
 	@Override
-	public Task<Void> getTask(ProjectSettings settings, Project project, IMainViewController controller) {
-		return new Task<Void>() {
+	public Runnable getTask(ProjectSettings settings, Project project, IMainViewController controller) {
+		return () -> {
+			Path newMediaPath = settings.getMediaPath();
 
-			@Override
-			protected Void call() throws Exception {
-				updateTitle(name());
-				Path newMediaPath = settings.getMediaPath();
+			project.closeFile();
 
-				project.closeFile();
+			for (Pad pad : project.getPads()) {
+				try {
+					if (pad.getStatus() != PadStatus.EMPTY) {
+						PadContent content = pad.getContent();
+						if (content instanceof SinglePathContent) {
+							Path path = ((SinglePathContent) content).getPath();
+							Path copiedFile = newMediaPath.resolve(path.getFileName());
 
-				for (Pad pad : project.getPads()) {
-					try {
-						if (pad.getStatus() != PadStatus.EMPTY) {
-							PadContent content = pad.getContent();
-							if (content instanceof SinglePathContent) {
-								Path path = ((SinglePathContent) content).getPath();
+							Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
+
+							Platform.runLater(() ->
+							{
+								// content.handlePath(copiedFile); TODO Media Path Handler
+							});
+						} else if (content instanceof MultiPathContent) {
+							MultiPathContent pathHandler = (MultiPathContent) content;
+							List<Path> paths = pathHandler.getPaths();
+							// TEST handle Paths in PadContent
+
+							pathHandler.clearPaths();
+
+							for (Path path : paths) {
 								Path copiedFile = newMediaPath.resolve(path.getFileName());
 
 								Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
-
-								Platform.runLater(() ->
-								{
-									// content.handlePath(copiedFile); TODO Media Path Handler
-								});
-							} else if (content instanceof MultiPathContent) {
-								MultiPathContent pathHandler = (MultiPathContent) content;
-								List<Path> paths = pathHandler.getPaths();
-								// TEST handle Paths in PadContent
-
-								pathHandler.clearPaths();
-
-								for (Path path : paths) {
-									Path copiedFile = newMediaPath.resolve(path.getFileName());
-
-									Files.copy(path, copiedFile, StandardCopyOption.REPLACE_EXISTING);
-									// content.handlePath(copiedFile); TODO Media Path Handler
-								}
+								// content.handlePath(copiedFile); TODO Media Path Handler
 							}
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
-				if (oldMediaPath.isPresent())
-					try {
-						FileUtils.deleteDirectory(oldMediaPath.get());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				return null;
 			}
+
+			if (oldMediaPath.isPresent())
+				try {
+					FileUtils.deleteDirectory(oldMediaPath.get());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		};
 	}
 }

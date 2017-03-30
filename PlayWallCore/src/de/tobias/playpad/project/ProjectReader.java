@@ -2,7 +2,6 @@ package de.tobias.playpad.project;
 
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.settings.ProfileNotFoundException;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -16,6 +15,14 @@ public interface ProjectReader {
 		ProfileReference getProfileReference();
 	}
 
-	Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException;
+	interface ProjectReaderListener {
+		void startReadProject();
+		void finishReadProject();
+		void readMedia(String name);
+		void totalMedia(int size);
+		void finish();
+	}
+
+	Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProjectNotFoundException;
 
 }

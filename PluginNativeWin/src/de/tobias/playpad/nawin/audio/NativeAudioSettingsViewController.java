@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;

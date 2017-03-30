@@ -2,16 +2,18 @@ package de.tobias.playpad.project.ref;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.*;
-import de.tobias.playpad.server.ConnectionState;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectSerializer;
+import de.tobias.playpad.project.ProjectWriter;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.Worker;
 import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -53,24 +55,6 @@ public final class ProjectReferenceManager {
 			}
 		}
 		return null;
-	}
-
-	public static Project loadProject(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
-		Project project = loadProjectImpl(projectReference, delegate);
-		Worker.runLater(project::loadPadsContent);
-		return project;
-	}
-
-	private static Project loadProjectImpl(ProjectReference projectReference, ProjectReader.ProjectReaderDelegate delegate) throws IOException, DocumentException, ProfileNotFoundException, ProjectNotFoundException {
-		Server server = PlayPadPlugin.getServerHandler().getServer();
-
-		ProjectReader reader;
-		if (projectReference.isSync() && server.getConnectionState() == ConnectionState.CONNECTED) {
-			reader = new ProjectSyncSerializer();
-		} else {
-			reader = new ProjectSerializer();
-		}
-		return reader.read(projectReference, delegate);
 	}
 
 	public static void saveProject(Project project) throws IOException {
@@ -247,11 +231,13 @@ public final class ProjectReferenceManager {
 	}
 
 	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
-		Server server = PlayPadPlugin.getServerHandler().getServer();
-
 		if (newValue) {
-			Project project = loadProjectImpl(reference, null); // TODO null for delegate
+			ProjectLoader loader = new ProjectLoader(reference);
+			Project project = loader.load();
+
 			CommandManager.execute(Commands.PROJECT_ADD, reference, reference);
+
+			Server server = PlayPadPlugin.getServerHandler().getServer();
 			server.postProject(project);
 		} else {
 			CommandManager.execute(Commands.PROJECT_REMOVE, reference, reference);

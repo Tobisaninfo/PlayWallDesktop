@@ -84,13 +84,6 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() ->
-		{
-			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(true);
-			}
-		});
-
 		// Old Player
 		if (player != null) {
 			getContent().stop();
@@ -124,7 +117,6 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 				}
 			});
 			loadedProperty.set(false);
-			// getContent().getPad().throwException(path, player.getError()); TODO Error Handling User
 		});
 		player.setOnEndOfMedia(() ->
 		{

@@ -158,7 +158,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
 		} else {
-			// getPad().throwException(path, new FileNotFoundException()); TODO Error Handling User
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 
@@ -170,7 +170,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	@Override
 	public void unloadMedia() {
 		// First Stop the pad (if playing)
-		getPad().setStatus(PadStatus.STOP);
+		if (getPad().getStatus() == PadStatus.PLAY || getPad().getStatus() == PadStatus.PAUSE) {
+			getPad().setStatus(PadStatus.STOP);
+		}
 
 		durationProperty.unbind();
 		positionProperty.unbind();

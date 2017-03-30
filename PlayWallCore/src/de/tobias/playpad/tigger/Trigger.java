@@ -12,7 +12,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
 

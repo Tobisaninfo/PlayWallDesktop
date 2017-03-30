@@ -4,22 +4,23 @@ import com.mashape.unirest.http.Unirest;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
-import de.tobias.playpad.server.sync.command.CommandExecutor;
-import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
 import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
-import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
+import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.util.ConsoleUtils;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
@@ -37,6 +38,7 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.dom4j.DocumentException;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -90,6 +92,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Debug
 		System.setOut(ConsoleUtils.convertStream(System.out, "[PlayWall] "));
 		System.setErr(ConsoleUtils.convertStream(System.err, "[PlayWall] "));
+
+		// Register UserDefaults Serializer
+		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
 
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
 		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
@@ -153,22 +158,19 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	@Override
 	public void start(Stage stage) {
+		// Assets
+		Image stageIcon = new Image(iconPath);
+		PlayPadMain.stageIcon = Optional.of(stageIcon);
+
+		/*
+		 * Setup
+		 */
+		PlayPadUpdater updater = new PlayPadUpdater();
+		UpdateRegistery.registerUpdateable(updater);
+
+		impl.startup(Localization.getBundle(), new LoginViewController());
+
 		try {
-			// Assets
-			try {
-				Image stageIcon = new Image(iconPath);
-				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception ignored) {
-			}
-
-			/*
-			 * Setup
-			 */
-			PlayPadUpdater updater = new PlayPadUpdater();
-			UpdateRegistery.registerUpdateable(updater);
-
-			impl.startup(Localization.getBundle(), new LoginViewController());
-
 			// Load Plugin Path
 			if (!getParameters().getRaw().contains("noplugins")) {
 				Path pluginFolder;
@@ -183,32 +185,53 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					setupPlugins(pluginFolder);
 				}
 			}
+		} catch (IOException e) {
+			System.err.println("Cannot load plugins:");
+			e.printStackTrace();
+		}
 
-			/*
-			 * Load Data
-			 */
+		/*
+		 * Load Data
+		 */
+		try {
 			ProfileReferenceManager.loadProfiles();
 			ProjectReferenceManager.loadProjects();
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+		}
 
+		try {
 			// Auto Open Project
-			if (getParameters().getRaw().size() > 0) {
-				if (getParameters().getNamed().containsKey("project")) {
-					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = ProjectReferenceManager.loadProject(ProjectReferenceManager.getProject(uuid), null);
+			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
+				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
+				if (value != null) {
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+					loader.setListener(new ProjectLoadDialog());
+					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
 				}
 			}
 
-			// Show Launch Stage
-			new LaunchDialog(stage);
-
-			// Check Updates
-			checkUpdates(impl.globalSettings, stage);
-
+			// Auto Open Project DEBUG
+			if (getParameters().getRaw().size() > 0) {
+				if (getParameters().getNamed().containsKey("project")) {
+					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
+					Project project = loader.load();
+					impl.openProject(project, null);
+					return;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// Show Launch Stage
+		new LaunchDialog(stage);
+
+		// Check Updates
+		checkUpdates(impl.globalSettings, stage);
 	}
 
 	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
@@ -240,6 +263,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
+			// Save last open project
+			Project project = impl.getCurrentProject();
+			if (project != null) {
+				ApplicationUtils.getApplication().getUserDefaults().setData("project", project.getProjectReference().getUuid());
+			}
+
+
 			ProfileReferenceManager.saveProfiles();
 			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();

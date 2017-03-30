@@ -5,7 +5,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;

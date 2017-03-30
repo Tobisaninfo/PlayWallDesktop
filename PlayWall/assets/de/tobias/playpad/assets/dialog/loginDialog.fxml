@@ -19,7 +19,7 @@
             </Label>
             <VBox layoutX="109.0" layoutY="259.0" spacing="14.0">
                <children>
-                  <Button fx:id="importProfileButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loginHandler" text="%login.button.login" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="importProfileButton" defaultButton="true" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#loginHandler" text="%login.button.login" VBox.vgrow="ALWAYS" />
                   <Button fx:id="importProfileButton1" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#registerHandler" text="%login.button.create" />
                </children>
             </VBox>

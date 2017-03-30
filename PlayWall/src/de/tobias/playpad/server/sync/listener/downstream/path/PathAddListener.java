@@ -24,13 +24,13 @@ public class PathAddListener implements ServerListener {
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 			UUID pad_id = UUID.fromString(json.get(PropertyDef.PATH_PAD_REF).getAsString());
-			String path = json.get(PropertyDef.PATH_PATH).getAsString();
+			String filename = json.get(PropertyDef.PATH_FILENAME).getAsString();
 
 			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
 			if (project != null) {
 				Pad pad = project.getPad(pad_id);
 				if (pad != null) {
-					MediaPath mediaPath = new MediaPath(uuid, Paths.get(path), pad);
+					MediaPath mediaPath = new MediaPath(uuid, filename, pad);
 					Platform.runLater(() -> pad.addPath(mediaPath));
 				}
 			}

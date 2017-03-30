@@ -16,35 +16,35 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class KeysTabViewController extends GlobalSettingsTabViewController implements IGlobalReloadTask {
 
-	@FXML private TextField searchTextField;
+	@FXML
+	private TextField searchTextField;
 
-	@FXML private TableView<Key> table;
-	@FXML private TableColumn<Key, String> shortcutTableColumn;
-	@FXML private TableColumn<Key, String> nameTableColumn;
+	@FXML
+	private TableView<Key> table;
+	@FXML
+	private TableColumn<Key, String> shortcutTableColumn;
+	@FXML
+	private TableColumn<Key, String> nameTableColumn;
 
-	@FXML private Label nameLabel;
-	@FXML private Label shortcutLabel;
-	@FXML private Button newShortcutButton;
-	@FXML private Button deleteButton;
+	@FXML
+	private Label nameLabel;
+	@FXML
+	private Label shortcutLabel;
+	@FXML
+	private Button newShortcutButton;
+	@FXML
+	private Button deleteButton;
 
 	private Key currentKey;
 	private ObservableList<Key> keys = FXCollections.observableArrayList();
@@ -55,20 +55,14 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 
 	@Override
 	public void init() {
-		shortcutTableColumn.setCellValueFactory(param ->
-		{
-			return param.getValue().displayProperty();
-		});
+		shortcutTableColumn.setCellValueFactory(param -> param.getValue().displayProperty());
 		nameTableColumn.setCellValueFactory(param ->
 		{
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 			return new SimpleStringProperty(globalSettings.getKeyCollection().getName(param.getValue().getId()));
 		});
 
-		table.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
-		{
-			setDetailView(c);
-		});
+		table.getSelectionModel().selectedItemProperty().addListener((a, b, c) -> setDetailView(c));
 		searchTextField.textProperty().addListener((a, b, c) -> search());
 
 		table.setRowFactory(tv ->
@@ -178,17 +172,8 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 	}
 
 	@Override
-	public Task<Void> getTask(GlobalSettings settings, IMainViewController controller) {
-		return new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				updateTitle(name());
-				updateProgress(-1, -1);
-
-				controller.loadKeybinding(settings.getKeyCollection());
-				return null;
-			}
-		};
+	public Runnable getTask(GlobalSettings settings, IMainViewController controller) {
+		return () -> controller.loadKeybinding(settings.getKeyCollection());
 	}
 
 	@Override

@@ -4,18 +4,22 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.importer.ConverterV6;
+import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.NewProjectDialog;
-import de.tobias.playpad.viewcontroller.dialog.ProfileChooseDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
@@ -34,33 +38,44 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.dom4j.DocumentException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import static de.tobias.utils.util.Localization.getString;
 
-public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDelegate, ChangeListener<ConnectionState> {
+public class LaunchDialog extends NVC implements ChangeListener<ConnectionState> {
 
-	public static final String IMAGE = "icon.png";
+	static final String IMAGE = "icon.png";
 
-	@FXML private Label infoLabel;
-	@FXML private ImageView imageView;
+	@FXML
+	private Label infoLabel;
+	@FXML
+	private ImageView imageView;
 
-	@FXML private ListView<ProjectReference> projectListView;
+	@FXML
+	private ListView<ProjectReference> projectListView;
 
-	@FXML private Button newProjectButton;
-	@FXML private Button importProjectButton;
-	@FXML private Button convertProjectButton;
+	@FXML
+	private Button newProjectButton;
+	@FXML
+	private Button importProjectButton;
+	@FXML
+	private Button convertProjectButton;
 
-	@FXML private Button openButton;
-	@FXML private Button deleteButton;
+	@FXML
+	private Button openButton;
+	@FXML
+	private Button deleteButton;
 
-	@FXML private Label cloudLabel;
+	@FXML
+	private Label cloudLabel;
 	private FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
@@ -140,11 +155,11 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		switch (server.getConnectionState()) {
 			case CONNECTED:
-				cloudIcon .setColor(Color.BLACK);
+				cloudIcon.setColor(Color.BLACK);
 				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
 				break;
 			case CONNECTION_LOST:
-				cloudIcon .setColor(Color.GRAY);
+				cloudIcon.setColor(Color.GRAY);
 				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
 				break;
 		}
@@ -153,36 +168,28 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	@FXML
 	private void newProjectButtonHandler(ActionEvent event) {
 		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-
-		ProjectReference projectRef = dialog.getProject();
-		try {
-			Project project = ProjectReferenceManager.loadProject(projectRef, this);
-			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
-		} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
-			e.printStackTrace();
-		}
+		dialog.showAndWait().ifPresent(this::launchProject);
 	}
 
 	@FXML
 	private void importProjectButtonHandler(ActionEvent event) {
-		// TODO Import Projects
-		/*FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters().add(new ExtensionFilter(getString(Strings.File_Filter_ZIP), PlayPadMain.projectZIPType));
+		FileChooser chooser = new FileChooser();
+
+		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		chooser.getExtensionFilters().add(extensionFilter);
+
 		File file = chooser.showOpenDialog(getContainingWindow());
+
 		if (file != null) {
-			Path zipFile = file.toPath();
 			try {
-				ImportDialog importDialog = ImportDialog.getInstance(getContainingWindow());
-				ProjectReference ref = ProjectImporter.importProject(zipFile, importDialog, importDialog);
-				if (ref != null) {
-					launchProject(ref);
-				}
-			} catch (DocumentException | IOException e) {
-				showErrorMessage(getString(Strings.Error_Project_Open, e.getLocalizedMessage()));
+				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
+				Optional<ProjectReference> importedProject = dialog.showAndWait();
+				importedProject.ifPresent(projectListView.getItems()::add);
+			} catch (IOException | DocumentException e) {
 				e.printStackTrace();
 			}
-		}*/
+		}
 	}
 
 	@FXML
@@ -247,9 +254,9 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 	}
 
 	/**
-	 * Gibt das ausgewählte Projekt zurück.
+	 * Returns the selected project from the list view
 	 *
-	 * @return Projekt
+	 * @return Project
 	 */
 	private ProjectReference getSelectedProject() {
 		return projectListView.getSelectionModel().getSelectedItem();
@@ -272,15 +279,20 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 			pluginViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
 		}
 
+		ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getContainingWindow());
 		try {
-			Project project = ProjectReferenceManager.loadProject(ref, this);
+			ProjectLoader loader = new ProjectLoader(ref);
+			loader.setDelegate(delegate);
+			loader.setListener(new ProjectLoadDialog());
+
+			Project project = loader.load();
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 			// Choose new profile
-			ProfileReference profile = getProfileReference();
+			ProfileReference profile = delegate.getProfileReference();
 			ref.setProfileReference(profile);
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
@@ -289,18 +301,5 @@ public class LaunchDialog extends NVC implements ProjectReader.ProjectReaderDele
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
 		}
-	}
-
-	// Zeigt dialog für das Ausfählen eines neuen Profiles.
-	@Override
-	public ProfileReference getProfileReference() {
-		ProfileChooseDialog dialog = new ProfileChooseDialog(getContainingWindow());
-
-		dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
-		Profile profile = dialog.getProfile();
-		if (profile != null) {
-			return profile.getRef();
-		}
-		return null;
 	}
 }

@@ -7,7 +7,7 @@ import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import javafx.application.Platform;
 
 public class PD12 extends MidiDeviceImpl {

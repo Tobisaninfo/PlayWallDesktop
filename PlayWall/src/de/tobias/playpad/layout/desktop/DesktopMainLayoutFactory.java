@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import de.tobias.playpad.layout.desktop.pad.DesktopPadView;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;

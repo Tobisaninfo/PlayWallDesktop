@@ -1,10 +1,5 @@
 package de.tobias.playpad.mediaplugin.video;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import de.tobias.playpad.pad.mediapath.MediaPath;
-
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -12,6 +7,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -21,6 +17,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class VideoContent extends PadContent implements Pauseable, Durationable {
 
@@ -126,12 +125,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	public void loadMedia() {
 		Path path = getPad().getPath();
 		if (path != null && Files.exists(path)) {
-			Platform.runLater(() ->
-			{
-				if (getPad().isPadVisible()) {
-					getPad().getController().getView().showBusyView(true);
-				}
-			});
 			media = new Media(path.toUri().toString());
 
 			// Old Player
@@ -162,7 +155,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 						getPad().getController().getView().showBusyView(false);
 					}
 				});
-				// getPad().throwException(path, player.getError()); TODO Error Handling User
 			});
 			player.setOnEndOfMedia(() ->
 			{
@@ -179,6 +171,8 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			positionProperty.bind(player.currentTimeProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(padVolumeListener);
+		} else {
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 
@@ -190,7 +184,9 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	@Override
 	public void unloadMedia() {
 		// First Stop the pad (if playing)
-		getPad().setStatus(PadStatus.STOP);
+		if (getPad().getStatus() == PadStatus.PLAY || getPad().getStatus() == PadStatus.PAUSE) {
+			getPad().setStatus(PadStatus.STOP);
+		}
 
 		durationProperty.unbind();
 		positionProperty.unbind();

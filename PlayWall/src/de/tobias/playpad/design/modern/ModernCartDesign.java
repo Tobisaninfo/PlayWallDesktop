@@ -105,7 +105,10 @@ public class ModernCartDesign extends Design implements CartDesign, DesignColorA
 	// TODO Extract this loader and saver
 	@Override
 	public void load(Element rootElement) {
-		uuid = UUID.fromString(rootElement.attributeValue("id"));
+		String uuidValue = rootElement.attributeValue("id");
+		if (uuidValue != null) {
+			uuid = UUID.fromString(uuidValue);
+		}
 
 		Element backgroundElement = rootElement.element("BackgroundColor");
 		if (backgroundElement != null) {

@@ -1,5 +1,25 @@
 package de.tobias.playpad.audio;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.utils.util.FileUtils;
+import javafx.application.Platform;
+import javafx.beans.property.*;
+import javafx.util.Duration;
+import javazoom.jl.converter.Converter;
+import javazoom.jl.decoder.JavaLayerException;
+import kuusisto.tinysound.Music;
+import kuusisto.tinysound.TinySound;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer.Info;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,31 +31,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer.Info;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.utils.util.FileUtils;
-import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.Duration;
-import javazoom.jl.converter.Converter;
-import javazoom.jl.decoder.JavaLayerException;
-import kuusisto.tinysound.Music;
-import kuusisto.tinysound.TinySound;
 
 public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 
@@ -215,13 +210,6 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 		initTinySound(audioCardName);
 
 		unloadMedia();
-		Platform.runLater(() ->
-		{
-			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(true);
-			}
-		});
-
 		executorService.submit(() ->
 		{
 			Path path = getContent().getPad().getPath();

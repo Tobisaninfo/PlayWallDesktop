@@ -5,7 +5,7 @@ public enum PadStatus {
 	EMPTY,
 	ERROR,
 	READY,
-	// Diese Trigger werden über den Listener PadStatusListener realisiert.
+	// Diese Trigger werden über den Listener PadStatusControlListener realisiert.
 	/**
 	 * Trigger the player to start playing.
 	 */
@@ -17,5 +17,9 @@ public enum PadStatus {
 	/**
 	 * Trigger the player to stop playing, not for end of file. To detect end of file, use oldValue = PLAY and newValue = READY.
 	 */
-	STOP
+	STOP,
+	/**
+	 * File not found
+	 */
+	NOT_FOUND
 }

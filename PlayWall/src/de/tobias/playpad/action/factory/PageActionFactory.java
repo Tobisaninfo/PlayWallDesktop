@@ -3,7 +3,7 @@ package de.tobias.playpad.action.factory;
 import de.tobias.playpad.action.*;
 import de.tobias.playpad.action.actions.PageAction;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import javafx.scene.control.TreeItem;
 

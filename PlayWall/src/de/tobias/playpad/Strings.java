@@ -28,8 +28,9 @@ public class Strings {
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
-	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
-	public static final String UI_Dialog_NewProile_Title = "UI.Dialog.NewProfile.Title";
+	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
+	public static final String UI_Dialog_NotFound_Title = "UI.Dialog.NotFound.Title";
+	public static final String UI_Dialog_NewProfile_Title = "UI.Dialog.NewProfile.Title";
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
 	public static final String UI_Dialog_ProjectManager_Title = "UI.Dialog.ProjectManager.Title";
@@ -51,6 +52,10 @@ public class Strings {
 
 	// UI - Dialog - Launch
 	public static final String UI_Dialog_Launch_Info = "UI.Dialog.Launch.Info";
+
+	// UI - Dialog - ProjeczLoad
+	public static final String UI_Dialog_ProjectLoad_StartProject = "UI.Dialof.ProjectLoad.StartProject";
+	public static final String UI_Dialog_ProjectLoad_StartPad = "UI.Dialof.ProjectLoad.StartPad";
 
 	// UI - Window - Settings
 	public static final String UI_Window_Settings_Gen_Title = "UI.Window.Settings.Gen.Title";
@@ -269,6 +274,9 @@ public class Strings {
 	// UI - Dialog - Page - Name
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
+
+	// UI - Dialog - PathMatch
+	public static final String UI_Dialog_PathMatch_Status = "UI.Dialog.PathMatch.Status";
 
 	// Tooltip
 	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
