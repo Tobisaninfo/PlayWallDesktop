@@ -58,6 +58,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		load("de/tobias/playpad/assets/dialog/project/", "importDialog", PlayPadMain.getUiResourceBundle());
 		applyViewControllerToStage().initOwner(owner);
 
+		addCloseKeyShortcut(() -> cancelHandler(null));
+
 		importer = new ProjectImporter(path, this);
 
 		// Set Default Values
@@ -73,8 +75,14 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		// Init Busy View
 		busyView = new BusyView(this);
 
+		if (!importer.isIncludeProfile()) {
+			profileNameTextField.setDisable(true);
+		}
+
 		if (importer.isIncludeMedia()) {
 			importButton.setDisable(true);
+		} else {
+			mediaPathButton.setDisable(true);
 		}
 	}
 
@@ -87,6 +95,13 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 				importButton.setDisable(false);
 			}
 		});
+
+		profileImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			profileNameTextField.setDisable(!newValue);
+		});
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			mediaPathButton.setDisable(!newValue);
+		});
 	}
 
 	public Optional<ProjectReference> showAndWait() {
@@ -94,17 +109,15 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		if (canceled)
 			return Optional.empty();
 		else
-			return Optional.of(importer.getProjectReference());
+			return Optional.ofNullable(importer.getProjectReference());
 	}
 
 	@Override
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
-		stage.setMinWidth(320);
+		stage.setMinWidth(380);
 		stage.setMinHeight(480);
-		stage.setWidth(320);
-		stage.setHeight(480);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectImport_Title));
 
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -139,16 +152,15 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		busyView.getIndicator().setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 		busyView.showProgress(true);
 
-		Worker.runLater(() -> {
 			try {
 				importer.execute();
 				canceled = false;
 
-				Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
+				getStageContainer().ifPresent(NVCStage::close);
 			} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
 				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Project_Export), PlayPadMain.stageIcon);
 			}
-		});
 	}
 
 

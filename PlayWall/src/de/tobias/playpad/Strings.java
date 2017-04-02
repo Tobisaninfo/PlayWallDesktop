@@ -154,6 +154,7 @@ public class Strings {
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_Import = "Error.Project.Import";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 	public static final String Error_Project_PageCount = "Error.Project.PageCount";
 	public static final String Error_Project_Sync_Change = "Error.Project.Sync.Change";

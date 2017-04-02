@@ -77,6 +77,10 @@ public class ProjectManagerDialog extends NVC {
 			}
 		});
 
+		// Initial Value
+		projectExportButton.setDisable(true);
+		projectDeleteButton.setDisable(true);
+
 		// Select Listener
 		projectList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue == null) {
@@ -84,11 +88,17 @@ public class ProjectManagerDialog extends NVC {
 
 				nameTextfield.clear();
 				profileCombobox.setValue(null);
+
+				projectExportButton.setDisable(true);
+				projectDeleteButton.setDisable(true);
 			} else {
 				setSettingsDisable(false);
 
 				nameTextfield.setText(newValue.getName());
 				profileCombobox.setValue(newValue.getProfileReference());
+
+				projectExportButton.setDisable(false);
+				projectDeleteButton.setDisable(false);
 			}
 		});
 
