@@ -124,7 +124,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			sslContext = SSLContext.getInstance("SSL");
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> hostname.equals("localhost"));
+			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
 
 			// Unirest
 			SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
@@ -206,7 +206,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
 				if (value != null) {
 					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
-					loader.setListener(new ProjectLoadDialog());
+					// TODO Load indicator
 					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
