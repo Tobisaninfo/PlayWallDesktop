@@ -17,6 +17,7 @@ import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -277,7 +278,7 @@ public class PathMatchDialog extends NVC {
 						if (!mediaPath.isMatched()) {
 							try {
 								Path result = MediaPool.find(mediaPath.getMediaPath().getFileName(), folder, subdirs);
-								mediaPath.setLocalPath(result);
+								Platform.runLater(() -> mediaPath.setLocalPath(result));
 								if (result != null) {
 									mediaPath.setSelected(true);
 								}

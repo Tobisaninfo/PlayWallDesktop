@@ -5,6 +5,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.ServerUtils;
 import de.tobias.playpad.server.sync.conflict.Conflict;
 import de.tobias.playpad.server.sync.conflict.ConflictSolver;
@@ -54,6 +55,12 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 		Command command = commandMap.get(name);
 		JsonObject sendData = command.execute(data);
 
+		// Handle Last midication date
+		long lastModified = System.currentTimeMillis();
+		sendData.addProperty(PropertyDef.TIME, lastModified);
+		sendData.addProperty(PropertyDef.PROJECT_REF, projectReference.getUuid().toString());
+		projectReference.setLastModified(lastModified);
+
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		boolean send = server.push(sendData);
 
@@ -64,7 +71,6 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 				storedCommands.put(uuid, new ArrayList<>());
 			}
 			storedCommands.get(uuid).add(sendData);
-			projectReference.setLastModified(System.currentTimeMillis());
 		}
 	}
 

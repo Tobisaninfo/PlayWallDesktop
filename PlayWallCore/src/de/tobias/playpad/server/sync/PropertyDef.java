@@ -6,6 +6,8 @@ package de.tobias.playpad.server.sync;
 public class PropertyDef {
 	public static final String ID = "id";
 	public static final String CMD = "cmd";
+	public static final String TIME = "time";
+	public static final String PROJECT_REF = "project";
 
 	public static final String FIELD = "field";
 	public static final String VALUE = "value";

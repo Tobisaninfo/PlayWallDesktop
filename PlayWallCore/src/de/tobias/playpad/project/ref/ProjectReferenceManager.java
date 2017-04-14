@@ -192,8 +192,7 @@ public final class ProjectReferenceManager {
 				removeProject(project);
 			}
 
-		} catch (IOException ignored) {
-		} catch (LoginException e) {
+		} catch (IOException | LoginException e) {
 			e.printStackTrace();
 		}
 
@@ -225,7 +224,7 @@ public final class ProjectReferenceManager {
 			}
 
 		List<ProjectReference> items = new ArrayList<>();
-		projects.forEach(items::add);
+		items.addAll(projects);
 		items.sort((o1, o2) -> Long.compare(o2.getLastModified(), o1.getLastModified()));
 		return items;
 	}

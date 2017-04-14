@@ -170,7 +170,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 					UUID uuid = UUID.fromString(object.getString("uuid"));
 					String name = object.getString("name");
 
-					ProjectReference ref = new ProjectReference(uuid, name);
+					ProjectReference ref = new ProjectReference(uuid, name, true);
 					projects.add(ref);
 				}
 				return projects;
