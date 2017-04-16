@@ -30,7 +30,7 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 	private NativeAudio audioPlayer;
 
 	public NativeAudioSettingsViewController() {
-		super("nawinSettings", "de/tobias/playpad/nawin/assets/", null);
+		super("nawinSettings", "de/tobias/playpad/assets/win/", null);
 
 		testButton.setGraphic(new FontIcon(FontAwesomeType.PLAY));
 
@@ -68,7 +68,7 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 		Path file = ApplicationUtils.getApplication().getPath(PathType.RESOURCES, "Test-Sound.wav");
 		if (Files.notExists(file)) {
 			InputStream iStr = getClass().getClassLoader()
-					.getResourceAsStream("de/tobias/playpad/nawin/assets/Test-Sound.wav");
+					.getResourceAsStream("de/tobias/playpad/assets/Test-Sound.wav");
 			try {
 				Files.createDirectories(file.getParent());
 				IOUtils.copy(iStr, file);
