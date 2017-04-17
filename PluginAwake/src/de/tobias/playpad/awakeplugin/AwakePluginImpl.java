@@ -1,12 +1,7 @@
-package de.tobias.playpad.awakeplugin.impl;
+package de.tobias.playpad.awakeplugin;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.awakeplugin.AwakePlugin;
-import de.tobias.playpad.awakeplugin.AwakeSettings;
-import de.tobias.playpad.plugin.ModernPluginManager;
-import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -42,6 +37,8 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 	private static final String NAME = "AwakePlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
+	private static final int currentBuild = 3;
+	private static final String currentVersion = "2.1";
 
 	private Module module;
 	private Updatable updatable;
@@ -60,7 +57,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		bundle = Localization.loadBundle("de/tobias/playpad/awakeplugin/assets/awake", getClass().getClassLoader());
 
 		module = new Module(NAME, IDENTIFIER);
-		updatable = new AwakePluginUpdater();
+		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
 		if (OS.getType() == OSType.Windows) {
 			try {

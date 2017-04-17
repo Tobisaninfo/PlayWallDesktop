@@ -7,6 +7,8 @@ import de.tobias.utils.util.OS.OSType
 import net.xeoh.plugins.base.annotations.PluginImplementation
 import net.xeoh.plugins.base.annotations.events.PluginLoaded
 
+import scala.reflect.api.StandardDefinitions
+
 /**
   * Created by tobias on 16.04.17.
   */
@@ -15,6 +17,8 @@ class NativeAudioPluginImpl extends NativeAudioPlugin {
 
 	private val NAME = "NativeAudioMac"
 	private val IDENTIFIER = "de.tobias.playwall.plugin.nativeaudio"
+	private val currentBuild = 1
+	private val currentVersion = "1.0"
 
 	private var module: Module = _
 	private var updatable: Updatable = _
@@ -22,7 +26,7 @@ class NativeAudioPluginImpl extends NativeAudioPlugin {
 	@PluginLoaded
 	def onLoaded(plugin: NativeAudioPlugin): Unit = {
 		module = new Module(NAME, IDENTIFIER)
-		updatable = new NativeAudioUpdater
+		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module)
 
 		// Init Audio Implementation
 		val loader = OS.getType match {

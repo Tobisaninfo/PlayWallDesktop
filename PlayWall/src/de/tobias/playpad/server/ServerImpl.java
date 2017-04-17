@@ -12,7 +12,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
-import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.ModernPlugin;
@@ -56,7 +55,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -111,6 +113,17 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		URL url = new URL("https://" + host + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
 		Type listType = new TypeToken<List<ModernPlugin>>() {
+		}.getType();
+
+		Gson gson = new Gson();
+		return gson.fromJson(reader, listType);
+	}
+
+	@Override
+	public ModernPlugin getPlugin(String name) throws IOException {
+		URL url = new URL("https://" + host + "/plugin/" + name);
+		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+		Type listType = new TypeToken<ModernPlugin>() {
 		}.getType();
 
 		Gson gson = new Gson();

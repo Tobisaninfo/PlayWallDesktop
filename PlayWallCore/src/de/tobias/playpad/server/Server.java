@@ -21,12 +21,28 @@ import java.util.List;
 public interface Server {
 
 	/**
+	 * Get the host of the server.
+	 *
+	 * @return hostname
+	 */
+	String getHost();
+
+	/**
 	 * Load the list of available plugins from the server
 	 *
 	 * @return plugins
 	 * @throws IOException network error
 	 */
 	List<ModernPlugin> getPlugins() throws IOException;
+
+	/**
+	 * Load plugin informtaion for a specific plugin.
+	 *
+	 * @param name plugin name
+	 * @return plugin info
+	 * @throws IOException network error
+	 */
+	ModernPlugin getPlugin(String name) throws IOException;
 
 	/**
 	 * Load a plugin file from the server

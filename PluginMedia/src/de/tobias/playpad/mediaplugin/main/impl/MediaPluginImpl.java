@@ -7,6 +7,7 @@ import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
+import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.updater.client.Updatable;
@@ -37,9 +38,11 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 	private static final String NAME = "MediaPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
+	private static final int currentBuild = 8;
+	private static final String currentVersion = "4.2.2";
 
 	private static Module module;
-	private static MediaPluginUpdater updater;
+	private static Updatable updater;
 	
 	private static MediaPluginImpl instance;
 	private MediaViewController videoViewController;
@@ -55,8 +58,8 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 	public void onEnable(MediaPlugin plugin) {
 		// Init
 		instance = this;
-		updater = new MediaPluginUpdater();
 		module = new Module(NAME, IDENTIFIER);
+		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
 		blindProperty = new SimpleBooleanProperty();
 
