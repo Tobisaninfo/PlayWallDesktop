@@ -1,4 +1,0 @@
-<Actions>
-	<Component id="MUTE" name="muteaction.name">de.tobias.playpad.actionsplugin.muteaction.MuteActionFactory</Component>
-	<Component id="STOP" name="stopaction.name">de.tobias.playpad.actionsplugin.stopaction.StopActionFactory</Component>
-</Actions>

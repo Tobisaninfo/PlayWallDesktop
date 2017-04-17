@@ -1,14 +1,11 @@
-package de.tobias.playpad.actionsplugin.stopaction;
+package de.tobias.playpad.action.factory;
 
-import java.util.List;
-
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.action.ActionDisplayable;
-import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.*;
+import de.tobias.playpad.action.actions.StopAction;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.control.TreeItem;
+
+import java.util.List;
 
 public class StopActionFactory extends ActionFactory {
 
@@ -18,8 +15,7 @@ public class StopActionFactory extends ActionFactory {
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> item = new TreeItem<>(actions.get(0));
-		return item;
+		return new TreeItem<>(actions.get(0));
 	}
 
 	@Override

@@ -109,6 +109,11 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
+	public String getHost() {
+		return host;
+	}
+
+	@Override
 	public List<ModernPlugin> getPlugins() throws IOException {
 		URL url = new URL("https://" + host + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));

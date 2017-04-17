@@ -201,6 +201,7 @@ public class Strings {
 	public static final String Action_Page_toString = "Action.Page.toString";
 	public static final String Action_Navigate_toString = "Action.Navigate.toString";
 	public static final String Action_Cart_Name = "Action.Cart.Name";
+	public static final String Action_Stop_Name = "Action.Stop.Name";
 	public static final String Action_Page_Name = "Action.Page.Name";
 	public static final String Action_Navigate_Name = "Action.Navigate.Name";
 

@@ -1,22 +1,22 @@
-package de.tobias.playpad.actionsplugin.stopaction;
+package de.tobias.playpad.action.actions;
 
-import org.dom4j.Element;
-
+import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.actionsplugin.impl.ActionsPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import org.dom4j.Element;
 
 public class StopAction extends Action {
 
@@ -67,7 +67,7 @@ public class StopAction extends Action {
 
 	@Override
 	public StringProperty displayProperty() {
-		return new SimpleStringProperty(ActionsPluginImpl.getBundle().getString("stopaction.name"));
+		return new SimpleStringProperty(Localization.getString(Strings.Action_Stop_Name));
 	}
 
 	@Override
