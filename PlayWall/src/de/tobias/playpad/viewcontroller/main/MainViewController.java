@@ -41,6 +41,7 @@ import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -100,6 +101,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
+	private ChangeListener<Number> notFoundListener;
 
 	// Sync Listener
 	private InvalidationListener projectTitleListener;
@@ -153,6 +155,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+		notFoundListener = (observable, oldValue, newValue) -> {
+			if (menuToolbarViewController != null)
+				menuToolbarViewController.setNotFoundNumber(newValue.intValue());
+		};
 
 		// Sync Listener
 		projectTitleListener = observable -> updateWindowTitle();
@@ -341,6 +347,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		if (this.openProject != null) {
 			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
 			this.openProject.getPages().removeListener(pagesListener);
+			this.openProject.notFoundMediaProperty().removeListener(notFoundListener);
 			this.openProject.close();
 		}
 
@@ -351,6 +358,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		// Add new Listener
 		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
 		openProject.getPages().addListener(pagesListener);
+		openProject.notFoundMediaProperty().addListener(notFoundListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
@@ -367,6 +375,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		showPage(FIRST_PAGE);
 		loadUserCss();
 		updateWindowTitle();
+
+		notFoundListener.changed(project.notFoundMediaProperty(), 0, project.getNotFoundMedia());
 	}
 
 	/*

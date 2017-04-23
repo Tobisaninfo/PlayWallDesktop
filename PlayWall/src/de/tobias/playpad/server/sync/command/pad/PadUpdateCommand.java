@@ -24,7 +24,7 @@ public class PadUpdateCommand implements Command {
 				json.addProperty(PropertyDef.CMD, Commands.PAD_UPDATE);
 
 				json.addProperty(PropertyDef.FIELD, change.getName());
-				json.addProperty(PropertyDef.VALUE, change.getValue().toString());
+				json.addProperty(PropertyDef.VALUE, change.getValue() != null ? change.getValue().toString() : null);
 
 				return json;
 			}

@@ -6,7 +6,9 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ColorModeHandler;
 import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.layout.desktop.listener.DesktopSearchController;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
+import de.tobias.playpad.layout.desktop.listener.PageButtonDragHandler;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -26,6 +28,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
+import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
@@ -104,6 +107,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	private MenuItem colorMenu;
 
+	@FXML
+	private MenuItem notFoundMenu;
 	@FXML
 	private MenuItem pluginMenu;
 
@@ -593,8 +598,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@FXML
-	void errorMenuHandler(ActionEvent event) {
-		// TODO Error Handling dialog
+	void notFoundMenuHandler(ActionEvent event) {
+		PathMatchDialog dialog = new PathMatchDialog(openProject, mainViewController.getStage());
+		dialog.showAndWait();
 	}
 
 	@FXML

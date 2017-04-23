@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Verwaltet alle Seiten, die jeweils die Kacheln enthalten.
@@ -53,6 +55,7 @@ public class Project {
 	final ProjectReference projectReference;
 
 	private transient IntegerProperty activePlayerProperty;
+	private transient IntegerProperty notFoundMediaProperty;
 	private transient ProjectUpdateListener syncListener;
 
 	public Project(ProjectReference ref) {
@@ -60,6 +63,7 @@ public class Project {
 		this.pages = FXCollections.observableArrayList();
 		this.settings = new ProjectSettings();
 		this.activePlayerProperty = new SimpleIntegerProperty();
+		this.notFoundMediaProperty = new SimpleIntegerProperty();
 
 		syncListener = new ProjectUpdateListener(this);
 		if (ref.isSync()) {
@@ -114,9 +118,13 @@ public class Project {
 	}
 
 	public Collection<Pad> getPads() {
+		return getPads(p -> true);
+	}
+
+	public Collection<Pad> getPads(Predicate<Pad> predicate) {
 		List<Pad> pads = new ArrayList<>();
 		pages.stream().map(Page::getPads).forEach(pads::addAll);
-		return pads;
+		return pads.parallelStream().filter(predicate).collect(Collectors.toList());
 	}
 
 	public void removePad(UUID id) {
@@ -160,7 +168,7 @@ public class Project {
 	}
 
 	public int getActivePlayers() {
-		return (int) getPads().stream().filter(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).count();
+		return getPads(p -> p.getStatus() == PadStatus.PLAY || p.getStatus() == PadStatus.PAUSE).size();
 	}
 
 	public boolean hasActivePlayers() {
@@ -175,10 +183,18 @@ public class Project {
 		activePlayerProperty.set(getActivePlayers());
 	}
 
-	// Utils
-	public void loadPadsContent() {
-		getPads().forEach(Pad::loadContent);
+	public int getNotFoundMedia() {
+		return notFoundMediaProperty.get();
 	}
+
+	public IntegerProperty notFoundMediaProperty() {
+		return notFoundMediaProperty;
+	}
+
+	public void updateNotFoundProperty() {
+		notFoundMediaProperty.set(getPads(p -> p.getStatus() == PadStatus.NOT_FOUND).size());
+	}
+
 
 	@Override
 	public String toString() {

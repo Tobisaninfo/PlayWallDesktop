@@ -13,45 +13,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-      xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-                 xmlns:fx="http://javafx.com/fxml/1">
+        <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
             <menus>
                 <Menu mnemonicParsing="false" text="%main.menu.file">
                     <items>
-                        <MenuItem fx:id="newProjectMenuItem" mnemonicParsing="false" onAction="#newDocumentHandler"
-                                  text="%main.menuitem.new">
+                        <MenuItem fx:id="newProjectMenuItem" mnemonicParsing="false" onAction="#newDocumentHandler" text="%main.menuitem.new">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <Menu fx:id="recentOpenMenu" mnemonicParsing="false" text="%main.menuitem.recentFiles"/>
-                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openDocumentHandler"
-                                  text="%main.menuitem.project">
+                        <Menu fx:id="recentOpenMenu" mnemonicParsing="false" text="%main.menuitem.recentFiles" />
+                        <MenuItem fx:id="openProjectMenuItem" mnemonicParsing="false" onAction="#openDocumentHandler" text="%main.menuitem.project">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveMenuHandler"
-                                  text="%main.menuitem.save">
+                        <MenuItem fx:id="saveProjectMenuItem" mnemonicParsing="false" onAction="#saveMenuHandler" text="%main.menuitem.save">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="profileMenu" mnemonicParsing="false" onAction="#profileMenuHandler"
-                                  text="%main.menuitem.profile"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="printProjectMenuItem" mnemonicParsing="false" onAction="#printMenuHandler"
-                                  text="%main.menuitem.print">
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="profileMenu" mnemonicParsing="false" onAction="#profileMenuHandler" text="%main.menuitem.profile" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="printProjectMenuItem" mnemonicParsing="false" onAction="#printMenuHandler" text="%main.menuitem.print">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                     </items>
@@ -60,124 +49,103 @@
                     <items>
                         <Menu mnemonicParsing="false" text="%main.menu.editmode">
                             <items>
-                                <MenuItem fx:id="playMenu" mnemonicParsing="false" onAction="#playMenuHandler"
-                                          text="%main.menuitem.play">
+                                <MenuItem fx:id="playMenu" mnemonicParsing="false" onAction="#playMenuHandler" text="%main.menuitem.play">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="dragMenu" mnemonicParsing="false" onAction="#dragMenuHandler"
-                                          text="%main.menuitem.drag">
+                                <MenuItem fx:id="dragMenu" mnemonicParsing="false" onAction="#dragMenuHandler" text="%main.menuitem.drag">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="J" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="J" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="pageMenu" mnemonicParsing="false" onAction="#pageMenuHandler"
-                                          text="%main.menuitem.page">
+                                <MenuItem fx:id="pageMenu" mnemonicParsing="false" onAction="#pageMenuHandler" text="%main.menuitem.page">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="K" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="colorMenu" mnemonicParsing="false" onAction="#colorMenuHandler"
-                                          text="%main.menuitem.color">
+                                <MenuItem fx:id="colorMenu" mnemonicParsing="false" onAction="#colorMenuHandler" text="%main.menuitem.color">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="L" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="errorMenu" mnemonicParsing="false" onAction="#errorMenuHandler"
-                                  text="%main.menuitem.errors">
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="notFoundMenu" mnemonicParsing="false" onAction="#notFoundMenuHandler" text="%main.menuitem.notfound">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler"
-                                  text="%main.menuitem.plugins"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="projectSettingsMenuItem" mnemonicParsing="false"
-                                  onAction="#projectSettingsHandler" text="%main.menuitem.projectSettings"/>
-                        <MenuItem fx:id="profileSettingsMenuItem" mnemonicParsing="false"
-                                  onAction="#profileSettingsHandler" text="%main.menuitem.profileSettings">
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler" text="%main.menuitem.plugins" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="projectSettingsMenuItem" mnemonicParsing="false" onAction="#projectSettingsHandler" text="%main.menuitem.projectSettings" />
+                        <MenuItem fx:id="profileSettingsMenuItem" mnemonicParsing="false" onAction="#profileSettingsHandler" text="%main.menuitem.profileSettings">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="globalSettingsMenuItem" mnemonicParsing="false"
-                                  onAction="#globalSettingsHandler" text="%main.menuitem.globalSettings">
+                        <MenuItem fx:id="globalSettingsMenuItem" mnemonicParsing="false" onAction="#globalSettingsHandler" text="%main.menuitem.globalSettings">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="DOWN"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
                     </items>
                 </Menu>
                 <Menu fx:id="layoutMenu" mnemonicParsing="false" text="%main.menu.view">
                     <items>
-                        <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false"
-                                       onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop"/>
-                        <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false"
-                                       onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
+                        <CheckMenuItem fx:id="alwaysOnTopItem" mnemonicParsing="false" onAction="#alwaysOnTopItemHandler" text="%main.menuitem.onTop" />
+                        <CheckMenuItem fx:id="fullScreenMenuItem" mnemonicParsing="false" onAction="#fullScreenMenuItemHandler" text="%main.menuitem.fullScreen">
                             <accelerator>
-                                <KeyCodeCombination alt="UP" code="F" control="UP" meta="UP" shift="DOWN"
-                                                    shortcut="DOWN"/>
+                                <KeyCodeCombination alt="UP" code="F" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                             </accelerator>
                         </CheckMenuItem>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem fx:id="searchPadMenuItem" mnemonicParsing="false" onAction="#searchPadHandler"
-                                  text="%main.menuitem.searchPad"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="searchPadMenuItem" mnemonicParsing="false" onAction="#searchPadHandler" text="%main.menuitem.searchPad" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                 </Menu>
-                <Menu fx:id="extensionMenu" mnemonicParsing="false" text="%main.menu.extension"/>
+                <Menu fx:id="extensionMenu" mnemonicParsing="false" text="%main.menu.extension" />
                 <Menu fx:id="infoMenu" mnemonicParsing="false" text="%main.menu.info">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#aboutMenuHandler" text="%main.menuitem.about"/>
-                        <MenuItem mnemonicParsing="false" onAction="#showChangelogMenuHandler"
-                                  text="%main.menuitem.changelog"/>
-                        <MenuItem mnemonicParsing="false" onAction="#visiteWebsiteMenuHandler"
-                                  text="%main.menuitem.website"/>
+                        <MenuItem mnemonicParsing="false" onAction="#aboutMenuHandler" text="%main.menuitem.about" />
+                        <MenuItem mnemonicParsing="false" onAction="#showChangelogMenuHandler" text="%main.menuitem.changelog" />
+                        <MenuItem mnemonicParsing="false" onAction="#visiteWebsiteMenuHandler" text="%main.menuitem.website" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <ToolBar fx:id="toolbar" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8"
-                 xmlns:fx="http://javafx.com/fxml/1">
+        <ToolBar fx:id="toolbar" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
             <items>
-                <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="28.0"
-                      prefWidth="586.0" spacing="14.0">
+                <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="586.0" spacing="14.0">
                     <children>
-                        <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
-                              HBox.hgrow="ALWAYS"/>
-                        <HBox fx:id="iconHbox" alignment="CENTER" spacing="14.0">
+                        <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS" />
+                        <HBox fx:id="notFoundContainer" alignment="CENTER" spacing="14.0">
+                            <children>
+                                <Label fx:id="notFoundLabel" />
+                            </children>
+                        </HBox>
+                        <HBox fx:id="iconHbox" alignment="CENTER" spacing="7.0">
                             <children>
                                 <Label fx:id="liveLabel" text="%main.label.live" textFill="RED">
                                     <font>
-                                        <Font size="26.0"/>
+                                        <Font size="26.0" />
                                     </font>
                                 </Label>
                             </children>
                         </HBox>
-                        <HBox fx:id="searchFieldHbox"/>
                         <HBox alignment="CENTER" spacing="7.0" HBox.hgrow="NEVER">
                             <children>
                                 <Label fx:id="volumeDownLabel">
                                     <font>
-                                        <Font size="24.0"/>
+                                        <Font size="24.0" />
                                     </font>
                                 </Label>
-                                <Slider fx:id="volumeSlider" focusTraversable="false" max="1.0"/>
+                                <Slider fx:id="volumeSlider" focusTraversable="false" max="1.0" />
                                 <Label fx:id="volumeUpLabel">
                                     <font>
-                                        <Font size="24.0"/>
+                                        <Font size="24.0" />
                                     </font>
                                 </Label>
                             </children>

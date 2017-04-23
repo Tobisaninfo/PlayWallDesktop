@@ -2,6 +2,9 @@ package de.tobias.playpad.layout.desktop.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
+import de.tobias.playpad.design.CartDesign;
+import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -12,8 +15,10 @@ import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
@@ -32,6 +37,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class DesktopPadView implements IPadView {
 
@@ -46,6 +52,8 @@ public class DesktopPadView implements IPadView {
 	private HBox preview;
 	private IPadContentView previewContent;
 
+	private FontIcon notFoundLabel;
+
 	private ProgressBar playBar;
 	private Button playButton;
 	private Button pauseButton;
@@ -59,7 +67,7 @@ public class DesktopPadView implements IPadView {
 	private BusyView busyView;
 
 	private transient DesktopPadViewController controller; // Reference to its controller
-	
+
 	public DesktopPadView(DesktopMainLayoutFactory connect) {
 		controller = new DesktopPadViewController(this, connect);
 		setupView();
@@ -114,11 +122,20 @@ public class DesktopPadView implements IPadView {
 		settingsButton.setFocusTraversable(false);
 		settingsButton.setOnAction(controller);
 
+		// Not Found Label
+		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		notFoundLabel.getStyleClass().clear();
+		notFoundLabel.setOpacity(0.75);
+		notFoundLabel.setSize(80);
+		notFoundLabel.setMouseTransparent(true);
+
+		notFoundLabel.setVisible(false);
+
 		// Button HBOX
 		buttonBox = new HBox(); // childern in addDefaultButton()
 
 		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
-		superRoot.getChildren().addAll(root);
+		superRoot.getChildren().addAll(root, notFoundLabel);
 	}
 
 	@Override
@@ -129,7 +146,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setContentView(Pad pad) {
 		superRoot.setUserData(pad);
-		
+
 		if (previewContent != null) {
 			previewContent.deinit();
 		}
@@ -339,27 +356,27 @@ public class DesktopPadView implements IPadView {
 	public void removeStyleClasses() {
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		indexLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		timeLabel.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		loopLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		triggerLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		errorLabel.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		loopLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		triggerLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		errorLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		preview.getChildren().forEach(i -> i.getStyleClass().removeIf( c -> c.startsWith("pad")));
+		preview.getChildren().forEach(i -> i.getStyleClass().removeIf(c -> c.startsWith("pad")));
 
-		playBar.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playBar.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		playButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		pauseButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		stopButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		newButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
-		settingsButton.getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		pauseButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		stopButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		newButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		settingsButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
-		playButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		pauseButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		stopButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		newButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
-		settingsButton.getGraphic().getStyleClass().removeIf( c -> c.startsWith("pad"));
+		playButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		pauseButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		stopButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		newButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		settingsButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		buttonBox.getStyleClass().remove("pad-button-box");
 		root.getStyleClass().remove("pad-root");
@@ -394,5 +411,32 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setPlayBarProgress(double value) {
 		playBar.setProgress(value);
+	}
+
+	@Override
+	public void showNotFoundIcon(Pad pad, boolean show) {
+		if (show) {
+			DesignColorAssociator associator = null;
+			if (pad.getPadSettings().isCustomDesign()) {
+				CartDesign design = pad.getPadSettings().getDesign();
+				if (design instanceof DesignColorAssociator) {
+					associator = (DesignColorAssociator) design;
+				}
+			} else {
+				GlobalDesign design = Profile.currentProfile().currentLayout();
+				if (design instanceof DesignColorAssociator) {
+					associator = (DesignColorAssociator) design;
+				}
+			}
+
+			if (associator != null) {
+				Color color = associator.getAssociatedStandardColor();
+				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
+			} else {
+				notFoundLabel.setColor(Color.RED);
+			}
+		}
+		notFoundLabel.setVisible(show);
+		root.setOpacity(show ? 0.5 : 1.0);
 	}
 }

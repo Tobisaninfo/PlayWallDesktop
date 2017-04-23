@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPool;
+import de.tobias.utils.util.Worker;
+import javafx.scene.media.MediaPlayer;
 import org.dom4j.Element;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -38,6 +41,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 	private static final String CONTENT_PATH_ELEMENT = "Path";
 	private static final String CONTENT_PATH_UUID = "id";
 	private static final String CONTENT_PATH_PATH = "path";
+	private static final String CONTENT_PATH_FILENAME = "filename";
 
 	private Project project;
 
@@ -75,11 +79,23 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 					Element pathElement = (Element) obj;
 					UUID uuid = UUID.fromString(pathElement.attributeValue(CONTENT_PATH_UUID));
 					Path path = null;
+					String filename = null;
 					if (pathElement.attributeValue(CONTENT_PATH_PATH) != null) {
 						path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
+						filename = path.getFileName().toString();
 					}
 
-					MediaPath mediaPath = new MediaPath(uuid, path, pad);
+					if (pathElement.attributeValue(CONTENT_PATH_FILENAME) != null) {
+						filename = pathElement.attributeValue(CONTENT_PATH_FILENAME);
+					}
+
+					MediaPath mediaPath = new MediaPath(uuid, filename, pad);
+
+					// Convert old projects to mediapool
+					if (path != null) {
+						MediaPool.getInstance().create(mediaPath, path);
+					}
+
 					pad.getPaths().add(mediaPath);
 				}
 			}
@@ -117,7 +133,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 				Element pathElement = pathsElement.addElement(CONTENT_PATH_ELEMENT);
 				pathElement.addAttribute(CONTENT_PATH_UUID, mediaPath.getId().toString());
 				if (mediaPath.getPath() != null) {
-					pathElement.addAttribute(CONTENT_PATH_PATH, mediaPath.getPath().toString());
+					pathElement.addAttribute(CONTENT_PATH_FILENAME, mediaPath.getFileName().toString());
 				}
 			}
 

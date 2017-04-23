@@ -28,7 +28,6 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 		load("de/tobias/playpad/assets/dialog/project/", "loadDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
-		nvcStage.show();
 	}
 
 	@Override
@@ -47,6 +46,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 
 	@Override
 	public void startReadProject() {
+		getStageContainer().ifPresent(NVCStage::show);
 		statusLabel.setText(Localization.getString(Strings.UI_Dialog_ProjectLoad_StartProject));
 	}
 

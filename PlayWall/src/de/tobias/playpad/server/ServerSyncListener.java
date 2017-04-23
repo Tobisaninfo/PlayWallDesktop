@@ -15,7 +15,6 @@ import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener
 import de.tobias.playpad.server.sync.listener.downstream.page.PageUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.path.PathAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.path.PathRemoveListener;
-import de.tobias.playpad.server.sync.listener.downstream.path.PathUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectUpdateListener;
@@ -52,7 +51,6 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PAD_MOVE, new PadMoveListener());
 
 		commands.put(Commands.PATH_ADD, new PathAddListener());
-		commands.put(Commands.PATH_UPDATE, new PathUpdateListener());
 		commands.put(Commands.PATH_REMOVE, new PathRemoveListener());
 
 		commands.put(Commands.DESIGN_ADD, new DesignAddListener());

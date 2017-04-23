@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
@@ -11,6 +12,7 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -19,6 +21,7 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVCStage;
@@ -39,7 +42,7 @@ import java.util.Set;
 
 public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
-	private static final String OPEN_FOLDER = "openFolder";
+	public static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
 	private DesktopPadView padView;
@@ -364,6 +367,12 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				padView.getNewButton().setDisable(false);
 				padView.getSettingsButton().setDisable(false);
 			} else if (pad.getStatus() == PadStatus.ERROR) {
+				padView.getPlayButton().setDisable(true);
+				padView.getPauseButton().setDisable(true);
+				padView.getStopButton().setDisable(true);
+				padView.getNewButton().setDisable(false);
+				padView.getSettingsButton().setDisable(false);
+			} else if (pad.getStatus() == PadStatus.NOT_FOUND) {
 				padView.getPlayButton().setDisable(true);
 				padView.getPauseButton().setDisable(true);
 				padView.getStopButton().setDisable(true);

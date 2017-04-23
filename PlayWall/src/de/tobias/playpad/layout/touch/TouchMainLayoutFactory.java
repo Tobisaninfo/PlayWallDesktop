@@ -2,6 +2,7 @@ package de.tobias.playpad.layout.touch;
 
 import java.util.Stack;
 
+import de.tobias.playpad.layout.touch.pad.TouchPadView;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;

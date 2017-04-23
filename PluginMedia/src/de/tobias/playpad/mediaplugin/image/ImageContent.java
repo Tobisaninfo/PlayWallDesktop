@@ -53,7 +53,7 @@ public class ImageContent extends PadContent {
 			getPad().setStatus(PadStatus.READY);
 			loaded = true;
 		} else {
-			// getPad().throwException(path, new FileNotFoundException()); TODO Error Handling User
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 
@@ -65,7 +65,10 @@ public class ImageContent extends PadContent {
 	@Override
 	public void unloadMedia() {
 		// First Stop the pad (if playing)
-		getPad().setStatus(PadStatus.STOP);
+		if (getPad().getStatus() == PadStatus.PLAY || getPad().getStatus() == PadStatus.PAUSE) {
+			getPad().setStatus(PadStatus.STOP);
+		}
+
 		loaded = false;
 		Platform.runLater(() -> getPad().setStatus(PadStatus.EMPTY));
 	}

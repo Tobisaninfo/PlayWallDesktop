@@ -29,7 +29,7 @@ public class Strings {
 	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
 	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
-	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
+	public static final String UI_Dialog_NotFound_Title = "UI.Dialog.NotFound.Title";
 	public static final String UI_Dialog_NewProfile_Title = "UI.Dialog.NewProfile.Title";
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
@@ -276,6 +276,9 @@ public class Strings {
 	// UI - Dialog - Page - Name
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
+
+	// UI - Dialog - PathMatch
+	public static final String UI_Dialog_PathMatch_Status = "UI.Dialog.PathMatch.Status";
 
 	// Tooltip
 	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";

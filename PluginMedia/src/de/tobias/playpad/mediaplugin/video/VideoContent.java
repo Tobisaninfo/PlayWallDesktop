@@ -155,7 +155,6 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 						getPad().getController().getView().showBusyView(false);
 					}
 				});
-				// getPad().throwException(path, player.getError()); TODO Error Handling User
 			});
 			player.setOnEndOfMedia(() ->
 			{
@@ -172,6 +171,8 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			positionProperty.bind(player.currentTimeProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(padVolumeListener);
+		} else {
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
 	}
 
@@ -183,7 +184,9 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	@Override
 	public void unloadMedia() {
 		// First Stop the pad (if playing)
-		getPad().setStatus(PadStatus.STOP);
+		if (getPad().getStatus() == PadStatus.PLAY || getPad().getStatus() == PadStatus.PAUSE) {
+			getPad().setStatus(PadStatus.STOP);
+		}
 
 		durationProperty.unbind();
 		positionProperty.unbind();

@@ -2,6 +2,7 @@ package de.tobias.playpad.project;
 
 import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.page.Page;
@@ -71,6 +72,10 @@ public class ProjectJsonReader {
 			pad.getPaths().add(path); // TODO Use addPath Method in right scope
 		}
 
+		if (pad.getPaths().size() != 0) {
+			pad.setStatus(PadStatus.READY);
+		}
+
 		if (!object.isNull("design")) {
 			ModernCartDesign design = readModernCartDesign(pad, object.getJSONObject("design"));
 			if (design != null) {
@@ -84,12 +89,12 @@ public class ProjectJsonReader {
 
 	private MediaPath readPath(Pad pad, JSONObject object) {
 		UUID id = UUID.fromString(object.getString("id"));
-		Path path = null;
-		if (!object.isNull("path")) {
-			path = Paths.get(object.getString("path"));
+		String filename = null;
+		if (!object.isNull("filename")) {
+			filename = object.getString("filename");
 		}
 
-		return new MediaPath(id, path, pad);
+		return new MediaPath(id, filename, pad);
 	}
 
 	private ModernCartDesign readModernCartDesign(Pad pad, JSONObject object) {

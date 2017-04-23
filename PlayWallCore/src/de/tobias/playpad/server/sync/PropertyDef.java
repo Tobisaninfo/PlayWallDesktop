@@ -21,7 +21,7 @@ public class PropertyDef {
 	public static final String PAD_PAGE_REF = "page";
 	public static final String PAD_CONTENT_TYPE = "contentType";
 
-	public static final String PATH_PATH = "path";
+	public static final String PATH_FILENAME = "filename";
 	public static final String PATH_PAD_REF = "pad";
 
 	public static final String DESIGN_BACKGROUND_COLOR = "background_color";

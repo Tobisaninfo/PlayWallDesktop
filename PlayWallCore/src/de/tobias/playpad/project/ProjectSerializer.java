@@ -42,9 +42,7 @@ public class ProjectSerializer implements ProjectReader, ProjectWriter {
 		// Load Pages
 		XMLHandler<Page> handler = new XMLHandler<>(rootElement);
 		List<Page> pages = handler.loadElements(PAGE_ELEMENT, new PageSerializer(project));
-		for (Page page : pages) {
-			project.pages.add(page);
-		}
+		project.pages.addAll(pages);
 
 		// Load Settings
 		Element settingsElement = rootElement.element(SETTINGS_ELEMENT);

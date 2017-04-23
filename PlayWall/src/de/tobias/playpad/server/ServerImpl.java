@@ -30,7 +30,6 @@ import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.page.PageUpdateCommand;
 import de.tobias.playpad.server.sync.command.path.PathAddCommand;
 import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
-import de.tobias.playpad.server.sync.command.path.PathUpdateCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectUpdateCommand;
@@ -101,7 +100,6 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
 
 		CommandManager.register(Commands.PATH_ADD, new PathAddCommand());
-		CommandManager.register(Commands.PATH_UPDATE, new PathUpdateCommand());
 		CommandManager.register(Commands.PATH_REMOVE, new PathRemoveCommand());
 
 		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
@@ -297,9 +295,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 				while (!connected && count < 20) {
 					count++;
 					try {
-						Thread.sleep(30 * 1000);
 						websocket = websocket.recreate().connect();
 						connected = true;
+						Thread.sleep(30 * 1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 						break;

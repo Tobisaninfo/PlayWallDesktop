@@ -11,7 +11,7 @@
 		<Key id="page" name="main.menuitem.page" key="K" ctrl="true" alt="false" meta="false" shift="false"/>
 		<Key id="color" name="main.menuitem.color" key="L" ctrl="true" alt="false" meta="false" shift="false"/>
 
-		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="true" alt="false" meta="false" shift="false"/>
+		<Key id="notfound" name="main.menuitem.notfound" key="E" ctrl="true" alt="false" meta="false" shift="false"/>
 		
 		<Key id="plugins" name="main.menuitem.plugins"/>
 		<Key id="project_settings" name="main.menuitem.projectSettings" key="Comma" ctrl="true" alt="true" meta="false" shift="false"/>
@@ -32,8 +32,8 @@
 		<Key id="drag" name="main.menuitem.drag" key="J" ctrl="false" alt="false" meta="true" shift="false"/>
 		<Key id="page" name="main.menuitem.page" key="K" ctrl="false" alt="false" meta="true" shift="false"/>
 		<Key id="color" name="main.menuitem.color" key="L" ctrl="false" alt="false" meta="true" shift="false"/>
-		
-		<Key id="errors" name="main.menuitem.errors" key="E" ctrl="false" alt="false" meta="true" shift="false"/>
+
+		<Key id="notfound" name="main.menuitem.notfound" key="E" ctrl="false" alt="false" meta="true" shift="false"/>
 		
 		<Key id="plugins" name="main.menuitem.plugins"/>
 		<Key id="project_settings" name="main.menuitem.projectSettings" key="Comma" ctrl="false" alt="true" meta="true" shift="false"/>
