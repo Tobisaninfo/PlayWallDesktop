@@ -19,5 +19,6 @@
     <orderEntry type="library" name="GSON" level="project" />
     <orderEntry type="library" name="Websocket Client" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.8.7" level="project" />
+    <orderEntry type="library" name="libLogger" level="project" />
   </component>
 </module>

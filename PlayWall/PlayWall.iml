@@ -34,5 +34,6 @@
     <orderEntry type="library" exported="" name="Websocket Client" level="project" />
     <orderEntry type="library" exported="" name="unirest" level="project" />
     <orderEntry type="library" exported="" name="scala-sdk-2.12.2" level="application" />
+    <orderEntry type="library" name="libLogger" level="project" />
   </component>
 </module>

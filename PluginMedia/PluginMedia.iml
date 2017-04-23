@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Plugins" level="project" />
     <orderEntry type="library" name="libUtils" level="project" />
     <orderEntry type="module" module-name="PlayWallCore" />
+    <orderEntry type="library" name="libLogger" level="project" />
   </component>
 </module>
