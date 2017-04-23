@@ -9,21 +9,19 @@ import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 /**
  * Eine Klasse mit nützlichen Methoden um die Farben bei den Mappern anzupassen.
- * 
- * @author tobias
- * 
- * @since 5.1.0
- * 
- * @see ColorAdjustable Action muss dieses Interface dafür Implementieren, damit die Farbe Automatisch zum pad gemacht
- *      wird.
- * @see ColorAssociator Mapper muss dieses Interface implemetieren, damit die entsprechenden Farbe gefunden werden kann
  *
+ * @author tobias
+ * @see ColorAdjustable Action muss dieses Interface dafür Implementieren, damit die Farbe Automatisch zum pad gemacht
+ * wird.
+ * @see ColorAssociator Mapper muss dieses Interface implemetieren, damit die entsprechenden Farbe gefunden werden kann
+ * @since 5.1.0
  */
 public class ColorAdjuster {
 
@@ -36,10 +34,12 @@ public class ColorAdjuster {
 		for (Action action : actions) {
 			if (action instanceof ColorAdjustable) {
 				ColorAdjustable adjustable = (ColorAdjustable) action;
-				if (adjustable.isAutoFeedbackColors()) {
-					for (Mapper mapper : action.getMappers()) {
-						if (mapper instanceof MapperFeedbackable) {
-							mapColorForMapper(adjustable, mapper);
+				if (adjustable.isAutoFeedbackColors() && adjustable.getPad() != null) {
+					if (adjustable.getPad().isPadVisible()) {
+						for (Mapper mapper : action.getMappers()) {
+							if (mapper instanceof MapperFeedbackable) {
+								mapColorForMapper(adjustable, mapper);
+							}
 						}
 					}
 				}

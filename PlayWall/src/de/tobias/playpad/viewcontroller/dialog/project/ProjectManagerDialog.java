@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
@@ -77,6 +78,10 @@ public class ProjectManagerDialog extends NVC {
 			}
 		});
 
+		// Initial Value
+		projectExportButton.setDisable(true);
+		projectDeleteButton.setDisable(true);
+
 		// Select Listener
 		projectList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue == null) {
@@ -84,11 +89,17 @@ public class ProjectManagerDialog extends NVC {
 
 				nameTextfield.clear();
 				profileCombobox.setValue(null);
+
+				projectExportButton.setDisable(true);
+				projectDeleteButton.setDisable(true);
 			} else {
 				setSettingsDisable(false);
 
 				nameTextfield.setText(newValue.getName());
 				profileCombobox.setValue(newValue.getProfileReference());
+
+				projectExportButton.setDisable(false);
+				projectDeleteButton.setDisable(false);
 			}
 		});
 
@@ -96,8 +107,11 @@ public class ProjectManagerDialog extends NVC {
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (Project.validateNameInput(newValue)) {
 				ProjectReference reference = getSelectedItem();
-				if (reference != null) {
+				if (reference != null && !ProjectReferenceManager.validProjectName(reference, newValue)) {
 					reference.setName(newValue);
+					nameTextfield.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
+				} else {
+					nameTextfield.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 				}
 			}
 		});

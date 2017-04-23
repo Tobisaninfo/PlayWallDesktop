@@ -1,2 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: . nawin/jni4net.j-0.8.8.0.jar nawin/NativeAudio.j4n.jar

@@ -10,7 +10,7 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
  * 
  * @since 5.1.0
  *
- * @see IMainViewController#performLayoutDependendAction(MainLayoutHandler)
+ * @see IMainViewController#performLayoutDependedAction(MainLayoutHandler)
  * @see MainLayoutFactory
  */
 @FunctionalInterface

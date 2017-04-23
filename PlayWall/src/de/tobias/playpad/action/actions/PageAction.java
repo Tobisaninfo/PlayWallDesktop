@@ -43,7 +43,12 @@ public class PageAction extends Action {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void init(Project project, IMainViewController controller) {
+
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
 		int page = controller.getPage();
 		if (page == this.page) {
 			handleFeedback(FeedbackMessage.EVENT);
