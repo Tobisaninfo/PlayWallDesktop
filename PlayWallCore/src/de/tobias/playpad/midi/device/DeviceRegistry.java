@@ -3,6 +3,8 @@ package de.tobias.playpad.midi.device;
 import java.util.HashMap;
 import java.util.List;
 
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.Logger;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;
@@ -37,7 +39,7 @@ public class DeviceRegistry extends EventDispatcher {
 	 */
 	public void registerDevice(String id, Class<? extends MidiDeviceImpl> device) {
 		devices.put(id, device);
-		System.out.println("Register MIDI MidiDeviceImpl Impl: " + id);
+		Logger.log(LogLevel.DEBUG, "Register MIDI MidiDeviceImpl Impl: " + id);
 	}
 
 	/**

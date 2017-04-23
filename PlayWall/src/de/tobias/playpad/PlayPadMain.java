@@ -1,6 +1,7 @@
 package de.tobias.playpad;
 
 import com.mashape.unirest.http.Unirest;
+import de.tobias.logger.Logger;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -89,21 +90,23 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			System.setProperty("glass.accessible.force", "false");
 		}
 
-		// Debug
-		System.setOut(ConsoleUtils.convertStream(System.out, "[PlayWall] "));
-		System.setErr(ConsoleUtils.convertStream(System.err, "[PlayWall] "));
-
 		// Register UserDefaults Serializer
 		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
 
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
 		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+
+		Logger.init(app.getPath(PathType.LOG));
 		app.start(args);
 	}
 
 	@Override
 	public void init() throws Exception {
 		App app = ApplicationUtils.getApplication();
+
+		if (!app.isDebug()) {
+			Logger.enableFileOutput(true);
+		}
 
 		// Init SSLContext
 		if (app.isDebug()) {
@@ -148,12 +151,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
 		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
-
-		// Console
-		if (!app.isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "err.log")));
-		}
 	}
 
 	@Override
