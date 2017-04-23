@@ -5,6 +5,7 @@ import de.tobias.playpad.launchpadplugin.midi.device.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.device.s.LaunchPadS;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.util.Localization;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -18,16 +19,18 @@ public class LaunchpadPluginImpl implements LaunchpadPlugin {
 
 	private static final String NAME = "LaunchPadPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.launchpad";
+	private static final int currentBuild = 4;
+	private static final String currentVersion = "3.1";
 
 	private static ResourceBundle bundle;
-	private LaunchPadPluginUpdater updater;
+	private StandardPluginUpdater updater;
 	private Module module;
 
 	@PluginLoaded
 	public void onLoaded(LaunchpadPlugin plugin) {
 		bundle = Localization.loadBundle("de/tobias/playpad/launchpadplugin/assets/launchpad", LaunchpadPluginImpl.class.getClassLoader());
-		updater = new LaunchPadPluginUpdater();
 		module = new Module(NAME, IDENTIFIER);
+		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
 		DeviceRegistry deviceFactory = DeviceRegistry.getFactoryInstance();
 		deviceFactory.registerDevice(LaunchPadMK2.NAME, LaunchPadMK2.class);

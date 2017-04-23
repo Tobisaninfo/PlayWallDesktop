@@ -32,7 +32,7 @@ import javafx.util.Duration;
 
 public class ModernGlobalDesign extends Design implements GlobalDesign, DesignColorAssociator, ColorModeHandler {
 
-	public static final double minWidth = 205;
+	public static final double minWidth = 165;
 	public static final double minHeight = 115;
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;

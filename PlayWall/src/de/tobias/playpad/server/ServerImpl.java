@@ -53,6 +53,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +109,11 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
+	public String getHost() {
+		return host;
+	}
+
+	@Override
 	public List<ModernPlugin> getPlugins() throws IOException {
 		URL url = new URL("https://" + host + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
@@ -119,12 +125,29 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
+	public ModernPlugin getPlugin(String name) throws IOException {
+		URL url = new URL("https://" + host + "/plugin/" + name);
+		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+		Type listType = new TypeToken<ModernPlugin>() {
+		}.getType();
+
+		Gson gson = new Gson();
+		return gson.fromJson(reader, listType);
+	}
+
+	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
-		String url = "https://" + host + "/" + channel + plugin.getPath();
+		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+		loadSource(plugin.getPath(), channel, path);
+	}
+
+	@Override
+	public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
+		String url = "https://" + host + "/" + channel + path;
+		System.out.println(url);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
-			Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-			Files.copy(response.getBody(), path);
+			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
 		}

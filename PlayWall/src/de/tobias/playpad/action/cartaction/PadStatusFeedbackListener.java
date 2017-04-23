@@ -49,7 +49,7 @@ public class PadStatusFeedbackListener implements ChangeListener<PadStatus> {
 								}
 							}
 						}
-					} catch (Exception e) {}
+					} catch (Exception ignored) {}
 					break;
 				case READY:
 					action.handleFeedback(FeedbackMessage.STANDARD);

@@ -174,7 +174,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
 		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
-		performLayoutDependendAction((oldToolbar, newToolbar) ->
+		performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (menuToolbarViewController != null)
 				menuToolbarViewController.initPageButtons();
@@ -515,12 +515,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			scene.getStylesheets().add(mainLayout.getStylesheet());
 		}
 
-		// design spezific css
+		// design specific css
 		if (openProject != null) {
 			Profile currentProfile = Profile.currentProfile();
 			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
 
+			// Mapping feedback
 			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			activeMapping.clearFeedback();
+			activeMapping.prepareFeedback(openProject);
 			activeMapping.adjustPadColorToMapper();
 			activeMapping.showFeedback(openProject);
 		}
@@ -595,7 +598,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				{
 					// Handle Mapper
 					if (currentProfile != null) {
-						activeMapping.initFeedback();
+						activeMapping.initFeedbackType();
 						if (openProject != null) {
 							activeMapping.showFeedback(openProject);
 							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
@@ -740,7 +743,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	@Override
-	public void performLayoutDependendAction(MainLayoutHandler runnable) {
+	public void performLayoutDependedAction(MainLayoutHandler runnable) {
 		runnable.handle(null, menuToolbarViewController);
 		layoutActions.add(runnable);
 	}

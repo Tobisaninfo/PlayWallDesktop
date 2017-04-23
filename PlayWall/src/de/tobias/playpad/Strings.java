@@ -154,6 +154,7 @@ public class Strings {
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_Import = "Error.Project.Import";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 	public static final String Error_Project_PageCount = "Error.Project.PageCount";
 	public static final String Error_Project_Sync_Change = "Error.Project.Sync.Change";
@@ -200,6 +201,7 @@ public class Strings {
 	public static final String Action_Page_toString = "Action.Page.toString";
 	public static final String Action_Navigate_toString = "Action.Navigate.toString";
 	public static final String Action_Cart_Name = "Action.Cart.Name";
+	public static final String Action_Stop_Name = "Action.Stop.Name";
 	public static final String Action_Page_Name = "Action.Page.Name";
 	public static final String Action_Navigate_Name = "Action.Navigate.Name";
 

@@ -148,6 +148,7 @@ public class PlayPadImpl implements PlayPad {
 				if (onLoaded != null) {
 					onLoaded.accept(e);
 				}
+				mainViewListeners.forEach(l -> l.onInit(mainViewController));
 			});
 		} else {
 			currentProject = project;

@@ -244,4 +244,8 @@ public final class ProjectReferenceManager {
 
 		reference.setSync(newValue);
 	}
+
+	public static boolean validProjectName(ProjectReference reference, String newValue) {
+		return getProjects().stream().filter(r -> r != reference).anyMatch(p -> p.getName().equals(newValue));
+	}
 }

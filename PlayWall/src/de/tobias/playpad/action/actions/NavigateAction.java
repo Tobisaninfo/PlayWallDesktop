@@ -52,7 +52,11 @@ public class NavigateAction extends Action {
 	}
 
 	@Override
-	public void initFeedback(Project project, IMainViewController controller) {
+	public void init(Project project, IMainViewController controller) {
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
 		handleFeedback(FeedbackMessage.STANDARD);
 	}
 

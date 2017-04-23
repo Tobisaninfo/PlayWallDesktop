@@ -124,11 +124,23 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		return mapping.get(action);
 	}
 
-	public void initFeedback() {
+	public void initFeedbackType() {
 		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
 		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).initFeedbackType();
+			}
+		}
+	}
+
+	public void prepareFeedback(Project project) {
+		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+
+		for (Action action : mapping.keySet()) {
+			try {
+				action.init(project, controller);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -138,12 +150,10 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		showFeedback(project, controller);
 	}
 
-	public void showFeedback(Project project, IMainViewController controller) {
-		clearFeedback();
-
+	private void showFeedback(Project project, IMainViewController controller) {
 		for (Action action : mapping.keySet()) {
 			try {
-				action.initFeedback(project, controller);
+				action.showFeedback(project, controller);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -158,7 +168,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 			}
 		}
 
-		getActions().forEach(action -> action.clearFeedback());
+		getActions().forEach(Action::clearFeedback);
 	}
 
 	public void adjustPadColorToMapper() {

@@ -10,6 +10,7 @@ import de.tobias.updater.client.UpdateChannel;
 import javafx.beans.property.ObjectProperty;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -21,12 +22,28 @@ import java.util.List;
 public interface Server {
 
 	/**
+	 * Get the host of the server.
+	 *
+	 * @return hostname
+	 */
+	String getHost();
+
+	/**
 	 * Load the list of available plugins from the server
 	 *
 	 * @return plugins
 	 * @throws IOException network error
 	 */
 	List<ModernPlugin> getPlugins() throws IOException;
+
+	/**
+	 * Load plugin informtaion for a specific plugin.
+	 *
+	 * @param name plugin name
+	 * @return plugin info
+	 * @throws IOException network error
+	 */
+	ModernPlugin getPlugin(String name) throws IOException;
 
 	/**
 	 * Load a plugin file from the server
@@ -36,6 +53,16 @@ public interface Server {
 	 * @throws IOException network error
 	 */
 	void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException;
+
+	/**
+	 * Load a source from the servers update channel.
+	 *
+	 * @param path        server path
+	 * @param channel     update channel
+	 * @param destination local path
+	 * @throws IOException network error
+	 */
+	void loadSource(String path, UpdateChannel channel, Path destination) throws IOException;
 
 	/**
 	 * Create a session on the server side and return the private key for the communication.
