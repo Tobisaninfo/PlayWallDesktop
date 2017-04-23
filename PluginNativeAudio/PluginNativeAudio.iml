@@ -13,7 +13,6 @@
     <orderEntry type="library" name="Updater" level="project" />
     <orderEntry type="library" name="YML" level="project" />
     <orderEntry type="library" name="Plugins" level="project" />
-    <orderEntry type="library" name="scala-sdk-2.12.1" level="application" />
     <orderEntry type="library" name="XML" level="project" />
     <orderEntry type="module-library">
       <library>
@@ -33,5 +32,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="scala-sdk-2.12.2" level="application" />
   </component>
 </module>
