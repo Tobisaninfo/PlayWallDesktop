@@ -119,20 +119,23 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			onFinish.accept(e);
 
 			// Min Size of window
-			ProjectSettings projectSettings = openProject.getSettings();
-			GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
-			double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
-			double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
-
-			getStage().setMinWidth(minWidth);
-			if (OS.getType() == OSType.MacOSX) {
-				getStage().setMinHeight(minHeight + 100);
-			} else {
-				getStage().setMinHeight(minHeight + 150);
-			}
-
+			setMinSize();
 			stage.show();
 		});
+	}
+
+	private void setMinSize() {
+		ProjectSettings projectSettings = openProject.getSettings();
+		GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
+		double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
+		double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
+
+		getStage().setMinWidth(minWidth);
+		if (OS.getType() == OSType.MacOSX) {
+			getStage().setMinHeight(minHeight + 100);
+		} else {
+			getStage().setMinHeight(minHeight + 150);
+		}
 	}
 
 	// Init
@@ -482,6 +485,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 
 		menuToolbarViewController.initPageButtons();
+		setMinSize();
 	}
 
 	@Override
