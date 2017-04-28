@@ -31,11 +31,6 @@ import java.util.stream.Collectors;
 public class Project {
 
 	/**
-	 * Pattern for the project name.
-	 */
-	public static final String PROJECT_NAME_PATTERN = "[\\p{L}0-9][\\p{L}\\s-_0-9]*";
-
-	/**
 	 * Project file extension.
 	 */
 	public static final String FILE_EXTENSION = ".xml";
@@ -287,6 +282,6 @@ public class Project {
 	 * @return <code>true</code> valid
 	 */
 	public static boolean validateNameInput(String name) {
-		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name) || !name.matches(PROJECT_NAME_PATTERN));
+		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name));
 	}
 }

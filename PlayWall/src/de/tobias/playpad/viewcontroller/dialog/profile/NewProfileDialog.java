@@ -52,7 +52,7 @@ public class NewProfileDialog extends NVC {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+				if (ProfileReferenceManager.getProfiles().contains(c)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -88,7 +88,7 @@ public class NewProfileDialog extends NVC {
 		try {
 			List<ProfileReference> profiles = ProfileReferenceManager.getProfiles();
 
-			if (profiles.contains(name) || !name.matches(Profile.profileNameEx)) {
+			if (profiles.contains(name)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 				return;
 			}

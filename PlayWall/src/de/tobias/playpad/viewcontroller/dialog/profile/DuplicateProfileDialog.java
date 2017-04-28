@@ -28,7 +28,7 @@ public class DuplicateProfileDialog extends TextInputDialog {
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+			if (ProfileReferenceManager.getProfiles().contains(c)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);

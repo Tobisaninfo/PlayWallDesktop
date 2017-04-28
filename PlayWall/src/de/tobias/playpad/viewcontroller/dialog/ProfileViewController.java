@@ -166,7 +166,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 		try {
 			String newProfileName = nameTextField.getText();
-			if (ProfileReferenceManager.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
+			if (ProfileReferenceManager.getProfiles().contains(newProfileName)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, newProfileName));
 				return;
 			}
