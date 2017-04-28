@@ -670,7 +670,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			globalSettingsViewController = new GlobalSettingsViewController(mainStage, onFinish);
 			globalSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		} else {
-			globalSettingsViewController.getStageContainer().get().getStage().toFront();
+			globalSettingsViewController.getStageContainer().ifPresent(e -> e.getStage().toFront());
 		}
 	}
 
