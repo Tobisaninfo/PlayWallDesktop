@@ -11,6 +11,9 @@ import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.layout.desktop.listener.PageButtonDragHandler;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -20,18 +23,17 @@ import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.Registry;
+import de.tobias.playpad.server.Session;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileNotFoundException;
-import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
+import de.tobias.playpad.viewcontroller.AuthViewController;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
-import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
+import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
@@ -48,6 +50,7 @@ import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
@@ -97,6 +100,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private MenuItem profileMenu;
 	@FXML
 	private MenuItem printProjectMenuItem;
+	@FXML
+	private MenuItem logoutMenuItem;
 
 	@FXML
 	private MenuItem playMenu;
@@ -575,6 +580,21 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void printMenuHandler(ActionEvent event) {
 		PrintDialog dialog = new PrintDialog(openProject, mainViewController.getStage());
 		dialog.getStageContainer().ifPresent(NVCStage::show);
+	}
+
+	@FXML
+	void logoutMenuHandler(ActionEvent event) {
+		AuthViewController authViewController = new AuthViewController(Localization.getString(Strings.Auth_Logout), (username, password) -> {
+			Session session = Session.load();
+			if (session != null) {
+				PlayPadPlugin.getServerHandler().getServer().logout(username, password, session.getKey());
+				session.delete();
+				Platform.exit();
+				return true;
+			}
+			return false;
+		});
+		authViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
 	}
 
 	@FXML

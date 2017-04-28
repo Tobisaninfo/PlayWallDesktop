@@ -25,7 +25,7 @@ public class Session {
 	}
 
 	public static Session load() {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.STORE, SESSION_KEY);
+		Path path = getPath();
 		try {
 			byte[] key = Files.readAllBytes(path);
 			return new Session(new String(key));
@@ -35,7 +35,7 @@ public class Session {
 	}
 
 	public void save() {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.STORE, SESSION_KEY);
+		Path path = getPath();
 		try {
 			if (Files.notExists(path)) {
 				Files.createDirectories(path.getParent());
@@ -45,5 +45,15 @@ public class Session {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void delete() throws IOException {
+		Path path = getPath();
+		Files.delete(path);
+
+	}
+
+	private static Path getPath() {
+		return ApplicationUtils.getApplication().getPath(PathType.STORE, SESSION_KEY);
 	}
 }

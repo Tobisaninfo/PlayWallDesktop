@@ -299,4 +299,5 @@ public class Strings {
 	// Server
 	public static final String Server_Connected = "Server.Connected";
 	public static final String Server_Disconnected = "Server.Disconnected";
+	public static final String Auth_Logout = "Auth.Logout";
 }
