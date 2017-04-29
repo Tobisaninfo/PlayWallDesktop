@@ -258,6 +258,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
 
+		// Not Found Icon Update
+		if (menuToolbarViewController != null && openProject != null)
+			menuToolbarViewController.setNotFoundNumber(openProject.getNotFoundMedia());
+
 		// Keyboard Shortcuts
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
