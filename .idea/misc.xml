@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="EntryPointsManager">
-    <list size="2">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="javafx.fxml.FXML" />
       <item index="1" class="java.lang.String" itemvalue="javafx.fxml.FXML" />
+      <item index="2" class="java.lang.String" itemvalue="net.xeoh.plugins.base.annotations.PluginImplementation" />
+      <item index="3" class="java.lang.String" itemvalue="net.xeoh.plugins.base.annotations.events.PluginLoaded" />
+      <item index="4" class="java.lang.String" itemvalue="net.xeoh.plugins.base.annotations.events.Shutdown" />
     </list>
   </component>
   <component name="JavadocGenerationManager">

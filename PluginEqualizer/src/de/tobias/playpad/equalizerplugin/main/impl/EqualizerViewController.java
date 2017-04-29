@@ -80,10 +80,7 @@ public class EqualizerViewController extends ViewController {
 
 	@Override
 	public void init() {
-		enableCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			equalizerView.setDisable(!c);
-		});
+		enableCheckBox.selectedProperty().addListener((a, b, c) -> equalizerView.setDisable(!c));
 
 		addCloseKeyShortcut(() -> getStage().close());
 	}

@@ -72,29 +72,21 @@ public class ImagePadContentFactory extends PadContentFactory {
 			VBox.setVgrow(stackPane, Priority.ALWAYS);
 
 			// Leitet alle StyleClasses von Parent Object an das NameLabel weiter
-			stackPane.getStyleClass().addListener(new ListChangeListener<String>() {
+			stackPane.getStyleClass().addListener((ListChangeListener<String>) c -> {
+				while (c.next()) {
+					for (String remitem : c.getRemoved()) {
+						nameLabel.getStyleClass().remove(remitem);
 
-				@Override
-				public void onChanged(javafx.collections.ListChangeListener.Change<? extends String> c) {
-					while (c.next()) {
-						for (String remitem : c.getRemoved()) {
-							nameLabel.getStyleClass().remove(remitem);
-
-						}
-						for (String additem : c.getAddedSubList()) {
-							nameLabel.getStyleClass().add(additem);
-						}
+					}
+					for (String additem : c.getAddedSubList()) {
+						nameLabel.getStyleClass().add(additem);
 					}
 				}
 			});
 			// Leitet alle PseudoClassStates von Parent Object an das NameLabel weiter
-			stackPane.getPseudoClassStates().addListener(new SetChangeListener<PseudoClass>() {
-
-				@Override
-				public void onChanged(javafx.collections.SetChangeListener.Change<? extends PseudoClass> c) {
-					nameLabel.pseudoClassStateChanged(c.getElementRemoved(), false);
-					nameLabel.pseudoClassStateChanged(c.getElementAdded(), true);
-				}
+			stackPane.getPseudoClassStates().addListener((SetChangeListener<PseudoClass>) c -> {
+				nameLabel.pseudoClassStateChanged(c.getElementRemoved(), false);
+				nameLabel.pseudoClassStateChanged(c.getElementAdded(), true);
 			});
 		}
 

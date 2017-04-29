@@ -18,7 +18,7 @@ import javafx.scene.text.TextAlignment;
 
 public class VideoPadContentFactory extends PadContentFactory {
 
-	public static final String[] FILE_EXTENSION = { "*.mp4", "*.mov" };
+	private static final String[] FILE_EXTENSION = { "*.mp4", "*.mov" };
 
 	public VideoPadContentFactory(String type) {
 		super(type);
@@ -54,7 +54,7 @@ public class VideoPadContentFactory extends PadContentFactory {
 
 		private Label nameLabel;
 
-		public VideoContentView(Pad pad, Pane parentNode) {
+		VideoContentView(Pad pad, Pane parentNode) {
 			nameLabel = new Label();
 			nameLabel.textProperty().bind(pad.nameProperty());
 
