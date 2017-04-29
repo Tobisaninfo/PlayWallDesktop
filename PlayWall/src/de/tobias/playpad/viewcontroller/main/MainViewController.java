@@ -130,6 +130,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
 		double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
 
+		if (minWidth < 500) {
+			minWidth = 500;
+		}
+
 		getStage().setMinWidth(minWidth);
 		if (OS.getType() == OSType.MacOSX) {
 			getStage().setMinHeight(minHeight + 100);

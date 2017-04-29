@@ -28,7 +28,6 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 
 	@FXML protected HBox pageHBox;
 	@FXML protected HBox toolbarHBox;
-	@FXML protected ToolBar toolbar;
 	@FXML protected Menu recentOpenMenu;
 	@FXML protected Slider volumeSlider;
 	@FXML protected Label volumeDownLabel;
@@ -80,9 +79,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		if (key != null) {
 			if (!key.getKeyCode().isEmpty()) {
 				KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
-				if (keyCode != null) {
-					menuItem.setAccelerator(keyCode);
-				}
+				menuItem.setAccelerator(keyCode);
 			}
 		}
 	}

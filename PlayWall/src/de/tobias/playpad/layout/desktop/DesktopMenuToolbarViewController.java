@@ -175,8 +175,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void init() {
 		super.init();
-		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
-		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
 		// Hide Extension menu then no items are in there
 		extensionMenu.visibleProperty().bind(Bindings.size(extensionMenu.getItems()).greaterThan(0));

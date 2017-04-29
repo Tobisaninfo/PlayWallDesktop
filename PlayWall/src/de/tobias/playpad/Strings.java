@@ -114,7 +114,6 @@ public class Strings {
 	public static final String UI_Placeholder_Preset = "UI.Placeholder.Preset";
 	public static final String UI_Placeholder_Plugins = "UI.Placeholder.Plugins";
 	public static final String UI_Placeholder_Updates = "UI.Placeholder.Updates";
-	public static final String UI_Placeholder_ErrorSummary = "UI.Placeholder.ErrorSummary";
 
 	// Info - MIDI
 	public static final String Info_Midi_Device_Connected = "Info.Midi.Device.Connected";

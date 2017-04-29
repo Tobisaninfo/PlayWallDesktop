@@ -17,6 +17,7 @@ import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -170,6 +171,8 @@ public class PathMatchDialog extends NVC {
 			return row;
 		});
 
+		table.setPlaceholder(new Label());
+
 		selectColumn.setCellFactory(table -> new CheckBoxTableCell<>());
 		actionColumn.setCellFactory(table -> new PathMatchActionCell(this));
 
@@ -213,7 +216,7 @@ public class PathMatchDialog extends NVC {
 	}
 
 	private void setStatusLabel() {
-		statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks()));
+		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks())));
 	}
 
 	public void showFileChooser(TempMediaPath item) {

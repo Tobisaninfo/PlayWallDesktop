@@ -78,8 +78,15 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		GlobalDesign layout = Profile.currentProfile().currentLayout();
 
 		try {
-			double neededWidth = layout.getMinWidth(Integer.valueOf(columnTextField.getText()));
-			double neededHeight = layout.getMinHeight(Integer.valueOf(rowTextField.getText())) + 100;
+			Integer column = Integer.valueOf(columnTextField.getText());
+			Integer rows = Integer.valueOf(rowTextField.getText());
+
+			if (column < 3 || rows < 1) {
+				return false;
+			}
+
+			double neededWidth = layout.getMinWidth(column);
+			double neededHeight = layout.getMinHeight(rows) + 100;
 
 			if (neededHeight <= height && neededWidth <= width)
 				return true;
