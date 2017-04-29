@@ -292,8 +292,13 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 			// Choose new profile
-			ProfileReference profile = delegate.getProfileReference();
+			ProfileReference profile = null;
+			try {
+				profile = delegate.getProfileReference();
+			} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+			}
 			ref.setProfileReference(profile);
+		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		} catch (ProjectNotFoundException e) {
 			e.printStackTrace();
 			showErrorMessage(getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));

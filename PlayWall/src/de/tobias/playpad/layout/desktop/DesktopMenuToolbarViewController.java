@@ -503,7 +503,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					ProjectLoader loader = new ProjectLoader(projectReference);
 					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
-				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException e) {
+				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException | ProjectReader.ProjectReaderDelegate.ProfileAbortException e) {
 					e.printStackTrace();
 				}
 			});
@@ -540,7 +540,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					mainViewController.showError(errorMessage);
 
 					// Neues Profile wählen
-					ProfileReference profile = delegate.getProfileReference();
+					ProfileReference profile = null;
+					try {
+						profile = delegate.getProfileReference();
+					} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+					}
 					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();
@@ -796,7 +800,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 							Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 					// Neues Profile wählen
-					ProfileReference profile = delegate.getProfileReference();
+					ProfileReference profile = null;
+					try {
+						profile = delegate.getProfileReference();
+					} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+					}
 					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					e.printStackTrace();

@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import com.hp.gagawa.java.elements.Pre;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
@@ -7,6 +8,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.profile.Profile;
@@ -131,6 +133,7 @@ public class ProjectManagerDialog extends NVC {
 				} catch (ProjectNotFoundException | ProfileNotFoundException | DocumentException | IOException e) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_Sync_Change, e.getLocalizedMessage()));
 					e.printStackTrace();
+				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			}
 		});

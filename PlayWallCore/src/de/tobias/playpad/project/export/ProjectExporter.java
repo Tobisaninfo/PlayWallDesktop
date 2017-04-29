@@ -5,6 +5,7 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.profile.ProfileNotFoundException;
@@ -36,7 +37,7 @@ public class ProjectExporter {
 		this.delegate = delegate;
 	}
 
-	public void export(Path zipFile, ProjectReference reference, boolean includeProfile, boolean includeMedia) throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException {
+	public void export(Path zipFile, ProjectReference reference, boolean includeProfile, boolean includeMedia) throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		ZipFile zip = new ZipFile(zipFile, ZipFile.FileMode.WRITE);
 
 		exportProject(zip, reference);
@@ -93,7 +94,7 @@ public class ProjectExporter {
 		});
 	}
 
-	private void exportMedia(ZipFile zip, ProjectReference reference) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
+	private void exportMedia(ZipFile zip, ProjectReference reference) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		ProjectLoader loader = new ProjectLoader(reference);
 		loader.setLoadMedia(false);
 		loader.setLoadProfile(false);

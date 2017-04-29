@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.importer.ProjectImporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
@@ -152,15 +153,16 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		busyView.getIndicator().setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 		busyView.showProgress(true);
 
-			try {
-				importer.execute();
-				canceled = false;
+		try {
+			importer.execute();
+			canceled = false;
 
-				getStageContainer().ifPresent(NVCStage::close);
-			} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
-				e.printStackTrace();
-				showErrorMessage(Localization.getString(Strings.Error_Project_Export), PlayPadMain.stageIcon);
-			}
+			getStageContainer().ifPresent(NVCStage::close);
+		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
+			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.Error_Project_Export), PlayPadMain.stageIcon);
+		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+		}
 	}
 
 
