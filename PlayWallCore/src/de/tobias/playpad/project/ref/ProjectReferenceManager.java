@@ -222,7 +222,7 @@ public final class ProjectReferenceManager {
 			}
 
 		List<ProjectReference> items = new ArrayList<>();
-		projects.forEach(items::add);
+		items.addAll(projects);
 		items.sort((o1, o2) -> Long.compare(o2.getLastModified(), o1.getLastModified()));
 		return items;
 	}
@@ -243,7 +243,11 @@ public final class ProjectReferenceManager {
 		reference.setSync(newValue);
 	}
 
-	public static boolean validProjectName(ProjectReference reference, String newValue) {
-		return getProjects().stream().filter(r -> r != reference).anyMatch(p -> p.getName().equals(newValue));
+	public static boolean validateProjectName(ProjectReference reference, String newValue) {
+		return getProjects().stream().filter(r -> r != reference).noneMatch(p -> p.getName().equals(newValue));
+	}
+
+	public static boolean validateProjectName(String newValue) {
+		return validateProjectName(null, newValue);
 	}
 }

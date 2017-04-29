@@ -2,8 +2,6 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.utils.nui.NVC;
@@ -16,20 +14,23 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
-public class DuplicateProjectDialog extends TextInputDialog {
+public class ProjectDuplicateDialog extends TextInputDialog {
 
 	private ProjectReference ref;
 
-	public DuplicateProjectDialog(NVC controller, ProjectReference cloneableProject) {
-		initOwner(controller.getContainingWindow());
+	private ProjectDuplicateDialog(NVC parent, ProjectReference cloneableProject) {
+		super(cloneableProject.getName());
+
+		initOwner(parent.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
 
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
+		button.setDisable(true);
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProjectReferenceManager.getProjects().contains(c)) {
+			if (!ProjectReferenceManager.validateProjectName(c)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
@@ -40,15 +41,10 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
-				if (ProfileReferenceManager.getProfiles().contains(name)) {
-					controller.showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
-					return;
-				}
-
 				ref = ProjectReferenceManager.duplicate(cloneableProject, name);
 			} catch (Exception e) {
 				e.printStackTrace();
-				controller.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));
+				parent.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));
 			}
 		});
 	}
@@ -59,5 +55,9 @@ public class DuplicateProjectDialog extends TextInputDialog {
 		} else {
 			return Optional.empty();
 		}
+	}
+
+	public static void showAndWait(ProjectManagerDialog parent, ProjectReference reference) {
+		new ProjectDuplicateDialog(parent, reference);
 	}
 }

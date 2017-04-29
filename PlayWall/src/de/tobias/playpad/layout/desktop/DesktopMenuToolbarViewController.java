@@ -33,7 +33,7 @@ import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
-import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
@@ -497,7 +497,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void newDocumentHandler(ActionEvent event) {
 		doAction(() ->
 		{
-			NewProjectDialog dialog = new NewProjectDialog(mainViewController.getStage());
+			ProjectNewDialog dialog = new ProjectNewDialog(mainViewController.getStage());
 			dialog.showAndWait().ifPresent(projectReference -> {
 				try {
 					ProjectLoader loader = new ProjectLoader(projectReference);

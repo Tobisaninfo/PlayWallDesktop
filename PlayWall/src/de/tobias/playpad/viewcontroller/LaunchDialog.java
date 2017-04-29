@@ -16,7 +16,7 @@ import de.tobias.playpad.server.Server;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.project.NewProjectDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
@@ -167,7 +167,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 
 	@FXML
 	private void newProjectButtonHandler(ActionEvent event) {
-		NewProjectDialog dialog = new NewProjectDialog(getContainingWindow());
+		ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow());
 		dialog.showAndWait().ifPresent(this::launchProject);
 	}
 

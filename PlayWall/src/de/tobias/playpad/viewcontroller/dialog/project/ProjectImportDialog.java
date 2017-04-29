@@ -2,6 +2,7 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.importer.ProjectImporter;
@@ -9,12 +10,13 @@ import de.tobias.playpad.project.importer.ProjectImporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.Worker;
-import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -33,7 +35,7 @@ import java.util.Optional;
 /**
  * Created by tobias on 11.03.17.
  */
-public class ProjectImportDialog extends NVC implements ProjectImporterDelegate {
+public class ProjectImportDialog extends NVC implements ProjectImporterDelegate, ChangeListener<String> {
 
 	@FXML private TextField projectNameTextField;
 	@FXML private CheckBox syncCheckbox;
@@ -98,11 +100,15 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		});
 
 		profileImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			validateInput();
 			profileNameTextField.setDisable(!newValue);
 		});
 		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			mediaPathButton.setDisable(!newValue);
 		});
+
+		projectNameTextField.textProperty().addListener(this);
+		profileNameTextField.textProperty().addListener(this);
 	}
 
 	public Optional<ProjectReference> showAndWait() {
@@ -118,6 +124,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(380);
+		stage.setMaxWidth(380);
+
 		stage.setMinHeight(480);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectImport_Title));
 
@@ -125,6 +133,22 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate 
 
 		if (Profile.currentProfile() != null)
 			Profile.currentProfile().currentLayout().applyCss(stage);
+	}
+
+	@Override
+	public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+		validateInput();
+	}
+
+	private void validateInput() {
+		boolean validProjectName = ProjectReferenceManager.validateProjectName(projectNameTextField.getText());
+		boolean validProfileName = ProfileReferenceManager.validateName(profileNameTextField.getText());
+
+		if (!validProjectName || (!validProfileName && shouldImportProfile())) {
+			importButton.setDisable(true);
+		} else {
+			importButton.setDisable(false);
+		}
 	}
 
 	// ActionHandler

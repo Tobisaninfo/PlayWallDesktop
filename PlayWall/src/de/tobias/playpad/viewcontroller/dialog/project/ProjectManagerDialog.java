@@ -1,6 +1,5 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
-import com.hp.gagawa.java.elements.Pre;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
@@ -46,6 +45,7 @@ public class ProjectManagerDialog extends NVC {
 
 	@FXML private Button projectExportButton;
 	@FXML private Button projectImportButton;
+	@FXML private Button projectDuplicateButton;
 	@FXML private Button projectDeleteButton;
 
 	@FXML private Button cancelButton;
@@ -82,6 +82,7 @@ public class ProjectManagerDialog extends NVC {
 
 		// Initial Value
 		projectExportButton.setDisable(true);
+		projectDuplicateButton.setDisable(true);
 		projectDeleteButton.setDisable(true);
 
 		// Select Listener
@@ -93,6 +94,7 @@ public class ProjectManagerDialog extends NVC {
 				profileCombobox.setValue(null);
 
 				projectExportButton.setDisable(true);
+				projectDuplicateButton.setDisable(true);
 				projectDeleteButton.setDisable(true);
 			} else {
 				setSettingsDisable(false);
@@ -101,6 +103,7 @@ public class ProjectManagerDialog extends NVC {
 				profileCombobox.setValue(newValue.getProfileReference());
 
 				projectExportButton.setDisable(false);
+				projectDuplicateButton.setDisable(false);
 				projectDeleteButton.setDisable(false);
 			}
 		});
@@ -109,7 +112,7 @@ public class ProjectManagerDialog extends NVC {
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (Project.validateNameInput(newValue)) {
 				ProjectReference reference = getSelectedItem();
-				if (reference != null && !ProjectReferenceManager.validProjectName(reference, newValue)) {
+				if (reference != null && ProjectReferenceManager.validateProjectName(reference, newValue)) {
 					reference.setName(newValue);
 					nameTextfield.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 				} else {
@@ -208,6 +211,14 @@ public class ProjectManagerDialog extends NVC {
 		if (reference != null) {
 			ProjectExportDialog dialog = new ProjectExportDialog(reference, getContainingWindow());
 			dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
+		}
+	}
+
+	@FXML
+	private void projectDuplicateHandler(ActionEvent event) {
+		ProjectReference reference = getSelectedItem();
+		if (reference != null) {
+			ProjectDuplicateDialog.showAndWait(this, reference);
 		}
 	}
 
