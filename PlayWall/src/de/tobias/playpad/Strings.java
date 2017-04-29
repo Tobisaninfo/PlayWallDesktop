@@ -138,7 +138,6 @@ public class Strings {
 	public static final String Error_Profile_NotFound = "Error.Profile.NotFound";
 	public static final String Error_Profile_Save = "Error.Profile.Save";
 	public static final String Error_Profile_Delete = "Error.Profile.Delete";
-	public static final String Error_Profile_SmallScreen = "Error.Profile.SmallScreen";
 
 	// Error - Preset
 	public static final String Error_Preset_Import = "Error.Preset.Import";
@@ -161,10 +160,6 @@ public class Strings {
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
 
-	// Error - Fix
-	public static final String Error_Fix_NewFile = "Error.Fix.NewFile";
-	public static final String Error_Fix_Delete = "Error.Fix.Delete";
-
 	// Error - Midi
 	public static final String Error_Midi_Settings_Unkown = "Error.Midi.Settings.Unknown";
 	public static final String Error_Midi_Device_Busy = "Error.Midi.Device.Busy";
@@ -173,8 +168,11 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
-	public static final String Error_Plugins_Available = "Error.Plugins.Available";
 	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
+
+	// Error - Screen
+	public static final String Error_Screen_TooMuch = "Error.Screen.TooMuch";
+	public static final String Error_Screen_TooLess = "Error.Screen.TooLess";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";

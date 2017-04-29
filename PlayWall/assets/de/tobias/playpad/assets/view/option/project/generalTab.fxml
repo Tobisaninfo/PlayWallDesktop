@@ -12,12 +12,14 @@
          <children>
             <Label alignment="BASELINE_RIGHT" layoutX="20.0" layoutY="68.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.columns" />
             <TextField fx:id="columnTextField" prefWidth="50.0" />
+            <Label fx:id="columnErrorLabel" maxHeight="1.7976931348623157E308" text="Label" />
          </children>
       </HBox>
       <HBox spacing="14.0">
          <children>
             <Label alignment="BASELINE_RIGHT" layoutX="18.0" layoutY="96.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.gen.label.rows" />
             <TextField fx:id="rowTextField" prefWidth="50.0" />
+            <Label fx:id="rowErrorLabel" maxHeight="1.7976931348623157E308" text="Label" />
          </children>
       </HBox>
    </children>
