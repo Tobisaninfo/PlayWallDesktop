@@ -18,7 +18,7 @@ public class ProjectDuplicateDialog extends TextInputDialog {
 
 	private ProjectReference ref;
 
-	private ProjectDuplicateDialog(NVC parent, ProjectReference cloneableProject) {
+	public ProjectDuplicateDialog(NVC parent, ProjectReference cloneableProject) {
 		super(cloneableProject.getName());
 
 		initOwner(parent.getContainingWindow());
@@ -55,9 +55,5 @@ public class ProjectDuplicateDialog extends TextInputDialog {
 		} else {
 			return Optional.empty();
 		}
-	}
-
-	public static void showAndWait(ProjectManagerDialog parent, ProjectReference reference) {
-		new ProjectDuplicateDialog(parent, reference);
 	}
 }

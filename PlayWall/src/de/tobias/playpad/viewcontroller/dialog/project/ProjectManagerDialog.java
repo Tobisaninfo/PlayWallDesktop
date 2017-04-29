@@ -158,9 +158,9 @@ public class ProjectManagerDialog extends NVC {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(600);
-		stage.setMinHeight(500);
+		stage.setMinHeight(530);
 		stage.setWidth(600);
-		stage.setHeight(500);
+		stage.setHeight(530);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
 
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -218,7 +218,9 @@ public class ProjectManagerDialog extends NVC {
 	private void projectDuplicateHandler(ActionEvent event) {
 		ProjectReference reference = getSelectedItem();
 		if (reference != null) {
-			ProjectDuplicateDialog.showAndWait(this, reference);
+			ProjectDuplicateDialog projectDuplicateDialog = new ProjectDuplicateDialog(this, reference);
+			Optional<ProjectReference> name = projectDuplicateDialog.getName();
+			name.ifPresent(projectList.getItems()::add);
 		}
 	}
 
