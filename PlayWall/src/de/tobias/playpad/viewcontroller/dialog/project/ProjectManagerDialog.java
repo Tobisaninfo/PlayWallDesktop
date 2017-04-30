@@ -158,9 +158,9 @@ public class ProjectManagerDialog extends NVC {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(600);
-		stage.setMinHeight(530);
+		stage.setMinHeight(540);
 		stage.setWidth(600);
-		stage.setHeight(530);
+		stage.setHeight(540);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
 
 		stage.initModality(Modality.WINDOW_MODAL);

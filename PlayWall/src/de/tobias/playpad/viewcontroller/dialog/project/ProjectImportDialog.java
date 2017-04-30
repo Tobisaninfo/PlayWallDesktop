@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -66,8 +67,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		importer = new ProjectImporter(path, this);
 
 		// Set Default Values
-		projectNameTextField.setText(importer.getProjectName());
-		profileNameTextField.setText(importer.getProfileName());
+		projectNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProjectName()));
+		profileNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProfileName()));
 
 		profileSection.setDisable(!importer.isIncludeProfile());
 		profileImportCheckbox.setSelected(importer.isIncludeProfile());
@@ -108,7 +109,11 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		});
 
 		projectNameTextField.textProperty().addListener(this);
+		projectNameTextField.textProperty().addListener((observable, oldValue, newValue) ->
+				projectNameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, !ProjectReferenceManager.validateProjectName(newValue)));
 		profileNameTextField.textProperty().addListener(this);
+		profileNameTextField.textProperty().addListener((observable, oldValue, newValue) ->
+				profileNameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, !ProfileReferenceManager.validateName(newValue)));
 	}
 
 	public Optional<ProjectReference> showAndWait() {
