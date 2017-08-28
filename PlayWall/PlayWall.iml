@@ -32,8 +32,8 @@
     <orderEntry type="library" exported="" name="Json" level="project" />
     <orderEntry type="library" exported="" name="GSON" level="project" />
     <orderEntry type="library" exported="" name="Websocket Client" level="project" />
+    <orderEntry type="library" exported="" name="libLogger" level="project" />
+    <orderEntry type="library" exported="" name="scala-sdk-2.12.3" level="application" />
     <orderEntry type="library" exported="" name="unirest" level="project" />
-    <orderEntry type="library" exported="" name="scala-sdk-2.12.2" level="application" />
-    <orderEntry type="library" name="libLogger" level="project" />
   </component>
 </module>
