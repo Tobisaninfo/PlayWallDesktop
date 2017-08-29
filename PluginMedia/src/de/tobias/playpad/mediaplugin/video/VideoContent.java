@@ -39,10 +39,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	VideoContent(String type, Pad pad) {
 		super(pad);
 		this.type = type;
-		padVolumeListener = (a, b, c) ->
-		{
-			updateVolume();
-		};
+		padVolumeListener = (a, b, c) -> updateVolume();
 	}
 
 	@Override
@@ -148,14 +145,12 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			});
 
 			player.setOnError(() ->
-			{
-				Platform.runLater(() ->
-				{
-					if (getPad().isPadVisible()) {
-						getPad().getController().getView().showBusyView(false);
-					}
-				});
-			});
+					Platform.runLater(() ->
+					{
+						if (getPad().isPadVisible()) {
+							getPad().getController().getView().showBusyView(false);
+						}
+					}));
 			player.setOnEndOfMedia(() ->
 			{
 				if (!getPad().getPadSettings().isLoop()) {

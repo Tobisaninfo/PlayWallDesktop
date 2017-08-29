@@ -98,17 +98,19 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	private void loadJNA() throws IOException {
 		Path folder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna");
 
+		if (Files.notExists(folder)) {
+			Files.createDirectories(folder);
+		}
+
 		Path jnaFile = folder.resolve("jna.jar");
 		Path jnaPlatformFile = folder.resolve("jna-platform.jar");
 
 		if (Files.notExists(jnaFile)) {
-			Files.createFile(jnaFile);
 			System.out.println("Download: /plugins/libAwake/jna.jar");
 			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna.jar", UpdateChannel.STABLE, jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
-			Files.createFile(jnaPlatformFile);
 			System.out.println("Download: /plugins/libAwake/jna-platform.jar");
 			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna-platform.jar", UpdateChannel.STABLE, jnaPlatformFile);
 		}

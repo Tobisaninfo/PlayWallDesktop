@@ -13,22 +13,26 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Optional;
 
-public class DuplicateProfileDialog extends TextInputDialog {
+public class ProfileDuplicateDialog extends TextInputDialog {
 
 	private ProfileReference newRef;
 
-	public DuplicateProfileDialog(NVC controller, ProfileReference cloneableProfile) {
+	public ProfileDuplicateDialog(NVC controller, ProfileReference cloneableProfile) {
+		super(cloneableProfile.getName());
+
 		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
 		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
 
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
+		button.setDisable(true); // Initial disable
 		getEditor().textProperty().addListener((a, b, c) ->
 		{
-			if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+			if (!ProfileReferenceManager.validateName(c)) {
 				button.setDisable(true);
 			} else {
 				button.setDisable(false);
@@ -39,15 +43,9 @@ public class DuplicateProfileDialog extends TextInputDialog {
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
-				if (ProfileReferenceManager.getProfiles().contains(name)) {
-					controller.showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
-					return;
-				}
-
 				newRef = new ProfileReference(name);
 				ProfileReferenceManager.duplicate(cloneableProfile, newRef);
-
-			} catch (Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				controller.showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getMessage()));
 			}

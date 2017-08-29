@@ -6,6 +6,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -52,7 +53,7 @@ public class ProjectImporter {
 		loadZipFile(zipFile);
 	}
 
-	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException {
+	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		if (includeProfile && delegate.shouldImportProfile()) {
 			importProfile();
 		}
@@ -144,7 +145,7 @@ public class ProjectImporter {
 		profileUUID = localProfileUUID; // Update Profile UUID with new local profile uuid
 	}
 
-	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
+	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		Path folder = delegate.getMediaPath();
 
 		ProjectLoader loader = new ProjectLoader(importedProjectReference);

@@ -175,6 +175,20 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
+	public void logout(String username, String password, String key) throws IOException {
+		String url = "https://" + host + "/sessions";
+		try {
+			Unirest.post(url)
+					.queryString("username", username)
+					.queryString("password", password)
+					.queryString("session", key)
+					.asJson();
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
+		}
+	}
+
+	@Override
 	public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
 		String url = "https://" + host + "/projects";
 		try {

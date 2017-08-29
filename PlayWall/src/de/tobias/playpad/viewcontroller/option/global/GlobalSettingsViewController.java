@@ -102,8 +102,9 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		onFinish();
-		getStageContainer().ifPresent(NVCStage::close);
+		if (onFinish()) {
+			getStageContainer().ifPresent(NVCStage::close);
+		}
 	}
 
 	/**

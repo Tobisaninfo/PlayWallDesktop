@@ -30,7 +30,7 @@ import java.util.Optional;
  *
  * @author tobias
  */
-public class NewProjectDialog extends NVC {
+public class ProjectNewDialog extends NVC {
 
 	@FXML
 	private TextField nameTextField;
@@ -48,7 +48,7 @@ public class NewProjectDialog extends NVC {
 
 	private ProjectReference project;
 
-	public NewProjectDialog(Window owner) {
+	public ProjectNewDialog(Window owner) {
 		load("de/tobias/playpad/assets/dialog/", "newProjectDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();

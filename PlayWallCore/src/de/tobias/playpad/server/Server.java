@@ -73,6 +73,8 @@ public interface Server {
 	 */
 	String getSession(String username, String password) throws IOException, LoginException;
 
+	void logout(String username, String password, String key) throws IOException;
+
 	/**
 	 * Get a list of the synced projects.
 	 *

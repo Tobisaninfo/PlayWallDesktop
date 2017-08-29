@@ -12,13 +12,13 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-public class AwakeSettings {
+class AwakeSettings {
 
-	public boolean active = false;
+	boolean active = false;
 
 	private static final String ACTIVE_ELEMENT = "Active";
 
-	public static AwakeSettings load(Path path) throws DocumentException, IOException {
+	static AwakeSettings load(Path path) throws DocumentException, IOException {
 		AwakeSettings settings = new AwakeSettings();
 		SAXReader reader = new SAXReader();
 		Document document = reader.read(Files.newInputStream(path));
@@ -29,7 +29,7 @@ public class AwakeSettings {
 		return settings;
 	}
 
-	public void save(Path path) throws IOException {
+	void save(Path path) throws IOException {
 		Document document = DocumentHelper.createDocument();
 		Element rootElement = document.addElement("Settings");
 

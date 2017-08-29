@@ -32,6 +32,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="scala-sdk-2.12.2" level="application" />
+    <orderEntry type="library" name="libLogger" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.12.3" level="application" />
   </component>
 </module>

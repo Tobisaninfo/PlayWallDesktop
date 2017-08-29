@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.export.ProjectExporter;
 import de.tobias.playpad.project.export.ProjectExporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
@@ -104,6 +105,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 					e.printStackTrace();
 				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {
 					e.printStackTrace();
+				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			});
 		}

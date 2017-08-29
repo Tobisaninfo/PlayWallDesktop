@@ -123,6 +123,10 @@ public class CartAction extends Action implements ColorAdjustable {
 	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
 		setPad(project.getPad(x, y, mainViewController.getPage()));
 
+		if (pad == null) {
+			return;
+		}
+
 		// wird nur ausgeführt, wenn das Pad ein Content hat und sichtbar in der GUI (Gilt für MIDI und Keyboard)
 		if (pad.getContent() != null && pad.getContent().isPadLoaded() && pad.isPadVisible()) {
 			switch (mode) {

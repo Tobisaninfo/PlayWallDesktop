@@ -2,10 +2,7 @@ package de.tobias.playpad.project.ref;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ProjectNotFoundException;
-import de.tobias.playpad.project.ProjectSerializer;
-import de.tobias.playpad.project.ProjectWriter;
+import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
@@ -229,7 +226,7 @@ public final class ProjectReferenceManager {
 		return items;
 	}
 
-	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
+	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		if (newValue) {
 			ProjectLoader loader = new ProjectLoader(reference);
 			Project project = loader.load();
@@ -245,7 +242,11 @@ public final class ProjectReferenceManager {
 		reference.setSync(newValue);
 	}
 
-	public static boolean validProjectName(ProjectReference reference, String newValue) {
-		return getProjects().stream().filter(r -> r != reference).anyMatch(p -> p.getName().equals(newValue));
+	public static boolean validateProjectName(ProjectReference reference, String newValue) {
+		return getProjects().stream().filter(r -> r != reference).noneMatch(p -> p.getName().equals(newValue));
+	}
+
+	public static boolean validateProjectName(String newValue) {
+		return validateProjectName(null, newValue);
 	}
 }

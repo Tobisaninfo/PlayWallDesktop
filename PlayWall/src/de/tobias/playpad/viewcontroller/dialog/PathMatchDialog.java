@@ -171,6 +171,8 @@ public class PathMatchDialog extends NVC {
 			return row;
 		});
 
+		table.setPlaceholder(new Label());
+
 		selectColumn.setCellFactory(table -> new CheckBoxTableCell<>());
 		actionColumn.setCellFactory(table -> new PathMatchActionCell(this));
 
@@ -214,7 +216,7 @@ public class PathMatchDialog extends NVC {
 	}
 
 	private void setStatusLabel() {
-		statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks()));
+		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks())));
 	}
 
 	public void showFileChooser(TempMediaPath item) {

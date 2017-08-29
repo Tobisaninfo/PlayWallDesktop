@@ -24,7 +24,6 @@ trait AudioImplLoader {
 	def copyResource(resourceFolder: Path, packageName: String, file: String): Path = {
 		val dest = resourceFolder.resolve(file)
 		IOUtils.copy(getClass.getClassLoader.getResourceAsStream(packageName + file), dest)
-		System.out.println("Copied: " + file)
 		dest
 	}
 }
