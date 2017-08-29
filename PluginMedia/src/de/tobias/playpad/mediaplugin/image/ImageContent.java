@@ -16,7 +16,7 @@ public class ImageContent extends PadContent {
 	private final String type;
 	private boolean loaded;
 
-	public ImageContent(String type, Pad pad) {
+	ImageContent(String type, Pad pad) {
 		super(pad);
 		this.type = type;
 	}

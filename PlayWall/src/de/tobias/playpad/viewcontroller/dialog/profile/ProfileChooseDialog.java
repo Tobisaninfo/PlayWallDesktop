@@ -51,11 +51,9 @@ public class ProfileChooseDialog extends NVC {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ChooseProfile_Title));
+		stage.setResizable(false);
 		stage.setWidth(560);
-		stage.setHeight(180);
-		stage.setMinWidth(560);
-		stage.setMinHeight(180);
-		stage.setMaxWidth(560);
+		stage.setHeight(230);
 
 		stage.initModality(Modality.WINDOW_MODAL);
 

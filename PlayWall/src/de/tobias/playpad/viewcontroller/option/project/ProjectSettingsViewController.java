@@ -93,8 +93,9 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		onFinish();
-		getStageContainer().ifPresent(NVCStage::close);
+		if (onFinish()) {
+			getStageContainer().ifPresent(NVCStage::close);
+		}
 	}
 
 	/**

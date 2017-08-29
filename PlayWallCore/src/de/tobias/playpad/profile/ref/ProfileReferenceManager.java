@@ -216,4 +216,12 @@ public final class ProfileReferenceManager {
 		XMLHandler.save(path, document);
 	}
 
+	public static boolean validateName(String name) {
+		for (ProfileReference ref : profiles) {
+			if (ref.getName().equals(name)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

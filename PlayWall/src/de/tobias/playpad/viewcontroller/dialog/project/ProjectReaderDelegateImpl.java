@@ -8,6 +8,7 @@ import de.tobias.utils.nui.NVCStage;
 import javafx.stage.Window;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Created by tobias on 18.03.17.
@@ -26,10 +27,10 @@ public class ProjectReaderDelegateImpl implements ProjectReader.ProjectReaderDel
 
 	// Show a dialog to choose a new profile
 	@Override
-	public ProfileReference getProfileReference() {
+	public ProfileReference getProfileReference() throws ProfileAbortException {
 		ProfileChooseDialog dialog = new ProfileChooseDialog(owner);
 
 		Optional<Profile> profile = dialog.showAndWait();
-		return profile.map(Profile::getRef).orElse(null);
+		return profile.map(Profile::getRef).orElseThrow(ProfileAbortException::new);
 	}
 }

@@ -29,12 +29,14 @@ public class MidiTabViewController extends ProfileSettingsTabViewController {
 		Info[] data = Midi.getMidiDevices();
 		// Gerät anzeigen - Doppelte weg
 		for (Info item : data) {
-			if (!deviceComboBox.getItems().contains(item.getName())) {
-				deviceComboBox.getItems().add(item.getName());
+			if (item != null) {
+				if (!deviceComboBox.getItems().contains(item.getName())) {
+					deviceComboBox.getItems().add(item.getName());
 
-				// aktives Gerät wählen
-				if (item.getName().equals(Profile.currentProfile().getProfileSettings().getMidiDevice())) {
-					deviceComboBox.getSelectionModel().select(item.getName());
+					// aktives Gerät wählen
+					if (item.getName().equals(Profile.currentProfile().getProfileSettings().getMidiDevice())) {
+						deviceComboBox.getSelectionModel().select(item.getName());
+					}
 				}
 			}
 		}

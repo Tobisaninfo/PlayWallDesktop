@@ -1,5 +1,7 @@
 package de.tobias.playpad.registry;
 
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.Logger;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.utils.ui.icon.FontIconType;
 import org.dom4j.Document;
@@ -45,7 +47,7 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 		item.module = module;
 
 		components.put(factory.getType(), item);
-		System.out.println("Registered: " + name + "#" + factory.getType());
+		Logger.log(LogLevel.DEBUG, "Registered: " + name + "#" + factory.getType());
 	}
 
 	@Override

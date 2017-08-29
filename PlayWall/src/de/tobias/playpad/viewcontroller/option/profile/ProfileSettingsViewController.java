@@ -144,8 +144,9 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		onFinish();
-		getStageContainer().ifPresent(NVCStage::close);
+		if (onFinish()) {
+			getStageContainer().ifPresent(NVCStage::close);
+		}
 	}
 
 	/**

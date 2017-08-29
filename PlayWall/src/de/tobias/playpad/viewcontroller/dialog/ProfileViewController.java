@@ -9,7 +9,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
-import de.tobias.playpad.viewcontroller.dialog.profile.DuplicateProfileDialog;
+import de.tobias.playpad.viewcontroller.dialog.profile.ProfileDuplicateDialog;
 import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -127,7 +127,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	@FXML
 	private void duplicateButtonHandler(ActionEvent event) {
 		if (profileList.getSelectionModel().getSelectedItem() != null) {
-			DuplicateProfileDialog dialog = new DuplicateProfileDialog(this, profileList.getSelectionModel().getSelectedItem());
+			ProfileDuplicateDialog dialog = new ProfileDuplicateDialog(this, profileList.getSelectionModel().getSelectedItem());
 
 			dialog.getName().ifPresent(newRef ->
 			{
@@ -166,7 +166,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 		try {
 			String newProfileName = nameTextField.getText();
-			if (ProfileReferenceManager.getProfiles().contains(newProfileName) || !newProfileName.matches(Profile.profileNameEx)) {
+			if (!ProfileReferenceManager.validateName(newProfileName)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, newProfileName));
 				return;
 			}

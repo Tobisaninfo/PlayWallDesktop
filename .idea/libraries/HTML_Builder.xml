@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="HTML Builder">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../Libraries/File Parser/HTML/gagawa-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../Java/Libraries/File Parser/HTML/gagawa-1.0.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

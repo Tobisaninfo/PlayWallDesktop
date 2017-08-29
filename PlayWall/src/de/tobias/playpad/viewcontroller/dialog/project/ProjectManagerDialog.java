@@ -7,6 +7,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.profile.Profile;
@@ -44,6 +45,7 @@ public class ProjectManagerDialog extends NVC {
 
 	@FXML private Button projectExportButton;
 	@FXML private Button projectImportButton;
+	@FXML private Button projectDuplicateButton;
 	@FXML private Button projectDeleteButton;
 
 	@FXML private Button cancelButton;
@@ -80,6 +82,7 @@ public class ProjectManagerDialog extends NVC {
 
 		// Initial Value
 		projectExportButton.setDisable(true);
+		projectDuplicateButton.setDisable(true);
 		projectDeleteButton.setDisable(true);
 
 		// Select Listener
@@ -91,6 +94,7 @@ public class ProjectManagerDialog extends NVC {
 				profileCombobox.setValue(null);
 
 				projectExportButton.setDisable(true);
+				projectDuplicateButton.setDisable(true);
 				projectDeleteButton.setDisable(true);
 			} else {
 				setSettingsDisable(false);
@@ -99,6 +103,7 @@ public class ProjectManagerDialog extends NVC {
 				profileCombobox.setValue(newValue.getProfileReference());
 
 				projectExportButton.setDisable(false);
+				projectDuplicateButton.setDisable(false);
 				projectDeleteButton.setDisable(false);
 			}
 		});
@@ -107,7 +112,7 @@ public class ProjectManagerDialog extends NVC {
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (Project.validateNameInput(newValue)) {
 				ProjectReference reference = getSelectedItem();
-				if (reference != null && !ProjectReferenceManager.validProjectName(reference, newValue)) {
+				if (reference != null && ProjectReferenceManager.validateProjectName(reference, newValue)) {
 					reference.setName(newValue);
 					nameTextfield.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 				} else {
@@ -131,6 +136,7 @@ public class ProjectManagerDialog extends NVC {
 				} catch (ProjectNotFoundException | ProfileNotFoundException | DocumentException | IOException e) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_Sync_Change, e.getLocalizedMessage()));
 					e.printStackTrace();
+				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			}
 		});
@@ -152,9 +158,9 @@ public class ProjectManagerDialog extends NVC {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
 		stage.setMinWidth(600);
-		stage.setMinHeight(500);
+		stage.setMinHeight(540);
 		stage.setWidth(600);
-		stage.setHeight(500);
+		stage.setHeight(540);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
 
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -205,6 +211,16 @@ public class ProjectManagerDialog extends NVC {
 		if (reference != null) {
 			ProjectExportDialog dialog = new ProjectExportDialog(reference, getContainingWindow());
 			dialog.getStageContainer().ifPresent(NVCStage::showAndWait);
+		}
+	}
+
+	@FXML
+	private void projectDuplicateHandler(ActionEvent event) {
+		ProjectReference reference = getSelectedItem();
+		if (reference != null) {
+			ProjectDuplicateDialog projectDuplicateDialog = new ProjectDuplicateDialog(this, reference);
+			Optional<ProjectReference> name = projectDuplicateDialog.getName();
+			name.ifPresent(projectList.getItems()::add);
 		}
 	}
 

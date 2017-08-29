@@ -23,7 +23,7 @@ public class BlindAction extends Action implements Displayable {
 
 	private ChangeListener<Boolean> blindFeedbackListener;
 
-	public BlindAction() {
+	BlindAction() {
 		blindFeedbackListener = (a, b, c) ->
 		{
 			if (c) {
@@ -80,10 +80,7 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass().equals(getClass())) {
-			return true;
-		}
-		return super.equals(obj);
+		return obj.getClass().equals(getClass()) || super.equals(obj);
 	}
 
 	@Override
@@ -98,7 +95,6 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public Action cloneAction() throws CloneNotSupportedException {
-		BlindAction actionClone = (BlindAction) super.clone();
-		return actionClone;
+		return (BlindAction) super.clone();
 	}
 }

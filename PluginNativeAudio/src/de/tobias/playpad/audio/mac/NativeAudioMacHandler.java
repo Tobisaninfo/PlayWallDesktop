@@ -24,7 +24,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable {
 	private DoubleProperty leftPeak;
 	private DoubleProperty rightPeak;
 
-	public NativeAudioMacHandler(PadContent content) {
+	NativeAudioMacHandler(PadContent content) {
 		super(content);
 
 		id = counter++;
@@ -35,7 +35,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable {
 		rightPeak = new SimpleDoubleProperty();
 	}
 
-	protected int getId() {
+	int getId() {
 		return id;
 	}
 

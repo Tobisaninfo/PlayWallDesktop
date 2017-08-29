@@ -73,7 +73,7 @@ public class ProjectLoader {
 		this.loadProfile = loadProfile;
 	}
 
-	public Project load() throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException {
+	public Project load() throws DocumentException, ProfileNotFoundException, IOException, ProjectNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		// Load Profile
 		if (loadProfile) {
 			// TODO Why should the profile be loaded first
@@ -82,7 +82,7 @@ public class ProjectLoader {
 				ProfileReference profile = delegate.getProfileReference();
 				projectReference.setProfileReference(profile);
 			}
-
+			
 			// Lädt das entsprechende Profile und aktiviert es
 			Profile.load(projectReference.getProfileReference());
 		}

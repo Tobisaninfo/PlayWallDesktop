@@ -12,7 +12,7 @@ import javafx.scene.control.TreeItem;
 
 public class BlindActionFactory extends ActionFactory {
 
-	public static final String TYPE = "BLIND";
+	static final String TYPE = "BLIND";
 
 	public BlindActionFactory(String type) {
 		super(type);
@@ -20,8 +20,7 @@ public class BlindActionFactory extends ActionFactory {
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> item = new TreeItem<>(actions.get(0));
-		return item;
+		return new TreeItem<>(actions.get(0));
 	}
 
 	@Override

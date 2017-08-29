@@ -21,7 +21,7 @@ import java.util.List;
 
 public class NativeAudioWinHandler extends AudioHandler implements Soundcardable {
 
-	public static final String SOUND_CARD = "SoundCard";
+	static final String SOUND_CARD = "SoundCard";
 
 	private NativeAudio audioHandler;
 	private ObjectProperty<Duration> durationProperty;
@@ -42,14 +42,13 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 						}
 					}
 
-					for (Iterator<NativeAudioWinHandler> iterator = playedHandlers.iterator(); iterator.hasNext();) {
+					for (Iterator<NativeAudioWinHandler> iterator = playedHandlers.iterator(); iterator.hasNext(); ) {
 						NativeAudioWinHandler handler = iterator.next();
 						Pad pad = handler.getContent().getPad();
 
 						if (handler.audioHandler != null) {
 							if (!handler.audioHandler.isPlaying()) {
 								if (!pad.getPadSettings().isLoop()) {
-									System.out.println("Stop");
 									pad.setEof(true);
 
 									// Remove from Loop and Stop
@@ -59,14 +58,19 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 							}
 						}
 
-						Duration position = Duration.millis(handler.audioHandler.getPosition());
+						if (handler.audioHandler != null) {
+							Duration position = Duration.millis(handler.audioHandler.getPosition());
 
-						// Update der Zeit
-						Platform.runLater(() -> handler.positionProperty.set(position));
+							// Update der Zeit
+							Platform.runLater(() -> handler.positionProperty.set(position));
+						}
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (ConcurrentModificationException ignored) {
+				} catch (InterruptedException e) {
+					break;
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -75,7 +79,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		positionThread.start();
 	}
 
-	public NativeAudioWinHandler(PadContent content) {
+	NativeAudioWinHandler(PadContent content) {
 		super(content);
 		durationProperty = new SimpleObjectProperty<>();
 		positionProperty = new SimpleObjectProperty<>();

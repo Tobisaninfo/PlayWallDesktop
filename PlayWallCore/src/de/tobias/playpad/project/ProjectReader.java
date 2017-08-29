@@ -12,7 +12,10 @@ import java.io.IOException;
 public interface ProjectReader {
 
 	interface ProjectReaderDelegate {
-		ProfileReference getProfileReference();
+		ProfileReference getProfileReference() throws ProfileAbortException;
+
+		class ProfileAbortException extends Exception {
+		}
 	}
 
 	interface ProjectReaderListener {

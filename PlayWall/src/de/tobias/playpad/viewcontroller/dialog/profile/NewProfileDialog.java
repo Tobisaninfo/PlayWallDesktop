@@ -26,14 +26,8 @@ import java.util.Optional;
 public class NewProfileDialog extends NVC {
 
 	@FXML private TextField nameTextField;
-	@FXML private CheckBox activeCheckBox;
-	@FXML private ComboBox<String> midiDeviceComboBox;
-
 	@FXML private Button finishButton;
 	@FXML private Button cancelButton;
-
-	@FXML private VBox accordionParent;
-	@FXML private Accordion accordion;
 
 	private Profile profile;
 
@@ -44,24 +38,6 @@ public class NewProfileDialog extends NVC {
 		nvcStage.initOwner(owner);
 		nvcStage.getStage().sizeToScene();
 		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
-
-		midiDeviceComboBox.setDisable(!activeCheckBox.isSelected());
-
-		// In Worker, da Midi.getMidiDevices etwas dauert und FX-Thread sonst blockiert
-		Worker.runLater(() ->
-		{
-			Info[] data = Midi.getMidiDevices();
-
-			// Gerät anzeigen - Doppelte weg
-			Platform.runLater(() ->
-			{
-				for (Info item : data) {
-					if (!midiDeviceComboBox.getItems().contains(item.getName())) {
-						midiDeviceComboBox.getItems().add(item.getName());
-					}
-				}
-			});
-		});
 	}
 
 	public Optional<Profile> showAndWait() {
@@ -69,37 +45,14 @@ public class NewProfileDialog extends NVC {
 		return Optional.ofNullable(profile);
 	}
 
-	private boolean expand = false;
-
 	@Override
 	public void init() {
-		accordion.heightProperty().addListener((obs, oldHeight, newHeight) ->
-		{
-			if (newHeight.doubleValue() > oldHeight.doubleValue()) {
-				if (accordionParent.getHeight() <= newHeight.doubleValue()) {
-					getStageContainer().ifPresent(nvcStage -> {
-						Stage stage = nvcStage.getStage();
-						stage.setHeight(stage.getHeight() + newHeight.doubleValue());
-					});
-					expand = true;
-				}
-			} else {
-				if (expand) {
-					getStageContainer().ifPresent(nvcStage -> {
-						Stage stage = nvcStage.getStage();
-						stage.setHeight(stage.getHeight() - oldHeight.doubleValue());
-					});
-				}
-				expand = false;
-			}
-		});
-
 		nameTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProfileReferenceManager.getProfiles().contains(c) || !c.matches(Profile.profileNameEx)) {
+				if (ProfileReferenceManager.getProfiles().contains(c)) {
 					finishButton.setDisable(true);
 					return;
 				}
@@ -117,8 +70,8 @@ public class NewProfileDialog extends NVC {
 		stage.setWidth(400);
 		stage.setHeight(200);
 
-		stage.setMinWidth(500);
-		stage.setMinHeight(200);
+		stage.setMinWidth(400);
+		stage.setMinHeight(150);
 
 		stage.setMaxWidth(500);
 
@@ -130,26 +83,17 @@ public class NewProfileDialog extends NVC {
 	}
 
 	@FXML
-	private void activeCheckBoxHandler(ActionEvent actionEvent) {
-		midiDeviceComboBox.setDisable(!activeCheckBox.isSelected());
-	}
-
-	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		String name = nameTextField.getText();
 		try {
 			List<ProfileReference> profiles = ProfileReferenceManager.getProfiles();
 
-			if (profiles.contains(name) || !name.matches(Profile.profileNameEx)) {
+			if (profiles.contains(name)) {
 				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
 				return;
 			}
 
 			profile = ProfileReferenceManager.newProfile(name);
-
-			profile.getProfileSettings().setMidiActive(activeCheckBox.isSelected());
-			profile.getProfileSettings().setMidiDeviceName(midiDeviceComboBox.getSelectionModel().getSelectedItem());
-
 			profile.save();
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (Exception e) {
