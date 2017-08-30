@@ -5,8 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.ServerListener;
 import de.tobias.playpad.server.sync.listener.downstream.design.DesignAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.pad.*;
@@ -30,9 +32,12 @@ import java.util.Map;
  */
 public class ServerSyncListener extends WebSocketAdapter {
 
+	private static final int CONNECTION_CLOSED = 1005; // Login failed
+	private static final int DISCONNECTED = 1002; // Server closed
+
 	private ObjectProperty<ConnectionState> connectionStateProperty;
 
-	private Map<String, de.tobias.playpad.server.sync.listener.ServerListener> commands;
+	private Map<String, ServerListener> commands;
 
 	ServerSyncListener() {
 		commands = new HashMap<>();
@@ -70,7 +75,13 @@ public class ServerSyncListener extends WebSocketAdapter {
 	@Override
 	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
 		System.out.println("Disconnected: " + clientCloseFrame.getCloseReason());
-		connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
+		if (clientCloseFrame.getCloseCode() == CONNECTION_CLOSED) {
+			connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
+		} else if (clientCloseFrame.getCloseCode() == DISCONNECTED) {
+			connectionStateProperty.set(ConnectionState.DISCONNECTED);
+		} else {
+			connectionStateProperty.set(ConnectionState.CONNECTION_REFUSED);
+		}
 	}
 
 	@Override

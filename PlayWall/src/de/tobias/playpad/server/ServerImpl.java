@@ -303,22 +303,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	@Override
 	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
 		if (newValue == ConnectionState.CONNECTION_LOST) {
-			Worker.runLater(() -> {
-				boolean connected = false;
-				int count = 0;
-				while (!connected && count < 20) {
-					count++;
-					try {
-						websocket = websocket.recreate().connect();
-						connected = true;
-						Thread.sleep(30 * 1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						break;
-					} catch (WebSocketException | IOException ignored) {
-					}
-				}
-			});
+			Worker.runLater(this::reconnect);
 		}
 	}
 
@@ -364,6 +349,23 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			Path file = folder.resolve(key.toString());
 			List<String> lines = storedCommands.get(key).stream().map(JsonElement::toString).collect(Collectors.toList());
 			Files.write(file, lines, StandardOpenOption.CREATE);
+		}
+	}
+
+	private void reconnect() {
+		boolean connected = false;
+		int count = 0;
+		while (!connected && count < 20) {
+			count++;
+			try {
+				websocket = websocket.recreate().connect();
+				connected = true;
+				Thread.sleep(30 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				break;
+			} catch (WebSocketException | IOException ignored) {
+			}
 		}
 	}
 }
