@@ -65,305 +65,311 @@ import java.util.stream.Collectors;
  */
 public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
-	private static final String OK = "OK";
+    private static final String OK = "OK";
 
-	private String host;
-	private WebSocket websocket;
-	private ServerSyncListener syncListener;
+    private String host;
+    private WebSocket websocket;
+    private ServerSyncListener syncListener;
 
-	ServerImpl(String host) {
-		this.host = host;
-		this.syncListener = new ServerSyncListener();
-		this.syncListener.connectionStateProperty().addListener(this);
+    ServerImpl(String host) {
+        this.host = host;
+        this.syncListener = new ServerSyncListener();
+        this.syncListener.connectionStateProperty().addListener(this);
 
-		try {
-			loadStoredFiles();
-		} catch (IOException e) {
-			e.printStackTrace(); // TODO Error Handling
-		}
-		registerCommands();
-	}
+        try {
+            loadStoredFiles();
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO Error Handling
+        }
+        registerCommands();
+    }
 
-	private void registerCommands() {
-		CommandManager.register(Commands.PROJECT_ADD, new ProjectAddCommand());
-		CommandManager.register(Commands.PROJECT_UPDATE, new ProjectUpdateCommand());
-		CommandManager.register(Commands.PROJECT_REMOVE, new ProjectRemoveCommand());
+    private void registerCommands() {
+        CommandManager.register(Commands.PROJECT_ADD, new ProjectAddCommand());
+        CommandManager.register(Commands.PROJECT_UPDATE, new ProjectUpdateCommand());
+        CommandManager.register(Commands.PROJECT_REMOVE, new ProjectRemoveCommand());
 
-		CommandManager.register(Commands.PAGE_ADD, new PageAddCommand());
-		CommandManager.register(Commands.PAGE_UPDATE, new PageUpdateCommand());
-		CommandManager.register(Commands.PAGE_REMOVE, new PageRemoveCommand());
+        CommandManager.register(Commands.PAGE_ADD, new PageAddCommand());
+        CommandManager.register(Commands.PAGE_UPDATE, new PageUpdateCommand());
+        CommandManager.register(Commands.PAGE_REMOVE, new PageRemoveCommand());
 
-		CommandManager.register(Commands.PAD_ADD, new PadAddCommand());
-		CommandManager.register(Commands.PAD_UPDATE, new PadUpdateCommand());
-		CommandManager.register(Commands.PAD_CLEAR, new PadClearCommand());
-		CommandManager.register(Commands.PAD_REMOVE, new PadRemoveCommand());
-		CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
+        CommandManager.register(Commands.PAD_ADD, new PadAddCommand());
+        CommandManager.register(Commands.PAD_UPDATE, new PadUpdateCommand());
+        CommandManager.register(Commands.PAD_CLEAR, new PadClearCommand());
+        CommandManager.register(Commands.PAD_REMOVE, new PadRemoveCommand());
+        CommandManager.register(Commands.PAD_MOVE, new PadMoveCommand());
 
-		CommandManager.register(Commands.PATH_ADD, new PathAddCommand());
-		CommandManager.register(Commands.PATH_REMOVE, new PathRemoveCommand());
+        CommandManager.register(Commands.PATH_ADD, new PathAddCommand());
+        CommandManager.register(Commands.PATH_REMOVE, new PathRemoveCommand());
 
-		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
-		CommandManager.register(Commands.DESIGN_UPDATE, new DesignUpdateCommand());
-	}
+        CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
+        CommandManager.register(Commands.DESIGN_UPDATE, new DesignUpdateCommand());
+    }
 
-	@Override
-	public String getHost() {
-		return host;
-	}
+    @Override
+    public String getHost() {
+        return host;
+    }
 
-	@Override
-	public List<ModernPlugin> getPlugins() throws IOException {
-		URL url = new URL("https://" + host + "/plugins");
-		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
-		Type listType = new TypeToken<List<ModernPlugin>>() {
-		}.getType();
+    @Override
+    public List<ModernPlugin> getPlugins() throws IOException {
+        URL url = new URL("https://" + host + "/plugins");
+        Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+        Type listType = new TypeToken<List<ModernPlugin>>() {
+        }.getType();
 
-		Gson gson = new Gson();
-		return gson.fromJson(reader, listType);
-	}
+        Gson gson = new Gson();
+        return gson.fromJson(reader, listType);
+    }
 
-	@Override
-	public ModernPlugin getPlugin(String name) throws IOException {
-		URL url = new URL("https://" + host + "/plugin/" + name);
-		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
-		Type listType = new TypeToken<ModernPlugin>() {
-		}.getType();
+    @Override
+    public ModernPlugin getPlugin(String name) throws IOException {
+        URL url = new URL("https://" + host + "/plugin/" + name);
+        Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+        Type listType = new TypeToken<ModernPlugin>() {
+        }.getType();
 
-		Gson gson = new Gson();
-		return gson.fromJson(reader, listType);
-	}
+        Gson gson = new Gson();
+        return gson.fromJson(reader, listType);
+    }
 
-	@Override
-	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-		loadSource(plugin.getPath(), channel, path);
-	}
+    @Override
+    public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
+        Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
+        loadSource(plugin.getPath(), channel, path);
+    }
 
-	@Override
-	public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
-		String url = "https://" + host + "/" + channel + path;
-		System.out.println(url);
-		try {
-			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
-			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage());
-		}
-	}
+    @Override
+    public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
+        String url = "https://" + host + "/" + channel + path;
+        System.out.println(url);
+        try {
+            HttpResponse<InputStream> response = Unirest.get(url).asBinary();
+            Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 
-	@Override
-	public String getSession(String username, String password) throws IOException, LoginException {
-		String url = "https://" + host + "/sessions";
-		try {
-			HttpResponse<JsonNode> response = Unirest.post(url)
-					.queryString("username", username)
-					.queryString("password", password)
-					.asJson();
-			JSONObject object = response.getBody().getObject();
+    @Override
+    public String getSession(String username, String password) throws IOException, LoginException {
+        String url = "https://" + host + "/sessions";
+        try {
+            HttpResponse<JsonNode> response = Unirest.post(url)
+                    .queryString("username", username)
+                    .queryString("password", password)
+                    .asJson();
+            JSONObject object = response.getBody().getObject();
 
-			// Account Error
-			if (!object.getString("status").equals(OK)) {
-				throw new LoginException(object.getString("message"));
-			}
-			// Session Key
-			return object.getString("key");
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage());
-		}
-	}
+            // Account Error
+            if (!object.getString("status").equals(OK)) {
+                throw new LoginException(object.getString("message"));
+            }
+            // Session Key
+            return object.getString("key");
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 
-	@Override
-	public void logout(String username, String password, String key) throws IOException {
-		String url = "https://" + host + "/sessions";
-		try {
-			Unirest.post(url)
-					.queryString("username", username)
-					.queryString("password", password)
-					.queryString("session", key)
-					.asJson();
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage());
-		}
-	}
+    @Override
+    public void logout(String username, String password, String key) throws IOException {
+        String url = "https://" + host + "/sessions";
+        try {
+            Unirest.post(url)
+                    .queryString("username", username)
+                    .queryString("password", password)
+                    .queryString("session", key)
+                    .asJson();
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 
-	@Override
-	public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
-		String url = "https://" + host + "/projects";
-		try {
-			Session session = PlayPadMain.getProgramInstance().getSession();
-			HttpResponse<JsonNode> request = Unirest.get(url)
-					.queryString("session", session.getKey())
-					.asJson();
-			JsonNode body = request.getBody();
+    @Override
+    public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
+        String url = "https://" + host + "/projects";
+        try {
+            Session session = PlayPadMain.getProgramInstance().getSession();
+            HttpResponse<JsonNode> request = Unirest.get(url)
+                    .queryString("session", session.getKey())
+                    .asJson();
+            JsonNode body = request.getBody();
 
-			if (body.isArray()) {
-				JSONArray array = body.getArray();
+            if (body.isArray()) {
+                JSONArray array = body.getArray();
 
-				List<ProjectReference> projects = new ArrayList<>();
-				for (int i = 0; i < array.length(); i++) {
-					JSONObject object = array.getJSONObject(i);
-					UUID uuid = UUID.fromString(object.getString("uuid"));
-					String name = object.getString("name");
+                List<ProjectReference> projects = new ArrayList<>();
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject object = array.getJSONObject(i);
+                    UUID uuid = UUID.fromString(object.getString("uuid"));
+                    String name = object.getString("name");
 
-					ProjectReference ref = new ProjectReference(uuid, name);
-					projects.add(ref);
-				}
-				return projects;
-			} else {
-				throw new LoginException(body.getObject().getString("message"));
-			}
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage());
-		}
-	}
+                    ProjectReference ref = new ProjectReference(uuid, name);
+                    projects.add(ref);
+                }
+                return projects;
+            } else {
+                throw new LoginException(body.getObject().getString("message"));
+            }
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 
-	@Override
-	public Project getProject(ProjectReference ref) throws IOException {
-		String url = "https://" + host + "/projects/" + ref.getUuid();
-		Session session = PlayPadMain.getProgramInstance().getSession();
-		try {
-			HttpResponse<JsonNode> response = Unirest.get(url)
-					.queryString("session", session.getKey())
-					.asJson();
+    @Override
+    public Project getProject(ProjectReference ref) throws IOException {
+        String url = "https://" + host + "/projects/" + ref.getUuid();
+        Session session = PlayPadMain.getProgramInstance().getSession();
+        try {
+            HttpResponse<JsonNode> response = Unirest.get(url)
+                    .queryString("session", session.getKey())
+                    .asJson();
 
-			JSONObject object = response.getBody().getObject();
-			ProjectJsonReader reader = new ProjectJsonReader(object);
-			return reader.read(ref);
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage());
-		}
-	}
+            JSONObject object = response.getBody().getObject();
+            ProjectJsonReader reader = new ProjectJsonReader(object);
+            return reader.read(ref);
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
 
-	@Override
-	public void postProject(Project project) throws IOException {
-		String url = "https://" + host + "/projects";
-		Session session = PlayPadMain.getProgramInstance().getSession();
-		try {
-			ProjectJsonWriter writer = new ProjectJsonWriter();
+    @Override
+    public void postProject(Project project) throws IOException {
+        String url = "https://" + host + "/projects";
+        Session session = PlayPadMain.getProgramInstance().getSession();
+        try {
+            ProjectJsonWriter writer = new ProjectJsonWriter();
 
-			String value = writer.write(project).toString();
-			System.out.println(value);
+            String value = writer.write(project).toString();
+            System.out.println(value);
 
-			Unirest.post(url)
-					.queryString("session", session.getKey())
-					.queryString("project", value)
-					.asJson();
-		} catch (UnirestException e) {
-			throw new IOException(e.getMessage(), e);
-		}
-	}
+            Unirest.post(url)
+                    .queryString("session", session.getKey())
+                    .queryString("project", value)
+                    .asJson();
+        } catch (UnirestException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+    }
 
-	@Override
-	public void connect(String key) {
-		try {
-			WebSocketFactory webSocketFactory = new WebSocketFactory();
-			if (PlayPadMain.sslContext != null) {
-				webSocketFactory.setSSLContext(PlayPadMain.sslContext);
-			}
-			websocket = webSocketFactory.createSocket("wss://" + host + "/project");
-			websocket.addHeader("key", key);
+    @Override
+    public void connect(String key) {
+        WebSocketFactory webSocketFactory = new WebSocketFactory();
+        if (PlayPadMain.sslContext != null) {
+            webSocketFactory.setSSLContext(PlayPadMain.sslContext);
+        }
+        try {
+            websocket = webSocketFactory.createSocket("wss://" + host + "/project");
+            websocket.addHeader("key", key);
 
-			websocket.addListener(syncListener);
-			websocket.connect();
-		} catch (WebSocketException | IOException e) {
-			System.err.println("Failed to connect to server: " + e.getMessage());
-		}
-	}
+            websocket.addListener(syncListener);
+            Worker.runLater(() -> {
+                try {
+                    websocket.connect();
+                } catch (WebSocketException e) {
+                    System.err.println("Failed to connect to server: " + e.getMessage());
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public void disconnect() {
-		System.out.println("Disconnect from Server");
-		websocket.disconnect();
+    @Override
+    public void disconnect() {
+        System.out.println("Disconnect from Server");
+        websocket.disconnect();
 
-		try {
-			saveStoredCommands();
-		} catch (IOException e) {
-			e.printStackTrace(); // TODO Error Handling
-		}
-	}
+        try {
+            saveStoredCommands();
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO Error Handling
+        }
+    }
 
-	@Override
-	public boolean push(String data) {
-		if (websocket.isOpen()) {
-			if (ApplicationUtils.getApplication().isDebug()) {
-				System.out.println("Send: " + data);
-			}
-			// Send to Server
-			websocket.sendText(data);
-			return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean push(String data) {
+        if (websocket.isOpen()) {
+            if (ApplicationUtils.getApplication().isDebug()) {
+                System.out.println("Send: " + data);
+            }
+            // Send to Server
+            websocket.sendText(data);
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean push(JsonElement json) {
-		return push(json.toString());
-	}
+    @Override
+    public boolean push(JsonElement json) {
+        return push(json.toString());
+    }
 
-	@Override
-	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
-		if (newValue == ConnectionState.CONNECTION_LOST) {
-			Worker.runLater(() -> {
-				boolean connected = false;
-				int count = 0;
-				while (!connected && count < 20) {
-					count++;
-					try {
-						websocket = websocket.recreate().connect();
-						connected = true;
-						Thread.sleep(30 * 1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-						break;
-					} catch (WebSocketException | IOException ignored) {
-					}
-				}
-			});
-		}
-	}
+    @Override
+    public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
+        if (newValue == ConnectionState.CONNECTION_LOST) {
+            Worker.runLater(() -> {
+                boolean connected = false;
+                int count = 0;
+                while (!connected && count < 20) {
+                    count++;
+                    try {
+                        websocket = websocket.recreate().connect();
+                        connected = true;
+                        Thread.sleep(30 * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
+                    } catch (WebSocketException | IOException ignored) {
+                    }
+                }
+            });
+        }
+    }
 
-	@Override
-	public ConnectionState getConnectionState() {
-		return syncListener.connectionStateProperty().get();
-	}
+    @Override
+    public ConnectionState getConnectionState() {
+        return syncListener.connectionStateProperty().get();
+    }
 
-	@Override
-	public ObjectProperty<ConnectionState> connectionStateProperty() {
-		return syncListener.connectionStateProperty();
-	}
+    @Override
+    public ObjectProperty<ConnectionState> connectionStateProperty() {
+        return syncListener.connectionStateProperty();
+    }
 
-	private void loadStoredFiles() throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
-		if (Files.exists(path)) {
-			for (Path file : Files.newDirectoryStream(path)) {
-				loadStoredFile(file);
-			}
-		}
-	}
+    private void loadStoredFiles() throws IOException {
+        Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+        if (Files.exists(path)) {
+            for (Path file : Files.newDirectoryStream(path)) {
+                loadStoredFile(file);
+            }
+        }
+    }
 
-	private void loadStoredFile(Path path) throws IOException {
-		List<String> lines = Files.readAllLines(path);
+    private void loadStoredFile(Path path) throws IOException {
+        List<String> lines = Files.readAllLines(path);
 
-		JsonParser parser = new JsonParser();
-		List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
+        JsonParser parser = new JsonParser();
+        List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
-		executor.setStoredCommands(path.getFileName().toString(), commands);
-	}
+        CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+        executor.setStoredCommands(path.getFileName().toString(), commands);
+    }
 
-	private void saveStoredCommands() throws IOException {
-		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+    private void saveStoredCommands() throws IOException {
+        Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
 
-		if (Files.notExists(folder)) {
-			Files.createDirectories(folder);
-		}
+        if (Files.notExists(folder)) {
+            Files.createDirectories(folder);
+        }
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
-		Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
-		for (UUID key : storedCommands.keySet()) {
-			Path file = folder.resolve(key.toString());
-			List<String> lines = storedCommands.get(key).stream().map(JsonElement::toString).collect(Collectors.toList());
-			Files.write(file, lines, StandardOpenOption.CREATE);
-		}
-	}
+        CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+        Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
+        for (UUID key : storedCommands.keySet()) {
+            Path file = folder.resolve(key.toString());
+            List<String> lines = storedCommands.get(key).stream().map(JsonElement::toString).collect(Collectors.toList());
+            Files.write(file, lines, StandardOpenOption.CREATE);
+        }
+    }
 }

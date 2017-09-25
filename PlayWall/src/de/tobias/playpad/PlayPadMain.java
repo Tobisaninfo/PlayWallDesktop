@@ -1,6 +1,8 @@
 package de.tobias.playpad;
 
 import com.mashape.unirest.http.Unirest;
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.LogLevelFilter;
 import de.tobias.logger.Logger;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
@@ -97,6 +99,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
 
 		Logger.init(app.getPath(PathType.LOG));
+		Logger.setLevelFilter(LogLevelFilter.DEBUG);
+		Logger.log(LogLevel.DEBUG, "Start JavaFX Application");
 		app.start(args);
 	}
 
@@ -110,6 +114,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		// Init SSLContext
 		if (app.isDebug()) {
+			Logger.log(LogLevel.DEBUG, "Setup TrustManager");
 			// Create a trust manager that does not validate certificate chains
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
@@ -140,6 +145,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		setupLocalization();
 
 		// Setup Global Settings
+		Logger.log(LogLevel.DEBUG, "Load global settings");
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
