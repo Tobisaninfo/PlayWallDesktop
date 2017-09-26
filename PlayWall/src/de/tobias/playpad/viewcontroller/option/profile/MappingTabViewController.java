@@ -4,39 +4,61 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.*;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
-import de.tobias.playpad.viewcontroller.dialog.MappingListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.Localization;
+import de.tobias.utils.util.Worker;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
-	@FXML private ComboBox<Mapping> mappingComboBox;
-	@FXML private Button editMappingsButton;
+	@FXML
+	private ComboBox<Mapping> mappingComboBox;
 
-	@FXML private TreeView<ActionDisplayable> treeView;
+	@FXML
+	private MenuButton editMappingsButton;
+	@FXML
+	private MenuItem mappingRenameButton;
+	@FXML
+	private MenuItem mappingExportButton;
+	@FXML
+	private MenuItem mappingDeleteButton;
+	@FXML
+	private MenuItem mappingDuplicateButton;
+	@FXML
+	private MenuItem mappingNewButton;
+	@FXML
+	private MenuItem mappingImportButton;
 
-	@FXML private VBox detailView;
+	@FXML
+	private TreeView<ActionDisplayable> treeView;
+
+	@FXML
+	private VBox detailView;
 	private BaseMapperOverviewViewController baseMapperOverviewViewController;
 
 	private Mapping oldMapping;
@@ -81,7 +103,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
 		Collection<ActionFactory> types = PlayPadPlugin.getRegistryCollection().getActions().getComponents();
-		List<ActionFactory> sortedTypes = types.stream().sorted((a, b) -> a.getType().compareTo(b.getType())).collect(Collectors.toList());
+		List<ActionFactory> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
 
 		// Sort the tpyes for the treeview
 		for (ActionType actionType : ActionType.values()) {
@@ -99,13 +121,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				rootItem.getChildren().add(item);
 			}
 		}
-	}
-
-	@FXML
-	private void editMappingsHandler(ActionEvent event) {
-		MappingListViewController controller = new MappingListViewController(Profile.currentProfile().getMappings(), getContainingWindow());
-		controller.getStage().showAndWait();
-		setMappingItemsToList();
 	}
 
 	private void createTreeViewContent() {
@@ -132,6 +147,144 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// Event Handler
+	@FXML
+	private void mappingRenameHandler(ActionEvent event) {
+		TextInputDialog dialog = new TextInputDialog(mapping.getName());
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(getContainingWindow());
+		dialog.setHeaderText("Umbenennen");
+		dialog.setContentText("Geben Sie einen neuen Namen für das Mapping Profil ein."); // TODO Localize
+		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(mapping::setName);
+	}
+
+	@FXML
+	private void mappingExportHandler(ActionEvent event) {
+		if (mapping != null) {
+			FileChooser chooser = new FileChooser();
+
+			FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.midiPresetType);
+			chooser.getExtensionFilters().add(filter);
+
+			File file = chooser.showSaveDialog(getContainingWindow());
+			if (file != null) {
+				Path path = file.toPath();
+
+				Worker.runLater(() ->
+				{
+					try {
+						MappingList.exportMidiPreset(path, mapping);
+					} catch (IOException e) {
+						e.printStackTrace();
+						showErrorMessage(Localization.getString(Strings.Error_Preset_Export, e.getLocalizedMessage()));
+					}
+				});
+			}
+		}
+	}
+
+	@FXML
+	private void mappingDeleteHandler(ActionEvent event) {
+		final MappingList mappings = Profile.currentProfile().getMappings();
+		int preset = mappingComboBox.getSelectionModel().getSelectedIndex();
+
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setContentText("Soll das Mapping Profile " + mappings.get(preset) + " wirklich gelöscht werden?");
+		alert.initModality(Modality.WINDOW_MODAL);
+		alert.initOwner(getContainingWindow());
+		alert.showAndWait().filter(b -> b == ButtonType.OK).ifPresent(result -> {
+			mappings.remove(preset);
+			mappingComboBox.getItems().remove(preset);
+
+			if (mappings.size() == 1) {
+				mappingDeleteButton.setDisable(true);
+			}
+		});
+	}
+
+	@FXML
+	private void mappingDuplicateHandler(ActionEvent event) {
+		try {
+			Mapping clonedMapping = mapping.clone();
+			clonedMapping.setName(Localization.getString(Strings.Standard_Copy, clonedMapping.getName()));
+
+			// Model
+			Profile.currentProfile().getMappings().add(clonedMapping);
+			// UI
+			mappingComboBox.getItems().add(clonedMapping);
+			mappingComboBox.getSelectionModel().select(clonedMapping);
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@FXML
+	private void mappingNewHandler(ActionEvent event) {
+		Mapping preset = new Mapping(true);
+		preset.initActionType(Profile.currentProfile());
+
+		TextInputDialog dialog = new TextInputDialog(mapping.getName());
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(getContainingWindow());
+		dialog.setHeaderText("Umbenennen");
+		dialog.setContentText("Geben Sie einen Namen für das Mapping Profil ein."); // TODO Localize
+		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(preset::setName);
+
+		final MappingList mappings = Profile.currentProfile().getMappings();
+		mappings.add(preset);
+		mappingComboBox.getItems().add(preset);
+		mappingComboBox.getSelectionModel().select(preset);
+
+		if (mappings.size() > 1) {
+			mappingDeleteButton.setDisable(false);
+		}
+	}
+
+	@FXML
+	private void mappingImportHandler(ActionEvent event) {
+		FileChooser chooser = new FileChooser();
+		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.midiPresetType));
+		File file = chooser.showOpenDialog(getContainingWindow());
+		if (file != null) {
+			Path path = file.toPath();
+
+			Worker.runLater(() ->
+			{
+				try {
+					Mapping preset = MappingList.importMappingPreset(path, Profile.currentProfile());
+					final MappingList mappingList = Profile.currentProfile().getMappings();
+					mappingList.add(preset);
+					Platform.runLater(() ->
+					{
+						mappingComboBox.getItems().add(preset);
+						mappingComboBox.getSelectionModel().select(preset);
+
+						if (mappingList.size() == 1) {
+							mappingDeleteButton.setDisable(true);
+						} else {
+							mappingDeleteButton.setDisable(false);
+						}
+
+						// Rename preset if name already esists
+						if (mappingList.containsName(preset.getName())) {
+							TextInputDialog dialog = new TextInputDialog(mapping.getName());
+							dialog.initModality(Modality.WINDOW_MODAL);
+							dialog.initOwner(getContainingWindow());
+							dialog.setHeaderText("Umbenennen");
+							dialog.setContentText("Geben Sie einen neuen Namen für das Mapping Profil ein."); // TODO Localize
+							dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(mapping::setName);
+						}
+					});
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					showErrorMessage(Localization.getString(Strings.Error_Preset_Import, e.getLocalizedMessage()));
+				}
+			});
+		}
+
 	}
 
 	// Tab Utils

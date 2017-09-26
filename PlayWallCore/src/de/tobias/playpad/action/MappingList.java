@@ -136,4 +136,8 @@ public class MappingList extends ArrayList<Mapping> {
 		writer.write(docoment);
 		writer.close();
 	}
+
+	public boolean containsName(String name) {
+		return stream().anyMatch(i -> i.getName().equals(name));
+	}
 }

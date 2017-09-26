@@ -11,7 +11,17 @@
          <children>
             <Label alignment="BASELINE_RIGHT" layoutX="14.0" layoutY="19.0" maxHeight="1.7976931348623157E308" prefWidth="150.0" text="%settings.mapping.label.mapping" />
             <ComboBox fx:id="mappingComboBox" layoutX="100.0" layoutY="14.0" prefWidth="150.0" />
-            <Button fx:id="editMappingsButton" layoutX="264.0" layoutY="14.0" mnemonicParsing="false" onAction="#editMappingsHandler" text="%settings.mapping.button.edit" />
+            <MenuButton mnemonicParsing="false" text="%settings.mapping.button.edit">
+              <items>
+                <MenuItem fx:id="mappingRenameButton" mnemonicParsing="false" onAction="#mappingRenameHandler" text="%settings.mapping.button.edit.rename" />
+                <MenuItem fx:id="mappingExportButton" mnemonicParsing="false" onAction="#mappingExportHandler" text="%settings.mapping.button.edit.export" />
+                  <MenuItem fx:id="mappingDeleteButton" mnemonicParsing="false" onAction="#mappingDeleteHandler" text="%settings.mapping.button.edit.delete" />
+                  <MenuItem fx:id="mappingDuplicateButton" mnemonicParsing="false" onAction="#mappingDuplicateHandler" text="%settings.mapping.button.edit.duplicate" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="mappingNewButton" mnemonicParsing="false" onAction="#mappingNewHandler" text="%settings.mapping.button.edit.new" />
+                  <MenuItem fx:id="mappingImportButton" mnemonicParsing="false" onAction="#mappingImportHandler" text="%settings.mapping.button.edit.import" />
+              </items>
+            </MenuButton>
          </children>
       </HBox>
       <HBox layoutY="50.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="50.0">
