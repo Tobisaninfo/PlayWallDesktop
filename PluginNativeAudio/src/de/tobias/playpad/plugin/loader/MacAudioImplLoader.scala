@@ -13,7 +13,7 @@ import de.tobias.utils.application.container.PathType
   */
 class MacAudioImplLoader extends AudioImplLoader {
 
-	private val ASSETS = "de/tobias/playpad/"
+	private val ASSETS = "de/tobias/playpad/assets/mac/"
 
 	override def preInit(): Unit = {
 		val app = ApplicationUtils.getApplication
