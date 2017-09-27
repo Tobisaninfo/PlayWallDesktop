@@ -6,6 +6,6 @@ public interface Fadeable {
 	void fadeIn();
 
 	void fadeOut(Runnable runnable);
-	
-	boolean getFade();
+
+	boolean isFadeActive();
 }

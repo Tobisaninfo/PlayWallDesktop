@@ -99,7 +99,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		Duration fadeOut = getPad().getPadSettings().getFade().getFadeOut();
 		if (fadeOut.toMillis() > 0) {
 			fade.fadeOut(fadeOut, () -> {
-				onFinish.run();
+				if (onFinish != null) {
+					onFinish.run();
+				}
 				updateVolume();
 			});
 		} else {
@@ -107,7 +109,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		}
 	}
 
-	public boolean getFade() {
+	public boolean isFadeActive() {
 		return fade.isFading();
 	}
 

@@ -39,7 +39,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 			PadContent content = pad.getContent();
 
 			// Zeit aktualiesieren bei Play und wenn Fade Out ist
-			boolean isFading = content instanceof Fadeable && ((Fadeable) content).getFade();
+			boolean isFading = content instanceof Fadeable && ((Fadeable) content).isFadeActive();
 			boolean isPlaying = pad.getStatus() == PadStatus.PLAY;
 
 			if (content instanceof Durationable && (isPlaying || isFading)) {
