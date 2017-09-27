@@ -6,7 +6,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.cartaction.CartAction;
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignFactory;

@@ -1,4 +1,4 @@
-package de.tobias.playpad.action.cartaction;
+package de.tobias.playpad.action.actions.cart;
 
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.pad.Pad;

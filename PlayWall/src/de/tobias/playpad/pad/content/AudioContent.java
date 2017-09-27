@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import de.tobias.playpad.audio.AudioEqualizeable;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -26,7 +27,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate, Seekable {
 
 	private final String type;
 
@@ -74,6 +75,13 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public boolean stop() {
 		audioHandler.stop();
 		return true;
+	}
+
+	@Override
+	public void seekToStart() {
+		if (audioHandler instanceof Seekable) {
+			((Seekable) audioHandler).seekToStart();
+		}
 	}
 
 	@Override

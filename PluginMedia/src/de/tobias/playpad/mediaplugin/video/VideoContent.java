@@ -7,6 +7,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Platform;
@@ -21,7 +22,7 @@ import javafx.util.Duration;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class VideoContent extends PadContent implements Pauseable, Durationable {
+public class VideoContent extends PadContent implements Pauseable, Durationable, Seekable {
 
 	static final String VIDEO_LAST_FRAME = "Video.LastFrame";
 
@@ -87,6 +88,11 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 		player.stop();
 		MediaPluginImpl.getInstance().getVideoViewController().setMediaPlayer(null, null);
 		return true;
+	}
+
+	@Override
+	public void seekToStart() {
+		player.seek(Duration.ZERO);
 	}
 
 	@Override

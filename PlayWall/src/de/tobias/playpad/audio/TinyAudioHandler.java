@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.util.FileUtils;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class TinyAudioHandler extends AudioHandler implements Soundcardable {
+public class TinyAudioHandler extends AudioHandler implements Soundcardable, Seekable {
 
 	public static final String SOUND_CARD = "SoundCard";
 
@@ -170,6 +171,12 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable {
 				playedHandlers.remove(this);
 			pause = false;
 		}
+	}
+
+	@Override
+	public void seekToStart() {
+		stop();
+		play();
 	}
 
 	@Override

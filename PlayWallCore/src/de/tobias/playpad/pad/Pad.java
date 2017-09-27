@@ -587,4 +587,37 @@ public class Pad implements Cloneable {
 		return clone;
 	}
 
+	// Util Satus Methods
+
+	public boolean isPlay() {
+		return getStatus() == PadStatus.PLAY;
+	}
+
+	public boolean isPaused() {
+		return getStatus() == PadStatus.PAUSE;
+	}
+
+	public boolean isStopped() {
+		return getStatus() == PadStatus.STOP;
+	}
+
+	public boolean isReady() {
+		return getStatus() == PadStatus.READY;
+	}
+
+	public void play() {
+		setStatus(PadStatus.PLAY);
+	}
+
+	public void restart() {
+
+	}
+
+	public void pause() {
+		setStatus(PadStatus.PAUSE);
+	}
+
+	public void stop() {
+		setStatus(PadStatus.STOP);
+	}
 }
