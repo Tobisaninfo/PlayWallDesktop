@@ -74,12 +74,9 @@ public class CartTriggerItem extends TriggerItem {
 					cart.setStatus(newStatus);
 			}
 		} else {
-			System.out.println(uuids);
-			// TODO Cart Trigger mit Pages und Index --> PadIndex
 			for (UUID uuid : uuids) {
 				if (!uuid.equals(source.getUuid())) {
 					Pad pad = project.getPad(uuid);
-					System.out.println(pad);
 					if (pad != null)
 						pad.setStatus(newStatus);
 				}

@@ -636,7 +636,7 @@ public class Pad implements Cloneable {
 	}
 
 	public void restart() {
-
+		setStatus(PadStatus.RESTART);
 	}
 
 	public void pause() {
