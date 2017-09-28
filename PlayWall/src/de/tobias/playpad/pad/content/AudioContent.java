@@ -109,6 +109,11 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		}
 	}
 
+	@Override
+	public void fade(double from, double to, Duration duration, Runnable onFinish) {
+		fade.fade(from, to, duration, onFinish);
+	}
+
 	public boolean isFadeActive() {
 		return fade.isFading();
 	}
@@ -167,6 +172,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			positionProperty.bind(audioHandler.positionProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
+
+			updateVolume();
 		} else {
 			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
