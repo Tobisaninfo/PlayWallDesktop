@@ -17,13 +17,15 @@ public class PadFadeDurationListener implements ChangeListener<Duration> {
 
 	@Override
 	public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-		final Duration fadeDuration = pad.getPadSettings().getFade().getFadeOut();
+		if (pad.getPadSettings().getFade().isFadeOutStop()) {
+			final Duration fadeDuration = pad.getPadSettings().getFade().getFadeOut();
 
-		if (pad.getContent() instanceof Durationable) {
-			Durationable durationable = (Durationable) pad.getContent();
-			if (durationable.getPosition() != null && durationable.getDuration() != null) {
-				if (durationable.getPosition().add(fadeDuration).greaterThan(durationable.getDuration())) {
-					fadeOut();
+			if (pad.getContent() instanceof Durationable) {
+				Durationable durationable = (Durationable) pad.getContent();
+				if (durationable.getPosition() != null && durationable.getDuration() != null) {
+					if (durationable.getPosition().add(fadeDuration).greaterThan(durationable.getDuration())) {
+						fadeOut();
+					}
 				}
 			}
 		}
