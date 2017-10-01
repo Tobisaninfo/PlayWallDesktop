@@ -13,13 +13,14 @@
             <ComboBox fx:id="mappingComboBox" layoutX="100.0" layoutY="14.0" prefWidth="150.0" />
             <MenuButton mnemonicParsing="false" text="%settings.mapping.button.edit">
               <items>
+                  <MenuItem fx:id="mappingNewButton" mnemonicParsing="false" onAction="#mappingNewHandler"
+                            text="%settings.mapping.button.edit.new"/>
                 <MenuItem fx:id="mappingRenameButton" mnemonicParsing="false" onAction="#mappingRenameHandler" text="%settings.mapping.button.edit.rename" />
-                <MenuItem fx:id="mappingExportButton" mnemonicParsing="false" onAction="#mappingExportHandler" text="%settings.mapping.button.edit.export" />
                   <MenuItem fx:id="mappingDeleteButton" mnemonicParsing="false" onAction="#mappingDeleteHandler" text="%settings.mapping.button.edit.delete" />
                   <MenuItem fx:id="mappingDuplicateButton" mnemonicParsing="false" onAction="#mappingDuplicateHandler" text="%settings.mapping.button.edit.duplicate" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="mappingNewButton" mnemonicParsing="false" onAction="#mappingNewHandler" text="%settings.mapping.button.edit.new" />
                   <MenuItem fx:id="mappingImportButton" mnemonicParsing="false" onAction="#mappingImportHandler" text="%settings.mapping.button.edit.import" />
+                  <MenuItem fx:id="mappingExportButton" mnemonicParsing="false" onAction="#mappingExportHandler"
+                            text="%settings.mapping.button.edit.export"/>
               </items>
             </MenuButton>
          </children>

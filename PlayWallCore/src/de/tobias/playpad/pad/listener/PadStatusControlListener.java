@@ -36,7 +36,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
 				// bei Single Pad Playing wird das alte Pad beendet.
 				if (!profileSettings.isMultiplePlayer()) {
-					if (currentPlayingPad != pad) {
+					if (currentPlayingPad != null && currentPlayingPad != pad) {
 						if (currentPlayingPad.isPlay() || currentPlayingPad.isPaused()) {
 							currentPlayingPad.stop();
 						}
