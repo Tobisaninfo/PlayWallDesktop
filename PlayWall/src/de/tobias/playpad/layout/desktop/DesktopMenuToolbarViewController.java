@@ -237,7 +237,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
-			mainViewController.addListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
+			mainViewController.removeListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
 		} else if (oldValue == DesktopEditMode.PAGE) {
 			highlightPageButton(currentSelectedPageButton);
 			iconHbox.getChildren().remove(addPageButton);
