@@ -53,7 +53,6 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		boolean activePlayer = project.hasActivePlayers();
 
 		addTab(new MappingTabViewController());
-		addTab(new MidiTabViewController());
 		addTab(new DesignTabViewController());
 		addTab(new PlayerTabViewController());
 

@@ -20,26 +20,7 @@
 	-fx-text-fill: red !important;
 }
 
-// Neu
 .pad {
-	/*
-	-fx-background-color: linear-gradient(#A7FF9A, #8FD673); // Grün
-	-fx-background-color: linear-gradient(#469fe2, #0080e2); // Blau
-
-
-	-fx-background-color: linear-gradient(#a90329, #6d0019); // Weinrot F
-	-fx-background-color: linear-gradient(#55B7FF, #369FE9); // Blau F
-	-fx-background-color: linear-gradient(#FF6E6B, #EF5350); // Rot F
-	-fx-background-color: linear-gradient(#73E178, #66BB6A); // Grün F
-	-fx-background-color: linear-gradient(#ffe08c, #d5bf54); // Gelb F
-	-fx-background-color: linear-gradient(#db7ab7, #dd61b0); // Pink F
-	-fx-background-color: linear-gradient(#ff9254, #ff7526); // Orange F
-	-fx-background-color: linear-gradient(#86F7FF, #52E3EC); // Aqua F
-	-fx-background-color: linear-gradient(#555555, #333333); // Dark F	
-	-fx-background-color: linear-gradient(#eeeeee, #cccccc); // Grau F
-	-fx-background-color: linear-gradient(#cccccc, #aaaaaa); // Mittel Grau F
-	*/
-
 	-fx-background-radius: 10px;
 	
 	-fx-border-color: rgb(20, 20, 20);

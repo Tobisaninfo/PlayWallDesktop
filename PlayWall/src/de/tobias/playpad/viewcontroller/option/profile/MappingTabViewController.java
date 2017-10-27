@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.*;
+import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
@@ -26,6 +27,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 
+import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiUnavailableException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -36,6 +39,7 @@ import java.util.stream.Collectors;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
+	// Mapping Profiles
 	@FXML
 	private ComboBox<Mapping> mappingComboBox;
 
@@ -54,6 +58,13 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	@FXML
 	private MenuItem mappingImportButton;
 
+	// midi settings
+	@FXML
+	private CheckBox midiActiveCheckBox;
+	@FXML
+	private ComboBox<String> deviceComboBox;
+
+	// Main View
 	@FXML
 	private TreeView<ActionDisplayable> treeView;
 
@@ -80,6 +91,24 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 			createTreeViewContent();
 		});
 
+		// Midi
+		MidiDevice.Info[] data = Midi.getMidiDevices();
+		// Gerät anzeigen - Doppelte weg
+		for (MidiDevice.Info item : data) {
+			if (item != null) {
+				if (!deviceComboBox.getItems().contains(item.getName())) {
+					deviceComboBox.getItems().add(item.getName());
+
+					// aktives Gerät wählen
+					if (item.getName().equals(Profile.currentProfile().getProfileSettings().getMidiDevice())) {
+						deviceComboBox.getSelectionModel().select(item.getName());
+					}
+				}
+			}
+		}
+		midiActiveCheckBox.selectedProperty().addListener((a, b, c) -> deviceComboBox.setDisable(!c));
+
+		// Main View
 		treeView.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
 			detailView.getChildren().clear();
@@ -149,7 +178,42 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		}
 	}
 
+	private boolean isMidiActive() {
+		return midiActiveCheckBox.isSelected();
+	}
+
 	// Event Handler
+	@FXML
+	private void deviceHandler(ActionEvent event) {
+		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+		String device = deviceComboBox.getValue();
+
+		// Ändern und Speichern
+		if (device != null) {
+			if (isMidiActive()) {
+				Midi midi = Midi.getInstance();
+				if (!device.equals(profilSettings.getMidiDevice()) || !midi.isOpen()) {
+					try {
+						// Setup
+						midi.lookupMidiDevice(device);
+						profilSettings.setMidiDeviceName(device);
+
+						// UI Rückmeldung
+						if (midi.getInputDevice() != null) {
+							showInfoMessage(Localization.getString(Strings.Info_Midi_Device_Connected, device));
+						}
+					} catch (NullPointerException e) {
+						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Unavailible, device));
+						e.printStackTrace();
+					} catch (IllegalArgumentException | MidiUnavailableException e) {
+						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
 	@FXML
 	private void mappingRenameHandler(ActionEvent event) {
 		TextInputDialog dialog = new TextInputDialog(mapping.getName());
@@ -159,6 +223,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		dialog.setContentText("Geben Sie einen neuen Namen für das Mapping Profil ein."); // TODO Localize
 		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(mapping::setName);
 	}
+
 
 	@FXML
 	private void mappingExportHandler(ActionEvent event) {
@@ -293,10 +358,18 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		oldMapping = profile.getMappings().getActiveMapping();
 		setMappingItemsToList();
 		createTreeViewContent();
+
+		midiActiveCheckBox.setSelected(profile.getProfileSettings().isMidiActive());
+		deviceComboBox.setDisable(!profile.getProfileSettings().isMidiActive());
+		deviceComboBox.setValue(profile.getProfileSettings().getMidiDevice());
 	}
 
 	@Override
 	public void saveSettings(Profile profile) {
+		ProfileSettings profileSettings = profile.getProfileSettings();
+
+		// Midi
+		profileSettings.setMidiActive(isMidiActive());
 	}
 
 	@Override
