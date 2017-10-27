@@ -6,13 +6,13 @@ main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
 backup: false
 iconPath: icon
-updateURL: https://tobisan.thecodelabs.de/playwall/resources/executables
+updateURL: https://playwall.thecodelabs.de/resources/executables
 userInfo:
-  Website: http://tobisan.thecodelabs.de/playwall/
+  Website: http://playwall.thecodelabs.de/
   PluginsURL:
-     Stable: https://tobisan.thecodelabs.de/playwall/resources/executables/stable/plugins.yml
-     Beta: https://tobisan.thecodelabs.de/playwall/resources/executables/beta/plugins.yml
-  ChangelogURL: https://tobisan.thecodelabs.de/roadmap/php/index.php?id=1
-  UpdaterProgram: https://tobisan.thecodelabs.de/playwall/resources/executables/utils/
-  Server: tobisan.thecodelabs.de:8090
-  AccountRegister: http://tobisan.thecodelabs.de/playwall/php/index.php
+     Stable: https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml
+     Beta: https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml
+  ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=1
+  UpdaterProgram: https://playwall.thecodelabs.de/resources/executables/utils/
+  Server: playwall.thecodelabs.de:8090
+  AccountRegister: http://playwall.thecodelabs.de/php/index.php
