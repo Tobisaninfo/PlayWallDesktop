@@ -5,6 +5,7 @@ import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.*;
@@ -12,7 +13,7 @@ import javafx.util.Duration;
 
 import java.nio.file.Path;
 
-public class NativeAudioMacHandler extends AudioHandler implements Peakable {
+public class NativeAudioMacHandler extends AudioHandler implements Peakable, Seekable {
 
 	private static int counter = 0;
 
@@ -53,6 +54,11 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable {
 	@Override
 	public void stop() {
 		NativeAudio.stop(id);
+	}
+
+	@Override
+	public void seekToStart() {
+		NativeAudio.seek(id, 0);
 	}
 
 	@Override

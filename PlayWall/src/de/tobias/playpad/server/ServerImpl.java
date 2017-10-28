@@ -302,7 +302,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
-		if (newValue == ConnectionState.CONNECTION_LOST) {
+		if (newValue == ConnectionState.CONNECTION_REFUSED) {
 			Worker.runLater(this::reconnect);
 		}
 	}

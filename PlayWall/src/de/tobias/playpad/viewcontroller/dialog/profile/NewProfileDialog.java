@@ -2,24 +2,19 @@ package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.Worker;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import javax.sound.midi.MidiDevice.Info;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +47,7 @@ public class NewProfileDialog extends NVC {
 			if (c.isEmpty()) {
 				finishButton.setDisable(true);
 			} else {
-				if (ProfileReferenceManager.getProfiles().contains(c)) {
+				if (ProfileReferenceManager.getProfiles().containsProfileName(c)) {
 					finishButton.setDisable(true);
 					return;
 				}

@@ -4,6 +4,8 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.fade.listener.PadFadeContentListener;
+import de.tobias.playpad.pad.fade.listener.PadFadeDurationListener;
 import de.tobias.playpad.pad.listener.PadStatusControlListener;
 import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
@@ -57,6 +59,8 @@ public class Pad implements Cloneable {
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
 	private transient PadStatusControlListener padStatusControlListener;
 	private transient PadStatusNotFoundListener padStatusNotFoundListener;
+	private transient PadFadeContentListener padFadeContentListener;
+	private transient PadFadeDurationListener padFadeDurationListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -117,12 +121,28 @@ public class Pad implements Cloneable {
 			padTriggerContentListener.changed(contentProperty, getContent(), null);
 		}
 
+		if (padFadeDurationListener != null && contentProperty != null) {
+			contentProperty.removeListener(padFadeContentListener);
+			padFadeContentListener.changed(contentProperty, getContent(), null);
+		}
+
 		// init new listener for properties
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
 
+		// Fade
+
+		padFadeDurationListener = new PadFadeDurationListener(this);
+		padFadeContentListener = new PadFadeContentListener(this);
+		contentProperty.addListener(padFadeContentListener);
+		padFadeContentListener.changed(contentProperty, null, getContent());
+
+		// Not found status count
+
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
+
+		// Trigger
 
 		padTriggerStatusListener = new PadTriggerStatusListener(this);
 		statusProperty.addListener(padTriggerStatusListener);
@@ -482,10 +502,6 @@ public class Pad implements Cloneable {
 			contentProperty.get().loadMedia();
 	}
 
-	public PadTriggerDurationListener getPadTriggerDurationListener() {
-		return padTriggerDurationListener;
-	}
-
 	public boolean isIgnoreTrigger() {
 		return ignoreTrigger;
 	}
@@ -526,6 +542,16 @@ public class Pad implements Cloneable {
 
 		mediaPaths.clear();
 	}
+
+
+	public PadTriggerDurationListener getPadTriggerDurationListener() {
+		return padTriggerDurationListener;
+	}
+
+	public PadFadeDurationListener getPadFadeDurationListener() {
+		return padFadeDurationListener;
+	}
+
 
 	@Override
 	public String toString() {
@@ -587,4 +613,37 @@ public class Pad implements Cloneable {
 		return clone;
 	}
 
+	// Util Satus Methods
+
+	public boolean isPlay() {
+		return getStatus() == PadStatus.PLAY;
+	}
+
+	public boolean isPaused() {
+		return getStatus() == PadStatus.PAUSE;
+	}
+
+	public boolean isStopped() {
+		return getStatus() == PadStatus.STOP;
+	}
+
+	public boolean isReady() {
+		return getStatus() == PadStatus.READY;
+	}
+
+	public void play() {
+		setStatus(PadStatus.PLAY);
+	}
+
+	public void restart() {
+		setStatus(PadStatus.RESTART);
+	}
+
+	public void pause() {
+		setStatus(PadStatus.PAUSE);
+	}
+
+	public void stop() {
+		setStatus(PadStatus.STOP);
+	}
 }

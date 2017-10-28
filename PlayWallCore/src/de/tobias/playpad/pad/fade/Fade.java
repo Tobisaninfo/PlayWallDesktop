@@ -46,7 +46,7 @@ public class Fade {
 		}
 	}
 
-	private void fade(double from, double to, Duration duration, Runnable onFinish) {
+	public void fade(double from, double to, Duration duration, Runnable onFinish) {
 		if (currentFadeTransition != null) {
 			currentFadeTransition.stop();
 		}

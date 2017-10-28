@@ -81,7 +81,6 @@ public class MediaViewController implements ProfileListener {
 		if (OS.getType() == OSType.Windows)
 			stage.setAlwaysOnTop(true);
 
-		getStage().setOnCloseRequest(Event::consume);
 		reloadSettings();
 	}
 

@@ -53,7 +53,6 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		boolean activePlayer = project.hasActivePlayers();
 
 		addTab(new MappingTabViewController());
-		addTab(new MidiTabViewController());
 		addTab(new DesignTabViewController());
 		addTab(new PlayerTabViewController());
 
@@ -85,7 +84,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	public void init() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
-		// Look Button Listener
+		// Lock Button Listener
 		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
 		lockedButton.setOnAction(e ->
 		{

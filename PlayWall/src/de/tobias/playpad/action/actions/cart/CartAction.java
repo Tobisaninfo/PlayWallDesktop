@@ -1,5 +1,7 @@
-package de.tobias.playpad.action.cartaction;
+package de.tobias.playpad.action.actions.cart;
 
+import de.tobias.playpad.action.actions.cart.handler.CartActionHandler;
+import de.tobias.playpad.action.actions.cart.handler.CartActionHandlerFactory;
 import de.tobias.utils.nui.NVC;
 import org.dom4j.Element;
 
@@ -20,8 +22,11 @@ import javafx.beans.property.StringProperty;
 
 public class CartAction extends Action implements ColorAdjustable {
 
-	public enum ControlMode {
-		PLAY_PAUSE, PLAY_STOP, PLAY_HOLD
+	public enum CartActionMode {
+		PLAY_PAUSE,
+		PLAY_STOP,
+		PLAY_HOLD,
+		PLAY_PLAY
 	}
 
 	private final String type;
@@ -29,7 +34,8 @@ public class CartAction extends Action implements ColorAdjustable {
 	private int x;
 	private int y;
 
-	private ControlMode mode;
+	private CartActionMode mode;
+	private CartActionHandler handler;
 	private boolean autoFeedbackColors;
 
 	private transient Pad pad;
@@ -38,16 +44,16 @@ public class CartAction extends Action implements ColorAdjustable {
 	private transient PadPositionWarningListener padPositionListener = new PadPositionWarningListener(this);
 
 	public CartAction(String type) {
-		this(type, 0, 0, ControlMode.PLAY_STOP);
+		this(type, 0, 0, CartActionMode.PLAY_STOP);
 		this.autoFeedbackColors = true;
 	}
 
-	public CartAction(String type, int x, int y, ControlMode mode) {
+	public CartAction(String type, int x, int y, CartActionMode mode) {
 		this.type = type;
 		this.x = x;
 		this.y = y;
 
-		this.mode = mode;
+		setMode(mode);
 		this.autoFeedbackColors = true;
 	}
 
@@ -59,12 +65,13 @@ public class CartAction extends Action implements ColorAdjustable {
 		return y;
 	}
 
-	public ControlMode getMode() {
+	public CartActionMode getMode() {
 		return mode;
 	}
 
-	public void setMode(ControlMode mode) {
+	public void setMode(CartActionMode mode) {
 		this.mode = mode;
+		this.handler = CartActionHandlerFactory.getInstance(mode);
 	}
 
 	@Override
@@ -129,48 +136,7 @@ public class CartAction extends Action implements ColorAdjustable {
 
 		// wird nur ausgeführt, wenn das Pad ein Content hat und sichtbar in der GUI (Gilt für MIDI und Keyboard)
 		if (pad.getContent() != null && pad.getContent().isPadLoaded() && pad.isPadVisible()) {
-			switch (mode) {
-			case PLAY_STOP:
-				if (type == InputType.PRESSED) {
-					if (pad.getStatus() == PadStatus.PLAY) {
-						pad.setStatus(PadStatus.STOP);
-					} else {
-						// Allow the listener to send the feedback
-						padPositionListener.setSend(false);
-
-						pad.setStatus(PadStatus.PLAY);
-					}
-				}
-				break;
-			case PLAY_HOLD:
-				if (type == InputType.PRESSED) {
-					if (pad.getStatus() == PadStatus.READY) {
-						// Allow the listener to send the feedback
-						padPositionListener.setSend(false);
-
-						pad.setStatus(PadStatus.PLAY);
-					}
-				} else if (type == InputType.RELEASED) {
-					if (pad.getStatus() == PadStatus.PLAY) {
-						pad.setStatus(PadStatus.STOP);
-					}
-				}
-				break;
-			case PLAY_PAUSE:
-				if (type == InputType.PRESSED) {
-					if (pad.getStatus() == PadStatus.PLAY) {
-						pad.setStatus(PadStatus.PAUSE);
-					} else {
-						// Allow the listener to send the feedback
-						padPositionListener.setSend(false);
-
-						pad.setStatus(PadStatus.PLAY);
-					}
-				}
-				break;
-			default:
-				break;
-			}
+			handler.performAction(type, this, pad, project, mainViewController);
 		}
 	}
 
@@ -190,7 +156,7 @@ public class CartAction extends Action implements ColorAdjustable {
 			x = Integer.valueOf(root.attributeValue(X_ATTR));
 		if (root.attributeValue(Y_ATTR) != null)
 			y = Integer.valueOf(root.attributeValue(Y_ATTR));
-		mode = ControlMode.valueOf(root.attributeValue(CONTROL_MDOE));
+		setMode(CartActionMode.valueOf(root.attributeValue(CONTROL_MDOE)));
 		autoFeedbackColors = Boolean.valueOf(root.attributeValue(AUTO_FEEDBACK_COLORS));
 	}
 
@@ -238,7 +204,7 @@ public class CartAction extends Action implements ColorAdjustable {
 		}
 	}
 
-	PadPositionWarningListener getPadPositionListener() {
+	public PadPositionWarningListener getPadPositionListener() {
 		return padPositionListener;
 	}
 
@@ -250,7 +216,7 @@ public class CartAction extends Action implements ColorAdjustable {
 		action.autoFeedbackColors = autoFeedbackColors;
 		action.x = x;
 		action.y = y;
-		action.mode = mode;
+		action.setMode(mode);
 
 		return action;
 	}

@@ -53,7 +53,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		addTab(new GeneralPadTabViewController(pad));
 		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));
-//		addTab(new TriggerPadTabViewController(pad)); TODO Add Trigger Tab when rewritten
+		addTab(new TriggerPadTabViewController(pad));
 
 		if (pad.getContent() != null) {
 			try {

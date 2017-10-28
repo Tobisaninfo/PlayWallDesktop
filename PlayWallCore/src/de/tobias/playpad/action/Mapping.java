@@ -36,11 +36,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	List<Mapper> getMapperForAction(Action action) {
-		if (mapping.containsKey(action)) {
-			return mapping.get(action);
-		} else {
-			return null;
-		}
+		return mapping.getOrDefault(action, null);
 	}
 
 	public String getName() {
@@ -182,6 +178,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		clone.mapping = new HashMap<>();
 		for (Action action : mapping.keySet()) {
 			Action actionClone = action.cloneAction();
+			actionClone.setMappingRef(clone);
 			clone.mapping.put(actionClone, new ArrayList<>());
 
 			for (Mapper mapper : action.getMappers()) {

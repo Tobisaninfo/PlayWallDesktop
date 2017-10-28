@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.profile.Profile;
@@ -36,8 +37,8 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				// bei Single Pad Playing wird das alte Pad beendet.
 				if (!profileSettings.isMultiplePlayer()) {
 					if (currentPlayingPad != null && currentPlayingPad != pad) {
-						if (currentPlayingPad.getStatus() == PadStatus.PLAY || currentPlayingPad.getStatus() == PadStatus.PAUSE) {
-							currentPlayingPad.setStatus(PadStatus.STOP);
+						if (currentPlayingPad.isPlay() || currentPlayingPad.isPaused()) {
+							currentPlayingPad.stop();
 						}
 					}
 					currentPlayingPad = pad;
@@ -69,7 +70,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				pad.getProject().updateActivePlayerProperty();
 
 				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad
-																														// nicht am ende ist
+					// nicht am ende ist
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						pad.getContent().stop();
@@ -83,6 +84,11 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 						pad.getProject().updateActivePlayerProperty();
 					}
 				}
+			}
+		} else if (newValue == PadStatus.RESTART) {
+			if (pad.getContent() instanceof Seekable) {
+				((Seekable) pad.getContent()).seekToStart();
+				pad.setStatus(PadStatus.PLAY);
 			}
 		}
 	}

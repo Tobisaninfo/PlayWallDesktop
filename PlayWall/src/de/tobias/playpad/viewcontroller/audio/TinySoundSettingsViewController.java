@@ -70,6 +70,14 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 		});
 	}
 
+	@Override
+	public void onClose() {
+		if (clip != null) {
+			clip.stop();
+			clip = null;
+		}
+	}
+
 	@FXML
 	private void testButtonHandler(ActionEvent event) {
 		try {

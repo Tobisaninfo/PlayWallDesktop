@@ -5,6 +5,7 @@ import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.profile.Profile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -19,7 +20,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 
-public class NativeAudioWinHandler extends AudioHandler implements Soundcardable {
+public class NativeAudioWinHandler extends AudioHandler implements Soundcardable, Seekable {
 
 	static final String SOUND_CARD = "SoundCard";
 
@@ -117,6 +118,11 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		audioHandler.stop();
 		if (playedHandlers.contains(this))
 			playedHandlers.remove(this);
+	}
+
+	@Override
+	public void seekToStart() {
+		audioHandler.seek(0);
 	}
 
 	@Override

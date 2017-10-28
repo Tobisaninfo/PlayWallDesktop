@@ -7,8 +7,8 @@ import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.cartaction.CartAction;
-import de.tobias.playpad.action.cartaction.CartAction.ControlMode;
+import de.tobias.playpad.action.actions.cart.CartAction;
+import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
@@ -32,7 +32,7 @@ public class CartActionFactory extends ActionFactory implements ActionDisplayabl
 	public void initActionType(Mapping mapping, Profile profile) {
 		for (int x = 0; x < ProjectSettings.MAX_COLUMNS; x++) {
 			for (int y = 0; y < ProjectSettings.MAX_ROWS; y++) {
-				CartAction action = new CartAction(getType(), x, y, ControlMode.PLAY_STOP);
+				CartAction action = new CartAction(getType(), x, y, CartActionMode.PLAY_STOP);
 				mapping.addActionIfNotContains(action);
 			}
 		}

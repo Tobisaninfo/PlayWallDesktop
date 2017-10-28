@@ -209,7 +209,7 @@ public class Strings {
 	// NavigationType - Enum
 	public static final String NavigationType_BaseName = "NavigationType.";
 
-	// ControlMode - Enum
+	// CartActionMode - Enum
 	public static final String CartAction_Mode_BaseName = "CartAction.Mode.";
 
 	// UI - Dialog - AutoUpdate
