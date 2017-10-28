@@ -73,7 +73,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	private void showAudioSettings(String classID) {
 		if (audioViewController != null) {
 			// Es gibt ein Settings View Controller der isChanged true ist
-			if (audioViewController.stream().filter(c -> c.isChanged()).count() > 0) {
+			if (audioViewController.stream().filter(AudioHandlerViewController::isChanged).count() > 0) {
 				changeAudioSettings = true;
 			}
 		}
@@ -135,6 +135,9 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 		profileSettings.setAudioClass(audioTypeComboBox.getValue());
 
+		if (audioViewController != null) {
+			audioViewController.forEach(AudioHandlerViewController::onClose);
+		}
 	}
 
 	@Override

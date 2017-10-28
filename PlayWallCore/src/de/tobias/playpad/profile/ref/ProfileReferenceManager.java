@@ -27,7 +27,7 @@ public final class ProfileReferenceManager {
 	/**
 	 * Liste mit allen Referenzen
 	 */
-	static List<ProfileReference> profiles = new ProfileReferenceList();
+	private static ProfileReferenceList profiles = new ProfileReferenceList();
 
 	/**
 	 * Sucht eine Referenz zu einer UUID raus.
@@ -54,7 +54,7 @@ public final class ProfileReferenceManager {
 	 * 
 	 * @return Liste von Referenzen (Name, UUID)
 	 */
-	public static List<ProfileReference> getProfiles() {
+	public static ProfileReferenceList getProfiles() {
 		return profiles;
 	}
 
@@ -181,7 +181,7 @@ public final class ProfileReferenceManager {
 		if (Files.exists(path)) {
 			// Load data from xml
 			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
-			ProfileReferenceManager.profiles = handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer());
+			ProfileReferenceManager.profiles.setAll(handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer()));
 			System.out.println("Find Profile: " + ProfileReferenceManager.profiles);
 		}
 

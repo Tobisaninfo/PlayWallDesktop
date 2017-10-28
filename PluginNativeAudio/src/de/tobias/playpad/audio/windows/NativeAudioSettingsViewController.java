@@ -63,6 +63,14 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 		});
 	}
 
+	@Override
+	public void onClose() {
+		if (audioPlayer != null) {
+			audioPlayer.stop();
+			audioPlayer = null;
+		}
+	}
+
 	@FXML
 	private void testButtonHandler(ActionEvent event) {
 		Path file = ApplicationUtils.getApplication().getPath(PathType.RESOURCES, "Test-Sound.wav");

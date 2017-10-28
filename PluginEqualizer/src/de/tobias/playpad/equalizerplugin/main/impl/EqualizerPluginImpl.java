@@ -15,6 +15,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -128,11 +129,11 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	public void handle(ActionEvent event) {
 		if (equalizerViewController == null) {
 			equalizerViewController = new EqualizerViewController(mainStage);
-			equalizerViewController.getStage().show();
-		} else if (equalizerViewController.getStage().isShowing()) {
-			equalizerViewController.getStage().toFront();
+			equalizerViewController.getStageContainer().ifPresent(NVCStage::show);
+		} else if (equalizerViewController.getContainingWindow().isShowing()) {
+			equalizerViewController.getStageContainer().ifPresent(s -> s.getStage().toFront());
 		} else {
-			equalizerViewController.getStage().show();
+			equalizerViewController.getStageContainer().ifPresent(NVCStage::show);
 		}
 	}
 

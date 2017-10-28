@@ -204,6 +204,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				connect.setEditMode(DesktopEditMode.PAGE);
 			} else if (c == colorButton) {
 				connect.setEditMode(DesktopEditMode.COLOR);
+
+				if (colorPickerView != null) {
+					colorPickerView.show(colorButton);
+				}
 			} else if (c == null) {
 				// select Old Button, if new selecting is empty
 				editButtons.getToggleGroup().selectToggle(b);
@@ -237,7 +241,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			for (IPadView view : mainViewController.getPadViews()) {
 				view.enableDragAndDropDesignMode(false);
 			}
-			mainViewController.addListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
+			mainViewController.removeListenerForPads(padRemoveMouseListener, MouseEvent.MOUSE_CLICKED);
 		} else if (oldValue == DesktopEditMode.PAGE) {
 			highlightPageButton(currentSelectedPageButton);
 			iconHbox.getChildren().remove(addPageButton);

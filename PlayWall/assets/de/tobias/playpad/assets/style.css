@@ -32,3 +32,8 @@
 .plugin-headline {
     -fx-font-size: 20px;
 }
+
+.headline {
+	-fx-font-size: 16px;
+	-fx-font-weight: bold;
+}

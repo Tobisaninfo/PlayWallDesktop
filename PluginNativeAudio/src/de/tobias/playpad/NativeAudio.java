@@ -10,6 +10,8 @@ public class NativeAudio {
 
 	public static native void stop(int id);
 
+	public static native void seek(int id, double duration);
+
 	public static native void setLoop(int id, boolean loop);
 
 	public static native double getVolume(int id);

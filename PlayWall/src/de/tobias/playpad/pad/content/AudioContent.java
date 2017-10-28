@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import de.tobias.playpad.audio.AudioEqualizeable;
+import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 
 import de.tobias.playpad.PlayPadPlugin;
@@ -26,7 +27,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate, Seekable {
 
 	private final String type;
 
@@ -77,6 +78,13 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
+	public void seekToStart() {
+		if (audioHandler instanceof Seekable) {
+			((Seekable) audioHandler).seekToStart();
+		}
+	}
+
+	@Override
 	public void fadeIn() {
 		Pad pad = getPad();
 
@@ -91,7 +99,9 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		Duration fadeOut = getPad().getPadSettings().getFade().getFadeOut();
 		if (fadeOut.toMillis() > 0) {
 			fade.fadeOut(fadeOut, () -> {
-				onFinish.run();
+				if (onFinish != null) {
+					onFinish.run();
+				}
 				updateVolume();
 			});
 		} else {
@@ -99,7 +109,12 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		}
 	}
 
-	public boolean getFade() {
+	@Override
+	public void fade(double from, double to, Duration duration, Runnable onFinish) {
+		fade.fade(from, to, duration, onFinish);
+	}
+
+	public boolean isFadeActive() {
 		return fade.isFading();
 	}
 
@@ -157,6 +172,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			positionProperty.bind(audioHandler.positionProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
+
+			updateVolume();
 		} else {
 			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}

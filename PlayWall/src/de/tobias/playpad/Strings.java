@@ -209,7 +209,7 @@ public class Strings {
 	// NavigationType - Enum
 	public static final String NavigationType_BaseName = "NavigationType.";
 
-	// ControlMode - Enum
+	// CartActionMode - Enum
 	public static final String CartAction_Mode_BaseName = "CartAction.Mode.";
 
 	// UI - Dialog - AutoUpdate
@@ -295,6 +295,7 @@ public class Strings {
 
 	// Server
 	public static final String Server_Connected = "Server.Connected";
+	public static final String Server_Connection_Lost = "Server.Connection_Lost";
 	public static final String Server_Disconnected = "Server.Disconnected";
 	public static final String Auth_Logout = "Auth.Logout";
 }

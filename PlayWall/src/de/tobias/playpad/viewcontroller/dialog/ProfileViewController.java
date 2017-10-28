@@ -40,8 +40,6 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	private Button duplicateButton;
 	@FXML
 	private Button deleteButton;
-	@FXML
-	private Button renameButton;
 
 	@FXML
 	private Button chooseButton;
@@ -68,22 +66,23 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		profileList.getItems().setAll(ProfileReferenceManager.getProfiles());
 		profileList.setCellFactory(list -> new DisplayableCell<>());
 
-		nameTextField.textProperty().addListener((a, b, c) ->
+		nameTextField.textProperty().addListener((a, b, newValue) ->
 		{
-			if (c != null) {
+			if (newValue != null) {
+				ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 				try {
-					if ((ProfileReferenceManager.getProfiles().contains(c) && !profileList.getSelectionModel().getSelectedItem().equals(c))
-							&& !c.equals(profileList.getSelectionModel().getSelectedItem().getName())) {
-						nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-					} else {
+					if (!(ProfileReferenceManager.getProfiles().containsProfileName(newValue)
+							&& !profileList.getSelectionModel().getSelectedItem().getName().equals(newValue)
+							&& !newValue.equals(ref.getName()))) {
 						nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
+
+						ref.setName(newValue);
+						return;
 					}
-				} catch (Exception e) {
-					nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
+				} catch (Exception ignored) {
 				}
-			} else {
-				nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 			}
+			nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 		});
 
 		profileList.getSelectionModel().selectedItemProperty().addListener(this);
@@ -95,7 +94,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Profile_Title));
 		stage.setMinWidth(375);
-		stage.setMinHeight(500);
+		stage.setMinHeight(400);
 
 		stage.initModality(Modality.WINDOW_MODAL);
 		Profile.currentProfile().currentLayout().applyCss(stage);
@@ -161,22 +160,6 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		});
 	}
 
-	@FXML
-	private void renameButtonHandler(ActionEvent event) {
-		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
-		try {
-			String newProfileName = nameTextField.getText();
-			if (!ProfileReferenceManager.validateName(newProfileName)) {
-				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, newProfileName));
-				return;
-			}
-			ref.setName(newProfileName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, ref.getName(), e.getMessage()));
-		}
-	}
-
 	private void selectProfile(ProfileReference ref) {
 		profileList.getSelectionModel().select(ref);
 	}
@@ -188,7 +171,6 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		} else {
 			nameTextField.clear();
 		}
-		renameButton.setDisable(newValue == null);
 		chooseButton.setDisable(newValue == null);
 		duplicateButton.setDisable(newValue == null);
 

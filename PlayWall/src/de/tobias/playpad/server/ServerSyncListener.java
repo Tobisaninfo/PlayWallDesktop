@@ -7,7 +7,6 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.CommandExecutor;
@@ -28,7 +27,6 @@ import de.tobias.playpad.server.sync.listener.downstream.path.PathRemoveListener
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.project.ProjectUpdateListener;
-import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
@@ -40,6 +38,9 @@ import java.util.Map;
  * Created by tobias on 19.02.17.
  */
 public class ServerSyncListener extends WebSocketAdapter {
+
+	private static final int CONNECTION_CLOSED = 1005; // Login failed
+	private static final int DISCONNECTED = 1002; // Server closed
 
 	private ObjectProperty<ConnectionState> connectionStateProperty;
 
@@ -98,7 +99,13 @@ public class ServerSyncListener extends WebSocketAdapter {
 	@Override
 	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
 		System.out.println("Disconnected: " + clientCloseFrame.getCloseReason());
-		connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
+		if (clientCloseFrame.getCloseCode() == CONNECTION_CLOSED) {
+			connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
+		} else if (clientCloseFrame.getCloseCode() == DISCONNECTED) {
+			connectionStateProperty.set(ConnectionState.DISCONNECTED);
+		} else {
+			connectionStateProperty.set(ConnectionState.CONNECTION_REFUSED);
+		}
 	}
 
 	@Override

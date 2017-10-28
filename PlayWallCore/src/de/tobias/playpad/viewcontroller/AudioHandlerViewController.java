@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller;
 import java.util.ResourceBundle;
 
 import de.tobias.playpad.audio.AudioHandlerFactory;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.ContentViewController;
 
 /**
@@ -12,7 +13,7 @@ import de.tobias.utils.ui.ContentViewController;
  * 
  * @see AudioHandlerFactory
  */
-public abstract class AudioHandlerViewController extends ContentViewController {
+public abstract class AudioHandlerViewController extends NVC {
 
 	/**
 	 * Neuer ViewController.
@@ -25,7 +26,7 @@ public abstract class AudioHandlerViewController extends ContentViewController {
 	 *            Localization
 	 */
 	public AudioHandlerViewController(String name, String path, ResourceBundle localization) {
-		super(name, path, localization);
+		load(path, name, localization);
 	}
 
 	/**
@@ -34,4 +35,11 @@ public abstract class AudioHandlerViewController extends ContentViewController {
 	 * @return <code>true</code> Audio Einstellungen für Pads werden automatisch neu geladen
 	 */
 	public abstract boolean isChanged();
+
+	/**
+	 * This method is called, then the window will be closed.
+	 */
+	public void onClose() {
+
+	}
 }

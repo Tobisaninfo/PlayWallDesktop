@@ -19,6 +19,10 @@ public enum PadStatus {
 	 */
 	STOP,
 	/**
+	 * Restart a Pad
+	 */
+	RESTART,
+	/**
 	 * File not found
 	 */
 	NOT_FOUND
