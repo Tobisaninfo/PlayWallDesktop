@@ -84,7 +84,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	public void init() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
-		// Look Button Listener
+		// Lock Button Listener
 		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
 		lockedButton.setOnAction(e ->
 		{

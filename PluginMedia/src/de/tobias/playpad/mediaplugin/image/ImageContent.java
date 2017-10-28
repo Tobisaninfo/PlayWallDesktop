@@ -52,6 +52,13 @@ public class ImageContent extends PadContent {
 		if (path != null && Files.exists(path)) {
 			getPad().setStatus(PadStatus.READY);
 			loaded = true;
+
+			Platform.runLater(() ->
+			{
+				if (getPad().isPadVisible()) {
+					getPad().getController().getView().showBusyView(false);
+				}
+			});
 		} else {
 			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
