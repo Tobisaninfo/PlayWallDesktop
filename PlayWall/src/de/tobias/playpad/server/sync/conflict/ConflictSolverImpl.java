@@ -3,19 +3,16 @@ package de.tobias.playpad.server.sync.conflict;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ProfileNotFoundException;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandExecutor;
-import de.tobias.playpad.server.sync.command.CommandStore;
-import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,7 +21,7 @@ import java.util.List;
 public class ConflictSolverImpl implements ConflictSolver {
 
 	@Override
-	public void solveConflict(CommandExecutor commandExecutor, ProjectReference project, ConflictStrategyType type) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException {
+	public void solveConflict(CommandExecutor commandExecutor, ProjectReference project, ConflictStrategyType type) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
 		ConflictStrategy strategy = null;
 
 		if (type == ConflictStrategyType.ROLLBACK) {

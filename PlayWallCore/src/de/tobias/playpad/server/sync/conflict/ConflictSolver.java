@@ -1,12 +1,10 @@
 package de.tobias.playpad.server.sync.conflict;
 
 import de.tobias.playpad.profile.ProfileNotFoundException;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.command.CommandExecutor;
-import de.tobias.playpad.server.sync.command.CommandStore;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -24,7 +22,7 @@ public interface ConflictSolver {
 	 * @param project  project
 	 * @param type     strategy type
 	 */
-	void solveConflict(CommandExecutor executor, ProjectReference project, ConflictStrategyType type) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException;
+	void solveConflict(CommandExecutor executor, ProjectReference project, ConflictStrategyType type) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 
 	/**
 	 * Check if a project has a sync conflict.

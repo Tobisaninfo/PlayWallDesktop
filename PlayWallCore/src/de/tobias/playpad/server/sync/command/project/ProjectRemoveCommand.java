@@ -2,9 +2,9 @@ package de.tobias.playpad.server.sync.command.project;
 
 import com.google.gson.JsonObject;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Command;
+import de.tobias.playpad.server.sync.command.Commands;
 
 /**
  * Created by tobias on 19.02.17.
