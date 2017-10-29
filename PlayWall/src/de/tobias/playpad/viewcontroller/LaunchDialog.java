@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller;
 
+import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -14,6 +15,7 @@ import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.profile.ProfileNotFoundException;
+import de.tobias.playpad.server.Session;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
@@ -37,6 +39,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -160,6 +163,10 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 				break;
 			case CONNECTION_LOST:
 				cloudIcon.setColor(Color.GRAY);
+				cloudLabel.setText(Localization.getString(Strings.Server_Connection_Lost));
+				break;
+			case DISCONNECTED:
+				cloudIcon.setColor(Color.RED);
 				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
 				break;
 		}
@@ -250,6 +257,20 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
 				}
 			});
+		}
+	}
+
+	@FXML
+	private void cloudIconClicked(MouseEvent event) {
+		Server server = PlayPadPlugin.getServerHandler().getServer();
+		if (server.getConnectionState() == ConnectionState.DISCONNECTED) {
+			LoginViewController loginViewController = new LoginViewController();
+			Session session = loginViewController.getSession();
+			try {
+				server.connect(session.getKey());
+			} catch (IOException | WebSocketException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

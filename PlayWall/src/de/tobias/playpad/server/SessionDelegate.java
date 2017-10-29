@@ -5,5 +5,10 @@ package de.tobias.playpad.server;
  */
 public interface SessionDelegate {
 
+	/**
+	 * Return a new session from the server and saves it on disk.
+	 *
+	 * @return session
+	 */
 	Session getSession();
 }

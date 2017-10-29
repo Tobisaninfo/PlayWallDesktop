@@ -35,7 +35,7 @@
       </HBox>
       <HBox layoutX="-57.0" layoutY="295.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0">
          <children>
-            <Label fx:id="cloudLabel"/>
+            <Label fx:id="cloudLabel" onMouseClicked="#cloudIconClicked"/>
          </children>
       </HBox>
    </children>
