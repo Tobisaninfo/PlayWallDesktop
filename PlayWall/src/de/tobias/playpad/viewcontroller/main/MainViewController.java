@@ -6,12 +6,16 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
-import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernDesignSizeHelper;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileListener;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -20,9 +24,6 @@ import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileListener;
-import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
@@ -72,10 +73,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	private static final int FIRST_PAGE = 0;
 
-	@FXML private VBox headerBox;
-	@FXML private GridPane padGridPane;
+	@FXML
+	private VBox headerBox;
+	@FXML
+	private GridPane padGridPane;
 
-	@FXML private AnchorPane gridContainer;
+	@FXML
+	private AnchorPane gridContainer;
 	private NotificationPane notificationPane;
 
 	private List<IPadView> padViews;
@@ -126,9 +130,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	private void setMinSize() {
 		ProjectSettings projectSettings = openProject.getSettings();
-		GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
-		double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
-		double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
+		double minWidth = ModernDesignSizeHelper.getMinWidth(projectSettings.getColumns());
+		double minHeight = ModernDesignSizeHelper.getMinHeight(projectSettings.getRows());
 
 		if (minWidth < 500) {
 			minWidth = 500;
@@ -528,11 +531,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		// design specific css
 		if (openProject != null) {
-			Profile currentProfile = Profile.currentProfile();
-			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
+			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCssMainView(design, this, getStage(), openProject);
 
 			// Mapping feedback
-			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 			activeMapping.clearFeedback();
 			activeMapping.prepareFeedback(openProject);
 			activeMapping.adjustPadColorToMapper();

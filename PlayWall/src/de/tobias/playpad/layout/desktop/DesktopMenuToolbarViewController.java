@@ -5,7 +5,8 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ColorModeHandler;
-import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.layout.desktop.listener.DesktopSearchController;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.layout.desktop.listener.PageButtonDragHandler;
@@ -33,9 +34,9 @@ import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
-import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -282,8 +283,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
 
-			GlobalDesign design = Profile.currentProfile().currentLayout();
-			if (design instanceof ColorModeHandler) {
+			ModernGlobalDesignHandler designHandler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
+			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			if (designHandler instanceof ColorModeHandler) {
 				if (colorPickerView == null) {
 					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
 

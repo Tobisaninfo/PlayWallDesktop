@@ -1,18 +1,13 @@
 package de.tobias.playpad.equalizerplugin.main.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;
@@ -29,6 +24,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.EqualizerBand;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EqualizerViewController extends NVC {
 
@@ -95,7 +95,8 @@ public class EqualizerViewController extends NVC {
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	@FXML

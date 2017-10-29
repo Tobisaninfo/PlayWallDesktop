@@ -1,12 +1,12 @@
 package de.tobias.playpad.design;
 
-public abstract class Design {
+public class Design {
 
-	protected void startStyleClass(StringBuilder builder, String name) {
-		builder.append("." + name + " {\n");
+	public static void startStyleClass(StringBuilder builder, String name) {
+		builder.append(".").append(name).append(" {\n");
 	}
 
-	protected void addStyleParameter(StringBuilder builder, String key, String value) {
+	public static void addStyleParameter(StringBuilder builder, String key, String value) {
 		builder.append("\t");
 		builder.append(key);
 		builder.append(": ");
@@ -14,7 +14,7 @@ public abstract class Design {
 		builder.append(";\n");
 	}
 
-	protected void addStyleParameter(StringBuilder builder, String key, double value) {
+	public static void addStyleParameter(StringBuilder builder, String key, double value) {
 		builder.append("\t");
 		builder.append(key);
 		builder.append(": ");
@@ -22,7 +22,7 @@ public abstract class Design {
 		builder.append(";\n");
 	}
 
-	protected void endStyleClass(StringBuilder builder) {
+	public static void endStyleClass(StringBuilder builder) {
 		builder.append("}\n\n");
 	}
 }

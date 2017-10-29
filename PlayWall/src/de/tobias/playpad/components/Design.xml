@@ -1,3 +1,0 @@
-<Actions>
-	<Component id="modern" default="true" name="Layout.Modern.Name">de.tobias.playpad.design.modern.ModernDesignFactory</Component>
-</Actions>

@@ -1,16 +1,19 @@
 package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -73,7 +76,8 @@ public class NewProfileDialog extends NVC {
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		if (Profile.currentProfile() != null) {
-			Profile.currentProfile().currentLayout().applyCss(stage);
+			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 		}
 	}
 

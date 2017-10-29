@@ -1,17 +1,15 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.mediapath.MediaPath;
-import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 /**
@@ -77,9 +75,9 @@ public class ProjectJsonReader {
 		}
 
 		if (!object.isNull("design")) {
-			ModernCartDesign design = readModernCartDesign(pad, object.getJSONObject("design"));
+			ModernCartDesign2 design = readModernCartDesign(pad, object.getJSONObject("design"));
 			if (design != null) {
-				pad.getPadSettings().setDesign(design, ModernCartDesign.TYPE);
+				pad.getPadSettings().setDesign(design);
 				pad.getPadSettings().setCustomDesign(true); // TODO Sync
 			}
 		}
@@ -97,13 +95,13 @@ public class ProjectJsonReader {
 		return new MediaPath(id, filename, pad);
 	}
 
-	private ModernCartDesign readModernCartDesign(Pad pad, JSONObject object) {
+	private ModernCartDesign2 readModernCartDesign(Pad pad, JSONObject object) {
 		if (!object.isNull("id")) {
 			UUID id = UUID.fromString(object.getString("id"));
 			ModernColor backgroundColor = ModernColor.valueOf(object.getString("background_color"));
 			ModernColor playColor = ModernColor.valueOf(object.getString("play_color"));
 
-			return new ModernCartDesign(pad, id, backgroundColor, playColor);
+			return new ModernCartDesign2(pad, id, backgroundColor, playColor);
 		}
 		return null;
 	}

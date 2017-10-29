@@ -1,26 +1,15 @@
 package de.tobias.playpad.pad;
 
-import java.util.HashMap;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignFactory;
-import de.tobias.playpad.registry.DefaultRegistry;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.server.sync.command.CommandManager;
-import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.util.Duration;
+
+import java.util.HashMap;
 
 public class PadSettings implements Cloneable {
 
@@ -35,7 +24,7 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
-	private HashMap<String, CartDesign> layouts = new HashMap<>();
+	private ModernCartDesign2 design;
 
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
 
@@ -161,40 +150,15 @@ public class PadSettings implements Cloneable {
 		return customDesignProperty;
 	}
 
-	public CartDesign getDesign() {
-		return getOrCreateDesign(Profile.currentProfile().getProfileSettings().getLayoutType());
-	}
-
-	HashMap<String, CartDesign> getDesigns() {
-		return layouts;
-	}
-
-	public CartDesign getDesign(String type) {
-		return layouts.get(type);
-	}
-
-	public CartDesign getOrCreateDesign(String type) {
-		if (!layouts.containsKey(type)) {
-			DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
-			try {
-				CartDesign design = registry.getFactory(type).newCartDesign(pad);
-				if (pad.getProject().getProjectReference().isSync()) {
-					CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
-				}
-				setDesign(design, type);
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public ModernCartDesign2 getDesign() {
+		if (design == null) {
+			design = new ModernCartDesign2(pad);
 		}
-		return layouts.get(type);
+		return design;
 	}
 
-	public void setDesign(CartDesign layout, String type) {
-		this.layouts.put(type, layout);
-		if (pad.getProject().getProjectReference().isSync()) {
-			layout.addListener();
-		}
+	public void setDesign(ModernCartDesign2 design) {
+		this.design = design;
 	}
 
 	public HashMap<String, Object> getCustomSettings() {
@@ -232,9 +196,9 @@ public class PadSettings implements Cloneable {
 		settings.loopProperty = new SimpleBooleanProperty(isLoop());
 
 		if (isCustomTimeMode())
-			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>(getTimeMode());
+			settings.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());
 		else
-			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>();
+			settings.timeModeProperty = new SimpleObjectProperty<>();
 
 		if (isCustomFade())
 			settings.fadeProperty = new SimpleObjectProperty<>(getFade());
@@ -247,11 +211,7 @@ public class PadSettings implements Cloneable {
 			settings.warningProperty = new SimpleObjectProperty<>();
 
 		settings.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		settings.layouts = new HashMap<>();
-		for (String key : layouts.keySet()) {
-			CartDesign clone = layouts.get(key).clone(pad);
-			settings.layouts.put(key, clone);
-		}
+		settings.design = design.clone(pad);
 
 		settings.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
 		settings.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert

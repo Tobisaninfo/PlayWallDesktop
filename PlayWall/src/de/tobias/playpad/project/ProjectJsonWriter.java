@@ -1,7 +1,6 @@
 package de.tobias.playpad.project;
 
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.page.Page;
@@ -52,9 +51,9 @@ public class ProjectJsonWriter {
 
 		json.put("paths", pathArray);
 
-		CartDesign design = pad.getPadSettings().getDesign(ModernCartDesign.TYPE);
-		if (design != null && design instanceof ModernCartDesign) {
-			JSONObject designJson = writeModernDesign((ModernCartDesign) design);
+		ModernCartDesign2 design = pad.getPadSettings().getDesign();
+		if (design != null) {
+			JSONObject designJson = writeModernDesign(design);
 			json.put("design", designJson);
 		}
 
@@ -70,7 +69,7 @@ public class ProjectJsonWriter {
 		return json;
 	}
 
-	private JSONObject writeModernDesign(ModernCartDesign design) {
+	private JSONObject writeModernDesign(ModernCartDesign2 design) {
 		JSONObject json = new JSONObject();
 
 		json.put("id", design.getId().toString());

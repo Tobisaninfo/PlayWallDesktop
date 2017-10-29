@@ -1,9 +1,10 @@
 package de.tobias.playpad.design;
 
-import java.util.function.Consumer;
-
 import de.tobias.playpad.DisplayableColor;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import javafx.scene.Node;
+
+import java.util.function.Consumer;
 
 /**
  * Wenn vom Design unterstützt, wird hier die GUI für Farbeinstellungen erstellt.
@@ -15,5 +16,5 @@ public interface ColorModeHandler {
 
 	Node getColorInterface(Consumer<DisplayableColor> onSelection);
 
-	void setColor(CartDesign design, DisplayableColor color);
+	void setColor(ModernCartDesign2 design, DisplayableColor color);
 }

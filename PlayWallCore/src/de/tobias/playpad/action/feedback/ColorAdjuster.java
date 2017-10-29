@@ -1,18 +1,16 @@
 package de.tobias.playpad.action.feedback;
 
-import java.util.Set;
-
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignColorAssociator;
-import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+
+import java.util.Set;
 
 /**
  * Eine Klasse mit nützlichen Methoden um die Farben bei den Mappern anzupassen.
@@ -59,18 +57,16 @@ public class ColorAdjuster {
 			Color layoutEvColor = null;
 
 			if (pad.getPadSettings().isCustomDesign()) {
-				CartDesign layout = pad.getPadSettings().getDesign();
-				if (layout instanceof DesignColorAssociator) {
-					DesignColorAssociator associator = (DesignColorAssociator) layout;
-					layoutStdColor = associator.getAssociatedStandardColor();
-					layoutEvColor = associator.getAssociatedEventColor();
+				ModernCartDesign2 design = pad.getPadSettings().getDesign();
+				if (design != null) {
+					layoutStdColor = design.getAssociatedStandardColor();
+					layoutEvColor = design.getAssociatedEventColor();
 				}
 			} else {
-				GlobalDesign layout = Profile.currentProfile().currentLayout();
-				if (layout instanceof DesignColorAssociator) {
-					DesignColorAssociator associator = (DesignColorAssociator) layout;
-					layoutStdColor = associator.getAssociatedStandardColor();
-					layoutEvColor = associator.getAssociatedEventColor();
+				ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+				if (design != null) {
+					layoutStdColor = design.getAssociatedStandardColor();
+					layoutEvColor = design.getAssociatedEventColor();
 				}
 			}
 

@@ -1,16 +1,18 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.importer.ProjectImporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.nui.NVC;
@@ -38,20 +40,31 @@ import java.util.Optional;
  */
 public class ProjectImportDialog extends NVC implements ProjectImporterDelegate, ChangeListener<String> {
 
-	@FXML private TextField projectNameTextField;
-	@FXML private CheckBox syncCheckbox;
+	@FXML
+	private TextField projectNameTextField;
+	@FXML
+	private CheckBox syncCheckbox;
 
-	@FXML private VBox profileSection;
-	@FXML private CheckBox profileImportCheckbox;
-	@FXML private TextField profileNameTextField;
+	@FXML
+	private VBox profileSection;
+	@FXML
+	private CheckBox profileImportCheckbox;
+	@FXML
+	private TextField profileNameTextField;
 
-	@FXML private VBox mediaSection;
-	@FXML private CheckBox mediaImportCheckbox;
-	@FXML private Button mediaPathButton;
-	@FXML private Label mediaPathLabel;
+	@FXML
+	private VBox mediaSection;
+	@FXML
+	private CheckBox mediaImportCheckbox;
+	@FXML
+	private Button mediaPathButton;
+	@FXML
+	private Label mediaPathLabel;
 
-	@FXML private Button cancelButton;
-	@FXML private Button importButton;
+	@FXML
+	private Button cancelButton;
+	@FXML
+	private Button importButton;
 
 	private BusyView busyView;
 
@@ -136,8 +149,10 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		if (Profile.currentProfile() != null)
-			Profile.currentProfile().currentLayout().applyCss(stage);
+		if (Profile.currentProfile() != null) {
+			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		}
 	}
 
 	@Override

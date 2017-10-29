@@ -1,14 +1,16 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.export.ProjectExporter;
 import de.tobias.playpad.project.export.ProjectExporterDelegate;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.utils.nui.BusyView;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -62,7 +64,8 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	@FXML

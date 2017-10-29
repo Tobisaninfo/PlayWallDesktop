@@ -1,21 +1,18 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.path.MultiPathContent;
 import de.tobias.playpad.pad.content.path.SinglePathContent;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.nui.NVC;
@@ -24,15 +21,14 @@ import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
@@ -152,7 +148,8 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	private void showCurrentSettings() {

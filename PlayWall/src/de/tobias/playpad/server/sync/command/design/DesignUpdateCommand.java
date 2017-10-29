@@ -1,8 +1,7 @@
 package de.tobias.playpad.server.sync.command.design;
 
 import com.google.gson.JsonObject;
-import de.tobias.playpad.design.modern.ModernCartDesign;
-import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Change;
 import de.tobias.playpad.server.sync.command.Command;
@@ -16,8 +15,8 @@ public class DesignUpdateCommand implements Command {
 	public JsonObject execute(Object data) {
 		if (data instanceof Change) {
 			Change change = (Change) data;
-			if (change.getRef() instanceof ModernCartDesign) {
-				ModernCartDesign design = (ModernCartDesign) change.getRef();
+			if (change.getRef() instanceof ModernCartDesign2) {
+				ModernCartDesign2 design = (ModernCartDesign2) change.getRef();
 
 				JsonObject json = new JsonObject();
 				json.addProperty(PropertyDef.ID, design.getId().toString());

@@ -2,9 +2,7 @@ package de.tobias.playpad.layout.touch.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.CartDesign;
 import de.tobias.playpad.design.DesignColorAssociator;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
@@ -27,11 +25,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class TouchPadView implements IPadView {
@@ -313,15 +307,9 @@ public class TouchPadView implements IPadView {
 		if (show) {
 			DesignColorAssociator associator = null;
 			if (pad.getPadSettings().isCustomDesign()) {
-				CartDesign design = pad.getPadSettings().getDesign();
-				if (design instanceof DesignColorAssociator) {
-					associator = (DesignColorAssociator) design;
-				}
+				associator = pad.getPadSettings().getDesign();
 			} else {
-				GlobalDesign design = Profile.currentProfile().currentLayout();
-				if (design instanceof DesignColorAssociator) {
-					associator = (DesignColorAssociator) design;
-				}
+				associator = Profile.currentProfile().getProfileSettings().getDesign();
 			}
 
 			if (associator != null) {
