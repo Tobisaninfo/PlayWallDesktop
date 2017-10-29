@@ -21,6 +21,7 @@ public class PadSettingsSerializer {
 	private static final String WARNING_ELEMENT = "Warning";
 
 	private static final String DESIGN_ELEMENT = "Design";
+	private static final String CUSTOM_DESIGN_ELEMENT = "custom";
 
 	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
@@ -49,6 +50,9 @@ public class PadSettingsSerializer {
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
+			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
+				padSettings.setCustomDesign(Boolean.valueOf(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
+			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign2 design = serializer.load(designElement, pad);
 			padSettings.setDesign(design);
@@ -98,6 +102,7 @@ public class PadSettingsSerializer {
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
 		ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 		serializer.save(designElement, padSettings.getDesign());
+		designElement.addAttribute(CUSTOM_DESIGN_ELEMENT, String.valueOf(padSettings.isCustomDesign()));
 
 		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
 		for (String key : padSettings.getCustomSettings().keySet()) {
