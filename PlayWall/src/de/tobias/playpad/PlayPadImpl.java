@@ -2,12 +2,13 @@ package de.tobias.playpad;
 
 import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
-import de.tobias.playpad.design.modern.ModernDesignFactory;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.*;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.Session;
+import de.tobias.playpad.server.SessionDelegate;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperOverviewViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
@@ -29,7 +30,10 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class PlayPadImpl implements PlayPad {
@@ -177,7 +181,6 @@ public class PlayPadImpl implements PlayPad {
             registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml", module, resourceBundle);
             registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml", module, resourceBundle);
             registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml", module, resourceBundle);
-            registryCollection.getDesigns().loadComponentsFromFile("de/tobias/playpad/components/Design.xml", module, resourceBundle);
             registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml", module, resourceBundle);
             registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml", module, resourceBundle);
             registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml", module, resourceBundle);
@@ -186,7 +189,6 @@ public class PlayPadImpl implements PlayPad {
             // Set Default
             // TODO Set Default
             registryCollection.getAudioHandlers().setDefaultID(JavaFXHandlerFactory.class);
-            registryCollection.getDesigns().setDefaultID(ModernDesignFactory.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

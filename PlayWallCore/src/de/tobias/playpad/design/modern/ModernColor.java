@@ -1,11 +1,7 @@
 package de.tobias.playpad.design.modern;
 
 import de.tobias.playpad.DisplayableColor;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
-import javafx.scene.paint.Stop;
+import javafx.scene.paint.*;
 
 public enum ModernColor implements DisplayableColor {
 

@@ -1,9 +1,7 @@
 package de.tobias.playpad.server.sync.command.design;
 
 import com.google.gson.JsonObject;
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernCartDesign;
-import de.tobias.playpad.server.Server;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Command;
 import de.tobias.playpad.server.sync.command.Commands;
@@ -17,8 +15,8 @@ public class DesignAddCommand implements Command {
 
 	@Override
 	public JsonObject execute(Object data) {
-		if (data instanceof ModernCartDesign) {
-			ModernCartDesign design = (ModernCartDesign) data;
+		if (data instanceof ModernCartDesign2) {
+			ModernCartDesign2 design = (ModernCartDesign2) data;
 
 			JsonObject json = new JsonObject();
 			json.addProperty(PropertyDef.CMD, Commands.DESIGN_ADD);

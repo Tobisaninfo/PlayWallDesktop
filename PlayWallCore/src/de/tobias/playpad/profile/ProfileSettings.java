@@ -1,21 +1,10 @@
 package de.tobias.playpad.profile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-
-import de.tobias.playpad.settings.Fade;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
-
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
+import de.tobias.playpad.settings.Fade;
 import de.tobias.utils.settings.SettingsSerializable;
 import de.tobias.utils.settings.Storable;
 import de.tobias.utils.settings.UserDefaults;
@@ -24,6 +13,18 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.util.Duration;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
 
 public class ProfileSettings implements SettingsSerializable {
 
@@ -40,8 +41,8 @@ public class ProfileSettings implements SettingsSerializable {
 	@Storable private HashMap<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
-	@Storable private String layoutType = PlayPadPlugin.getRegistryCollection().getDesigns().getDefaultID(); // Rather
-																												// DesignType
+	@Storable
+	private ModernGlobalDesign2 design = new ModernGlobalDesign2();
 	@Storable private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
 
 	// Cart Settings
@@ -72,12 +73,12 @@ public class ProfileSettings implements SettingsSerializable {
 		return midiDevice;
 	}
 
-	public String getLayoutType() {
-		return layoutType;
-	}
-
 	public String getMainLayoutType() {
 		return mainLayoutType;
+	}
+
+	public ModernGlobalDesign2 getDesign() {
+		return design;
 	}
 
 	public Duration getWarningFeedback() {
@@ -121,12 +122,12 @@ public class ProfileSettings implements SettingsSerializable {
 		this.midiDevice = midiDevice;
 	}
 
-	public void setLayoutType(String layoutType) {
-		this.layoutType = layoutType;
-	}
-
 	public void setMainLayoutType(String mainLayoutType) {
 		this.mainLayoutType = mainLayoutType;
+	}
+
+	public void setDesign(ModernGlobalDesign2 design) {
+		this.design = design;
 	}
 
 	public void setWarningTime(Duration warningTime) {
@@ -177,8 +178,8 @@ public class ProfileSettings implements SettingsSerializable {
 	private static final String TIME_DISPLAY_ELEMENT = "TimeDisplay";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
-	private static final String LAYOUT_TYPE_ELEMENT = "LayoutType";
 	private static final String MAIN_LAYOUT_TYPE_ELEMENT = "MainLayoutType";
+	private static final String DESIGN_ELEMENT = "Design";
 	private static final String MIDI_ACTIVE_ELEMENT = "MidiActive";
 	private static final String MIDI_DEVICE_ELEMENT = "MidiDevice";
 
@@ -198,8 +199,10 @@ public class ProfileSettings implements SettingsSerializable {
 			if (root.element(MIDI_ACTIVE_ELEMENT) != null)
 				profileSettings.setMidiActive(Boolean.valueOf(root.element(MIDI_ACTIVE_ELEMENT).getStringValue()));
 
-			if (root.element(LAYOUT_TYPE_ELEMENT) != null) {
-				profileSettings.setLayoutType(root.element(LAYOUT_TYPE_ELEMENT).getStringValue());
+			if (root.element(DESIGN_ELEMENT) != null) {
+				Element element = root.element(DESIGN_ELEMENT);
+				ModernGlobalDesignSerializer serializer = new ModernGlobalDesignSerializer();
+				profileSettings.setDesign(serializer.load(element));
 			}
 			if (root.element(MAIN_LAYOUT_TYPE_ELEMENT) != null) {
 				profileSettings.setMainLayoutType(root.element(MAIN_LAYOUT_TYPE_ELEMENT).getStringValue());
@@ -265,7 +268,9 @@ public class ProfileSettings implements SettingsSerializable {
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
 		root.addElement(MIDI_ACTIVE_ELEMENT).addText(String.valueOf(midiActive));
 
-		root.addElement(LAYOUT_TYPE_ELEMENT).addText(layoutType);
+		Element designElement = root.addElement(DESIGN_ELEMENT);
+		ModernGlobalDesignSerializer serializer = new ModernGlobalDesignSerializer();
+		serializer.save(designElement, design);
 		root.addElement(MAIN_LAYOUT_TYPE_ELEMENT).addText(mainLayoutType);
 
 		root.addElement(WARNING_ELEMENT).addText(warningTime.toString());

@@ -1,30 +1,18 @@
 package de.tobias.playpad.pad;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPool;
+import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.project.Project;
+import de.tobias.utils.xml.XMLDeserializer;
+import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-
-import de.tobias.playpad.pad.mediapath.MediaPath;
-import de.tobias.playpad.pad.mediapath.MediaPool;
-import de.tobias.utils.util.Worker;
-import javafx.scene.media.MediaPlayer;
-import org.dom4j.Element;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignFactory;
-import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.DefaultRegistry;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.tigger.Trigger;
-import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.utils.settings.UserDefaults;
-import de.tobias.utils.xml.XMLDeserializer;
-import de.tobias.utils.xml.XMLSerializer;
-import javafx.util.Duration;
 
 public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 

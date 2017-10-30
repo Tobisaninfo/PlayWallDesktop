@@ -3,7 +3,6 @@ package de.tobias.playpad;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.design.DesignFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.registry.DefaultRegistry;
@@ -26,8 +25,6 @@ public interface RegistryCollection {
 	AudioRegistry getAudioHandlers();
 
 	Registry<PadDragMode> getDragModes();
-
-	DefaultRegistry<DesignFactory> getDesigns();
 
 	Registry<MapperFactory> getMappers();
 

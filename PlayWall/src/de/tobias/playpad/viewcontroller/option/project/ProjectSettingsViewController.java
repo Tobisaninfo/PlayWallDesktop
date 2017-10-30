@@ -1,10 +1,12 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProjectSettingsViewController;
@@ -69,7 +71,8 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 		stage.setMinHeight(500);
 		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	/**

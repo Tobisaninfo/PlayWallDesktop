@@ -3,7 +3,7 @@ package de.tobias.playpad.server.sync.listener.downstream.design;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
@@ -31,10 +31,10 @@ public class DesignAddListener implements ServerListener {
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {
-					ModernCartDesign modernCartDesign = new ModernCartDesign(pad, uuid);
+					ModernCartDesign2 modernCartDesign = new ModernCartDesign2(pad, uuid);
 					modernCartDesign.setBackgroundColor(backgroundColor);
 					modernCartDesign.setPlayColor(playColor);
-					pad.getPadSettings().setDesign(modernCartDesign, ModernCartDesign.TYPE);
+					pad.getPadSettings().setDesign(modernCartDesign);
 				}
 			}
 		}

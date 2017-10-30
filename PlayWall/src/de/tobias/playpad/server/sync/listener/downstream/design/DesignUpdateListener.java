@@ -3,8 +3,7 @@ package de.tobias.playpad.server.sync.listener.downstream.design;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
@@ -32,28 +31,25 @@ public class DesignUpdateListener implements ServerListener {
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {
-					CartDesign design = pad.getPadSettings().getOrCreateDesign(ModernCartDesign.TYPE);
-					if (design != null && design instanceof ModernCartDesign) {
-						ModernCartDesign modernCartDesign = (ModernCartDesign) design;
-						if (modernCartDesign.getId().equals(uuid)) {
+					ModernCartDesign2 design = pad.getPadSettings().getDesign();
+					if (design.getId().equals(uuid)) {
 
-							String field = json.get(PropertyDef.FIELD).getAsString();
-							ModernColor color = ModernColor.valueOf(json.get(PropertyDef.VALUE).getAsString());
-							IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+						String field = json.get(PropertyDef.FIELD).getAsString();
+						ModernColor color = ModernColor.valueOf(json.get(PropertyDef.VALUE).getAsString());
+						IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 
-							if (field.equals(PropertyDef.DESIGN_BACKGROUND_COLOR)) {
-								Platform.runLater(() -> {
-									modernCartDesign.setBackgroundColor(color);
-									pad.getPadSettings().setCustomDesign(true);
-									mainViewController.loadUserCss();
-								});
-							} else if (field.equals(PropertyDef.DESIGN_PLAY_COLOR)) {
-								Platform.runLater(() -> {
-									modernCartDesign.setPlayColor(color);
-									pad.getPadSettings().setCustomDesign(true);
-									mainViewController.loadUserCss();
-								});
-							}
+						if (field.equals(PropertyDef.DESIGN_BACKGROUND_COLOR)) {
+							Platform.runLater(() -> {
+								design.setBackgroundColor(color);
+								pad.getPadSettings().setCustomDesign(true);
+								mainViewController.loadUserCss();
+							});
+						} else if (field.equals(PropertyDef.DESIGN_PLAY_COLOR)) {
+							Platform.runLater(() -> {
+								design.setPlayColor(color);
+								pad.getPadSettings().setCustomDesign(true);
+								mainViewController.loadUserCss();
+							});
 						}
 					}
 				}
