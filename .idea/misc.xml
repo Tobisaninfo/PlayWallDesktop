@@ -8,6 +8,9 @@
       <item index="3" class="java.lang.String" itemvalue="net.xeoh.plugins.base.annotations.events.PluginLoaded" />
       <item index="4" class="java.lang.String" itemvalue="net.xeoh.plugins.base.annotations.events.Shutdown" />
     </list>
+    <writeAnnotations>
+      <writeAnnotation name="javafx.fxml.FXML" />
+    </writeAnnotations>
   </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/out/docs" />

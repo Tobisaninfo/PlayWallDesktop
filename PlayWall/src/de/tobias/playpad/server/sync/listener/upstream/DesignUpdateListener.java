@@ -1,30 +1,24 @@
 package de.tobias.playpad.server.sync.listener.upstream;
 
-import com.google.gson.JsonObject;
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.sync.PropertyDef;
-import de.tobias.playpad.server.sync.ServerUtils;
 import de.tobias.playpad.server.sync.command.Change;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import javafx.beans.value.ChangeListener;
-
-import java.util.function.Consumer;
 
 /**
  * Created by tobias on 24.02.17.
  */
 public class DesignUpdateListener {
 
-	private ModernCartDesign design;
+	private ModernCartDesign2 design;
 
 	private ChangeListener<ModernColor> backgroundColorListener;
 	private ChangeListener<ModernColor> playColorListener;
 
-	public DesignUpdateListener(ModernCartDesign design) {
+	public DesignUpdateListener(ModernCartDesign2 design) {
 		this.design = design;
 
 		backgroundColorListener = (observable, oldValue, newValue) -> {

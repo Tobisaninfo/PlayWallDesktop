@@ -4,8 +4,9 @@ import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.IGlobalReloadTask;
@@ -67,7 +68,8 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	/**

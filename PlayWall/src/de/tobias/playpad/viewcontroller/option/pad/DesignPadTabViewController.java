@@ -1,48 +1,38 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignFactory;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.viewcontroller.CartDesignViewController;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML private VBox layoutContainer;
 	@FXML private CheckBox enableLayoutCheckBox;
-	private CartDesignViewController layoutViewController;
+
+	private ModernCartDesignViewController layoutViewController;
 
 	private Pad pad;
 
 	DesignPadTabViewController(Pad pad) {
 		load("de/tobias/playpad/assets/view/option/pad/", "layoutTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
-	}
-
-	private void setLayoutController(CartDesignViewController cartLayoutViewController) {
-		if (layoutViewController != null)
-			layoutContainer.getChildren().remove(layoutViewController.getParent());
-
-		if (cartLayoutViewController != null) {
-			layoutViewController = cartLayoutViewController;
-			layoutContainer.getChildren().add(layoutViewController.getParent());
-		}
 	}
 
 	@Override
@@ -54,9 +44,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 				try {
 					padSettings.setCustomDesign(true);
 
-					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartDesign layout = padSettings.getOrCreateDesign(layoutType);
-					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
+					ModernCartDesign2 layout = padSettings.getDesign();
+					layout.copyGlobalLayout(Profile.currentProfile().getProfileSettings().getDesign());
 
 					setLayoutViewController(pad);
 				} catch (Exception e) {
@@ -65,7 +54,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 				}
 			} else if (!c && padSettings.isCustomDesign()) {
 				padSettings.setCustomDesign(false);
-				setLayoutController(null);
+				setLayoutViewController(null);
 			}
 		});
 	}
@@ -86,19 +75,18 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	}
 
 	private void setLayoutViewController(Pad pad) {
-		try {
-			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartDesign layout = pad.getPadSettings().getOrCreateDesign(layoutType);
+		if (pad != null) {
+			try {
+				ModernCartDesign2 design = pad.getPadSettings().getDesign();
 
-			DesignFactory component = PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType);
-			CartDesignViewController controller = component.getCartDesignViewController(layout);
-			setLayoutController(controller);
-		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+				ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
+				layoutContainer.getChildren().setAll(controller.getParent());
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+			}
+		} else {
+			layoutContainer.getChildren().clear();
 		}
 	}
 

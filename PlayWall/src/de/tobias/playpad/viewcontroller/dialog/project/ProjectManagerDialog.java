@@ -1,8 +1,12 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -10,8 +14,6 @@ import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -165,7 +167,8 @@ public class ProjectManagerDialog extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	public Optional<ProjectReference> showAndWait() {

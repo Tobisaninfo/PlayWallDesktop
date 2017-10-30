@@ -1,4 +1,0 @@
-<Actions>
-	<Component id="modern" default="true" name="Layout.Modern.Name">de.tobias.playpad.design.modern.ModernDesignFactory</Component>
-	<Component id="classic" name="Layout.Classic.Name">de.tobias.playpad.design.classic.ClassicDesignFactory</Component>
-</Actions>

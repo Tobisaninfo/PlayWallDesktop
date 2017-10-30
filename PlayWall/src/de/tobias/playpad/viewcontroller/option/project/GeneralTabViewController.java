@@ -3,10 +3,9 @@ package de.tobias.playpad.viewcontroller.option.project;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernDesignSizeHelper;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
@@ -131,12 +130,10 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		double width = mainWindowScreen.getVisualBounds().getMaxX() - mainWindowScreen.getVisualBounds().getMinX();
 		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
 
-		GlobalDesign globalLayout = Profile.currentProfile().currentLayout();
-
 		if (dimension == Dimension.COLUMNS) {
-			return Math.min((int) (width / globalLayout.getPadWidth()), ProjectSettings.MAX_COLUMNS);
+			return Math.min((int) (width / ModernDesignSizeHelper.getPadWidth()), ProjectSettings.MAX_COLUMNS);
 		} else if (dimension == Dimension.ROWS) {
-			return Math.min((int) ((height - DISPLAY_OFFSET) / globalLayout.getPadHeight()), ProjectSettings.MAX_ROWS);
+			return Math.min((int) ((height - DISPLAY_OFFSET) / ModernDesignSizeHelper.getPadHeight()), ProjectSettings.MAX_ROWS);
 		}
 		return -1;
 	}
@@ -144,8 +141,6 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	private boolean screenValid() {
 		double width = mainWindowScreen.getVisualBounds().getMaxX() - mainWindowScreen.getVisualBounds().getMinX();
 		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
-
-		GlobalDesign layout = Profile.currentProfile().currentLayout();
 
 		try {
 			Integer column = Integer.valueOf(columnTextField.getText());
@@ -155,8 +150,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 				return false;
 			}
 
-			double neededWidth = layout.getMinWidth(column);
-			double neededHeight = layout.getMinHeight(rows) + 100;
+			double neededWidth = ModernDesignSizeHelper.getMinWidth(column);
+			double neededHeight = ModernDesignSizeHelper.getMinHeight(rows) + 100;
 
 			if (neededHeight <= height && neededWidth <= width)
 				return true;

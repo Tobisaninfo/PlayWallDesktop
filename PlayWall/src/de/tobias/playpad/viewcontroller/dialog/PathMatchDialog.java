@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadViewController;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -191,7 +192,8 @@ public class PathMatchDialog extends NVC {
 		stage.setMaxHeight(600);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	public void showAndWait() {

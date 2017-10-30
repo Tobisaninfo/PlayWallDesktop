@@ -2,12 +2,8 @@ package de.tobias.playpad.profile;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
-import de.tobias.playpad.design.DesignFactory;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.registry.DefaultRegistry;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -17,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Profile {
@@ -34,7 +29,6 @@ public class Profile {
 
 	private ProfileSettings profileSettings;
 	private MappingList mappings;
-	private HashMap<String, GlobalDesign> layouts;
 
 	/**
 	 * Use {@link ProfileReferenceManager#addProfile(ProfileReference)} instead
@@ -46,7 +40,6 @@ public class Profile {
 		this.ref = ref;
 		this.profileSettings = new ProfileSettings();
 		this.mappings = new MappingList(this);
-		this.layouts = new HashMap<>();
 	}
 
 	public static void registerListener(ProfileListener listener) {
@@ -67,31 +60,6 @@ public class Profile {
 
 		// Notify Profile Change
 		listeners.forEach(listener -> listener.reloadSettings(old, currentProfile));
-	}
-
-	public HashMap<String, GlobalDesign> getLayouts() {
-		return layouts;
-	}
-
-	public GlobalDesign getLayout(String type) {
-		if (layouts.containsKey(type)) {
-			return layouts.get(type);
-		} else {
-			try {
-				DefaultRegistry<DesignFactory> registry = PlayPadPlugin.getRegistryCollection().getDesigns();
-				GlobalDesign layout = registry.getFactory(type).newGlobalDesign();
-				layouts.put(type, layout);
-				return layout;
-			} catch (NoSuchComponentException e) { // -> Throw exception
-				// TODO Error Handling
-				e.printStackTrace();
-			}
-		}
-		return null;
-	}
-
-	public GlobalDesign currentLayout() {
-		return getLayout(profileSettings.getLayoutType());
 	}
 
 	public MappingList getMappings() {
@@ -117,12 +85,7 @@ public class Profile {
 
 		if (Files.exists(app.getPath(PathType.CONFIGURATION, ref.getFileName()))) {
 
-			ProfileSettings profileSettings = ProfileSettings.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), PROFILE_SETTINGS_XML));
-			HashMap<String, GlobalDesign> layouts = GlobalDesign
-					.loadGlobalLayout(app.getPath(PathType.CONFIGURATION, ref.getFileName(), LAYOUT_XML));
-
-			profile.profileSettings = profileSettings;
-			profile.layouts = layouts;
+			profile.profileSettings = ProfileSettings.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), PROFILE_SETTINGS_XML));
 
 			// Listener
 			PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->
@@ -135,8 +98,7 @@ public class Profile {
 			});
 
 			// Mapping erst danach, weil das auf current Profile zugreifen muss
-			MappingList mappings = MappingList.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_XML), profile);
-			profile.mappings = mappings;
+			profile.mappings = MappingList.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_XML), profile);
 
 			setCurrentProfile(profile);
 
@@ -164,7 +126,6 @@ public class Profile {
 
 		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
 		mappings.save(getProfilePath(MAPPING_XML));
-		GlobalDesign.saveGlobal(layouts, getProfilePath(LAYOUT_XML));
 	}
 
 	private Path getProfilePath(String fileName) {

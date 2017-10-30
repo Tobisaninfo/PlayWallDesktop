@@ -1,15 +1,14 @@
 package de.tobias.playpad.viewcontroller;
 
-import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.server.Session;
-import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,9 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URI;
-
-import static de.tobias.utils.util.Localization.getString;
 
 /**
  * Created by tobias on 21.02.17.
@@ -60,7 +56,8 @@ public class AuthViewController extends NVC {
 		stage.setHeight(250);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Login_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	@FXML

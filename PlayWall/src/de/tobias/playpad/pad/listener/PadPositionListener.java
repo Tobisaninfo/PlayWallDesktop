@@ -1,5 +1,10 @@
 package de.tobias.playpad.pad.listener;
 
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesignHandler;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
@@ -89,10 +94,15 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		PadSettings padSettings = pad.getPadSettings();
 		Duration warning = padSettings.getWarning();
 
+		ModernGlobalDesign2 globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 		if (padSettings.isCustomDesign()) {
-			padSettings.getDesign().handleWarning(controller, warning, Profile.currentProfile().currentLayout());
+			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
+			ModernCartDesign2 design = pad.getPadSettings().getDesign();
+
+			handler.handleWarning(design, controller, warning, globalDesign);
 		} else {
-			Profile.currentProfile().currentLayout().handleWarning(controller, warning);
+			ModernGlobalDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
+			handler.handleWarning(globalDesign, controller, warning);
 		}
 	}
 
@@ -114,9 +124,15 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		PadSettings padSettings = pad.getPadSettings();
 
 		if (padSettings.isCustomDesign()) {
-			padSettings.getDesign().stopWarning(controller);
+			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
+			ModernCartDesign2 design = pad.getPadSettings().getDesign();
+
+			handler.stopWarning(design, controller);
 		} else {
-			Profile.currentProfile().currentLayout().stopWarning(controller);
+			ModernGlobalDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
+			ModernGlobalDesign2 globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+
+			handler.stopWarning(globalDesign, controller);
 		}
 		controller.getView().setStyle("");
 	}

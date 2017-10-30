@@ -1,23 +1,21 @@
 package de.tobias.playpad.viewcontroller.design;
 
-import java.util.function.Consumer;
-
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
-
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.view.ColorPickerView;
-import de.tobias.playpad.viewcontroller.CartDesignViewController;
+import de.tobias.utils.nui.NVC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 
-public class ModernCartDesignViewController extends CartDesignViewController {
+import java.util.function.Consumer;
+
+public class ModernCartDesignViewController extends NVC {
 
 	@FXML private Button backgroundColorButton;
 	@FXML private Button playColorButton;
@@ -25,21 +23,20 @@ public class ModernCartDesignViewController extends CartDesignViewController {
 
 	@FXML private Button resetButton;
 
-	private ModernCartDesign cartLayout;
+	private ModernCartDesign2 design;
 
 	private PopOver colorChooser;
 
-	public ModernCartDesignViewController(CartDesign layout) {
-		super(layout);
+	public ModernCartDesignViewController(ModernCartDesign2 layout) {
 		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutCart", PlayPadMain.getUiResourceBundle());
 
-		this.cartLayout = (ModernCartDesign) layout;
+		this.design = layout;
 		setLayout();
 	}
 
 	private void setLayout() {
-		backgroundColorButton.setStyle(getLinearGradientCss(cartLayout.getBackgroundColor()));
-		playColorButton.setStyle(getLinearGradientCss(cartLayout.getPlayColor()));
+		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
+		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 	}
 
 	@Override
@@ -48,18 +45,18 @@ public class ModernCartDesignViewController extends CartDesignViewController {
 
 	@FXML
 	private void resetButtonHandler(ActionEvent event) {
-		cartLayout.reset();
+		design.reset();
 		setLayout();
 	}
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, cartLayout.getBackgroundColor(), (color) -> cartLayout.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), (color) -> design.setBackgroundColor(color));
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, cartLayout.getPlayColor(), (color) -> cartLayout.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), (color) -> design.setPlayColor(color));
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
