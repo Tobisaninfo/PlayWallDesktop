@@ -75,17 +75,18 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	}
 
 	private void setLayoutViewController(Pad pad) {
-		try {
-			ModernCartDesign2 design = pad.getPadSettings().getDesign();
+		if (pad != null) {
+			try {
+				ModernCartDesign2 design = pad.getPadSettings().getDesign();
 
-			ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
-			layoutContainer.getChildren().setAll(controller.getParent());
-		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+				ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
+				layoutContainer.getChildren().setAll(controller.getParent());
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+			}
+		} else {
+			layoutContainer.getChildren().clear();
 		}
 	}
 

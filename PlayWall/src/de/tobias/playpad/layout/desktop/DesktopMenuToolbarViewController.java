@@ -5,7 +5,6 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ColorModeHandler;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.layout.desktop.listener.DesktopSearchController;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
@@ -284,10 +283,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			colorButton.setSelected(true);
 
 			ModernGlobalDesignHandler designHandler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
-			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
 			if (designHandler instanceof ColorModeHandler) {
 				if (colorPickerView == null) {
-					colorPickerView = new DesktopColorPickerView((ColorModeHandler) design);
+					colorPickerView = new DesktopColorPickerView((ColorModeHandler) designHandler);
 
 					// Add Listener for Pads
 					mainViewController.addListenerForPads(colorPickerView, MouseEvent.MOUSE_CLICKED);
