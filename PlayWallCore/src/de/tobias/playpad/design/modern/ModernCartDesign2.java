@@ -4,6 +4,7 @@ import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.upstream.DesignUpdateListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
@@ -17,7 +18,7 @@ public class ModernCartDesign2 implements DesignColorAssociator {
 	private ObjectProperty<ModernColor> playColor;
 
 	private Pad pad;
-	// private DesignUpdateListener syncListener; TODO Enable listener
+	private DesignUpdateListener syncListener;
 
 	public ModernCartDesign2(Pad pad) {
 		this(pad, UUID.randomUUID());
@@ -34,7 +35,7 @@ public class ModernCartDesign2 implements DesignColorAssociator {
 		this.backgroundColor = new SimpleObjectProperty<>(backgroundColor);
 		this.playColor = new SimpleObjectProperty<>(playColor);
 
-		// syncListener = new DesignUpdateListener(this);
+		syncListener = new DesignUpdateListener(this);
 	}
 
 	public UUID getId() {
@@ -70,11 +71,11 @@ public class ModernCartDesign2 implements DesignColorAssociator {
 	}
 
 	public void addListener() {
-//		syncListener.addListener();
+		syncListener.addListener();
 	}
 
 	public void removeListener() {
-//		syncListener.removeListener();
+		syncListener.removeListener();
 	}
 
 	public void reset() {
@@ -101,10 +102,10 @@ public class ModernCartDesign2 implements DesignColorAssociator {
 		clone.pad = pad;
 		clone.uuid = UUID.randomUUID();
 
-//		syncListener = new DesignUpdateListener(clone);
+		syncListener = new DesignUpdateListener(clone);
 		if (pad.getProject().getProjectReference().isSync()) {
-			addListener();
 			CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), clone);
+			clone.addListener();
 		}
 
 		return clone;

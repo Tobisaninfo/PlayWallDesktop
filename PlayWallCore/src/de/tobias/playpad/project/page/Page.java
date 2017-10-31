@@ -175,6 +175,7 @@ public class Page implements Cloneable {
 
 			if (projectReference.getProjectReference().isSync()) {
 				CommandManager.execute(Commands.PAD_ADD, projectReference.getProjectReference(), pad);
+				CommandManager.execute(Commands.PAD_SETTINGS_ADD, projectReference.getProjectReference(), pad.getPadSettings());
 			}
 		}
 		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();

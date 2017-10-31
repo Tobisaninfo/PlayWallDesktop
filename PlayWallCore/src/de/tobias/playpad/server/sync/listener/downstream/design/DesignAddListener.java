@@ -23,7 +23,7 @@ public class DesignAddListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			UUID padId = UUID.fromString(json.get(PropertyDef.DESIGN_PAD_REF).getAsString());
+			UUID padId = UUID.fromString(json.get(PropertyDef.DESIGN_PAD_SETTINGS_REF).getAsString());
 			ModernColor backgroundColor = ModernColor.valueOf(json.get(PropertyDef.DESIGN_BACKGROUND_COLOR).getAsString());
 			ModernColor playColor = ModernColor.valueOf(json.get(PropertyDef.DESIGN_PLAY_COLOR).getAsString());
 

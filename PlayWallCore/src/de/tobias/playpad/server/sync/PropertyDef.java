@@ -28,5 +28,11 @@ public class PropertyDef {
 
 	public static final String DESIGN_BACKGROUND_COLOR = "background_color";
 	public static final String DESIGN_PLAY_COLOR = "play_color";
-	public static final String DESIGN_PAD_REF = "pad";
+	public static final String DESIGN_PAD_SETTINGS_REF = "pad_settings";
+
+	public static final String PAD_SETTINGS_PAD_ID = "pad_id";
+	public static final String PAD_SETTINGS_VOLUME = "volume";
+	public static final String PAD_SETTINGS_LOOP = "loop";
+	public static final String PAD_SETTINGS_TIME_MODE = "time_mode";
+	public static final String PAD_SETTINGS_WARNING = "warning";
 }

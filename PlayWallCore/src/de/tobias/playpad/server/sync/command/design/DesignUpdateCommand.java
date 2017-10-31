@@ -20,7 +20,7 @@ public class DesignUpdateCommand implements Command {
 
 				JsonObject json = new JsonObject();
 				json.addProperty(PropertyDef.ID, design.getId().toString());
-				json.addProperty(PropertyDef.DESIGN_PAD_REF, design.getPad().getUuid().toString());
+				json.addProperty(PropertyDef.DESIGN_PAD_SETTINGS_REF, design.getPad().getPadSettings().getId().toString());
 				json.addProperty(PropertyDef.CMD, Commands.DESIGN_UPDATE);
 
 				json.addProperty(PropertyDef.FIELD, change.getName());

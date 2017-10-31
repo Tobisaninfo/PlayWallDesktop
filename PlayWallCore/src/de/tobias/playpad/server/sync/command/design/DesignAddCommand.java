@@ -23,8 +23,8 @@ public class DesignAddCommand implements Command {
 
 			// Add Data
 			json.addProperty(PropertyDef.ID, design.getId().toString());
-			UUID padId = design.getPad().getUuid();
-			json.addProperty(PropertyDef.DESIGN_PAD_REF, padId.toString());
+			UUID padId = design.getPad().getPadSettings().getId();
+			json.addProperty(PropertyDef.DESIGN_PAD_SETTINGS_REF, padId.toString());
 			json.addProperty(PropertyDef.DESIGN_BACKGROUND_COLOR, design.getBackgroundColor().name());
 			json.addProperty(PropertyDef.DESIGN_PLAY_COLOR, design.getPlayColor().name());
 

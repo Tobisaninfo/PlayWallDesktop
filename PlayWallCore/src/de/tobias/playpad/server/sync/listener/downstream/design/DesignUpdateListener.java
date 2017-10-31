@@ -25,7 +25,7 @@ public class DesignUpdateListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			UUID padId = UUID.fromString(json.get(PropertyDef.DESIGN_PAD_REF).getAsString());
+			UUID padId = UUID.fromString(json.get(PropertyDef.DESIGN_PAD_SETTINGS_REF).getAsString());
 
 			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
 			if (project != null) {

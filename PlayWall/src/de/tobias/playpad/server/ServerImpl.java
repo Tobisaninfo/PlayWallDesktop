@@ -25,6 +25,8 @@ import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.command.design.DesignAddCommand;
 import de.tobias.playpad.server.sync.command.design.DesignUpdateCommand;
 import de.tobias.playpad.server.sync.command.pad.*;
+import de.tobias.playpad.server.sync.command.pad.settings.PadSettingsAddCommand;
+import de.tobias.playpad.server.sync.command.pad.settings.PadSettingsUpdateCommand;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.page.PageUpdateCommand;
@@ -106,6 +108,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
 		CommandManager.register(Commands.DESIGN_UPDATE, new DesignUpdateCommand());
+
+		CommandManager.register(Commands.PAD_SETTINGS_ADD, new PadSettingsAddCommand());
+		CommandManager.register(Commands.PAD_SETTINGS_UPDATE, new PadSettingsUpdateCommand());
 	}
 
 	@Override

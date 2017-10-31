@@ -9,10 +9,14 @@ import de.tobias.utils.settings.UserDefaults;
 import javafx.util.Duration;
 import org.dom4j.Element;
 
+import java.util.UUID;
+
 /**
  * Created by tobias on 26.02.17.
  */
 public class PadSettingsSerializer {
+
+	private static final String ID_ATTR = "id";
 
 	private static final String VOLUME_ELEMENT = "Volume";
 	private static final String LOOP_ELEMENT = "Loop";
@@ -28,7 +32,13 @@ public class PadSettingsSerializer {
 	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
 
 	public PadSettings loadElement(Element settingsElement, Pad pad) {
-		PadSettings padSettings = new PadSettings(pad);
+		PadSettings padSettings;
+		if (settingsElement.attributeValue(ID_ATTR) != null) {
+			UUID id = UUID.fromString(settingsElement.attributeValue(ID_ATTR));
+			padSettings = new PadSettings(pad, id);
+		} else {
+			padSettings = new PadSettings(pad);
+		}
 
 		if (settingsElement.element(VOLUME_ELEMENT) != null)
 			padSettings.setVolume(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
@@ -88,7 +98,8 @@ public class PadSettingsSerializer {
 	}
 
 	public void saveElement(Element settingsElement, PadSettings padSettings) {
-		// Settings
+		settingsElement.addAttribute(ID_ATTR, padSettings.getId().toString());
+
 		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(padSettings.getVolume()));
 		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(padSettings.isLoop()));
 		if (padSettings.isCustomTimeMode())
@@ -100,8 +111,10 @@ public class PadSettingsSerializer {
 
 		// Layout
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
-		ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
-		serializer.save(designElement, padSettings.getDesign());
+		if (padSettings.isCustomDesign()) {
+			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
+			serializer.save(designElement, padSettings.getDesign());
+		}
 		designElement.addAttribute(CUSTOM_DESIGN_ELEMENT, String.valueOf(padSettings.isCustomDesign()));
 
 		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
