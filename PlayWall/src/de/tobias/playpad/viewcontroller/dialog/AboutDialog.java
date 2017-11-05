@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+// TODO Extract into lang file
 public class AboutDialog extends NVC {
+
 	@FXML
 	private Label libsLabel;
 
@@ -78,6 +80,7 @@ public class AboutDialog extends NVC {
 
 		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Website));
 		websiteLink.setPadding(Insets.EMPTY);
+		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
 			String url = info.getUserInfo().get(AppUserInfoStrings.WEBSITE).toString();
 			openWebsite(url);
@@ -86,6 +89,7 @@ public class AboutDialog extends NVC {
 
 		Hyperlink codeLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Code));
 		codeLink.setPadding(Insets.EMPTY);
+		codeLink.setFocusTraversable(false);
 		codeLink.setOnAction(e -> {
 			String url = info.getUserInfo().get(AppUserInfoStrings.REPOSITORY).toString();
 			openWebsite(url);
@@ -109,8 +113,8 @@ public class AboutDialog extends NVC {
 		stage.setResizable(false);
 		stage.initStyle(StageStyle.TRANSPARENT);
 
-		stage.setWidth(900);
-		stage.setHeight(430);
+		stage.setWidth(650);
+		stage.setHeight(400);
 
 		double centerXPosition = owner.getX() + owner.getWidth() / 2d;
 		double centerYPosition = owner.getY() + owner.getHeight() / 2d;

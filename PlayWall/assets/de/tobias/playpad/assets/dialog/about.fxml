@@ -5,16 +5,16 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane fx:id="rootPane" prefHeight="430.0" prefWidth="800.0"
+<AnchorPane fx:id="rootPane" prefHeight="300.0" prefWidth="600.0"
             style="-fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <HBox spacing="14.0" style="-fx-base: #333333;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox alignment="CENTER_LEFT" spacing="14.0" style="-fx-base: #333333;" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <ImageView fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../gfx/Logo-3D.png"/>
+                        <Image url="@../gfx/Logo-large.png"/>
                     </image>
                 </ImageView>
                 <VBox alignment="CENTER_LEFT" spacing="7.0">
@@ -32,7 +32,7 @@
                         </HBox>
                         <HBox spacing="14.0">
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="Author:" textAlignment="RIGHT"/>
+                                <Label alignment="CENTER_RIGHT" prefWidth="75.0" text="Autor:" textAlignment="RIGHT"/>
                                 <Label fx:id="authorLabel" text="Tobias Ullerich"/>
                             </children>
                         </HBox>
