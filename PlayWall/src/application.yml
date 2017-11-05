@@ -8,11 +8,12 @@ backup: false
 iconPath: icon
 updateURL: https://playwall.thecodelabs.de/resources/executables
 userInfo:
-  Website: http://playwall.thecodelabs.de/
+  Website: https://playwall.thecodelabs.de/
+  Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop
   PluginsURL:
      Stable: https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml
      Beta: https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml
   ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=1
   UpdaterProgram: https://playwall.thecodelabs.de/resources/executables/utils/
   Server: playwall.thecodelabs.de:8090
-  AccountRegister: http://playwall.thecodelabs.de/php/index.php
+  AccountRegister: https://playwall.thecodelabs.de/php/index.php

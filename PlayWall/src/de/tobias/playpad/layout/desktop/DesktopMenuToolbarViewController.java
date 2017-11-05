@@ -29,10 +29,7 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.AuthViewController;
-import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
-import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
-import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
-import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
+import de.tobias.playpad.viewcontroller.dialog.*;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
@@ -42,10 +39,8 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
-import de.tobias.utils.application.ApplicationInfo;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.ui.scene.NotificationPane;
@@ -732,12 +727,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void aboutMenuHandler(ActionEvent event) {
-		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
-		String message = Localization.getString(Strings.UI_Dialog_Info_Content, info.getVersion(), info.getBuild(), info.getAuthor());
-		if (mainViewController instanceof Alertable) {
-			mainViewController.showInfoMessage(message, Localization.getString(Strings.UI_Dialog_Info_Header, info.getName()),
-					PlayPadMain.stageIcon.orElse(null));
-		}
+		AboutDialog aboutDialog = new AboutDialog(mainViewController.getStage());
+		aboutDialog.getStageContainer().ifPresent(NVCStage::show);
+
 	}
 
 	@FXML

@@ -53,7 +53,7 @@ public class Strings {
 	// UI - Dialog - Launch
 	public static final String UI_Dialog_Launch_Info = "UI.Dialog.Launch.Info";
 
-	// UI - Dialog - ProjeczLoad
+	// UI - Dialog - ProjectLoad
 	public static final String UI_Dialog_ProjectLoad_StartProject = "UI.Dialof.ProjectLoad.StartProject";
 	public static final String UI_Dialog_ProjectLoad_StartPad = "UI.Dialof.ProjectLoad.StartPad";
 
@@ -102,9 +102,11 @@ public class Strings {
 	// UI - Dialog - Profile
 	public static final String UI_Dialog_Profile_Delete_Content = "UI.Dialog.Profile.Delete.Content";
 
-	// UI - Dialog - Info
-	public static final String UI_Dialog_Info_Header = "UI.Dialog.Info.Header";
-	public static final String UI_Dialog_Info_Content = "UI.Dialog.Info.Content";
+	// UI - Dialog - About
+	public static final String UI_Dialog_About_Graphics = "UI.Dialog.About.Graphics";
+	public static final String UI_Dialog_About_Libraries = "UI.Dialog.About.Libraries";
+	public static final String UI_Dialog_About_Website = "UI.Dialog.About.Website";
+	public static final String UI_Dialog_About_Code = "UI.Dialog.About.Code";
 
 	// UI - Dialog - Feedback
 	public static final String UI_Dialog_Feedback_Content = "UI.Dialog.Feedback.Content";
