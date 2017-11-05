@@ -1,4 +1,4 @@
-package de.tobias.playpad.server.sync.listener.downstream.design;
+package de.tobias.playpad.server.sync.listener.downstream.pad.settings.design;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

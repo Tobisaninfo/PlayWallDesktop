@@ -46,8 +46,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		load("de/tobias/playpad/assets/view/option/pad/", "padSettingsView", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 
-		System.out.println(pad.getPadSettings().loopProperty());
-
 		addTab(new GeneralPadTabViewController(pad));
 		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));

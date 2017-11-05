@@ -1,4 +1,4 @@
-package de.tobias.playpad.server.sync.command.design;
+package de.tobias.playpad.server.sync.command.pad.settings.design;
 
 import com.google.gson.JsonObject;
 import de.tobias.playpad.design.modern.ModernCartDesign2;

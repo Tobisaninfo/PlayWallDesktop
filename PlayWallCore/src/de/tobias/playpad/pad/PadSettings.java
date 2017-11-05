@@ -55,6 +55,10 @@ public class PadSettings implements Cloneable {
 		return id;
 	}
 
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
 	public double getVolume() {
 		return volumeProperty.get();
 	}
@@ -271,4 +275,5 @@ public class PadSettings implements Cloneable {
 	public void removeListener() {
 		syncListener.removeListener();
 	}
+
 }

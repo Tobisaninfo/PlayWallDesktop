@@ -16,9 +16,11 @@ import de.tobias.playpad.server.sync.conflict.ConflictSolver;
 import de.tobias.playpad.server.sync.conflict.ConflictType;
 import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.playpad.server.sync.listener.ServerListener;
-import de.tobias.playpad.server.sync.listener.downstream.design.DesignAddListener;
-import de.tobias.playpad.server.sync.listener.downstream.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.pad.*;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.PadSettingsAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.PadSettingsUpdateListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.design.DesignAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageUpdateListener;
@@ -67,6 +69,9 @@ public class ServerSyncListener extends WebSocketAdapter {
 
 		commands.put(Commands.DESIGN_ADD, new DesignAddListener());
 		commands.put(Commands.DESIGN_UPDATE, new DesignUpdateListener());
+
+		commands.put(Commands.PAD_SETTINGS_ADD, new PadSettingsAddListener());
+		commands.put(Commands.PAD_SETTINGS_UPDATE, new PadSettingsUpdateListener());
 
 		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.CONNECTION_LOST);
 	}

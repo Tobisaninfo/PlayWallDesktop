@@ -37,7 +37,7 @@ public class PadSettingsUpdateListener {
 		};
 
 		warningListener = (observable, oldValue, newValue) -> {
-			Change change = new Change(PropertyDef.PAD_SETTINGS_WARNING, newValue, padSettings);
+			Change change = new Change(PropertyDef.PAD_SETTINGS_WARNING, newValue.toMillis(), padSettings);
 			CommandManager.execute(Commands.PAD_SETTINGS_UPDATE, padSettings.getPad().getProject().getProjectReference(), change);
 		};
 	}
