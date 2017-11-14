@@ -9,6 +9,8 @@ import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.layout.desktop.listener.DesktopSearchController;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.layout.desktop.listener.PageButtonDragHandler;
+import de.tobias.playpad.log.LogSeason;
+import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.Profile;
@@ -616,6 +618,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void colorMenuHandler(ActionEvent event) {
 		connect.setEditMode(DesktopEditMode.COLOR);
+	}
+
+	@FXML
+	void logMenuItemHandler(ActionEvent event) {
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(name -> {
+			LogSeason logSeason = LogSeasons.createLogSeason(name);
+			logSeason.createProjectSnapshot(openProject);
+		});
 	}
 
 	@FXML

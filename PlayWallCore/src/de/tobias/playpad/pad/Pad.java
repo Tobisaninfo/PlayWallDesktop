@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.log.PadPlayLogListener;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
@@ -61,6 +62,7 @@ public class Pad implements Cloneable {
 	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 	private transient PadFadeContentListener padFadeContentListener;
 	private transient PadFadeDurationListener padFadeDurationListener;
+	private transient PadPlayLogListener padPlayLogListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -126,6 +128,10 @@ public class Pad implements Cloneable {
 			padFadeContentListener.changed(contentProperty, getContent(), null);
 		}
 
+		if (padPlayLogListener != null && statusProperty != null) {
+			statusProperty.removeListener(padPlayLogListener);
+		}
+
 		// init new listener for properties
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
@@ -141,6 +147,10 @@ public class Pad implements Cloneable {
 
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
+
+		// PlayOutLog Listener
+		padPlayLogListener = new PadPlayLogListener(this);
+		statusProperty.addListener(padPlayLogListener);
 
 		// Trigger
 
