@@ -4,16 +4,16 @@ import java.util.UUID;
 
 public class PlayOutItem {
 
-	private final UUID pathUUId;
+	private final UUID pathUuid;
 	private final long time;
 
-	public PlayOutItem(UUID pathUUId, long time) {
-		this.pathUUId = pathUUId;
+	public PlayOutItem(UUID pathUuid, long time) {
+		this.pathUuid = pathUuid;
 		this.time = time;
 	}
 
-	public UUID getPathUUId() {
-		return pathUUId;
+	public UUID getPathUuid() {
+		return pathUuid;
 	}
 
 	public long getTime() {
@@ -23,7 +23,7 @@ public class PlayOutItem {
 	@Override
 	public String toString() {
 		return "PlayOutItem{" +
-				"pathUUId=" + pathUUId +
+				"pathUuid=" + pathUuid +
 				", time=" + time +
 				'}';
 	}

@@ -1,5 +1,7 @@
 package de.tobias.playpad.log;
 
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.Logger;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import javafx.beans.value.ChangeListener;
@@ -17,11 +19,13 @@ public class PadPlayLogListener implements ChangeListener<PadStatus> {
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
 		if (newValue == PadStatus.PLAY) {
 			LogSeason instance = LogSeasons.getInstance();
-			instance.getLogItems().stream().filter(item -> item.getUuid().equals(pad.getPaths().get(0).getId())).forEach(item -> {
-				PlayOutItem playoutItem = new PlayOutItem(item.getUuid(), System.currentTimeMillis());
-				item.getPlayoutItems().add(playoutItem);
-				System.out.println(playoutItem);
-			});
+			if (instance != null) {
+				instance.getLogItems().stream().filter(item -> item.getUuid().equals(pad.getPaths().get(0).getId())).forEach(item -> {
+					PlayOutItem playoutItem = new PlayOutItem(item.getUuid(), System.currentTimeMillis());
+					item.addPlayOutItem(playoutItem);
+					Logger.log(LogLevel.DEBUG, "Play Item: " + playoutItem);
+				});
+			}
 		}
 	}
 }

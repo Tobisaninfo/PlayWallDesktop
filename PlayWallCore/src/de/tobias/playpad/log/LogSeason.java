@@ -1,5 +1,6 @@
 package de.tobias.playpad.log;
 
+import de.tobias.playpad.log.storage.LogSeasonStorageHandler;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.Project;
@@ -34,7 +35,14 @@ public class LogSeason {
 
 	private void addLogItem(Pad pad) {
 		for (MediaPath mediaPath : pad.getPaths()) {
-			logItems.add(new LogItem(mediaPath));
+			LogItem logItem = new LogItem(mediaPath, this);
+			logItems.add(logItem);
+
+			// Save
+			LogSeasonStorageHandler storageHandler = LogSeasons.getStorageHandler();
+			if (storageHandler != null) {
+				storageHandler.addLogItem(logItem);
+			}
 		}
 	}
 
@@ -48,5 +56,9 @@ public class LogSeason {
 
 	public List<LogItem> getLogItems() {
 		return logItems;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
