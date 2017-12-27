@@ -33,16 +33,20 @@ public class LogSeason {
 		project.getPads().forEach(this::addLogItem);
 	}
 
-	private void addLogItem(Pad pad) {
+	public void addLogItem(Pad pad) {
 		for (MediaPath mediaPath : pad.getPaths()) {
-			LogItem logItem = new LogItem(mediaPath, this);
-			logItems.add(logItem);
+			addLogItem(mediaPath);
+		}
+	}
 
-			// Save
-			LogSeasonStorageHandler storageHandler = LogSeasons.getStorageHandler();
-			if (storageHandler != null) {
-				storageHandler.addLogItem(logItem);
-			}
+	public void addLogItem(MediaPath mediaPath) {
+		LogItem logItem = new LogItem(mediaPath, this);
+		logItems.add(logItem);
+
+		// Save
+		LogSeasonStorageHandler storageHandler = LogSeasons.getStorageHandler();
+		if (storageHandler != null) {
+			storageHandler.addLogItem(logItem);
 		}
 	}
 

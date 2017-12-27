@@ -1,7 +1,8 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.log.PadPlayLogListener;
+import de.tobias.playpad.log.listener.PadMediaPathLogListener;
+import de.tobias.playpad.log.listener.PadPlayLogListener;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
@@ -21,6 +22,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
+import de.tobias.utils.util.FileUtils;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,7 +64,9 @@ public class Pad implements Cloneable {
 	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 	private transient PadFadeContentListener padFadeContentListener;
 	private transient PadFadeDurationListener padFadeDurationListener;
+
 	private transient PadPlayLogListener padPlayLogListener;
+	private transient PadMediaPathLogListener padMediaPathLogListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -132,6 +136,10 @@ public class Pad implements Cloneable {
 			statusProperty.removeListener(padPlayLogListener);
 		}
 
+		if (padMediaPathLogListener != null && mediaPaths != null) {
+			mediaPaths.removeListener(padMediaPathLogListener);
+		}
+
 		// init new listener for properties
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
@@ -151,6 +159,9 @@ public class Pad implements Cloneable {
 		// PlayOutLog Listener
 		padPlayLogListener = new PadPlayLogListener(this);
 		statusProperty.addListener(padPlayLogListener);
+
+		padMediaPathLogListener = new PadMediaPathLogListener();
+		mediaPaths.addListener(padMediaPathLogListener);
 
 		// Trigger
 
@@ -297,7 +308,14 @@ public class Pad implements Cloneable {
 		return mediaPaths.get(0).getFileName();
 	}
 
+	/**
+	 * Set media path and update pad name
+	 *
+	 * @param path media path
+	 */
 	public void setPath(Path path) {
+		setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
+
 		if (mediaPaths.isEmpty()) {
 			createMediaPath(path);
 		} else {
