@@ -70,7 +70,7 @@
                                 <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="logMenu" mnemonicParsing="false" onAction="#logMenuItemHandler"
+                        <MenuItem fx:id="logMenuItem" mnemonicParsing="false" onAction="#logMenuItemHandler"
                                   text="%main.menuitem.log"/>
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler" text="%main.menuitem.plugins" />

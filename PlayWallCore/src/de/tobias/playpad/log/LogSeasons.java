@@ -30,4 +30,8 @@ public class LogSeasons {
 	public static void setStorageHandler(LogSeasonStorageHandler storageHandler) {
 		LogSeasons.storageHandler = storageHandler;
 	}
+
+	public static void stop() {
+		INSTANCE = null;
+	}
 }

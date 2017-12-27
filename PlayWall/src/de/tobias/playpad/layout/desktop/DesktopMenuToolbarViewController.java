@@ -67,6 +67,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.SegmentedButton;
 import org.controlsfx.control.textfield.TextFields;
@@ -110,6 +111,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private MenuItem colorMenu;
 
 	@FXML
+	private MenuItem logMenuItem;
+	@FXML
 	private MenuItem notFoundMenu;
 	@FXML
 	private MenuItem pluginMenu;
@@ -138,6 +141,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	private Label liveLabel;
+
+	private FontIcon logIcon;
 
 	private SegmentedButton editButtons;
 	private ToggleButton playButton;
@@ -175,6 +180,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		// Hide Extension menu then no items are in there
 		extensionMenu.visibleProperty().bind(Bindings.size(extensionMenu.getItems()).greaterThan(0));
+
+		// LogIcon
+		logIcon = new FontIcon(FontAwesomeType.LIST);
 
 		// Edit Mode Buttons
 		editButtons = new SegmentedButton();
@@ -622,11 +630,23 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void logMenuItemHandler(ActionEvent event) {
-		TextInputDialog dialog = new TextInputDialog();
-		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(name -> {
-			LogSeason logSeason = LogSeasons.createLogSeason(name);
-			logSeason.createProjectSnapshot(openProject);
-		});
+		if (LogSeasons.getInstance() == null) {
+			TextInputDialog dialog = new TextInputDialog();
+			dialog.initModality(Modality.WINDOW_MODAL);
+			dialog.initOwner(getWindow());
+			dialog.setHeaderText("PlayOut Log");
+			dialog.setContentText("Geben Sie einen Namen für das PlayOut Log ein"); // TODO i18n
+			dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(name -> {
+				LogSeason logSeason = LogSeasons.createLogSeason(name);
+				logSeason.createProjectSnapshot(openProject);
+				iconHbox.getChildren().add(0, logIcon);
+				logMenuItem.setText("PlayOut Log stop");
+			});
+		} else {
+			LogSeasons.stop();
+			removeToolbarItem(logIcon);
+			logMenuItem.setText("PlayOut Log starten...");
+		}
 	}
 
 	@FXML
