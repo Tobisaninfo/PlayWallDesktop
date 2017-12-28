@@ -19,7 +19,7 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 		if (connection != null) {
 			createDatabaseTable("CREATE TABLE IF NOT EXISTS LogSeason (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name VARCHAR NOT NULL);");
 			createDatabaseTable("CREATE TABLE IF NOT EXISTS LogItem (uuid VARCHAR NOT NULL, name VARCHAR NOT NULL, color VARCHAR NOT NULL, page INTEGER NOT NULL, position INTEGER NOT NULL, logSeason INTEGER NOT NULL, PRIMARY KEY (uuid, logSeason), FOREIGN KEY (logSeason) REFERENCES LogSeason(id));");
-			createDatabaseTable("CREATE TABLE IF NOT EXISTS PlayOutItem (uuid VARCHAR NOT NULL, time INTEGER NOT NULL, PRIMARY KEY (uuid, time), FOREIGN KEY (uuid) REFERENCES LogItem(uuid));");
+			createDatabaseTable("CREATE TABLE IF NOT EXISTS PlayOutItem (uuid VARCHAR NOT NULL, time INTEGER NOT NULL, logSeason INTEGER NOT NULL, PRIMARY KEY (uuid, logSeason, time), FOREIGN KEY (uuid) REFERENCES LogItem(uuid));");
 		}
 	}
 
@@ -80,9 +80,10 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 	public void addPlayOutItem(PlayOutItem item) {
 		PreparedStatement stmt = null;
 		try {
-			stmt = connection.prepareStatement("INSERT INTO PlayOutItem VALUES (?, ?)");
+			stmt = connection.prepareStatement("INSERT INTO PlayOutItem VALUES (?, ?, ?)");
 			stmt.setString(1, item.getPathUuid().toString());
-			stmt.setLong(2, item.getTime());
+			stmt.setInt(2, item.getLogSeason().getId());
+			stmt.setLong(3, item.getTime());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());

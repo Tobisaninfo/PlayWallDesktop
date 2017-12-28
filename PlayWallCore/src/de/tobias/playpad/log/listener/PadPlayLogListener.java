@@ -24,7 +24,7 @@ public class PadPlayLogListener implements ChangeListener<PadStatus> {
 			LogSeason instance = LogSeasons.getInstance();
 			if (instance != null) {
 				instance.getLogItems().stream().filter(item -> item.getUuid().equals(pad.getPaths().get(0).getId())).forEach(item -> {
-					PlayOutItem playoutItem = new PlayOutItem(item.getUuid(), System.currentTimeMillis());
+					PlayOutItem playoutItem = new PlayOutItem(item.getUuid(), instance, System.currentTimeMillis());
 					item.addPlayOutItem(playoutItem);
 					Logger.log(LogLevel.DEBUG, "Play Item: " + playoutItem);
 				});
