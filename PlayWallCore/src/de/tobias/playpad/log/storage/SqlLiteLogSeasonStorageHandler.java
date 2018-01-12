@@ -82,8 +82,8 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 		try {
 			stmt = connection.prepareStatement("INSERT INTO PlayOutItem VALUES (?, ?, ?)");
 			stmt.setString(1, item.getPathUuid().toString());
-			stmt.setInt(2, item.getLogSeason().getId());
-			stmt.setLong(3, item.getTime());
+			stmt.setInt(3, item.getLogSeason().getId());
+			stmt.setLong(2, item.getTime());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
 			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
