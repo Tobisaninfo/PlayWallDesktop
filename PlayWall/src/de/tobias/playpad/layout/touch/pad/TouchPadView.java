@@ -102,11 +102,10 @@ public class TouchPadView implements IPadView {
 
 		if (OS.isWindows() && User32X.isTouchAvailable()) {
 			superRoot.setOnTouchPressed(controller);
-			playBar.setOnTouchPressed(controller);
 		} else {
 			superRoot.setOnMouseClicked(controller);
-			playBar.setOnMouseClicked(controller);
 		}
+		playBar.setMouseTransparent(true);
 	}
 
 	@Override
