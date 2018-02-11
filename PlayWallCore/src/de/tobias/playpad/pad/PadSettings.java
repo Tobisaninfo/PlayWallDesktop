@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad;
 
 import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
@@ -93,7 +94,7 @@ public class PadSettings implements Cloneable {
 
 	/**
 	 * Returns either the fade settings of this pad or the global settings
-	 * 
+	 *
 	 * @return Fade
 	 */
 	public Fade getFade() {
@@ -155,6 +156,14 @@ public class PadSettings implements Cloneable {
 			design = new ModernCartDesign2(pad);
 		}
 		return design;
+	}
+
+	public ModernColor getBackgroundColor() {
+		if (isCustomDesign()) {
+			return design.getBackgroundColor();
+		} else {
+			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
+		}
 	}
 
 	public void setDesign(ModernCartDesign2 design) {

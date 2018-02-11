@@ -1,7 +1,11 @@
 package de.tobias.playpad;
 
 import com.neovisionaries.ws.client.WebSocketException;
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.Logger;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
+import de.tobias.playpad.log.LogSeasons;
+import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
@@ -21,6 +25,7 @@ import de.tobias.playpad.volume.PadVolume;
 import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.SystemUtils;
@@ -30,6 +35,7 @@ import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -128,6 +134,12 @@ public class PlayPadImpl implements PlayPad {
 
         PlayPadPlugin.getServerHandler().getServer().disconnect();
 
+		try {
+			LogSeasons.getStorageHandler().close();
+		} catch (RuntimeException e) {
+			Logger.log(LogLevel.ERROR, "Cannot close LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
+		}
+
         try {
             Path applicationSupportPath = SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain");
             FileUtils.deleteDirectory(applicationSupportPath);
@@ -166,6 +178,14 @@ public class PlayPadImpl implements PlayPad {
     }
 
     void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
+		App app = ApplicationUtils.getApplication();
+		try {
+			Path playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db");
+			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath));
+			Logger.log(LogLevel.INFO, "Setup LogSeasonStorageHandler in path: " + playOutLogPath);
+		} catch (SQLException e) {
+			Logger.log(LogLevel.ERROR, "Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
+		}
         registerComponents(resourceBundle);
         configureServer(delegate);
     }

@@ -8,17 +8,16 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.util.FileUtils;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -158,7 +157,6 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				}
 
 				this.currentPad.setPath(file.toPath());
-				this.currentPad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
 
 				if (currentPad.getController() != null) {
 					IPadView padView = currentPad.getController().getView();
