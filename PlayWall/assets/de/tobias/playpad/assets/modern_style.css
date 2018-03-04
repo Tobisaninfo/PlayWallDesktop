@@ -111,7 +111,7 @@
 
 .pad-playbar {
     -fx-background-radius: 10px;
-    -fx-effect: dropshadow( gaussian , rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);     
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);
 }
 
 .tool-bar {
