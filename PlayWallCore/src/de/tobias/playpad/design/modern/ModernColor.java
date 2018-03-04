@@ -105,13 +105,15 @@ public enum ModernColor implements DisplayableColor {
 
 	@Override
 	public Paint getPaint() {
-		LinearGradient gradient = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
+		return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
 				new Stop(1, Color.web(colorLow)));
-		return gradient;
 	}
 
 	public String linearGradient() {
 		return "linear-gradient(" + getColorHi() + "," + getColorLow() + ")";
 	}
 
+	public String paint() {
+		return getColorHi();
+	}
 }

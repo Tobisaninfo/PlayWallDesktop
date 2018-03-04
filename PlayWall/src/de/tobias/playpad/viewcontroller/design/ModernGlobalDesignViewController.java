@@ -29,6 +29,9 @@ public class ModernGlobalDesignViewController extends NVC {
 
 	@FXML private Button resetButton;
 
+	@FXML
+	private CheckBox flatDesignCheckbox;
+
 	private ModernGlobalDesign2 design;
 
 	private PopOver colorChooser;
@@ -45,6 +48,7 @@ public class ModernGlobalDesignViewController extends NVC {
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 
 		warnAnimationCheckBox.setSelected(design.isWarnAnimation());
+		flatDesignCheckbox.setSelected(design.isFlatDesign());
 
 		infoLabelFontSizeComboBox.setValue(design.getInfoFontSize());
 		titleLabelFontSizeComboBox.setValue(design.getTitleFontSize());
@@ -55,6 +59,10 @@ public class ModernGlobalDesignViewController extends NVC {
 		warnAnimationCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
 			design.setWarnAnimation(c);
+		});
+		flatDesignCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			design.setFlatDesign(c);
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);

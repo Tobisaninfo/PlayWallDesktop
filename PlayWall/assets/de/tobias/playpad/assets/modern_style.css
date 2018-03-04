@@ -22,11 +22,11 @@
 
 .pad {
 	-fx-background-radius: 10px;
-	
+
 	-fx-border-color: rgb(20, 20, 20);
 	-fx-border-width: 2px;
 	-fx-border-radius: 8px;
-	
+
 	-fx-padding: 5 10 5 10;
 }
 
@@ -43,7 +43,7 @@
 
 	-fx-hgap: 6px;
 	-fx-vgap: 6px;
-	
+
 	-fx-padding: 6px;
 }
 
@@ -97,21 +97,27 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
 }
 
-.pad-playbar .bar {
-    -fx-background-color: white;
-    -fx-padding: 0.5em;
-    
-    -fx-background-radius: 10px;    
-}
+/*Old Progress Bar*/
+/*.pad-playbar .bar {*/
+/*-fx-background-color: white;*/
+/*-fx-padding: 0.5em;*/
+/**/
+/*-fx-background-radius: 10px;    */
+/*}*/
 
-.pad-playbar .track { 
-	-fx-base: black;
-    -fx-background-radius: 10px; 
-}
+/*.pad-playbar .track { */
+/*-fx-base: black;*/
+/*-fx-background-radius: 10px; */
+/*}*/
 
-.pad-playbar {
-    -fx-background-radius: 10px;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);
+/*.pad-playbar {*/
+/*-fx-background-radius: 10px;*/
+/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);*/
+/*}*/
+
+.progress-bar > .bar {
+	-fx-background-insets: 1 1 1 1;
+	-fx-padding: 0.30em;
 }
 
 .tool-bar {

@@ -47,7 +47,7 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 
 	// Cart Layout
 	@Override
-	public String convertToCss(ModernCartDesign2 design, String prefix, boolean full) {
+	public String convertToCss(ModernCartDesign2 design, String prefix, boolean full, boolean flat) {
 		StringBuilder builder = new StringBuilder();
 
 		ModernColor backgroundColor = design.getBackgroundColor();
@@ -65,7 +65,11 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad" + prefix);
-		addStyleParameter(builder, "-fx-background-color", backgroundColor.linearGradient());
+		if (flat) {
+			addStyleParameter(builder, "-fx-background-color", backgroundColor.paint());
+		} else {
+			addStyleParameter(builder, "-fx-background-color", backgroundColor.linearGradient());
+		}
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad" + prefix + "-info");
@@ -76,13 +80,13 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 		addStyleParameter(builder, "-fx-text-fill", backgroundColor.getFontColor());
 		endStyleClass(builder);
 
-		buildCss(builder, PseudoClasses.PLAY_CALSS.getPseudoClassName(), prefix, design.getPlayColor());
-		buildCss(builder, PseudoClasses.WARN_CLASS.getPseudoClassName(), prefix, backgroundColor);
+		buildCss(builder, PseudoClasses.PLAY_CALSS.getPseudoClassName(), prefix, design.getPlayColor(), flat);
+		buildCss(builder, PseudoClasses.WARN_CLASS.getPseudoClassName(), prefix, backgroundColor, flat);
 
 		return builder.toString().replace("0x", "#");
 	}
 
-	private void buildCss(StringBuilder builder, String state, String prefix, ModernColor color) {
+	private void buildCss(StringBuilder builder, String state, String prefix, ModernColor color, boolean flat) {
 		startStyleClass(builder, "pad" + prefix + "-info:" + state);
 		addStyleParameter(builder, "-fx-text-fill", color.getFontColor());
 		endStyleClass(builder);
@@ -92,7 +96,11 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad" + prefix + ":" + state);
-		addStyleParameter(builder, "-fx-background-color", color.linearGradient());
+		if (flat) {
+			addStyleParameter(builder, "-fx-background-color", color.paint());
+		} else {
+			addStyleParameter(builder, "-fx-background-color", color.linearGradient());
+		}
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad" + prefix + "-playbar:" + state + " .track");
