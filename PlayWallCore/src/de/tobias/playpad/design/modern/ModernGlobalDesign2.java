@@ -13,6 +13,8 @@ public class ModernGlobalDesign2 implements DesignColorAssociator {
 	private int infoFontSize = 14;
 	private int titleFontSize = 16;
 
+	private boolean flatDesign;
+
 	public ModernColor getBackgroundColor() {
 		return backgroundColor;
 	}
@@ -53,6 +55,14 @@ public class ModernGlobalDesign2 implements DesignColorAssociator {
 		this.titleFontSize = titleFontSize;
 	}
 
+	public boolean isFlatDesign() {
+		return flatDesign;
+	}
+
+	public void setFlatDesign(boolean flatDesign) {
+		this.flatDesign = flatDesign;
+	}
+
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
 		playColor = ModernColor.RED1;
@@ -61,6 +71,8 @@ public class ModernGlobalDesign2 implements DesignColorAssociator {
 
 		infoFontSize = 14;
 		titleFontSize = 16;
+
+		flatDesign = false;
 	}
 
 	@Override

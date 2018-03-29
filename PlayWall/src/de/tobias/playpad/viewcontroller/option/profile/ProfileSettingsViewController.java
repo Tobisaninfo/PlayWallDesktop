@@ -10,7 +10,6 @@ import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
@@ -60,15 +59,10 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		// Custom Tabs - Content Types
 		PadContentRegistry padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
 		for (String type : padContents.getTypes()) {
-			try {
-				PadContentFactory component = padContents.getFactory(type);
-				ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
-				if (controller != null) {
-					addTab(controller);
-				}
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			PadContentFactory component = padContents.getFactory(type);
+			ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
+			if (controller != null) {
+				addTab(controller);
 			}
 		}
 

@@ -44,7 +44,11 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad");
-		addStyleParameter(builder, "-fx-background-color", design.getBackgroundColor().linearGradient());
+		if (design.isFlatDesign()) {
+			addStyleParameter(builder, "-fx-background-color", design.getBackgroundColor().paint());
+		} else {
+			addStyleParameter(builder, "-fx-background-color", design.getBackgroundColor().linearGradient());
+		}
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad-info");
@@ -57,13 +61,13 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 		addStyleParameter(builder, "-fx-font-size", design.getTitleFontSize());
 		endStyleClass(builder);
 
-		buildStateCss(builder, PseudoClasses.PLAY_CALSS.getPseudoClassName(), design.getPlayColor());
-		buildStateCss(builder, PseudoClasses.WARN_CLASS.getPseudoClassName(), design.getBackgroundColor());
+		buildStateCss(builder, PseudoClasses.PLAY_CALSS.getPseudoClassName(), design.getPlayColor(), design.isFlatDesign());
+		buildStateCss(builder, PseudoClasses.WARN_CLASS.getPseudoClassName(), design.getBackgroundColor(), design.isFlatDesign());
 
 		return builder.toString().replace("0x", "#");
 	}
 
-	private void buildStateCss(StringBuilder builder, String state, ModernColor color) {
+	private void buildStateCss(StringBuilder builder, String state, ModernColor color, boolean flat) {
 		startStyleClass(builder, "pad-info:" + state);
 		addStyleParameter(builder, "-fx-text-fill", color.getFontColor());
 		endStyleClass(builder);
@@ -73,7 +77,11 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad:" + state);
-		addStyleParameter(builder, "-fx-background-color", color.linearGradient());
+		if (flat) {
+			addStyleParameter(builder, "-fx-background-color", color.paint());
+		} else {
+			addStyleParameter(builder, "-fx-background-color", color.linearGradient());
+		}
 		endStyleClass(builder);
 
 		startStyleClass(builder, "pad-playbar:" + state + " .track");
@@ -109,7 +117,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "custom_style.css");
 
-		String css = convertToCSS(design);
+		StringBuilder css = new StringBuilder(convertToCSS(design));
 
 		// Pad Spezelles Layout immer
 		ModernCartDesignHandler cartDesignHandler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
@@ -118,13 +126,13 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 
 			if (padSettings.isCustomDesign()) {
 				ModernCartDesign2 cartDesign = padSettings.getDesign();
-				css += "\n" + cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), true);
+				css.append("\n").append(cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), true, design.isFlatDesign()));
 			}
 		}
 
 		// Speichern der generierten CSS Datei
 		try {
-			Files.write(path, css.getBytes());
+			Files.write(path, css.toString().getBytes());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

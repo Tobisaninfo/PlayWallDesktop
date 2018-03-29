@@ -19,7 +19,6 @@ public class Profile {
 
 	private static final String PROFILE_SETTINGS_XML = "ProfileSettings.xml";
 	private static final String MAPPING_XML = "Mapping.xml";
-	private static final String LAYOUT_XML = "Layout.xml";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();
 	private static Profile currentProfile;
@@ -72,7 +71,7 @@ public class Profile {
 
 	public static Profile load(ProfileReference ref) throws DocumentException, IOException, ProfileNotFoundException {
 		if (ref == null) {
-			throw new ProfileNotFoundException(null);
+			throw new IllegalArgumentException("Profile is null"); // TODO Check if to catch exception somewhere
 		}
 		// Altes Speichern bevor neues Geladen
 		if (currentProfile != null)

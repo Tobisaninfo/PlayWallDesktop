@@ -40,6 +40,11 @@ public enum ModernColor implements DisplayableColor {
 	LIGHT_GREEN2("#9ccc65", "#7cb342", "#000000", "#000000", "#FFFFFF", "#000000"),
 	LIGHT_GREEN3("#7cb342", "#558b2f", "#000000", "#000000", "#FFFFFF", "#000000"),
 
+	// ---- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
+	LIME1("#e6ee9c", "#d4e157", "#000000", "#000000", "#FFFFFF", "#000000"),
+	LIME2("#d4e157", "#c0ca33", "#000000", "#000000", "#FFFFFF", "#000000"),
+	LIME3("#c0ca33", "#9e9d24", "#000000", "#000000", "#FFFFFF", "#000000"),
+
 	// ------- BG ------ PLAY ------ Font ---- Button -- Bar BG -- Bar Track
 	YELLOW1("#fff59d", "#ffee58", "#000000", "#000000", "#FFFFFF", "#000000"),
 	YELLOW2("#ffee58", "#fdd835", "#000000", "#000000", "#FFFFFF", "#000000"),
@@ -53,7 +58,10 @@ public enum ModernColor implements DisplayableColor {
 	// ---- BG ------ PLAY ----- Font ---- Button --- Bar BG --- Bar Track
 	GRAY1("#eeeeee", "#cccccc", "#000000", "#000000", "#000000", "#FFFFFF"),
 	GRAY2("#cccccc", "#aaaaaa", "#000000", "#000000", "#000000", "#FFFFFF"),
-	GRAY3("#555555", "#333333", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF");
+	GRAY3("#aaaaaa", "#888888", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF"),
+	GRAY4("#888888", "#666666", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF"),
+	GRAY5("#666666", "#444444", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF"),
+	GRAY6("#444444", "#222222", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF");
 
 	private final String colorHi;
 	private final String colorLow;
@@ -97,13 +105,15 @@ public enum ModernColor implements DisplayableColor {
 
 	@Override
 	public Paint getPaint() {
-		LinearGradient gradient = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
+		return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
 				new Stop(1, Color.web(colorLow)));
-		return gradient;
 	}
 
 	public String linearGradient() {
 		return "linear-gradient(" + getColorHi() + "," + getColorLow() + ")";
 	}
 
+	public String paint() {
+		return getColorHi();
+	}
 }

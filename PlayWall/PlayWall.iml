@@ -35,5 +35,6 @@
     <orderEntry type="library" exported="" name="libLogger" level="project" />
     <orderEntry type="library" exported="" name="unirest" level="project" />
     <orderEntry type="library" name="scala-sdk-2.12.4" level="application" />
+    <orderEntry type="library" name="scala-sdk-2.12.5" level="application" />
   </component>
 </module>

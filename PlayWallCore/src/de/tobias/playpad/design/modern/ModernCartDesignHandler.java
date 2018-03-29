@@ -5,7 +5,7 @@ import javafx.util.Duration;
 
 public interface ModernCartDesignHandler {
 
-	String convertToCss(ModernCartDesign2 design, String classSufix, boolean fullCss);
+	String convertToCss(ModernCartDesign2 design, String classSuffix, boolean fullCss, boolean flat);
 
 	/*
  	 * Wird in einem neuen Thread aufgerufen
