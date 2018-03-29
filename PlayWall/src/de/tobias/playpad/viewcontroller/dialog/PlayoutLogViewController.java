@@ -1,0 +1,121 @@
+package de.tobias.playpad.viewcontroller.dialog;
+
+import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.log.LogSeason;
+import de.tobias.playpad.log.LogSeasons;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.util.Localization;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+
+public class PlayoutLogViewController extends NVC {
+
+	@FXML
+	private TextField nameTextField;
+	@FXML
+	private ListView<LogSeason> logList;
+	@FXML
+	private Button startButton;
+	@FXML
+	private Button exportButton;
+	@FXML
+	private Button deleteButton;
+	@FXML
+	private Button finishButton;
+
+	private FontIcon logIcon;
+
+	// TODO l10n
+	public PlayoutLogViewController(Window owner) {
+		load("de/tobias/playpad/assets/dialog/", "playoutLogDialog", PlayPadMain.getUiResourceBundle());
+
+		NVCStage stage = applyViewControllerToStage();
+		stage.initOwner(owner);
+		stage.initModality(Modality.WINDOW_MODAL);
+		addCloseKeyShortcut(stage::close);
+	}
+
+	@Override
+	public void init() {
+		logList.getItems().setAll(LogSeasons.getAllLogSeasonsLazy());
+
+		// LogIcon
+		logIcon = new FontIcon(FontAwesomeType.LIST);
+
+		if (LogSeasons.getInstance() != null) { // Running
+			startButton.setText("Stop"); // TODO l10n
+			nameTextField.setDisable(true);
+			nameTextField.setText(LogSeasons.getInstance().getName());
+		} else {
+			startButton.setText("Start"); // TODO l10n
+			nameTextField.setDisable(false);
+		}
+	}
+
+	@Override
+	public void initStage(Stage stage) {
+		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+
+		stage.setTitle(Localization.getString(Strings.UI_Dialog_PlayoutLog_Title));
+		stage.setMinWidth(375);
+		stage.setMinHeight(400);
+
+		stage.initModality(Modality.WINDOW_MODAL);
+
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+	}
+
+	@FXML
+	private void startButtonHandler(ActionEvent event) {
+		final MenuToolbarViewController controller = PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
+
+		if (LogSeasons.getInstance() == null) { // Start
+			if (nameTextField.getText().isEmpty()) {
+				return;
+			}
+			LogSeason logSeason = LogSeasons.createLogSeason(nameTextField.getText());
+			final Project currentProject = PlayPadPlugin.getImplementation().getCurrentProject();
+			logSeason.createProjectSnapshot(currentProject);
+
+			controller.addToolbarItem(logIcon);
+			startButton.setText("Stop"); // TODO l10n
+			nameTextField.setDisable(false);
+		} else { // Stop
+			LogSeasons.stop();
+			controller.removeToolbarItem(logIcon);
+			startButton.setText("Start"); // TODO l10n
+			nameTextField.setDisable(false);
+		}
+	}
+
+	@FXML
+	private void exportButtonHandler(ActionEvent event) {
+
+	}
+
+	@FXML
+	private void deleteButtonHandler(ActionEvent event) {
+
+	}
+
+	@FXML
+	private void finishButtonHandler(ActionEvent event) {
+		getStageContainer().ifPresent(NVCStage::close);
+	}
+}

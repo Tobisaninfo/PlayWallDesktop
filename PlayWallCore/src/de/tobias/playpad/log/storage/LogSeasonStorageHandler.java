@@ -4,12 +4,16 @@ import de.tobias.playpad.log.LogItem;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.PlayOutItem;
 
+import java.util.List;
+
 public interface LogSeasonStorageHandler {
 	void addLogSeason(LogSeason season);
 
 	void addLogItem(LogItem item);
 
 	void addPlayOutItem(PlayOutItem item);
+
+	List<LogSeason> getAllLogSeasonsLazy();
 
 	/**
 	 * Close the storage handler.

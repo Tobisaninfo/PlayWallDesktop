@@ -2,6 +2,8 @@ package de.tobias.playpad.log;
 
 import de.tobias.playpad.log.storage.LogSeasonStorageHandler;
 
+import java.util.List;
+
 public class LogSeasons {
 
 	private static LogSeason INSTANCE;
@@ -33,5 +35,9 @@ public class LogSeasons {
 
 	public static void stop() {
 		INSTANCE = null;
+	}
+
+	public static List<LogSeason> getAllLogSeasonsLazy() {
+		return getStorageHandler().getAllLogSeasonsLazy();
 	}
 }

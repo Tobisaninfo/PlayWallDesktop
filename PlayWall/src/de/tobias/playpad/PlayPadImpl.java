@@ -179,6 +179,7 @@ public class PlayPadImpl implements PlayPad {
 
     void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
 		App app = ApplicationUtils.getApplication();
+		// Setup PlayoutLog
 		try {
 			Path playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db");
 			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath));

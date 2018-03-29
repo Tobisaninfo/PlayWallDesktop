@@ -8,6 +8,8 @@ import de.tobias.playpad.log.PlayOutItem;
 
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 
@@ -92,6 +94,27 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 		}
 	}
 
+	@Override
+	public List<LogSeason> getAllLogSeasonsLazy() {
+		List<LogSeason> logSeasons = new ArrayList<>();
+		PreparedStatement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.prepareStatement("SELECT * FROM LogSeason");
+			resultSet = stmt.executeQuery();
+
+			while (resultSet.next()) {
+				LogSeason logSeason = new LogSeason(resultSet.getInt("id"), resultSet.getString("name"));
+				logSeasons.add(logSeason);
+			}
+		} catch (SQLException e) {
+			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
+		} finally {
+			closeResource(resultSet);
+			closeResource(stmt);
+		}
+		return logSeasons;
+	}
 
 	private void closeResource(AutoCloseable stmt) {
 		if (stmt != null) {

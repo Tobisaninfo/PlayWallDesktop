@@ -20,13 +20,11 @@ public class Strings {
 	public static final String UI_Dialog_Launch_Title = "UI.Dialog.Launch.Title";
 	public static final String UI_Dialog_Login_Title = "UI.Dialog.Login.Title";
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
-	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
 	public static final String UI_Window_ProjectSettings_Title = "UI.Window.ProjectSettings.Title";
 	public static final String UI_Window_GlobalSettings_Title = "UI.Window.GlobalSettings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
-	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
 	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
 	public static final String UI_Dialog_NotFound_Title = "UI.Dialog.NotFound.Title";
@@ -34,17 +32,10 @@ public class Strings {
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
 	public static final String UI_Dialog_ProjectManager_Title = "UI.Dialog.ProjectManager.Title";
-	public static final String UI_Dialog_UpdateCenter_Title = "UI.Dialog.UpdateCenter.Title";
-	public static final String UI_Dialog_Preset_Title = "UI.Dialog.Preset.Title";
 	public static final String UI_Dialog_Plugins_Title = "UI.Dialog.Plugins.Title";
 	public static final String UI_Dialog_Print_Title = "UI.Dialog.Print.Title";
 	public static final String UI_Dialog_Profile_Title = "UI.Dialog.Profile.Title";
-
-	// UI - Standard
-	public static final String UI_Standard_DoNotShow = "UI.Standard.DoNotShow";
-
-	// UI - Layout - Classic - Theme - Enum
-	public static final String UI_Layout_Classic_Theme_BaseName = "UI.Layout.Classic.Theme.";
+	public static final String UI_Dialog_PlayoutLog_Title = "UI.Dialog.PlayoutLog.Title";
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
@@ -81,15 +72,6 @@ public class Strings {
 	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content"; // Duplicate Project
 	public static final String UI_Dialog_NewProject_Media = "UI.Dialog.NewProject.MediaPath"; // Create Project
 
-	// UI - Dialog - Import
-	public static final String UI_Dialog_Import_ReplaceProfile_Content = "UI.Dialog.Import.ReplaceProfile.Content";
-	public static final String UI_Dialog_Import_ReplaceProfile_Skip = "UI.Dialog.Import.ReplaceProfile.Skip";
-	public static final String UI_Dialog_Import_ReplaceProfile_Rename = "UI.Dialog.Import.ReplaceProfile.Rename";
-	public static final String UI_Dialog_Import_ReplaceProfile_ReplaceContent = "UI.Dialog.Import.ReplaceProfile.ReplaceContent";
-	public static final String UI_Dialog_Import_ReplaceProject_ReplaceContent = "UI.Dialog.Import.ReplaceProject.ReplaceContent";
-	public static final String UI_Dialog_Import_ReplaceMedia_Content = "UI.Dialog.Import.ReplaceMedia.Content";
-	public static final String UI_Dialog_Import_ReplaceMedia_Copy = "UI.Dialog.Import.ReplaceMedia.Copy";
-	public static final String UI_Dialog_Import_ReplaceMedia_Skip = "UI.Dialog.Import.ReplaceMedia.Skip";
 
 	// UI - Dialog - ProjectManager
 	public static final String UI_Dialog_ProjectManager_Delete_Header = "UI.Dialog.ProjectManager.Delete.Header";
