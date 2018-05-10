@@ -94,7 +94,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onPlay(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizeable) {
+		if (content instanceof Equalizeable) {
 
 			// Equalizer
 			Equalizeable equalizeable = (Equalizeable) content;
@@ -111,16 +111,16 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onStop(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizeable) {
+		if (content instanceof Equalizeable) {
 
 			// Equalizer
 			Equalizeable equalizeable = (Equalizeable) content;
 			AudioEqualizer audioEqualizer = equalizeable.getAudioEqualizer();
 			if (audioEqualizer != null) {
 				for (EqualizerBand band : audioEqualizer.getBands()) {
-					band.gainProperty().bind(Equalizer.getInstance().gainProperty((int) band.getBandwidth()));
+					band.gainProperty().unbind();
 				}
-				audioEqualizer.enabledProperty().bind(Equalizer.getInstance().enableProperty());
+				audioEqualizer.enabledProperty().unbind();
 			}
 		}
 	}

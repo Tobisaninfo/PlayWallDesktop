@@ -8,10 +8,9 @@ import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -36,8 +35,10 @@ import java.util.stream.Collectors;
 public class AudioTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
 	// Audio
-	@FXML private ComboBox<String> audioTypeComboBox;
-	@FXML private VBox options;
+	@FXML
+	private ComboBox<String> audioTypeComboBox;
+	@FXML
+	private VBox options;
 
 	private List<AudioHandlerViewController> audioViewController;
 	private boolean changeAudioSettings;
@@ -73,7 +74,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	private void showAudioSettings(String classID) {
 		if (audioViewController != null) {
 			// Es gibt ein Settings View Controller der isChanged true ist
-			if (audioViewController.stream().filter(AudioHandlerViewController::isChanged).count() > 0) {
+			if (audioViewController.stream().anyMatch(AudioHandlerViewController::isChanged)) {
 				changeAudioSettings = true;
 			}
 		}
@@ -81,17 +82,20 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		options.getChildren().clear();
 
 		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
-		try {
-			AudioHandlerFactory audio = audioHandlerRegistry.getFactory(classID);
+		AudioHandlerFactory audio = audioHandlerRegistry.getFactory(classID);
 
-			for (AudioCapability audioCapability : AudioCapability.getFeatures()) {
-				options.getChildren().add(createCapabilityView(audio, audioCapability));
-			}
-		} catch (NoSuchComponentException e) {
-			e.printStackTrace();
+		for (AudioCapability audioCapability : AudioCapability.getFeatures()) {
+			options.getChildren().add(createCapabilityView(audio, audioCapability));
 		}
 	}
 
+	/**
+	 * Create Settings View for one AudioCapability
+	 *
+	 * @param audio           current audio impl
+	 * @param audioCapability audioCapability
+	 * @return ui element
+	 */
 	private Parent createCapabilityView(AudioHandlerFactory audio, AudioCapability audioCapability) {
 		HBox masterView = new HBox(14);
 		VBox detailView = new VBox(14);
