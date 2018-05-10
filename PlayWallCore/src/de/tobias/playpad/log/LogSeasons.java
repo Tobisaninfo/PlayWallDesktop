@@ -13,8 +13,8 @@ public class LogSeasons {
 		return INSTANCE;
 	}
 
-	public static LogSeason createLogSeason(String name) {
-		INSTANCE = new LogSeason(name);
+	public static LogSeason createLogSeason(String name, int columns, int rows) {
+		INSTANCE = new LogSeason(name, columns, rows);
 
 		// Save
 		LogSeasonStorageHandler storageHandler = LogSeasons.getStorageHandler();
@@ -39,5 +39,9 @@ public class LogSeasons {
 
 	public static List<LogSeason> getAllLogSeasonsLazy() {
 		return getStorageHandler().getAllLogSeasonsLazy();
+	}
+
+	public static LogSeason getLogSeason(int id) {
+		return getStorageHandler().getLogSeason(id);
 	}
 }

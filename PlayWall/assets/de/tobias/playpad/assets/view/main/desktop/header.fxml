@@ -40,7 +40,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="%main.menu.option">
                     <items>
-                        <Menu mnemonicParsing="false" text="%main.menu.editmode">
+                        <Menu mnemonicParsing="false" text="%main.menuitem.editmode">
                             <items>
                                 <MenuItem fx:id="playMenu" mnemonicParsing="false" onAction="#playMenuHandler" text="%main.menuitem.play">
                                     <accelerator>

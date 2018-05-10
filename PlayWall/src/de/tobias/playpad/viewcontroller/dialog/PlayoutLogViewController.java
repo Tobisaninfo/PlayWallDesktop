@@ -1,13 +1,16 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import com.itextpdf.text.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
+import de.tobias.playpad.log.export.PlayoutLogPdfExport;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
@@ -19,9 +22,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
 
 public class PlayoutLogViewController extends NVC {
 
@@ -89,8 +97,11 @@ public class PlayoutLogViewController extends NVC {
 			if (nameTextField.getText().isEmpty()) {
 				return;
 			}
-			LogSeason logSeason = LogSeasons.createLogSeason(nameTextField.getText());
+
 			final Project currentProject = PlayPadPlugin.getImplementation().getCurrentProject();
+			final ProjectSettings settings = currentProject.getSettings();
+
+			LogSeason logSeason = LogSeasons.createLogSeason(nameTextField.getText(), settings.getColumns(), settings.getRows());
 			logSeason.createProjectSnapshot(currentProject);
 
 			controller.addToolbarItem(logIcon);
@@ -106,7 +117,17 @@ public class PlayoutLogViewController extends NVC {
 
 	@FXML
 	private void exportButtonHandler(ActionEvent event) {
-
+		getSelectedLogSeason().ifPresent(season -> { // Lazy Season
+			FileChooser fileChooser = new FileChooser();
+			File file = fileChooser.showSaveDialog(getContainingWindow());
+			if (file != null) {
+				try {
+					PlayoutLogPdfExport.createPdfFile(file.toPath(), LogSeasons.getLogSeason(season.getId()));
+				} catch (IOException | DocumentException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	@FXML
@@ -117,5 +138,9 @@ public class PlayoutLogViewController extends NVC {
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		getStageContainer().ifPresent(NVCStage::close);
+	}
+
+	private Optional<LogSeason> getSelectedLogSeason() {
+		return Optional.ofNullable(logList.getSelectionModel().getSelectedItem());
 	}
 }

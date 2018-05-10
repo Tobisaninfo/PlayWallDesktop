@@ -1,5 +1,6 @@
 package de.tobias.playpad.util;
 
+import com.itextpdf.text.BaseColor;
 import javafx.scene.paint.Color;
 
 /**
@@ -21,5 +22,14 @@ public class ColorUtils {
 		} else {
 			return Color.WHITE;
 		}
+	}
+
+	public static BaseColor toBaseColor(String hexCode) {
+		hexCode = hexCode.replace("#", "");
+		return new BaseColor(
+				Integer.valueOf(hexCode.substring(0, 2), 16),
+				Integer.valueOf(hexCode.substring(2, 4), 16),
+				Integer.valueOf(hexCode.substring(4, 6), 16)
+		);
 	}
 }

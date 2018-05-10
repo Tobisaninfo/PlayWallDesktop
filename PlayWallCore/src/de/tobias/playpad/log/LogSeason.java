@@ -13,20 +13,25 @@ public class LogSeason {
 	private int id;
 	private String name;
 
+	private int columns;
+	private int rows;
+
 	private List<LogItem> logItems;
 
-	public LogSeason(String name) {
-		this(-1, name);
+	public LogSeason(String name, int columns, int rows) {
+		this(-1, name, columns, rows);
 	}
 
-	public LogSeason(int id, String name) {
-		this(id, name, new ArrayList<>());
+	public LogSeason(int id, String name, int columns, int rows) {
+		this(id, name, new ArrayList<>(), columns, rows);
 	}
 
-	public LogSeason(int id, String name, List<LogItem> logItems) {
+	public LogSeason(int id, String name, List<LogItem> logItems, int columns, int rows) {
 		this.id = id;
 		this.name = name;
 		this.logItems = logItems;
+		this.columns = columns;
+		this.rows = rows;
 	}
 
 	public void createProjectSnapshot(Project project) {
@@ -64,6 +69,14 @@ public class LogSeason {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getColumns() {
+		return columns;
+	}
+
+	public int getRows() {
+		return rows;
 	}
 
 	@Override

@@ -34,7 +34,7 @@
         <HBox alignment="TOP_RIGHT">
             <children>
                 <Button fx:id="finishButton" defaultButton="true" mnemonicParsing="false"
-                        onAction="#finishButtonHandler" text="Button"/>
+                        onAction="#finishButtonHandler" text="Fertig"/>
             </children>
         </HBox>
     </children>

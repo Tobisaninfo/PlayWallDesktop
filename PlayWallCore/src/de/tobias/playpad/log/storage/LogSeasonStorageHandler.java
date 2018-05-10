@@ -13,6 +13,8 @@ public interface LogSeasonStorageHandler {
 
 	void addPlayOutItem(PlayOutItem item);
 
+	LogSeason getLogSeason(int id);
+
 	List<LogSeason> getAllLogSeasonsLazy();
 
 	/**

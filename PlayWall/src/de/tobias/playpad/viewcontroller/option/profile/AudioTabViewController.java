@@ -100,7 +100,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		HBox masterView = new HBox(14);
 		VBox detailView = new VBox(14);
 
-		Label nameLabel = new Label(Localization.getString(audioCapability.getName()));
+		Label nameLabel = new Label(audioCapability.getName());
 		nameLabel.setAlignment(Pos.CENTER_RIGHT);
 		nameLabel.setMinWidth(150);
 
