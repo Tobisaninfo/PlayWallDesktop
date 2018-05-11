@@ -4,6 +4,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.log.LogItem;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.util.ColorUtils;
@@ -18,8 +19,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PlayoutLogPdfExport {
-
-	private static final Font CELL_FONT = new Font(Font.FontFamily.HELVETICA, 8);
 
 	public static void createPdfFile(Path path, LogSeason season) throws IOException, DocumentException {
 		Document document = new Document(PageSize.A4.rotate());
@@ -68,19 +67,35 @@ public class PlayoutLogPdfExport {
 		PdfPTable table = new PdfPTable(season.getColumns());
 
 		for (LogItem logItem : logItemList) {
-			table.addCell(createCell(logItem));
+			table.addCell(createCell(logItem, season));
 		}
 
 		return table;
 	}
 
-	private static PdfPCell createCell(LogItem logItem) {
+	private static PdfPCell createCell(LogItem logItem, LogSeason season) {
 		String text = logItem.getName();
 		if (!logItem.getName().isEmpty()) {
-			text += "\n" + logItem.getPlayOutItems().size();
+			text += "\n\n" + logItem.getPlayOutItems().size();
 		}
-		PdfPCell cell = new PdfPCell(new Phrase(text, CELL_FONT));
+
+		Font font = new Font(Font.FontFamily.HELVETICA, 12);
+		ModernColor color = ModernColor.modernColorByBackgroundColor(logItem.getColor());
+		if (color != null) {
+			font.setColor(ColorUtils.toBaseColor(color.getFontColor()));
+		} else {
+			font.setColor(BaseColor.BLACK);
+		}
+
+		final Phrase phrase = new Phrase(text, font);
+		PdfPCell cell = new PdfPCell(phrase);
+
 		cell.setBackgroundColor(ColorUtils.toBaseColor(logItem.getColor()));
+
+		cell.setMinimumHeight((PageSize.A4.rotate().getHeight() - 125.0f) / season.getRows());
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
 		return cell;
 	}
 

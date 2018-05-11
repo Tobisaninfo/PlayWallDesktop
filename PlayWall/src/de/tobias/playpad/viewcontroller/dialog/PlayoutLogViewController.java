@@ -119,6 +119,9 @@ public class PlayoutLogViewController extends NVC {
 	private void exportButtonHandler(ActionEvent event) {
 		getSelectedLogSeason().ifPresent(season -> { // Lazy Season
 			FileChooser fileChooser = new FileChooser();
+			FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PDF", "*.pdf");
+			fileChooser.getExtensionFilters().add(extensionFilter);
+
 			File file = fileChooser.showSaveDialog(getContainingWindow());
 			if (file != null) {
 				try {

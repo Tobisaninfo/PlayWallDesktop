@@ -116,4 +116,13 @@ public enum ModernColor implements DisplayableColor {
 	public String paint() {
 		return getColorHi();
 	}
+
+	public static ModernColor modernColorByBackgroundColor(String color) {
+		for (ModernColor modernColor : ModernColor.values()) {
+			if (modernColor.getColorHi().contains(color) || modernColor.getColorLow().contains(color)) {
+				return modernColor;
+			}
+		}
+		return null;
+	}
 }
