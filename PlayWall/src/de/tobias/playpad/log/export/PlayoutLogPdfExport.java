@@ -1,9 +1,7 @@
 package de.tobias.playpad.log.export;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.log.LogItem;
 import de.tobias.playpad.log.LogSeason;
@@ -24,6 +22,7 @@ public class PlayoutLogPdfExport {
 		Document document = new Document(PageSize.A4.rotate());
 
 		PdfWriter writer = PdfWriter.getInstance(document, Files.newOutputStream(path));
+		writer.setPageEvent(new HeaderFooter(season.getName()));
 		document.open();
 
 		List<Integer> pages = new ArrayList<>();
@@ -97,6 +96,38 @@ public class PlayoutLogPdfExport {
 		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
 		return cell;
+	}
+
+	private static class HeaderFooter extends PdfPageEventHelper {
+
+		private String text;
+
+		public HeaderFooter(String text) {
+			this.text = text;
+		}
+
+		@Override
+		public void onEndPage(PdfWriter writer, Document document) {
+			Font font = new Font(Font.FontFamily.HELVETICA, 12);
+
+			PdfPTable table = new PdfPTable(2);
+			try {
+				table.setWidths(new int[]{24, 24});
+				table.setTotalWidth(document.getPageSize().getWidth() - 150);
+				table.getDefaultCell().setBorder(Rectangle.BOTTOM);
+				table.addCell(new Phrase(text, font));
+				table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+				table.addCell(new Phrase("Seite " + writer.getPageNumber(), font));
+
+				final PdfContentByte canvas = writer.getDirectContent();
+				canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
+				table.writeSelectedRows(0, -1, 80, 30, canvas);
+				canvas.endMarkedContentSequence();
+
+			} catch (DocumentException e) {
+				throw new ExceptionConverter(e);
+			}
+		}
 	}
 
 }
