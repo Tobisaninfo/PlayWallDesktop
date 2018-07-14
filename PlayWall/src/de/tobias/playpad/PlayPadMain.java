@@ -104,7 +104,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		App app = ApplicationUtils.getApplication();
 
 		if (!app.isDebug()) {
@@ -127,17 +127,21 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				}
 			}};
 
-			// Install the all-trusting trust manager
-			sslContext = SSLContext.getInstance("SSL");
-			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
+			try {
+				// Install the all-trusting trust manager
+				sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+				HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
 
-			// Unirest
-			SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
-			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-			CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-			Unirest.setHttpClient(httpclient);
+				// Unirest
+				SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
+				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+				CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+				Unirest.setHttpClient(httpclient);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		// Localization

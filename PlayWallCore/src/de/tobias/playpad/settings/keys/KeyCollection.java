@@ -1,19 +1,18 @@
 package de.tobias.playpad.settings.keys;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.utils.util.OS;
+import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.util.OS;
-import de.tobias.utils.xml.XMLHandler;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Verwaltung der Tastenkombinationen für das Menu.
@@ -133,19 +132,23 @@ public class KeyCollection {
 
 	private static final String KEY_ELEMENT = "Key";
 
-	public void load(Path path) throws DocumentException, IOException {
-		if (Files.exists(path)) {
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(Files.newInputStream(path));
-			Element root = document.getRootElement();
+	public void load(Path path) {
+		try {
+			if (Files.exists(path)) {
+				SAXReader reader = new SAXReader();
+				Document document = reader.read(Files.newInputStream(path));
+				Element root = document.getRootElement();
 
-			if (root.element(GlobalSettings.KEYS_ELEMENT) != null) {
-				XMLHandler<Key> handler = new XMLHandler<>(root.element(GlobalSettings.KEYS_ELEMENT));
-				List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
-				for (Key key : keys) {
-					updateKey(key);
+				if (root.element(GlobalSettings.KEYS_ELEMENT) != null) {
+					XMLHandler<Key> handler = new XMLHandler<>(root.element(GlobalSettings.KEYS_ELEMENT));
+					List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
+					for (Key key : keys) {
+						updateKey(key);
+					}
 				}
 			}
+		} catch (DocumentException | IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
