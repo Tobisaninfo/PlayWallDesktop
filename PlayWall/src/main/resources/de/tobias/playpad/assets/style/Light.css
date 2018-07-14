@@ -1,0 +1,73 @@
+.root {
+	/*-fx-base: rgb(40, 40, 40);*/
+	/*-fx-background: rgb(40, 40, 40);*/
+	/*-fx-control-inner-background:  rgb(45, 45, 45);*/
+}
+
+.menu-bar {
+	-fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base, 15%));
+}
+
+.menu:hover,
+.menu-item:hover,
+.menu:showing,
+.menu-item:focused,
+.list-view .list-cell:selected,
+.combo-box-popup .list-view .list-cell:filled:selected,
+.combo-box-popup .list-view .list-cell:filled:selected:hover,
+.combo-box-popup .list-view .list-cell:filled:hover {
+	-fx-background-color: rgb(200, 200, 200);
+	-fx-text-fill: white;
+}
+
+.tool-bar:horizontal {
+	-fx-border: 1px 0px 1px 0px;
+	-fx-border-color: black;
+}
+
+.button:hover {
+	-fx-color: -fx-hover-base;
+}
+
+.table-view {
+	-fx-table-cell-border-color: derive(-fx-base, +10%);
+	-fx-table-header-border-color: derive(-fx-base, +20%);
+}
+
+.split-pane:horizontal > * > .split-pane-divider {
+	-fx-border-color: transparent -fx-base transparent -fx-base;
+	-fx-background-color: transparent, derive(-fx-base, 20%);
+	-fx-background-insets: 0, 0 1 0 1;
+}
+
+.fonticon {
+	-fx-text-fill: black;
+}
+
+.label {
+	-fx-text-fill: black;
+}
+
+.progress-bar {
+	-fx-accent: black;
+}
+
+.notification-pane.dark .notification-bar > .pane .label {
+	-fx-text-fill: #ebebeb;
+}
+
+.pad:play {
+	-fx-background-color: #aa5555bb;
+}
+
+.pad:warn {
+	-fx-background-color: #cc0000bb;
+}
+
+.pad:fade {
+	-fx-background-color: #ff9933bb;
+}
+
+.current-page-button {
+	-fx-base: lightgray;
+}

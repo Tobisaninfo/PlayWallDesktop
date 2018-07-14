@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ScrollPane fitToWidth="true" maxWidth="1.7976931348623157E308" prefViewportHeight="20.0"
+                    prefViewportWidth="100.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox fx:id="itemView" minHeight="20.0" minWidth="100.0" spacing="14.0"/>
+            </content>
+        </ScrollPane>
+        <HBox fx:id="buttonBox" minHeight="10.0" spacing="14.0"/>
+    </children>
+</VBox>

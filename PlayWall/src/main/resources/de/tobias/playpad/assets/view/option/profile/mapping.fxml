@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox layoutX="14.0" layoutY="14.0" spacing="14.0">
+            <children>
+                <Label alignment="BASELINE_RIGHT" layoutX="14.0" layoutY="19.0" maxHeight="1.7976931348623157E308"
+                       prefWidth="150.0" text="%settings.mapping.label.mapping"/>
+                <ComboBox fx:id="mappingComboBox" layoutX="100.0" layoutY="14.0" prefWidth="150.0"/>
+                <MenuButton mnemonicParsing="false" text="%settings.mapping.button.edit">
+                    <items>
+                        <MenuItem fx:id="mappingNewButton" mnemonicParsing="false" onAction="#mappingNewHandler"
+                                  text="%settings.mapping.button.edit.new"/>
+                        <MenuItem fx:id="mappingRenameButton" mnemonicParsing="false" onAction="#mappingRenameHandler"
+                                  text="%settings.mapping.button.edit.rename"/>
+                        <MenuItem fx:id="mappingDeleteButton" mnemonicParsing="false" onAction="#mappingDeleteHandler"
+                                  text="%settings.mapping.button.edit.delete"/>
+                        <MenuItem fx:id="mappingDuplicateButton" mnemonicParsing="false"
+                                  onAction="#mappingDuplicateHandler" text="%settings.mapping.button.edit.duplicate"/>
+                        <MenuItem fx:id="mappingImportButton" mnemonicParsing="false" onAction="#mappingImportHandler"
+                                  text="%settings.mapping.button.edit.import"/>
+                        <MenuItem fx:id="mappingExportButton" mnemonicParsing="false" onAction="#mappingExportHandler"
+                                  text="%settings.mapping.button.edit.export"/>
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+        <HBox spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.midi.label.midiDeviceImpl">
+                    <HBox.margin>
+                        <Insets top="4.0"/>
+                    </HBox.margin>
+                </Label>
+                <HBox maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <ComboBox fx:id="deviceComboBox" onAction="#deviceHandler" prefWidth="150.0"/>
+                        <CheckBox fx:id="midiActiveCheckBox" mnemonicParsing="false" text="%settings.checkbox.activate">
+                            <padding>
+                                <Insets top="5.0"/>
+                            </padding>
+                            <HBox.margin>
+                                <Insets top="4.0"/>
+                            </HBox.margin>
+                        </CheckBox>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+        <HBox layoutY="50.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="50.0" VBox.vgrow="ALWAYS">
+            <children>
+                <TreeView fx:id="treeView" prefHeight="400.0" prefWidth="200.0" showRoot="false"
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="50.0"/>
+                <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                            style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="detailView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                              spacing="14.0"/>
+                    </content>
+                </ScrollPane>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+    </padding>
+</VBox>

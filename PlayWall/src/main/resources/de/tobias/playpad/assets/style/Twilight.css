@@ -1,0 +1,95 @@
+.root {
+	-fx-base: rgb(40, 40, 50);
+	-fx-background: rgb(40, 40, 50);
+	-fx-control-inner-background: rgb(40, 40, 50);
+}
+
+.tab {
+	-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base, 30%));
+}
+
+.tab:selected {
+	-fx-background-color: linear-gradient(to bottom, -fx-base, derive(-fx-base, 30%));
+}
+
+.menu-bar {
+	-fx-background-color: linear-gradient(to top, -fx-base, derive(-fx-base, 30%));
+}
+
+.menu:hover,
+.menu-item:hover,
+.menu:showing,
+.menu-item:focused,
+.list-view .list-cell:selected,
+.combo-box-popup .list-view .list-cell:filled:selected,
+.combo-box-popup .list-view .list-cell:filled:selected:hover,
+.combo-box-popup .list-view .list-cell:filled:hover {
+	-fx-background-color: rgb(70, 70, 90);
+	-fx-text-fill: white;
+}
+
+.tool-bar:horizontal {
+	-fx-background-color: linear-gradient(to bottom, derive(-fx-base, +20%), derive(-fx-base, +0%));
+}
+
+.button {
+	-fx-base: rgb(20, 20, 30);
+}
+
+.button:hover {
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-color: -fx-hover-base;
+}
+
+.table-view {
+	-fx-table-cell-border-color: derive(-fx-base, +10%);
+	-fx-table-header-border-color: derive(-fx-base, +20%);
+}
+
+.fonticon {
+	-fx-text-fill: white;
+}
+
+.label {
+	-fx-text-fill: white;
+	-fx-fill: white;
+}
+
+.pad-playbar {
+	-fx-accent: white;
+}
+
+.pad:play {
+	-fx-background-color: #aa5555bb;
+}
+
+.pad:warn {
+	-fx-background-color: #cc0000bb;
+}
+
+.pad:fade {
+	-fx-background-color: #999988bb;
+}
+
+.current-page-button {
+	-fx-base: lightgray;
+}
+
+/*Notification Bar*/
+.notification-pane.dark .notification-bar > .pane {
+	-fx-background-color: linear-gradient(#D6D6D6, #CCCCCC 37%, #ABABAB);
+	-fx-padding: 0 7 0 7;
+}
+
+.notification-pane.top .notification-bar > .pane {
+	-fx-background-insets: 0 0 0 0, 0 0 1 0, 0 0 2 0;
+}
+
+.notification-pane.bottom .notification-bar > .pane {
+	-fx-background-insets: 0 0 0 0, 1 0 0 0, 2 0 0 0;
+}
+
+.notification-pane .notification-bar > .pane .label {
+	-fx-font-size: 1.166667em; /*15px;*/
+	-fx-text-fill: #292929;
+}

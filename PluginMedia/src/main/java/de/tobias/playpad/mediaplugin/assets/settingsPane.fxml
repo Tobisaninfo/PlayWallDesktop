@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox prefHeight="200.0" prefWidth="645.0" spacing="14.0" AnchorPane.bottomAnchor="14.0"
+              AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+            <children>
+                <Label text="%settings.video.label.screens"/>
+                <VBox alignment="TOP_CENTER">
+                    <children>
+                        <Pane fx:id="screenViewPane" prefWidth="617.0" VBox.vgrow="ALWAYS"/>
+                    </children>
+                </VBox>
+                <HBox prefHeight="100.0" prefWidth="200.0" spacing="14.0">
+                    <children>
+                        <Label text="%settings.video.label.screenChoice">
+                            <HBox.margin>
+                                <Insets top="4.0"/>
+                            </HBox.margin>
+                        </Label>
+                        <VBox prefHeight="88.0" prefWidth="325.0" spacing="14.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <ComboBox fx:id="screenComboBox" prefWidth="150.0"/>
+                                <CheckBox fx:id="fullscreenCheckBox" mnemonicParsing="false"
+                                          text="%settings.video.checkbox.fullscreen"/>
+                                <CheckBox fx:id="videoOpenAtLaunchCheckBox" mnemonicParsing="false"
+                                          text="%settings.video.checkbox.openAtLaunch"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

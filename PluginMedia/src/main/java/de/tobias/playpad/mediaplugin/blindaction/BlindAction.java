@@ -1,0 +1,101 @@
+package de.tobias.playpad.mediaplugin.blindaction;
+
+import de.tobias.playpad.Displayable;
+import de.tobias.playpad.action.Action;
+import de.tobias.playpad.action.InputType;
+import de.tobias.playpad.action.feedback.FeedbackMessage;
+import de.tobias.playpad.action.feedback.FeedbackType;
+import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.utils.nui.icon.FontAwesomeType;
+import de.tobias.utils.nui.icon.FontIcon;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import org.dom4j.Element;
+
+public class BlindAction extends Action implements Displayable {
+
+	private ChangeListener<Boolean> blindFeedbackListener;
+
+	BlindAction() {
+		blindFeedbackListener = (a, b, c) ->
+		{
+			if (c) {
+				handleFeedback(FeedbackMessage.EVENT);
+			} else {
+				handleFeedback(FeedbackMessage.STANDARD);
+			}
+		};
+	}
+
+	@Override
+	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
+		if (type == InputType.PRESSED) {
+			MediaPluginImpl.blindProperty().set(!MediaPluginImpl.blindProperty().get());
+		}
+	}
+
+	@Override
+	public void clearFeedback() {
+		MediaPluginImpl.blindProperty().removeListener(blindFeedbackListener);
+	}
+
+	@Override
+	public void init(Project project, IMainViewController controller) {
+		// Listener für Eingaben
+		BooleanProperty blindProperty = MediaPluginImpl.blindProperty();
+		blindProperty.removeListener(blindFeedbackListener);
+		blindProperty.addListener(blindFeedbackListener);
+	}
+
+	@Override
+	public void showFeedback(Project project, IMainViewController controller) {
+		BooleanProperty blindProperty = MediaPluginImpl.blindProperty();
+
+		// Handle Current Feedback
+		blindFeedbackListener.changed(blindProperty, null, blindProperty.getValue());
+	}
+
+	@Override
+	public FeedbackType geFeedbackType() {
+		return FeedbackType.DOUBLE;
+	}
+
+	@Override
+	public String getType() {
+		return BlindActionFactory.TYPE;
+	}
+
+	@Override
+	public void load(Element root) {
+	}
+
+	@Override
+	public void save(Element root) {
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj.getClass().equals(getClass()) || super.equals(obj);
+	}
+
+	@Override
+	public StringProperty displayProperty() {
+		return new SimpleStringProperty(MediaPluginImpl.getInstance().getBundle().getString("blindaction.name"));
+	}
+
+	@Override
+	public Node getGraphics() {
+		return new Label("", new FontIcon(FontAwesomeType.DESKTOP));
+	}
+
+	@Override
+	public Action cloneAction() throws CloneNotSupportedException {
+		return (BlindAction) super.clone();
+	}
+}

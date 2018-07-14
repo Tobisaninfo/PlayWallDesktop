@@ -34,6 +34,12 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/PlayWall/pom.xml" />
+        <option value="$PROJECT_DIR$/PlayWallCore/pom.xml" />
+        <option value="$PROJECT_DIR$/PluginAwake/pom.xml" />
+        <option value="$PROJECT_DIR$/PluginEqualizer/pom.xml" />
+        <option value="$PROJECT_DIR$/PluginLaunchpad/pom.xml" />
+        <option value="$PROJECT_DIR$/PluginMedia/pom.xml" />
+        <option value="$PROJECT_DIR$/PluginNativeAudio/pom.xml" />
       </list>
     </option>
   </component>

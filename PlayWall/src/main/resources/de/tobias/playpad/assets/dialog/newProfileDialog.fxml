@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="150.0" minWidth="400.0" spacing="14.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label text="%newProfile.label.info"/>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProfile.label.name"/>
+                <TextField fx:id="nameTextField" minWidth="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <Separator maxWidth="1.7976931348623157E308" valignment="BOTTOM"/>
+        <HBox alignment="BOTTOM_RIGHT" spacing="14.0">
+            <children>
+                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonHandler"
+                        text="%newProfile.button.cancel"/>
+                <Button fx:id="finishButton" defaultButton="true" mnemonicParsing="false"
+                        onAction="#finishButtonHandler" text="%newProfile.button.finish"/>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+    </padding>
+</VBox>

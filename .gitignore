@@ -1,5 +1,6 @@
 **/.DS_Store
 /out/
+/target/
 .idea/workspace.xml
 .idea/dictionaries/*
 kotlinc.xml

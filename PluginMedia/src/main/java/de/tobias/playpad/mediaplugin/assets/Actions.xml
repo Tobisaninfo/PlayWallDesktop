@@ -1,0 +1,4 @@
+<Actions>
+    <Component id="BLIND" name="blindaction.name">de.tobias.playpad.mediaplugin.blindaction.BlindActionFactory
+    </Component>
+</Actions>

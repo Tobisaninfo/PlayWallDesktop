@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="200.0" minWidth="500.0" spacing="14.0"
+      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProject.label.name"/>
+                <TextField fx:id="nameTextField" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProject.label.sync"/>
+                <CheckBox fx:id="syncCheckbox" maxWidth="1.7976931348623157E308" text="%newProject.checkbox.sync"
+                          HBox.hgrow="ALWAYS"/>
+            </children>
+        </HBox>
+        <Separator prefWidth="200.0"/>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" minWidth="100.0" prefWidth="100.0" text="%newProject.label.profile"
+                       HBox.hgrow="NEVER"/>
+                <ComboBox fx:id="profileComboBox" maxWidth="1.7976931348623157E308" minWidth="200.0" prefWidth="200.0"
+                          HBox.hgrow="ALWAYS"/>
+                <Button fx:id="newProfileButton" mnemonicParsing="false" onAction="#newProfileButtonHandler"
+                        prefWidth="130.0" text="%newProject.button.newProfile"/>
+            </children>
+        </HBox>
+        <HBox prefWidth="500.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Label alignment="TOP_LEFT" text="%profile.label.info" textAlignment="JUSTIFY" wrapText="true"
+                       HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets left="114.0"/>
+                    </padding>
+                </Label>
+            </children>
+        </HBox>
+        <Separator valignment="BOTTOM" VBox.vgrow="ALWAYS"/>
+        <HBox alignment="BOTTOM_RIGHT" spacing="14.0">
+            <children>
+                <Button fx:id="cnacelButton" mnemonicParsing="false" onAction="#cancelButtonHandler" prefWidth="130.0"
+                        text="%newProject.button.cancel"/>
+                <Button fx:id="finishButton" defaultButton="true" mnemonicParsing="false"
+                        onAction="#finishButtonHandler" prefWidth="130.0" text="%newProject.button.finish"/>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+    </padding>
+</VBox>

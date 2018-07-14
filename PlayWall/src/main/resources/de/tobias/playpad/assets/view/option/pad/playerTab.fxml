@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox spacing="14.0">
+            <children>
+                <HBox layoutX="14.0" layoutY="253.0" spacing="14.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.player.label.fade"
+                               textAlignment="RIGHT"/>
+                        <CheckBox fx:id="customFadeCheckBox" mnemonicParsing="false"
+                                  text="%padSettings.gen.checkbox.customSettings"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <VBox fx:id="fadeContainer" minHeight="20.0"/>
+        <Separator prefWidth="200.0"/>
+        <VBox layoutX="14.0" layoutY="139.0" spacing="14.0">
+            <children>
+                <HBox layoutX="14.0" layoutY="139.0" spacing="14.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.player.label.warning"
+                               textAlignment="RIGHT"/>
+                        <CheckBox fx:id="warningEnableCheckBox" mnemonicParsing="false"
+                                  text="%padSettings.gen.checkbox.customSettings"/>
+                    </children>
+                </HBox>
+                <VBox fx:id="warningFeedbackContainer" minHeight="25.0"/>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+    </padding>
+</VBox>

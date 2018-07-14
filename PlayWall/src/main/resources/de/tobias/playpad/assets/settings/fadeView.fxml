@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox prefWidth="500.0" spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="19.0" prefWidth="150.0"
+                       text="%settings.player.label.fadeIn" textAlignment="RIGHT"/>
+                <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Slider fx:id="fadeInSlider" blockIncrement="0.1" majorTickUnit="1.0" max="10.0"
+                                        maxWidth="1.7976931348623157E308" minorTickCount="9" showTickLabels="true"
+                                        showTickMarks="true" snapToTicks="true" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="fadeInLabel" prefWidth="75.0"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <CheckBox fx:id="fadeInStartCheckBox" mnemonicParsing="false"
+                                          text="%settings.player.label.startIn"/>
+                                <CheckBox fx:id="fadeInPauseCheckBox" mnemonicParsing="false"
+                                          text="%settings.player.label.pauseIn"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="53.0" prefWidth="150.0"
+                       text="%settings.player.label.fadeOut" textAlignment="RIGHT"/>
+                <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <HBox spacing="14.0">
+                            <children>
+                                <Slider fx:id="fadeOutSlider" blockIncrement="0.1" majorTickUnit="1.0" max="10.0"
+                                        maxWidth="1.7976931348623157E308" minorTickCount="9" showTickLabels="true"
+                                        showTickMarks="true" snapToTicks="true" HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="fadeOutLabel" prefWidth="75.0"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="14.0">
+                            <children>
+                                <CheckBox fx:id="fadeOutPauseCheckBox" mnemonicParsing="false"
+                                          text="%settings.player.label.pauseOut"/>
+                                <CheckBox fx:id="fadeOutStopCheckBox" mnemonicParsing="false"
+                                          text="%settings.player.label.stopOut"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Label maxWidth="1.7976931348623157E308" text="%settings.player.label.fadeInfo" wrapText="true"
+               VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets left="164.0"/>
+            </VBox.margin>
+        </Label>
+    </children>
+</VBox>

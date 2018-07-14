@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox spacing="14.0">
+            <children>
+                <VBox layoutX="14.0" layoutY="14.0" spacing="14.0" AnchorPane.leftAnchor="14.0"
+                      AnchorPane.topAnchor="14.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="%project.export.label.headline"/>
+                        <CheckBox fx:id="profileCheckBox" layoutX="29.0" layoutY="42.0" mnemonicParsing="false"
+                                  text="%project.export.checkbox.profile"/>
+                        <CheckBox fx:id="mediaCheckBox" layoutX="29.0" layoutY="69.0" mnemonicParsing="false"
+                                  text="%project.export.checkbox.media"/>
+                    </children>
+                </VBox>
+                <HBox alignment="BOTTOM_RIGHT" layoutX="457.0" layoutY="102.0" spacing="14.0"
+                      AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Button fx:id="cancelButton" layoutX="457.0" layoutY="102.0" mnemonicParsing="false"
+                                onAction="#cancelButtonHandler" text="%project.export.button.cancel"/>
+                        <Button fx:id="saveButton" layoutX="528.0" layoutY="102.0" mnemonicParsing="false"
+                                onAction="#saveButtonHandler" text="%project.export.button.save"/>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+            </padding>
+        </VBox>
+    </children>
+</StackPane>
