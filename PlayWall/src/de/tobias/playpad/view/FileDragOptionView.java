@@ -1,8 +1,5 @@
 package de.tobias.playpad.view;
 
-import java.util.Set;
-import java.util.function.Consumer;
-
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import javafx.animation.FadeTransition;
@@ -14,14 +11,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+
+import java.util.Set;
+import java.util.function.Consumer;
 
 public class FileDragOptionView {
 

@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -17,6 +15,8 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.Set;
 
 public class TriggerPointViewController extends NVC {
 

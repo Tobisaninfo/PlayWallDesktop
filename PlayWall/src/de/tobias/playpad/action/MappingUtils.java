@@ -1,12 +1,12 @@
 package de.tobias.playpad.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.tobias.playpad.action.mapper.KeyboardMapper;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MidiMapper;
 import javafx.scene.input.KeyCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MappingUtils {
 

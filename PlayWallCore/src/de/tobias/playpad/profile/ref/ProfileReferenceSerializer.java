@@ -1,16 +1,15 @@
 package de.tobias.playpad.profile.ref;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.ModuleSerializer;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLHandler;
 import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Util zum arbeiten mit XML und ProfileReference

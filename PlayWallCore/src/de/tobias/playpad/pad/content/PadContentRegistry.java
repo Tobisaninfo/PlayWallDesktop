@@ -1,14 +1,10 @@
 package de.tobias.playpad.pad.content;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import de.tobias.playpad.registry.ComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
+
+import java.nio.file.Path;
+import java.util.*;
 
 public class PadContentRegistry extends ComponentRegistry<PadContentFactory> {
 

@@ -1,9 +1,5 @@
 package de.tobias.playpad.action.mididevice;
 
-import java.util.List;
-
-import javax.sound.midi.MidiMessage;
-
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
@@ -11,6 +7,9 @@ import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;
 import de.tobias.playpad.event.Listener;
 import de.tobias.playpad.midi.device.DeviceRegistry;
+
+import javax.sound.midi.MidiMessage;
+import java.util.List;
 
 /**
  * Abstraktes Midi Gerät. Jede Implementierung musss hier von erben. Es ist zugleich ein Listener und registriert die Listener beim

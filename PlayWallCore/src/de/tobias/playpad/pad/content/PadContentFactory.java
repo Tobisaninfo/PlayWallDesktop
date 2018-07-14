@@ -1,7 +1,5 @@
 package de.tobias.playpad.pad.content;
 
-import java.nio.file.Path;
-
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.registry.Component;
@@ -9,6 +7,8 @@ import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.utils.util.FileUtils;
 import javafx.scene.layout.Pane;
+
+import java.nio.file.Path;
 
 // COMMENT PadContentFactory
 public abstract class PadContentFactory extends Component implements Comparable<PadContentFactory> {

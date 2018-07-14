@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
-import javax.sound.midi.MidiMessage;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.feedback.FeedbackType;
@@ -28,6 +26,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import javax.sound.midi.MidiMessage;
 
 public class MidiMapperViewController extends MapperViewController implements MidiListener {
 

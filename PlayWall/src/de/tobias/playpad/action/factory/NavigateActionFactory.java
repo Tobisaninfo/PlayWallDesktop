@@ -7,7 +7,6 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import javafx.scene.control.TreeItem;
 
-import java.util.Collections;
 import java.util.List;
 
 public class NavigateActionFactory extends ActionFactory implements ActionDisplayable {

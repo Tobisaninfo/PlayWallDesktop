@@ -1,20 +1,16 @@
 package de.tobias.playpad.action.factory;
 
-import java.util.List;
-
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.action.ActionDisplayable;
-import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.Mapping;
+import de.tobias.playpad.action.*;
 import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode;
-import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.actions.CartActionTypeViewController;
 import de.tobias.utils.nui.NVC;
 import javafx.scene.control.TreeItem;
+
+import java.util.List;
 
 public class CartActionFactory extends ActionFactory implements ActionDisplayable {
 

@@ -1,13 +1,13 @@
 package de.tobias.playpad.midi.device;
 
-import java.util.HashMap;
-import java.util.List;
-
 import de.tobias.logger.LogLevel;
 import de.tobias.logger.Logger;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Verwaltet die Midi Geräte Implementierung. Hier werden Geräte registiert und bei Verwendung instanziert für das Programm.

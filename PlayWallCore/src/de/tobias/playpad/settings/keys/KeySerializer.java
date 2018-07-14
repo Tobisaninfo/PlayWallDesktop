@@ -1,9 +1,8 @@
 package de.tobias.playpad.settings.keys;
 
-import org.dom4j.Element;
-
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
 
 public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 

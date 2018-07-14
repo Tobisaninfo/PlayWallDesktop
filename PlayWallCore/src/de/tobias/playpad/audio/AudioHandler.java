@@ -1,10 +1,10 @@
 package de.tobias.playpad.audio;
 
-import java.nio.file.Path;
-
 import de.tobias.playpad.pad.content.PadContent;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.util.Duration;
+
+import java.nio.file.Path;
 
 // Mögliche Interfaces: Equalizeable
 

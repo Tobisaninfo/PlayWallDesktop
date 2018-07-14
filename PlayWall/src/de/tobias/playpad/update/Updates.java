@@ -1,12 +1,5 @@
 package de.tobias.playpad.update;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
@@ -16,6 +9,13 @@ import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.IOUtils;
 import de.tobias.utils.util.OS;
 import javafx.application.Platform;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Updates {
 

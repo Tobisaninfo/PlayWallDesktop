@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.keys.Key;
@@ -10,6 +8,8 @@ import de.tobias.utils.util.Localization;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class KeysConflictDialog extends Alert {
 

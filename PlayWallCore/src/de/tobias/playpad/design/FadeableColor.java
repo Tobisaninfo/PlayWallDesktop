@@ -1,11 +1,11 @@
 package de.tobias.playpad.design;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.animation.Interpolatable;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FadeableColor implements Interpolatable<FadeableColor> {
 

@@ -1,9 +1,8 @@
 package de.tobias.playpad.action.mapper.feedback;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
+import org.dom4j.Element;
 
 /**
  * Implementierung eines 1 State Feedbacks für MIDI Geräte.

@@ -1,25 +1,20 @@
 package de.tobias.playpad.action.mapper;
 
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
-import de.tobias.utils.nui.NVC;
-import org.dom4j.Element;
-
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.feedback.ColorAssociator;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.Feedback;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.feedback.FeedbackType;
+import de.tobias.playpad.action.feedback.*;
 import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
 import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
+import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
+import org.dom4j.Element;
 
 public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbackable {
 

@@ -1,8 +1,8 @@
 package de.tobias.playpad.project;
 
-import java.nio.file.Path;
-
 import de.tobias.utils.settings.Storable;
+
+import java.nio.file.Path;
 
 public class ProjectSettings {
 

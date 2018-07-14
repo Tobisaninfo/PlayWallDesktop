@@ -1,13 +1,7 @@
 package de.tobias.playpad.action;
 
-import java.io.IOException;
-import java.lang.ref.WeakReference;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
+import de.tobias.playpad.profile.Profile;
+import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -16,8 +10,13 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import de.tobias.playpad.profile.Profile;
-import de.tobias.utils.xml.XMLHandler;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 // COMMENT MappingList
 public class MappingList extends ArrayList<Mapping> {

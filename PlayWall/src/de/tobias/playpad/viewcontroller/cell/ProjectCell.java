@@ -1,8 +1,5 @@
 package de.tobias.playpad.viewcontroller.cell;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -18,6 +15,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class ProjectCell extends ListCell<ProjectReference> {
 

@@ -1,23 +1,19 @@
 package de.tobias.playpad.action;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
+import de.tobias.playpad.action.mapper.MapperFactory;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 // COMMENT Mapping
 public class Mapping implements Cloneable, ActionDisplayable {

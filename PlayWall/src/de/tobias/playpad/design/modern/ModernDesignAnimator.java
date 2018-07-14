@@ -1,7 +1,5 @@
 package de.tobias.playpad.design.modern;
 
-import java.util.HashMap;
-
 import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.FadeableColor;
 import de.tobias.playpad.pad.view.IPadView;
@@ -15,6 +13,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
+
+import java.util.HashMap;
 
 public class ModernDesignAnimator {
 

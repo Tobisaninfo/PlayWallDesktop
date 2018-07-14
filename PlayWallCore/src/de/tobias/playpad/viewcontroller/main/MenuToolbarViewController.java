@@ -1,16 +1,15 @@
 package de.tobias.playpad.viewcontroller.main;
 
-import java.util.ResourceBundle;
-
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.utils.ui.ContentViewController;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+
+import java.util.ResourceBundle;
 
 /**
  * Abstrakter ViewController für das Menu und die Toolbar des Hauptfenster. Jede Implementierung kann die GUI selbst bestimmen.

@@ -1,9 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
-import de.tobias.utils.nui.NVC;
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
@@ -11,6 +7,7 @@ import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.view.ColorPickerView;
+import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
@@ -21,6 +18,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 
 public class DoubleFeedbackViewController extends NVC {
 

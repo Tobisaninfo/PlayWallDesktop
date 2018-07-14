@@ -1,14 +1,5 @@
 package de.tobias.playpad.project.ref;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.ModuleSerializer;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -18,6 +9,14 @@ import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLHandler;
 import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class ProjectReferenceSerializer implements XMLDeserializer<ProjectReference>, XMLSerializer<ProjectReference> {
 

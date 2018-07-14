@@ -1,10 +1,5 @@
 package de.tobias.playpad.profile.ref;
 
-import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.Profile;
@@ -12,6 +7,11 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Container für Profile Referenzen

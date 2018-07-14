@@ -1,10 +1,9 @@
 package de.tobias.playpad.viewcontroller;
 
-import java.util.ResourceBundle;
-
 import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.ContentViewController;
+
+import java.util.ResourceBundle;
 
 /**
  * Einstellungen ViewController für einen sAudio Handler.

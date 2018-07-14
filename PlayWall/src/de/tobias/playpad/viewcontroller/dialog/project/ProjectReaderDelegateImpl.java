@@ -1,14 +1,12 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.ProjectReader;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.dialog.profile.ProfileChooseDialog;
-import de.tobias.utils.nui.NVCStage;
 import javafx.stage.Window;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Created by tobias on 18.03.17.

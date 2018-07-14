@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.util.HashMap;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -19,6 +17,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
+import java.util.HashMap;
 
 public class TriggerPadTabViewController extends PadSettingsTabViewController implements ChangeListener<TreeItem<TriggerDisplayable>> {
 

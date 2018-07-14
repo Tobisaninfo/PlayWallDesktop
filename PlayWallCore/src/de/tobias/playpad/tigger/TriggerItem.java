@@ -1,12 +1,11 @@
 package de.tobias.playpad.tigger;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
+import org.dom4j.Element;
 
 public abstract class TriggerItem {
 

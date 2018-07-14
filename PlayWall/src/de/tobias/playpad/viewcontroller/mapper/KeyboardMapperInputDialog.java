@@ -1,13 +1,13 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
-import java.util.Optional;
-
 import de.tobias.playpad.action.mapper.KeyboardMapper;
 import de.tobias.utils.util.StringUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class KeyboardMapperInputDialog extends Alert {
 

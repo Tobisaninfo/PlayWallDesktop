@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.main;
 
-import java.util.List;
-
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
@@ -20,6 +18,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 /**
  * Schnittstelle für das Hautpfenster von PlayWall.

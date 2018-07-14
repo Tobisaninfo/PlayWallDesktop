@@ -1,10 +1,10 @@
 package de.tobias.playpad.action;
 
-import java.util.List;
-
-import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.registry.Component;
 import javafx.scene.control.TreeItem;
+
+import java.util.List;
 
 /**
  * Verwalter einer Action für die Instance und GUI.

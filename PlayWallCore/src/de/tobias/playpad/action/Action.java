@@ -1,16 +1,15 @@
 package de.tobias.playpad.action;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import org.dom4j.Element;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Diese Klasse ist die Basis für alle Actions, die durch Mapper auftreten. Die Klasse verarbeitet dabei allen Input und führt die Listener

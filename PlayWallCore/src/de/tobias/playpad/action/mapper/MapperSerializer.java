@@ -1,12 +1,11 @@
 package de.tobias.playpad.action.mapper;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
 
 /**
  * Laden und Speichern von Mappern (Array von Mappern)

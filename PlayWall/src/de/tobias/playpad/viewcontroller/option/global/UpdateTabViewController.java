@@ -1,12 +1,10 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
-import java.io.IOException;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
@@ -22,13 +20,10 @@ import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+
+import java.io.IOException;
 
 public class UpdateTabViewController extends GlobalSettingsTabViewController {
 

@@ -1,28 +1,23 @@
 package de.tobias.playpad.viewcontroller.actions;
 
-import java.util.List;
-
+import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.utils.nui.NVC;
-import org.controlsfx.control.SegmentedButton;
-
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
+import de.tobias.utils.nui.NVC;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import org.controlsfx.control.SegmentedButton;
+
+import java.util.List;
 
 /**
  * Diese View ist die Basis für die Einstellunge für eine CartAction. Dabei enthällt diese View ein Grid aus Buttons (Carts), eine

@@ -1,8 +1,8 @@
 package de.tobias.playpad.audio;
 
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.DefaultComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.profile.Profile;
 
 @Deprecated
 public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerFactory> {

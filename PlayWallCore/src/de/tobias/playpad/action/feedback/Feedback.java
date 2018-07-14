@@ -1,8 +1,7 @@
 package de.tobias.playpad.action.feedback;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.action.mapper.Mapper;
+import org.dom4j.Element;
 
 /**
  * Das ist die Abstrakte Klasse für ein Feedback. Jedes Mapper Gerät kann eine eigene Klasse dafür entwickeln. Allerdings müssen gibt es ur

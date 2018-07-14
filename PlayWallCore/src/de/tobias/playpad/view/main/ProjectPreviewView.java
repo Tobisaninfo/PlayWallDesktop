@@ -6,13 +6,11 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectPreviewView extends Pagination {

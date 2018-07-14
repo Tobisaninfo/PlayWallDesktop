@@ -1,9 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.nio.file.Path;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.utils.ui.Alertable;
@@ -12,6 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+
+import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class PathLookupListener implements EventHandler<ActionEvent> {
 

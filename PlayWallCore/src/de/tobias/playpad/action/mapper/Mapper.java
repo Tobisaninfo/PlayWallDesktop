@@ -1,11 +1,10 @@
 package de.tobias.playpad.action.mapper;
 
-import org.dom4j.Element;
-
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackType;
+import org.dom4j.Element;
 
 /**
  * Abstrakte Klasse für das Handling von Mappern. Die Aktionen und Handler werden von der Entsprechenden Aktion verwaltet, die dazu gehört.

@@ -1,6 +1,9 @@
 package de.tobias.playpad.viewcontroller;
 
-import de.tobias.playpad.*;
+import de.tobias.playpad.AppUserInfoStrings;
+import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.Strings;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
@@ -19,7 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;

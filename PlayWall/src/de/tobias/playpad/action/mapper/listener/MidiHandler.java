@@ -1,19 +1,18 @@
 package de.tobias.playpad.action.mapper.listener;
 
-import java.util.List;
-
-import javax.sound.midi.MidiMessage;
-
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.MappingUtils;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.application.Platform;
+
+import javax.sound.midi.MidiMessage;
+import java.util.List;
 
 /**
  * Diese Klasse Verwaltet den MIDI Input und führt die Actions aus.

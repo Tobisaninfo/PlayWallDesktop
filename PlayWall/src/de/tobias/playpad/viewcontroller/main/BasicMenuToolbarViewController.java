@@ -1,7 +1,5 @@
 package de.tobias.playpad.viewcontroller.main;
 
-import java.util.ResourceBundle;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
@@ -16,9 +14,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.control.ToolBar;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
+
+import java.util.ResourceBundle;
 
 public abstract class BasicMenuToolbarViewController extends MenuToolbarViewController implements EventHandler<ActionEvent> {
 

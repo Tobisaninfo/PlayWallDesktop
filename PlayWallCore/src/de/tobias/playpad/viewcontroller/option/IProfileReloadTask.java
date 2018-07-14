@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.option;
 
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
 /**

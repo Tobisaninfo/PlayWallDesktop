@@ -1,7 +1,8 @@
 package de.tobias.playpad.viewcontroller.audio;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.audio.TinyAudioHandler;import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.audio.TinyAudioHandler;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;

@@ -1,18 +1,17 @@
 package de.tobias.playpad.action;
 
-import java.util.List;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperSerializer;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.utils.xml.XMLDeserializer;
 import de.tobias.utils.xml.XMLHandler;
 import de.tobias.utils.xml.XMLSerializer;
+import org.dom4j.Element;
+
+import java.util.List;
 
 public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<Action> {
 

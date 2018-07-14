@@ -1,10 +1,9 @@
 package de.tobias.playpad.settings;
 
-import de.tobias.playpad.profile.ProfileSettings;
-import org.dom4j.Element;
-
 import de.tobias.playpad.pad.PadSettings;
+import de.tobias.playpad.profile.ProfileSettings;
 import javafx.util.Duration;
+import org.dom4j.Element;
 
 /**
  * Einstellungen zum Fade, zusammengefasst in dieser Klasse.

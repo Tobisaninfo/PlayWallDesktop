@@ -1,14 +1,13 @@
 package de.tobias.playpad.pad;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Path;
-
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import de.tobias.playpad.registry.NoSuchComponentException;
 import javafx.scene.media.MediaException;
 import javazoom.jl.decoder.JavaLayerException;
+
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class PadException extends Exception {
 

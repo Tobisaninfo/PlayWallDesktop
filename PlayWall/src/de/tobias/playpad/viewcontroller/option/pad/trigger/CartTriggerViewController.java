@@ -7,21 +7,15 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.utils.nui.NVC;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
-import org.controlsfx.control.textfield.TextFields;
 
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CartTriggerViewController extends NVC {

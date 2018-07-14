@@ -1,20 +1,19 @@
 package de.tobias.playpad.tigger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
+import org.dom4j.Element;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Trigger {
 

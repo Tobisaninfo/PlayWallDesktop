@@ -1,7 +1,5 @@
 package de.tobias.playpad.layout.desktop.listener;
 
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -11,6 +9,8 @@ import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
+
+import java.util.List;
 
 public class DesktopSearchController implements EventHandler<ActionEvent> {
 

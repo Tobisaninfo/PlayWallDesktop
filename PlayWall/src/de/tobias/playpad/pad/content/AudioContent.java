@@ -1,23 +1,19 @@
 package de.tobias.playpad.pad.content;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import de.tobias.playpad.audio.AudioEqualizeable;
-import de.tobias.playpad.pad.content.play.Seekable;
-import de.tobias.playpad.pad.mediapath.MediaPath;
-
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.audio.AudioEqualizeable;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
-import de.tobias.playpad.pad.content.play.Equalizeable;
-import de.tobias.playpad.pad.fade.Fade;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.play.Durationable;
-import de.tobias.playpad.pad.fade.Fadeable;
-import de.tobias.playpad.pad.fade.FadeDelegate;
+import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.pad.content.play.Pauseable;
+import de.tobias.playpad.pad.content.play.Seekable;
+import de.tobias.playpad.pad.fade.Fade;
+import de.tobias.playpad.pad.fade.FadeDelegate;
+import de.tobias.playpad.pad.fade.Fadeable;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -26,6 +22,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.media.AudioEqualizer;
 import javafx.util.Duration;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate, Seekable {
 

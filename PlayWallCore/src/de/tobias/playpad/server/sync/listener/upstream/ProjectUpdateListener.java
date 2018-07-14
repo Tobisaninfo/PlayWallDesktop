@@ -1,14 +1,10 @@
 package de.tobias.playpad.server.sync.listener.upstream;
 
-import com.google.gson.JsonObject;
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Change;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.server.sync.ServerUtils;
-import de.tobias.playpad.server.sync.PropertyDef;
 import javafx.beans.value.ChangeListener;
 
 /**

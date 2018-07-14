@@ -1,11 +1,11 @@
 package de.tobias.playpad.view;
 
-import java.util.function.Consumer;
-
 import de.tobias.playpad.DisplayableColor;
 import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
+
+import java.util.function.Consumer;
 
 public class ColorPickerView extends GridPane {
 

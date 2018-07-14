@@ -1,9 +1,9 @@
 package de.tobias.playpad.registry;
 
+import de.tobias.playpad.plugin.Module;
+
 import java.util.Collection;
 import java.util.Set;
-
-import de.tobias.playpad.plugin.Module;
 
 /**
  * Dieses Interface definiert Methoden bei Arbeit mit Komponenten, die durch Plugins zum Programm hinzugefügt werden können.

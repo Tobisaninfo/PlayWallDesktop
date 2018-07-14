@@ -1,7 +1,7 @@
 package de.tobias.playpad.pad.content;
 
-import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 
 /**
  * Verarbeitet den Inhalt eines Pads. Die Einstellungen und der Status ist in Pad ausgelagert.

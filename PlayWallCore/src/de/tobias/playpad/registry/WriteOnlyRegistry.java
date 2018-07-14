@@ -1,13 +1,12 @@
 package de.tobias.playpad.registry;
 
+import de.tobias.playpad.plugin.Module;
+import org.dom4j.DocumentException;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import org.dom4j.DocumentException;
-
-import de.tobias.playpad.plugin.Module;
 
 /**
  * Eine Schnittstelle um Komponenten zu registrieren, aber nicht auszulesen.

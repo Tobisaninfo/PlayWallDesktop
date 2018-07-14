@@ -1,9 +1,9 @@
 package de.tobias.playpad.volume;
 
+import de.tobias.playpad.pad.Pad;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import de.tobias.playpad.pad.Pad;
 
 public class VolumeManager {
 
