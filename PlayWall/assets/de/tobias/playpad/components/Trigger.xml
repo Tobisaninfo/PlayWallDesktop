@@ -1,4 +1,0 @@
-<Actions>
-	<Component id="Cart" name="Trigger.Cart.Name">de.tobias.playpad.trigger.CartTriggerItemFactory</Component>
-	<Component id="Volume" name="Trigger.Volume.Name">de.tobias.playpad.trigger.VolumeTriggerItemFactory</Component>
-</Actions>

@@ -1,4 +1,0 @@
-<Actions>
-	<Component id="MIDI" name="Mapper.Midi.Name">de.tobias.playpad.action.mapper.MidiMapperFactory</Component>
-	<Component id="KEYBOARD" name="Mapper.Keyboard.Name">de.tobias.playpad.action.mapper.KeyboardMapperFactory</Component>
-</Actions>
