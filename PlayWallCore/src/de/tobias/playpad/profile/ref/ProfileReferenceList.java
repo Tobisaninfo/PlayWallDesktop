@@ -2,6 +2,8 @@ package de.tobias.playpad.profile.ref;
 
 import de.tobias.utils.list.UniqList;
 
+import java.util.Collection;
+
 /**
  * Liste, wo nur ProfileRefernzen gespeichert werden, deren Namen Unique ist.
  * 
@@ -10,7 +12,7 @@ import de.tobias.utils.list.UniqList;
  * @since 5.0.1
  * @see ProfileReference
  */
-final class ProfileReferenceList extends UniqList<ProfileReference> {
+public final class ProfileReferenceList extends UniqList<ProfileReference> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,13 +28,22 @@ final class ProfileReferenceList extends UniqList<ProfileReference> {
 			}
 		} else if (o instanceof ProfileReference) {
 			for (ProfileReference reference : this) {
-				if (reference.getName() == o) {
+				if (reference == o) {
 					return true;
-				} else if (reference.getName() == ((ProfileReference) o).getName()) {
+				} else if (reference.getName().equals(((ProfileReference) o).getName())) {
 					return true;
 				}
 			}
 		}
 		return super.contains(o);
+	}
+
+	public void setAll(Collection<ProfileReference> elements) {
+		clear();
+		addAll(elements);
+	}
+
+	public boolean containsProfileName(String name) {
+		return stream().anyMatch(profile -> profile.getName().equals(name));
 	}
 }

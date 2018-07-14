@@ -1,7 +1,7 @@
 package de.tobias.playpad.volume;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 
 public class GlobalVolume implements VolumeFilter {
 

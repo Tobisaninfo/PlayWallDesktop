@@ -3,7 +3,6 @@ package de.tobias.playpad.pad.drag;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.Component;
-import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Modus um ein Pad mit Drag and Drop zu verschieben.

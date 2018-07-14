@@ -6,27 +6,31 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
-import de.tobias.playpad.design.GlobalDesign;
+import de.tobias.playpad.design.modern.ModernDesignSizeHelper;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileListener;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
+import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.DefaultRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileListener;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.playpad.view.ExceptionButton;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
-import de.tobias.playpad.viewcontroller.dialog.ErrorSummaryDialog;
 import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
+import de.tobias.playpad.viewcontroller.main.listener.LayoutChangedListener;
+import de.tobias.playpad.viewcontroller.main.listener.LockedListener;
+import de.tobias.playpad.viewcontroller.main.listener.VolumeChangeListener;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.ui.NotificationHandler;
@@ -36,7 +40,9 @@ import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
 import de.tobias.utils.util.Worker;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -67,10 +73,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	private static final int FIRST_PAGE = 0;
 
-	@FXML private VBox headerBox;
-	@FXML private GridPane padGridPane;
+	@FXML
+	private VBox headerBox;
+	@FXML
+	private GridPane padGridPane;
 
-	@FXML private AnchorPane gridContainer;
+	@FXML
+	private AnchorPane gridContainer;
 	private NotificationPane notificationPane;
 
 	private List<IPadView> padViews;
@@ -96,6 +105,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private VolumeChangeListener volumeChangeListener;
 	private LockedListener lockedListener;
 	private LayoutChangedListener layoutChangedListener;
+	private ChangeListener<Number> notFoundListener;
+
+	// Sync Listener
+	private InvalidationListener projectTitleListener;
+	private InvalidationListener pagesListener;
 
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("de/tobias/playpad/assets/view/main/", "mainView", PlayPadMain.getUiResourceBundle(), e ->
@@ -103,27 +117,32 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			NVCStage stage = e.applyViewControllerToStage();
 			stage.addCloseHook(this::closeRequest);
 
-			new ErrorSummaryDialog(stage.getStage());
-
 			// Init with existing stage
 			initMapper(openProject);
+			reloadSettings(null, Profile.currentProfile());
 			onFinish.accept(e);
 
 			// Min Size of window
-			ProjectSettings projectSettings = openProject.getSettings();
-			GlobalDesign currentLayout = Profile.currentProfile().currentLayout();
-			double minWidth = currentLayout.getMinWidth(projectSettings.getColumns());
-			double minHeight = currentLayout.getMinHeight(projectSettings.getRows());
-
-			getStage().setMinWidth(minWidth);
-			if (OS.getType() == OSType.MacOSX) {
-				getStage().setMinHeight(minHeight + 100);
-			} else {
-				getStage().setMinHeight(minHeight + 150);
-			}
-
+			setMinSize();
 			stage.show();
 		});
+	}
+
+	private void setMinSize() {
+		ProjectSettings projectSettings = openProject.getSettings();
+		double minWidth = ModernDesignSizeHelper.getMinWidth(projectSettings.getColumns());
+		double minHeight = ModernDesignSizeHelper.getMinHeight(projectSettings.getRows());
+
+		if (minWidth < 500) {
+			minWidth = 500;
+		}
+
+		getStage().setMinWidth(minWidth);
+		if (OS.getType() == OSType.MacOSX) {
+			getStage().setMinHeight(minHeight + 100);
+		} else {
+			getStage().setMinHeight(minHeight + 150);
+		}
 	}
 
 	// Init
@@ -146,16 +165,26 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		volumeChangeListener = new VolumeChangeListener(openProject);
 		lockedListener = new LockedListener(this);
 		layoutChangedListener = new LayoutChangedListener();
+		notFoundListener = (observable, oldValue, newValue) -> {
+			if (menuToolbarViewController != null)
+				menuToolbarViewController.setNotFoundNumber(newValue.intValue());
+		};
+
+		// Sync Listener
+		projectTitleListener = observable -> updateWindowTitle();
+		pagesListener = observable -> {
+			getMenuToolbarController().initPageButtons();
+			showPage(0);
+		};
 
 		// Default Layout
 		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
 
 		Profile.registerListener(this);
-		reloadSettings(null, Profile.currentProfile());
 
 		// Wenn sich die Toolbar ändert werden die Button neu erstellt. Das ist hier, weil es nur einmal als Listener da
 		// sein muss. Die Methode wird aber an unterschiedlichen stellen mehrmals aufgerufen
-		performLayoutDependendAction((oldToolbar, newToolbar) ->
+		performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (menuToolbarViewController != null)
 				menuToolbarViewController.initPageButtons();
@@ -232,6 +261,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		menuToolbarViewController.getVolumeSlider().valueProperty().bindBidirectional(settings.volumeProperty());
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
 
+		// Not Found Icon Update
+		if (menuToolbarViewController != null && openProject != null)
+			menuToolbarViewController.setNotFoundNumber(openProject.getNotFoundMedia());
+
 		// Keyboard Shortcuts
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
@@ -247,8 +280,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	private boolean closeRequest() {
-		ErrorSummaryDialog.getInstance().getStage().close();
-
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
@@ -271,7 +302,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			}
 
 			// Save Dialog
-			if (globalSettings.isIgnoreSaveDialog()) {
+			if (globalSettings.isIgnoreSaveDialog() || openProject.getProjectReference().isSync()) {
 				saveProject();
 			} else {
 				SaveDialog alert = new SaveDialog(getStage());
@@ -316,7 +347,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				openProject.save();
+				ProjectReferenceManager.saveProject(openProject);
 				System.out.println("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {
@@ -325,10 +356,24 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 	}
 
+	@Override
 	public void openProject(Project project) {
+		// Remove old listener
+		if (this.openProject != null) {
+			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
+			this.openProject.getPages().removeListener(pagesListener);
+			this.openProject.notFoundMediaProperty().removeListener(notFoundListener);
+			this.openProject.close();
+		}
+
 		removePadContentsFromView();
 
 		openProject = project;
+
+		// Add new Listener
+		openProject.getProjectReference().nameProperty().addListener(projectTitleListener);
+		openProject.getPages().addListener(pagesListener);
+		openProject.notFoundMediaProperty().addListener(notFoundListener);
 
 		volumeChangeListener.setOpenProject(openProject);
 		midiHandler.setProject(project);
@@ -338,7 +383,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		midiHandler.setProject(project);
 		keyboardHandler.setProject(project);
 		DesktopPadDragListener.setProject(project);
-		ErrorSummaryDialog.getInstance().setProject(openProject);
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -346,6 +390,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		showPage(FIRST_PAGE);
 		loadUserCss();
 		updateWindowTitle();
+
+		notFoundListener.changed(project.notFoundMediaProperty(), 0, project.getNotFoundMedia());
 	}
 
 	/*
@@ -354,6 +400,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	@Override
 	public int getPage() {
 		return currentPageShowing;
+	}
+
+	@Override
+	public boolean showPage(Page page) {
+		return showPage(page.getPosition());
 	}
 
 	@Override
@@ -446,6 +497,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 
 		menuToolbarViewController.initPageButtons();
+		setMinSize();
 	}
 
 	@Override
@@ -478,12 +530,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			scene.getStylesheets().add(mainLayout.getStylesheet());
 		}
 
-		// design spezific css
+		// design specific css
 		if (openProject != null) {
-			Profile currentProfile = Profile.currentProfile();
-			currentProfile.currentLayout().applyCssMainView(this, getStage(), openProject);
+			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCssMainView(design, this, getStage(), openProject);
 
-			Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
+			// Mapping feedback
+			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+			activeMapping.clearFeedback();
+			activeMapping.prepareFeedback(openProject);
 			activeMapping.adjustPadColorToMapper();
 			activeMapping.showFeedback(openProject);
 		}
@@ -558,7 +613,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				{
 					// Handle Mapper
 					if (currentProfile != null) {
-						activeMapping.initFeedback();
+						activeMapping.initFeedbackType();
 						if (openProject != null) {
 							activeMapping.showFeedback(openProject);
 							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
@@ -703,7 +758,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	@Override
-	public void performLayoutDependendAction(MainLayoutHandler runnable) {
+	public void performLayoutDependedAction(MainLayoutHandler runnable) {
 		runnable.handle(null, menuToolbarViewController);
 		layoutActions.add(runnable);
 	}

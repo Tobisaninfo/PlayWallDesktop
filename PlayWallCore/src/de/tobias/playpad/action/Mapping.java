@@ -14,7 +14,7 @@ import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperConnectFeedbackable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -36,11 +36,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	List<Mapper> getMapperForAction(Action action) {
-		if (mapping.containsKey(action)) {
-			return mapping.get(action);
-		} else {
-			return null;
-		}
+		return mapping.getOrDefault(action, null);
 	}
 
 	public String getName() {
@@ -124,11 +120,23 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		return mapping.get(action);
 	}
 
-	public void initFeedback() {
+	public void initFeedbackType() {
 		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
 		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).initFeedbackType();
+			}
+		}
+	}
+
+	public void prepareFeedback(Project project) {
+		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+
+		for (Action action : mapping.keySet()) {
+			try {
+				action.init(project, controller);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -138,12 +146,10 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		showFeedback(project, controller);
 	}
 
-	public void showFeedback(Project project, IMainViewController controller) {
-		clearFeedback();
-
+	private void showFeedback(Project project, IMainViewController controller) {
 		for (Action action : mapping.keySet()) {
 			try {
-				action.initFeedback(project, controller);
+				action.showFeedback(project, controller);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -158,7 +164,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 			}
 		}
 
-		getActions().forEach(action -> action.clearFeedback());
+		getActions().forEach(Action::clearFeedback);
 	}
 
 	public void adjustPadColorToMapper() {
@@ -172,6 +178,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 		clone.mapping = new HashMap<>();
 		for (Action action : mapping.keySet()) {
 			Action actionClone = action.cloneAction();
+			actionClone.setMappingRef(clone);
 			clone.mapping.put(actionClone, new ArrayList<>());
 
 			for (Mapper mapper : action.getMappers()) {

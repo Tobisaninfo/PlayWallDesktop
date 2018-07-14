@@ -1,39 +1,33 @@
 package de.tobias.playpad.layout.desktop.pad;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Set;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.content.ContentFactory;
-import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.view.PadDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.util.FileUtils;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Set;
 
 public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
@@ -49,7 +43,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
 
-	public DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutFactory connect) {
+	DesktopPadDragListener(Pad currentPad, IPadView view, DesktopMainLayoutFactory connect) {
 		this.currentPad = currentPad;
 		this.connect = connect;
 
@@ -97,7 +91,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				// Build In Filesupport
 				try {
 					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
-					Set<ContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+					Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 
 					if (!connects.isEmpty()) {
 						if (fileHud == null) {
@@ -150,24 +144,19 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 		// File Handling
 		if (db.hasFiles()) {
-			success = true;
 			File file = db.getFiles().get(0);
 
-			ContentFactory connect = fileHud.getSelectedConnect();
+			PadContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
-				PadContent content = currentPad.getContent();
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
-					content = connect.newInstance(currentPad);
+					currentPad.setContentType(connect.getType());
 				}
 
-				try {
-					content.handlePath(file.toPath());
-				} catch (NoSuchComponentException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (currentPad.isPadVisible()) {
+					currentPad.getController().getView().showBusyView(true);
 				}
-				this.currentPad.setContent(content);
-				this.currentPad.setName(FileUtils.getFilenameWithoutExtention(file.toPath().getFileName()));
+
+				this.currentPad.setPath(file.toPath());
 
 				if (currentPad.getController() != null) {
 					IPadView padView = currentPad.getController().getView();
@@ -195,11 +184,14 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
 				mainViewController.showPage(mainViewController.getPage());
 
-				// Event Completion
-				event.setDropCompleted(success);
-				event.consume();
+				if (project.getProjectReference().isSync()) {
+					CommandManager.execute(Commands.PAD_MOVE);
+				}
 			}
 		}
+		// Event Completion
+		event.setDropCompleted(success);
+		event.consume();
 	}
 
 	private void dragDetacted(MouseEvent event) {

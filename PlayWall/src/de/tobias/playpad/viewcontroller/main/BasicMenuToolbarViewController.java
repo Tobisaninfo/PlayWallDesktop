@@ -28,10 +28,13 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 
 	@FXML protected HBox pageHBox;
 	@FXML protected HBox toolbarHBox;
-	@FXML protected ToolBar toolbar;
 	@FXML protected Menu recentOpenMenu;
 	@FXML protected Slider volumeSlider;
 	@FXML protected Label volumeDownLabel;
+
+	@FXML private HBox notFoundContainer;
+	@FXML private Label notFoundLabel;
+
 
 	protected Project openProject; // REFERENCE zu MainViewController
 
@@ -49,6 +52,18 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() - ev.getDeltaY() * 0.001);
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
+
+		FontIcon fontIcon = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
+		fontIcon.getStyleClass().add("pad-notfound");
+		fontIcon.setSize(20);
+
+		notFoundContainer.getChildren().add(0, fontIcon);
+	}
+
+	@Override
+	public void setNotFoundNumber(int count) {
+		notFoundContainer.setVisible(count > 0);
+		notFoundLabel.setText(String.valueOf(count));
 	}
 
 	// Utils
@@ -64,9 +79,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		if (key != null) {
 			if (!key.getKeyCode().isEmpty()) {
 				KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
-				if (keyCode != null) {
-					menuItem.setAccelerator(keyCode);
-				}
+				menuItem.setAccelerator(keyCode);
 			}
 		}
 	}

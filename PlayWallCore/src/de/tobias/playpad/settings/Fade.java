@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings;
 
+import de.tobias.playpad.profile.ProfileSettings;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.PadSettings;
@@ -30,7 +31,7 @@ public class Fade {
 	 * Erstellt ein neues Fade mit den Default Werten. (Fade Dauer: 0 sec)
 	 */
 	public Fade() {
-		this(Duration.ZERO, Duration.ZERO);
+		this(Duration.ONE, Duration.ONE);
 	}
 
 	/**

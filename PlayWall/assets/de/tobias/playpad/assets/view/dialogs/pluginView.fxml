@@ -26,7 +26,7 @@
             <Label fx:id="pluginHeadlineLabel" styleClass="plugin-headline" text="Headline" />
             <Button fx:id="pluginInstallButton" mnemonicParsing="false" onAction="#pluginInstallHandler" text="Installieren" />
             <Label fx:id="pluginVersionLabel" text="Aktuelle Version: 1.4.2" />
-            <Label fx:id="pluginInfoLabel" text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet." wrapText="true" />
+            <Label fx:id="pluginInfoLabel" wrapText="true" />
          </children>
       </VBox>
    </children>

@@ -1,32 +1,32 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.cartaction.CartAction;
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignFactory;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.viewcontroller.CartDesignViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML private VBox layoutContainer;
 	@FXML private CheckBox enableLayoutCheckBox;
-	private CartDesignViewController layoutViewController;
+
+	private ModernCartDesignViewController layoutViewController;
 
 	private Pad pad;
 
@@ -35,37 +35,26 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		this.pad = pad;
 	}
 
-	private void setLayoutController(CartDesignViewController cartLayoutViewController) {
-		if (layoutViewController != null)
-			layoutContainer.getChildren().remove(layoutViewController.getParent());
-
-		if (cartLayoutViewController != null) {
-			layoutViewController = cartLayoutViewController;
-			layoutContainer.getChildren().add(layoutViewController.getParent());
-		}
-	}
-
 	@Override
 	public void init() {
 		enableLayoutCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
 			PadSettings padSettings = pad.getPadSettings();
-			if (c && !padSettings.isCustomLayout()) {
+			if (c && !padSettings.isCustomDesign()) {
 				try {
-					padSettings.setCustomLayout(true);
+					padSettings.setCustomDesign(true);
 
-					String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-					CartDesign layout = padSettings.getLayout(layoutType);
-					layout.copyGlobalLayout(Profile.currentProfile().getLayout(layoutType));
+					ModernCartDesign2 layout = padSettings.getDesign();
+					layout.copyGlobalLayout(Profile.currentProfile().getProfileSettings().getDesign());
 
 					setLayoutViewController(pad);
 				} catch (Exception e) {
 					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
 					e.printStackTrace();
 				}
-			} else if (!c && padSettings.isCustomLayout()) {
-				padSettings.setCustomLayout(false);
-				setLayoutController(null);
+			} else if (!c && padSettings.isCustomDesign()) {
+				padSettings.setCustomDesign(false);
+				setLayoutViewController(null);
 			}
 		});
 	}
@@ -79,26 +68,25 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	public void loadSettings(Pad pad) {
 		PadSettings padSettings = pad.getPadSettings();
 
-		enableLayoutCheckBox.setSelected(padSettings.isCustomLayout());
-		if (padSettings.isCustomLayout()) {
+		enableLayoutCheckBox.setSelected(padSettings.isCustomDesign());
+		if (padSettings.isCustomDesign()) {
 			setLayoutViewController(pad);
 		}
 	}
 
 	private void setLayoutViewController(Pad pad) {
-		try {
-			String layoutType = Profile.currentProfile().getProfileSettings().getLayoutType();
-			CartDesign layout = pad.getPadSettings().getLayout(layoutType);
+		if (pad != null) {
+			try {
+				ModernCartDesign2 design = pad.getPadSettings().getDesign();
 
-			DesignFactory component = PlayPadPlugin.getRegistryCollection().getDesigns().getFactory(layoutType);
-			CartDesignViewController controller = component.getCartDesignViewController(layout);
-			setLayoutController(controller);
-		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+				ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
+				layoutContainer.getChildren().setAll(controller.getParent());
+			} catch (Exception e) {
+				e.printStackTrace();
+				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+			}
+		} else {
+			layoutContainer.getChildren().clear();
 		}
 	}
 
@@ -113,8 +101,8 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
 			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class));
 			// Update die Mapper der CartAction
-			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getIndex() == pad.getIndex())
-					.forEach(item -> item.initFeedback(pad.getProject(), mainViewController));
+			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
+					.forEach(item -> item.init(pad.getProject(), mainViewController));
 		} catch (NoSuchComponentException e) {
 			e.printStackTrace();
 		}

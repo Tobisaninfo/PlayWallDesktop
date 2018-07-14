@@ -3,8 +3,7 @@ package de.tobias.playpad.action;
 import java.util.List;
 
 import de.tobias.playpad.registry.Component;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.utils.ui.icon.FontIconType;
+import de.tobias.playpad.profile.Profile;
 import javafx.scene.control.TreeItem;
 
 /**

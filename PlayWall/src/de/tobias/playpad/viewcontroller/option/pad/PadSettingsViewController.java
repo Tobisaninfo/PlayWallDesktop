@@ -1,39 +1,34 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.ContentFactory;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.path.MultiPathContent;
 import de.tobias.playpad.pad.content.path.SinglePathContent;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Control;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
@@ -54,7 +49,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		addTab(new GeneralPadTabViewController(pad));
 		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));
-//		addTab(new TriggerPadTabViewController(pad)); TODO Add Trigger Tab when rewritten
+		addTab(new TriggerPadTabViewController(pad));
 
 		if (pad.getContent() != null) {
 			try {
@@ -62,8 +57,8 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 				String type = pad.getContent().getType();
 				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
 
-				ContentFactory contentFactory = registry.getFactory(type);
-				PadSettingsTabViewController contentTab = contentFactory.getSettingsViewController(pad);
+				PadContentFactory padContentFactory = registry.getFactory(type);
+				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
 
 				if (contentTab != null)
 					addTab(contentTab);
@@ -134,9 +129,9 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getIndexReadable(), pad.getName());
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getPositionReadable(), pad.getName());
 		} else {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getIndexReadable());
+			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
 	}
@@ -153,7 +148,8 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	private void showCurrentSettings() {

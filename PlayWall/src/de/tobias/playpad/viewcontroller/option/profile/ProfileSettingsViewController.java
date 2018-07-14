@@ -3,12 +3,13 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
@@ -19,11 +20,8 @@ import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Worker;
-import javafx.beans.Observable;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -31,43 +29,40 @@ import javafx.scene.control.ToggleButton;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.controlsfx.control.TaskProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileSettingsViewController extends NVC implements IProfileSettingsViewController {
 
-	@FXML private TabPane tabPane;
-	@FXML private ToggleButton lockedButton;
-	@FXML private Button finishButton;
+	@FXML
+	private TabPane tabPane;
+	@FXML
+	private ToggleButton lockedButton;
+	@FXML
+	private Button finishButton;
 
 	private List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Runnable onFinish;
 
 	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		load("de/tobias/playpad/assets/view/option/profile/", "settingsView",  PlayPadMain.getUiResourceBundle());
+		load("de/tobias/playpad/assets/view/option/profile/", "settingsView", PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasActivePlayers();
 
 		addTab(new MappingTabViewController());
-		addTab(new MidiTabViewController());
 		addTab(new DesignTabViewController());
 		addTab(new PlayerTabViewController());
 
 		// Custom Tabs - Content Types
-		for (String type : PlayPadPlugin.getRegistryCollection().getPadContents().getTypes()) {
-			try {
-				ContentFactory component = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(type);
-				ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
-				if (controller != null) {
-					addTab(controller);
-				}
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		PadContentRegistry padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+		for (String type : padContents.getTypes()) {
+			PadContentFactory component = padContents.getFactory(type);
+			ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
+			if (controller != null) {
+				addTab(controller);
 			}
 		}
 
@@ -84,7 +79,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	public void init() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
-		// Look Button Listener
+		// Lock Button Listener
 		lockedButton.setGraphic(new FontIcon(FontAwesomeType.LOCK));
 		lockedButton.setOnAction(e ->
 		{
@@ -110,7 +105,8 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	/**
@@ -143,13 +139,14 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		onFinish();
-		getStageContainer().ifPresent(NVCStage::close);
+		if (onFinish()) {
+			getStageContainer().ifPresent(NVCStage::close);
+		}
 	}
 
 	/**
 	 * Speichert alle Informationen.
-	 * 
+	 *
 	 * @return <code>true</code>Alle Einstellungen sind Valid.
 	 */
 	private boolean onFinish() {
@@ -167,46 +164,26 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		Profile profile = Profile.currentProfile();
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 
-		showProgressDialog(profile.getProfileSettings(), project, mainController);
+		executeConfigurationTasks(profile.getProfileSettings(), project, mainController);
 
 		return true;
 	}
 
-	private void showProgressDialog(ProfileSettings settings, Project project, IMainViewController mainController) {
-		TaskProgressView<Task<Void>> taskView = new TaskProgressView<>();
-
+	private void executeConfigurationTasks(ProfileSettings settings, Project project, IMainViewController mainController) {
 		for (ProfileSettingsTabViewController controller : tabs) {
 			if (controller instanceof IProfileReloadTask) {
 				if (controller.needReload()) {
-					Task<Void> task = ((IProfileReloadTask) controller).getTask(settings, project, mainController);
-					taskView.getTasks().add(task);
+					Runnable task = ((IProfileReloadTask) controller).getTask(settings, project, mainController);
 					Worker.runLater(task);
 				}
 			}
-		}
-
-		if (!taskView.getTasks().isEmpty()) {
-			// Run Listener
-			PlayPadMain.getProgramInstance().getSettingsListener().forEach(l -> l.onChange(Profile.currentProfile()));
-
-			Scene scene = new Scene(taskView);
-			Stage stage = new Stage();
-			taskView.getTasks().addListener((Observable observable) ->
-			{
-				if (taskView.getTasks().isEmpty()) {
-					stage.close();
-				}
-			});
-			stage.setScene(scene);
-			stage.showAndWait();
 		}
 	}
 
 	/**
 	 * Aktiviert/Deaktiviert den Look Button.
-	 * 
-	 * @param isLocked
-	 *            isLooked
+	 *
+	 * @param isLocked isLooked
 	 */
 	private void setLookEnable(boolean isLocked) {
 		tabPane.setDisable(isLocked);

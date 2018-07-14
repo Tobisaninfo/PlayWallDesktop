@@ -1,12 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -19,14 +12,19 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class GeneralTabViewController extends GlobalSettingsTabViewController {
+
+	@FXML private CheckBox openLastDocumentCheckbox;
 
 	@FXML private CheckBox liveModeCheckBox;
 
@@ -35,16 +33,12 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML private RadioButton pageEnable;
 	@FXML private RadioButton pageDisable;
-	@FXML private ToggleGroup pageGroup;
 	@FXML private RadioButton dragEnable;
 	@FXML private RadioButton dragDisable;
-	@FXML private ToggleGroup dragGroup;
 	@FXML private RadioButton fileEnable;
 	@FXML private RadioButton fileDisable;
-	@FXML private ToggleGroup fileGroup;
 	@FXML private RadioButton settingsEnable;
 	@FXML private RadioButton settingsDisable;
-	@FXML private ToggleGroup settingsGroup;
 
 	private boolean changeSettings;
 
@@ -59,13 +53,13 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public void init() {
-		pageGroup = new ToggleGroup();
+		ToggleGroup pageGroup = new ToggleGroup();
 		pageGroup.getToggles().addAll(pageEnable, pageDisable);
-		dragGroup = new ToggleGroup();
+		ToggleGroup dragGroup = new ToggleGroup();
 		dragGroup.getToggles().addAll(dragEnable, dragDisable);
-		fileGroup = new ToggleGroup();
+		ToggleGroup fileGroup = new ToggleGroup();
 		fileGroup.getToggles().addAll(fileEnable, fileDisable);
-		settingsGroup = new ToggleGroup();
+		ToggleGroup settingsGroup = new ToggleGroup();
 		settingsGroup.getToggles().addAll(settingsEnable, settingsDisable);
 
 		liveModeCheckBox.selectedProperty().addListener((a, b, c) ->
@@ -147,26 +141,27 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public void loadSettings(GlobalSettings settings) {
+		openLastDocumentCheckbox.setSelected(settings.isOpenLastDocument());
 
 		liveModeCheckBox.setSelected(settings.isLiveMode());
 		cacheTextField.setText(settings.getCachePath().toString());
 
-		if (settings.isLiveModePage() == true)
+		if (settings.isLiveModePage())
 			pageEnable.setSelected(true);
 		else
 			pageDisable.setSelected(true);
 
-		if (settings.isLiveModeDrag() == true)
+		if (settings.isLiveModeDrag())
 			dragEnable.setSelected(true);
 		else
 			dragDisable.setSelected(true);
 
-		if (settings.isLiveModeFile() == true)
+		if (settings.isLiveModeFile())
 			fileEnable.setSelected(true);
 		else
 			fileDisable.setSelected(true);
 
-		if (settings.isLiveModeSettings() == true)
+		if (settings.isLiveModeSettings())
 			settingsEnable.setSelected(true);
 		else
 			settingsDisable.setSelected(true);
@@ -176,6 +171,8 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public void saveSettings(GlobalSettings settings) {
+		settings.setOpenLastDocument(openLastDocumentCheckbox.isSelected());
+
 		settings.setLiveMode(liveModeCheckBox.isSelected());
 		settings.setCachePath(Paths.get(cacheTextField.getText()));
 

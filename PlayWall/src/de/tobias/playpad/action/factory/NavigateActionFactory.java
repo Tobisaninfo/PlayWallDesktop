@@ -3,7 +3,7 @@ package de.tobias.playpad.action.factory;
 import de.tobias.playpad.action.*;
 import de.tobias.playpad.action.actions.NavigateAction;
 import de.tobias.playpad.action.actions.NavigateAction.NavigationType;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.nui.NVC;
 import javafx.scene.control.TreeItem;
 
@@ -20,7 +20,7 @@ public class NavigateActionFactory extends ActionFactory implements ActionDispla
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
 
-		Collections.sort(actions, (o1, o2) ->
+		actions.sort((o1, o2) ->
 		{
 			if (o1 instanceof NavigateAction && o2 instanceof NavigateAction) {
 				NavigateAction c1 = (NavigateAction) o1;

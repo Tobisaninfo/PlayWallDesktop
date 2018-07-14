@@ -19,8 +19,9 @@
             </Label>
             <VBox layoutX="109.0" layoutY="259.0" spacing="14.0">
                <children>
-                  <Button fx:id="newProfileButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newProfileButtonHandler" text="%launch.button.new" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="importProfileButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importProfileButtonHandler" text="%launch.button.import" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="newProjectButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newProjectButtonHandler" text="%launch.button.new" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importProjectButtonHandler" text="%launch.button.import" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="convertProjectButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#convertProjectButtonHandler" text="%launch.button.convert" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </children>
@@ -30,6 +31,11 @@
          <children>
             <Button fx:id="deleteButton" layoutX="494.0" layoutY="305.0" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%launch.button.delete" />
             <Button fx:id="openButton" layoutX="568.0" layoutY="305.0" mnemonicParsing="false" onAction="#openButtonHandler" text="%launch.button.open" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         </children>
+      </HBox>
+      <HBox layoutX="-57.0" layoutY="295.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0">
+         <children>
+            <Label fx:id="cloudLabel" onMouseClicked="#cloudIconClicked"/>
          </children>
       </HBox>
    </children>

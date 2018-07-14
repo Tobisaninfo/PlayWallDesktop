@@ -1,26 +1,27 @@
 package de.tobias.playpad.pad;
 
-import java.util.HashMap;
-
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.CartDesign;
-import de.tobias.playpad.design.DesignFactory;
-import de.tobias.playpad.registry.DefaultRegistry;
-import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.upstream.PadSettingsUpdateListener;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.util.Duration;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class PadSettings implements Cloneable {
+
+	// Pad Reference
+	private Pad pad;
+
+	private UUID id;
 
 	// Settings
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
@@ -29,12 +30,35 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 
-	private BooleanProperty customLayoutProperty = new SimpleBooleanProperty(false);
-	private HashMap<String, CartDesign> layouts = new HashMap<>();
+	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
+	private ModernCartDesign2 design;
 
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
 
 	private HashMap<String, Object> customSettings = new HashMap<>();
+
+	// Sync Listener
+	private PadSettingsUpdateListener syncListener;
+
+	public PadSettings(Pad pad) {
+		this.pad = pad;
+		this.syncListener = new PadSettingsUpdateListener(this);
+		this.id = UUID.randomUUID();
+	}
+
+	public PadSettings(Pad pad, UUID uuid) {
+		this.pad = pad;
+		this.syncListener = new PadSettingsUpdateListener(this);
+		this.id = uuid;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
 	public double getVolume() {
 		return volumeProperty.get();
@@ -95,7 +119,7 @@ public class PadSettings implements Cloneable {
 
 	/**
 	 * Returns either the fade settings of this pad or the global settings
-	 * 
+	 *
 	 * @return Fade
 	 */
 	public Fade getFade() {
@@ -140,41 +164,46 @@ public class PadSettings implements Cloneable {
 		return warningProperty;
 	}
 
-	public boolean isCustomLayout() {
-		return customLayoutProperty.get();
+	public boolean isCustomDesign() {
+		return customDesignProperty.get();
 	}
 
-	public void setCustomLayout(boolean customLayout) {
-		this.customLayoutProperty.set(customLayout);
+	public void setCustomDesign(boolean customLayout) {
+		this.customDesignProperty.set(customLayout);
 	}
 
-	public BooleanProperty customLayoutProperty() {
-		return customLayoutProperty;
+	public BooleanProperty customDesignProperty() {
+		return customDesignProperty;
 	}
 
-	public CartDesign getDesign() {
-		return getLayout(Profile.currentProfile().getProfileSettings().getLayoutType());
-	}
+	public ModernCartDesign2 getDesign() {
+		if (design == null) {
+			ModernCartDesign2 design = new ModernCartDesign2(pad);
 
-	HashMap<String, CartDesign> getLayouts() {
-		return layouts;
-	}
-
-	public CartDesign getLayout(String type) {
-		if (!layouts.containsKey(type)) {
-			DefaultRegistry<DesignFactory> layouts2 = PlayPadPlugin.getRegistryCollection().getDesigns();
-			try {
-				layouts.put(type, layouts2.getFactory(type).newCartDesign());
-			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (pad.getProject().getProjectReference().isSync()) {
+				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
 			}
+
+			setDesign(design);
+
 		}
-		return layouts.get(type);
+		return design;
 	}
 
-	public void setLayout(CartDesign layout, String type) {
-		this.layouts.put(type, layout);
+	public ModernColor getBackgroundColor() {
+		if (isCustomDesign()) {
+			return design.getBackgroundColor();
+		} else {
+			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
+		}
+	}
+
+	public void setDesign(ModernCartDesign2 design) {
+		this.design = design;
+		if (pad.getProject().getProjectReference().isSync()) {
+			design.addListener();
+		}
+
 	}
 
 	public HashMap<String, Object> getCustomSettings() {
@@ -206,39 +235,54 @@ public class PadSettings implements Cloneable {
 		return false;
 	}
 
-	@Override
-	public PadSettings clone() throws CloneNotSupportedException {
-		PadSettings settings = (PadSettings) super.clone();
-		settings.volumeProperty = new SimpleDoubleProperty(getVolume());
-		settings.loopProperty = new SimpleBooleanProperty(isLoop());
+	public PadSettings clone(Pad pad) throws CloneNotSupportedException {
+		PadSettings clone = (PadSettings) super.clone();
+		clone.id = UUID.randomUUID();
+
+		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
+		clone.loopProperty = new SimpleBooleanProperty(isLoop());
 
 		if (isCustomTimeMode())
-			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>(getTimeMode());
+			clone.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());
 		else
-			settings.timeModeProperty = new SimpleObjectProperty<TimeMode>();
+			clone.timeModeProperty = new SimpleObjectProperty<>();
 
 		if (isCustomFade())
-			settings.fadeProperty = new SimpleObjectProperty<>(getFade());
+			clone.fadeProperty = new SimpleObjectProperty<>(getFade());
 		else
-			settings.fadeProperty = new SimpleObjectProperty<>();
+			clone.fadeProperty = new SimpleObjectProperty<>();
 
 		if (isCustomWarning())
-			settings.warningProperty = new SimpleObjectProperty<>(getWarning());
+			clone.warningProperty = new SimpleObjectProperty<>(getWarning());
 		else
-			settings.warningProperty = new SimpleObjectProperty<>();
+			clone.warningProperty = new SimpleObjectProperty<>();
 
-		settings.customLayoutProperty = new SimpleBooleanProperty(isCustomLayout());
-		settings.layouts = new HashMap<>();
-		for (String key : layouts.keySet()) {
-			CartDesign clone = (CartDesign) layouts.get(key).clone();
-			settings.layouts.put(key, clone);
+		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
+		clone.design = design.clone(pad);
+
+		clone.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
+		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
+
+		clone.updateTrigger();
+
+		if (pad.getProject().getProjectReference().isSync()) {
+			CommandManager.execute(Commands.PAD_SETTINGS_ADD, pad.getProject().getProjectReference(), clone);
 		}
 
-		settings.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
-		settings.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
-
-		settings.updateTrigger();
-
-		return settings;
+		return clone;
 	}
+
+	public Pad getPad() {
+		return pad;
+	}
+
+
+	public void addSyncListener() {
+		syncListener.addListener();
+	}
+
+	public void removeListener() {
+		syncListener.removeListener();
+	}
+
 }

@@ -5,7 +5,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
@@ -13,6 +13,8 @@ import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -29,12 +31,9 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 	private IMainViewController mainViewController;
 
-	public TouchMenuToolbarViewController(IMainViewController mainViewController) {
+	TouchMenuToolbarViewController(IMainViewController mainViewController) {
 		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = mainViewController;
-
-		toolbarHBox.prefWidthProperty().bind(toolbar.widthProperty().subtract(25));
-		toolbarHBox.prefHeightProperty().bind(toolbar.minHeightProperty());
 
 		// Schriftgröße Icons
 		FontIcon icon = (FontIcon) volumeDownLabel.getGraphic();
@@ -59,12 +58,12 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
-			String name = page.getName(); 
-			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1));
-			}
-			
-			Button button = new Button(name);
+
+			Button button = new Button();
+			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
+					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.otherwise(page.nameProperty());
+			button.textProperty().bind(nameBinding);
 			button.setUserData(i);
 			button.setFocusTraversable(false);
 			button.setOnAction(this);

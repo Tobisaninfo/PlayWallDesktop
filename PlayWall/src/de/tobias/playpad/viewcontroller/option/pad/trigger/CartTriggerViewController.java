@@ -5,15 +5,21 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
+import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,9 +28,8 @@ public class CartTriggerViewController extends NVC {
 
 	@FXML private ComboBox<PadStatus> statusComboBox;
 	@FXML private CheckBox allCartsCheckbox;
-	@FXML private TextField cartTextField;
-	@FXML private ListView<UUID> addedCarts;
-	@FXML private Button addButton;
+
+	private ProjectPreviewView projectPreviewView;
 
 	private CartTriggerItem item;
 
@@ -32,9 +37,24 @@ public class CartTriggerViewController extends NVC {
 		load("de/tobias/playpad/assets/view/option/pad/trigger/", "cartTrigger", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
+		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
+		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
+		projectPreviewView = new ProjectPreviewView(project, pads);
+		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
+		projectPreviewView.selectedProperty().addListener(new InvalidationListener() {
+			@Override
+			public void invalidated(Observable observable) {
+				item.getCarts().clear();
+				for (Pad pad : projectPreviewView.getSelected()) {
+					item.getCarts().add(pad.getUuid());
+				}
+			}
+		});
+		VBox vBox = (VBox) getParent();
+		vBox.getChildren().add(projectPreviewView);
+
 		statusComboBox.setValue(item.getNewStatus());
 		allCartsCheckbox.setSelected(item.isAllCarts());
-		addedCarts.getItems().setAll(item.getCarts());
 	}
 
 	@Override
@@ -46,44 +66,5 @@ public class CartTriggerViewController extends NVC {
 		{
 			item.setAllCarts(c);
 		});
-
-		// Auto Complete
-		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-		Set<String> names = project.getPads().stream().filter(p -> p.getStatus() != PadStatus.EMPTY).map(Pad::getName)
-				.collect(Collectors.toSet());
-		TextFields.bindAutoCompletion(cartTextField, names);
-
-		addedCarts.setCellFactory(new Callback<ListView<UUID>, ListCell<UUID>>() {
-
-			@Override
-			public ListCell<UUID> call(ListView<UUID> param) {
-				ListCell<UUID> cell = new ListCell<UUID>() {
-					@Override
-					protected void updateItem(UUID item, boolean empty) {
-						super.updateItem(item, empty);
-						if (!empty) {
-							setGraphic(new Button("", new FontIcon(FontAwesomeType.TRASH)));
-							setContentDisplay(ContentDisplay.RIGHT);
-							Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-							setText(project.getPad(item).getName());
-						}
-					}
-				};
-				return cell;
-			}
-		});
-	}
-
-	@FXML
-	private void addHandler(ActionEvent event) {
-		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-		for (Pad pad : project.getPads()) {
-			if (pad.getStatus() != PadStatus.EMPTY) {
-				if (pad.getName().equals(cartTextField.getText())) {
-					item.getCarts().add(pad.getUuid());
-					addedCarts.getItems().add(pad.getUuid());
-				}
-			}
-		}
 	}
 }

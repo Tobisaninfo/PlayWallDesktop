@@ -1,35 +1,25 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
-import com.hp.gagawa.java.elements.Body;
-import com.hp.gagawa.java.elements.Div;
-import com.hp.gagawa.java.elements.H1;
-import com.hp.gagawa.java.elements.Html;
-import com.hp.gagawa.java.elements.Table;
-import com.hp.gagawa.java.elements.Td;
-import com.hp.gagawa.java.elements.Tr;
-
+import com.hp.gagawa.java.elements.*;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.playpad.settings.Profile;
 import de.tobias.playpad.viewcontroller.cell.PageNameListCell;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.ui.ViewController;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
+import javafx.print.*;
 import javafx.print.Printer.MarginType;
-import javafx.print.PrinterJob;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.web.WebEngine;
@@ -79,7 +69,8 @@ public class PrintDialog extends NVC {
 		stage.setMinHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
 
-		Profile.currentProfile().currentLayout().applyCss(stage);
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	private void createPreview(int pageIndex) {

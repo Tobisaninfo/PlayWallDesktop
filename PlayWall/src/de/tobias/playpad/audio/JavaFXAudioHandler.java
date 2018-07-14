@@ -2,7 +2,7 @@ package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
-import de.tobias.playpad.pad.content.AudioContent;
+import de.tobias.playpad.pad.content.play.Seekable;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.media.AudioEqualizer;
@@ -12,7 +12,7 @@ import javafx.util.Duration;
 
 import java.nio.file.Path;
 
-public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeable {
+public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeable, Seekable {
 
 	private Media media;
 	private MediaPlayer player;
@@ -44,6 +44,11 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 	@Override
 	public void stop() {
 		player.stop();
+	}
+
+	@Override
+	public void seekToStart() {
+		player.seek(Duration.ZERO);
 	}
 
 	@Override
@@ -85,19 +90,12 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 
 	@Override
 	public void loadMedia(Path[] paths) {
-		Platform.runLater(() ->
-		{
-			if (getContent().getPad().isPadVisible()) {
-				getContent().getPad().getController().getView().showBusyView(true);
-			}
-		});
-
 		// Old Player
 		if (player != null) {
 			getContent().stop();
 		}
 
-		Path path = ((AudioContent) getContent()).getPath();
+		Path path = getContent().getPad().getPath();
 		media = new Media(path.toFile().toURI().toString());
 		player = new MediaPlayer(media);
 
@@ -125,7 +123,6 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 				}
 			});
 			loadedProperty.set(false);
-			// getContent().getPad().throwException(path, player.getError()); TODO Error Handling User
 		});
 		player.setOnEndOfMedia(() ->
 		{

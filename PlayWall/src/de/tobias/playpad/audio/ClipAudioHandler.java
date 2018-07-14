@@ -1,28 +1,10 @@
 package de.tobias.playpad.audio;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.DataLine.Info;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Mixer;
-
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.AudioContent;
+import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.utils.util.FileUtils;
 import javafx.application.Platform;
@@ -32,6 +14,18 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Duration;
 import javazoom.jl.converter.Converter;
 import javazoom.jl.decoder.JavaLayerException;
+
+import javax.sound.sampled.*;
+import javax.sound.sampled.DataLine.Info;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
 
 @Deprecated
 public class ClipAudioHandler extends AudioHandler {
@@ -84,7 +78,8 @@ public class ClipAudioHandler extends AudioHandler {
 					}
 
 					Thread.sleep(SLEEP_TIME_POSITION);
-				} catch (InterruptedException e) {} catch (ConcurrentModificationException e) {} catch (Exception e) {
+				} catch (InterruptedException | ConcurrentModificationException ignored) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -199,7 +194,7 @@ public class ClipAudioHandler extends AudioHandler {
 		try {
 			clip = (Clip) mixer.getLine(info);
 
-			Path path = ((AudioContent) getContent()).getPath();
+			Path path = getContent().getPad().getPath();
 			URL url = path.toUri().toURL();
 
 			// Convert wenn mp3

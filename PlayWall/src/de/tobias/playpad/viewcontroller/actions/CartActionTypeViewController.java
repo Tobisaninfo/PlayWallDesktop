@@ -10,12 +10,11 @@ import org.controlsfx.control.SegmentedButton;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.cartaction.CartAction;
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.utils.ui.ContentViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;

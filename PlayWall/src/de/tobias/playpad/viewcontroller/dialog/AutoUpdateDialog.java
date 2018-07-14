@@ -4,7 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateRegistery;
-import de.tobias.utils.ui.AdvancedDialog;
+import de.tobias.utils.nui.AdvancedDialog;
 import de.tobias.utils.util.Localization;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;

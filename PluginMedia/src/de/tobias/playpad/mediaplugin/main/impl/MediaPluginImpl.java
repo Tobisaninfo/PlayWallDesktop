@@ -4,11 +4,12 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.MediaPlugin;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
-import de.tobias.playpad.pad.content.ContentFactory;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
+import de.tobias.playpad.plugin.StandardPluginUpdater;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.settings.Profile;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -37,9 +38,11 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 	private static final String NAME = "MediaPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
+	private static final int currentBuild = 8;
+	private static final String currentVersion = "4.2.2";
 
 	private static Module module;
-	private static MediaPluginUpdater updater;
+	private static Updatable updater;
 	
 	private static MediaPluginImpl instance;
 	private MediaViewController videoViewController;
@@ -55,8 +58,8 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 	public void onEnable(MediaPlugin plugin) {
 		// Init
 		instance = this;
-		updater = new MediaPluginUpdater();
 		module = new Module(NAME, IDENTIFIER);
+		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
 		blindProperty = new SimpleBooleanProperty();
 
@@ -65,7 +68,7 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 		// Load Content Types
 		try {
-			Registry<ContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
 			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +109,10 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 	@Shutdown
 	public void onDisable() {
-		Platform.runLater(() -> videoViewController.getStage().close());
+		Platform.runLater(() -> {
+			videoViewController.getStage().setFullScreen(false);
+			videoViewController.getStage().close();
+		});
 		System.out.println("Disable Media Plugin");
 	}
 

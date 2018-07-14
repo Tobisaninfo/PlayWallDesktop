@@ -12,7 +12,7 @@ import org.dom4j.Element;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.ModuleSerializer;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.xml.XMLDeserializer;
@@ -23,6 +23,8 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 
 	private static final String UUID_ATTR = "uuid";
 	private static final String NAME_ATTR = "name";
+	private static final String SYNC_ATTR = "sync";
+	private static final String LAST_MODIFIED_ATTR = "last_modified";
 	private static final String PROFILE_ATTR = "profile";
 	private static final String MODULE_ELEMENT = "Module";
 
@@ -30,13 +32,19 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 	public ProjectReference loadElement(Element element) {
 		UUID uuid = UUID.fromString(element.attributeValue(UUID_ATTR));
 		String name = element.attributeValue(NAME_ATTR);
-		UUID profile = UUID.fromString(element.attributeValue(PROFILE_ATTR));
+
+		UUID profile = null;
+		if (element.attributeValue(PROFILE_ATTR) != null) {
+			profile  = UUID.fromString(element.attributeValue(PROFILE_ATTR));
+		}
+		boolean sync = Boolean.valueOf(element.attributeValue(SYNC_ATTR));
+		long lastModified = Long.valueOf(element.attributeValue(LAST_MODIFIED_ATTR));
 
 		XMLHandler<Module> handler = new XMLHandler<>(element);
 		Set<Module> modules = new HashSet<>(handler.loadElements(MODULE_ELEMENT, new ModuleSerializer()));
 
-		ProfileReference profileRef = ProfileReferences.getReference(profile);
-		ProjectReference ref = new ProjectReference(uuid, name, profileRef, modules);
+		ProfileReference profileRef = ProfileReferenceManager.getReference(profile);
+		ProjectReference ref = new ProjectReference(uuid, name, lastModified, profileRef, modules, sync);
 
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		if (Files.exists(projectPath)) {
@@ -53,7 +61,11 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 	public void saveElement(Element newElement, ProjectReference data) {
 		newElement.addAttribute(UUID_ATTR, data.getUuid().toString());
 		newElement.addAttribute(NAME_ATTR, data.getName());
-		newElement.addAttribute(PROFILE_ATTR, data.getProfileReference().getUuid().toString());
+		newElement.addAttribute(SYNC_ATTR, String.valueOf(data.isSync()));
+		newElement.addAttribute(LAST_MODIFIED_ATTR, String.valueOf(data.getLastModified()));
+		if (data.getProfileReference() != null) {
+			newElement.addAttribute(PROFILE_ATTR, data.getProfileReference().getUuid().toString());
+		}
 
 		XMLHandler<Module> handler = new XMLHandler<>(newElement);
 		handler.saveElements(MODULE_ELEMENT, data.getRequestedModules(), new ModuleSerializer());

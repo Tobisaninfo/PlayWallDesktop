@@ -2,7 +2,6 @@ package de.tobias.playpad.audio;
 
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
-import de.tobias.playpad.viewcontroller.audio.ClipSettingsViewController;
 
 @Deprecated
 public class ClipAudioHandlerFactory extends AudioHandlerFactory implements AutoCloseable {

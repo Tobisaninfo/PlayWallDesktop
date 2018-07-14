@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import de.tobias.utils.list.UniqList;
 import org.dom4j.Element;
 
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
@@ -26,18 +27,7 @@ public class CartTriggerItem extends TriggerItem {
 		this.type = type;
 		newStatus = PadStatus.PLAY;
 		allCarts = false;
-		uuids = new ArrayList<UUID>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean add(UUID e) {
-				if (!contains(e))
-					return super.add(e);
-				else
-					return false;
-			}
-		};
+		uuids = new UniqList<>();
 	}
 
 	public List<UUID> getCarts() {
@@ -74,12 +64,9 @@ public class CartTriggerItem extends TriggerItem {
 					cart.setStatus(newStatus);
 			}
 		} else {
-			System.out.println(uuids);
-			// TODO Cart Trigger mit Pages und Index --> PadIndex
 			for (UUID uuid : uuids) {
 				if (!uuid.equals(source.getUuid())) {
 					Pad pad = project.getPad(uuid);
-					System.out.println(pad);
 					if (pad != null)
 						pad.setStatus(newStatus);
 				}

@@ -18,31 +18,24 @@ public class Strings {
 
 	// UI - Window - Titles
 	public static final String UI_Dialog_Launch_Title = "UI.Dialog.Launch.Title";
+	public static final String UI_Dialog_Login_Title = "UI.Dialog.Login.Title";
 	public static final String UI_Window_Main_Title = "UI.Window.Main.Title";
-	public static final String UI_Window_Changelog_Title = "UI.Window.Changelog.Title";
 	public static final String UI_Window_Settings_Title = "UI.Window.Settings.Title";
 	public static final String UI_Window_ProjectSettings_Title = "UI.Window.ProjectSettings.Title";
 	public static final String UI_Window_GlobalSettings_Title = "UI.Window.GlobalSettings.Title";
 	public static final String UI_Window_PadSettings_Title = "UI.Window.PadSettings.Title";
 	public static final String UI_Window_PadSettings_Title_Empty = "UI.Window.PadSettings.Title.Empty";
-	public static final String UI_Dialog_DragAndDrop_Title = "UI.Dialog.DragAndDrop.Title";
 	public static final String UI_Dialog_ProjectExport_Title = "UI.Dialog.ProjectExport.Title";
-	public static final String UI_Dialog_ErrorSummary_Title = "UI.Dialog.ErrorSummary.Title";
-	public static final String UI_Dialog_NewProile_Title = "UI.Dialog.NewProfile.Title";
+	public static final String UI_Dialog_ProjectImport_Title = "UI.Dialog.ProjectImport.Title";
+	public static final String UI_Dialog_NotFound_Title = "UI.Dialog.NotFound.Title";
+	public static final String UI_Dialog_NewProfile_Title = "UI.Dialog.NewProfile.Title";
 	public static final String UI_Dialog_NewProject_Title = "UI.Dialog.NewProject.Title";
 	public static final String UI_Dialog_ChooseProfile_Title = "UI.Dialog.ChooseProfile.Title";
 	public static final String UI_Dialog_ProjectManager_Title = "UI.Dialog.ProjectManager.Title";
-	public static final String UI_Dialog_UpdateCenter_Title = "UI.Dialog.UpdateCenter.Title";
-	public static final String UI_Dialog_Preset_Title = "UI.Dialog.Preset.Title";
 	public static final String UI_Dialog_Plugins_Title = "UI.Dialog.Plugins.Title";
 	public static final String UI_Dialog_Print_Title = "UI.Dialog.Print.Title";
 	public static final String UI_Dialog_Profile_Title = "UI.Dialog.Profile.Title";
-
-	// UI - Standard
-	public static final String UI_Standard_DoNotShow = "UI.Standard.DoNotShow";
-
-	// UI - Layout - Classic - Theme - Enum
-	public static final String UI_Layout_Classic_Theme_BaseName = "UI.Layout.Classic.Theme.";
+	public static final String UI_Dialog_PlayoutLog_Title = "UI.Dialog.PlayoutLog.Title";
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
@@ -50,6 +43,10 @@ public class Strings {
 
 	// UI - Dialog - Launch
 	public static final String UI_Dialog_Launch_Info = "UI.Dialog.Launch.Info";
+
+	// UI - Dialog - ProjectLoad
+	public static final String UI_Dialog_ProjectLoad_StartProject = "UI.Dialof.ProjectLoad.StartProject";
+	public static final String UI_Dialog_ProjectLoad_StartPad = "UI.Dialof.ProjectLoad.StartPad";
 
 	// UI - Window - Settings
 	public static final String UI_Window_Settings_Gen_Title = "UI.Window.Settings.Gen.Title";
@@ -75,25 +72,23 @@ public class Strings {
 	public static final String UI_Dialog_NewProject_Content = "UI.Dialog.NewProject.Content"; // Duplicate Project
 	public static final String UI_Dialog_NewProject_Media = "UI.Dialog.NewProject.MediaPath"; // Create Project
 
-	// UI - Dialog - Import
-	public static final String UI_Dialog_Import_ReplaceProfile_Content = "UI.Dialog.Import.ReplaceProfile.Content";
-	public static final String UI_Dialog_Import_ReplaceProfile_Skip = "UI.Dialog.Import.ReplaceProfile.Skip";
-	public static final String UI_Dialog_Import_ReplaceProfile_Rename = "UI.Dialog.Import.ReplaceProfile.Rename";
-	public static final String UI_Dialog_Import_ReplaceProfile_ReplaceContent = "UI.Dialog.Import.ReplaceProfile.ReplaceContent";
-	public static final String UI_Dialog_Import_ReplaceProject_ReplaceContent = "UI.Dialog.Import.ReplaceProject.ReplaceContent";
-	public static final String UI_Dialog_Import_ReplaceMedia_Content = "UI.Dialog.Import.ReplaceMedia.Content";
-	public static final String UI_Dialog_Import_ReplaceMedia_Copy = "UI.Dialog.Import.ReplaceMedia.Copy";
-	public static final String UI_Dialog_Import_ReplaceMedia_Skip = "UI.Dialog.Import.ReplaceMedia.Skip";
 
 	// UI - Dialog - ProjectManager
+	public static final String UI_Dialog_ProjectManager_Delete_Header = "UI.Dialog.ProjectManager.Delete.Header";
 	public static final String UI_Dialog_ProjectManager_Delete_Content = "UI.Dialog.ProjectManager.Delete.Content";
+
+	// UI - Dialog - Project Convert
+	public static final String UI_Dialog_Project_Convert_Header = "UI.Dialog.Project.Convert.Header";
+	public static final String UI_Dialog_Project_Convert_Content = "UI.Dialog.Project.Convert.Content";
 
 	// UI - Dialog - Profile
 	public static final String UI_Dialog_Profile_Delete_Content = "UI.Dialog.Profile.Delete.Content";
 
-	// UI - Dialog - Info
-	public static final String UI_Dialog_Info_Header = "UI.Dialog.Info.Header";
-	public static final String UI_Dialog_Info_Content = "UI.Dialog.Info.Content";
+	// UI - Dialog - About
+	public static final String UI_Dialog_About_Graphics = "UI.Dialog.About.Graphics";
+	public static final String UI_Dialog_About_Libraries = "UI.Dialog.About.Libraries";
+	public static final String UI_Dialog_About_Website = "UI.Dialog.About.Website";
+	public static final String UI_Dialog_About_Code = "UI.Dialog.About.Code";
 
 	// UI - Dialog - Feedback
 	public static final String UI_Dialog_Feedback_Content = "UI.Dialog.Feedback.Content";
@@ -103,7 +98,6 @@ public class Strings {
 	public static final String UI_Placeholder_Preset = "UI.Placeholder.Preset";
 	public static final String UI_Placeholder_Plugins = "UI.Placeholder.Plugins";
 	public static final String UI_Placeholder_Updates = "UI.Placeholder.Updates";
-	public static final String UI_Placeholder_ErrorSummary = "UI.Placeholder.ErrorSummary";
 
 	// Info - MIDI
 	public static final String Info_Midi_Device_Connected = "Info.Midi.Device.Connected";
@@ -128,7 +122,6 @@ public class Strings {
 	public static final String Error_Profile_NotFound = "Error.Profile.NotFound";
 	public static final String Error_Profile_Save = "Error.Profile.Save";
 	public static final String Error_Profile_Delete = "Error.Profile.Delete";
-	public static final String Error_Profile_SmallScreen = "Error.Profile.SmallScreen";
 
 	// Error - Preset
 	public static final String Error_Preset_Import = "Error.Preset.Import";
@@ -136,21 +129,20 @@ public class Strings {
 
 	// Error - Project
 	public static final String Error_Project_Create = "Error.Project.Create";
+	public static final String Error_Project_Convert = "Error.Project.Convert";
 	public static final String Error_Project_NotFound = "Error.Project.NotFound";
 	public static final String Error_Project_Open = "Error.Project.Open";
 	public static final String Error_Project_Save = "Error.Project.Save";
 	public static final String Error_Project_Rename = "Error.Project.Rename";
 	public static final String Error_Project_Delete = "Error.Project.Delete";
 	public static final String Error_Project_Export = "Error.Project.Export";
+	public static final String Error_Project_Import = "Error.Project.Import";
 	public static final String Error_Project_MediaPath = "Error.Project.MediaPath";
 	public static final String Error_Project_PageCount = "Error.Project.PageCount";
+	public static final String Error_Project_Sync_Change = "Error.Project.Sync.Change";
 
 	// Error - Pad
 	public static final String Error_Pad_BaseName = "Error.Pad.";
-
-	// Error - Fix
-	public static final String Error_Fix_NewFile = "Error.Fix.NewFile";
-	public static final String Error_Fix_Delete = "Error.Fix.Delete";
 
 	// Error - Midi
 	public static final String Error_Midi_Settings_Unkown = "Error.Midi.Settings.Unknown";
@@ -160,8 +152,11 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
-	public static final String Error_Plugins_Available = "Error.Plugins.Available";
 	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
+
+	// Error - Screen
+	public static final String Error_Screen_TooMuch = "Error.Screen.TooMuch";
+	public static final String Error_Screen_TooLess = "Error.Screen.TooLess";
 
 	// Mapper
 	public static final String Mapper_Keyboard_Name = "Mapper.Keyboard.Name";
@@ -187,6 +182,7 @@ public class Strings {
 	public static final String Action_Page_toString = "Action.Page.toString";
 	public static final String Action_Navigate_toString = "Action.Navigate.toString";
 	public static final String Action_Cart_Name = "Action.Cart.Name";
+	public static final String Action_Stop_Name = "Action.Stop.Name";
 	public static final String Action_Page_Name = "Action.Page.Name";
 	public static final String Action_Navigate_Name = "Action.Navigate.Name";
 
@@ -197,7 +193,7 @@ public class Strings {
 	// NavigationType - Enum
 	public static final String NavigationType_BaseName = "NavigationType.";
 
-	// ControlMode - Enum
+	// CartActionMode - Enum
 	public static final String CartAction_Mode_BaseName = "CartAction.Mode.";
 
 	// UI - Dialog - AutoUpdate
@@ -262,6 +258,9 @@ public class Strings {
 	public static final String UI_Dialog_Page_Name_Header = "UI.Dialog.Page.Name.Header";
 	public static final String UI_Dialog_Page_Name_Content = "UI.Dialog.Page.Name.Content";
 
+	// UI - Dialog - PathMatch
+	public static final String UI_Dialog_PathMatch_Status = "UI.Dialog.PathMatch.Status";
+
 	// Tooltip
 	public static final String Tooltip_PlayButton = "Tooltip.PlayButton";
 	public static final String Tooltip_DragButton = "Tooltip.DragButton";
@@ -277,4 +276,10 @@ public class Strings {
 	// AudioHandler
 	public static final String AudioHandler_JavaFX = "AudioHandler.JavaFX";
 	public static final String AudioHandler_TinySound = "AudioHandler.TinySound";
+
+	// Server
+	public static final String Server_Connected = "Server.Connected";
+	public static final String Server_Connection_Lost = "Server.Connection_Lost";
+	public static final String Server_Disconnected = "Server.Disconnected";
+	public static final String Auth_Logout = "Auth.Logout";
 }

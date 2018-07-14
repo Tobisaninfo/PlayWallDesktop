@@ -1,19 +1,29 @@
 package de.tobias.playpad;
 
+import com.mashape.unirest.http.Unirest;
+import de.tobias.logger.LogLevel;
+import de.tobias.logger.LogLevelFilter;
+import de.tobias.logger.Logger;
+import de.tobias.playpad.design.modern.ModernDesignHandlerImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
-import de.tobias.playpad.profile.ref.ProfileReferences;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.ref.ProjectReferences;
+import de.tobias.playpad.project.loader.ProjectLoader;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.ServerHandlerImpl;
+import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
+import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
+import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.ConsoleUtils;
+import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
 import de.tobias.utils.util.OS;
@@ -25,11 +35,21 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.dom4j.DocumentException;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.cert.X509Certificate;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,11 +78,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	private static ResourceBundle uiResourceBundle;
 
 	private static PlayPadImpl impl;
-	private static PlayPadUpdater updater;
 
 	public static ResourceBundle getUiResourceBundle() {
 		return uiResourceBundle;
 	}
+
+	public static SSLContext sslContext;
 
 	public static void main(String[] args) throws Exception {
 		// Verhindert einen Bug unter Windows 10 mit comboboxen
@@ -70,57 +91,93 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			System.setProperty("glass.accessible.force", "false");
 		}
 
-		// Debug
-		System.setOut(ConsoleUtils.convertStream(System.out, "[PlayWall] "));
-		System.setErr(ConsoleUtils.convertStream(System.err, "[PlayWall] "));
+		// Register UserDefaults Serializer
+		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
 
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
 		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+
+		Logger.init(app.getPath(PathType.LOG));
+		Logger.setLevelFilter(LogLevelFilter.DEBUG);
+		Logger.log(LogLevel.DEBUG, "Start JavaFX Application");
 		app.start(args);
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		App app = ApplicationUtils.getApplication();
+
+		if (!app.isDebug()) {
+			Logger.enableFileOutput(true);
+		}
+
+		// Init SSLContext
+		if (app.isDebug()) {
+			Logger.log(LogLevel.DEBUG, "Setup TrustManager");
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
+
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			}};
+
+			try {
+				// Install the all-trusting trust manager
+				sslContext = SSLContext.getInstance("SSL");
+				sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+				HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
+
+				// Unirest
+				SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
+				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+				CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+				Unirest.setHttpClient(httpclient);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 		// Localization
 		setupLocalization();
 
 		// Setup Global Settings
+		Logger.log(LogLevel.DEBUG, "Load global settings");
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
 		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
-		impl = new PlayPadImpl(globalSettings);
+		// Set Factory Implementations
+		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
+		PlayPadPlugin.setModernDesignHandler(new ModernDesignHandlerImpl());
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
-
-		// Console
-		if (!app.isDebug()) {
-			System.setOut(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "out.log")));
-			System.setErr(ConsoleUtils.streamToFile(app.getPath(PathType.LOG, "err.log")));
-		}
+		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
+		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
 	}
 
 	@Override
 	public void start(Stage stage) {
+		// Assets
+		Image stageIcon = new Image(iconPath);
+		PlayPadMain.stageIcon = Optional.of(stageIcon);
+
+		/*
+		 * Setup
+		 */
+		PlayPadUpdater updater = new PlayPadUpdater();
+		UpdateRegistery.registerUpdateable(updater);
+
+		impl.startup(Localization.getBundle(), new LoginViewController());
+
 		try {
-			// Assets
-			try {
-				Image stageIcon = new Image(iconPath);
-				PlayPadMain.stageIcon = Optional.of(stageIcon);
-			} catch (Exception e) {
-			}
-
-			/*
-			 * Setup
-			 */
-			updater = new PlayPadUpdater();
-			UpdateRegistery.registerUpdateable(updater);
-
-			impl.startup(Localization.getBundle());
-
 			// Load Plugin Path
 			if (!getParameters().getRaw().contains("noplugins")) {
 				Path pluginFolder;
@@ -135,32 +192,53 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					setupPlugins(pluginFolder);
 				}
 			}
+		} catch (IOException e) {
+			System.err.println("Cannot load plugins:");
+			e.printStackTrace();
+		}
 
-			/*
-			 * Load Data
-			 */
-			ProfileReferences.loadProfiles();
-			ProjectReferences.loadProjects();
+		/*
+		 * Load Data
+		 */
+		try {
+			ProfileReferenceManager.loadProfiles();
+			ProjectReferenceManager.loadProjects();
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+		}
 
+		try {
 			// Auto Open Project
-			if (getParameters().getRaw().size() > 0) {
-				if (getParameters().getNamed().containsKey("project")) {
-					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					Project project = Project.load(ProjectReferences.getProject(uuid), true, null);
+			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
+				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
+				if (value != null) {
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+					// TODO Load indicator
+					Project project = loader.load();
 					impl.openProject(project, null);
 					return;
 				}
 			}
 
-			// Show Launch Stage
-			new LaunchDialog(stage);
-
-			// Check Updates
-			checkUpdates(impl.globalSettings, stage);
-
+			// Auto Open Project DEBUG
+			if (getParameters().getRaw().size() > 0) {
+				if (getParameters().getNamed().containsKey("project")) {
+					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
+					Project project = loader.load();
+					impl.openProject(project, null);
+					return;
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// Show Launch Stage
+		new LaunchDialog(stage);
+
+		// Check Updates
+		checkUpdates(impl.globalSettings, stage);
 	}
 
 	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
@@ -192,8 +270,15 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void stop() throws Exception {
 		try {
-			ProfileReferences.saveProfiles();
-			ProjectReferences.saveProjects();
+			// Save last open project
+			Project project = impl.getCurrentProject();
+			if (project != null) {
+				ApplicationUtils.getApplication().getUserDefaults().setData("project", project.getProjectReference().getUuid());
+			}
+
+
+			ProfileReferenceManager.saveProfiles();
+			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
 			e.printStackTrace(); // Speichern Fehler

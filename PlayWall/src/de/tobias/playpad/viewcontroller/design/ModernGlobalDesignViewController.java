@@ -1,25 +1,23 @@
 package de.tobias.playpad.viewcontroller.design;
 
-import java.util.function.Consumer;
-
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
-
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.design.GlobalDesign;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.view.ColorPickerView;
-import de.tobias.playpad.viewcontroller.GlobalDesignViewController;
+import de.tobias.utils.nui.NVC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.util.converter.IntegerStringConverter;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 
-public class ModernGlobalDesignViewController extends GlobalDesignViewController {
+import java.util.function.Consumer;
+
+public class ModernGlobalDesignViewController extends NVC {
 
 	@FXML private Button backgroundColorButton;
 	@FXML private Button playColorButton;
@@ -31,64 +29,71 @@ public class ModernGlobalDesignViewController extends GlobalDesignViewController
 
 	@FXML private Button resetButton;
 
-	private ModernGlobalDesign globalLayout;
+	@FXML
+	private CheckBox flatDesignCheckbox;
+
+	private ModernGlobalDesign2 design;
 
 	private PopOver colorChooser;
 
-	public ModernGlobalDesignViewController(GlobalDesign layout) {
-		super(layout);
+	public ModernGlobalDesignViewController(ModernGlobalDesign2 design) {
 		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutGlobal", PlayPadMain.getUiResourceBundle());
 
-		this.globalLayout = (ModernGlobalDesign) layout;
+		this.design = design;
 		setLayout();
 	}
 
 	private void setLayout() {
-		backgroundColorButton.setStyle(getLinearGradientCss(globalLayout.getBackgroundColor()));
-		playColorButton.setStyle(getLinearGradientCss(globalLayout.getPlayColor()));
+		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
+		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 
-		warnAnimationCheckBox.setSelected(globalLayout.isWarnAnimation());
+		warnAnimationCheckBox.setSelected(design.isWarnAnimation());
+		flatDesignCheckbox.setSelected(design.isFlatDesign());
 
-		infoLabelFontSizeComboBox.setValue(globalLayout.getInfoFontSize());
-		titleLabelFontSizeComboBox.setValue(globalLayout.getTitleFontSize());
+		infoLabelFontSizeComboBox.setValue(design.getInfoFontSize());
+		titleLabelFontSizeComboBox.setValue(design.getTitleFontSize());
 	}
 
 	@Override
 	public void init() {
 		warnAnimationCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
-			globalLayout.setWarnAnimation(c);
+			design.setWarnAnimation(c);
+		});
+		flatDesignCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			design.setFlatDesign(c);
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
 		infoLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
 		{
-			globalLayout.setInfoFontSize(c);
+			design.setInfoFontSize(c);
 		});
 		infoLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
 
 		titleLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
 		titleLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
 		{
-			globalLayout.setTitleFontSize(c);
+			design.setTitleFontSize(c);
 		});
 		titleLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
 	}
 
 	@FXML
 	private void resetButtonHandler(ActionEvent event) {
-		globalLayout.reset();
+		design.reset();
 		setLayout();
 	}
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, globalLayout.getBackgroundColor(), (color) -> globalLayout.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), (color) -> design.setBackgroundColor(color));
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, globalLayout.getPlayColor(), (color) -> globalLayout.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), (color) -> design.setPlayColor(color));
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {

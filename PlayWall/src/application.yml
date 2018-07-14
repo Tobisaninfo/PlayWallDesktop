@@ -1,17 +1,19 @@
 name: PlayWall
-version: 6.1.1
-build: 39
-identifier: de.tobias.playpad.v6
+version: 6.2.0
+build: 40
+identifier: de.tobias.playpad.v7
 main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
 backup: false
 iconPath: icon
-updateURL: https://tobisan.ddns.net/playwall/resources/executables
+updateURL: https://playwall.thecodelabs.de/resources/executables
 userInfo:
-  Website: http://tobisan.no-ip.org/
+  Website: https://playwall.thecodelabs.de/
+  Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop
   PluginsURL:
-     Stable: https://tobisan.ddns.net/playwall/resources/executables/stable/plugins.yml
-     Beta: https://tobisan.ddns.net/playwall/resources/executables/beta/plugins.yml
-  ChangelogURL: https://tobisan.ddns.net/roadmap/php/index.php?id=1
-  UpdaterProgram: https://tobisan.ddns.net/playwall/resources/executables/utils/
-  Server: https://tobisan.ddns.net:8090
+     Stable: https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml
+     Beta: https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml
+  ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=1
+  UpdaterProgram: https://playwall.thecodelabs.de/resources/executables/utils/
+  Server: playwall.thecodelabs.de:8090
+  AccountRegister: https://playwall.thecodelabs.de/php/index.php

@@ -10,8 +10,8 @@ import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.mediaplugin.video.VideoContent;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.settings.Profile;
-import de.tobias.playpad.settings.ProfileListener;
+import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileListener;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.util.OS;
@@ -81,7 +81,6 @@ public class MediaViewController implements ProfileListener {
 		if (OS.getType() == OSType.Windows)
 			stage.setAlwaysOnTop(true);
 
-		getStage().setOnCloseRequest(Event::consume);
 		reloadSettings();
 	}
 
@@ -190,7 +189,7 @@ public class MediaViewController implements ProfileListener {
 					mediaView.setMediaPlayer(content.getPlayer());
 				} else if (currentDisplayedPad.getContent() instanceof ImageContent) {
 					ImageContent content = (ImageContent) currentDisplayedPad.getContent();
-					URI uri = content.getPath().toUri();
+					URI uri = currentDisplayedPad.getPath().toUri();
 					setImage(uri.toString(), currentDisplayedPad);
 				}
 			}

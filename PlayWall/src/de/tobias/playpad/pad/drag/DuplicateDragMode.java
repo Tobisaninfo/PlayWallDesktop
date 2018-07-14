@@ -1,16 +1,8 @@
 package de.tobias.playpad.pad.drag;
 
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.icon.FontIconType;
-import de.tobias.utils.util.Localization;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
 
 public class DuplicateDragMode extends PadDragMode {
 
@@ -21,13 +13,12 @@ public class DuplicateDragMode extends PadDragMode {
 	@Override
 	public boolean handle(PadIndex oldIndex, PadIndex newIndex, Project project) {
 		Pad oldPad = project.getPad(oldIndex);
+		Pad newPad = project.getPad(newIndex);
+
 		try {
-			Pad copyPad = oldPad.clone();
+			Pad copyPad = oldPad.clone(oldPad.getPage());
 
-			// Alte Pads entfernen, damit keine Nebenabhängigkeiten entstehen in den verschiedenen Seiten
-			project.setPad(newIndex, null);
-
-			// Neue Pads in die Seiten einfügen
+			project.removePad(newPad.getUuid());
 			project.setPad(newIndex, copyPad);
 			return true;
 		} catch (CloneNotSupportedException e) {

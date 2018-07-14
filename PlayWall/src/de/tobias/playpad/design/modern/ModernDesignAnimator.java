@@ -24,7 +24,7 @@ public class ModernDesignAnimator {
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
 	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
-		int index = padViewController.getPad().getIndex();
+		int index = padViewController.getPad().getPosition();
 
 		if (timelines.containsKey(index)) {
 			timelines.get(index).stop();
@@ -58,7 +58,7 @@ public class ModernDesignAnimator {
 	}
 
 	public static void animateWarn(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
-		int index = padViewController.getPad().getIndex();
+		int index = padViewController.getPad().getPosition();
 
 		if (timelines.containsKey(index)) {
 			timelines.get(index).stop();
@@ -96,7 +96,7 @@ public class ModernDesignAnimator {
 	}
 
 	public static void stopAnimation(IPadViewController controller) {
-		int index = controller.getPad().getIndex();
+		int index = controller.getPad().getPosition();
 
 		if (timelines.containsKey(index)) {
 			timelines.get(index).stop();

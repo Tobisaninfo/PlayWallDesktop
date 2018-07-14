@@ -1,16 +1,13 @@
 package de.tobias.playpad.equalizerplugin.main.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
-import de.tobias.playpad.settings.Profile;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.ui.ViewController;
+import de.tobias.utils.nui.NVC;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;
@@ -28,7 +25,12 @@ import javafx.scene.media.EqualizerBand;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class EqualizerViewController extends ViewController {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class EqualizerViewController extends NVC {
 
 	@FXML private HBox equalizerView;
 	@FXML private Button resetButton;
@@ -36,9 +38,9 @@ public class EqualizerViewController extends ViewController {
 	@FXML private CheckBox enableCheckBox;
 
 	public EqualizerViewController(Window owner) {
-		super("equalizerView", "de/tobias/playpad/equalizerplugin/assets/", null, EqualizerPluginImpl.getBundle());
+		load("de/tobias/playpad/equalizerplugin/assets/", "equalizerView", EqualizerPluginImpl.getBundle());
 
-		getStage().initOwner(owner);
+		applyViewControllerToStage().initOwner(owner);
 
 		Equalizer eq = Equalizer.getInstance();
 
@@ -80,12 +82,9 @@ public class EqualizerViewController extends ViewController {
 
 	@Override
 	public void init() {
-		enableCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			equalizerView.setDisable(!c);
-		});
+		enableCheckBox.selectedProperty().addListener((a, b, c) -> equalizerView.setDisable(!c));
 
-		addCloseKeyShortcut(() -> getStage().close());
+		addCloseKeyShortcut(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
 
 	@Override
@@ -96,7 +95,8 @@ public class EqualizerViewController extends ViewController {
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		Profile.currentProfile().currentLayout().applyCss(getStage());
+		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
 	@FXML
@@ -120,6 +120,6 @@ public class EqualizerViewController extends ViewController {
 					PlayPadPlugin.getImplementation().getIcon().orElse(null));
 			e.printStackTrace();
 		}
-		getStage().close();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 }

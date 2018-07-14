@@ -1,12 +1,5 @@
 package de.tobias.playpad.mediaplugin.video;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.dom4j.Element;
-
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -14,9 +7,9 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.content.play.Pauseable;
-import de.tobias.playpad.project.ProjectExporter;
+import de.tobias.playpad.pad.content.play.Seekable;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.volume.VolumeManager;
-import de.tobias.utils.util.ZipFile;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -26,15 +19,16 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-public class VideoContent extends PadContent implements Pauseable, Durationable {
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-	public static final String VIDEO_LAST_FRAME = "Video.LastFrame";
+public class VideoContent extends PadContent implements Pauseable, Durationable, Seekable {
+
+	static final String VIDEO_LAST_FRAME = "Video.LastFrame";
 
 	private final String type;
 	private Media media;
 	private MediaPlayer player;
-
-	private Path path;
 
 	private transient ObjectProperty<Duration> durationProperty = new SimpleObjectProperty<>();
 	private transient ObjectProperty<Duration> positionProperty = new SimpleObjectProperty<>();
@@ -43,28 +37,10 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	private transient boolean holdLastFrame = false;
 
-	public VideoContent(String type, Pad pad) {
+	VideoContent(String type, Pad pad) {
 		super(pad);
 		this.type = type;
-		padVolumeListener = (a, b, c) ->
-		{
-			updateVolume();
-		};
-	}
-
-	public Path getPath() {
-		return path;
-	}
-
-	public void setPath(Path path) {
-		this.path = path;
-	}
-
-	@Override
-	public void handlePath(Path path) throws IOException {
-		unloadMedia();
-		setPath(getRealPath(path));
-		loadMedia();
+		padVolumeListener = (a, b, c) -> updateVolume();
 	}
 
 	@Override
@@ -115,6 +91,11 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	}
 
 	@Override
+	public void seekToStart() {
+		player.seek(Duration.ZERO);
+	}
+
+	@Override
 	public boolean isPadLoaded() {
 		return player != null;
 	}
@@ -145,13 +126,8 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 
 	@Override
 	public void loadMedia() {
-		if (Files.exists(path)) {
-			Platform.runLater(() ->
-			{
-				if (getPad().isPadVisible()) {
-					getPad().getController().getView().showBusyView(true);
-				}
-			});
+		Path path = getPad().getPath();
+		if (path != null && Files.exists(path)) {
 			media = new Media(path.toUri().toString());
 
 			// Old Player
@@ -175,15 +151,12 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			});
 
 			player.setOnError(() ->
-			{
-				Platform.runLater(() ->
-				{
-					if (getPad().isPadVisible()) {
-						getPad().getController().getView().showBusyView(false);
-					}
-				});
-				// getPad().throwException(path, player.getError()); TODO Error Handling User
-			});
+					Platform.runLater(() ->
+					{
+						if (getPad().isPadVisible()) {
+							getPad().getController().getView().showBusyView(false);
+						}
+					}));
 			player.setOnEndOfMedia(() ->
 			{
 				if (!getPad().getPadSettings().isLoop()) {
@@ -199,13 +172,22 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 			positionProperty.bind(player.currentTimeProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(padVolumeListener);
+		} else {
+			Platform.runLater(() -> getPad().setStatus(PadStatus.NOT_FOUND));
 		}
+	}
+
+	@Override
+	public void loadMedia(MediaPath mediaPath) {
+		loadMedia();
 	}
 
 	@Override
 	public void unloadMedia() {
 		// First Stop the pad (if playing)
-		getPad().setStatus(PadStatus.STOP);
+		if (getPad().getStatus() == PadStatus.PLAY || getPad().getStatus() == PadStatus.PAUSE) {
+			getPad().setStatus(PadStatus.STOP);
+		}
 
 		durationProperty.unbind();
 		positionProperty.unbind();
@@ -225,53 +207,13 @@ public class VideoContent extends PadContent implements Pauseable, Durationable 
 	}
 
 	@Override
-	public void load(Element element) {
-		path = Paths.get(element.getStringValue());
-	}
-
-	@Override
-	public void save(Element element) {
-		element.addText(path.toString());
-	}
-
-	@Override
-	public void importMedia(Path mediaFolder, ZipFile zip, Element element) {
-		String fileName = Paths.get(element.getStringValue()).getFileName().toString();
-		Path mediaFile = Paths.get(ProjectExporter.mediaFolder, fileName);
-
-		Path desFile = mediaFolder.resolve(fileName);
-
-		try {
-			if (Files.notExists(desFile.getParent())) {
-				Files.createDirectories(desFile.getParent());
-			}
-
-			if (Files.notExists(desFile))
-				zip.getFile(mediaFile, desFile);
-
-			element.setText(desFile.toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void exportMedia(ZipFile zip, Element element) {
-		Path desPath = Paths.get(ProjectExporter.mediaFolder, path.getFileName().toString());
-		try {
-			if (Files.notExists(desPath.getParent())) {
-				Files.createDirectories(desPath.getParent());
-			}
-			zip.addFile(path, desPath);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void unloadMedia(MediaPath mediaPath) {
+		unloadMedia();
 	}
 
 	@Override
 	public PadContent clone() throws CloneNotSupportedException {
 		VideoContent clone = (VideoContent) super.clone();
-		clone.path = Paths.get(path.toUri());
 		clone.loadMedia();
 		return clone;
 	}

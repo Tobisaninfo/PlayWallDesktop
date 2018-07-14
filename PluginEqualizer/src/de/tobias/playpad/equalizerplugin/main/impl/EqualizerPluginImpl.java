@@ -1,24 +1,21 @@
 package de.tobias.playpad.equalizerplugin.main.impl;
 
-import java.io.IOException;
-import java.util.ResourceBundle;
-
-import org.dom4j.DocumentException;
-
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.equalizerplugin.main.Equalizer;
 import de.tobias.playpad.equalizerplugin.main.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
+import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
+import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.nui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,12 +26,18 @@ import javafx.stage.Stage;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;
+import org.dom4j.DocumentException;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
 
 @PluginImplementation
 public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
 	private static final String NAME = "Equalizer";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
+	private static final int currentBuild = 5;
+	private static final String currentVersion = "4.1";
 
 	private Module module;
 	private Updatable updatable;
@@ -45,7 +48,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 
 	private MenuItem eqMenuItem;
 
-	public static ResourceBundle getBundle() {
+	static ResourceBundle getBundle() {
 		return bundle;
 	}
 
@@ -58,8 +61,8 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 			e.printStackTrace();
 		}
 
-		updatable = new EqualizerPluginUpdater();
 		module = new Module(NAME, IDENTIFIER);
+		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
 		PlayPadPlugin.getImplementation().addMainViewListener(this);
 		PlayPadPlugin.getImplementation().addPadListener(this);
@@ -80,7 +83,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
 		eqMenuItem.setOnAction(this);
 
-		t.performLayoutDependendAction((oldToolbar, newToolbar) ->
+		t.performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (oldToolbar != null)
 				oldToolbar.removeMenuItem(eqMenuItem);
@@ -91,7 +94,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onPlay(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizeable) {
+		if (content instanceof Equalizeable) {
 
 			// Equalizer
 			Equalizeable equalizeable = (Equalizeable) content;
@@ -108,16 +111,16 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	@Override
 	public void onStop(Pad pad) {
 		PadContent content = pad.getContent();
-		if (content != null && content instanceof Equalizeable) {
+		if (content instanceof Equalizeable) {
 
 			// Equalizer
 			Equalizeable equalizeable = (Equalizeable) content;
 			AudioEqualizer audioEqualizer = equalizeable.getAudioEqualizer();
 			if (audioEqualizer != null) {
 				for (EqualizerBand band : audioEqualizer.getBands()) {
-					band.gainProperty().bind(Equalizer.getInstance().gainProperty((int) band.getBandwidth()));
+					band.gainProperty().unbind();
 				}
-				audioEqualizer.enabledProperty().bind(Equalizer.getInstance().enableProperty());
+				audioEqualizer.enabledProperty().unbind();
 			}
 		}
 	}
@@ -126,11 +129,11 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 	public void handle(ActionEvent event) {
 		if (equalizerViewController == null) {
 			equalizerViewController = new EqualizerViewController(mainStage);
-			equalizerViewController.getStage().show();
-		} else if (equalizerViewController.getStage().isShowing()) {
-			equalizerViewController.getStage().toFront();
+			equalizerViewController.getStageContainer().ifPresent(NVCStage::show);
+		} else if (equalizerViewController.getContainingWindow().isShowing()) {
+			equalizerViewController.getStageContainer().ifPresent(s -> s.getStage().toFront());
 		} else {
-			equalizerViewController.getStage().show();
+			equalizerViewController.getStageContainer().ifPresent(NVCStage::show);
 		}
 	}
 
