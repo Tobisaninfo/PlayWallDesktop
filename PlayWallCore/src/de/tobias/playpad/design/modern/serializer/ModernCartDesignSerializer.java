@@ -39,6 +39,7 @@ public class ModernCartDesignSerializer {
 	}
 
 	public void save(Element rootElement, ModernCartDesign2 design) {
+		rootElement.addAttribute("id", design.getId().toString());
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
 	}

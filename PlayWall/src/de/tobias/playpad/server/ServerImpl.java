@@ -19,12 +19,14 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectJsonReader;
 import de.tobias.playpad.project.ProjectJsonWriter;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.server.sync.command.CommandExecutorImpl;
 import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.CommandStore;
 import de.tobias.playpad.server.sync.command.Commands;
-import de.tobias.playpad.server.sync.command.design.DesignAddCommand;
-import de.tobias.playpad.server.sync.command.design.DesignUpdateCommand;
 import de.tobias.playpad.server.sync.command.pad.*;
+import de.tobias.playpad.server.sync.command.pad.settings.PadSettingsAddCommand;
+import de.tobias.playpad.server.sync.command.pad.settings.PadSettingsUpdateCommand;
+import de.tobias.playpad.server.sync.command.pad.settings.design.DesignAddCommand;
+import de.tobias.playpad.server.sync.command.pad.settings.design.DesignUpdateCommand;
 import de.tobias.playpad.server.sync.command.page.PageAddCommand;
 import de.tobias.playpad.server.sync.command.page.PageRemoveCommand;
 import de.tobias.playpad.server.sync.command.page.PageUpdateCommand;
@@ -33,6 +35,7 @@ import de.tobias.playpad.server.sync.command.path.PathRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectUpdateCommand;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -66,6 +69,7 @@ import java.util.stream.Collectors;
 public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
+	private static final String CACHE_FOLDER = "Cache";
 
 	private String host;
 	private WebSocket websocket;
@@ -104,6 +108,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 		CommandManager.register(Commands.DESIGN_ADD, new DesignAddCommand());
 		CommandManager.register(Commands.DESIGN_UPDATE, new DesignUpdateCommand());
+
+		CommandManager.register(Commands.PAD_SETTINGS_ADD, new PadSettingsAddCommand());
+		CommandManager.register(Commands.PAD_SETTINGS_UPDATE, new PadSettingsUpdateCommand());
 	}
 
 	@Override
@@ -205,7 +212,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 					UUID uuid = UUID.fromString(object.getString("uuid"));
 					String name = object.getString("name");
 
-					ProjectReference ref = new ProjectReference(uuid, name);
+					ProjectReference ref = new ProjectReference(uuid, name, true);
 					projects.add(ref);
 				}
 				return projects;
@@ -250,6 +257,24 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 					.asJson();
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public Version getLastServerModification(ProjectReference ref) throws IOException {
+		String url = "https://" + host + "/projects/modification/" + ref.getUuid();
+		Session session = PlayPadMain.getProgramInstance().getSession();
+		try {
+			HttpResponse<JsonNode> response = Unirest.get(url)
+					.queryString("session", session.getKey())
+					.asJson();
+
+			JSONObject object = response.getBody().getObject();
+			String remoteSession = object.getString("session");
+			long time = object.getLong("time");
+			return new Version(time, remoteSession, false);
+		} catch (UnirestException e) {
+			throw new IOException(e.getMessage());
 		}
 	}
 
@@ -300,6 +325,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		return push(json.toString());
 	}
 
+	// Reconnect
 	@Override
 	public void changed(ObservableValue<? extends ConnectionState> observable, ConnectionState oldValue, ConnectionState newValue) {
 		if (newValue == ConnectionState.CONNECTION_REFUSED) {
@@ -318,7 +344,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	private void loadStoredFiles() throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, CACHE_FOLDER);
 		if (Files.exists(path)) {
 			for (Path file : Files.newDirectoryStream(path)) {
 				loadStoredFile(file);
@@ -332,18 +358,18 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		JsonParser parser = new JsonParser();
 		List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		executor.setStoredCommands(path.getFileName().toString(), commands);
 	}
 
 	private void saveStoredCommands() throws IOException {
-		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, "Cache");
+		Path folder = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, CACHE_FOLDER);
 
 		if (Files.notExists(folder)) {
 			Files.createDirectories(folder);
 		}
 
-		CommandExecutorImpl executor = (CommandExecutorImpl) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
 		for (UUID key : storedCommands.keySet()) {
 			Path file = folder.resolve(key.toString());

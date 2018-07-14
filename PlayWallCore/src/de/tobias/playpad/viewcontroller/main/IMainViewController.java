@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
@@ -103,6 +104,13 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @return success
 	 */
 	boolean showPage(Page page);
+
+	/**
+	 * Opens a project
+	 *
+	 * @param project project
+	 */
+	void openProject(Project project);
 
 	/**
 	 * Lädt die CSS Files neu.

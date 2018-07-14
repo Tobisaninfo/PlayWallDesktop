@@ -8,8 +8,8 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.StandardPluginUpdater;
-import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.ui.HUD;
 import de.tobias.utils.ui.icon.FontAwesomeType;
@@ -109,7 +109,10 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 	@Shutdown
 	public void onDisable() {
-		Platform.runLater(() -> videoViewController.getStage().close());
+		Platform.runLater(() -> {
+			videoViewController.getStage().setFullScreen(false);
+			videoViewController.getStage().close();
+		});
 		System.out.println("Disable Media Plugin");
 	}
 

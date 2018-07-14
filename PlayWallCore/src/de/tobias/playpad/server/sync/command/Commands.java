@@ -19,10 +19,12 @@ public class Commands {
 	public static final String PAD_MOVE = "pad-mv";
 
 	public static final String PATH_ADD = "path-add";
-	public static final String PATH_UPDATE = "path-update";
 	public static final String PATH_REMOVE = "path-rm";
 
 	public static final String DESIGN_ADD = "design-add";
 	public static final String DESIGN_UPDATE = "design-update";
+
+	public static final String PAD_SETTINGS_ADD = "pad-settings-add"; // Called in Page when pad is added
+	public static final String PAD_SETTINGS_UPDATE = "pad-settings-update";
 }
 

@@ -89,7 +89,8 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	}
 
 	private void setProjectListValues() {
-		projectListView.getItems().setAll(ProjectReferenceManager.getProjectsSorted());
+		List<ProjectReference> projectsSorted = ProjectReferenceManager.getProjectsSorted();
+		projectListView.getItems().setAll(projectsSorted);
 	}
 
 	@Override

@@ -3,6 +3,9 @@ package de.tobias.playpad.pad;
 import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.server.sync.command.CommandManager;
+import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.listener.upstream.PadSettingsUpdateListener;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
@@ -11,11 +14,14 @@ import javafx.beans.property.*;
 import javafx.util.Duration;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class PadSettings implements Cloneable {
 
 	// Pad Reference
 	private Pad pad;
+
+	private UUID id;
 
 	// Settings
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
@@ -31,8 +37,27 @@ public class PadSettings implements Cloneable {
 
 	private HashMap<String, Object> customSettings = new HashMap<>();
 
+	// Sync Listener
+	private PadSettingsUpdateListener syncListener;
+
 	public PadSettings(Pad pad) {
 		this.pad = pad;
+		this.syncListener = new PadSettingsUpdateListener(this);
+		this.id = UUID.randomUUID();
+	}
+
+	public PadSettings(Pad pad, UUID uuid) {
+		this.pad = pad;
+		this.syncListener = new PadSettingsUpdateListener(this);
+		this.id = uuid;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public double getVolume() {
@@ -153,7 +178,14 @@ public class PadSettings implements Cloneable {
 
 	public ModernCartDesign2 getDesign() {
 		if (design == null) {
-			design = new ModernCartDesign2(pad);
+			ModernCartDesign2 design = new ModernCartDesign2(pad);
+
+			if (pad.getProject().getProjectReference().isSync()) {
+				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
+			}
+
+			setDesign(design);
+
 		}
 		return design;
 	}
@@ -168,6 +200,10 @@ public class PadSettings implements Cloneable {
 
 	public void setDesign(ModernCartDesign2 design) {
 		this.design = design;
+		if (pad.getProject().getProjectReference().isSync()) {
+			design.addListener();
+		}
+
 	}
 
 	public HashMap<String, Object> getCustomSettings() {
@@ -200,33 +236,53 @@ public class PadSettings implements Cloneable {
 	}
 
 	public PadSettings clone(Pad pad) throws CloneNotSupportedException {
-		PadSettings settings = (PadSettings) super.clone();
-		settings.volumeProperty = new SimpleDoubleProperty(getVolume());
-		settings.loopProperty = new SimpleBooleanProperty(isLoop());
+		PadSettings clone = (PadSettings) super.clone();
+		clone.id = UUID.randomUUID();
+
+		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
+		clone.loopProperty = new SimpleBooleanProperty(isLoop());
 
 		if (isCustomTimeMode())
-			settings.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());
+			clone.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());
 		else
-			settings.timeModeProperty = new SimpleObjectProperty<>();
+			clone.timeModeProperty = new SimpleObjectProperty<>();
 
 		if (isCustomFade())
-			settings.fadeProperty = new SimpleObjectProperty<>(getFade());
+			clone.fadeProperty = new SimpleObjectProperty<>(getFade());
 		else
-			settings.fadeProperty = new SimpleObjectProperty<>();
+			clone.fadeProperty = new SimpleObjectProperty<>();
 
 		if (isCustomWarning())
-			settings.warningProperty = new SimpleObjectProperty<>(getWarning());
+			clone.warningProperty = new SimpleObjectProperty<>(getWarning());
 		else
-			settings.warningProperty = new SimpleObjectProperty<>();
+			clone.warningProperty = new SimpleObjectProperty<>();
 
-		settings.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		settings.design = design.clone(pad);
+		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
+		clone.design = design.clone(pad);
 
-		settings.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
-		settings.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
+		clone.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
+		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
 
-		settings.updateTrigger();
+		clone.updateTrigger();
 
-		return settings;
+		if (pad.getProject().getProjectReference().isSync()) {
+			CommandManager.execute(Commands.PAD_SETTINGS_ADD, pad.getProject().getProjectReference(), clone);
+		}
+
+		return clone;
 	}
+
+	public Pad getPad() {
+		return pad;
+	}
+
+
+	public void addSyncListener() {
+		syncListener.addListener();
+	}
+
+	public void removeListener() {
+		syncListener.removeListener();
+	}
+
 }

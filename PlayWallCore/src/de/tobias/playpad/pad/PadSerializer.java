@@ -120,8 +120,8 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			for (MediaPath mediaPath : data.getPaths()) {
 				Element pathElement = pathsElement.addElement(CONTENT_PATH_ELEMENT);
 				pathElement.addAttribute(CONTENT_PATH_UUID, mediaPath.getId().toString());
-				if (mediaPath.getPath() != null) {
-					pathElement.addAttribute(CONTENT_PATH_FILENAME, mediaPath.getFileName().toString());
+				if (mediaPath.getFileName() != null) {
+					pathElement.addAttribute(CONTENT_PATH_FILENAME, mediaPath.getFileName());
 				}
 			}
 
