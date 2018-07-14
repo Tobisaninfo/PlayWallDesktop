@@ -5,6 +5,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.updater.client.UpdateChannel;
 import javafx.beans.property.ObjectProperty;
 
@@ -98,6 +99,14 @@ public interface Server {
 	 * @throws IOException network error
 	 */
 	void postProject(Project project) throws IOException;
+
+	/**
+	 * Get the last project modification.
+	 *
+	 * @param projectReference project reference
+	 * @return last modification
+	 */
+	Version getLastServerModification(ProjectReference projectReference) throws IOException;
 
 	/**
 	 * Connect to sync server with key.

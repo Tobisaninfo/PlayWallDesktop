@@ -189,8 +189,7 @@ public final class ProjectReferenceManager {
 				removeProject(project);
 			}
 
-		} catch (IOException ignored) {
-		} catch (LoginException e) {
+		} catch (IOException | LoginException e) {
 			e.printStackTrace();
 		}
 

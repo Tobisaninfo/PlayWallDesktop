@@ -282,7 +282,7 @@ public class PathMatchDialog extends NVC {
 						if (!mediaPath.isMatched()) {
 							try {
 								Path result = MediaPool.find(mediaPath.getMediaPath().getFileName(), folder, subdirs);
-								mediaPath.setLocalPath(result);
+								Platform.runLater(() -> mediaPath.setLocalPath(result));
 								if (result != null) {
 									mediaPath.setSelected(true);
 								}

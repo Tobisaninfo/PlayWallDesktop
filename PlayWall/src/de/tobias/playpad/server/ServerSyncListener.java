@@ -5,13 +5,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFrame;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.server.sync.command.CommandExecutor;
 import de.tobias.playpad.server.sync.command.Commands;
+import de.tobias.playpad.server.sync.conflict.Conflict;
+import de.tobias.playpad.server.sync.conflict.ConflictSolver;
+import de.tobias.playpad.server.sync.conflict.ConflictType;
+import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.playpad.server.sync.listener.ServerListener;
-import de.tobias.playpad.server.sync.listener.downstream.design.DesignAddListener;
-import de.tobias.playpad.server.sync.listener.downstream.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.pad.*;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.PadSettingsAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.PadSettingsUpdateListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.design.DesignAddListener;
+import de.tobias.playpad.server.sync.listener.downstream.pad.settings.design.DesignUpdateListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageAddListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageRemoveListener;
 import de.tobias.playpad.server.sync.listener.downstream.page.PageUpdateListener;
@@ -61,6 +70,9 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.DESIGN_ADD, new DesignAddListener());
 		commands.put(Commands.DESIGN_UPDATE, new DesignUpdateListener());
 
+		commands.put(Commands.PAD_SETTINGS_ADD, new PadSettingsAddListener());
+		commands.put(Commands.PAD_SETTINGS_UPDATE, new PadSettingsUpdateListener());
+
 		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.CONNECTION_LOST);
 	}
 
@@ -69,7 +81,24 @@ public class ServerSyncListener extends WebSocketAdapter {
 		System.out.println("Connected");
 		connectionStateProperty.set(ConnectionState.CONNECTED);
 
-		// Handle Conflicts
+
+		// Handle Conflicts for all projects
+		CommandExecutor commandExecutor = PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
+		ConflictSolver solver = commandExecutor.getConflictSolver();
+
+		// Clear old conflicts
+		commandExecutor.conflicts().clear();
+
+		// Find new conflicts
+		for (ProjectReference reference : ProjectReferenceManager.getProjects()) {
+			ConflictType conflictType = solver.checkConflict(commandExecutor, reference);
+			if (conflictType != ConflictType.NON) {
+				List<Version> versions = solver.getVersions(reference);
+
+				Conflict conflict = new Conflict(reference, conflictType, versions);
+				commandExecutor.conflicts().add(conflict);
+			}
+		}
 	}
 
 	@Override

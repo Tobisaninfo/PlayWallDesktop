@@ -24,6 +24,7 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 	private static final String UUID_ATTR = "uuid";
 	private static final String NAME_ATTR = "name";
 	private static final String SYNC_ATTR = "sync";
+	private static final String LAST_MODIFIED_ATTR = "last_modified";
 	private static final String PROFILE_ATTR = "profile";
 	private static final String MODULE_ELEMENT = "Module";
 
@@ -37,12 +38,13 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 			profile  = UUID.fromString(element.attributeValue(PROFILE_ATTR));
 		}
 		boolean sync = Boolean.valueOf(element.attributeValue(SYNC_ATTR));
+		long lastModified = Long.valueOf(element.attributeValue(LAST_MODIFIED_ATTR));
 
 		XMLHandler<Module> handler = new XMLHandler<>(element);
 		Set<Module> modules = new HashSet<>(handler.loadElements(MODULE_ELEMENT, new ModuleSerializer()));
 
 		ProfileReference profileRef = ProfileReferenceManager.getReference(profile);
-		ProjectReference ref = new ProjectReference(uuid, name, profileRef, modules, sync);
+		ProjectReference ref = new ProjectReference(uuid, name, lastModified, profileRef, modules, sync);
 
 		Path projectPath = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, ref.getFileName());
 		if (Files.exists(projectPath)) {
@@ -60,6 +62,7 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 		newElement.addAttribute(UUID_ATTR, data.getUuid().toString());
 		newElement.addAttribute(NAME_ATTR, data.getName());
 		newElement.addAttribute(SYNC_ATTR, String.valueOf(data.isSync()));
+		newElement.addAttribute(LAST_MODIFIED_ATTR, String.valueOf(data.getLastModified()));
 		if (data.getProfileReference() != null) {
 			newElement.addAttribute(PROFILE_ATTR, data.getProfileReference().getUuid().toString());
 		}

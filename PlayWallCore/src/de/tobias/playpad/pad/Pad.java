@@ -470,6 +470,10 @@ public class Pad implements Cloneable {
 	 */
 	public void setPadSettings(PadSettings padSettings) {
 		this.padSettings = padSettings;
+
+		if (project.getProjectReference().isSync()) {
+			padSettings.addSyncListener();
+		}
 	}
 
 	/*
