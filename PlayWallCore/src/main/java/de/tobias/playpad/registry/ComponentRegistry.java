@@ -95,7 +95,7 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 				String type = element.attributeValue("id");
 
 				// Find the class of the type
-				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue());
+				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue().trim());
 				Constructor<C> constructor = clazz.getConstructor(String.class);
 				C factory = constructor.newInstance(type);
 

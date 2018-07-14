@@ -29,7 +29,7 @@
     <orderEntry type="library" name="Maven: de.tobias:libStorage:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: de.tobias:libLogger:1.3.5" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.17.1" level="project" />
-    <orderEntry type="library" name="Maven: de.tobias:Updater:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:Updater:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.23.1" level="project" />
     <orderEntry type="library" name="Maven: net.xeoh:jspf:1.0.2" level="project" />

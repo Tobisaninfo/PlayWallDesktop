@@ -34,6 +34,14 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>libUtils</name>
+            <url>https://maven.thecodelabs.de/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>de.tobias</groupId>
@@ -43,7 +51,7 @@
         <dependency>
             <groupId>de.tobias</groupId>
             <artifactId>Updater</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>

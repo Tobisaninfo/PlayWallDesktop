@@ -70,7 +70,7 @@ public class DefaultComponentRegistry<F extends Component> extends ComponentRegi
 				String type = element.attributeValue("id");
 
 				// Find the class of the type
-				@SuppressWarnings("unchecked") Class<F> clazz = (Class<F>) loader.loadClass(element.getStringValue());
+				@SuppressWarnings("unchecked") Class<F> clazz = (Class<F>) loader.loadClass(element.getStringValue().trim());
 				Constructor<F> constructor = clazz.getConstructor(String.class);
 				F factory = constructor.newInstance(type);
 
