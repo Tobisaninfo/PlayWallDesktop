@@ -14,8 +14,9 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="module" module-name="PlayWallCore" />
-    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.5.2" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.5.3" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
+    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.14" level="project" />
     <orderEntry type="library" name="Maven: org.dom4j:dom4j:2.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.hp.gagawa:gagawa:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:23.3-jre" level="project" />
@@ -49,7 +50,6 @@
     <orderEntry type="library" name="Maven: com.neovisionaries:nv-websocket-client:2.5" level="project" />
     <orderEntry type="library" name="Maven: javazoom:jlayer:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.minidev:json-smart:1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:9.0.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.13" level="project" />

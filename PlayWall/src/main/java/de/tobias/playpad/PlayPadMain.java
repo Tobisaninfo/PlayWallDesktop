@@ -101,6 +101,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		Logger.init(app.getPath(PathType.LOG));
 		Logger.setLevelFilter(LogLevelFilter.DEBUG);
 		Logger.log(LogLevel.DEBUG, "Start JavaFX Application");
+
 		app.start(args);
 	}
 
@@ -114,7 +115,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		// Init SSLContext
 		if (app.isDebug()) {
-			Logger.log(LogLevel.DEBUG, "Setup TrustManager");
+			Logger.log(LogLevel.DEBUG, "Setup TrustManager in Debug Mode");
 			// Create a trust manager that does not validate certificate chains
 			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
 				public java.security.cert.X509Certificate[] getAcceptedIssuers() {

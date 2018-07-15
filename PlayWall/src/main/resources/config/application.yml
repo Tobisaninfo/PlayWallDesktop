@@ -2,11 +2,13 @@ name: PlayWall
 version: 6.2.0
 build: 40
 identifier: de.tobias.playpad.v7
+date: "2018-07-15"
+
 main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
-backup: false
-iconPath: icon
+
 updateURL: https://playwall.thecodelabs.de/resources/executables
+
 userInfo:
   Website: https://playwall.thecodelabs.de/
   Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop
