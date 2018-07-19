@@ -9,7 +9,7 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Component;
-import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
@@ -70,7 +70,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private VBox detailView;
-	private BaseMapperOverviewViewController baseMapperOverviewViewController;
+	private BaseMapperListViewController mapperListViewController;
 
 	private Mapping oldMapping;
 	private Mapping mapping;
@@ -168,10 +168,10 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	public void showMapperFor(Action action) {
 		try {
 			if (action != null) {
-				baseMapperOverviewViewController = BaseMapperOverviewViewController.getInstance();
-				baseMapperOverviewViewController.showAction(action, detailView);
+				mapperListViewController = BaseMapperListViewController.getInstance();
+				mapperListViewController.showAction(action, detailView);
 			} else {
-				detailView.getChildren().remove(baseMapperOverviewViewController.getParent());
+				detailView.getChildren().remove(mapperListViewController.getParent());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

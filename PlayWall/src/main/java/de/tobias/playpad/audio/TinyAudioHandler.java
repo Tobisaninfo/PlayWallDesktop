@@ -22,7 +22,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer.Info;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -158,8 +157,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 	public void pause() {
 		if (music != null) {
 			music.pause();
-			if (playedHandlers.contains(this))
-				playedHandlers.remove(this);
+			playedHandlers.remove(this);
 			pause = true;
 		}
 	}
@@ -168,8 +166,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 	public void stop() {
 		if (music != null) {
 			music.stop();
-			if (playedHandlers.contains(this))
-				playedHandlers.remove(this);
+			playedHandlers.remove(this);
 			pause = false;
 		}
 	}
@@ -225,7 +222,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 				URL url = path.toUri().toURL();
 
 				// Convert wenn mp3
-				if (FileUtils.getFileExtention(url.getFile()).toLowerCase().endsWith(MP3)) {
+				if (FileUtils.getFileExtension(url.getFile()).toLowerCase().endsWith(MP3)) {
 					GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 					Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 					url = convertMp3ToWav(path, wavPath, getContent().getPad());
@@ -263,7 +260,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 		iStr.close();
 	}
 
-	private static URL convertMp3ToWav(Path orgPath, Path wavPath, Pad pad) throws JavaLayerException, URISyntaxException, IOException {
+	private static URL convertMp3ToWav(Path orgPath, Path wavPath, Pad pad) throws JavaLayerException, IOException {
 		if (Files.notExists(wavPath)) {
 			Files.createDirectories(wavPath.getParent());
 			Files.createFile(wavPath);

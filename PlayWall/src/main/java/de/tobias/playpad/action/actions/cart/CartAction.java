@@ -132,9 +132,8 @@ public class CartAction extends Action implements ColorAdjustable {
 			return;
 		}
 
-		// wird nur ausgeführt, wenn das Pad ein Content hat und sichtbar in der GUI (Gilt für MIDI und Keyboard)
-		if (pad.getContent() != null && pad.getContent().isPadLoaded() && pad.isPadVisible()) {
-			handler.performAction(type, this, pad, project, mainViewController);
+		if (pad.hasVisibleContent()) {
+			handler.performAction(type, this, pad, project);
 		}
 	}
 
@@ -143,62 +142,44 @@ public class CartAction extends Action implements ColorAdjustable {
 		return FeedbackType.DOUBLE;
 	}
 
-	private static final String X_ATTR = "x";
-	private static final String Y_ATTR = "y";
-	private static final String CONTROL_MDOE = "mode";
-	private static final String AUTO_FEEDBACK_COLORS = "autoColor";
-
-	@Override
-	public void load(Element root) {
-		if (root.attributeValue(X_ATTR) != null)
-			x = Integer.valueOf(root.attributeValue(X_ATTR));
-		if (root.attributeValue(Y_ATTR) != null)
-			y = Integer.valueOf(root.attributeValue(Y_ATTR));
-		setMode(CartActionMode.valueOf(root.attributeValue(CONTROL_MDOE)));
-		autoFeedbackColors = Boolean.valueOf(root.attributeValue(AUTO_FEEDBACK_COLORS));
-	}
-
-	@Override
-	public void save(Element root) {
-		root.addAttribute(X_ATTR, String.valueOf(x));
-		root.addAttribute(Y_ATTR, String.valueOf(y));
-		root.addAttribute(CONTROL_MDOE, mode.name());
-		root.addAttribute(AUTO_FEEDBACK_COLORS, String.valueOf(autoFeedbackColors));
-	}
-
 	void setPad(Pad newPad) {
 		Pad oldPad = this.pad;
-		if (newPad == null || !newPad.equals(oldPad) || oldPad == null) {
-			// Remove old Listener
-			if (oldPad != null) {
-				if (oldPad.getContent() != null) {
-					if (oldPad.getContent() instanceof Durationable) {
-						Durationable durationable = (Durationable) oldPad.getContent();
-						durationable.positionProperty().removeListener(padPositionListener);
-					}
-				}
-				oldPad.contentProperty().removeListener(padContentFeedbackListener);
-				oldPad.statusProperty().removeListener(padStatusFeedbackListener);
-			}
-
+		if (newPad == null || !newPad.equals(oldPad)) {
+			removeOldListener(oldPad);
 			this.pad = newPad;
+			addNewListener(newPad);
+		}
+	}
 
-			padPositionListener.setPad(newPad);
-			padStatusFeedbackListener.setAction(this);
-			padContentFeedbackListener.setAction(this);
-
-			if (newPad != null) {
-				// Add new listener
-				if (newPad.getContent() != null) {
-					if (newPad.getContent() instanceof Durationable) {
-						Durationable durationable = (Durationable) newPad.getContent();
-						durationable.positionProperty().addListener(padPositionListener);
-					}
+	private void removeOldListener(Pad oldPad) {
+		if (oldPad != null) {
+			if (oldPad.getContent() != null) {
+				if (oldPad.getContent() instanceof Durationable) {
+					Durationable durationable = (Durationable) oldPad.getContent();
+					durationable.positionProperty().removeListener(padPositionListener);
 				}
-
-				newPad.statusProperty().addListener(padStatusFeedbackListener);
-				newPad.contentProperty().addListener(padContentFeedbackListener);
 			}
+			oldPad.contentProperty().removeListener(padContentFeedbackListener);
+			oldPad.statusProperty().removeListener(padStatusFeedbackListener);
+		}
+	}
+
+	private void addNewListener(Pad newPad) {
+		padPositionListener.setPad(newPad);
+		padStatusFeedbackListener.setAction(this);
+		padContentFeedbackListener.setAction(this);
+
+		if (newPad != null) {
+			// Add new listener
+			if (newPad.getContent() != null) {
+				if (newPad.getContent() instanceof Durationable) {
+					Durationable durationable = (Durationable) newPad.getContent();
+					durationable.positionProperty().addListener(padPositionListener);
+				}
+			}
+
+			newPad.statusProperty().addListener(padStatusFeedbackListener);
+			newPad.contentProperty().addListener(padContentFeedbackListener);
 		}
 	}
 
@@ -240,4 +221,29 @@ public class CartAction extends Action implements ColorAdjustable {
 		cartActionViewController.setCartAction(this);
 		return cartActionViewController;
 	}
+
+	// Serialization
+	private static final String X_ATTR = "x";
+	private static final String Y_ATTR = "y";
+	private static final String CONTROL_MODE = "mode";
+	private static final String AUTO_FEEDBACK_COLORS = "autoColor";
+
+	@Override
+	public void load(Element root) {
+		if (root.attributeValue(X_ATTR) != null)
+			x = Integer.valueOf(root.attributeValue(X_ATTR));
+		if (root.attributeValue(Y_ATTR) != null)
+			y = Integer.valueOf(root.attributeValue(Y_ATTR));
+		setMode(CartActionMode.valueOf(root.attributeValue(CONTROL_MODE)));
+		autoFeedbackColors = Boolean.valueOf(root.attributeValue(AUTO_FEEDBACK_COLORS));
+	}
+
+	@Override
+	public void save(Element root) {
+		root.addAttribute(X_ATTR, String.valueOf(x));
+		root.addAttribute(Y_ATTR, String.valueOf(y));
+		root.addAttribute(CONTROL_MODE, mode.name());
+		root.addAttribute(AUTO_FEEDBACK_COLORS, String.valueOf(autoFeedbackColors));
+	}
+
 }

@@ -678,4 +678,13 @@ public class Pad implements Cloneable {
 	public void stop() {
 		setStatus(PadStatus.STOP);
 	}
+
+	/**
+	 * Returns true, when pad has content and pad is visible.
+	 *
+	 * @return loaded & visible
+	 */
+	public boolean hasVisibleContent() {
+		return getContent() != null && getContent().isPadLoaded() && isPadVisible();
+	}
 }

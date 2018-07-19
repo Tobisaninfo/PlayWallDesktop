@@ -29,6 +29,7 @@ import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
+import de.tobias.utils.util.SystemUtils;
 import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -145,6 +146,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				e.printStackTrace();
 			}
 		}
+
+		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
 		// Localization
 		setupLocalization();

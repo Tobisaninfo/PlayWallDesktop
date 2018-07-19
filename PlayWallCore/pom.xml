@@ -46,12 +46,12 @@
         <dependency>
             <groupId>de.tobias</groupId>
             <artifactId>libUtils</artifactId>
-            <version>1.5.3</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>de.tobias</groupId>
             <artifactId>Updater</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
         </dependency>
 
         <dependency>

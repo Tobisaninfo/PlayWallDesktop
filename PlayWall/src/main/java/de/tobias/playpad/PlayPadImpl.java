@@ -14,12 +14,10 @@ import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
 import de.tobias.playpad.server.SessionDelegate;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.view.MapperOverviewViewController;
-import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
-import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
+import de.tobias.playpad.view.MapperListViewControllerImpl;
+import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
-import de.tobias.playpad.viewcontroller.option.IProfileSettingsViewController;
 import de.tobias.playpad.volume.GlobalVolume;
 import de.tobias.playpad.volume.PadVolume;
 import de.tobias.playpad.volume.VolumeManager;
@@ -47,8 +45,6 @@ public class PlayPadImpl implements PlayPad {
 	private Application.Parameters parameters;
 
 	protected List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
-	protected List<WindowListener<IProfileSettingsViewController>> settingsViewListeners = new ArrayList<>();
-	protected List<WindowListener<IPadSettingsViewController>> padSettingsViewListeners = new ArrayList<>();
 	protected List<SettingsListener> settingsListeners = new ArrayList<>();
 	protected List<PadListener> padListeners = new ArrayList<>();
 
@@ -220,7 +216,7 @@ public class PlayPadImpl implements PlayPad {
 		volumeManager.addFilter(new PadVolume());
 
 		// Mapper
-		BaseMapperOverviewViewController.setInstance(new MapperOverviewViewController());
+		BaseMapperListViewController.setInstance(new MapperListViewControllerImpl());
 	}
 
 	public Application.Parameters getParameters() {

@@ -7,6 +7,8 @@ date: "2018-07-15"
 main: de.tobias.playpad.PlayPadMain
 author: Tobias Ullerich
 
+serverBaseURL: https://playwall.thecodelabs.de/files
+
 updateURL: https://playwall.thecodelabs.de/resources/executables
 
 userInfo:

@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+// TODO Refactor with RemoteResources
 public class Updates {
 
 	// Ornder im App-Folder wo Updates zwischengespeichert werden sollen.

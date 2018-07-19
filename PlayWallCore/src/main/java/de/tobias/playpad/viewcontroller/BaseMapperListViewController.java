@@ -9,16 +9,16 @@ import javafx.scene.layout.Pane;
 
 import java.util.List;
 
-public abstract class BaseMapperOverviewViewController {
+public abstract class BaseMapperListViewController {
 
-	private static BaseMapperOverviewViewController instance;
+	private static BaseMapperListViewController instance;
 
-	public static BaseMapperOverviewViewController getInstance() {
+	public static BaseMapperListViewController getInstance() {
 		return instance;
 	}
 
-	public static void setInstance(BaseMapperOverviewViewController instance) {
-		BaseMapperOverviewViewController.instance = instance;
+	public static void setInstance(BaseMapperListViewController instance) {
+		BaseMapperListViewController.instance = instance;
 	}
 
 	public interface MapperAddListener {
@@ -28,7 +28,7 @@ public abstract class BaseMapperOverviewViewController {
 
 	public abstract List<MapperViewController> getControllers();
 
-	public abstract void addMapperAddListener(MapperAddListener addListener);
+	public abstract void addNewMapperListener(MapperAddListener addListener);
 
 	public abstract void showAction(Action action, Pane parent);
 

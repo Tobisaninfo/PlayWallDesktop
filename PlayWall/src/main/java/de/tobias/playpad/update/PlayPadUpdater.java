@@ -2,22 +2,21 @@ package de.tobias.playpad.update;
 
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
+import de.tobias.updater.client.UpdateItem;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
+import de.tobias.utils.application.remote.RemoteResource;
+import de.tobias.utils.application.remote.RemoteResourceType;
 import de.tobias.utils.util.SystemUtils;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 
 public class PlayPadUpdater implements Updatable {
 
-	private int newBuild;
-	private String newVersion;
-	private URL remotePath;
+	private UpdateItem updateItem;
+	private URL remoteUrl;
 
 	@Override
 	public int getCurrentBuild() {
@@ -31,27 +30,29 @@ public class PlayPadUpdater implements Updatable {
 
 	@Override
 	public int getNewBuild() {
-		return newBuild;
+		return updateItem.getBuild();
 	}
 
 	@Override
 	public String getNewVersion() {
-		return newVersion;
+		return updateItem.getVersion();
 	}
 
 	@Override
-	public void loadInformation(UpdateChannel channel) throws IOException, URISyntaxException {
+	public void loadInformation(UpdateChannel channel) throws MalformedURLException {
 		App app = ApplicationUtils.getMainApplication();
-		URL url = new URL(app.getInfo().getUpdateURL() + "/" + channel + "/version.yml");
-		FileConfiguration config = YamlConfiguration.loadConfiguration(url.openStream());
-		newBuild = config.getInt("build");
-		newVersion = config.getString("version");
+		RemoteResource update = app.getRemoteResource(RemoteResourceType.UPDATE, channel.toString(), "version.yml");
+		updateItem = update.getAsYaml(UpdateItem.class);
 
-		if (SystemUtils.isExe() && channel == UpdateChannel.STABLE) { // EXE only for stable release
-			remotePath = new URL(config.getString("pathExe"));
+		String remotePath;
+		if (SystemUtils.isExe()) {
+			remotePath = updateItem.getPathExe();
+		} else if (SystemUtils.isJar()) {
+			remotePath = updateItem.getPathJar();
 		} else {
-			remotePath = new URL(config.getString("pathJar"));
+			remotePath = updateItem.getPathApp();
 		}
+		remoteUrl = new URL(remotePath);
 	}
 
 	@Override
@@ -61,17 +62,12 @@ public class PlayPadUpdater implements Updatable {
 
 	@Override
 	public URL getDownloadPath() {
-		return remotePath;
+		return remoteUrl;
 	}
 
 	@Override
 	public Path getLocalPath() {
-		try {
-			return SystemUtils.getRunPath();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return SystemUtils.getRunPath();
 	}
 
 	@Override

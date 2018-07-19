@@ -5,7 +5,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode;
 import de.tobias.playpad.action.mapper.MapperViewController;
-import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.utils.nui.NVC;
 import javafx.fxml.FXML;
@@ -23,7 +23,7 @@ public class CartActionViewController extends NVC {
 
 	@FXML
 	private VBox rootContainer;
-	private BaseMapperOverviewViewController baseMapperOverviewViewController;
+	private BaseMapperListViewController baseMapperListViewController;
 
 	private CartAction action;
 
@@ -45,20 +45,17 @@ public class CartActionViewController extends NVC {
 		{
 			action.setAutoFeedbackColors(c);
 			// Disable Feedback Controls bei Automatischen Feedback für VORHANDENE MAPPER
-			if (baseMapperOverviewViewController != null) {
-				baseMapperOverviewViewController.getControllers().forEach(controller ->
-				{
-					toggleFeedbackVisablity(action, controller);
-				});
+			if (baseMapperListViewController != null) {
+				baseMapperListViewController.getControllers().forEach(this::toggleFeedbackVisibility);
 			}
 		});
 		VBox.setVgrow(rootContainer, Priority.ALWAYS);
 
-		baseMapperOverviewViewController = BaseMapperOverviewViewController.getInstance();
-		baseMapperOverviewViewController.addMapperAddListener((mapper, controller) ->
+		baseMapperListViewController = BaseMapperListViewController.getInstance();
+		baseMapperListViewController.addNewMapperListener((mapper, controller) ->
 		{
-			// Disable Feedback Controls bei Automatischen Feedback für NEUE MAPPER die erstellt werden
-			toggleFeedbackVisablity(action, controller);
+			// Show/Hide Feedback settings, depending on the cart action settings
+			toggleFeedbackVisibility(controller);
 		});
 	}
 
@@ -69,7 +66,7 @@ public class CartActionViewController extends NVC {
 		autoColorCheckbox.setSelected(action.isAutoFeedbackColors());
 	}
 
-	private void toggleFeedbackVisablity(CartAction action, MapperViewController controller) {
+	private void toggleFeedbackVisibility(MapperViewController controller) {
 		if (action.isAutoFeedbackColors()) {
 			controller.hideFeedback();
 		} else {

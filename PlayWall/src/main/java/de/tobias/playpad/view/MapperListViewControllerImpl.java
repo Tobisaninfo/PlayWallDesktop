@@ -8,7 +8,7 @@ import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.playpad.viewcontroller.BaseMapperOverviewViewController;
+import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.utils.nui.icon.FontAwesomeType;
 import de.tobias.utils.nui.icon.FontIcon;
 import javafx.scene.Parent;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 // Diese Klasse zeigt die Mapper zu einer Action an
-public class MapperOverviewViewController extends BaseMapperOverviewViewController {
+public class MapperListViewControllerImpl extends BaseMapperListViewController {
 
 	private VBox root;
 	private VBox mappingView;
@@ -39,7 +39,7 @@ public class MapperOverviewViewController extends BaseMapperOverviewViewControll
 	private Pane parent;
 	private ScrollPane scrollPane;
 
-	public MapperOverviewViewController() {
+	public MapperListViewControllerImpl() {
 		controllers = new ArrayList<>();
 		addListeners = new ArrayList<>();
 
@@ -136,7 +136,7 @@ public class MapperOverviewViewController extends BaseMapperOverviewViewControll
 	}
 
 	@Override
-	public void addMapperAddListener(MapperAddListener addListener) {
+	public void addNewMapperListener(MapperAddListener addListener) {
 		addListeners.add(addListener);
 	}
 

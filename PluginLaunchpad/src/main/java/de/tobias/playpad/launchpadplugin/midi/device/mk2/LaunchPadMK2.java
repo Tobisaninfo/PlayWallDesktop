@@ -116,13 +116,6 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 
 	@Override
 	public DisplayableFeedbackColor map(Color color) {
-		// TEST Ist das nötig
-		// try {
-		// URL resource = getClass().getClassLoader().getResource("de/tobias/playpad/launchpadplugin/assets/launchpad_mk2.map");
-		// mapProperties = MapParser.load(resource);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 		if (mapProperties.containsKey(color.toString())) {
 			String nameOfConst = mapProperties.get(color.toString());
 			return LaunchPadMK2Color.valueOf(nameOfConst);
