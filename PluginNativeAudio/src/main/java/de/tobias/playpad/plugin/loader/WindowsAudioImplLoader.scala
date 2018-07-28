@@ -14,7 +14,7 @@ import net.sf.jni4net.Bridge
   */
 class WindowsAudioImplLoader extends AudioImplLoader {
 
-	private val ASSETS = "de/tobias/playpad/assets/win/"
+	private val ASSETS = "win/"
 
 	override def preInit(): Unit = {
 		val app: App = ApplicationUtils.getApplication

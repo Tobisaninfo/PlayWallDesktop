@@ -1,4 +1,4 @@
-package de.tobias.playpad.launchpadplugin.midi.device.s;
+package de.tobias.playpad.launchpadplugin.midi.s;
 
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import javafx.scene.paint.Color;

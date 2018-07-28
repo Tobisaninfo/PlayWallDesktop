@@ -1,4 +1,4 @@
-package de.tobias.playpad.equalizerplugin.main;
+package de.tobias.playpad.equalizerplugin;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;

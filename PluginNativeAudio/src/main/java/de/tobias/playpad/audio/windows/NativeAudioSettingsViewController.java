@@ -77,13 +77,11 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 	private void testButtonHandler(ActionEvent event) {
 		Path file = ApplicationUtils.getApplication().getPath(PathType.RESOURCES, "Test-Sound.wav");
 		if (Files.notExists(file)) {
-			InputStream iStr = getClass().getClassLoader()
-					.getResourceAsStream("de/tobias/playpad/assets/Test-Sound.wav");
+			InputStream iStr = getClass().getClassLoader().getResourceAsStream("Test-Sound.wav");
 			try {
 				Files.createDirectories(file.getParent());
 				IOUtils.copy(iStr, file);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

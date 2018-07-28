@@ -12,7 +12,7 @@ public class VideoPadSettingsTabViewController extends PadSettingsTabViewControl
 	private CheckBox lastFrameCheckBox;
 
 	VideoPadSettingsTabViewController() {
-		load("de/tobias/playpad/mediaplugin/assets/", "settingsPadPane", MediaPluginImpl.getInstance().getBundle());
+		load("view/", "SettingsPadPane", MediaPluginImpl.getInstance().getBundle());
 	}
 
 	@Override

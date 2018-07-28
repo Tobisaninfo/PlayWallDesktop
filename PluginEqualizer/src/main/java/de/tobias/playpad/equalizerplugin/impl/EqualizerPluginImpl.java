@@ -1,8 +1,8 @@
-package de.tobias.playpad.equalizerplugin.main.impl;
+package de.tobias.playpad.equalizerplugin.impl;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.equalizerplugin.main.Equalizer;
-import de.tobias.playpad.equalizerplugin.main.EqualizerPlugin;
+import de.tobias.playpad.equalizerplugin.Equalizer;
+import de.tobias.playpad.equalizerplugin.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Equalizeable;
@@ -54,7 +54,7 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 
 	@PluginLoaded
 	public void onEnable(EqualizerPlugin plugin) {
-		bundle = Localization.loadBundle("de/tobias/playpad/equalizerplugin/assets/equalizer", EqualizerPluginImpl.class.getClassLoader());
+		bundle = Localization.loadBundle("lang/equalizer", EqualizerPluginImpl.class.getClassLoader());
 		try {
 			Equalizer.load(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
 		} catch (DocumentException | IOException e) {

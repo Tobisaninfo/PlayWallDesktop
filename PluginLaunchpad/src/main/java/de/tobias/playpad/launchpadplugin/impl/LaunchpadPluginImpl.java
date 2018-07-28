@@ -1,8 +1,8 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
 import de.tobias.playpad.launchpadplugin.LaunchpadPlugin;
-import de.tobias.playpad.launchpadplugin.midi.device.mk2.LaunchPadMK2;
-import de.tobias.playpad.launchpadplugin.midi.device.s.LaunchPadS;
+import de.tobias.playpad.launchpadplugin.midi.mk2.LaunchPadMK2;
+import de.tobias.playpad.launchpadplugin.midi.s.LaunchPadS;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.StandardPluginUpdater;
@@ -28,7 +28,7 @@ public class LaunchpadPluginImpl implements LaunchpadPlugin {
 
 	@PluginLoaded
 	public void onLoaded(LaunchpadPlugin plugin) {
-		bundle = Localization.loadBundle("de/tobias/playpad/launchpadplugin/assets/launchpad", LaunchpadPluginImpl.class.getClassLoader());
+		bundle = Localization.loadBundle("lang/launchpad", LaunchpadPluginImpl.class.getClassLoader());
 		module = new Module(NAME, IDENTIFIER);
 		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
 

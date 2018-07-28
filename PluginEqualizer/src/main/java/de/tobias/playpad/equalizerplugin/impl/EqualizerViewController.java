@@ -1,8 +1,8 @@
-package de.tobias.playpad.equalizerplugin.main.impl;
+package de.tobias.playpad.equalizerplugin.impl;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
-import de.tobias.playpad.equalizerplugin.main.Equalizer;
+import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
@@ -42,7 +42,7 @@ public class EqualizerViewController extends NVC {
 	private CheckBox enableCheckBox;
 
 	public EqualizerViewController(Window owner) {
-		load("de/tobias/playpad/equalizerplugin/assets/", "equalizerView", EqualizerPluginImpl.getBundle());
+		load("view", "equalizerView", EqualizerPluginImpl.getBundle());
 
 		applyViewControllerToStage().initOwner(owner);
 
@@ -101,6 +101,7 @@ public class EqualizerViewController extends NVC {
 
 		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		stage.getScene().getStylesheets().add("style/style.css");
 	}
 
 	@FXML

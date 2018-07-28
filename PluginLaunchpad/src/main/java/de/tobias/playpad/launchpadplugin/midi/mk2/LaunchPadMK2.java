@@ -1,4 +1,4 @@
-package de.tobias.playpad.launchpadplugin.midi.device.mk2;
+package de.tobias.playpad.launchpadplugin.midi.mk2;
 
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
@@ -24,7 +24,7 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 
 	public LaunchPadMK2() {
 		try {
-			URL resource = getClass().getClassLoader().getResource("de/tobias/playpad/launchpadplugin/assets/launchpad_mk2.map");
+			URL resource = getClass().getClassLoader().getResource("launchpad_mk2.map");
 			mapProperties = MapParser.load(resource);
 		} catch (Exception e) {
 			e.printStackTrace();

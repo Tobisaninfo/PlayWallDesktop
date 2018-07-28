@@ -1,4 +1,4 @@
-package de.tobias.playpad.equalizerplugin.main;
+package de.tobias.playpad.equalizerplugin;
 
 import de.tobias.playpad.plugin.AdvancedPlugin;
 

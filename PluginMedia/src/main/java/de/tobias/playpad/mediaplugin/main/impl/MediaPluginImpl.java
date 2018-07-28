@@ -63,13 +63,13 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 		blindProperty = new SimpleBooleanProperty();
 
-		bundle = Localization.loadBundle("de/tobias/playpad/mediaplugin/assets/video", getClass().getClassLoader());
+		bundle = Localization.loadBundle("lang/video", getClass().getClassLoader());
 		videoViewController = new MediaViewController(settings);
 
 		// Load Content Types
 		try {
 			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/PadContent.xml", getClass().getClassLoader(), module, bundle);
+			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 
 		try {
 			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistryCollection().getActions();
-			padContents.loadComponentsFromFile("de/tobias/playpad/mediaplugin/assets/Actions.xml", getClass().getClassLoader(), module, bundle);
+			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,7 +123,7 @@ public class MediaPluginImpl implements MediaPlugin, SettingsListener, ChangeLis
 		try {
 			settings.load(path);
 		} catch (NoSuchFileException e) {
-			System.out.println("No Awake.xml config on folder");
+			System.out.println("No Media.xml config on folder");
 		} catch (DocumentException | IOException e) {
 			e.printStackTrace();
 		}
