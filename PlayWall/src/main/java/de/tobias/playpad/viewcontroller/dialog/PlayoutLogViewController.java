@@ -7,7 +7,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
-import de.tobias.playpad.log.export.PlayoutLogPdfExport;
+import de.tobias.playpad.log.PlayoutLogPdfExport;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;

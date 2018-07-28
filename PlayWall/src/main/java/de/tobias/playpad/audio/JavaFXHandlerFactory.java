@@ -24,7 +24,7 @@ public class JavaFXHandlerFactory extends AudioHandlerFactory {
 	}
 
 	@Override
-	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapability) {
 		return null;
 	}
 }

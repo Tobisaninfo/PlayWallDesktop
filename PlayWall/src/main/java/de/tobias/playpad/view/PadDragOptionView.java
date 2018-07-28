@@ -1,6 +1,5 @@
 package de.tobias.playpad.view;
 
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;

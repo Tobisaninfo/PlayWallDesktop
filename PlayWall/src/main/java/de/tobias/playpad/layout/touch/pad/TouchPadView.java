@@ -1,7 +1,6 @@
 package de.tobias.playpad.layout.touch.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
@@ -14,6 +13,7 @@ import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.utils.nui.icon.FontAwesomeType;
 import de.tobias.utils.nui.icon.FontIcon;
 import de.tobias.utils.nui.scene.BusyView;

@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.profile.Profile;
@@ -10,6 +9,7 @@ import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
 import de.tobias.playpad.viewcontroller.dialog.profile.ProfileDuplicateDialog;

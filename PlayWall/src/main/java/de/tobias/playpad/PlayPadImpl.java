@@ -6,8 +6,8 @@ import de.tobias.logger.Logger;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
+import de.tobias.playpad.midi.PD12;
 import de.tobias.playpad.midi.device.DeviceRegistry;
-import de.tobias.playpad.midi.device.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.Server;
@@ -195,13 +195,13 @@ public class PlayPadImpl implements PlayPad {
 			// Load Components
 			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
 
-			registryCollection.getActions().loadComponentsFromFile("de/tobias/playpad/components/Actions.xml", module, resourceBundle);
-			registryCollection.getAudioHandlers().loadComponentsFromFile("de/tobias/playpad/components/AudioHandler.xml", module, resourceBundle);
-			registryCollection.getDragModes().loadComponentsFromFile("de/tobias/playpad/components/DragMode.xml", module, resourceBundle);
-			registryCollection.getMappers().loadComponentsFromFile("de/tobias/playpad/components/Mapper.xml", module, resourceBundle);
-			registryCollection.getPadContents().loadComponentsFromFile("de/tobias/playpad/components/PadContent.xml", module, resourceBundle);
-			registryCollection.getTriggerItems().loadComponentsFromFile("de/tobias/playpad/components/Trigger.xml", module, resourceBundle);
-			registryCollection.getMainLayouts().loadComponentsFromFile("de/tobias/playpad/components/Layout.xml", module, resourceBundle);
+			registryCollection.getActions().loadComponentsFromFile("components/Actions.xml", module, resourceBundle);
+			registryCollection.getAudioHandlers().loadComponentsFromFile("components/AudioHandler.xml", module, resourceBundle);
+			registryCollection.getDragModes().loadComponentsFromFile("components/DragMode.xml", module, resourceBundle);
+			registryCollection.getMappers().loadComponentsFromFile("components/Mapper.xml", module, resourceBundle);
+			registryCollection.getPadContents().loadComponentsFromFile("components/PadContent.xml", module, resourceBundle);
+			registryCollection.getTriggerItems().loadComponentsFromFile("components/Trigger.xml", module, resourceBundle);
+			registryCollection.getMainLayouts().loadComponentsFromFile("components/Layout.xml", module, resourceBundle);
 
 			// Set Default
 			// TODO Set Default

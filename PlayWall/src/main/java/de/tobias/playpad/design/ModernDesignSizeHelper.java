@@ -1,4 +1,4 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design;
 
 public class ModernDesignSizeHelper {
 

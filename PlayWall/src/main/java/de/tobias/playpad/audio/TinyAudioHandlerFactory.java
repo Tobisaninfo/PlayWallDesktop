@@ -35,8 +35,8 @@ public class TinyAudioHandlerFactory extends AudioHandlerFactory implements Auto
 	}
 
 	@Override
-	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
-		if (audioCapablility == AudioCapability.SOUNDCARD) {
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapability) {
+		if (audioCapability == AudioCapability.SOUNDCARD) {
 			return new TinySoundSettingsViewController();
 		}
 		return null;

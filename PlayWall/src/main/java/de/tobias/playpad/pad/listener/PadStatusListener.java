@@ -1,8 +1,8 @@
 package de.tobias.playpad.pad.listener;
 
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.view.PseudoClasses;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

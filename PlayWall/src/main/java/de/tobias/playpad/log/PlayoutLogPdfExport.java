@@ -1,10 +1,8 @@
-package de.tobias.playpad.log.export;
+package de.tobias.playpad.log;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.log.LogItem;
-import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.util.ColorUtils;
 
 import java.io.IOException;

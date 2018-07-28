@@ -1,6 +1,7 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design;
 
-import de.tobias.playpad.design.ModernDesignHandler;
+import de.tobias.playpad.design.modern.ModernCartDesignHandler;
+import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 
 public class ModernDesignHandlerImpl implements ModernDesignHandler {
 

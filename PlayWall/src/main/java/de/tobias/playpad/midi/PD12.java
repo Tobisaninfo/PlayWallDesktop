@@ -1,4 +1,4 @@
-package de.tobias.playpad.midi.device;
+package de.tobias.playpad.midi;
 
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;

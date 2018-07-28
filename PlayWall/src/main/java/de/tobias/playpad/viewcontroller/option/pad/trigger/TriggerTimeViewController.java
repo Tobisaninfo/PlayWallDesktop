@@ -1,8 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.tigger.TriggerItem;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.util.TimeUtils;
 import javafx.fxml.FXML;

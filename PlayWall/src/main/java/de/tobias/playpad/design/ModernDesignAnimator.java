@@ -1,9 +1,8 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design;
 
-import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.FadeableColor;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.view.PseudoClasses;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;

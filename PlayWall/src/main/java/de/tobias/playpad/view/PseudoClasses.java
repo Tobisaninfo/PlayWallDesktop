@@ -1,4 +1,4 @@
-package de.tobias.playpad;
+package de.tobias.playpad.view;
 
 import javafx.css.PseudoClass;
 

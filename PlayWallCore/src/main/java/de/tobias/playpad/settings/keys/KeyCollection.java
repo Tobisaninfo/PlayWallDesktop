@@ -222,9 +222,9 @@ public class KeyCollection {
 	}
 
 	/**
-	 * Change an Interal Key with this new settings
+	 * Change an internal Key with this new settings
 	 *
-	 * @param newKey virtal copy.
+	 * @param newKey virtual copy.
 	 */
 	public void editKey(Key newKey) {
 		Key savedKey = getKey(newKey.getId());

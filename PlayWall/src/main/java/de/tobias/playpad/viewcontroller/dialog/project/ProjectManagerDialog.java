@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.profile.Profile;
@@ -14,6 +13,7 @@ import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.utils.nui.NVC;
 import de.tobias.utils.nui.NVCStage;

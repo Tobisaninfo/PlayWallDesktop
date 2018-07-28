@@ -5,7 +5,7 @@ import de.tobias.logger.FileOutputOption;
 import de.tobias.logger.LogLevel;
 import de.tobias.logger.LogLevelFilter;
 import de.tobias.logger.Logger;
-import de.tobias.playpad.design.modern.ModernDesignHandlerImpl;
+import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -16,6 +16,7 @@ import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.playpad.update.Updates;
+import de.tobias.playpad.update.VersionUpdater;
 import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
@@ -156,7 +157,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		Logger.log(LogLevel.DEBUG, "Load global settings");
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
-		globalSettings.getKeyCollection().loadDefaultFromFile("de/tobias/playpad/components/Keys.xml", uiResourceBundle);
+		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", uiResourceBundle);
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
 		// Set Factory Implementations

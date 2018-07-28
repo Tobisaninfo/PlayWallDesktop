@@ -1,16 +1,15 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design;
 
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.ColorModeHandler;
-import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.modern.*;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.view.ColorPickerView;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;

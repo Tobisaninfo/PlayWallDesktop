@@ -1,11 +1,11 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PseudoClasses;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernDesignSizeHelper;
+import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;

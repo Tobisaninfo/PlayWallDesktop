@@ -6,7 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
-import de.tobias.playpad.design.modern.ModernDesignSizeHelper;
+import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;

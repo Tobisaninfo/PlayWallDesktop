@@ -1,10 +1,13 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design;
 
-import de.tobias.playpad.PseudoClasses;
-import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesignHandler;
+import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.ModernGlobalDesign2;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.view.PseudoClasses;
 import javafx.util.Duration;
 
 import static de.tobias.playpad.design.Design.*;

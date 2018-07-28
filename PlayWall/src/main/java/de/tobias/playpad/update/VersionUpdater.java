@@ -1,4 +1,4 @@
-package de.tobias.playpad;
+package de.tobias.playpad.update;
 
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.update.UpdateService;

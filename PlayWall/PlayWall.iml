@@ -13,6 +13,7 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
+    <orderEntry type="library" name="scala-sdk-2.12.6" level="application" />
     <orderEntry type="module" module-name="PlayWallCore" />
     <orderEntry type="library" name="Maven: de.tobias:libUtils:1.6.0" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
