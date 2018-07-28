@@ -51,6 +51,7 @@
     <orderEntry type="library" name="Maven: com.neovisionaries:nv-websocket-client:2.5" level="project" />
     <orderEntry type="library" name="Maven: javazoom:jlayer:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: net.minidev:json-smart:1.2" level="project" />
+    <orderEntry type="module" module-name="PlayWallComponents" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.13" level="project" />

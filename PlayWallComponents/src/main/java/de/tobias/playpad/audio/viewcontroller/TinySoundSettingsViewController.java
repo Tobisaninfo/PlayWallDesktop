@@ -1,6 +1,6 @@
-package de.tobias.playpad.viewcontroller.audio;
+package de.tobias.playpad.audio.viewcontroller;
 
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
@@ -35,7 +35,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 	private Clip clip;
 
 	public TinySoundSettingsViewController() {
-		super("tinySoundSettings", "de/tobias/playpad/assets/view/audio/", PlayPadMain.getUiResourceBundle());
+		super("tinySoundSettings", "de/tobias/playpad/assets/view/audio/", PlayPadPlugin.getImplementation().getUIResourceBundle());
 
 		// Mixer (ohne Port)
 		List<Info> infos = Arrays.stream(AudioSystem.getMixerInfo()).filter(info -> !info.getName().startsWith("Port"))

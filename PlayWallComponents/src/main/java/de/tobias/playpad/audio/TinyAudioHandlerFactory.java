@@ -1,8 +1,8 @@
 package de.tobias.playpad.audio;
 
+import de.tobias.playpad.audio.viewcontroller.TinySoundSettingsViewController;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
-import de.tobias.playpad.viewcontroller.audio.TinySoundSettingsViewController;
 
 public class TinyAudioHandlerFactory extends AudioHandlerFactory implements AutoCloseable {
 

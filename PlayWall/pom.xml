@@ -170,6 +170,11 @@
             <artifactId>PlayWallCore</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>de.tobias</groupId>
+            <artifactId>PlayWallCompoents</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>net.java.dev.jna</groupId>

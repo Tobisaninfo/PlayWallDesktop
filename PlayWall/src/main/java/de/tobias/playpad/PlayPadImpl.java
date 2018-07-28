@@ -243,4 +243,9 @@ public class PlayPadImpl implements PlayPad {
 	public Session getSession() {
 		return session;
 	}
+
+	@Override
+	public ResourceBundle getUIResourceBundle() {
+		return PlayPadMain.getUiResourceBundle();
+	}
 }
