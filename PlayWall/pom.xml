@@ -4,29 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.tobias</groupId>
-    <artifactId>PlayWallDesktop</artifactId>
-    <version>1.0.0</version>
+    <parent>
+        <groupId>de.tobias.playpad</groupId>
+        <artifactId>PlayWallDesktop</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>PlayWall</artifactId>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.main>de.tobias.playpad.PlayPadMain</project.main>
         <project.iconBase>src/main/resources/icon</project.iconBase>
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -166,14 +158,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.tobias</groupId>
+            <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallCore</artifactId>
-            <version>1.0.1</version>
+            <version>LATEST</version>
         </dependency>
         <dependency>
-            <groupId>de.tobias</groupId>
-            <artifactId>PlayWallCompoents</artifactId>
-            <version>1.0.0</version>
+            <groupId>de.tobias.playpad</groupId>
+            <artifactId>PlayWallComponents</artifactId>
+            <version>LATEST</version>
         </dependency>
 
         <dependency>

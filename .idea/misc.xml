@@ -41,6 +41,7 @@
         <option value="$PROJECT_DIR$/PluginMedia/pom.xml" />
         <option value="$PROJECT_DIR$/PluginNativeAudio/pom.xml" />
         <option value="$PROJECT_DIR$/PlayWallComponents/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
