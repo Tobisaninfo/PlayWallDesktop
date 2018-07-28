@@ -54,7 +54,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 	@PluginLoaded
 	public void onLoad(AwakePlugin plugin) {
-		bundle = Localization.loadBundle("de/tobias/playpad/awakeplugin/assets/awake", getClass().getClassLoader());
+		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
 
 		module = new Module(NAME, IDENTIFIER);
 		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
