@@ -6,7 +6,6 @@ import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.utils.settings.Key;
-import de.tobias.utils.settings.SettingsSerializable;
 import de.tobias.utils.settings.UserDefaults;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -26,7 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-public class ProfileSettings implements SettingsSerializable {
+public class ProfileSettings {
 
 	private static final long serialVersionUID = 1L;
 

@@ -24,7 +24,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.6.0" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.6.4" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.14" level="project" />
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.1.0" level="project" />
@@ -38,8 +38,8 @@
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.19" level="project" />
     <orderEntry type="library" name="Maven: de.tobias:YAMLStorage:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: de.tobias:libStorage:1.1.0" level="project" />
-    <orderEntry type="library" name="Maven: de.tobias:libLogger:1.3.5" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:libStorage:1.2.1" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:libLogger:1.3.6" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.17.1" level="project" />
     <orderEntry type="library" name="Maven: de.tobias:Updater:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
