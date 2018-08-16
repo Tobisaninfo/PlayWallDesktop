@@ -112,7 +112,7 @@ public class Midi implements AutoCloseable {
 		}
 	}
 
-	public void close() throws MidiUnavailableException {
+	public void close() {
 		try {
 			if (inputDevice != null) {
 				inputDevice.getTransmitter().close();
@@ -131,7 +131,6 @@ public class Midi implements AutoCloseable {
 		if (outputDevice != null) {
 			if (midiCommand != 0) {
 				ShortMessage message = new ShortMessage(midiCommand, midiKey, midiVelocity);
-				// System.out.println("Send: " + Arrays.toString(message.getMessage()));
 				outputDevice.getReceiver().send(message, -1);
 			}
 		}

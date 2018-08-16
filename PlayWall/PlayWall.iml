@@ -22,7 +22,7 @@
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.12.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.6.4" level="project" />
+    <orderEntry type="library" name="Maven: de.tobias:libUtils:1.6.5" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:8.40.14" level="project" />
     <orderEntry type="library" name="Maven: org.dom4j:dom4j:2.1.0" level="project" />

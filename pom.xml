@@ -53,7 +53,7 @@
         <dependency>
             <groupId>de.tobias</groupId>
             <artifactId>libUtils</artifactId>
-            <version>1.6.4</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>de.tobias</groupId>
@@ -125,7 +125,7 @@
 
     <distributionManagement>
         <repository>
-            <id>central</id>
+            <id>release</id>
             <name>TheCodeLabs-releases</name>
             <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
         </repository>
@@ -138,7 +138,7 @@
 
     <repositories>
         <repository>
-            <id>central</id>
+            <id>release</id>
             <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
             <releases>
                 <enabled>true</enabled>

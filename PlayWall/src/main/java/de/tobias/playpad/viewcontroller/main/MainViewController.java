@@ -334,11 +334,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			// MIDI Shutdown
 			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
 			if (profilSettings.isMidiActive()) {
-				try {
-					midi.close();
-				} catch (MidiUnavailableException e1) {
-					e1.printStackTrace();
-				}
+				midi.close();
 			}
 		}
 		return true;
