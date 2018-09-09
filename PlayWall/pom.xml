@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>1.0.0</version>
+        <version>6.2.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>PlayWall</artifactId>
@@ -96,76 +96,19 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!--Scala Plugin-->
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala</id>
-            <name>Scala Tools</name>
-            <url>http://scala-tools.org/repo-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <repositories>
-        <repository>
-            <id>scala</id>
-            <name>Scala Tools</name>
-            <url>http://scala-tools.org/repo-releases/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>releases</id>
-            <url>https://maven.thecodelabs.de/nexus/content/repositories/releases</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallCore</artifactId>
-            <version>LATEST</version>
+            <version>${core.version}</version>
         </dependency>
         <dependency>
             <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallComponents</artifactId>
-            <version>LATEST</version>
+            <version>${components.version}</version>
         </dependency>
 
         <dependency>
@@ -198,4 +141,40 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <name>TheCodeLabs-releases</name>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>TheCodeLabs-snapshots</name>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>release</id>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>snapshots</id>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
