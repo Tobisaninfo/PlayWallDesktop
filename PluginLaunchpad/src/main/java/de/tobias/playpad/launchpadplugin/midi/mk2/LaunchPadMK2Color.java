@@ -11,10 +11,10 @@ public enum LaunchPadMK2Color implements DisplayableFeedbackColor {
 	C4(4, Color.rgb(255, 74, 76)), // RED
 	C5(5, Color.rgb(255, 0, 24)), // RED
 	C6(6, Color.rgb(93, 1, 3)), // DARK_RED
-	C8(8, Color.rgb(254, 188, 112)), // LIGHT_ORGANGE
+	C8(8, Color.rgb(254, 188, 112)), // LIGHT_ORANGE
 	C9(9, Color.rgb(255, 83, 35)), // ORANGE
-	C10(10, Color.rgb(92, 28, 6)), // BRAUN
-	C11(11, Color.rgb(255, 189, 112)), // ORNAGE ! DARK
+	C10(10, Color.rgb(92, 28, 6)), // BROWN
+	C11(11, Color.rgb(255, 189, 112)), // ORANGE ! DARK
 	C12(12, Color.rgb(253, 252, 91)), // YELLOW
 	C13(13, Color.rgb(253, 252, 85)), // YELLOW
 	C14(14, Color.rgb(88, 88, 24)), // YELLOW
@@ -22,8 +22,8 @@ public enum LaunchPadMK2Color implements DisplayableFeedbackColor {
 	C17(17, Color.rgb(117, 253, 92)), // LIGHT_GREEN
 	C21(21, Color.rgb(0, 253, 81)), // LIGHT_GREEN
 	C25(25, Color.rgb(0, 253, 81)), // LIGHT_GREEN
-	C28(28, Color.rgb(0, 253, 143)), // LIGHT GRREN
-	C32(32, Color.rgb(0, 252, 184)), // TURQUOISE
+	C28(28, Color.rgb(0, 253, 143)), // LIGHT GREEN
+	C32(32, Color.rgb(0, 252, 184)), // TURQUOISESingle
 	C36(36, Color.rgb(36, 194, 250)), // LIGHT_BLUE
 	C37(37, Color.rgb(0, 169, 249)), // LIGHT_BLUE
 	C40(40, Color.rgb(60, 137, 248)), // BLUE
@@ -42,9 +42,9 @@ public enum LaunchPadMK2Color implements DisplayableFeedbackColor {
 	C76(76, Color.rgb(0, 136, 40)), // GREEN
 	C78(78, Color.rgb(0, 169, 249)), // LIGHT_BLUE
 	C79(79, Color.rgb(5, 44, 245)), // BLUE
-	C90(90, Color.rgb(0, 252, 207)), // TURKY
-	C81(81, Color.rgb(123, 31, 245)), // PURPULE
-	C82(82, Color.rgb(185, 24, 123)), // PURPULE
+	C90(90, Color.rgb(0, 252, 207)), // TURQUOISE
+	C81(81, Color.rgb(123, 31, 245)), // PURPLE
+	C82(82, Color.rgb(185, 24, 123)), // PURPLE
 	C84(84, Color.rgb(255, 71, 32)), // ORANGE !
 	C88(88, Color.rgb(0, 253, 81)), // GREEN !
 	C92(92, Color.rgb(37, 81, 194)), // BLUE
