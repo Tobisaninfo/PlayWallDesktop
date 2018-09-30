@@ -9,7 +9,7 @@ import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

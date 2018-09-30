@@ -4,7 +4,7 @@ import de.tobias.playpad.action.*;
 import de.tobias.playpad.action.actions.PageAction;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import javafx.scene.control.TreeItem;
 
 import java.util.Collections;

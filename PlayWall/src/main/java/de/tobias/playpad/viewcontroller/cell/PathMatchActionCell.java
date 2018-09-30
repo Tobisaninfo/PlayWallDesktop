@@ -1,8 +1,8 @@
 package de.tobias.playpad.viewcontroller.cell;
 
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
-import de.tobias.utils.nui.icon.FontAwesomeType;
-import de.tobias.utils.nui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

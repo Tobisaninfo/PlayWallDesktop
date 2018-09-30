@@ -21,7 +21,7 @@ import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.nui.NVCStage;
+import de.tobias.utils.ui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;

@@ -13,7 +13,7 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
 import de.tobias.playpad.viewcontroller.option.feedback.SingleFeedbackViewController;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.option;
 
 import de.tobias.playpad.profile.Profile;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 
 /**
  * Abstract Tab für SettingsViewController.

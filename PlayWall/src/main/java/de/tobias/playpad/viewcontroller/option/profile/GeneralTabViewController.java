@@ -7,7 +7,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.nui.Alertable;
+import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;

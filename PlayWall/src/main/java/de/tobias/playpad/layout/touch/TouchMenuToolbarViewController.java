@@ -11,7 +11,7 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.nui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;

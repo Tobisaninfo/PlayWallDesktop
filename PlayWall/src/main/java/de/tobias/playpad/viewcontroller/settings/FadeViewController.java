@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.settings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

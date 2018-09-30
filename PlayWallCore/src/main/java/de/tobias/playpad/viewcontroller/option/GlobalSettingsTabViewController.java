@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.option;
 
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 
 public abstract class GlobalSettingsTabViewController extends NVC {
 

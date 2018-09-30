@@ -1,6 +1,6 @@
 package de.tobias.playpad.action.mapper;
 
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 
 /**
  * Übersicht über die Mapper zu einer Action.s

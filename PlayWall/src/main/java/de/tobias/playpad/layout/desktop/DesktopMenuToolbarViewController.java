@@ -40,10 +40,10 @@ import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewControll
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
 import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.nui.NVCStage;
-import de.tobias.utils.nui.icon.FontAwesomeType;
-import de.tobias.utils.nui.icon.FontIcon;
-import de.tobias.utils.nui.scene.NotificationPane;
+import de.tobias.utils.ui.NVCStage;
+import de.tobias.utils.ui.icon.FontAwesomeType;
+import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.ui.scene.NotificationPane;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;

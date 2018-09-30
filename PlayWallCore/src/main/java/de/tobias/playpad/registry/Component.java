@@ -1,8 +1,8 @@
 package de.tobias.playpad.registry;
 
 import de.tobias.playpad.Displayable;
-import de.tobias.utils.nui.icon.FontIcon;
-import de.tobias.utils.nui.icon.FontIconType;
+import de.tobias.utils.ui.icon.FontIcon;
+import de.tobias.utils.ui.icon.FontIconType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;

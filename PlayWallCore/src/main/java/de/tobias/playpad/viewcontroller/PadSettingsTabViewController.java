@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 
 public abstract class PadSettingsTabViewController extends NVC {
 

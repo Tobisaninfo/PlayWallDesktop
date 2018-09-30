@@ -10,7 +10,7 @@ import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
-import de.tobias.utils.util.Worker;
+import de.tobias.utils.threading.Worker;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;

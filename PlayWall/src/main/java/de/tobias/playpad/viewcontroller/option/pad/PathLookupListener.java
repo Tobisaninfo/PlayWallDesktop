@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.utils.nui.Alertable;
+import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

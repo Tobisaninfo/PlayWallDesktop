@@ -7,7 +7,7 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.actions.CartActionTypeViewController;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;

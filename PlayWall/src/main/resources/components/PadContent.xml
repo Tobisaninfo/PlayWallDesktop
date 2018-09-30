@@ -1,5 +1,5 @@
 <Actions>
-    <Component id="audio" name="Content.Audio.Name" icon="MUSIC" class="de.tobias.utils.nui.icon.FontAwesomeType"
+    <Component id="audio" name="Content.Audio.Name" icon="MUSIC" class="de.tobias.utils.ui.icon.FontAwesomeType"
                size="30">de.tobias.playpad.pad.content.AudioPadContentFactory
     </Component>
 </Actions>

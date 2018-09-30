@@ -5,7 +5,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernCartDesign2;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.view.ColorPickerView;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

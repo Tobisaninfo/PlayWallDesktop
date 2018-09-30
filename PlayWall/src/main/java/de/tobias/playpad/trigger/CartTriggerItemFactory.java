@@ -5,7 +5,7 @@ import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.CartTriggerViewController;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.Localization;
 
 public class CartTriggerItemFactory extends TriggerItemFactory {

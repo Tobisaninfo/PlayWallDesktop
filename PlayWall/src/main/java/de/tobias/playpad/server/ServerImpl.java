@@ -39,7 +39,7 @@ import de.tobias.playpad.server.sync.conflict.Version;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.Worker;
+import de.tobias.utils.threading.Worker;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

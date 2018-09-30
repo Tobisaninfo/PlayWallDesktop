@@ -1,7 +1,7 @@
 package de.tobias.playpad.tigger;
 
 import de.tobias.playpad.registry.Component;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 
 public abstract class TriggerItemFactory extends Component {
 

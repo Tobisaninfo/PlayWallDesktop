@@ -6,7 +6,7 @@ import de.tobias.playpad.audio.Peakable;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Seekable;
-import de.tobias.utils.util.Worker;
+import de.tobias.utils.threading.Worker;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.util.Duration;

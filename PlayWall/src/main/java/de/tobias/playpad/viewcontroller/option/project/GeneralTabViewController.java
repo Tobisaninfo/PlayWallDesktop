@@ -9,7 +9,7 @@ import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
-import de.tobias.utils.nui.Alertable;
+import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

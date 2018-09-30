@@ -15,7 +15,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.updater.client.Updatable;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.nui.NVCStage;
+import de.tobias.utils.ui.NVCStage;
 import de.tobias.utils.util.Localization;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

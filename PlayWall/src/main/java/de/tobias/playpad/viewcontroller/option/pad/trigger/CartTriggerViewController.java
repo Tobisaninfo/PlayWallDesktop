@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;

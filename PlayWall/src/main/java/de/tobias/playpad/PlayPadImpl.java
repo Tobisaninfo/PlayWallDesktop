@@ -24,10 +24,10 @@ import de.tobias.playpad.volume.VolumeManager;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.threading.Worker;
+import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.FileUtils;
 import de.tobias.utils.util.SystemUtils;
-import de.tobias.utils.util.Worker;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 

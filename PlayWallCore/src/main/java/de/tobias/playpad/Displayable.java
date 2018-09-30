@@ -1,6 +1,6 @@
 package de.tobias.playpad;
 
-import de.tobias.utils.nui.NVC;
+import de.tobias.utils.ui.NVC;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 
