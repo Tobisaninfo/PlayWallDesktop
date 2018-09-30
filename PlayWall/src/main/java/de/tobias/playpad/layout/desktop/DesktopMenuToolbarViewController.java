@@ -221,7 +221,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				initPageButtons();
 				highlightPageButton(mainViewController.getPage());
 			} else {
-				showErrorMessage(Localization.getString(Strings.Error_Project_PageCount), PlayPadMain.stageIcon);
+				showErrorMessage(Localization.getString(Strings.Error_Project_PageCount));
 			}
 		});
 

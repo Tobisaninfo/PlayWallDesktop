@@ -1,6 +1,5 @@
 package de.tobias.playpad.layout.desktop.listener;
 
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
@@ -48,7 +47,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 		}
 
 		if (searchResult.isEmpty()) {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
 			return;
 		}
 
@@ -59,7 +58,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 				result.getController().getView().highlightView(HIGHLIGHT_DURATION);
 			}
 		} else {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches), PlayPadMain.stageIcon.orElse(null));
+			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
 			currentIndex = 0;
 		}
 	}

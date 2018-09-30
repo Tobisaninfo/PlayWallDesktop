@@ -117,7 +117,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 					}
 				}
 			}
-			alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_CacheDelete, deleteFiles), PlayPadMain.stageIcon.get());
+			alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_CacheDelete, deleteFiles));
 
 			calcCacheSize();
 		} catch (IOException e) {
@@ -147,7 +147,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.numberToString(size)));
 		} catch (IOException e) {
 			e.printStackTrace();
-			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()), PlayPadMain.stageIcon);
+			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()));
 		}
 	}
 

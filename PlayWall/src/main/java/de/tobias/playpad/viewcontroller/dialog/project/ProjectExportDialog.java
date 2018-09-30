@@ -108,7 +108,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 					busyView.showProgress(false);
 
 					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
-					showErrorMessage(errorMessage, PlayPadMain.stageIcon);
+					showErrorMessage(errorMessage);
 					e.printStackTrace();
 				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {
 					e.printStackTrace();

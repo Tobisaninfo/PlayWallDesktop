@@ -204,7 +204,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
 			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Project_Export), PlayPadMain.stageIcon);
+			showErrorMessage(Localization.getString(Strings.Error_Project_Export));
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		}
 	}

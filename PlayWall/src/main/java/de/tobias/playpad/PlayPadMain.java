@@ -27,6 +27,7 @@ import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
 import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.threading.Worker;
+import de.tobias.utils.ui.Alerts;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.Localization.LocalizationDelegate;
 import de.tobias.utils.util.OS;
@@ -174,6 +175,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Assets
 		Image stageIcon = new Image(iconPath);
 		PlayPadMain.stageIcon = Optional.of(stageIcon);
+		Alerts.shared().setDefaultIcon(stageIcon);
 
 		/*
 		 * Setup

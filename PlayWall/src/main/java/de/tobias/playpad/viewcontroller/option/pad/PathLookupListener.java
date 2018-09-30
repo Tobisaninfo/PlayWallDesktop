@@ -1,6 +1,5 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.utils.ui.Alertable;
 import de.tobias.utils.util.Localization;
@@ -44,7 +43,7 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 			Desktop.getDesktop().browse(path.getParent().toUri());
 		} catch (IOException e) {
 			String string = Localization.getString(Strings.Error_Standard_Gen, e.getMessage());
-			alertable.showErrorMessage(string, PlayPadPlugin.getImplementation().getIcon());
+			alertable.showErrorMessage(string);
 			e.printStackTrace();
 		}
 	}

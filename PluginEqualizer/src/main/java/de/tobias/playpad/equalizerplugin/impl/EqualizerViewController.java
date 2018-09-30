@@ -121,8 +121,7 @@ public class EqualizerViewController extends NVC {
 		try {
 			Equalizer.save(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
 		} catch (IOException e) {
-			showErrorMessage(Localization.getString("error.file.save", e.getLocalizedMessage()),
-					PlayPadPlugin.getImplementation().getIcon().orElse(null));
+			showErrorMessage(Localization.getString("error.file.save", e.getLocalizedMessage()));
 			e.printStackTrace();
 		}
 		getStageContainer().ifPresent(NVCStage::close);
