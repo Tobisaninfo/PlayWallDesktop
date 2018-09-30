@@ -6,7 +6,7 @@ import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.NativeLauncher;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.IOUtils;
+import de.tobias.utils.io.IOUtils;
 import de.tobias.utils.util.OS;
 import javafx.application.Platform;
 

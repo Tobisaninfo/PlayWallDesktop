@@ -22,7 +22,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
-import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.io.PathUtils;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -314,7 +314,7 @@ public class Pad implements Cloneable {
 	 * @param path media path
 	 */
 	public void setPath(Path path) {
-		setName(FileUtils.getFilenameWithoutExtention(path.getFileName()));
+		setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
 
 		if (mediaPaths.isEmpty()) {
 			createMediaPath(path);

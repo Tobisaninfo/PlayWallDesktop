@@ -5,7 +5,7 @@ import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.io.PathUtils;
 import javafx.scene.layout.Pane;
 
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public abstract class PadContentFactory extends Component implements Comparable<
 	}
 
 	public static boolean isFileTypeSupported(Path path, PadContentFactory connect) {
-		String extension = FileUtils.getFileExtention(path);
+		String extension = PathUtils.getFileExtension(path);
 		for (String ex : connect.getSupportedTypes()) {
 			if (ex.endsWith(extension)) {
 				return true;

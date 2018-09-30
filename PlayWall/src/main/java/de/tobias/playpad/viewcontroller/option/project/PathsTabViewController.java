@@ -12,7 +12,8 @@ import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
-import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.io.FileUtils;
+import de.tobias.utils.io.PathUtils;
 import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -57,7 +58,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 			Path path = folder.toPath();
 
 			if (currentMediaPath.isPresent()) {
-				boolean subDirectory = FileUtils.isSubDirectory(currentMediaPath.get(), path);
+				boolean subDirectory = PathUtils.isSubDirectory(currentMediaPath.get(), path);
 				if (subDirectory) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_MediaPath));
 					return;

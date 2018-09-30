@@ -12,7 +12,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.io.FileUtils;
 import de.tobias.utils.util.zip.ZipFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

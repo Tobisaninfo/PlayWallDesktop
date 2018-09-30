@@ -4,7 +4,7 @@ import java.io.IOException
 import java.nio.file.Path
 
 import de.tobias.playpad.plugin.Module
-import de.tobias.utils.util.IOUtils
+import de.tobias.utils.io.IOUtils
 
 /**
   * Created by tobias on 16.04.17.

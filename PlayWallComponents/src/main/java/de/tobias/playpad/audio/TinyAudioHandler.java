@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.util.FileUtils;
+import de.tobias.utils.io.PathUtils;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.util.Duration;
@@ -222,7 +222,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 				URL url = path.toUri().toURL();
 
 				// Convert wenn mp3
-				if (FileUtils.getFileExtension(url.getFile()).toLowerCase().endsWith(MP3)) {
+				if (PathUtils.getFileExtension(url.getFile()).toLowerCase().endsWith(MP3)) {
 					GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 					Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 					url = convertMp3ToWav(path, wavPath, getContent().getPad());
