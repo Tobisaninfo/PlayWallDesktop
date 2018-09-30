@@ -3,6 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <scala-library.version>2.12.6</scala-library.version>
+        <jni4net.j.version>0.8.8.0</jni4net.j.version>
+        <nativeAudio.version>1.0.0</nativeAudio.version>
+    </properties>
 
     <parent>
         <groupId>de.tobias.playpad</groupId>
@@ -11,6 +16,33 @@
     </parent>
 
     <artifactId>PlayWallPluginNativeAudio</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.tobias.playpad</groupId>
+            <artifactId>PlayWallCore</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala-library.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jni4net</groupId>
+            <artifactId>jni4net.j</artifactId>
+            <version>${jni4net.j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tobias</groupId>
+            <artifactId>NativeAudio</artifactId>
+            <version>${nativeAudio.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/j4n/NativeAudio.j4n.jar</systemPath>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -36,36 +68,8 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>de.tobias.playpad</groupId>
-            <artifactId>PlayWallCore</artifactId>
-            <version>${core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.12.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.jni4net</groupId>
-            <artifactId>jni4net.j</artifactId>
-            <version>0.8.8.0</version>
-        </dependency>
-        <dependency>
-            <groupId>de.tobias</groupId>
-            <artifactId>NativeAudio</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/j4n/NativeAudio.j4n.jar</systemPath>
-        </dependency>
-    </dependencies>
 
     <distributionManagement>
         <repository>
