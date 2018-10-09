@@ -144,7 +144,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 				size += Files.size(item);
 			}
 			directoryStream.close();
-			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.numberToString(size)));
+			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.convertBytesToAppropriateFormat(size)));
 		} catch (IOException e) {
 			e.printStackTrace();
 			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()));

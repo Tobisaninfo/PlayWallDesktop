@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Updater">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../Java/Libraries/Updater.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

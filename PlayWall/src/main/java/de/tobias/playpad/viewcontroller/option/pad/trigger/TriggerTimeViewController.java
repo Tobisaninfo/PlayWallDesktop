@@ -29,7 +29,7 @@ public class TriggerTimeViewController extends NVC {
 	public void init() {
 		timeTextField.textProperty().addListener((a, b, c) ->
 		{
-			Optional<Duration> duration = TimeUtils.parse(c);
+			Optional<Duration> duration = TimeUtils.parseDuration(c);
 			duration.ifPresent(item::setDurationFromPoint);
 			timeTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, !duration.isPresent());
 		});

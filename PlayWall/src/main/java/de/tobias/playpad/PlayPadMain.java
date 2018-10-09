@@ -175,7 +175,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Assets
 		Image stageIcon = new Image(iconPath);
 		PlayPadMain.stageIcon = Optional.of(stageIcon);
-		Alerts.shared().setDefaultIcon(stageIcon);
+		Alerts.getInstance().setDefaultIcon(stageIcon);
 
 		/*
 		 * Setup
