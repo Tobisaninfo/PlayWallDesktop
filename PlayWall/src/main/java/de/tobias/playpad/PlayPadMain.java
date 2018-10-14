@@ -186,7 +186,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		impl.startup(Localization.getBundle(), new LoginViewController());
 
-		NativeApplication.sharedInstance().setDockIcon(stageIcon);
+		NativeApplication.sharedInstance().setDockIcon(new Image("de/tobias/playpad/assets/gfx/Logo-large.png"));
 		NativeApplication.sharedInstance().setAppearance(true);
 
 		try {
