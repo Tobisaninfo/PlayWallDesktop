@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="XML">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../Java/Libraries/File Parser/XML/dom4j-1.6.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

@@ -17,7 +17,7 @@ userInfo:
   PluginsURL:
      Stable: https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml
      Beta: https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml
-  ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=1
+  ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=4
   UpdaterProgram: https://playwall.thecodelabs.de/resources/executables/utils/
   Server: playwall.thecodelabs.de:8090
   AccountRegister: https://playwall.thecodelabs.de/php/index.php
