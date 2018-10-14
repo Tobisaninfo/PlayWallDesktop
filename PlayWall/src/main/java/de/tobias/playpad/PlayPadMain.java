@@ -25,6 +25,7 @@ import de.tobias.updater.client.UpdateRegistery;
 import de.tobias.utils.application.App;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.application.system.NativeApplication;
 import de.tobias.utils.settings.UserDefaults;
 import de.tobias.utils.threading.Worker;
 import de.tobias.utils.ui.Alerts;
@@ -175,7 +176,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Assets
 		Image stageIcon = new Image(iconPath);
 		PlayPadMain.stageIcon = Optional.of(stageIcon);
-		Alerts.shared().setDefaultIcon(stageIcon);
+		Alerts.getInstance().setDefaultIcon(stageIcon);
 
 		/*
 		 * Setup
@@ -184,6 +185,9 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		UpdateRegistery.registerUpdateable(updater);
 
 		impl.startup(Localization.getBundle(), new LoginViewController());
+
+		NativeApplication.sharedInstance().setDockIcon(stageIcon);
+		NativeApplication.sharedInstance().setAppearance(true);
 
 		try {
 			// Load Plugin Path

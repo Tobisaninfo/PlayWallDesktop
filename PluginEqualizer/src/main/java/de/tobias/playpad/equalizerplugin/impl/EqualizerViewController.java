@@ -63,7 +63,7 @@ public class EqualizerViewController extends NVC {
 			slider.getStyleClass().add("equalizer-slider");
 			slider.setUserData(band);
 
-			Label infoLabel = new Label(NumberUtils.numberToString(band, 0) + EqualizerPluginImpl.getBundle().getString("eq.slider"));
+			Label infoLabel = new Label(NumberUtils.convertBytesToAppropriateFormat(band, 0) + EqualizerPluginImpl.getBundle().getString("eq.slider"));
 			infoLabel.getStyleClass().add("equalizer-label");
 
 			bandBox.getChildren().addAll(slider, infoLabel);
