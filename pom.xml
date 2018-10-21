@@ -40,11 +40,11 @@
         <module>PlayWall</module>
         <module>PlayWallCore</module>
         <module>PlayWallComponents</module>
-        <module>PluginAwake</module>
-        <module>PluginEqualizer</module>
-        <module>PluginLaunchpad</module>
-        <module>PluginMedia</module>
-        <module>PluginNativeAudio</module>
+        <module>PlayWallPluginAwake</module>
+        <module>PlayWallPluginEqualizer</module>
+        <module>PlayWallPluginLaunchpad</module>
+        <module>PlayWallPluginMedia</module>
+        <module>PlayWallPluginNativeAudio</module>
     </modules>
 
     <dependencyManagement>
@@ -151,6 +151,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
+                <version>3.4.2</version>
                 <executions>
                     <execution>
                         <id>scala-compile-first</id>
@@ -225,7 +226,7 @@
 
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/Releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

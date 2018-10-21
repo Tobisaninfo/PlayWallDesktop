@@ -6,11 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/PlayWallComponents/PlayWallComponents.iml" filepath="$PROJECT_DIR$/PlayWallComponents/PlayWallComponents.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" filepath="$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallDesktop.iml" filepath="$PROJECT_DIR$/PlayWallDesktop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PluginAwake/PlayWallPluginAwake.iml" filepath="$PROJECT_DIR$/PluginAwake/PlayWallPluginAwake.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PluginEqualizer/PlayWallPluginEqualizer.iml" filepath="$PROJECT_DIR$/PluginEqualizer/PlayWallPluginEqualizer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PluginLaunchpad/PlayWallPluginLaunchpad.iml" filepath="$PROJECT_DIR$/PluginLaunchpad/PlayWallPluginLaunchpad.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PluginMedia/PlayWallPluginMedia.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PluginNativeAudio/PlayWallPluginNativeAudio.iml" filepath="$PROJECT_DIR$/PluginNativeAudio/PlayWallPluginNativeAudio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginAwake/PlayWallPluginAwake.iml" filepath="$PROJECT_DIR$/PlayWallPluginAwake/PlayWallPluginAwake.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" filepath="$PROJECT_DIR$/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" filepath="$PROJECT_DIR$/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PlayWallPluginMedia/PlayWallPluginMedia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" filepath="$PROJECT_DIR$/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" />
     </modules>
   </component>
 </project>
