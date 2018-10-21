@@ -1,23 +1,25 @@
-name: PlayWall
-version: 6.2.0
+name: "PlayWall"
+version: "6.2.0"
 build: 40
-identifier: de.tobias.playpad.v7
+identifier: "de.tobias.playpad.v7"
 date: "2018-07-15"
 
-main: de.tobias.playpad.PlayPadMain
-author: Tobias Ullerich
+main: "de.tobias.playpad.PlayPadMain"
+author: "Tobias Ullerich"
 
-serverBaseURL: https://playwall.thecodelabs.de/files
+basePath: "PlayWall"
 
-updateURL: https://playwall.thecodelabs.de/resources/executables
+serverBaseURL: "https://playwall.thecodelabs.de/files"
+
+updateURL: "https://playwall.thecodelabs.de/resources/executables"
 
 userInfo:
-  Website: https://playwall.thecodelabs.de/
-  Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop
+  Website: "https://playwall.thecodelabs.de/"
+  Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop"
   PluginsURL:
-     Stable: https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml
-     Beta: https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml
-  ChangelogURL: https://playwall.thecodelabs.de/php/roadmap/index.php?id=4
-  UpdaterProgram: https://playwall.thecodelabs.de/resources/executables/utils/
-  Server: playwall.thecodelabs.de:8090
-  AccountRegister: https://playwall.thecodelabs.de/php/index.php
+    Stable: "https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml"
+    Beta: "https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml"
+  ChangelogURL: "https://playwall.thecodelabs.de/php/roadmap/index.php?id=4"
+  UpdaterProgram: "https://playwall.thecodelabs.de/resources/executables/utils/"
+  Server: "playwall.thecodelabs.de:8090"
+  AccountRegister: "https://playwall.thecodelabs.de/php/index.php"
