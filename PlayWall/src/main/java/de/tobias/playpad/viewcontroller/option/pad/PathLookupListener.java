@@ -1,24 +1,15 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
-import de.tobias.playpad.Strings;
-import de.tobias.utils.ui.Alertable;
-import de.tobias.utils.util.Localization;
+import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.utils.application.system.NativeApplication;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 
-import java.awt.*;
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class PathLookupListener implements EventHandler<ActionEvent> {
-
-	private Alertable alertable;
-
-	PathLookupListener(Alertable alertable) {
-		this.alertable = alertable;
-	}
 
 	@Override
 	public void handle(ActionEvent event) {
@@ -26,25 +17,19 @@ public class PathLookupListener implements EventHandler<ActionEvent> {
 		if (source instanceof Button) {
 			// single path
 			Object userData = ((Button) source).getUserData();
-			if (userData instanceof Path) {
-				showPath((Path) userData);
+			if (userData instanceof MediaPath) {
+				showPath((MediaPath) userData);
 			}
 		} else if (source instanceof MenuItem) {
 			// multiple path
 			Object userData = ((MenuItem) source).getUserData();
 			if (userData instanceof Path) {
-				showPath((Path) userData);
+				showPath((MediaPath) userData);
 			}
 		}
 	}
 
-	private void showPath(Path path) {
-		try {
-			Desktop.getDesktop().browse(path.getParent().toUri());
-		} catch (IOException e) {
-			String string = Localization.getString(Strings.Error_Standard_Gen, e.getMessage());
-			alertable.showErrorMessage(string);
-			e.printStackTrace();
-		}
+	private void showPath(MediaPath path) {
+		NativeApplication.sharedInstance().showFileInFileViewer(path.getPath());
 	}
 }

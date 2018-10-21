@@ -6,11 +6,9 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
-import de.tobias.playpad.pad.content.path.MultiPathContent;
-import de.tobias.playpad.pad.content.path.SinglePathContent;
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
@@ -18,6 +16,7 @@ import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.utils.ui.NVC;
 import de.tobias.utils.ui.NVCStage;
 import de.tobias.utils.util.Localization;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -26,7 +25,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +37,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private List<PadSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Control pathLookupButton;
-	private PathLookupListener pathLookupListener;
 
 	@FXML
 	private Button finishButton;
@@ -82,41 +79,32 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	}
 
 	private void setupPathLookupButton() {
-		pathLookupListener = new PathLookupListener(this);
+		PathLookupListener pathLookupListener = new PathLookupListener();
 
 		if (pad.getContent() != null) {
-			PadContent content = pad.getContent();
-			// nur EIN Path
-			if (content instanceof SinglePathContent) {
+			final ObservableList<MediaPath> paths = pad.getPaths();
+			if (paths.size() == 1) {
 				Button button = new Button(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
 
-				// Referenz auf das Model
-				Path path = ((SinglePathContent) content).getPath();
+				MediaPath path = paths.get(0);
 				button.setUserData(path);
-
 				button.setOnAction(pathLookupListener);
 
-				// Setzt globales Feld
 				pathLookupButton = button;
-			} else if (content instanceof MultiPathContent) {
+			} else if (paths.size() > 1) {
 				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
-				List<Path> paths = ((MultiPathContent) content).getPaths();
 
-				for (Path path : paths) {
-					MenuItem item = new MenuItem(path.getFileName().toString());
+				for (MediaPath path : paths) {
+					MenuItem item = new MenuItem(path.getFileName());
 					button.getItems().add(item);
 
-					// Referenz auf das Model
 					item.setUserData(path);
-
 					item.setOnAction(pathLookupListener);
 				}
 
-				// Setzt globales Feld
 				pathLookupButton = button;
 			}
 
-			// Hüge Path Button zum Root Container hinzu.
 			Parent parent = getParent();
 			if (parent instanceof AnchorPane && pathLookupButton != null) {
 				AnchorPane anchorPane = (AnchorPane) parent;

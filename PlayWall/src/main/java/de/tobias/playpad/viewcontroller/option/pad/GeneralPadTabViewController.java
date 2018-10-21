@@ -34,8 +34,6 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 	private Pad pad;
 
-	private ChangeListener<Number> volumeListener;
-
 	GeneralPadTabViewController(Pad pad) {
 		load("view/option/pad", "GeneralTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
@@ -48,8 +46,7 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void init() {
 		// Init Listener
-		volumeListener = (a, b, c) -> pad.getPadSettings().setVolume(c.doubleValue() / 100.0);
-
+		ChangeListener<Number> volumeListener = (a, b, c) -> pad.getPadSettings().setVolume(c.doubleValue() / 100.0);
 		volumeSlider.valueProperty().addListener(volumeListener);
 
 		customTimeDisplayCheckBox.selectedProperty().addListener((a, b, c) ->
