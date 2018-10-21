@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 
 import java.util.UUID;
 
-public class ModernCartDesign2 implements DesignColorAssociator {
+public class ModernCartDesign2 implements DesignColorAssociator, Cloneable {
 
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;

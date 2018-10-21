@@ -21,7 +21,7 @@ public class TinyAudioHandlerFactory extends AudioHandlerFactory implements Auto
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		TinyAudioHandler.shutdown();
 	}
 

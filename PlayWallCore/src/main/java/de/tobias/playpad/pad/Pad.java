@@ -616,6 +616,12 @@ public class Pad implements Cloneable {
 		clone.nameProperty = new SimpleStringProperty(getName());
 		clone.statusProperty = new SimpleObjectProperty<>(getStatus());
 
+		clone.mediaPaths = FXCollections.observableArrayList();
+		for (MediaPath path : mediaPaths) {
+			MediaPath clonedPath = path.clone(clone);
+			clone.mediaPaths.add(clonedPath);
+		}
+
 		clone.contentTypeProperty = new SimpleStringProperty(getContentType());
 		if (getContent() != null) {
 			clone.contentProperty = new SimpleObjectProperty<>(getContent().clone());
@@ -628,12 +634,6 @@ public class Pad implements Cloneable {
 			CommandManager.execute(Commands.PAD_ADD, project.getProjectReference(), clone);
 			clone.padListener = new PadUpdateListener(clone);
 			clone.addSyncListener();
-		}
-
-		clone.mediaPaths = FXCollections.observableArrayList();
-		for (MediaPath path : mediaPaths) {
-			MediaPath clonedPath = path.clone(clone);
-			clone.mediaPaths.add(clonedPath);
 		}
 
 		clone.padSettings = padSettings.clone(clone);

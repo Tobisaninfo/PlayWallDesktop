@@ -41,12 +41,6 @@ public class MediaPath implements Cloneable {
 		return mediaPath;
 	}
 
-	public static MediaPath create(Pad pad, String filename) {
-		MediaPath mediaPath = new MediaPath(UUID.randomUUID(), filename, pad);
-		MediaPool.getInstance().create(mediaPath);
-		return mediaPath;
-	}
-
 	public UUID getId() {
 		return id;
 	}
@@ -116,6 +110,8 @@ public class MediaPath implements Cloneable {
 		clone.id = UUID.randomUUID();
 		clone.fileName = new SimpleStringProperty(fileName.get());
 		clone.pad = pad;
+
+		MediaPool.getInstance().create(clone, this.getPath());
 
 		if (pad.getProject().getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_ADD, pad.getProject().getProjectReference(), clone);
