@@ -4,7 +4,7 @@ import com.hp.gagawa.java.elements.*;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
@@ -73,7 +73,7 @@ public class PrintDialog extends NVC {
 		stage.setMinHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 

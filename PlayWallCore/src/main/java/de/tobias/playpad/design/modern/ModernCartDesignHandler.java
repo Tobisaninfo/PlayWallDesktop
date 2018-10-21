@@ -5,14 +5,14 @@ import javafx.util.Duration;
 
 public interface ModernCartDesignHandler {
 
-	String convertToCss(ModernCartDesign2 design, String classSuffix, boolean fullCss, boolean flat);
+	String convertToCss(ModernCartDesign design, String classSuffix, boolean fullCss, boolean flat);
 
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	void handleWarning(ModernCartDesign2 design, IPadViewController controller, Duration warning, ModernGlobalDesign2 globalDesign);
+	void handleWarning(ModernCartDesign design, IPadViewController controller, Duration warning, ModernGlobalDesign globalDesign);
 
-	default void stopWarning(ModernCartDesign2 design, IPadViewController controller) {
+	default void stopWarning(ModernCartDesign design, IPadViewController controller) {
 	}
 
 }

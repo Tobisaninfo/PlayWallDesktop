@@ -1,7 +1,7 @@
 package de.tobias.playpad.profile;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.settings.Fade;
@@ -46,7 +46,7 @@ public class ProfileSettings {
 
 	// Layout
 	@Key
-	private ModernGlobalDesign2 design = new ModernGlobalDesign2();
+	private ModernGlobalDesign design = new ModernGlobalDesign();
 	@Key
 	private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
 
@@ -88,7 +88,7 @@ public class ProfileSettings {
 		return mainLayoutType;
 	}
 
-	public ModernGlobalDesign2 getDesign() {
+	public ModernGlobalDesign getDesign() {
 		return design;
 	}
 
@@ -137,7 +137,7 @@ public class ProfileSettings {
 		this.mainLayoutType = mainLayoutType;
 	}
 
-	public void setDesign(ModernGlobalDesign2 design) {
+	public void setDesign(ModernGlobalDesign design) {
 		this.design = design;
 	}
 

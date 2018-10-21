@@ -4,7 +4,7 @@ import com.itextpdf.text.DocumentException;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.PlayoutLogPdfExport;
@@ -85,7 +85,7 @@ public class PlayoutLogViewController extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 

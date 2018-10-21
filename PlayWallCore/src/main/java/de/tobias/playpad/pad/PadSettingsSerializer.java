@@ -1,6 +1,6 @@
 package de.tobias.playpad.pad;
 
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.serializer.ModernCartDesignSerializer;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
@@ -64,7 +64,7 @@ public class PadSettingsSerializer {
 				padSettings.setCustomDesign(Boolean.valueOf(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
 			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
-			ModernCartDesign2 design = serializer.load(designElement, pad);
+			ModernCartDesign design = serializer.load(designElement, pad);
 			padSettings.setDesign(design);
 		}
 

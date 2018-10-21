@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.design;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.utils.ui.NVC;
 import javafx.event.ActionEvent;
@@ -38,11 +38,11 @@ public class ModernGlobalDesignViewController extends NVC {
 	@FXML
 	private CheckBox flatDesignCheckbox;
 
-	private ModernGlobalDesign2 design;
+	private ModernGlobalDesign design;
 
 	private PopOver colorChooser;
 
-	public ModernGlobalDesignViewController(ModernGlobalDesign2 design) {
+	public ModernGlobalDesignViewController(ModernGlobalDesign design) {
 		load("view/option/layout", "ModernLayoutGlobal", PlayPadMain.getUiResourceBundle());
 
 		this.design = design;

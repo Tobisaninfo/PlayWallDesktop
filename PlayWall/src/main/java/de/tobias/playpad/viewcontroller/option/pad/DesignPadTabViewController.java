@@ -6,7 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.factory.CartActionFactory;
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.profile.Profile;
@@ -46,7 +46,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 				try {
 					padSettings.setCustomDesign(true);
 
-					ModernCartDesign2 layout = padSettings.getDesign();
+					ModernCartDesign layout = padSettings.getDesign();
 					layout.copyGlobalLayout(Profile.currentProfile().getProfileSettings().getDesign());
 
 					setLayoutViewController(pad);
@@ -79,7 +79,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	private void setLayoutViewController(Pad pad) {
 		if (pad != null) {
 			try {
-				ModernCartDesign2 design = pad.getPadSettings().getDesign();
+				ModernCartDesign design = pad.getPadSettings().getDesign();
 
 				ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
 				layoutContainer.getChildren().setAll(controller.getParent());

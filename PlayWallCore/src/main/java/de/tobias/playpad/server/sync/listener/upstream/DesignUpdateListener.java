@@ -1,6 +1,6 @@
 package de.tobias.playpad.server.sync.listener.upstream;
 
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Change;
@@ -13,12 +13,12 @@ import javafx.beans.value.ChangeListener;
  */
 public class DesignUpdateListener {
 
-	private ModernCartDesign2 design;
+	private ModernCartDesign design;
 
 	private ChangeListener<ModernColor> backgroundColorListener;
 	private ChangeListener<ModernColor> playColorListener;
 
-	public DesignUpdateListener(ModernCartDesign2 design) {
+	public DesignUpdateListener(ModernCartDesign design) {
 		this.design = design;
 
 		backgroundColorListener = (observable, oldValue, newValue) -> {

@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.option.pad;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
@@ -150,7 +150,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 

@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
@@ -100,7 +100,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
 
 		if (Profile.currentProfile() != null) {
-			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 		} else {
 			// Add Stylesheet manuel

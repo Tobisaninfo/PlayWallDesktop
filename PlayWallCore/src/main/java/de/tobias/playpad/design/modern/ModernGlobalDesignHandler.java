@@ -8,15 +8,15 @@ import javafx.util.Duration;
 
 public interface ModernGlobalDesignHandler {
 
-	void applyCss(ModernGlobalDesign2 design, Stage stage);
+	void applyCss(ModernGlobalDesign design, Stage stage);
 
-	void applyCssMainView(ModernGlobalDesign2 design, IMainViewController controller, Stage stage, Project project);
+	void applyCssMainView(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project);
 
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	void handleWarning(ModernGlobalDesign2 design, IPadViewController controller, Duration warning);
+	void handleWarning(ModernGlobalDesign design, IPadViewController controller, Duration warning);
 
-	default void stopWarning(ModernGlobalDesign2 design, IPadViewController controller) {
+	default void stopWarning(ModernGlobalDesign design, IPadViewController controller) {
 	}
 }

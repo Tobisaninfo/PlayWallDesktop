@@ -1,7 +1,7 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.utils.application.ApplicationUtils;
@@ -99,7 +99,7 @@ public class EqualizerViewController extends NVC {
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 		stage.getScene().getStylesheets().add("style/style.css");
 	}

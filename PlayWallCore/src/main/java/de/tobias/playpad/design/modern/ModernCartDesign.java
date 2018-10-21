@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 
 import java.util.UUID;
 
-public class ModernCartDesign2 implements DesignColorAssociator, Cloneable {
+public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
@@ -20,15 +20,15 @@ public class ModernCartDesign2 implements DesignColorAssociator, Cloneable {
 	private Pad pad;
 	private DesignUpdateListener syncListener;
 
-	public ModernCartDesign2(Pad pad) {
+	public ModernCartDesign(Pad pad) {
 		this(pad, UUID.randomUUID());
 	}
 
-	public ModernCartDesign2(Pad pad, UUID uuid) {
+	public ModernCartDesign(Pad pad, UUID uuid) {
 		this(pad, uuid, ModernColor.GRAY1, ModernColor.RED3);
 	}
 
-	public ModernCartDesign2(Pad pad, UUID id, ModernColor backgroundColor, ModernColor playColor) {
+	public ModernCartDesign(Pad pad, UUID id, ModernColor backgroundColor, ModernColor playColor) {
 		this.uuid = id;
 		this.pad = pad;
 
@@ -95,8 +95,8 @@ public class ModernCartDesign2 implements DesignColorAssociator, Cloneable {
 		return Color.web(backgroundColor.get().getColorHi());
 	}
 
-	public ModernCartDesign2 clone(Pad pad) throws CloneNotSupportedException {
-		ModernCartDesign2 clone = (ModernCartDesign2) super.clone();
+	public ModernCartDesign clone(Pad pad) throws CloneNotSupportedException {
+		ModernCartDesign clone = (ModernCartDesign) super.clone();
 		clone.backgroundColor = new SimpleObjectProperty<>(getBackgroundColor());
 		clone.playColor = new SimpleObjectProperty<>(getPlayColor());
 		clone.pad = pad;
@@ -111,7 +111,7 @@ public class ModernCartDesign2 implements DesignColorAssociator, Cloneable {
 		return clone;
 	}
 
-	public void copyGlobalLayout(ModernGlobalDesign2 globalDesign) {
+	public void copyGlobalLayout(ModernGlobalDesign globalDesign) {
 		setBackgroundColor(globalDesign.getBackgroundColor());
 		setPlayColor(globalDesign.getPlayColor());
 	}

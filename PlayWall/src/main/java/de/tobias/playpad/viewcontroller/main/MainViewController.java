@@ -7,7 +7,7 @@ import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
 import de.tobias.playpad.action.mapper.listener.MidiHandler;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
@@ -528,7 +528,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		// design specific css
 		if (openProject != null) {
-			ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCssMainView(design, this, getStage(), openProject);
 
 			// Mapping feedback

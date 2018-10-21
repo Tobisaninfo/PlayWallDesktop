@@ -1,9 +1,9 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -94,10 +94,10 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		PadSettings padSettings = pad.getPadSettings();
 		Duration warning = padSettings.getWarning();
 
-		ModernGlobalDesign2 globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 		if (padSettings.isCustomDesign()) {
 			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
-			ModernCartDesign2 design = pad.getPadSettings().getDesign();
+			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.handleWarning(design, controller, warning, globalDesign);
 		} else {
@@ -125,12 +125,12 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 		if (padSettings.isCustomDesign()) {
 			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
-			ModernCartDesign2 design = pad.getPadSettings().getDesign();
+			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.stopWarning(design, controller);
 		} else {
 			ModernGlobalDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
-			ModernGlobalDesign2 globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+			ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 
 			handler.stopWarning(globalDesign, controller);
 		}

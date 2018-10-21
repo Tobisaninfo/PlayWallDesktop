@@ -1,9 +1,9 @@
 package de.tobias.playpad.design;
 
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
@@ -16,7 +16,7 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 
 	// Warn Handler -> Animation oder Blinken
 	@Override
-	public void handleWarning(ModernCartDesign2 design, IPadViewController controller, Duration warning, ModernGlobalDesign2 globalDesign) {
+	public void handleWarning(ModernCartDesign design, IPadViewController controller, Duration warning, ModernGlobalDesign globalDesign) {
 		if (globalDesign.isWarnAnimation()) {
 			warnAnimation(design, controller, warning);
 		} else {
@@ -25,11 +25,11 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 	}
 
 	@Override
-	public void stopWarning(ModernCartDesign2 design, IPadViewController controller) {
+	public void stopWarning(ModernCartDesign design, IPadViewController controller) {
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(ModernCartDesign2 design, IPadViewController controller, Duration warning) {
+	private void warnAnimation(ModernCartDesign design, IPadViewController controller, Duration warning) {
 		ModernColor backgroundColor = design.getBackgroundColor();
 		ModernColor playColor = design.getPlayColor();
 
@@ -50,7 +50,7 @@ public class ModernCartDesignHandlerImpl implements ModernCartDesignHandler {
 
 	// Cart Layout
 	@Override
-	public String convertToCss(ModernCartDesign2 design, String prefix, boolean full, boolean flat) {
+	public String convertToCss(ModernCartDesign design, String prefix, boolean full, boolean flat) {
 		StringBuilder builder = new StringBuilder();
 
 		ModernColor backgroundColor = design.getBackgroundColor();

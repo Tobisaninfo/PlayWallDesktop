@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.design;
 
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.utils.ui.NVC;
@@ -27,11 +27,11 @@ public class ModernCartDesignViewController extends NVC {
 	@FXML
 	private Button resetButton;
 
-	private ModernCartDesign2 design;
+	private ModernCartDesign design;
 
 	private PopOver colorChooser;
 
-	public ModernCartDesignViewController(ModernCartDesign2 layout) {
+	public ModernCartDesignViewController(ModernCartDesign layout) {
 		load("view/option/layout", "ModernLayoutCart", PlayPadMain.getUiResourceBundle());
 
 		this.design = layout;

@@ -3,7 +3,7 @@ package de.tobias.playpad.layout.desktop;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.ColorModeHandler;
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import javafx.event.EventHandler;
@@ -67,7 +67,7 @@ public class DesktopColorPickerView implements Consumer<DisplayableColor>, Event
 
 				if (event.getButton() == MouseButton.PRIMARY) {
 					padSettings.setCustomDesign(true);
-					ModernCartDesign2 design = padSettings.getDesign();
+					ModernCartDesign design = padSettings.getDesign();
 					colorModeHandler.setColor(design, selectedColor);
 				} else if (event.getButton() == MouseButton.SECONDARY) {
 					padSettings.setCustomDesign(false);

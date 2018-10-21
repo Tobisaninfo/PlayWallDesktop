@@ -3,7 +3,7 @@ package de.tobias.playpad.design.modern;
 import de.tobias.playpad.design.DesignColorAssociator;
 import javafx.scene.paint.Color;
 
-public class ModernGlobalDesign2 implements DesignColorAssociator {
+public class ModernGlobalDesign implements DesignColorAssociator {
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;

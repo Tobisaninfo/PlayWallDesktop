@@ -1,13 +1,13 @@
 package de.tobias.playpad.design.modern.serializer;
 
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import org.dom4j.Element;
 
 public class ModernGlobalDesignSerializer {
 
-	public ModernGlobalDesign2 load(Element rootElement) {
-		ModernGlobalDesign2 design = new ModernGlobalDesign2();
+	public ModernGlobalDesign load(Element rootElement) {
+		ModernGlobalDesign design = new ModernGlobalDesign();
 		Element backgroundElement = rootElement.element("BackgroundColor");
 		if (backgroundElement != null) {
 			try {
@@ -55,7 +55,7 @@ public class ModernGlobalDesignSerializer {
 		return design;
 	}
 
-	public void save(Element rootElement, ModernGlobalDesign2 design) {
+	public void save(Element rootElement, ModernGlobalDesign design) {
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
 		Element animationElement = rootElement.addElement("Animation");

@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.server.Session;
 import de.tobias.utils.ui.NVC;
@@ -60,7 +60,7 @@ public class AuthViewController extends NVC {
 		stage.setHeight(250);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Login_Title));
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 

@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
@@ -23,7 +23,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 	DesignTabViewController() {
 		load("view/option/profile", "LayoutTab", PlayPadMain.getUiResourceBundle());
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		ModernGlobalDesignViewController globalLayoutViewController = new ModernGlobalDesignViewController(design);
 		layoutContainer.getChildren().setAll(globalLayoutViewController.getParent());
 	}

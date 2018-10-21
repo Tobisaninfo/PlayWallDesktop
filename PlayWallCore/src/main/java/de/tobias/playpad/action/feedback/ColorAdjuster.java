@@ -3,8 +3,8 @@ package de.tobias.playpad.action.feedback;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperFeedbackable;
-import de.tobias.playpad.design.modern.ModernCartDesign2;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
@@ -57,13 +57,13 @@ public class ColorAdjuster {
 			Color layoutEvColor = null;
 
 			if (pad.getPadSettings().isCustomDesign()) {
-				ModernCartDesign2 design = pad.getPadSettings().getDesign();
+				ModernCartDesign design = pad.getPadSettings().getDesign();
 				if (design != null) {
 					layoutStdColor = design.getAssociatedStandardColor();
 					layoutEvColor = design.getAssociatedEventColor();
 				}
 			} else {
-				ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+				ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 				if (design != null) {
 					layoutStdColor = design.getAssociatedStandardColor();
 					layoutEvColor = design.getAssociatedEventColor();

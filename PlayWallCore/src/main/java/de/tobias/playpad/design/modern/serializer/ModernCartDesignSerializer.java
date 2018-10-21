@@ -1,6 +1,6 @@
 package de.tobias.playpad.design.modern.serializer;
 
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import org.dom4j.Element;
@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public class ModernCartDesignSerializer {
 
-	public ModernCartDesign2 load(Element rootElement, Pad pad) {
-		ModernCartDesign2 design;
+	public ModernCartDesign load(Element rootElement, Pad pad) {
+		ModernCartDesign design;
 		String uuidValue = rootElement.attributeValue("id");
 		if (uuidValue != null) {
-			design = new ModernCartDesign2(pad, UUID.fromString(uuidValue));
+			design = new ModernCartDesign(pad, UUID.fromString(uuidValue));
 		} else {
-			design = new ModernCartDesign2(pad);
+			design = new ModernCartDesign(pad);
 		}
 
 		Element backgroundElement = rootElement.element("BackgroundColor");
@@ -38,7 +38,7 @@ public class ModernCartDesignSerializer {
 		return design;
 	}
 
-	public void save(Element rootElement, ModernCartDesign2 design) {
+	public void save(Element rootElement, ModernCartDesign design) {
 		rootElement.addAttribute("id", design.getId().toString());
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());

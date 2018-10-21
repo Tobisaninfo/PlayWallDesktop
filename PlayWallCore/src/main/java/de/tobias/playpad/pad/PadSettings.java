@@ -1,6 +1,6 @@
 package de.tobias.playpad.pad;
 
-import de.tobias.playpad.design.modern.ModernCartDesign2;
+import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.server.sync.command.CommandManager;
@@ -31,7 +31,7 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
-	private ModernCartDesign2 design;
+	private ModernCartDesign design;
 
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
 
@@ -176,9 +176,9 @@ public class PadSettings implements Cloneable {
 		return customDesignProperty;
 	}
 
-	public ModernCartDesign2 getDesign() {
+	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign2 design = new ModernCartDesign2(pad);
+			ModernCartDesign design = new ModernCartDesign(pad);
 
 			if (pad.getProject().getProjectReference().isSync()) {
 				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
@@ -198,7 +198,7 @@ public class PadSettings implements Cloneable {
 		}
 	}
 
-	public void setDesign(ModernCartDesign2 design) {
+	public void setDesign(ModernCartDesign design) {
 		this.design = design;
 		if (pad.getProject().getProjectReference().isSync()) {
 			design.addListener();

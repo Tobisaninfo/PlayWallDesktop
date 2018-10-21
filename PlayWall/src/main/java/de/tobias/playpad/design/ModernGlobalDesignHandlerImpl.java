@@ -27,7 +27,7 @@ import static de.tobias.playpad.design.Design.*;
 
 public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler, ColorModeHandler {
 
-	private String convertToCSS(ModernGlobalDesign2 design) {
+	private String convertToCSS(ModernGlobalDesign design) {
 		StringBuilder builder = new StringBuilder();
 
 		startStyleClass(builder, "pad-icon");
@@ -97,7 +97,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void applyCss(ModernGlobalDesign2 design, Stage stage) {
+	public void applyCss(ModernGlobalDesign design, Stage stage) {
 		// Add Build in Default
 		stage.getScene().getStylesheets().add("style/style.css");
 		stage.getScene().getStylesheets().add("style/modern.css");
@@ -109,7 +109,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void applyCssMainView(ModernGlobalDesign2 design, IMainViewController controller, Stage stage, Project project) {
+	public void applyCssMainView(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project) {
 		applyCss(design, stage);
 
 		controller.setGridColor(Color.TRANSPARENT);
@@ -124,7 +124,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (padSettings.isCustomDesign()) {
-				ModernCartDesign2 cartDesign = padSettings.getDesign();
+				ModernCartDesign cartDesign = padSettings.getDesign();
 				css.append("\n").append(cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), true, design.isFlatDesign()));
 			}
 		}
@@ -141,7 +141,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void handleWarning(ModernGlobalDesign2 design, IPadViewController controller, Duration warning) {
+	public void handleWarning(ModernGlobalDesign design, IPadViewController controller, Duration warning) {
 		if (design.isWarnAnimation()) {
 			warnAnimation(design, controller, warning);
 		} else {
@@ -151,11 +151,11 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 
 
 	@Override
-	public void stopWarning(ModernGlobalDesign2 design, IPadViewController controller) {
+	public void stopWarning(ModernGlobalDesign design, IPadViewController controller) {
 		ModernDesignAnimator.stopAnimation(controller);
 	}
 
-	private void warnAnimation(ModernGlobalDesign2 design, IPadViewController controller, Duration warning) {
+	private void warnAnimation(ModernGlobalDesign design, IPadViewController controller, Duration warning) {
 		FadeableColor stopColor = new FadeableColor(design.getBackgroundColor().getColorHi(), design.getBackgroundColor().getColorLow());
 		FadeableColor playColor = new FadeableColor(design.getPlayColor().getColorHi(), design.getPlayColor().getColorLow());
 
@@ -178,7 +178,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void setColor(ModernCartDesign2 design, DisplayableColor color) {
+	public void setColor(ModernCartDesign design, DisplayableColor color) {
 		if (color instanceof ModernColor) {
 			design.setBackgroundColor((ModernColor) color);
 		}

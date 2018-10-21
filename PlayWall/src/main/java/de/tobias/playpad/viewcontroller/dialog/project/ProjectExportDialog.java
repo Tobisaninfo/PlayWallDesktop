@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign2;
+import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -68,7 +68,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
+		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 	}
 
