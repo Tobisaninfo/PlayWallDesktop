@@ -8,7 +8,6 @@ import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.utils.ui.NVC;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
@@ -30,20 +29,17 @@ public class CartTriggerViewController extends NVC {
 	private CartTriggerItem item;
 
 	public CartTriggerViewController(CartTriggerItem item) {
-		load("de/tobias/playpad/assets/view/option/pad/trigger/", "cartTrigger", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "CartTrigger", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
 		projectPreviewView = new ProjectPreviewView(project, pads);
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
-		projectPreviewView.selectedProperty().addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-				item.getCarts().clear();
-				for (Pad pad : projectPreviewView.getSelected()) {
-					item.getCarts().add(pad.getUuid());
-				}
+		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
+			item.getCarts().clear();
+			for (Pad pad : projectPreviewView.getSelected()) {
+				item.getCarts().add(pad.getUuid());
 			}
 		});
 		VBox vBox = (VBox) getParent();
@@ -58,9 +54,6 @@ public class CartTriggerViewController extends NVC {
 		statusComboBox.getItems().addAll(PadStatus.PLAY, PadStatus.PAUSE, PadStatus.STOP);
 		statusComboBox.valueProperty().addListener((a, b, c) -> item.setNewStatus(c));
 
-		allCartsCheckbox.selectedProperty().addListener((a, b, c) ->
-		{
-			item.setAllCarts(c);
-		});
+		allCartsCheckbox.selectedProperty().addListener((a, b, c) -> item.setAllCarts(c));
 	}
 }

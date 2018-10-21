@@ -78,7 +78,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 	}
 
 	private void loadView(Window owner) {
-		load("de/tobias/playpad/assets/view/dialogs/", "pluginView", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "PluginDialog", PlayPadMain.getUiResourceBundle());
 		NVCStage stage = applyViewControllerToStage();
 		stage.initOwner(owner);
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -104,7 +104,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
 		} else {
 			// Add Stylesheet manuel
-			stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style.css");
+			stage.getScene().getStylesheets().add("style/style.css");
 		}
 	}
 

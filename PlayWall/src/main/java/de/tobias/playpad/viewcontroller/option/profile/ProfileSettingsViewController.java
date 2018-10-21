@@ -4,7 +4,6 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign2;
-import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.profile.Profile;
@@ -26,7 +25,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleButton;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -46,8 +44,8 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 
 	private Runnable onFinish;
 
-	public ProfileSettingsViewController(Midi midiHandler, Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		load("de/tobias/playpad/assets/view/option/profile/", "settingsView", PlayPadMain.getUiResourceBundle());
+	public ProfileSettingsViewController(Window owner, Project project, Runnable onFinish) {
+		load("view/option/profile", "SettingsView", PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasActivePlayers();

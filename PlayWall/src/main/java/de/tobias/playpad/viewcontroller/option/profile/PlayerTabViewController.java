@@ -30,7 +30,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	private ComboBox<TimeMode> timeDisplayComboBox;
 
 	PlayerTabViewController() {
-		load("de/tobias/playpad/assets/view/option/profile/", "playerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "PlayerTab", PlayPadMain.getUiResourceBundle());
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();

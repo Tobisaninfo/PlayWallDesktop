@@ -14,7 +14,7 @@
             <children>
                 <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../gfx/Logo-large.png"/>
+                        <Image url="@../../gfx/Logo-large.png"/>
                     </image>
                 </ImageView>
                 <VBox alignment="CENTER_LEFT" spacing="7.0">

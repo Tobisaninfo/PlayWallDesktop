@@ -14,9 +14,9 @@ public class UpdateCell extends ListCell<Updatable> {
 		super.updateItem(item, empty);
 		if (!empty) {
 			if (item instanceof PlayPadUpdater) {
-				setGraphic(new ImageView("de/tobias/playpad/assets/files/class_obj.png"));
+				setGraphic(new ImageView("gfx/class_obj.png"));
 			} else {
-				setGraphic(new ImageView("de/tobias/playpad/assets/files/enum_obj.png"));
+				setGraphic(new ImageView("gfx/enum_obj.png"));
 			}
 			setText(Localization.getString(Strings.UI_Dialog_Update_Cell, item.name(), item.getCurrentVersion(), item.getNewVersion()));
 		} else {

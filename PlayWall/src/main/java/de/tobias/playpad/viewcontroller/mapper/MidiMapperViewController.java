@@ -44,7 +44,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	private NVC feedbackController;
 
 	public MidiMapperViewController() {
-		load("de/tobias/playpad/assets/view/mapper/", "midi", PlayPadMain.getUiResourceBundle());
+		load("view/mapper", "Midi", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

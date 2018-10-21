@@ -28,7 +28,7 @@ public class CartActionViewController extends NVC {
 	private CartAction action;
 
 	public CartActionViewController() {
-		load("de/tobias/playpad/assets/view/actions/", "cartAction", PlayPadMain.getUiResourceBundle());
+		load("view/actions", "CartAction", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

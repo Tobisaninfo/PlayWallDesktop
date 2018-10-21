@@ -43,7 +43,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 	private Runnable onFinish;
 
 	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		load("de/tobias/playpad/assets/view/option/project/", "projectSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "ProjectSettingsView", PlayPadMain.getUiResourceBundle());
 		this.onFinish = onFinish;
 		this.project = project;
 

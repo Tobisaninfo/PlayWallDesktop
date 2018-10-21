@@ -47,7 +47,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	private transient Optional<Path> oldMediaPath = Optional.empty();
 
 	PathsTabViewController() {
-		load("de/tobias/playpad/assets/view/option/project/", "pathTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "PathTab", PlayPadMain.getUiResourceBundle());
 	}
 
 	@FXML

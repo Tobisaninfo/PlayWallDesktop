@@ -40,14 +40,14 @@ public class CartActionTypeViewController extends NVC {
 	private IMappingTabViewController parentController;
 
 	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController) {
-		load("de/tobias/playpad/assets/view/actions/", "cartActions", PlayPadMain.getUiResourceBundle());
+		load("view/actions", "CartActions", PlayPadMain.getUiResourceBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
 
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		ProjectSettings settings = currentProject.getSettings();
 
-		showCartButtons(settings, 0);
+		showCartButtons(settings);
 		VBox.setVgrow(gridPane, Priority.ALWAYS);
 	}
 
@@ -56,7 +56,7 @@ public class CartActionTypeViewController extends NVC {
 		buttonVbox.minHeightProperty().bind(buttonVbox.heightProperty());
 	}
 
-	private void showCartButtons(ProjectSettings settings, int page) {
+	private void showCartButtons(ProjectSettings settings) {
 		gridPane.getChildren().clear();
 
 		gridPane.getColumnConstraints().clear();

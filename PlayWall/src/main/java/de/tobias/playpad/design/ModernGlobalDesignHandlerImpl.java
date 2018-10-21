@@ -99,8 +99,8 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	@Override
 	public void applyCss(ModernGlobalDesign2 design, Stage stage) {
 		// Add Build in Default
-		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style.css");
-		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/modern_style.css");
+		stage.getScene().getStylesheets().add("style/style.css");
+		stage.getScene().getStylesheets().add("style/modern.css");
 
 		// User Settings
 		Path userCss = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "style.css");

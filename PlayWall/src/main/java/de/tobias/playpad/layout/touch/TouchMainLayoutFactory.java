@@ -49,7 +49,7 @@ public class TouchMainLayoutFactory extends MainLayoutFactory {
 
 	@Override
 	public String getStylesheet() {
-		return "de/tobias/playpad/assets/style/touch.css";
+		return "style/touch.css";
 	}
 
 }

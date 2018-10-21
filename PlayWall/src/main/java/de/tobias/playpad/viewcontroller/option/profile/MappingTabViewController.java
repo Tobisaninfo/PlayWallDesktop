@@ -76,7 +76,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private Mapping mapping;
 
 	MappingTabViewController() {
-		load("de/tobias/playpad/assets/view/option/profile/", "mapping", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "Mapping", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

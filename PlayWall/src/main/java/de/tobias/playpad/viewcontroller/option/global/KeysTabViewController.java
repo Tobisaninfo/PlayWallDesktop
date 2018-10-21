@@ -50,7 +50,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 	private ObservableList<Key> keys = FXCollections.observableArrayList();
 
 	KeysTabViewController() {
-		load("de/tobias/playpad/assets/view/option/global/", "keysTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "KeysTab", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

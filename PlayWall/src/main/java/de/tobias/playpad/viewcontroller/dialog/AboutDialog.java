@@ -58,7 +58,7 @@ public class AboutDialog extends NVC {
 
 	public AboutDialog(Window owner) {
 		this.owner = owner;
-		load("de/tobias/playpad/assets/dialog/", "about", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "About", PlayPadMain.getUiResourceBundle());
 		NVCStage stage = applyViewControllerToStage().initOwner(owner).initModality(Modality.WINDOW_MODAL);
 		addCloseKeyShortcut(stage::close);
 	}

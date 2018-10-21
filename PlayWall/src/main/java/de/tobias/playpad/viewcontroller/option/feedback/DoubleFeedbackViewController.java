@@ -42,7 +42,7 @@ public class DoubleFeedbackViewController extends NVC {
 	private DoubleMidiFeedback feedback;
 
 	public DoubleFeedbackViewController(DoubleMidiFeedback feedback, DisplayableFeedbackColor[] colors) {
-		load("de/tobias/playpad/assets/view/option/feedback/", "doubleFeedback", PlayPadMain.getUiResourceBundle());
+		load("view/option/feedback", "DoubleFeedback", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
 		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();

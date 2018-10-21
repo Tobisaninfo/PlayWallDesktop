@@ -51,7 +51,7 @@ public class ProjectNewDialog extends NVC {
 	private ProjectReference project;
 
 	public ProjectNewDialog(Window owner) {
-		load("de/tobias/playpad/assets/dialog/", "newProjectDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NewProjectDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

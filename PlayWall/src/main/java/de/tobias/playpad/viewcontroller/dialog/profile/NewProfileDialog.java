@@ -33,7 +33,7 @@ public class NewProfileDialog extends NVC {
 	private Profile profile;
 
 	public NewProfileDialog(Window owner) {
-		load("de/tobias/playpad/assets/dialog/", "newProfileDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NewProfileDialog", PlayPadMain.getUiResourceBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

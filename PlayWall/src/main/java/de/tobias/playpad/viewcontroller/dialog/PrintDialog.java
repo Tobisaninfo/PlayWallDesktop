@@ -41,7 +41,7 @@ public class PrintDialog extends NVC {
 	private Project project;
 
 	public PrintDialog(Project project, Window owner) {
-		load("de/tobias/playpad/assets/dialog/project/", "printDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "PrintDialog", PlayPadMain.getUiResourceBundle());
 		this.project = project;
 
 		int pages = project.getPages().size();

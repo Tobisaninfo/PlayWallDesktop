@@ -32,7 +32,7 @@ public class ModernCartDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernCartDesignViewController(ModernCartDesign2 layout) {
-		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutCart", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutCart", PlayPadMain.getUiResourceBundle());
 
 		this.design = layout;
 		setLayout();

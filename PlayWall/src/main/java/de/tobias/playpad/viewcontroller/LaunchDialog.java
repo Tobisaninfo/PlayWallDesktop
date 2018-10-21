@@ -82,7 +82,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	private FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
-		load("de/tobias/playpad/assets/dialog/", "launchDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "LaunchDialog", PlayPadMain.getUiResourceBundle());
 		setProjectListValues();
 
 		applyViewControllerToStage(stage);
@@ -137,8 +137,8 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 
 	@Override
 	public void initStage(Stage stage) {
-		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style.css");
-		stage.getScene().getStylesheets().add("de/tobias/playpad/assets/style/launchDialog_style.css");
+		stage.getScene().getStylesheets().add("style/style.css");
+		stage.getScene().getStylesheets().add("style/launch-dialog.css");
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);

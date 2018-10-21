@@ -43,7 +43,7 @@ public class ModernGlobalDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernGlobalDesignViewController(ModernGlobalDesign2 design) {
-		load("de/tobias/playpad/assets/view/option/layout/", "modernLayoutGlobal", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutGlobal", PlayPadMain.getUiResourceBundle());
 
 		this.design = design;
 		setLayout();

@@ -20,7 +20,7 @@ public class WarningFeedbackViewController extends NVC {
 	private Label warningFeedbackTimeLabel;
 
 	public WarningFeedbackViewController() {
-		load("de/tobias/playpad/assets/settings/", "warningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/settings", "WarningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
 		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
 
 		warningFeedbackTimeSlider.setValue(profilSettings.getWarningFeedback().toSeconds());
@@ -33,7 +33,7 @@ public class WarningFeedbackViewController extends NVC {
 	}
 
 	public WarningFeedbackViewController(Pad pad) {
-		load("de/tobias/playpad/assets/settings/", "warningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/settings/", "WarningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

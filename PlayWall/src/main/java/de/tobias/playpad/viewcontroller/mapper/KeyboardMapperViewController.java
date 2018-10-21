@@ -22,7 +22,7 @@ public class KeyboardMapperViewController extends MapperViewController {
 	private KeyboardMapper mapper;
 
 	public KeyboardMapperViewController() {
-		load("de/tobias/playpad/assets/view/mapper/", "keyboard", PlayPadMain.getUiResourceBundle());
+		load("view/mapper", "Keyboard", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class FadeViewController extends NVC {
 	private Fade fade;
 
 	public FadeViewController() {
-		load("de/tobias/playpad/assets/settings/", "fadeView", PlayPadMain.getUiResourceBundle());
+		load("view/settings", "fadeView", PlayPadMain.getUiResourceBundle());
 	}
 
 	@Override

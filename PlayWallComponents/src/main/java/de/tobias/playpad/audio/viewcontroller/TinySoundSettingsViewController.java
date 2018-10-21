@@ -35,7 +35,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 	private Clip clip;
 
 	public TinySoundSettingsViewController() {
-		super("tinySoundSettings", "de/tobias/playpad/assets/view/audio/", PlayPadPlugin.getImplementation().getUIResourceBundle());
+		super("TinySoundSettings", "view/audio", PlayPadPlugin.getImplementation().getUIResourceBundle());
 
 		// Mixer (ohne Port)
 		List<Info> infos = Arrays.stream(AudioSystem.getMixerInfo()).filter(info -> !info.getName().startsWith("Port"))
@@ -85,7 +85,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 	private void testButtonHandler(ActionEvent event) {
 		try {
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(
-					TinySoundSettingsViewController.class.getClassLoader().getResource("de/tobias/playpad/assets/files/Test-Sound.wav"));
+					TinySoundSettingsViewController.class.getClassLoader().getResource("sfx/Test-Sound.wav"));
 
 			if (clip != null) {
 				clip.stop();

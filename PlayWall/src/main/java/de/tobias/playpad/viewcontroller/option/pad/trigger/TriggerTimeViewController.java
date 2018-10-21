@@ -19,7 +19,7 @@ public class TriggerTimeViewController extends NVC {
 	private TriggerItem item;
 
 	TriggerTimeViewController(TriggerItem item) {
-		load("de/tobias/playpad/assets/view/option/pad/trigger/", "triggerTime", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "TriggerTime", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		timeTextField.setText(String.valueOf(item.getDurationFromPoint().toSeconds()));

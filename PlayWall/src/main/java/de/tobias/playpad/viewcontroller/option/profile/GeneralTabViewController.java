@@ -57,7 +57,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
-		load("de/tobias/playpad/assets/view/option/global/", "generalTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "GeneralTab", PlayPadMain.getUiResourceBundle());
 		this.alertable = alertable;
 
 		calcCacheSize();

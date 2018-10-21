@@ -50,7 +50,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 	private ProjectReference projectRef;
 
 	ProjectExportDialog(ProjectReference projectRef, Window owner) {
-		load("de/tobias/playpad/assets/dialog/project/", "exportDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "ExportDialog", PlayPadMain.getUiResourceBundle());
 		this.projectRef = projectRef;
 
 		NVCStage nvcStage = applyViewControllerToStage();

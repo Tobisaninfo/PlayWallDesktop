@@ -158,7 +158,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private DesktopMainLayoutFactory connect;
 
 	DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
-		super("header", "de/tobias/playpad/assets/view/main/desktop/", PlayPadMain.getUiResourceBundle());
+		super("Header", "view/main/desktop", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = controller;
 		this.connect = connect;
 		this.connect.editModeProperty().addListener(this);
@@ -516,7 +516,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		{
 			Stage stage = mainViewController.getStage();
 
-			ProjectManagerDialog view = new ProjectManagerDialog(stage, openProject);
+			ProjectManagerDialog view = new ProjectManagerDialog(stage);
 			Optional<ProjectReference> result = view.showAndWait();
 
 			if (result.isPresent()) {
@@ -675,8 +675,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				mainStage.toFront();
 			};
 
-			profileSettingsViewController = new ProfileSettingsViewController(midi, mainViewController.getScreen(), mainStage, openProject,
-					onFinish);
+			profileSettingsViewController = new ProfileSettingsViewController(mainStage, openProject, onFinish);
 
 			profileSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		} else if (profileSettingsViewController.getStageContainer().isPresent() && profileSettingsViewController.getStageContainer().get().getStage().isShowing()) {

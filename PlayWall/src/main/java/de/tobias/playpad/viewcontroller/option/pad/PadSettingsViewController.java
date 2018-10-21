@@ -45,7 +45,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private Button finishButton;
 
 	public PadSettingsViewController(Pad pad, Window owner) {
-		load("de/tobias/playpad/assets/view/option/pad/", "padSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "PadSettingsView", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));

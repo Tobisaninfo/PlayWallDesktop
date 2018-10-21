@@ -72,7 +72,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 	private Path mediaPath;
 
 	public ProjectImportDialog(Path path, Window owner) throws IOException, DocumentException {
-		load("de/tobias/playpad/assets/dialog/project/", "importDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "ImportDialog", PlayPadMain.getUiResourceBundle());
 		applyViewControllerToStage().initOwner(owner);
 
 		addCloseKeyShortcut(() -> cancelHandler(null));

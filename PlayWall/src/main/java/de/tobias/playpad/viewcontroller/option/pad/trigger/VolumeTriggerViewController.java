@@ -9,7 +9,6 @@ import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.utils.ui.NVC;
 import de.tobias.utils.util.Localization;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -36,7 +35,7 @@ public class VolumeTriggerViewController extends NVC {
 	private VolumeTriggerItem item;
 
 	public VolumeTriggerViewController(VolumeTriggerItem item) {
-		load("de/tobias/playpad/assets/view/option/pad/trigger/", "volumeTrigger", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "VolumeTrigger", PlayPadMain.getUiResourceBundle());
 		this.item = item;
 
 		volumeSlider.setValue(item.getVolume() * 100.0);
@@ -46,13 +45,10 @@ public class VolumeTriggerViewController extends NVC {
 		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
 		projectPreviewView = new ProjectPreviewView(project, pads);
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
-		projectPreviewView.selectedProperty().addListener(new InvalidationListener() {
-			@Override
-			public void invalidated(Observable observable) {
-				item.getCarts().clear();
-				for (Pad pad : projectPreviewView.getSelected()) {
-					item.getCarts().add(pad.getUuid());
-				}
+		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
+			item.getCarts().clear();
+			for (Pad pad : projectPreviewView.getSelected()) {
+				item.getCarts().add(pad.getUuid());
 			}
 		});
 		VBox vBox = (VBox) getParent();
@@ -72,8 +68,8 @@ public class VolumeTriggerViewController extends NVC {
 		{
 			item.setDuration(Duration.seconds(c.doubleValue()));
 
-			double secounds = Math.round(item.getDuration().toSeconds() * 10.0) / 10.0;
-			durationLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, secounds));
+			double seconds = Math.round(item.getDuration().toSeconds() * 10.0) / 10.0;
+			durationLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, seconds));
 		});
 
 	}

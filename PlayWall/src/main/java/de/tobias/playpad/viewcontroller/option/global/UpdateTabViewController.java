@@ -53,7 +53,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private Label placeholderLabel;
 
 	UpdateTabViewController() {
-		load("de/tobias/playpad/assets/view/option/global/", "updateTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "UpdateTab", PlayPadMain.getUiResourceBundle());
 
 		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 
@@ -80,8 +80,8 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 			globalSettings.setUpdateChannel(c);
 		});
 
-		infoCLabel.setGraphic(new ImageView("de/tobias/playpad/assets/files/class_obj.png"));
-		infoELabel.setGraphic(new ImageView("de/tobias/playpad/assets/files/enum_obj.png"));
+		infoCLabel.setGraphic(new ImageView("gfx/class_obj.png"));
+		infoELabel.setGraphic(new ImageView("gfx/enum_obj.png"));
 
 		progressIndecator = new ProgressIndicator(-1);
 		progressIndecator.setMinSize(75, 75);

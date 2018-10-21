@@ -35,7 +35,7 @@ public class SingleFeedbackViewController extends NVC {
 	private SingleMidiFeedback feedback;
 
 	public SingleFeedbackViewController(SingleMidiFeedback feedback, DisplayableFeedbackColor[] colors) {
-		load("de/tobias/playpad/assets/view/option/feedback/", "singleFeedback", PlayPadMain.getUiResourceBundle());
+		load("view/option/feedback", "SingleFeedback", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
 		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();

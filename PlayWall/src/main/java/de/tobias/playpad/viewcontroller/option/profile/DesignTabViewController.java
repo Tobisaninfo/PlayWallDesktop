@@ -21,7 +21,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 	private VBox layoutContainer;
 
 	DesignTabViewController() {
-		load("de/tobias/playpad/assets/view/option/profile/", "layoutTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "LayoutTab", PlayPadMain.getUiResourceBundle());
 
 		ModernGlobalDesign2 design = Profile.currentProfile().getProfileSettings().getDesign();
 		ModernGlobalDesignViewController globalLayoutViewController = new ModernGlobalDesignViewController(design);

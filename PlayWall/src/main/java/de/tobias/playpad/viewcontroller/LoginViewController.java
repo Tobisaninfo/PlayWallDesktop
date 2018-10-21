@@ -105,7 +105,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@Override
 	public Session getSession() {
-		load("de/tobias/playpad/assets/dialog/", "loginDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "LoginDialog", PlayPadMain.getUiResourceBundle());
 		applyViewControllerToStage();
 
 		Optional<NVCStage> stage = getStageContainer();

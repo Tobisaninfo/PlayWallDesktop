@@ -48,7 +48,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	private Label rowErrorLabel;
 
 	GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
-		load("de/tobias/playpad/assets/view/option/project/", "generalTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "GeneralTab", PlayPadMain.getUiResourceBundle());
 
 		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;

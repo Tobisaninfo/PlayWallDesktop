@@ -37,7 +37,7 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	private ChangeListener<Number> volumeListener;
 
 	GeneralPadTabViewController(Pad pad) {
-		load("de/tobias/playpad/assets/view/option/pad/", "generalTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "GeneralTab", PlayPadMain.getUiResourceBundle());
 		this.pad = pad;
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {

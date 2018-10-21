@@ -28,7 +28,7 @@ public class TriggerPointViewController extends NVC {
 	private TriggerDisplayable triggerWrapper;
 
 	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
-		load("de/tobias/playpad/assets/view/option/pad/trigger/", "triggerPoint", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "TriggerPoint", PlayPadMain.getUiResourceBundle());
 		this.triggerWrapper = triggerWrapper;
 
 		for (TriggerItem item : triggerWrapper.getTrigger().getItems())

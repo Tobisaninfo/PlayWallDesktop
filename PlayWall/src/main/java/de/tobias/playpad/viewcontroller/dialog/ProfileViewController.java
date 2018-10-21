@@ -49,7 +49,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	private Project project;
 
 	public ProfileViewController(Window owner, Project project) {
-		load("de/tobias/playpad/assets/dialog/", "profileSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "ProfileSettingsView", PlayPadMain.getUiResourceBundle());
 		profileList.getSelectionModel().select(Profile.currentProfile().getRef());
 		this.project = project;
 

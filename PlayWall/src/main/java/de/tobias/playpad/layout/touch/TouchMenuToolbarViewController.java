@@ -34,7 +34,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	private IMainViewController mainViewController;
 
 	TouchMenuToolbarViewController(IMainViewController mainViewController) {
-		super("header", "de/tobias/playpad/assets/view/main/touch/", PlayPadMain.getUiResourceBundle());
+		super("Header", "view/main/touch", PlayPadMain.getUiResourceBundle());
 		this.mainViewController = mainViewController;
 
 		// Schriftgröße Icons
