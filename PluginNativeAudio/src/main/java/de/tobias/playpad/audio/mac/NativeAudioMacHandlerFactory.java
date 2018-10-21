@@ -64,7 +64,7 @@ public class NativeAudioMacHandlerFactory extends AudioHandlerFactory implements
 	}
 
 	@Override
-	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapability) {
 		return null;
 	}
 }

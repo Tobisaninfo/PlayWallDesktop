@@ -17,7 +17,7 @@ class MacAudioImplLoader extends AudioImplLoader {
 
 	override def preInit(): Unit = {
 		val app = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.LIBRARY, "namac")
+		val resourceFolder = app.getPath(PathType.LIBRARY, "Native")
 		if (Files.notExists(resourceFolder)) {
 			Files.createDirectories(resourceFolder)
 		}

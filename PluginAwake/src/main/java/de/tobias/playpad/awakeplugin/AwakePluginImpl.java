@@ -10,13 +10,12 @@ import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.utils.application.ApplicationUtils;
 import de.tobias.utils.application.container.PathType;
+import de.tobias.utils.application.system.NativeApplication;
 import de.tobias.utils.ui.icon.FontAwesomeType;
 import de.tobias.utils.ui.icon.FontIcon;
 import de.tobias.utils.util.Localization;
 import de.tobias.utils.util.OS;
 import de.tobias.utils.util.OS.OSType;
-import de.tobias.utils.util.mac.AwakeUtils;
-import de.tobias.utils.util.win.Kernel32;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
@@ -66,13 +65,6 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (OS.getType() == OSType.MacOSX) {
-			try {
-				Path file = loadLibMac();
-				AwakeUtils.load(file.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
 		PlayPadPlugin.getImplementation().addMainViewListener(this);
@@ -83,16 +75,6 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	@Shutdown
 	public void onDisable() {
 		System.out.println("Disable Awake Plugin");
-	}
-
-	private Path loadLibMac() throws IOException {
-		Path localPath = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "awakelib.dylib");
-		if (Files.notExists(localPath)) {
-			Files.createFile(localPath);
-			System.out.println("Download: /plugins/libAwake/libAwakeLib.dylib");
-			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/libAwakeLib.dylib", UpdateChannel.STABLE, localPath);
-		}
-		return localPath;
 	}
 
 	private void loadJNA() throws IOException {
@@ -185,19 +167,7 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 	}
 
 	private void activeSleep(boolean activate) {
-		if (activate) {
-			if (OS.getType() == OSType.Windows) {
-				Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED | Kernel32.ES_SYSTEM_REQUIRED);
-			} else if (OS.getType() == OSType.MacOSX) {
-				AwakeUtils.getInstance().lock();
-			}
-		} else {
-			if (OS.getType() == OSType.Windows) {
-				Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_CONTINUOUS);
-			} else if (OS.getType() == OSType.MacOSX) {
-				AwakeUtils.getInstance().unlock();
-			}
-		}
+		NativeApplication.sharedInstance().preventSystemSleep(activate);
 	}
 
 	@Override

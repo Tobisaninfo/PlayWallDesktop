@@ -1,4 +1,0 @@
---project=uuid
---server=host:port
---plugin=path:path:path
-noplugins
