@@ -1,8 +1,15 @@
 package de.tobias.playpad;
 
 import com.neovisionaries.ws.client.WebSocketException;
-import de.tobias.logger.LogLevel;
-import de.tobias.logger.Logger;
+import de.thecodelabs.logger.LogLevel;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.io.FileUtils;
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
@@ -21,13 +28,6 @@ import de.tobias.playpad.viewcontroller.main.MainViewController;
 import de.tobias.playpad.volume.GlobalVolume;
 import de.tobias.playpad.volume.PadVolume;
 import de.tobias.playpad.volume.VolumeManager;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.io.FileUtils;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.SystemUtils;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 

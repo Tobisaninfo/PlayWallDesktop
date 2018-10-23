@@ -1,7 +1,7 @@
 package de.tobias.playpad.registry;
 
+import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.utils.ui.icon.FontIconType;
 
 /**
  * Created by tobias on 31.12.16.

@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
+import de.thecodelabs.utils.io.FileUtils;
+import de.thecodelabs.utils.io.PathUtils;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -12,9 +15,6 @@ import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
-import de.tobias.utils.io.FileUtils;
-import de.tobias.utils.io.PathUtils;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,11 +1,11 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.StringUtils;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.viewcontroller.mapper.KeyboardMapperViewController;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.StringUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.input.KeyCode;

@@ -1,6 +1,6 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
-import de.tobias.utils.io.IOUtils;
+import de.thecodelabs.utils.io.IOUtils;
 
 import java.io.IOException;
 import java.net.URL;

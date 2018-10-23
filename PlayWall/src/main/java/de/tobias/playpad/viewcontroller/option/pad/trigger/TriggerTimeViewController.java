@@ -1,10 +1,10 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.TimeUtils;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.view.PseudoClasses;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.TimeUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.util.Duration;

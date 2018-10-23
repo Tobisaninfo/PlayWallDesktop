@@ -1,5 +1,7 @@
 package de.tobias.playpad.layout.touch;
 
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -11,8 +13,6 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.util.Localization;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;

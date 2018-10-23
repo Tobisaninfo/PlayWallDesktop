@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.actions;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
@@ -10,7 +11,6 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.utils.ui.NVC;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;

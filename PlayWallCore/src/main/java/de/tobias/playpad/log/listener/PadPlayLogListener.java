@@ -1,7 +1,7 @@
 package de.tobias.playpad.log.listener;
 
-import de.tobias.logger.LogLevel;
-import de.tobias.logger.Logger;
+import de.thecodelabs.logger.LogLevel;
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.PlayOutItem;

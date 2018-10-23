@@ -1,8 +1,8 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;

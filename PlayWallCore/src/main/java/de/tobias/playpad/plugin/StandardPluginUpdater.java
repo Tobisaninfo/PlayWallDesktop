@@ -1,11 +1,11 @@
 package de.tobias.playpad.plugin;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.server.Server;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

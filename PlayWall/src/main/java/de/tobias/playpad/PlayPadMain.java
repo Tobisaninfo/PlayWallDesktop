@@ -1,10 +1,22 @@
 package de.tobias.playpad;
 
 import com.mashape.unirest.http.Unirest;
-import de.tobias.logger.FileOutputOption;
-import de.tobias.logger.LogLevel;
-import de.tobias.logger.LogLevelFilter;
-import de.tobias.logger.Logger;
+import de.thecodelabs.logger.FileOutputOption;
+import de.thecodelabs.logger.LogLevel;
+import de.thecodelabs.logger.LogLevelFilter;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.storage.settings.UserDefaults;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.application.system.NativeApplication;
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.Alerts;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.Localization.LocalizationDelegate;
+import de.thecodelabs.utils.util.OS;
+import de.thecodelabs.utils.util.OS.OSType;
+import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
@@ -22,18 +34,6 @@ import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.updater.client.UpdateRegistery;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.application.system.NativeApplication;
-import de.tobias.utils.settings.UserDefaults;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.Alerts;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.Localization.LocalizationDelegate;
-import de.tobias.utils.util.OS;
-import de.tobias.utils.util.OS.OSType;
-import de.tobias.utils.util.SystemUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -173,84 +173,88 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	@Override
 	public void start(Stage stage) {
-		// Assets
-		Image stageIcon = new Image(iconPath);
-		PlayPadMain.stageIcon = Optional.of(stageIcon);
-		Alerts.getInstance().setDefaultIcon(stageIcon);
-
-		/*
-		 * Setup
-		 */
-		PlayPadUpdater updater = new PlayPadUpdater();
-		UpdateRegistery.registerUpdateable(updater);
-
-		impl.startup(Localization.getBundle(), new LoginViewController());
-
-		NativeApplication.sharedInstance().setDockIcon(new Image("gfx/Logo-large.png"));
-		NativeApplication.sharedInstance().setAppearance(true);
-
 		try {
-			// Load Plugin Path
-			if (!getParameters().getRaw().contains("noplugins")) {
-				Path pluginFolder;
-				if (getParameters().getNamed().containsKey("plugin")) {
-					String pluginParam = getParameters().getNamed().get("plugin");
-					for (String part : pluginParam.split(":")) {
-						pluginFolder = Paths.get(part);
+			// Assets
+			Image stageIcon = new Image(iconPath);
+			PlayPadMain.stageIcon = Optional.of(stageIcon);
+			Alerts.getInstance().setDefaultIcon(stageIcon);
+
+			/*
+			 * Setup
+			 */
+			PlayPadUpdater updater = new PlayPadUpdater();
+			UpdateRegistery.registerUpdateable(updater);
+
+			impl.startup(Localization.getBundle(), new LoginViewController());
+
+			NativeApplication.sharedInstance().setDockIcon(new Image("gfx/Logo-large.png"));
+			NativeApplication.sharedInstance().setAppearance(true);
+
+			try {
+				// Load Plugin Path
+				if (!getParameters().getRaw().contains("noplugins")) {
+					Path pluginFolder;
+					if (getParameters().getNamed().containsKey("plugin")) {
+						String pluginParam = getParameters().getNamed().get("plugin");
+						for (String part : pluginParam.split(":")) {
+							pluginFolder = Paths.get(part);
+							setupPlugins(pluginFolder);
+						}
+					} else {
+						pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
 						setupPlugins(pluginFolder);
 					}
-				} else {
-					pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
-					setupPlugins(pluginFolder);
 				}
-			}
-		} catch (IOException e) {
-			System.err.println("Cannot load plugins:");
-			e.printStackTrace();
-		}
-
-		/*
-		 * Load Data
-		 */
-		try {
-			ProfileReferenceManager.loadProfiles();
-			ProjectReferenceManager.loadProjects();
-		} catch (IOException | DocumentException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			// Auto Open Project
-			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
-				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
-				if (value != null) {
-					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
-					// TODO Load indicator
-					Project project = loader.load();
-					impl.openProject(project, null);
-					return;
-				}
+			} catch (IOException e) {
+				System.err.println("Cannot load plugins:");
+				e.printStackTrace();
 			}
 
-			// Auto Open Project DEBUG
-			if (getParameters().getRaw().size() > 0) {
-				if (getParameters().getNamed().containsKey("project")) {
-					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
-					Project project = loader.load();
-					impl.openProject(project, null);
-					return;
-				}
+			/*
+			 * Load Data
+			 */
+			try {
+				ProfileReferenceManager.loadProfiles();
+				ProjectReferenceManager.loadProjects();
+			} catch (IOException | DocumentException e) {
+				e.printStackTrace();
 			}
+
+			try {
+				// Auto Open Project
+				if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
+					UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
+					if (value != null) {
+						ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+						// TODO Load indicator
+						Project project = loader.load();
+						impl.openProject(project, null);
+						return;
+					}
+				}
+
+				// Auto Open Project DEBUG
+				if (getParameters().getRaw().size() > 0) {
+					if (getParameters().getNamed().containsKey("project")) {
+						UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+						ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
+						Project project = loader.load();
+						impl.openProject(project, null);
+						return;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			// Show Launch Stage
+			new LaunchDialog(stage);
+
+			// Check Updates
+			checkUpdates(impl.globalSettings, stage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// Show Launch Stage
-		new LaunchDialog(stage);
-
-		// Check Updates
-		checkUpdates(impl.globalSettings, stage);
 	}
 
 	private void checkUpdates(GlobalSettings globalSettings, Window owner) {

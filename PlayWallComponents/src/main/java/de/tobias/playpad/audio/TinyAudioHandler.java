@@ -1,5 +1,6 @@
 package de.tobias.playpad.audio;
 
+import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -7,7 +8,6 @@ import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.io.PathUtils;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.util.Duration;

@@ -1,5 +1,7 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.feedback.*;
@@ -9,8 +11,6 @@ import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;

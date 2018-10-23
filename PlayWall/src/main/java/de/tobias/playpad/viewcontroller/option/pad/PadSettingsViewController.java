@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -13,9 +16,6 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

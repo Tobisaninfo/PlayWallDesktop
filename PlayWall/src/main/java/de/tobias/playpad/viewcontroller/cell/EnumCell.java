@@ -1,6 +1,6 @@
 package de.tobias.playpad.viewcontroller.cell;
 
-import de.tobias.utils.util.Localization;
+import de.thecodelabs.utils.util.Localization;
 import javafx.scene.control.ListCell;
 
 public class EnumCell<T extends Enum<?>> extends ListCell<T> {

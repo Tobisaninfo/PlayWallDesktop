@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -9,7 +10,6 @@ import de.tobias.playpad.trigger.TriggerDisplayable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.TriggerPointViewController;
-import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

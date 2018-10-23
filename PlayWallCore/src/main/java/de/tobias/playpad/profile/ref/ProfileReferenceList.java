@@ -1,6 +1,6 @@
 package de.tobias.playpad.profile.ref;
 
-import de.tobias.utils.list.UniqList;
+import de.thecodelabs.utils.list.UniqList;
 
 import java.util.Collection;
 

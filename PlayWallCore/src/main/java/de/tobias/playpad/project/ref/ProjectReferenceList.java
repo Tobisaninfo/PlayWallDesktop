@@ -1,6 +1,6 @@
 package de.tobias.playpad.project.ref;
 
-import de.tobias.utils.list.UniqList;
+import de.thecodelabs.utils.list.UniqList;
 
 /**
  * Liste, wo nur ProjektRefernzen gespeichert werden, deren Namen Unique ist.

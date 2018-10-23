@@ -1,15 +1,16 @@
 <Actions>
-    <Component id="CART" name="Action.Cart.Name" icon="TH" class="de.tobias.utils.ui.icon.FontAwesomeType" size="11">
+    <Component id="CART" name="Action.Cart.Name" icon="TH" class="de.thecodelabs.utils.ui.icon.FontAwesomeType"
+               size="11">
         de.tobias.playpad.action.factory.CartActionFactory
     </Component>
-    <Component id="PAGE" name="Action.Page.Name" icon="FILE_TEXT" class="de.tobias.utils.ui.icon.FontAwesomeType"
+    <Component id="PAGE" name="Action.Page.Name" icon="FILE_TEXT" class="de.thecodelabs.utils.ui.icon.FontAwesomeType"
                size="11">de.tobias.playpad.action.factory.PageActionFactory
     </Component>
     <Component id="NAVIGATE" name="Action.Navigate.Name" icon="NAVIGATION"
-               class="de.tobias.utils.ui.icon.MaterialDesignIcon" size="11">
+               class="de.thecodelabs.utils.ui.icon.MaterialDesignIcon" size="11">
         de.tobias.playpad.action.factory.NavigateActionFactory
     </Component>
-    <Component id="STOP" name="Action.Stop.Name" icon="STOP" class="de.tobias.utils.ui.icon.MaterialDesignIcon"
+    <Component id="STOP" name="Action.Stop.Name" icon="STOP" class="de.thecodelabs.utils.ui.icon.MaterialDesignIcon"
                size="11">de.tobias.playpad.action.factory.StopActionFactory
     </Component>
 </Actions>

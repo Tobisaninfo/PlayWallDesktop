@@ -2,11 +2,11 @@ package de.tobias.playpad.plugin.loader
 
 import java.nio.file.Files
 
+import de.thecodelabs.utils.application.ApplicationUtils
+import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.audio.mac.NativeAudioMacHandlerFactory
 import de.tobias.playpad.plugin.Module
-import de.tobias.utils.application.ApplicationUtils
-import de.tobias.utils.application.container.PathType
 
 /**
   * Created by tobias on 16.04.17.

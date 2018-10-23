@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.TimeMode;
@@ -9,7 +10,6 @@ import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
-import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

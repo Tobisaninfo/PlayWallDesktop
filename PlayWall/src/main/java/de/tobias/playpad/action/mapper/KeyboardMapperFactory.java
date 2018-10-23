@@ -1,7 +1,7 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
-import de.tobias.utils.util.Localization;
 
 public class KeyboardMapperFactory extends MapperFactory {
 

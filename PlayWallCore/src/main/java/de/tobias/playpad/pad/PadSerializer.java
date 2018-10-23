@@ -1,13 +1,13 @@
 package de.tobias.playpad.pad;
 
+import de.thecodelabs.storage.xml.XMLDeserializer;
+import de.thecodelabs.storage.xml.XMLSerializer;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.project.Project;
-import de.tobias.utils.xml.XMLDeserializer;
-import de.tobias.utils.xml.XMLSerializer;
 import org.dom4j.Element;
 
 import java.nio.file.Path;

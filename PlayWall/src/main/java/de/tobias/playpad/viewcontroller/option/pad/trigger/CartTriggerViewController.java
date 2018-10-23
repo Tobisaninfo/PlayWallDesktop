@@ -1,12 +1,12 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
-import de.tobias.utils.ui.NVC;
 import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;

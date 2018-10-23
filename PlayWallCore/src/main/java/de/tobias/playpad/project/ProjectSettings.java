@@ -1,6 +1,6 @@
 package de.tobias.playpad.project;
 
-import de.tobias.utils.settings.Key;
+import de.thecodelabs.storage.settings.annotation.Key;
 
 import java.nio.file.Path;
 

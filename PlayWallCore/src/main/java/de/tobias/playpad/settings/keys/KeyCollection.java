@@ -1,8 +1,8 @@
 package de.tobias.playpad.settings.keys;
 
+import de.thecodelabs.storage.xml.XMLHandler;
+import de.thecodelabs.utils.util.OS;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.util.OS;
-import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

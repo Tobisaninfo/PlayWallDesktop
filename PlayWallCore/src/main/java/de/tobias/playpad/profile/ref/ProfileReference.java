@@ -1,10 +1,10 @@
 package de.tobias.playpad.profile.ref;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

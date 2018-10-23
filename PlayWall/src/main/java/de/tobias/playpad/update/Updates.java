@@ -1,13 +1,13 @@
 package de.tobias.playpad.update;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.application.system.NativeApplication;
+import de.thecodelabs.utils.io.IOUtils;
+import de.thecodelabs.utils.util.OS;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.updater.client.UpdateRegistery;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.NativeLauncher;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.io.IOUtils;
-import de.tobias.utils.util.OS;
 import javafx.application.Platform;
 
 import java.io.IOException;
@@ -96,7 +96,7 @@ public class Updates {
 
 	private static void startExeFile(String parameter, Path fileExe, boolean needAdminPermission) throws IOException {
 		if (needAdminPermission) {
-			NativeLauncher.executeAsAdministrator(fileExe.toAbsolutePath().toString(), parameter);
+			NativeApplication.sharedInstance().executeAsAdministrator(fileExe.toAbsolutePath().toString(), parameter);
 		} else {
 			ProcessBuilder builder = new ProcessBuilder(fileExe.toAbsolutePath().toString(), parameter);
 			builder.start();

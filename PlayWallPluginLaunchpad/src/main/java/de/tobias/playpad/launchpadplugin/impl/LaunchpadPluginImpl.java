@@ -1,5 +1,6 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.launchpadplugin.LaunchpadPlugin;
 import de.tobias.playpad.launchpadplugin.midi.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.s.LaunchPadS;
@@ -7,7 +8,6 @@ import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.updater.client.Updatable;
-import de.tobias.utils.util.Localization;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 import net.xeoh.plugins.base.annotations.events.PluginLoaded;
 import net.xeoh.plugins.base.annotations.events.Shutdown;

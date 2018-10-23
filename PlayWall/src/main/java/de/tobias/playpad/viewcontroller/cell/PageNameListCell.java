@@ -1,9 +1,9 @@
 package de.tobias.playpad.viewcontroller.cell;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.page.Page;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.ListCell;
 
 public final class PageNameListCell extends ListCell<Integer> {

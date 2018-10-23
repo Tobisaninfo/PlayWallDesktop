@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -14,7 +15,6 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.util.Localization;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;

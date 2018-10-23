@@ -1,6 +1,13 @@
 package de.tobias.playpad.viewcontroller;
 
 import com.neovisionaries.ws.client.WebSocketException;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -22,13 +29,6 @@ import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -51,7 +51,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static de.tobias.utils.util.Localization.getString;
+import static de.thecodelabs.utils.util.Localization.getString;
 
 public class LaunchDialog extends NVC implements ChangeListener<ConnectionState> {
 

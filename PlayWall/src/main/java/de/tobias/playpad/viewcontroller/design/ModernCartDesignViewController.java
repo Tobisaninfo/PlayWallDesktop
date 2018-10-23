@@ -1,11 +1,11 @@
 package de.tobias.playpad.viewcontroller.design;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.view.ColorPickerView;
-import de.tobias.utils.ui.NVC;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

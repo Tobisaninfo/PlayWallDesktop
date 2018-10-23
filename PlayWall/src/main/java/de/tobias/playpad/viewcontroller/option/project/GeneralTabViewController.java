@@ -1,5 +1,7 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
+import de.thecodelabs.utils.ui.Alertable;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
@@ -9,8 +11,6 @@ import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProjectSettingsTabViewController;
-import de.tobias.utils.ui.Alertable;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

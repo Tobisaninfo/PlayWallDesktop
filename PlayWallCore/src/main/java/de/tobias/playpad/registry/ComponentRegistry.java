@@ -1,9 +1,9 @@
 package de.tobias.playpad.registry;
 
-import de.tobias.logger.LogLevel;
-import de.tobias.logger.Logger;
+import de.thecodelabs.logger.LogLevel;
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.icon.FontIconType;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.utils.ui.icon.FontIconType;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;

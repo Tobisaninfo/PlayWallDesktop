@@ -1,5 +1,13 @@
 package de.tobias.playpad.awakeplugin;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.application.system.NativeApplication;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.OS;
+import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.Profile;
@@ -8,14 +16,6 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.application.system.NativeApplication;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.OS;
-import de.tobias.utils.util.OS.OSType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;

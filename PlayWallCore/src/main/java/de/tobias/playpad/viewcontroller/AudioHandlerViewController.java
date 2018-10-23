@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.audio.AudioHandlerFactory;
-import de.tobias.utils.ui.NVC;
 
 import java.util.ResourceBundle;
 

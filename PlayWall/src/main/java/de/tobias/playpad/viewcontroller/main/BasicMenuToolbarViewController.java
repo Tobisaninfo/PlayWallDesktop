@@ -1,12 +1,12 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

@@ -1,8 +1,8 @@
 package de.tobias.playpad.pad.mediapath;
 
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 
 import java.io.IOException;
 import java.nio.file.Files;

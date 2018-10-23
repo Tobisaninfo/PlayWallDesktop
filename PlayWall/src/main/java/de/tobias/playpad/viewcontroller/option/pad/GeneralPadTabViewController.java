@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -8,7 +9,6 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
-import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

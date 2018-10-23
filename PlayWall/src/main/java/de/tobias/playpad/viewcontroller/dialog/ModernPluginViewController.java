@@ -1,5 +1,9 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -9,10 +13,6 @@ import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

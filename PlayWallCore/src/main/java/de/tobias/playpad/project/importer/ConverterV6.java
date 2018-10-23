@@ -1,9 +1,9 @@
 package de.tobias.playpad.project.importer;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

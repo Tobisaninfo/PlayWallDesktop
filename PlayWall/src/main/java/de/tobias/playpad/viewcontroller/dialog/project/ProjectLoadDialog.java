@@ -1,11 +1,11 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ProjectReader;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,11 +1,11 @@
 package de.tobias.playpad.pad;
 
+import de.thecodelabs.storage.settings.UserDefaults;
 import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.serializer.ModernCartDesignSerializer;
 import de.tobias.playpad.settings.Fade;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
-import de.tobias.utils.settings.UserDefaults;
 import javafx.util.Duration;
 import org.dom4j.Element;
 

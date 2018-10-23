@@ -1,6 +1,6 @@
 package de.tobias.playpad.util;
 
-import de.tobias.utils.settings.UserDefaults;
+import de.thecodelabs.storage.settings.UserDefaults;
 import org.dom4j.Element;
 
 import java.util.UUID;

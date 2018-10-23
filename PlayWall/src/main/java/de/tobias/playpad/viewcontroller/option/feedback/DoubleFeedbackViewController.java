@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
@@ -7,9 +10,6 @@ import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.view.ColorPickerView;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

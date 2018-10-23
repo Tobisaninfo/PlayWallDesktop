@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import de.thecodelabs.utils.ui.Alertable;
+import de.thecodelabs.utils.ui.NotificationHandler;
+import de.thecodelabs.utils.ui.scene.NotificationPane;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
@@ -7,9 +10,6 @@ import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MainLayoutHandler;
-import de.tobias.utils.ui.Alertable;
-import de.tobias.utils.ui.NotificationHandler;
-import de.tobias.utils.ui.scene.NotificationPane;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;

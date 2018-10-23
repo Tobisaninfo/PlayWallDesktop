@@ -2,11 +2,11 @@ package de.tobias.playpad.plugin.loader
 
 import java.nio.file.Files
 
+import de.thecodelabs.utils.application.container.PathType
+import de.thecodelabs.utils.application.{App, ApplicationUtils}
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.audio.windows.NativeAudioWinHandlerFactory
 import de.tobias.playpad.plugin.Module
-import de.tobias.utils.application.container.PathType
-import de.tobias.utils.application.{App, ApplicationUtils}
 import net.sf.jni4net.Bridge
 
 /**

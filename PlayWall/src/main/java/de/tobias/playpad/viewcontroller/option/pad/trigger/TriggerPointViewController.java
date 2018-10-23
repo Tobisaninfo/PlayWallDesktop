@@ -1,14 +1,14 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.trigger.TriggerDisplayable;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;

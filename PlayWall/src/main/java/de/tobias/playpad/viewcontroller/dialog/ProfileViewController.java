@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -13,9 +16,6 @@ import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
 import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
 import de.tobias.playpad.viewcontroller.dialog.profile.ProfileDuplicateDialog;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

@@ -1,11 +1,12 @@
 <Actions>
-    <Component id="move" name="DnDMode.Move" icon="ARROWS" class="de.tobias.utils.ui.icon.FontAwesomeType" size="30">
+    <Component id="move" name="DnDMode.Move" icon="ARROWS" class="de.thecodelabs.utils.ui.icon.FontAwesomeType"
+               size="30">
         de.tobias.playpad.pad.drag.MoveDragMode
     </Component>
-    <Component id="duplicate" name="DnDMode.Duplicate" icon="COPY" class="de.tobias.utils.ui.icon.FontAwesomeType"
+    <Component id="duplicate" name="DnDMode.Duplicate" icon="COPY" class="de.thecodelabs.utils.ui.icon.FontAwesomeType"
                size="30">de.tobias.playpad.pad.drag.DuplicateDragMode
     </Component>
     <Component id="replace" name="DnDMode.Replace" icon="ARROW_CIRCLE_RIGHT"
-               class="de.tobias.utils.ui.icon.FontAwesomeType" size="30">de.tobias.playpad.pad.drag.ReplaceDragMode
+               class="de.thecodelabs.utils.ui.icon.FontAwesomeType" size="30">de.tobias.playpad.pad.drag.ReplaceDragMode
     </Component>
 </Actions>

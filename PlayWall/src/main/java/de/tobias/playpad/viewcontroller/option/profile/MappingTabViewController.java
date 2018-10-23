@@ -1,5 +1,8 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -16,9 +19,6 @@ import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

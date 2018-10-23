@@ -1,9 +1,9 @@
 package de.tobias.playpad.server;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.utils.application.ApplicationUtils;
 import javafx.application.Application;
 
 import java.util.Map;

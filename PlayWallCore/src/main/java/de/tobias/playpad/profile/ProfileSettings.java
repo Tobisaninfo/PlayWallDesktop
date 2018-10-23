@@ -1,12 +1,12 @@
 package de.tobias.playpad.profile;
 
+import de.thecodelabs.storage.settings.UserDefaults;
+import de.thecodelabs.storage.settings.annotation.Key;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.settings.Fade;
-import de.tobias.utils.settings.Key;
-import de.tobias.utils.settings.UserDefaults;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;

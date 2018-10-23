@@ -1,10 +1,10 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;

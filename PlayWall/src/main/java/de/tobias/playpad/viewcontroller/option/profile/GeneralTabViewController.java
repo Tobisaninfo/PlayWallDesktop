@@ -1,15 +1,15 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.ui.Alertable;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.NumberUtils;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.ui.Alertable;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

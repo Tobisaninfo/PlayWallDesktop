@@ -1,5 +1,9 @@
 package de.tobias.playpad.mediaplugin.main.impl;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.ui.scene.HUD;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.MediaPlugin;
@@ -11,10 +15,6 @@ import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.updater.client.Updatable;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.scene.HUD;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

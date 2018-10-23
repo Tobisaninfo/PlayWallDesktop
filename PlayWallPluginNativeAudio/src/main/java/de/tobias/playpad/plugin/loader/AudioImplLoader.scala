@@ -3,8 +3,8 @@ package de.tobias.playpad.plugin.loader
 import java.io.IOException
 import java.nio.file.Path
 
+import de.thecodelabs.utils.io.IOUtils
 import de.tobias.playpad.plugin.Module
-import de.tobias.utils.io.IOUtils
 
 /**
   * Created by tobias on 16.04.17.

@@ -1,5 +1,11 @@
 package de.tobias.playpad.layout.desktop;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.ui.scene.NotificationPane;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -39,12 +45,6 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.global.GlobalSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewController;
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.scene.NotificationPane;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;

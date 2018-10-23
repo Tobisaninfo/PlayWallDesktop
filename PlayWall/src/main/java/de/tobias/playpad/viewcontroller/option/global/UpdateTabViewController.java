@@ -1,5 +1,9 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.utils.application.ApplicationInfo;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -13,10 +17,6 @@ import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.updater.client.UpdateRegistery;
-import de.tobias.utils.application.ApplicationInfo;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

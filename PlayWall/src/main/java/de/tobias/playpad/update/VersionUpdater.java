@@ -1,7 +1,7 @@
 package de.tobias.playpad.update;
 
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.update.UpdateService;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.update.UpdateService;
 
 public class VersionUpdater implements UpdateService {
 

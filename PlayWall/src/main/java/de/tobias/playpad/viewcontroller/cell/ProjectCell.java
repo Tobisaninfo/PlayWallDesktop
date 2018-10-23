@@ -1,13 +1,13 @@
 package de.tobias.playpad.viewcontroller.cell;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;

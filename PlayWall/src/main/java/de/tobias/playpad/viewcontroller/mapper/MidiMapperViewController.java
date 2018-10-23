@@ -1,5 +1,7 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.feedback.FeedbackType;
@@ -13,8 +15,6 @@ import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
 import de.tobias.playpad.viewcontroller.option.feedback.SingleFeedbackViewController;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

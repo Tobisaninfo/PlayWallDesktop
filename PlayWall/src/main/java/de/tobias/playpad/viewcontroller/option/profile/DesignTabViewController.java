@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
@@ -10,7 +11,6 @@ import de.tobias.playpad.viewcontroller.design.ModernGlobalDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;

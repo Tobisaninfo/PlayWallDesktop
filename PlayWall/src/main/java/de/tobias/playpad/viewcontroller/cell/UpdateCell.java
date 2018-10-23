@@ -1,9 +1,9 @@
 package de.tobias.playpad.viewcontroller.cell;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.update.PlayPadUpdater;
 import de.tobias.updater.client.Updatable;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 

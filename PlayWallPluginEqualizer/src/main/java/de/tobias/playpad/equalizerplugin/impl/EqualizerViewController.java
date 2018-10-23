@@ -1,15 +1,15 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.NumberUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.NumberUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;

@@ -1,5 +1,9 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.thecodelabs.utils.ui.animation.PulseTranslation;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.ui.scene.BusyView;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.DesignColorAssociator;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
@@ -18,10 +22,6 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.playpad.view.PseudoClasses;
-import de.tobias.utils.ui.animation.PulseTranslation;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
-import de.tobias.utils.ui.scene.BusyView;
 import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;

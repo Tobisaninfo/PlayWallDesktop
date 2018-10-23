@@ -1,12 +1,12 @@
 package de.tobias.playpad.audio.viewcontroller;
 
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

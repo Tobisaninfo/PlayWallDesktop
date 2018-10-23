@@ -1,10 +1,10 @@
 package de.tobias.playpad.profile.ref;
 
+import de.thecodelabs.storage.xml.XMLDeserializer;
+import de.thecodelabs.storage.xml.XMLHandler;
+import de.thecodelabs.storage.xml.XMLSerializer;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.ModuleSerializer;
-import de.tobias.utils.xml.XMLDeserializer;
-import de.tobias.utils.xml.XMLHandler;
-import de.tobias.utils.xml.XMLSerializer;
 import org.dom4j.Element;
 
 import java.util.HashSet;
@@ -32,8 +32,7 @@ public class ProfileReferenceSerializer implements XMLSerializer<ProfileReferenc
 		XMLHandler<Module> handler = new XMLHandler<>(element);
 		Set<Module> modules = new HashSet<>(handler.loadElements(MODULE_ELEMENT, new ModuleSerializer()));
 
-		ProfileReference ref = new ProfileReference(uuid, name, modules);
-		return ref;
+		return new ProfileReference(uuid, name, modules);
 	}
 
 	@Override

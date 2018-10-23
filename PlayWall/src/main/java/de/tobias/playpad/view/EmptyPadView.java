@@ -1,7 +1,7 @@
 package de.tobias.playpad.view;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
-import de.tobias.utils.util.Localization;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;

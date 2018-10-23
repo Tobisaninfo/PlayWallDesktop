@@ -1,5 +1,7 @@
 package de.tobias.playpad.mediaplugin.blindaction;
 
+import de.thecodelabs.utils.ui.icon.FontAwesomeType;
+import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
@@ -8,8 +10,6 @@ import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.ui.icon.FontAwesomeType;
-import de.tobias.utils.ui.icon.FontIcon;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

@@ -1,8 +1,8 @@
 package de.tobias.playpad.action;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.utils.ui.NVC;
 
 /**
  * Einn zusätzliches Interface für die Klasse {@link ActionFactory} oder {@link Action} mit der es möglich ist für ein ActionType oder eine

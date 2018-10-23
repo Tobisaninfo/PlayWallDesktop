@@ -1,9 +1,9 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.Midi;
-import de.tobias.utils.util.Localization;
 
 public class MidiMapperFactory extends MapperFactory implements MapperConnectFeedbackable {
 

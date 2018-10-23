@@ -1,7 +1,7 @@
 package de.tobias.playpad.midi.device;
 
-import de.tobias.logger.LogLevel;
-import de.tobias.logger.Logger;
+import de.thecodelabs.logger.LogLevel;
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;

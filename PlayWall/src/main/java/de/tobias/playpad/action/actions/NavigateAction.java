@@ -1,5 +1,6 @@
 package de.tobias.playpad.action.actions;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
@@ -7,7 +8,6 @@ import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.util.Localization;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

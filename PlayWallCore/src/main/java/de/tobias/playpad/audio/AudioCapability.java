@@ -1,7 +1,7 @@
 package de.tobias.playpad.audio;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.pad.content.play.Equalizeable;
-import de.tobias.utils.util.Localization;
 
 import java.util.ArrayList;
 import java.util.List;

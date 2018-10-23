@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.actions;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.actions.cart.CartAction;
@@ -7,7 +8,6 @@ import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
-import de.tobias.utils.ui.NVC;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;

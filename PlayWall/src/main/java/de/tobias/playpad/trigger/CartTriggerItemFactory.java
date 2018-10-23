@@ -1,12 +1,12 @@
 package de.tobias.playpad.trigger;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.CartTriggerViewController;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
 
 public class CartTriggerItemFactory extends TriggerItemFactory {
 

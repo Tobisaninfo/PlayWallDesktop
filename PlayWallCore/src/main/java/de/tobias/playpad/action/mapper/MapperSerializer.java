@@ -1,10 +1,10 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.storage.xml.XMLDeserializer;
+import de.thecodelabs.storage.xml.XMLSerializer;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.Action;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.utils.xml.XMLDeserializer;
-import de.tobias.utils.xml.XMLSerializer;
 import org.dom4j.Element;
 
 /**

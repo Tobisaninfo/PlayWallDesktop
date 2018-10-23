@@ -1,7 +1,7 @@
 package de.tobias.playpad.settings.keys;
 
-import de.tobias.utils.xml.XMLDeserializer;
-import de.tobias.utils.xml.XMLSerializer;
+import de.thecodelabs.storage.xml.XMLDeserializer;
+import de.thecodelabs.storage.xml.XMLSerializer;
 import org.dom4j.Element;
 
 public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {

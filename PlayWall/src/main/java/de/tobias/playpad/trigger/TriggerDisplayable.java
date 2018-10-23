@@ -1,10 +1,10 @@
 package de.tobias.playpad.trigger;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
-import de.tobias.utils.util.Localization;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

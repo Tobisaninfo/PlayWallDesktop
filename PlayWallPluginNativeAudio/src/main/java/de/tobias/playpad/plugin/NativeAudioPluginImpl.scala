@@ -1,9 +1,9 @@
 package de.tobias.playpad.plugin
 
+import de.thecodelabs.utils.util.OS
+import de.thecodelabs.utils.util.OS.OSType
 import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoader}
 import de.tobias.updater.client.Updatable
-import de.tobias.utils.util.OS
-import de.tobias.utils.util.OS.OSType
 import net.xeoh.plugins.base.annotations.PluginImplementation
 import net.xeoh.plugins.base.annotations.events.PluginLoaded
 

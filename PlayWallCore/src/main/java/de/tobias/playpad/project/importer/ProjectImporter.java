@@ -1,5 +1,9 @@
 package de.tobias.playpad.project.importer;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
+import de.thecodelabs.utils.util.zip.ZipFile;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.profile.ProfileNotFoundException;
@@ -11,10 +15,6 @@ import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
-import de.tobias.utils.util.zip.ZipFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -71,7 +71,7 @@ public class ProjectImporter {
 		App app = ApplicationUtils.getApplication();
 
 		// Load Zip Informations
-		InputStream infoInputStream = zip.inputStream(Paths.get("info.xml"));
+		InputStream infoInputStream = zip.inputStream("info.xml");
 		if (infoInputStream == null) {
 			// TODO Throw exception
 		}

@@ -1,5 +1,7 @@
 package de.tobias.playpad.design;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.modern.*;
@@ -11,8 +13,6 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.view.ColorPickerView;
 import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;

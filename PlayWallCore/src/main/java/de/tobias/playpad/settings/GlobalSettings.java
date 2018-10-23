@@ -1,10 +1,10 @@
 package de.tobias.playpad.settings;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.updater.client.UpdateChannel;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

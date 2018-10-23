@@ -1,5 +1,9 @@
 package de.tobias.playpad.viewcontroller;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -8,10 +12,6 @@ import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
 import de.tobias.playpad.server.SessionDelegate;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static de.tobias.utils.util.Localization.getString;
+import static de.thecodelabs.utils.util.Localization.getString;
 
 /**
  * Created by tobias on 21.02.17.

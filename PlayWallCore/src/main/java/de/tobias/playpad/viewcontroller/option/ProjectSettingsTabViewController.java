@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.option;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.utils.ui.NVC;
 
 /**
  * Abstracter Tab für Project Einstellungen.

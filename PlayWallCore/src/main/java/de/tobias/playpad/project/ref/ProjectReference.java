@@ -1,14 +1,14 @@
 package de.tobias.playpad.project.ref;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.sync.conflict.Version;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import javafx.beans.property.*;
 
 import java.nio.file.Path;

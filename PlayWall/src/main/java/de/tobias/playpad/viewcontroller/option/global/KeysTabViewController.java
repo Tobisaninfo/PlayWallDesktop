@@ -1,5 +1,7 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.OS;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -9,8 +11,6 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.IGlobalReloadTask;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.OS;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

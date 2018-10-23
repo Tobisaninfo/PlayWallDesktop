@@ -1,11 +1,11 @@
 package de.tobias.playpad.pad.content;
 
+import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.utils.io.PathUtils;
 import javafx.scene.layout.Pane;
 
 import java.nio.file.Path;

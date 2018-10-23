@@ -1,9 +1,9 @@
 package de.tobias.playpad.project;
 
+import de.thecodelabs.storage.xml.XMLHandler;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.page.PageSerializer;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

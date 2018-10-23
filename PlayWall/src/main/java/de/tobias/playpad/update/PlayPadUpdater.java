@@ -1,13 +1,14 @@
 package de.tobias.playpad.update;
 
+import de.thecodelabs.storage.settings.StorageTypes;
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.remote.RemoteResource;
+import de.thecodelabs.utils.application.remote.RemoteResourceType;
+import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateChannel;
 import de.tobias.updater.client.UpdateItem;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.remote.RemoteResource;
-import de.tobias.utils.application.remote.RemoteResourceType;
-import de.tobias.utils.util.SystemUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,7 +43,7 @@ public class PlayPadUpdater implements Updatable {
 	public void loadInformation(UpdateChannel channel) throws MalformedURLException {
 		App app = ApplicationUtils.getMainApplication();
 		RemoteResource update = app.getRemoteResource(RemoteResourceType.UPDATE, channel.toString(), "version.yml");
-		updateItem = update.getAsYaml(UpdateItem.class);
+		updateItem = update.deserialize(StorageTypes.YAML, UpdateItem.class);
 
 		String remotePath;
 		if (SystemUtils.isExe()) {

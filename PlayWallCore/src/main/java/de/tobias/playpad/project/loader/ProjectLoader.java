@@ -1,5 +1,6 @@
 package de.tobias.playpad.project.loader;
 
+import de.thecodelabs.utils.threading.Worker;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -10,7 +11,6 @@ import de.tobias.playpad.project.*;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
-import de.tobias.utils.threading.Worker;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;

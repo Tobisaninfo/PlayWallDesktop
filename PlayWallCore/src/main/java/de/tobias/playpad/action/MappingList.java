@@ -1,7 +1,7 @@
 package de.tobias.playpad.action;
 
+import de.thecodelabs.storage.xml.XMLHandler;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.utils.xml.XMLHandler;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;

@@ -1,11 +1,11 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.util.Localization;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;

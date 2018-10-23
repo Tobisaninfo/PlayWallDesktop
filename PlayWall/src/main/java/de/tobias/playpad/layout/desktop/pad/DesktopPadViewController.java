@@ -1,5 +1,8 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
@@ -20,9 +23,6 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.util.Localization;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

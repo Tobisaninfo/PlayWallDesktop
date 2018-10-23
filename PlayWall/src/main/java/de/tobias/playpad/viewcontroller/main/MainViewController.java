@@ -1,5 +1,13 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.NotificationHandler;
+import de.thecodelabs.utils.ui.scene.NotificationPane;
+import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.utils.util.OS;
+import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -31,14 +39,6 @@ import de.tobias.playpad.viewcontroller.dialog.SaveDialog;
 import de.tobias.playpad.viewcontroller.main.listener.LayoutChangedListener;
 import de.tobias.playpad.viewcontroller.main.listener.LockedListener;
 import de.tobias.playpad.viewcontroller.main.listener.VolumeChangeListener;
-import de.tobias.utils.threading.Worker;
-import de.tobias.utils.ui.NVC;
-import de.tobias.utils.ui.NVCStage;
-import de.tobias.utils.ui.NotificationHandler;
-import de.tobias.utils.ui.scene.NotificationPane;
-import de.tobias.utils.util.Localization;
-import de.tobias.utils.util.OS;
-import de.tobias.utils.util.OS.OSType;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;

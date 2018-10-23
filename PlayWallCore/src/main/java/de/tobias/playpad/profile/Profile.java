@@ -1,12 +1,12 @@
 package de.tobias.playpad.profile;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.MappingList;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.utils.application.App;
-import de.tobias.utils.application.ApplicationUtils;
-import de.tobias.utils.application.container.PathType;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
