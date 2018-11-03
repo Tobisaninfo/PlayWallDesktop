@@ -258,7 +258,9 @@ public class PadSettings implements Cloneable {
 			clone.warningProperty = new SimpleObjectProperty<>();
 
 		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		clone.design = design.clone(pad);
+		if (design != null) {
+			clone.design = design.clone(pad);
+		}
 
 		clone.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
 		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert

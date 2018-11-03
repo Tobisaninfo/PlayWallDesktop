@@ -173,8 +173,6 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				PadIndex srcIndex = (PadIndex) data;
 				PadIndex newIndex = currentPad.getPadIndex(); // Lister ist auf Ziel Pad, daher ist der Index von currentPad
 
-				System.out.println(newIndex);
-
 				// Drag handle
 				PadDragMode mode = padHud.getSelectedPadDragMode();
 				success = mode.handle(srcIndex, newIndex, project);
