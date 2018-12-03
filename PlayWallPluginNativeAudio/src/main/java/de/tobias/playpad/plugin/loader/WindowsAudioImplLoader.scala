@@ -12,7 +12,7 @@ import net.sf.jni4net.Bridge
 /**
   * Created by tobias on 16.04.17.
   */
-class WindowsAudioImplLoader extends AudioImplLoader {
+class WindowsAudioImplLoader extends AudioModuleLoader {
 
 	private val ASSETS = "win/"
 

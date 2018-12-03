@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
+  <component name="ExternalSystem" externalSystem="Maven" />
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -19,6 +20,7 @@
     <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.dom4j:dom4j:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: com.hp.gagawa:gagawa:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:23.3-jre" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.0.18" level="project" />
@@ -30,7 +32,6 @@
     <orderEntry type="library" name="Maven: de.thecodelabs:libLogger:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:1.17.1" level="project" />
     <orderEntry type="library" name="Maven: de.tobias:Updater:1.0.5" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.23.1" level="project" />
     <orderEntry type="library" name="Maven: net.xeoh:jspf:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: kuusisto:tinysound:1.1.1" level="project" />

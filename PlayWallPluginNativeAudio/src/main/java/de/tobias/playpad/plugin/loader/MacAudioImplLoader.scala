@@ -11,19 +11,20 @@ import de.tobias.playpad.plugin.Module
 /**
   * Created by tobias on 16.04.17.
   */
-class MacAudioImplLoader extends AudioImplLoader {
+class MacAudioImplLoader extends AudioModuleLoader {
 
 	private val ASSETS = "mac/"
 
 	override def preInit(): Unit = {
 		val app = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.LIBRARY, "Native")
+		val resourceFolder = app.getPath(PathType.NATIVE_LIBRARY)
 		if (Files.notExists(resourceFolder)) {
 			Files.createDirectories(resourceFolder)
 		}
 
-		val dest = copyResource(resourceFolder, ASSETS, "libNativeAudio.dylib")
-		System.load(dest.toString)
+		val (dest, copied) = copyResource(resourceFolder, ASSETS, "libNativeAudio.dylib")
+		if (copied)
+			System.load(dest.toString)
 	}
 
 	override def init(module: Module): Unit = {
