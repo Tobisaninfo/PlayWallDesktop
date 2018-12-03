@@ -1,7 +1,7 @@
 package de.tobias.playpad.plugin.loader
 
 import java.io.IOException
-import java.nio.file.{Files, Path}
+import java.nio.file.Path
 
 import de.thecodelabs.utils.io.IOUtils
 import de.tobias.playpad.plugin.Module
@@ -21,10 +21,9 @@ trait AudioModuleLoader {
 	def init(module: Module): Unit
 
 	@throws[IOException]
-	def copyResource(resourceFolder: Path, packageName: String, file: String): (Path, Boolean) = {
+	def copyResource(resourceFolder: Path, packageName: String, file: String): Path = {
 		val dest = resourceFolder.resolve(file)
-		val exists = Files.exists(dest)
 		IOUtils.copy(getClass.getClassLoader.getResourceAsStream(packageName + file), dest)
-		(dest, exists)
+		dest
 	}
 }

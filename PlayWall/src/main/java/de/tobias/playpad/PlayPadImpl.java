@@ -231,12 +231,14 @@ public class PlayPadImpl implements PlayPad {
 			session = delegate.getSession();
 		}
 
-		// Connect to Server
-		Server server = PlayPadPlugin.getServerHandler().getServer();
-		try {
-			server.connect(session.getKey());
-		} catch (IOException | WebSocketException e) {
-			e.printStackTrace();
+		if (session != null) {
+			// Connect to Server
+			Server server = PlayPadPlugin.getServerHandler().getServer();
+			try {
+				server.connect(session.getKey());
+			} catch (IOException | WebSocketException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

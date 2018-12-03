@@ -1,6 +1,5 @@
 package de.tobias.playpad;
 
-import com.mashape.unirest.http.Unirest;
 import de.thecodelabs.logger.FileOutputOption;
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.LogLevelFilter;
@@ -34,6 +33,7 @@ import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import de.tobias.updater.client.UpdateRegistery;
+import io.github.openunirest.http.Unirest;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.ButtonBar.ButtonData;

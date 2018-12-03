@@ -12,7 +12,6 @@ import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
 import de.tobias.playpad.server.SessionDelegate;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -64,8 +63,6 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@Override
 	public void initStage(Stage stage) {
-		stage.setOnCloseRequest(e -> Platform.exit());
-
 		stage.setTitle(getString(Strings.UI_Dialog_Login_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 

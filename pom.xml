@@ -25,7 +25,7 @@
         <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
 
         <nv-websocket-client.version>2.6</nv-websocket-client.version>
-        <unirest-java.version>1.4.9</unirest-java.version>
+        <unirest-java.version>2.5.03</unirest-java.version>
 
         <jspf.version>1.0.2</jspf.version>
 
@@ -117,7 +117,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.mashape.unirest</groupId>
+            <groupId>io.github.openunirest</groupId>
             <artifactId>unirest-java</artifactId>
             <version>${unirest-java.version}</version>
         </dependency>

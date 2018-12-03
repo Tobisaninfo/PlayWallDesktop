@@ -15,16 +15,20 @@ class MacAudioImplLoader extends AudioModuleLoader {
 
 	private val ASSETS = "mac/"
 
+	private var loaded: Boolean = false
+
 	override def preInit(): Unit = {
 		val app = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.NATIVE_LIBRARY)
+		val resourceFolder = app.getPath(PathType.LIBRARY, "Audio")
 		if (Files.notExists(resourceFolder)) {
 			Files.createDirectories(resourceFolder)
 		}
 
-		val (dest, copied) = copyResource(resourceFolder, ASSETS, "libNativeAudio.dylib")
-		if (copied)
+		if (!loaded) {
+			val dest = copyResource(resourceFolder, ASSETS, "libNativeAudio.dylib")
 			System.load(dest.toString)
+			loaded = true
+		}
 	}
 
 	override def init(module: Module): Unit = {
