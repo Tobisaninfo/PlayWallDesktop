@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
 import com.neovisionaries.ws.client.WebSocketException;
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
@@ -20,9 +21,7 @@ import de.tobias.playpad.project.importer.ConverterV6;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.server.ConnectionState;
-import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.Session;
+import de.tobias.playpad.server.*;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
@@ -265,12 +264,14 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	private void cloudIconClicked(MouseEvent event) {
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		if (server.getConnectionState() == ConnectionState.DISCONNECTED) {
-			LoginViewController loginViewController = new LoginViewController();
-			Session session = loginViewController.getSession();
+			SessionDelegate sessionDelegate = new LoginViewController();
+			Session session = sessionDelegate.getSession();
 			try {
 				server.connect(session.getKey());
 			} catch (IOException | WebSocketException e) {
 				e.printStackTrace();
+			} catch (SessionNotExisitsException ignored) {
+				Logger.warning("Session not exists");
 			}
 		}
 	}

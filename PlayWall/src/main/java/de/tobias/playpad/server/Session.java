@@ -12,7 +12,9 @@ import java.nio.file.Path;
  */
 public class Session {
 
-	private static final String SESSION_KEY = "session.key";
+	public static final Session EMPTY = new Session(null);
+
+	private static final String SESSION_KEY = "session.txt";
 
 	private String key;
 
@@ -20,7 +22,10 @@ public class Session {
 		this.key = key;
 	}
 
-	public String getKey() {
+	public String getKey() throws SessionNotExisitsException {
+		if (key == null) {
+			throw new SessionNotExisitsException();
+		}
 		return key;
 	}
 
@@ -31,10 +36,14 @@ public class Session {
 			return new Session(new String(key));
 		} catch (IOException ignored) {
 		}
-		return null;
+		return EMPTY;
 	}
 
 	public void save() {
+		if (key == null) {
+			return;
+		}
+
 		Path path = getPath();
 		try {
 			if (Files.notExists(path)) {

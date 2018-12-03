@@ -73,7 +73,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 		commands.put(Commands.PAD_SETTINGS_ADD, new PadSettingsAddListener());
 		commands.put(Commands.PAD_SETTINGS_UPDATE, new PadSettingsUpdateListener());
 
-		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.CONNECTION_LOST);
+		connectionStateProperty = new SimpleObjectProperty<>(ConnectionState.DISCONNECTED);
 	}
 
 	@Override

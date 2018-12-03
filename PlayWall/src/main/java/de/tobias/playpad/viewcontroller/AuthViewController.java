@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller;
 
 import de.thecodelabs.utils.ui.NVC;
-import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -72,7 +71,7 @@ public class AuthViewController extends NVC {
 		try {
 			boolean success = authBasedRunnable.run(username, password);
 			if (success) {
-				getStageContainer().ifPresent(NVCStage::close);
+				closeStage();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

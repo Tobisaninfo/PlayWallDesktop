@@ -46,6 +46,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 	private Session session;
 
 	public LoginViewController() {
+		this.session = Session.EMPTY;
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 		stage.setResizable(false);
 		stage.setWidth(650);
-		stage.setHeight(300);
+		stage.setHeight(350);
 		stage.centerOnScreen();
 	}
 
@@ -98,6 +99,11 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@FXML
+	private void skipHandler(ActionEvent event) {
+		closeStage();
 	}
 
 	@Override

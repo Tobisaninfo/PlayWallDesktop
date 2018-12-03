@@ -30,6 +30,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.server.Session;
+import de.tobias.playpad.server.SessionNotExisitsException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
@@ -56,12 +57,12 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -588,15 +589,16 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void logoutMenuHandler(ActionEvent event) {
 		AuthViewController authViewController = new AuthViewController(Localization.getString(Strings.Auth_Logout), (username, password) -> {
 			Session session = Session.load();
-			if (session != null) {
+			try {
 				PlayPadPlugin.getServerHandler().getServer().logout(username, password, session.getKey());
 				session.delete();
 				Platform.exit();
 				return true;
+			} catch (SessionNotExisitsException e) {
+				return false;
 			}
-			return false;
 		});
-		authViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
+		authViewController.showStage();
 	}
 
 	@FXML

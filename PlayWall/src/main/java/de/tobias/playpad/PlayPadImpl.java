@@ -17,9 +17,7 @@ import de.tobias.playpad.midi.PD12;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.Server;
-import de.tobias.playpad.server.Session;
-import de.tobias.playpad.server.SessionDelegate;
+import de.tobias.playpad.server.*;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.MapperListViewControllerImpl;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
@@ -128,7 +126,10 @@ public class PlayPadImpl implements PlayPad {
 			}
 		});
 
-		PlayPadPlugin.getServerHandler().getServer().disconnect();
+		final Server server = PlayPadPlugin.getServerHandler().getServer();
+		if (server.getConnectionState() != ConnectionState.DISCONNECTED) {
+			server.disconnect();
+		}
 
 		try {
 			LogSeasons.getStorageHandler().close();
@@ -231,13 +232,15 @@ public class PlayPadImpl implements PlayPad {
 			session = delegate.getSession();
 		}
 
-		if (session != null) {
+		if (session != Session.EMPTY) {
 			// Connect to Server
 			Server server = PlayPadPlugin.getServerHandler().getServer();
 			try {
 				server.connect(session.getKey());
 			} catch (IOException | WebSocketException e) {
 				e.printStackTrace();
+			} catch (SessionNotExisitsException ignored) {
+
 			}
 		}
 	}
