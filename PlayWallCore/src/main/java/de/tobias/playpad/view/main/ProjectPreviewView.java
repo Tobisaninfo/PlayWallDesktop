@@ -33,30 +33,35 @@ public class ProjectPreviewView extends Pagination {
 			for (int x = 0; x < project.getSettings().getColumns(); x++) {
 				for (int y = 0; y < project.getSettings().getRows(); y++) {
 					final Pad pad = page.getPad(x, y);
-					ToggleButton toggleButton = new ToggleButton(String.valueOf(pad.getPositionReadable()));
-					if (pad.getStatus() != PadStatus.EMPTY) {
-						toggleButton.setTooltip(new Tooltip(pad.getName()));
-					}
-					if (preSelect.contains(pad)) {
-						toggleButton.setSelected(true);
-					}
-					toggleButton.setMinWidth(35);
-					toggleButton.setPrefWidth(35);
-					toggleButton.setMaxWidth(35);
-
-					toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
-						if (newValue) {
-							selected.add(pad);
-						} else {
-							selected.remove(pad);
-						}
-					});
+					ToggleButton toggleButton = getToggleButton(preSelect, pad);
 
 					gridPane.add(toggleButton, x, y);
 				}
 			}
 			return gridPane;
 		});
+	}
+
+	private ToggleButton getToggleButton(List<Pad> preSelect, Pad pad) {
+		ToggleButton toggleButton = new ToggleButton(String.valueOf(pad.getPositionReadable()));
+		if (pad.getStatus() != PadStatus.EMPTY) {
+			toggleButton.setTooltip(new Tooltip(pad.getName()));
+		}
+		if (preSelect.contains(pad)) {
+			toggleButton.setSelected(true);
+		}
+		toggleButton.setMinWidth(35);
+		toggleButton.setPrefWidth(35);
+		toggleButton.setMaxWidth(35);
+
+		toggleButton.selectedProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue) {
+				selected.add(pad);
+			} else {
+				selected.remove(pad);
+			}
+		});
+		return toggleButton;
 	}
 
 	public List<Pad> getSelected() {

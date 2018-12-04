@@ -139,7 +139,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinHeight(550);
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	private void showCurrentSettings() {

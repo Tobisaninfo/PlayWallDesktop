@@ -97,7 +97,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void applyCss(ModernGlobalDesign design, Stage stage) {
+	public void applyStyleSheet(ModernGlobalDesign design, Stage stage) {
 		// Add Build in Default
 		stage.getScene().getStylesheets().add("style/style.css");
 		stage.getScene().getStylesheets().add("style/modern.css");
@@ -109,16 +109,14 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	@Override
-	public void applyCssMainView(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project) {
-		applyCss(design, stage);
+	public void applyStyleSheetToMainViewController(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project) {
+		applyStyleSheet(design, stage);
 
 		controller.setGridColor(Color.TRANSPARENT);
 
+		// Generate dynamic style sheet
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "custom_style.css");
-
 		StringBuilder css = new StringBuilder(convertToCSS(design));
-
-		// Pad Spezelles Layout immer
 		ModernCartDesignHandler cartDesignHandler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
 		for (Pad pad : project.getPads()) {
 			PadSettings padSettings = pad.getPadSettings();
@@ -128,8 +126,6 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 				css.append("\n").append(cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), true, design.isFlatDesign()));
 			}
 		}
-
-		// Speichern der generierten CSS Datei
 		try {
 			Files.write(path, css.toString().getBytes());
 		} catch (IOException e) {
@@ -156,8 +152,8 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 	}
 
 	private void warnAnimation(ModernGlobalDesign design, IPadViewController controller, Duration warning) {
-		FadeableColor stopColor = new FadeableColor(design.getBackgroundColor().getColorHi(), design.getBackgroundColor().getColorLow());
-		FadeableColor playColor = new FadeableColor(design.getPlayColor().getColorHi(), design.getPlayColor().getColorLow());
+		FadeableColor stopColor = design.getBackgroundColor().toFadeableColor();
+		FadeableColor playColor = design.getPlayColor().toFadeableColor();
 
 		Pad pad = controller.getPad();
 

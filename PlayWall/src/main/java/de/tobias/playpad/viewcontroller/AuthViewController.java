@@ -60,7 +60,7 @@ public class AuthViewController extends NVC {
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Login_Title));
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	@FXML

@@ -100,7 +100,7 @@ public class EqualizerViewController extends NVC {
 		stage.setMinHeight(250);
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 		stage.getScene().getStylesheets().add("style/style.css");
 	}
 

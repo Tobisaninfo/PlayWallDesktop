@@ -75,7 +75,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	/**

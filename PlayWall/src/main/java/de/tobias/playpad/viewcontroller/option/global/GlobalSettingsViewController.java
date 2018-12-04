@@ -72,7 +72,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	/**

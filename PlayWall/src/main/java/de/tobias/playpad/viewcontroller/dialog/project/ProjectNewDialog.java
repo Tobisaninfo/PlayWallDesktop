@@ -84,7 +84,7 @@ public class ProjectNewDialog extends NVC {
 
 		if (Profile.currentProfile() != null) {
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 		}
 	}
 

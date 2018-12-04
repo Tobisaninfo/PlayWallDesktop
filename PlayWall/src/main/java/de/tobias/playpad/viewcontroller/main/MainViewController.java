@@ -529,7 +529,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		// design specific css
 		if (openProject != null) {
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCssMainView(design, this, getStage(), openProject);
+			PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
 			// Mapping feedback
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();

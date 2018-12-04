@@ -179,7 +179,7 @@ public class ProjectManagerDialog extends NVC {
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	public Optional<ProjectReference> showAndWait() {

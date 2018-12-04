@@ -39,6 +39,10 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.initStyle(StageStyle.UNDECORATED);
 
+		// TODO Rewrite
+		stage.getScene().getStylesheets().add("style/style.css");
+		stage.getScene().getStylesheets().add("style/modern.css");
+
 		stage.setAlwaysOnTop(true);
 		stage.centerOnScreen();
 	}

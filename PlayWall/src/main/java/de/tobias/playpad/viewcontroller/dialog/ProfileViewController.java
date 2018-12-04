@@ -101,7 +101,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	@FXML

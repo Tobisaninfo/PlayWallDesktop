@@ -10,7 +10,6 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
 import java.util.HashMap;
@@ -24,36 +23,6 @@ public class ModernDesignAnimator {
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
 	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
-		int index = padViewController.getPad().getPosition();
-
-		if (timelines.containsKey(index)) {
-			timelines.get(index).stop();
-		}
-
-		ChangeListener<FadeableColor> fadeListener = new ChangeListener<FadeableColor>() {
-
-			@Override
-			public void changed(ObservableValue<? extends FadeableColor> observable, FadeableColor oldValue, FadeableColor newValue) {
-				padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
-			}
-		};
-
-		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
-		backgroundColor.addListener(fadeListener);
-
-		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
-				new KeyFrame(duration, new KeyValue(backgroundColor, endColor)));
-
-		timeline.playFromStart();
-		timeline.setOnFinished(event ->
-		{
-			backgroundColor.removeListener(fadeListener);
-			padViewController.getView().setStyle("");
-			timelines.remove(index);
-		});
-
-		// Memory
-		timelines.put(index, timeline);
 
 	}
 
@@ -64,13 +33,7 @@ public class ModernDesignAnimator {
 			timelines.get(index).stop();
 		}
 
-		ChangeListener<FadeableColor> fadeListener = new ChangeListener<FadeableColor>() {
-
-			@Override
-			public void changed(ObservableValue<? extends FadeableColor> observable, FadeableColor oldValue, FadeableColor newValue) {
-				padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
-			}
-		};
+		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
 
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
 		backgroundColor.addListener(fadeListener);
@@ -106,7 +69,8 @@ public class ModernDesignAnimator {
 	public static void warnFlash(IPadViewController controller) {
 		final IPadView view = controller.getView();
 		try {
-			while (true) {
+			while (!Thread.interrupted()) {
+
 				Platform.runLater(() ->
 				{
 					view.pseudoClassState(PseudoClasses.WARN_CLASS, true);

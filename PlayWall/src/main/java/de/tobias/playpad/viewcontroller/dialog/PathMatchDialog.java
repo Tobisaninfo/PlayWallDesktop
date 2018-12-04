@@ -193,7 +193,7 @@ public class PathMatchDialog extends NVC {
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	public void showAndWait() {

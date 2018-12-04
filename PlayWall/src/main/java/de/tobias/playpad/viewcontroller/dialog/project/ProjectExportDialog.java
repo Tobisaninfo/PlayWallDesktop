@@ -69,7 +69,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyCss(design, stage);
+		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
 	}
 
 	@FXML

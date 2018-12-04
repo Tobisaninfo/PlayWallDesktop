@@ -8,9 +8,9 @@ import javafx.util.Duration;
 
 public interface ModernGlobalDesignHandler {
 
-	void applyCss(ModernGlobalDesign design, Stage stage);
+	void applyStyleSheet(ModernGlobalDesign design, Stage stage);
 
-	void applyCssMainView(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project);
+	void applyStyleSheetToMainViewController(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project);
 
 	/*
 	 * Wird in einem neuen Thread aufgerufen
