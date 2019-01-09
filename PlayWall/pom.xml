@@ -16,7 +16,7 @@
         <project.main>de.tobias.playpad.PlayPadMain</project.main>
         <project.iconBase>src/main/resources/icon</project.iconBase>
 
-        <jna.version>5.1.0</jna.version>
+        <jna.version>5.2.0</jna.version>
 
         <itextpdf.version>5.5.13</itextpdf.version>
 
