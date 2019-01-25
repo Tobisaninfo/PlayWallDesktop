@@ -24,8 +24,14 @@
 
         <junit.version>4.12</junit.version>
 
-        <launch4j-maven-plugin.version>1.7.24</launch4j-maven-plugin.version>
+        <launch4j-maven-plugin.version>1.7.25</launch4j-maven-plugin.version>
         <appbundle-maven-plugin.version>1.2.0</appbundle-maven-plugin.version>
+
+        <project.buildDir>../build/${project.version}</project.buildDir>
+        <project.jar>${project.buildDir}/${project.artifactId}.jar</project.jar>
+        <project.exe>${project.buildDir}/${project.artifactId}.exe</project.exe>
+        <project.app>${project.buildDir}/${project.artifactId}.app</project.app>
+        <project.zip>${project.buildDir}/${project.artifactId}.zip</project.zip>
     </properties>
 
     <dependencies>
@@ -74,6 +80,7 @@
 
     <build>
         <plugins>
+            <!--Fat Jar-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -99,6 +106,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!-- LAUNCH4J -->
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
@@ -113,12 +121,13 @@
                         </goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <jar>../build/${project.version}/${project.artifactId}.jar</jar>
-                            <outfile>../build/${project.version}/${project.artifactId}.exe</outfile>
-                            <downloadUrl>http://java.com/download</downloadUrl>
+                            <jar>${project.jar}</jar>
+                            <icon>${project.iconBase}.ico</icon>
+                            <outfile>${project.exe}</outfile>
                             <classPath>
                                 <mainClass>${project.main}</mainClass>
                             </classPath>
+                            <downloadUrl>http://java.com/download</downloadUrl>
                             <jre>
                                 <bundledJre64Bit>false</bundledJre64Bit>
                                 <bundledJreAsFallback>false</bundledJreAsFallback>
@@ -126,7 +135,6 @@
                                 <jdkPreference>preferJre</jdkPreference>
                                 <runtimeBits>64/32</runtimeBits>
                             </jre>
-                            <icon>${project.iconBase}.ico</icon>
                         </configuration>
                     </execution>
                 </executions>
@@ -140,7 +148,7 @@
                 <configuration>
                     <mainClass>${project.main}</mainClass>
                     <iconFile>${project.iconBase}.icns</iconFile>
-                    <buildDirectory>../build/${project.version}</buildDirectory>
+                    <buildDirectory>${project.buildDir}</buildDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -148,6 +156,34 @@
                         <goals>
                             <goal>bundle</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--Deploy exe, zip-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.exe}</file>
+                                    <type>exe</type>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.zip}</file>
+                                    <type>zip</type>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -176,7 +212,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <workingDirectory>../build/${project.version}</workingDirectory>
+                                    <workingDirectory>${project.buildDir}</workingDirectory>
                                     <executable>${basedir}/scripts/sign.sh</executable>
                                 </configuration>
                             </execution>
