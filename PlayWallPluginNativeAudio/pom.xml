@@ -36,11 +36,9 @@
             <version>${jni4net.j.version}</version>
         </dependency>
         <dependency>
-            <groupId>de.tobias</groupId>
-            <artifactId>NativeAudio</artifactId>
+            <groupId>de.tobias.playpad</groupId>
+            <artifactId>NativeAudioWin</artifactId>
             <version>${nativeAudio.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/j4n/NativeAudio.j4n.jar</systemPath>
         </dependency>
     </dependencies>
 
