@@ -92,19 +92,6 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
 }
 
-.progress-bar > .track {
-	-fx-background-color: #ffffff;
-	-fx-background-radius: 2px;
-}
-
-.progress-bar > .bar {
-	-fx-background-insets: 1 1 1 1;
-	-fx-padding: 0 . em;
-
-	-fx-background-color: #000000;
-}
-
-
 .tool-bar {
 	-fx-background-color: #333333;
 	-fx-border-width: 1px 0 1px 0;
