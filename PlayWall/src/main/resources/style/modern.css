@@ -3,24 +3,24 @@
 }
 
 .button {
-	-fx-background-color: #505050;
+	-fx-background-color: #606060;
 	-fx-text-fill: #EEEEEE;
 	-fx-background-radius: 3px;
 	-fx-border-width: 0;
 }
 
 .button:focused {
-	-fx-background-color: #7f7f7f;
+	-fx-background-color: #9b9b9b;
 	-fx-text-fill: #EEEEEE !important;
 }
 
 .button:hover {
-	-fx-background-color: #6a6a6a;
+	-fx-background-color: #797979;
 	-fx-text-fill: #EEEEEE !important;
 }
 
 .button:default {
-	-fx-background-color: #286d85;
+	-fx-background-color: #358dab;
 	-fx-text-fill: #EEEEEE !important;
 }
 
@@ -109,7 +109,8 @@
 }
 
 .current-page-button {
-	-fx-background-color: #2e4355;
+	-fx-background-color: #dbdbdb;
+	-fx-text-fill: #333333;
 }
 
 .slider .thumb {
