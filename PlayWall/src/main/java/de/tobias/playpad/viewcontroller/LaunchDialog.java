@@ -54,7 +54,7 @@ import static de.thecodelabs.utils.util.Localization.getString;
 
 public class LaunchDialog extends NVC implements ChangeListener<ConnectionState> {
 
-	static final String IMAGE = "icon.png";
+	static final String IMAGE = "gfx/Logo-large.png";
 
 	@FXML
 	private Label infoLabel;
@@ -137,6 +137,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	@Override
 	public void initStage(Stage stage) {
 		stage.getScene().getStylesheets().add("style/style.css");
+		stage.getScene().getStylesheets().add("style/modern.css");
 		stage.getScene().getStylesheets().add("style/launch-dialog.css");
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));

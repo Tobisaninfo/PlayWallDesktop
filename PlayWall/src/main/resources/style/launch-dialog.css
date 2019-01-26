@@ -1,9 +1,13 @@
 /*projectList */
+#list {
+	-fx-base: rgb(60, 60, 60);
+}
+
 #list .list-cell {
 	-fx-skin: "com.sun.javafx.scene.control.skin.ListCellSkin";
 	-fx-background-color: -fx-base;
 	-fx-padding: 10px;
-	-fx-text-fill: -fx-text-inner-color;
+	-fx-text-fill: #FFFFFF;
 	-fx-opacity: 1;
 }
 
@@ -14,44 +18,44 @@
 }
 
 #list .list-view:focused .list-cell:focused {
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
 	-fx-background-insets: 0, 1, 2;
 }
 
 #list .list-view:focused .list-cell:focused:odd {
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
 	-fx-background-insets: 0, 1, 2;
 }
 
 /* When the list-cell is selected and focused */
 #list .list-view:focused .list-cell:filled:focused:selected {
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
 	-fx-background-insets: 0, 1, 2;
-	-fx-background: -fx-base;
-	-fx-text-fill: -fx-selection-bar-text;
+	-fx-background: derive(-fx-base, -50%);
+	-fx-text-fill: #444444;
 }
 
 #list .list-view:focused .list-cell:filled:selected, #list .list-view:focused .list-cell:filled:selected:hover {
-	-fx-background: -fx-base;
-	-fx-background-color: derive(-fx-hover-base, +50%);
-	-fx-text-fill: -fx-selection-bar-text;
+	-fx-background: derive(-fx-base, -50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
+	-fx-text-fill: #444444;
 }
 
 #list .list-view:focused .list-cell:filled:focused:selected:hover {
-	-fx-background: -fx-base;
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background: derive(-fx-base, -50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
 	-fx-background-insets: 0, 1, 2;
-	-fx-text-fill: -fx-selection-bar-text;
+	-fx-text-fill: #444444;
 }
 
 /* When the ListView is _not_ focused, we show alternate selection colors */
 #list .list-cell:filled:selected:focused, #list .list-cell:filled:selected, .list-view:horizontal .list-cell:filled:selected {
-	-fx-background-color: lightgray;
-	-fx-text-fill: -fx-selection-bar-text;
+	-fx-background-color: derive(-fx-base, +50%);
+	-fx-text-fill: #444444;
 }
 
 #list .list-cell:filled:selected:focused:disabled, #list .list-cell:filled:selected:disabled {
-	-fx-opacity: -fx-disabled-opacity;
+	-fx-opacity: derive(-fx-hover-base, -50%);
 }
 
 #list .list-cell:filled:hover {
@@ -60,21 +64,23 @@
 }
 
 #list .list-view:focused .list-cell:filled:focused:hover {
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
 
 	-fx-background-insets: 0, 1, 2;
 	-fx-text-fill: -fx-text-inner-color;
 }
 
 #list .list-view:horizontal .list-cell:filled:selected, #list .list-view:horizontal .list-cell:filled:selected:hover {
-	-fx-background-color: derive(-fx-hover-base, +50%);
+	-fx-background-color: derive(-fx-hover-base, -50%);
+	-fx-text-fill: #444444;
 }
 
 .projectname {
 	-fx-font-size: 13px;
+	-fx-text-fill: #FFFFFF;
 }
 
 .profilename {
 	-fx-font-size: 10px;
-	-fx-text-fill: gray;
+	-fx-text-fill: #DDDDDD;
 }
