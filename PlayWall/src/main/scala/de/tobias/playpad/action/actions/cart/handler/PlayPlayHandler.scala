@@ -11,7 +11,7 @@ class PlayPlayHandler extends CartActionHandler {
 							   pad: Pad,
 							   project: Project): Unit = {
 		if (`type` eq InputType.PRESSED) {
-			pad.setStatus(PadStatus.RESTART);
+			pad.setStatus(PadStatus.RESTART)
 		}
 	}
 }
