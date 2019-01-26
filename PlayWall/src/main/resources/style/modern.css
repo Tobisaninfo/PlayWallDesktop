@@ -1,5 +1,5 @@
 .root {
-	-fx-base: rgb(30, 30, 30);
+	-fx-base: rgb(20, 20, 20);
 }
 
 .button {
@@ -10,12 +10,12 @@
 }
 
 .button:focused {
-	-fx-background-color: #9b9b9b;
+	-fx-background-color: #878787;
 	-fx-text-fill: #EEEEEE !important;
 }
 
 .button:hover {
-	-fx-background-color: #9b9b9b;
+	-fx-background-color: #878787;
 	-fx-text-fill: #EEEEEE !important;
 }
 
@@ -39,6 +39,15 @@
 	-fx-text-fill: red !important;
 }
 
+.pad-grid {
+	-fx-background-color: rgb(60, 60, 60);
+
+	-fx-hgap: 6px;
+	-fx-vgap: 6px;
+
+	-fx-padding: 6px;
+}
+
 .pad {
 	-fx-background-radius: 10px;
 
@@ -55,15 +64,6 @@
 
 .pad-button-box {
 	-fx-spacing: 0px;
-}
-
-.pad-grid {
-	-fx-background-color: rgb(60, 60, 60);
-
-	-fx-hgap: 6px;
-	-fx-vgap: 6px;
-
-	-fx-padding: 6px;
 }
 
 .pad-info {
