@@ -2,9 +2,26 @@
 	-fx-base: rgb(30, 30, 30);
 }
 
-.deleteButton {
-	-fx-background-color: transparent;
-	-fx-padding: 0;
+.button {
+	-fx-background-color: #505050;
+	-fx-text-fill: #EEEEEE;
+	-fx-background-radius: 3px;
+	-fx-border-width: 0;
+}
+
+.button:focused {
+	-fx-background-color: #7f7f7f;
+	-fx-text-fill: #EEEEEE !important;
+}
+
+.button:hover {
+	-fx-background-color: #6a6a6a;
+	-fx-text-fill: #EEEEEE !important;
+}
+
+.button:default {
+	-fx-background-color: #286d85;
+	-fx-text-fill: #EEEEEE !important;
 }
 
 .pad:drag {
@@ -57,27 +74,6 @@
 	-fx-border-color: transparent;
 }
 
-.pad-button:hover {
-	-fx-background-color: transparent;
-	-fx-border-width: 1px;
-	-fx-border-color: rgb(30, 30, 30, 0.5);
-	-fx-border-radius: 10px;
-}
-
-.pad-button:pressed {
-	-fx-background-color: transparent;
-	-fx-border-width: 1px;
-	-fx-border-color: black;
-	-fx-border-radius: 10px;
-}
-
-.pad-button:selected {
-	-fx-background-color: transparent;
-	-fx-border-width: 1px;
-	-fx-border-color: black;
-	-fx-border-radius: 10px;
-}
-
 .pad-notfound {
 	-fx-text-fill: red !important;
 }
@@ -96,39 +92,31 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
 }
 
-/*Old Progress Bar*/
-/*.pad-playbar .bar {*/
-/*-fx-background-color: white;*/
-/*-fx-padding: 0.5em;*/
-/**/
-/*-fx-background-radius: 10px;    */
-/*}*/
-
-/*.pad-playbar .track { */
-/*-fx-base: black;*/
-/*-fx-background-radius: 10px; */
-/*}*/
-
-/*.pad-playbar {*/
-/*-fx-background-radius: 10px;*/
-/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.5, 2, 2);*/
-/*}*/
+.progress-bar > .track {
+	-fx-background-color: #ffffff;
+	-fx-background-radius: 2px;
+}
 
 .progress-bar > .bar {
 	-fx-background-insets: 1 1 1 1;
-	-fx-padding: 0.30em;
+	-fx-padding: 0 . em;
+
+	-fx-background-color: #000000;
 }
 
+
 .tool-bar {
-	-fx-base: rgb(60, 60, 60);
+	-fx-background-color: #333333;
+	-fx-border-width: 1px 0 1px 0;
+	-fx-border-color: #222222;
 }
 
 .menu-bar {
-	-fx-base: rgb(60, 60, 60);
+	-fx-background-color: #333333;
 }
 
 .current-page-button {
-	-fx-base: lightgray;
+	-fx-background-color: #2e4355;
 }
 
 .slider .thumb {

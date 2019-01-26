@@ -29,19 +29,19 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				controller.getPadPositionListener().setSend(false);
 
 				// UI Styling
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, true);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, true);
 				break;
 
 			case PAUSE:
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				break;
 
 			case STOP:
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle("");
@@ -49,7 +49,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 
 			case READY:
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle(""); // Cleanup from warning UI
@@ -59,7 +59,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				controller.getView().setErrorLabelActive(true);
 
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle(""); // Cleanup from warning UI
@@ -69,7 +69,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				controller.getView().showNotFoundIcon(controller.getPad(), true);
 
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle(""); // Cleanup from warning UI
@@ -77,7 +77,7 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 
 			case EMPTY:
 				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle(""); // Cleanup from warning UI

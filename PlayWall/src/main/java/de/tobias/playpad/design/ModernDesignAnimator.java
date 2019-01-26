@@ -97,12 +97,12 @@ public class ModernDesignAnimator {
 				Platform.runLater(() ->
 				{
 					view.pseudoClassState(PseudoClasses.WARN_CLASS, true);
-					view.pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+					view.pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				});
 				Thread.sleep(500);
 				Platform.runLater(() ->
 				{
-					view.pseudoClassState(PseudoClasses.PLAY_CALSS, true);
+					view.pseudoClassState(PseudoClasses.PLAY_CLASS, true);
 					view.pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				});
 				Thread.sleep(500);
@@ -111,7 +111,7 @@ public class ModernDesignAnimator {
 			Platform.runLater(() ->
 			{
 				view.pseudoClassState(PseudoClasses.WARN_CLASS, false);
-				view.pseudoClassState(PseudoClasses.PLAY_CALSS, false);
+				view.pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 			});
 		}
 	}

@@ -27,6 +27,7 @@ import static de.tobias.playpad.design.Design.*;
 
 public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler, ColorModeHandler {
 
+	// TODO Rewrite with expression parser
 	private String convertToCSS(ModernGlobalDesign design) {
 		StringBuilder builder = new StringBuilder();
 
@@ -60,7 +61,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 		addStyleParameter(builder, "-fx-font-size", design.getTitleFontSize());
 		endStyleClass(builder);
 
-		buildStateCss(builder, PseudoClasses.PLAY_CALSS.getPseudoClassName(), design.getPlayColor(), design.isFlatDesign());
+		buildStateCss(builder, PseudoClasses.PLAY_CLASS.getPseudoClassName(), design.getPlayColor(), design.isFlatDesign());
 		buildStateCss(builder, PseudoClasses.WARN_CLASS.getPseudoClassName(), design.getBackgroundColor(), design.isFlatDesign());
 
 		return builder.toString().replace("0x", "#");
@@ -123,7 +124,7 @@ public class ModernGlobalDesignHandlerImpl implements ModernGlobalDesignHandler,
 
 			if (padSettings.isCustomDesign()) {
 				ModernCartDesign cartDesign = padSettings.getDesign();
-				css.append("\n").append(cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), true, design.isFlatDesign()));
+				css.append("\n").append(cartDesignHandler.convertToCss(cartDesign, pad.getPadIndex().toString(), design.isFlatDesign()));
 			}
 		}
 		try {
