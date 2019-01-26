@@ -24,10 +24,12 @@
 	-fx-text-fill: #EEEEEE !important;
 }
 
+/*noinspection CssInvalidPseudoSelector*/
 .pad:drag {
 	-fx-opacity: 0.8;
 }
 
+/*noinspection CssInvalidPseudoSelector*/
 .text-field:error {
 	-fx-text-box-border: red;
 	-fx-focus-color: red;
@@ -74,6 +76,14 @@
 	-fx-border-color: transparent;
 }
 
+.pad-button:hover {
+	-fx-background-color: transparent;
+}
+
+.pad-button:hover .fonticon {
+	-fx-text-fill: #DDDDDD;
+}
+
 .pad-notfound {
 	-fx-text-fill: red !important;
 }
@@ -89,7 +99,7 @@
 
 .fonticon {
 	-fx-text-fill: white;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);
+	/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);*/
 }
 
 .tool-bar {
