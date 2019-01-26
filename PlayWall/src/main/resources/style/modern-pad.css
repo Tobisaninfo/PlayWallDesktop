@@ -1,23 +1,23 @@
-.pad ${#prefix} -icon ${#class} {
+.pad${#prefix}-icon ${#class} {
 	-fx-text-fill: ${#buttonColor};
 }
 
-.pad ${#prefix} -playbar ${#class} .track {
+.pad${#prefix}-playbar ${#class} .track {
 	-fx-base: ${#playbarTrackColor};
 }
 
-.pad ${#prefix} -playbar ${#class} .bar {
+.pad${#prefix}-playbar ${#class} .bar {
 	-fx-background-color: ${#playbarBarColor};
 }
 
-.pad ${#prefix} ${#class} {
+.pad${#prefix}${#class} {
 	-fx-background-color: ${#padColor};
 }
 
-.pad ${#prefix} -info ${#class} {
+.pad${#prefix}-info ${#class} {
 	-fx-text-fill: ${#fontColor};
 }
 
-.pad ${#prefix} -title ${#class} {
+.pad${#prefix}-title ${#class} {
 	-fx-text-fill: ${#fontColor};
 }
