@@ -1,5 +1,17 @@
+@font-face {
+	font-family: "Lato";
+	src: url("Lato/Lato-Regular.ttf");
+}
+
+@font-face {
+	font-family: "Lato";
+	font-weight: bold;
+	src: url("Lato/Lato-Bold.ttf");
+}
+
 .root {
 	-fx-base: rgb(20, 20, 20);
+	-fx-font-family: Lato sans-serif;
 }
 
 .button {

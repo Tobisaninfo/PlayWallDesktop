@@ -7,7 +7,7 @@
 .pad${#prefix}-playbar${#class} .track {
 	-fx-background-radius: 2px;
 	-fx-base: ${#playbarTrackColor};
-	-fx-background-color: ${#playbarTrackColor};
+	-fx-background-color: ${#playbarTrackColor}AA;
 }
 
 .pad${#prefix}-playbar${#class} .bar {

@@ -1,12 +1,10 @@
 package de.tobias.playpad.design
 
 import de.thecodelabs.utils.application.ApplicationUtils
-import de.thecodelabs.utils.util.ColorUtils
 import de.tobias.playpad.design.modern.{ModernCartDesign, ModernCartDesignHandler, ModernColor, ModernGlobalDesign}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.view.PseudoClasses
-import javafx.scene.paint.Color
 import javafx.util.Duration
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
@@ -36,7 +34,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
-			"playbarBarColor" -> ColorUtils.toRGBHex(Color.web(design.getBackgroundColor.getColorHi).darker()),
+			"playbarBarColor" -> color.getPlaybarTrackColor,
 			"padColor" -> (if (flat) color.paint() else color.linearGradient()),
 			"fontColor" -> color.getFontColor
 		)

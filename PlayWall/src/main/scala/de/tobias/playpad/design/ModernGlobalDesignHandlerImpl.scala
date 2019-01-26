@@ -5,14 +5,12 @@ import java.util.function.Consumer
 
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
-import de.thecodelabs.utils.util.ColorUtils
-import de.tobias.playpad.{DisplayableColor, PlayPadPlugin}
 import de.tobias.playpad.design.modern.{ModernCartDesign, ModernColor, ModernGlobalDesign, ModernGlobalDesignHandler}
-import de.tobias.playpad.pad.Pad
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
 import de.tobias.playpad.viewcontroller.main.IMainViewController
+import de.tobias.playpad.{DisplayableColor, PlayPadPlugin}
 import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.stage.Stage
@@ -81,7 +79,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
-			"playbarBarColor" -> ColorUtils.toRGBHex(Color.web(design.getBackgroundColor.getColorHi).darker()),
+			"playbarBarColor" -> color.getPlaybarTrackColor,
 			"padColor" -> (if (design.isFlatDesign) color.paint() else color.linearGradient()),
 			"fontColor" -> color.getFontColor,
 			"infoFontSize" -> s"${design.getInfoFontSize}",
