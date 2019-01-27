@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.threading.Worker;
@@ -149,7 +150,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	@Override
 	public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
 		String url = "https://" + host + "/" + channel + path;
-		System.out.println(url);
+		Logger.debug("Load server resource: {0}", path);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
 			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);

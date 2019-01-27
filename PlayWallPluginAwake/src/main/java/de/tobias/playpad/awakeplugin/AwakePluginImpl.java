@@ -1,5 +1,6 @@
 package de.tobias.playpad.awakeplugin;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.application.system.NativeApplication;
@@ -11,6 +12,7 @@ import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.server.Server;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -69,12 +71,14 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 		PlayPadPlugin.getImplementation().addMainViewListener(this);
 		PlayPadPlugin.getImplementation().addSettingsListener(this);
-		System.out.println("Enable Awake Plugin");
+		Logger.info("Enable Awake Plugin");
 	}
 
 	@Shutdown
 	public void onDisable() {
-		System.out.println("Disable Awake Plugin");
+		Logger.info("Deactivate sleep prevention for shutdown");
+		activeSleep(false); // Disable for shutdown
+		Logger.info("Disable Awake Plugin");
 	}
 
 	private void loadJNA() throws IOException {
@@ -84,17 +88,16 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 			Files.createDirectories(folder);
 		}
 
-		Path jnaFile = folder.resolve("jna.jar");
-		Path jnaPlatformFile = folder.resolve("jna-platform.jar");
+		final Server server = PlayPadPlugin.getServerHandler().getServer();
+		final Path jnaFile = folder.resolve("jna.jar");
+		final Path jnaPlatformFile = folder.resolve("jna-platform.jar");
 
 		if (Files.notExists(jnaFile)) {
-			System.out.println("Download: /plugins/libAwake/jna.jar");
-			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna.jar", UpdateChannel.STABLE, jnaFile);
+			server.loadSource("/plugins/libAwake/jna.jar", UpdateChannel.STABLE, jnaFile);
 		}
 
 		if (Files.notExists(jnaPlatformFile)) {
-			System.out.println("Download: /plugins/libAwake/jna-platform.jar");
-			PlayPadPlugin.getServerHandler().getServer().loadSource("/plugins/libAwake/jna-platform.jar", UpdateChannel.STABLE, jnaPlatformFile);
+			server.loadSource("/plugins/libAwake/jna-platform.jar", UpdateChannel.STABLE, jnaPlatformFile);
 		}
 	}
 
@@ -105,9 +108,9 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		try {
 			settings = AwakeSettings.load(path);
 		} catch (NoSuchFileException e) {
-			System.out.println("No Awake.xml config in folder");
+			Logger.info("No Awake.xml config in folder");
 		} catch (DocumentException | IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		activeSleep(settings.active);
