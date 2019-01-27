@@ -8,8 +8,8 @@ public class ProjectSettings {
 
 	public static final int MAX_PAGES = 8;
 
-	public static final int MAX_COLUMNS = 10;
-	public static final int MAX_ROWS = 10;
+	public static final int MAX_COLUMNS = 15;
+	public static final int MAX_ROWS = 15;
 
 	public static final int MIN_COLUMNS = 3;
 	public static final int MIN_ROWS = 1;

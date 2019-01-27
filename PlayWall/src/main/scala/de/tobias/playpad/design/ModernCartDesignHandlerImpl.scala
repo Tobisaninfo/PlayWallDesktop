@@ -49,8 +49,8 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 			val playColor = design.getPlayColor
 			val backgroundColor = design.getBackgroundColor
 
-			val fadeStopColor = new FadeableColor(backgroundColor.getColorHi, backgroundColor.getColorLow)
-			val fadePlayColor = new FadeableColor(playColor.getColorHi, playColor.getColorLow)
+			val fadeStopColor = if (globalDesign.isFlatDesign) backgroundColor.toFlatFadeableColor else backgroundColor.toFadeableColor
+			val fadePlayColor = playColor.toFadeableColor
 
 			var animationDuration = warning
 			val pad = controller.getPad

@@ -115,7 +115,7 @@ public enum ModernColor implements DisplayableColor {
 	}
 
 	public String paint() {
-		return getColorHi();
+		return getColorLow();
 	}
 
 	public static ModernColor modernColorByBackgroundColor(String color) {
@@ -125,6 +125,10 @@ public enum ModernColor implements DisplayableColor {
 			}
 		}
 		return null;
+	}
+
+	public FadeableColor toFlatFadeableColor() {
+		return new FadeableColor(getColorLow());
 	}
 
 	public FadeableColor toFadeableColor() {

@@ -6,12 +6,12 @@ import java.util.function.Consumer
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.design.modern.{ModernCartDesign, ModernColor, ModernGlobalDesign, ModernGlobalDesignHandler}
+import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
 import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.{DisplayableColor, PlayPadPlugin}
-import javafx.scene.Node
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.Duration
@@ -91,10 +91,34 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	override def handleWarning(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
-
+		if (design.isWarnAnimation) {
+			warnAnimation(design, controller, warning)
+		}
+		else {
+			ModernDesignAnimator.warnFlash(controller)
+		}
 	}
 
-	override def getColorInterface(onSelection: Consumer[DisplayableColor]): Node = new ColorPickerView(null, ModernColor.values.asInstanceOf[Array[DisplayableColor]], onSelection)
+	private def warnAnimation(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
+		val stopColor = if (design.isFlatDesign) design.getBackgroundColor.toFlatFadeableColor else design.getBackgroundColor.toFadeableColor
+		val playColor = if (design.isFlatDesign) design.getPlayColor.toFlatFadeableColor else design.getPlayColor.toFadeableColor
+
+		val pad = controller.getPad
+		var duration = warning
+		pad.getContent match {
+			case durationable: Durationable =>
+				if (warning.greaterThan(durationable.getDuration)) {
+					duration = durationable.getDuration
+				}
+			case _ =>
+		}
+		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, duration)
+	}
+
+
+	override def stopWarning(design: ModernGlobalDesign, controller: IPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
+
+	override def getColorInterface(onSelection: Consumer[DisplayableColor]) = new ColorPickerView(null, ModernColor.values.asInstanceOf[Array[DisplayableColor]], onSelection)
 
 	override def setColor(design: ModernCartDesign, color: DisplayableColor): Unit = {
 		color match {

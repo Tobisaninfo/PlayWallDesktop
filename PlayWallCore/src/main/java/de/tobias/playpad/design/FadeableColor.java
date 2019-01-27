@@ -11,6 +11,16 @@ public class FadeableColor implements Interpolatable<FadeableColor> {
 
 	private List<Stop> stops;
 
+	public FadeableColor(Color color) {
+		stops = new ArrayList<>();
+		stops.add(new Stop(0, color));
+		stops.add(new Stop(1, color));
+	}
+
+	public FadeableColor(String color) {
+		this(Color.web(color));
+	}
+
 	public FadeableColor(Color hi, Color low) {
 		stops = new ArrayList<>();
 		stops.add(new Stop(0, hi));
@@ -57,14 +67,14 @@ public class FadeableColor implements Interpolatable<FadeableColor> {
 
 	@Override
 	public String toString() {
-		String val = "linear-gradient(";
+		StringBuilder val = new StringBuilder("linear-gradient(");
 		for (int i = 0; i < stops.size(); i++) {
-			val += stops.get(i).getColor().toString().replace("0x", "#");
+			val.append(stops.get(i).getColor().toString().replace("0x", "#"));
 			if (i + 1 < stops.size()) {
-				val += ", ";
+				val.append(", ");
 			}
 		}
-		val += ")";
-		return val;
+		val.append(")");
+		return val.toString();
 	}
 }
