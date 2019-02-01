@@ -36,6 +36,10 @@
 	-fx-text-fill: #EEEEEE !important;
 }
 
+.progress-bar .bar {
+	-fx-background-color: #EEEEEE;
+}
+
 /*noinspection CssInvalidPseudoSelector*/
 .pad:drag {
 	-fx-opacity: 0.8;
@@ -54,8 +58,8 @@
 .pad-grid {
 	-fx-background-color: rgb(60, 60, 60);
 
-	-fx-hgap: 6px;
-	-fx-vgap: 6px;
+	-fx-hgap: 8px;
+	-fx-vgap: 8px;
 
 	-fx-padding: 6px;
 }
@@ -63,9 +67,9 @@
 .pad {
 	-fx-background-radius: 10px;
 
-	-fx-border-color: rgb(20, 20, 20);
-	-fx-border-width: 2px;
-	-fx-border-radius: 8px;
+	/*-fx-border-color: rgb(20, 20, 20);*/
+	/*-fx-border-width: 2px;*/
+	/*-fx-border-radius: 8px;*/
 
 	-fx-padding: 5 10 5 10;
 }
