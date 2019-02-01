@@ -1,0 +1,4 @@
+main: "de.tobias.playpad.awakeplugin.AwakePluginImpl"
+name: "AwakePlugin"
+version: "2.1"
+build: 3

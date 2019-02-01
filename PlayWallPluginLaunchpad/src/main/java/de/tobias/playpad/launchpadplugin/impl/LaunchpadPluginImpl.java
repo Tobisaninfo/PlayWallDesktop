@@ -1,21 +1,17 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.launchpadplugin.LaunchpadPlugin;
 import de.tobias.playpad.launchpadplugin.midi.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.s.LaunchPadS;
 import de.tobias.playpad.midi.device.DeviceRegistry;
+import de.tobias.playpad.plugin.AdvancedPlugin;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.updater.client.Updatable;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-import net.xeoh.plugins.base.annotations.events.PluginLoaded;
-import net.xeoh.plugins.base.annotations.events.Shutdown;
 
 import java.util.ResourceBundle;
 
-@PluginImplementation
-public class LaunchpadPluginImpl implements LaunchpadPlugin {
+public class LaunchpadPluginImpl implements AdvancedPlugin {
 
 	private static final String NAME = "LaunchPadPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.launchpad";
@@ -26,8 +22,8 @@ public class LaunchpadPluginImpl implements LaunchpadPlugin {
 	private StandardPluginUpdater updater;
 	private Module module;
 
-	@PluginLoaded
-	public void onLoaded(LaunchpadPlugin plugin) {
+	@Override
+	public void startup() {
 		bundle = Localization.loadBundle("lang/launchpad", LaunchpadPluginImpl.class.getClassLoader());
 		module = new Module(NAME, IDENTIFIER);
 		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
@@ -39,8 +35,8 @@ public class LaunchpadPluginImpl implements LaunchpadPlugin {
 		System.out.println("Enable LaunchPad Plugin");
 	}
 
-	@Shutdown
-	public void onShutdown() {
+	@Override
+	public void shutdown() {
 		System.out.println("Disable LaunchPad Plugin");
 	}
 

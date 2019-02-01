@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin;
 
+import de.thecodelabs.plugins.Plugin;
 import de.tobias.updater.client.Updatable;
 
 /**
@@ -7,7 +8,7 @@ import de.tobias.updater.client.Updatable;
  *
  * @author tobias - s0553746
  */
-public interface AdvancedPlugin extends net.xeoh.plugins.base.Plugin {
+public interface AdvancedPlugin extends Plugin {
 
 	Module getModule();
 

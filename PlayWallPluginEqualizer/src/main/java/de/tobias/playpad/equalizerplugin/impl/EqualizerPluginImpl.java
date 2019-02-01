@@ -6,14 +6,10 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.equalizerplugin.Equalizer;
-import de.tobias.playpad.equalizerplugin.EqualizerPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Equalizeable;
-import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.plugin.PadListener;
-import de.tobias.playpad.plugin.StandardPluginUpdater;
-import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.updater.client.Updatable;
@@ -23,16 +19,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.media.AudioEqualizer;
 import javafx.scene.media.EqualizerBand;
 import javafx.stage.Stage;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-import net.xeoh.plugins.base.annotations.events.PluginLoaded;
-import net.xeoh.plugins.base.annotations.events.Shutdown;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-@PluginImplementation
-public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
+public class EqualizerPluginImpl implements AdvancedPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
 	private static final String NAME = "Equalizer";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
@@ -52,8 +44,8 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		return bundle;
 	}
 
-	@PluginLoaded
-	public void onEnable(EqualizerPlugin plugin) {
+	@Override
+	public void startup() {
 		bundle = Localization.loadBundle("lang/equalizer", EqualizerPluginImpl.class.getClassLoader());
 		try {
 			Equalizer.load(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
@@ -70,8 +62,8 @@ public class EqualizerPluginImpl implements EqualizerPlugin, WindowListener<IMai
 		System.out.println("Enable Equalizer Plugin");
 	}
 
-	@Shutdown
-	public void onDisable() {
+	@Override
+	public void shutdown() {
 		System.out.println("Disable Equalizer Plugin");
 	}
 

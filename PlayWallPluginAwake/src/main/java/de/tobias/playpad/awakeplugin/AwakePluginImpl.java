@@ -22,9 +22,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-import net.xeoh.plugins.base.annotations.events.PluginLoaded;
-import net.xeoh.plugins.base.annotations.events.Shutdown;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -33,8 +30,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-@PluginImplementation
-public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
+public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
 	private static final String NAME = "AwakePlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
@@ -53,8 +49,8 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 
 	private ResourceBundle bundle;
 
-	@PluginLoaded
-	public void onLoad(AwakePlugin plugin) {
+	@Override
+	public void startup() {
 		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
 
 		module = new Module(NAME, IDENTIFIER);
@@ -74,8 +70,8 @@ public class AwakePluginImpl implements AwakePlugin, WindowListener<IMainViewCon
 		Logger.info("Enable Awake Plugin");
 	}
 
-	@Shutdown
-	public void onDisable() {
+	@Override
+	public void shutdown() {
 		Logger.info("Deactivate sleep prevention for shutdown");
 		activeSleep(false); // Disable for shutdown
 		Logger.info("Disable Awake Plugin");

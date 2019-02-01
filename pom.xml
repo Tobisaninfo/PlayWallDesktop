@@ -27,8 +27,6 @@
         <nv-websocket-client.version>2.6</nv-websocket-client.version>
         <unirest-java.version>2.5.03</unirest-java.version>
 
-        <jspf.version>1.0.2</jspf.version>
-
         <jlayer.version>1.0.1</jlayer.version>
         <tinysound.version>1.1.1</tinysound.version>
         <jorbis.version>0.0.17</jorbis.version>
@@ -38,6 +36,7 @@
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
         <maven-jar-plugin.version>2.3.1</maven-jar-plugin.version>
+        <libPlugins.version>2.0.0</libPlugins.version>
     </properties>
 
     <modules>
@@ -73,6 +72,11 @@
             <artifactId>libLogger</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libPlugins</artifactId>
+            <version>${libPlugins.version}</version>
+        </dependency>
+        <dependency>
             <groupId>de.tobias</groupId>
             <artifactId>Updater</artifactId>
             <version>${Updater.version}</version>
@@ -88,13 +92,7 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>${sqlite-jdbc.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>net.xeoh</groupId>
-            <artifactId>jspf</artifactId>
-            <version>${jspf.version}</version>
-        </dependency>
-
+        
         <dependency>
             <groupId>kuusisto</groupId>
             <artifactId>tinysound</artifactId>

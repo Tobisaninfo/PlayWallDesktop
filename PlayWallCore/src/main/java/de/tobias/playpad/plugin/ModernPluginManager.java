@@ -1,23 +1,19 @@
 package de.tobias.playpad.plugin;
 
+import de.thecodelabs.plugins.Plugin;
+import de.thecodelabs.plugins.PluginManager;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.updater.client.Updatable;
 import de.tobias.updater.client.UpdateRegistery;
-import net.xeoh.plugins.base.Plugin;
-import net.xeoh.plugins.base.PluginManager;
-import net.xeoh.plugins.base.impl.PluginManagerFactory;
-import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +38,7 @@ public class ModernPluginManager {
 	}
 
 	private ModernPluginManager() {
-		this.pluginManager = PluginManagerFactory.createPluginManager();
+		this.pluginManager = PluginManager.getInstance();
 		this.deletedPlugins = new HashSet<>();
 		this.modules = new HashSet<>();
 	}
@@ -60,14 +56,11 @@ public class ModernPluginManager {
 	}
 
 	public void loadFile(Path path) {
-		URI uri = path.toUri();
-
-		pluginManager.addPluginsFrom(uri);
+		pluginManager.addFolder(path);
+		pluginManager.loadPlugins();
 
 		// Registriert Funktionen aus Plugin (Module und Update, ...)
-		PluginManagerUtil util = new PluginManagerUtil(pluginManager);
-		Collection<Plugin> plugins = util.getPlugins();
-		for (Plugin p : plugins) {
+		for (Plugin p : pluginManager.getPlugins()) {
 			if (p instanceof AdvancedPlugin) {
 				AdvancedPlugin advancedPlugin = (AdvancedPlugin) p;
 				Module module = advancedPlugin.getModule();

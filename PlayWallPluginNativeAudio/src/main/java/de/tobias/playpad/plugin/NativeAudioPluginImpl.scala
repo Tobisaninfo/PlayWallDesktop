@@ -4,14 +4,11 @@ import de.thecodelabs.utils.util.OS
 import de.thecodelabs.utils.util.OS.OSType
 import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoader}
 import de.tobias.updater.client.Updatable
-import net.xeoh.plugins.base.annotations.PluginImplementation
-import net.xeoh.plugins.base.annotations.events.PluginLoaded
 
 /**
   * Created by tobias on 16.04.17.
   */
-@PluginImplementation
-class NativeAudioPluginImpl extends NativeAudioPlugin {
+class NativeAudioPluginImpl extends AdvancedPlugin {
 
 	private val NAME = "NativeAudioMac"
 	private val IDENTIFIER = "de.tobias.playwall.plugin.nativeaudio"
@@ -21,8 +18,8 @@ class NativeAudioPluginImpl extends NativeAudioPlugin {
 	private var module: Module = _
 	private var updatable: Updatable = _
 
-	@PluginLoaded
-	def onLoaded(plugin: NativeAudioPlugin): Unit = {
+
+	override def startup(): Unit = {
 		module = new Module(NAME, IDENTIFIER)
 		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module)
 
@@ -37,6 +34,10 @@ class NativeAudioPluginImpl extends NativeAudioPlugin {
 			loader.preInit()
 			loader.init(module)
 		}
+	}
+
+	override def shutdown(): Unit = {
+
 	}
 
 	override def getModule: Module = module
