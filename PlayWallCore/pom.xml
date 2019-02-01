@@ -12,6 +12,101 @@
 
     <artifactId>PlayWallCore</artifactId>
 
+    <properties>
+        <jlayer.version>1.0.1</jlayer.version>
+
+        <jna.version>5.2.0</jna.version>
+
+        <scala-library.version>2.12.7</scala-library.version>
+        <junit.version>4.12</junit.version>
+    </properties>
+
+    <dependencies>
+        <!--Own libraries-->
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libUtils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libLogger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libPlugins</artifactId>
+            <version>${libPlugins.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tobias</groupId>
+            <artifactId>Updater</artifactId>
+            <version>${Updater.version}</version>
+        </dependency>
+
+        <!--Audio-->
+        <dependency>
+            <groupId>javazoom</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>${jlayer.version}</version>
+        </dependency>
+
+        <!--Network/Json-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>${sqlite-jdbc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.openunirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>${unirest-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.neovisionaries</groupId>
+            <artifactId>nv-websocket-client</artifactId>
+            <version>${nv-websocket-client.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>${json-smart.version}</version>
+        </dependency>
+
+        <!--Native-->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna-platform</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+
+        <!--Tools-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala-library.version}</version>
+        </dependency>
+
+        <!--Tests-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
     <distributionManagement>
         <repository>
             <id>release</id>

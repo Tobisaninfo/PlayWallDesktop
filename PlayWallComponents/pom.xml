@@ -12,11 +12,39 @@
 
     <artifactId>PlayWallComponents</artifactId>
 
+    <properties>
+        <tinysound.version>1.1.1</tinysound.version>
+        <jorbis.version>0.0.17</jorbis.version>
+        <vorbisspi.version>1.0.3.3</vorbisspi.version>
+        <tritonus-share.version>0.3.7.4</tritonus-share.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallCore</artifactId>
             <version>${core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>kuusisto</groupId>
+            <artifactId>tinysound</artifactId>
+            <version>${tinysound.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jcraft</groupId>
+            <artifactId>jorbis</artifactId>
+            <version>${jorbis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>vorbisspi</artifactId>
+            <version>${vorbisspi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.soundlibs</groupId>
+            <artifactId>tritonus-share</artifactId>
+            <version>${tritonus-share.version}</version>
         </dependency>
     </dependencies>
 
