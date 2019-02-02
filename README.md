@@ -7,7 +7,6 @@ PlayWall is a multimedia application that helps to managing your jingles.
 - Supporting audio device selection
 - Audio Equalizer
 - Handling Video file formats (mp4, mov)
-
 - Different user interactions
   - Midi
   - Keyboard
