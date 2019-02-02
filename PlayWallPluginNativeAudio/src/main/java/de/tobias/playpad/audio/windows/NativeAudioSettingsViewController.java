@@ -1,8 +1,8 @@
 package de.tobias.playpad.audio.windows;
 
+import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
-import de.thecodelabs.utils.io.IOUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -15,12 +15,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import nativeaudio.NativeAudio;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class NativeAudioSettingsViewController extends AudioHandlerViewController {
+
+	private  static final String TEST_SOUND_WAV = "Test-Sound.wav";
 
 	@FXML
 	private ComboBox<String> soundCardComboBox;
@@ -75,16 +74,9 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 
 	@FXML
 	private void testButtonHandler(ActionEvent event) {
-		Path file = ApplicationUtils.getApplication().getPath(PathType.RESOURCES, "Test-Sound.wav");
-		if (Files.notExists(file)) {
-			InputStream iStr = getClass().getClassLoader().getResourceAsStream("Test-Sound.wav");
-			try {
-				Files.createDirectories(file.getParent());
-				IOUtils.copy(iStr, file);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		final App app = ApplicationUtils.getApplication();
+		Path file = app.getPath(PathType.RESOURCES, TEST_SOUND_WAV);
+		app.getClasspathResource("Test-Sound.wav").copy(PathType.RESOURCES, "TestSound.wav");
 
 		if (audioPlayer == null) {
 			audioPlayer = new NativeAudio();

@@ -3,10 +3,9 @@ package de.tobias.playpad.plugin.loader
 import java.nio.file.Files
 
 import de.thecodelabs.utils.application.ApplicationUtils
-import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.audio.mac.NativeAudioMacHandlerFactory
-import de.tobias.playpad.plugin.Module
+import de.tobias.playpad.plugin.{Module, NativeAudioPathType}
 
 /**
   * Created by tobias on 16.04.17.
@@ -19,7 +18,7 @@ class MacAudioImplLoader extends AudioModuleLoader {
 
 	override def preInit(): Unit = {
 		val app = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.LIBRARY, "Audio")
+		val resourceFolder = app.getPath(NativeAudioPathType.AUDIO)
 		if (Files.notExists(resourceFolder)) {
 			Files.createDirectories(resourceFolder)
 		}

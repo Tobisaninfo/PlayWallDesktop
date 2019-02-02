@@ -109,15 +109,13 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 	@Override
 	public void pause() {
 		audioHandler.pause();
-		if (playedHandlers.contains(this))
-			playedHandlers.remove(this);
+		playedHandlers.remove(this);
 	}
 
 	@Override
 	public void stop() {
 		audioHandler.stop();
-		if (playedHandlers.contains(this))
-			playedHandlers.remove(this);
+		playedHandlers.remove(this);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ class WindowsAudioImplLoader extends AudioModuleLoader {
 
 	override def preInit(): Unit = {
 		val app: App = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.LIBRARY, "Native")
+		val resourceFolder = app.getPath(PathType.NATIVE_LIBRARY)
 
 		if (!app.isDebug) {
 			if (Files.notExists(resourceFolder))
@@ -33,7 +33,7 @@ class WindowsAudioImplLoader extends AudioModuleLoader {
 			copyResource(resourceFolder, ASSETS, "NAudio.dll")
 		}
 
-		Bridge.setVerbose(true)
+		Bridge.setVerbose(app isDebug)
 		Bridge.init()
 		Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve("NativeAudio.j4n.dll").toFile)
 	}
