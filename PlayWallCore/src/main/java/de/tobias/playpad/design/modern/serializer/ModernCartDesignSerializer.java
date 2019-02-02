@@ -1,7 +1,7 @@
 package de.tobias.playpad.design.modern.serializer;
 
-import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import org.dom4j.Element;
 

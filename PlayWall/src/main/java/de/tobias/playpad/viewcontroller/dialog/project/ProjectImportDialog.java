@@ -149,7 +149,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+			PlayPadPlugin.styleable().applyStyleSheet(stage);
 		}
 	}
 

@@ -190,7 +190,7 @@ public class PathMatchDialog extends NVC {
 		stage.setMaxHeight(600);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 	}
 
 	public void showAndWait() {

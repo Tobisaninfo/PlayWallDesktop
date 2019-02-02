@@ -97,7 +97,7 @@ public class EqualizerViewController extends NVC {
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 		stage.getScene().getStylesheets().add("style/style.css");
 	}
 

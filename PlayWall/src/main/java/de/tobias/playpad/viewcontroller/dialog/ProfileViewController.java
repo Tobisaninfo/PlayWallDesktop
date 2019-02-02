@@ -99,7 +99,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 	}
 
 	@FXML

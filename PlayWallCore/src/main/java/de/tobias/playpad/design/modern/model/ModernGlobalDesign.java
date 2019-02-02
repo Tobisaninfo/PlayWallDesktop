@@ -1,6 +1,7 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design.modern.model;
 
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.modern.ModernColor;
 import javafx.scene.paint.Color;
 
 public class ModernGlobalDesign implements DesignColorAssociator {

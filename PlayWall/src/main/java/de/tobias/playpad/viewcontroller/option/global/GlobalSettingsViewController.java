@@ -69,7 +69,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 	}
 
 	/**

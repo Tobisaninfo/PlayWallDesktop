@@ -1,4 +1,4 @@
-package de.tobias.playpad.design;
+package de.tobias.playpad.util;
 
 import javafx.animation.Interpolatable;
 import javafx.scene.paint.Color;

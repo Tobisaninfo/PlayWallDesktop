@@ -2,10 +2,10 @@ package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.ModernDesign;
-import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
+import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
@@ -99,12 +99,12 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		if (padSettings.isCustomDesign()) {
-			ModernCartDesignHandler handler = modernDesign.getModernCartDesignHandler();
+			ModernCartDesignHandler handler = modernDesign.cart();
 			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.handleWarning(design, controller, warning, globalDesign);
 		} else {
-			ModernGlobalDesignHandler handler = modernDesign.getModernGlobalDesignHandler();
+			ModernGlobalDesignHandler handler = modernDesign.global();
 			handler.handleWarning(globalDesign, controller, warning);
 		}
 	}
@@ -128,12 +128,12 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		if (padSettings.isCustomDesign()) {
-			ModernCartDesignHandler handler = modernDesign.getModernCartDesignHandler();
+			ModernCartDesignHandler handler = modernDesign.cart();
 			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.stopWarning(design, controller);
 		} else {
-			ModernGlobalDesignHandler handler = modernDesign.getModernGlobalDesignHandler();
+			ModernGlobalDesignHandler handler = modernDesign.global();
 			ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 
 			handler.stopWarning(globalDesign, controller);

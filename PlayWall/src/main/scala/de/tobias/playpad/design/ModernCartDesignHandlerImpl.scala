@@ -1,7 +1,8 @@
 package de.tobias.playpad.design
 
 import de.thecodelabs.utils.application.ApplicationUtils
-import de.tobias.playpad.design.modern.{ModernCartDesign, ModernCartDesignHandler, ModernColor, ModernGlobalDesign}
+import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
+import de.tobias.playpad.design.modern.{ModernCartDesignHandler, ModernColor}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.view.PseudoClasses
@@ -15,7 +16,7 @@ import scala.collection.JavaConverters._
 
 class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 
-	override def convertToCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
+	override def generateCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
 		generateCss(design, flat, classSuffix, design.getBackgroundColor) +
 			generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
 			generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")

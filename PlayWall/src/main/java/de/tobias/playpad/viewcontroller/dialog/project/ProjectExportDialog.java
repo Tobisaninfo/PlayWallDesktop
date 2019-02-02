@@ -66,7 +66,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 	}
 
 	@FXML

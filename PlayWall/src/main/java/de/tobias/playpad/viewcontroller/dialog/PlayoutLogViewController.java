@@ -83,7 +83,7 @@ public class PlayoutLogViewController extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
 	}
 
 	@FXML

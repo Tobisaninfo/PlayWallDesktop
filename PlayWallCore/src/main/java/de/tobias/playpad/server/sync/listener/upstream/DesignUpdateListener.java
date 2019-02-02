@@ -1,7 +1,7 @@
 package de.tobias.playpad.server.sync.listener.upstream;
 
-import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.command.Change;
 import de.tobias.playpad.server.sync.command.CommandManager;

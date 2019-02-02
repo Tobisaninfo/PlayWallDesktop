@@ -99,7 +99,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
 
 		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
+			PlayPadPlugin.styleable().applyStyleSheet(stage);
 		} else {
 			// Add Stylesheet manuel
 			stage.getScene().getStylesheets().add("style/style.css");

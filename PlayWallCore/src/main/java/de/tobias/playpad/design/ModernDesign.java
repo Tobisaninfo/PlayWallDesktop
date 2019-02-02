@@ -4,7 +4,7 @@ import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 
 public interface ModernDesign {
-	ModernGlobalDesignHandler getModernGlobalDesignHandler();
+	ModernGlobalDesignHandler global();
 
-	ModernCartDesignHandler getModernCartDesignHandler();
+	ModernCartDesignHandler cart();
 }

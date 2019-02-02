@@ -4,7 +4,7 @@ import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
+import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorPickerView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

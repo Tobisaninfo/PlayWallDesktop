@@ -5,7 +5,8 @@ import java.util.function.Consumer
 
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
-import de.tobias.playpad.design.modern.{ModernCartDesign, ModernColor, ModernGlobalDesign, ModernGlobalDesignHandler}
+import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
+import de.tobias.playpad.design.modern.{ModernColor, ModernGlobalDesignHandler}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
@@ -43,16 +44,16 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		// generate dynamic style sheet
 		val customCss = ApplicationUtils.getApplication.getPath(PathType.CONFIGURATION, "custom_style.css")
 		val stringBuilder = new StringBuilder()
-		stringBuilder.append(convertToCSS(design))
+		stringBuilder.append(generateCss(design))
 
-		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.getModernCartDesignHandler
+		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.cart
 
 		project.getPads.forEach(pad => {
 			val padSettings = pad.getPadSettings
 
 			if (padSettings.isCustomDesign) {
 				val cartDesign = padSettings.getDesign
-				stringBuilder.append(cartDesignHandler.convertToCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
+				stringBuilder.append(cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
 			}
 		})
 		Files.write(customCss, stringBuilder.toString().getBytes())
@@ -61,7 +62,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		stage.getScene.getStylesheets.add(customCss.toUri.toString)
 	}
 
-	private def convertToCSS(design: ModernGlobalDesign): String = {
+	private def generateCss(design: ModernGlobalDesign): String = {
 		generateCss(design, design.getBackgroundColor) +
 			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
 			generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")

@@ -1,7 +1,7 @@
 package de.tobias.playpad.design.modern;
 
 import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.design.FadeableColor;
+import de.tobias.playpad.util.FadeableColor;
 import javafx.scene.paint.*;
 
 public enum ModernColor implements DisplayableColor {

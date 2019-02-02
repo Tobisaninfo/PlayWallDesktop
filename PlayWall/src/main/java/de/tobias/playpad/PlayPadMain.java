@@ -16,7 +16,7 @@ import de.thecodelabs.utils.util.Localization.LocalizationDelegate;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playpad.design.ModernDesignHandler;
+import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -137,7 +137,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
-		PlayPadPlugin.setDesignHandler(new ModernDesignHandler());
+		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
 		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());

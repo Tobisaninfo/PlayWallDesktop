@@ -1,7 +1,7 @@
 package de.tobias.playpad.pad;
 
-import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernColor;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;

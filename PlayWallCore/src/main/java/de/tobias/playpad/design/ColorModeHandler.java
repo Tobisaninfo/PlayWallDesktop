@@ -1,7 +1,7 @@
 package de.tobias.playpad.design;
 
 import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.design.modern.ModernCartDesign;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import javafx.scene.Node;
 
 import java.util.function.Consumer;

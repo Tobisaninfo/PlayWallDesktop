@@ -1,7 +1,7 @@
 package de.tobias.playpad.design.modern.serializer;
 
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
+import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import org.dom4j.Element;
 
 public class ModernGlobalDesignSerializer {

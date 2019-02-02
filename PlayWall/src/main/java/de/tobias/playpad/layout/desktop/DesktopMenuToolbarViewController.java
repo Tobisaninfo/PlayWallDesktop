@@ -280,7 +280,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		} else if (newValue == DesktopEditMode.COLOR) {
 			colorButton.setSelected(true);
 
-			ModernGlobalDesignHandler designHandler = PlayPadMain.getProgramInstance().getModernDesign().getModernGlobalDesignHandler();
+			ModernGlobalDesignHandler designHandler = PlayPadMain.getProgramInstance().getModernDesign().global();
 			if (designHandler instanceof ColorModeHandler) {
 				if (colorPickerView == null) {
 					colorPickerView = new DesktopColorPickerView((ColorModeHandler) designHandler);

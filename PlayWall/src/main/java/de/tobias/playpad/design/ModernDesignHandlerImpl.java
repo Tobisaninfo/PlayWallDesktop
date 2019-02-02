@@ -9,7 +9,7 @@ public class ModernDesignHandlerImpl implements ModernDesign {
 	private ModernGlobalDesignHandler globalDesignHandler;
 
 	@Override
-	public ModernGlobalDesignHandler getModernGlobalDesignHandler() {
+	public ModernGlobalDesignHandler global() {
 		if (globalDesignHandler == null) {
 			globalDesignHandler = new ModernGlobalDesignHandlerImpl();
 		}
@@ -17,7 +17,7 @@ public class ModernDesignHandlerImpl implements ModernDesign {
 	}
 
 	@Override
-	public ModernCartDesignHandler getModernCartDesignHandler() {
+	public ModernCartDesignHandler cart() {
 		if (cartDesignHandler == null) {
 			cartDesignHandler = new ModernCartDesignHandlerImpl();
 		}

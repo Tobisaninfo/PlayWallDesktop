@@ -2,6 +2,7 @@ package de.tobias.playpad.design;
 
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.util.FadeableColor;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;

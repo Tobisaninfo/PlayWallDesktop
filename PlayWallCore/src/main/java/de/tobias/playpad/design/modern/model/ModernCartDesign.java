@@ -1,6 +1,7 @@
-package de.tobias.playpad.design.modern;
+package de.tobias.playpad.design.modern.model;
 
 import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
