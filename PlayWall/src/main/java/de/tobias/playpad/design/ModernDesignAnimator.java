@@ -24,43 +24,16 @@ public class ModernDesignAnimator {
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
 	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
-		int index = padViewController.getPad().getPosition();
-
-		if (timelines.containsKey(index)) {
-			timelines.get(index).stop();
-		}
-
-		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
-
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
-		backgroundColor.addListener(fadeListener);
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
 				new KeyFrame(duration, new KeyValue(backgroundColor, endColor)));
 
-		timeline.playFromStart();
-		timeline.setOnFinished(event ->
-		{
-			backgroundColor.removeListener(fadeListener);
-			padViewController.getView().setStyle("");
-			timelines.remove(index);
-		});
-
-		// Memory
-		timelines.put(index, timeline);
+		animate(padViewController, timeline, backgroundColor);
 	}
 
 	public static void animateWarn(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
-		int index = padViewController.getPad().getPosition();
-
-		if (timelines.containsKey(index)) {
-			timelines.get(index).stop();
-		}
-
-		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
-
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
-		backgroundColor.addListener(fadeListener);
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
 				new KeyFrame(Duration.seconds(0.125), new KeyValue(backgroundColor, startColor)),
@@ -69,11 +42,24 @@ public class ModernDesignAnimator {
 
 		timeline.setAutoReverse(true);
 		timeline.setCycleCount((int) (duration.toSeconds() / 0.625));
+		animate(padViewController, timeline, backgroundColor);
+	}
+
+	private static void animate(IPadViewController padViewController, Timeline timeline, ObjectProperty<FadeableColor> objectProperty) {
+		int index = padViewController.getPad().getPosition();
+
+		if (timelines.containsKey(index)) {
+			timelines.get(index).stop();
+		}
+
+		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
+		objectProperty.addListener(fadeListener);
+
 		timeline.playFromStart();
 
 		timeline.setOnFinished(event ->
 		{
-			backgroundColor.removeListener(fadeListener);
+			objectProperty.removeListener(fadeListener);
 			padViewController.getView().setStyle("");
 			timelines.remove(index);
 		});
