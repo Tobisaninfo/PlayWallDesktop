@@ -56,7 +56,11 @@ public class ModernPluginManager {
 	}
 
 	public void loadFile(Path path) {
-		pluginManager.addFolder(path);
+		if (path.endsWith("classes")) {
+			pluginManager.addFile(path);
+		} else {
+			pluginManager.addFolder(path);
+		}
 		pluginManager.loadPlugins();
 
 		// Registriert Funktionen aus Plugin (Module und Update, ...)

@@ -1,7 +1,6 @@
 package de.tobias.playpad;
 
 import de.thecodelabs.logger.FileOutputOption;
-import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.LogLevelFilter;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
@@ -90,23 +89,27 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	public static SSLContext sslContext;
 
-	public static void main(String[] args) throws Exception {
-		// Verhindert einen Bug unter Windows 10 mit comboboxen
-		if (OS.getType() == OSType.Windows) {
-			System.setProperty("glass.accessible.force", "false");
+	public static void main(String[] args) {
+		try {
+			// Verhindert einen Bug unter Windows 10 mit comboboxen
+			if (OS.getType() == OSType.Windows) {
+				System.setProperty("glass.accessible.force", "false");
+			}
+
+			// Register UserDefaults Serializer
+			UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
+
+			App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
+			ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+
+			Logger.init(app.getPath(PathType.LOG));
+			Logger.setLevelFilter(LogLevelFilter.DEBUG);
+			Logger.debug("Start JavaFX Application");
+
+			app.start(args);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		// Register UserDefaults Serializer
-		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
-
-		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
-		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
-
-		Logger.init(app.getPath(PathType.LOG));
-		Logger.setLevelFilter(LogLevelFilter.DEBUG);
-		Logger.log(LogLevel.DEBUG, "Start JavaFX Application");
-
-		app.start(args);
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		setupLocalization();
 
 		// Setup Global Settings
-		Logger.log(LogLevel.DEBUG, "Load global settings");
+		Logger.debug("Load global settings");
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
 		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", uiResourceBundle);
@@ -256,7 +259,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		try {
 			// Save last open project
 			Project project = impl.getCurrentProject();
