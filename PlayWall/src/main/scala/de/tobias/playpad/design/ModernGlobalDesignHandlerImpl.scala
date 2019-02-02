@@ -62,10 +62,9 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	private def convertToCSS(design: ModernGlobalDesign): String = {
-		var css: String = generateCss(design, design.getBackgroundColor)
-		css += generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
-		css += generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
-		css
+		generateCss(design, design.getBackgroundColor) +
+			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
+			generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
 	}
 
 	private def generateCss(design: ModernGlobalDesign, color: ModernColor, styleState: String = ""): String = {

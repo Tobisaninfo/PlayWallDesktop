@@ -16,10 +16,9 @@ import scala.collection.JavaConverters._
 class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 
 	override def convertToCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
-		var css: String = generateCss(design, flat, classSuffix, design.getBackgroundColor)
-		css += generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
-		css += generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
-		css
+		generateCss(design, flat, classSuffix, design.getBackgroundColor) +
+			generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
+			generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
 	}
 
 	private def generateCss(design: ModernCartDesign, flat: Boolean, padIdentifier: String, color: ModernColor, styleState: String = ""): String = {
@@ -43,14 +42,13 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
 
-	// TODO Handle flat design here
 	override def handleWarning(design: ModernCartDesign, controller: IPadViewController, warning: Duration, globalDesign: ModernGlobalDesign): Unit = {
 		if (globalDesign.isWarnAnimation) {
 			val playColor = design.getPlayColor
 			val backgroundColor = design.getBackgroundColor
 
 			val fadeStopColor = if (globalDesign.isFlatDesign) backgroundColor.toFlatFadeableColor else backgroundColor.toFadeableColor
-			val fadePlayColor = playColor.toFadeableColor
+			val fadePlayColor = if (globalDesign.isFlatDesign) playColor.toFlatFadeableColor else playColor.toFadeableColor
 
 			var animationDuration = warning
 			val pad = controller.getPad
