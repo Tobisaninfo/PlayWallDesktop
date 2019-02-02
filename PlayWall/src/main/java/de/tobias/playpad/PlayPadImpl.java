@@ -11,6 +11,8 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
+import de.tobias.playpad.design.ModernDesign;
+import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
 import de.tobias.playpad.midi.PD12;
@@ -51,6 +53,7 @@ public class PlayPadImpl implements PlayPad {
 	private static Module module;
 
 	protected GlobalSettings globalSettings;
+	private ModernDesign modernDesign;
 
 	protected Session session;
 
@@ -180,10 +183,13 @@ public class PlayPadImpl implements PlayPad {
 		try {
 			Path playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db");
 			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath));
-			Logger.log(LogLevel.INFO, "Setup LogSeasonStorageHandler in path: " + playOutLogPath);
+			Logger.info("Setup LogSeasonStorageHandler in path: " + playOutLogPath);
 		} catch (SQLException e) {
-			Logger.log(LogLevel.ERROR, "Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
+			Logger.error("Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
 		}
+
+		modernDesign = new ModernDesignHandlerImpl();
+
 		registerComponents(resourceBundle);
 		configureServer(delegate);
 	}
@@ -247,6 +253,10 @@ public class PlayPadImpl implements PlayPad {
 
 	public Session getSession() {
 		return session;
+	}
+
+	public ModernDesign getModernDesign() {
+		return modernDesign;
 	}
 
 	@Override

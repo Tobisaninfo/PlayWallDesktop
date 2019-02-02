@@ -11,7 +11,7 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
 import de.tobias.playpad.viewcontroller.main.IMainViewController
-import de.tobias.playpad.{DisplayableColor, PlayPadPlugin}
+import de.tobias.playpad.{DisplayableColor, PlayPadMain}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.Duration
@@ -45,7 +45,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val stringBuilder = new StringBuilder()
 		stringBuilder.append(convertToCSS(design))
 
-		val cartDesignHandler = PlayPadPlugin.getModernDesignHandler.getModernCartDesignHandler
+		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.getModernCartDesignHandler
 
 		project.getPads.forEach(pad => {
 			val padSettings = pad.getPadSettings

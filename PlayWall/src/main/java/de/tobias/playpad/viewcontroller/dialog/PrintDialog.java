@@ -8,9 +8,7 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -73,8 +71,7 @@ public class PrintDialog extends NVC {
 		stage.setMinHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	private void createPreview(int pageIndex) {

@@ -11,8 +11,6 @@ import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.profile.Profile;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Hyperlink;
@@ -124,7 +122,6 @@ public class AboutDialog extends NVC {
 
 		stage.getScene().setFill(Color.TRANSPARENT);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 }

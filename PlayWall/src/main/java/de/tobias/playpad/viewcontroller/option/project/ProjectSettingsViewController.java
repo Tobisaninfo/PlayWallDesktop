@@ -7,8 +7,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -74,8 +72,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 		stage.setMinHeight(500);
 		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	/**

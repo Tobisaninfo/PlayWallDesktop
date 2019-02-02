@@ -16,7 +16,7 @@ import de.thecodelabs.utils.util.Localization.LocalizationDelegate;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playpad.design.ModernDesignHandlerImpl;
+import de.tobias.playpad.design.ModernDesignHandler;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -119,35 +119,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		// Init SSLContext
 		if (app.isDebug()) {
-			Logger.log(LogLevel.DEBUG, "Setup TrustManager in Debug Mode");
-			// Create a trust manager that does not validate certificate chains
-			TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-					return null;
-				}
-
-				public void checkClientTrusted(X509Certificate[] certs, String authType) {
-				}
-
-				public void checkServerTrusted(X509Certificate[] certs, String authType) {
-				}
-			}};
-
-			try {
-				// Install the all-trusting trust manager
-				sslContext = SSLContext.getInstance("SSL");
-				sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-				HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-				HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
-
-				// Unirest
-				SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
-				SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-				CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
-				Unirest.setHttpClient(httpclient);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			disableSSL();
 		}
 
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
@@ -165,7 +137,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setImplementation(impl);
-		PlayPadPlugin.setModernDesignHandler(new ModernDesignHandlerImpl());
+		PlayPadPlugin.setDesignHandler(new ModernDesignHandler());
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
 		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
@@ -341,4 +313,35 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		return impl;
 	}
 
+	private static void disableSSL() {
+		Logger.warning("Setup TrustManager in Debug Mode");
+		// Create a trust manager that does not validate certificate chains
+		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			}
+
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			}
+		}};
+
+		try {
+			// Install the all-trusting trust manager
+			sslContext = SSLContext.getInstance("SSL");
+			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+			HttpsURLConnection.setDefaultHostnameVerifier((hostname, sslSession) -> true);
+
+			// Unirest
+			SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+			CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
+			Unirest.setHttpClient(httpclient);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

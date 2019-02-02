@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.listener;
 
-import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.modern.ModernCartDesign;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesign;
@@ -95,18 +96,20 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		Duration warning = padSettings.getWarning();
 
 		ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
+
 		if (padSettings.isCustomDesign()) {
-			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
+			ModernCartDesignHandler handler = modernDesign.getModernCartDesignHandler();
 			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.handleWarning(design, controller, warning, globalDesign);
 		} else {
-			ModernGlobalDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
+			ModernGlobalDesignHandler handler = modernDesign.getModernGlobalDesignHandler();
 			handler.handleWarning(globalDesign, controller, warning);
 		}
 	}
 
-	protected void startWarningThread() {
+	private void startWarningThread() {
 		if (warningThread != null) {
 			warningThread.interrupt();
 		}
@@ -122,14 +125,15 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		}
 
 		PadSettings padSettings = pad.getPadSettings();
+		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		if (padSettings.isCustomDesign()) {
-			ModernCartDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernCartDesignHandler();
+			ModernCartDesignHandler handler = modernDesign.getModernCartDesignHandler();
 			ModernCartDesign design = pad.getPadSettings().getDesign();
 
 			handler.stopWarning(design, controller);
 		} else {
-			ModernGlobalDesignHandler handler = PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler();
+			ModernGlobalDesignHandler handler = modernDesign.getModernGlobalDesignHandler();
 			ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 
 			handler.stopWarning(globalDesign, controller);

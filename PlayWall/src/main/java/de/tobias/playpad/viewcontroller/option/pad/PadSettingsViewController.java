@@ -6,13 +6,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.mediapath.MediaPath;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -138,8 +136,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	private void showCurrentSettings() {

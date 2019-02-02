@@ -6,7 +6,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -100,8 +99,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	@FXML

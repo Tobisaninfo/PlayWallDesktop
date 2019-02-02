@@ -8,8 +8,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
@@ -68,8 +66,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	@FXML

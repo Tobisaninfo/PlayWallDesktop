@@ -7,9 +7,7 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.NumberUtils;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.equalizerplugin.Equalizer;
-import de.tobias.playpad.profile.Profile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Orientation;
@@ -99,8 +97,7 @@ public class EqualizerViewController extends NVC {
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 		stage.getScene().getStylesheets().add("style/style.css");
 	}
 

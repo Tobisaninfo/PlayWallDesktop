@@ -1,13 +1,13 @@
 package de.tobias.playpad;
 
-import de.tobias.playpad.design.ModernDesignHandler;
+import de.tobias.playpad.design.modern.DesignHandler;
 import de.tobias.playpad.server.ServerHandler;
 import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
 
 public final class PlayPadPlugin {
 
 	private static PlayPad implementation;
-	private static ModernDesignHandler modernDesignHandler;
+	private static DesignHandler modernDesignHandler;
 	private static RegistryCollection registryCollection;
 	private static ServerHandler serverHandler;
 	private static CommandExecutorHandler commandExecutorHandler;
@@ -49,11 +49,11 @@ public final class PlayPadPlugin {
 		commandExecutorHandler = handler;
 	}
 
-	public static ModernDesignHandler getModernDesignHandler() {
+	public static DesignHandler getDesignHandler() {
 		return modernDesignHandler;
 	}
 
-	static void setModernDesignHandler(ModernDesignHandler modernDesignHandler) {
+	static void setDesignHandler(DesignHandler modernDesignHandler) {
 		PlayPadPlugin.modernDesignHandler = modernDesignHandler;
 	}
 }

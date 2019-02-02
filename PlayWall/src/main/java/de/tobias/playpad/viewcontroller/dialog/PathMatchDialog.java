@@ -8,14 +8,12 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadViewController;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.cell.PathMatchActionCell;
 import javafx.application.Platform;
@@ -192,8 +190,7 @@ public class PathMatchDialog extends NVC {
 		stage.setMaxHeight(600);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	public void showAndWait() {

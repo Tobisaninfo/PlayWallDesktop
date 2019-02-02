@@ -5,8 +5,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.server.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -59,8 +57,7 @@ public class AuthViewController extends NVC {
 		stage.setHeight(250);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Login_Title));
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	@FXML

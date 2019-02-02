@@ -9,11 +9,9 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.PlayoutLogPdfExport;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -85,8 +83,7 @@ public class PlayoutLogViewController extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	@FXML

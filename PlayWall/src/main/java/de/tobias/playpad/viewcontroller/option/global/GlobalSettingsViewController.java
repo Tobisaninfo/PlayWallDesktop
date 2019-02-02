@@ -8,8 +8,6 @@ import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.design.modern.ModernGlobalDesign;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
@@ -71,8 +69,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
-		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		PlayPadPlugin.getModernDesignHandler().getModernGlobalDesignHandler().applyStyleSheet(design, stage);
+		PlayPadPlugin.getDesignHandler().applyStyleSheet(stage);
 	}
 
 	/**
