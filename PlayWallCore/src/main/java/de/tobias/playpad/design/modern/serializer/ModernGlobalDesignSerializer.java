@@ -51,6 +51,10 @@ public class ModernGlobalDesignSerializer {
 				e.printStackTrace();
 			}
 		}
+		Element flatDesignElement = rootElement.element("FlatDesign");
+		if (flatDesignElement != null) {
+			design.setFlatDesign(Boolean.valueOf(flatDesignElement.getStringValue()));
+		}
 
 		return design;
 	}
@@ -62,5 +66,6 @@ public class ModernGlobalDesignSerializer {
 		animationElement.addElement("Warn").addText(String.valueOf(design.isWarnAnimation()));
 		rootElement.addElement("InfoFontSize").addText(String.valueOf(design.getInfoFontSize()));
 		rootElement.addElement("TitleFontSize").addText(String.valueOf(design.getTitleFontSize()));
+		rootElement.addElement("FlatDesign").addText(String.valueOf(design.isFlatDesign()));
 	}
 }
