@@ -1,16 +1,16 @@
 package de.tobias.playpad.plugin;
 
 import de.thecodelabs.plugins.Plugin;
-import de.tobias.updater.client.Updatable;
+import de.thecodelabs.versionizer.config.Artifact;
 
 /**
  * Schnittatelle, von der Plugins erben, damit diese alle notwendigen Services unterstützen.
  *
  * @author tobias - s0553746
  */
-public interface AdvancedPlugin extends Plugin {
+public interface PlayPadPluginStub extends Plugin {
 
 	Module getModule();
 
-	Updatable getUpdatable();
+	Artifact getArtifact();
 }

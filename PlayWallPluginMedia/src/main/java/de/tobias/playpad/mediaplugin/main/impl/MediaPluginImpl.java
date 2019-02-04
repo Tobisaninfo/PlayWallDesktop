@@ -1,20 +1,20 @@
 package de.tobias.playpad.mediaplugin.main.impl;
 
+import de.thecodelabs.storage.settings.Storage;
+import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadPlugin;
+import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.pad.content.PadContentFactory;
-import de.tobias.playpad.plugin.AdvancedPlugin;
 import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.StandardPluginUpdater;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.Registry;
-import de.tobias.updater.client.Updatable;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -30,15 +30,13 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, ChangeListener<Boolean> {
+public class MediaPluginImpl implements PlayPadPluginStub, SettingsListener, ChangeListener<Boolean> {
 
 	private static final String NAME = "MediaPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
-	private static final int currentBuild = 8;
-	private static final String currentVersion = "4.2.2";
 
 	private static Module module;
-	private static Updatable updater;
+	private static Artifact artifact;
 
 	private static MediaPluginImpl instance;
 	private MediaViewController videoViewController;
@@ -55,7 +53,7 @@ public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, Change
 		// Init
 		instance = this;
 		module = new Module(NAME, IDENTIFIER);
-		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
+		artifact = Storage.load(MediaPluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
 		blindProperty = new SimpleBooleanProperty();
 
@@ -64,13 +62,13 @@ public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, Change
 
 		// Load Content Types
 		try {
-			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+			Registry<PadContentFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistryCollection().getPadContents();
 			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		PlayPadPlugin.getImplementation().addSettingsListener(this);
+		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
 
 		if (Profile.currentProfile() != null) {
 			onLoad(Profile.currentProfile());
@@ -93,7 +91,7 @@ public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, Change
 		}
 
 		try {
-			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistryCollection().getActions();
+			Registry<ActionFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistryCollection().getActions();
 			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,7 +160,7 @@ public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, Change
 		{
 			if (newValue) {
 				videoViewController.blind(true);
-				Pane root = (Pane) PlayPadPlugin.getImplementation().getMainViewController().getParent();
+				Pane root = (Pane) de.tobias.playpad.PlayPadPlugin.getImplementation().getMainViewController().getParent();
 				if (blindHUD != null)
 					blindHUD.addToParent(root);
 			} else {
@@ -178,7 +176,7 @@ public class MediaPluginImpl implements AdvancedPlugin, SettingsListener, Change
 	}
 
 	@Override
-	public Updatable getUpdatable() {
-		return updater;
+	public Artifact getArtifact() {
+		return artifact;
 	}
 }

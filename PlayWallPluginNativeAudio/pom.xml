@@ -44,6 +44,24 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>de.thecodelabs</groupId>
+                <artifactId>versionizer-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <configuration>
+                    <resourceFile>build.json</resourceFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>resource-fill</id>
+                        <goals>
+                            <goal>resource-fill</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--Scala Plugin-->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>

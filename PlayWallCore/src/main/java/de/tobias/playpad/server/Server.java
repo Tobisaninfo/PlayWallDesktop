@@ -2,15 +2,14 @@ package de.tobias.playpad.server;
 
 import com.google.gson.JsonElement;
 import com.neovisionaries.ws.client.WebSocketException;
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.plugin.ModernPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.conflict.Version;
-import de.tobias.updater.client.UpdateChannel;
 import javafx.beans.property.ObjectProperty;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -52,17 +51,7 @@ public interface Server {
 	 * @param channel update channel
 	 * @throws IOException network error
 	 */
-	void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException;
-
-	/**
-	 * Load a source from the servers update channel.
-	 *
-	 * @param path        server path
-	 * @param channel     update channel
-	 * @param destination local path
-	 * @throws IOException network error
-	 */
-	void loadSource(String path, UpdateChannel channel, Path destination) throws IOException;
+	void loadPlugin(ModernPlugin plugin, UpdateService.RepositoryType channel) throws IOException;
 
 	/**
 	 * Create a session on the server side and return the private key for the communication.

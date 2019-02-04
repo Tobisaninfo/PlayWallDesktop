@@ -1,18 +1,22 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
+import de.thecodelabs.storage.settings.Storage;
+import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadPlugin;
+import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Equalizeable;
-import de.tobias.playpad.plugin.*;
+import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.plugin.PadListener;
+import de.tobias.playpad.plugin.PlayPadPluginStub;
+import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import de.tobias.updater.client.Updatable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
@@ -24,15 +28,13 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-public class EqualizerPluginImpl implements AdvancedPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
+public class EqualizerPluginImpl implements PlayPadPluginStub, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
 	private static final String NAME = "Equalizer";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
-	private static final int currentBuild = 5;
-	private static final String currentVersion = "4.1";
 
 	private Module module;
-	private Updatable updatable;
+	private Artifact artifact;
 
 	private Stage mainStage;
 	private EqualizerViewController equalizerViewController;
@@ -54,10 +56,10 @@ public class EqualizerPluginImpl implements AdvancedPlugin, WindowListener<IMain
 		}
 
 		module = new Module(NAME, IDENTIFIER);
-		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
+		artifact = Storage.load(EqualizerPluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
-		PlayPadPlugin.getImplementation().addMainViewListener(this);
-		PlayPadPlugin.getImplementation().addPadListener(this);
+		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
+		de.tobias.playpad.PlayPadPlugin.getImplementation().addPadListener(this);
 
 		System.out.println("Enable Equalizer Plugin");
 	}
@@ -135,7 +137,7 @@ public class EqualizerPluginImpl implements AdvancedPlugin, WindowListener<IMain
 	}
 
 	@Override
-	public Updatable getUpdatable() {
-		return updatable;
+	public Artifact getArtifact() {
+		return artifact;
 	}
 }

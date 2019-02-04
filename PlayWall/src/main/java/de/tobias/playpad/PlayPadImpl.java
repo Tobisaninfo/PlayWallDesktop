@@ -3,6 +3,7 @@ package de.tobias.playpad;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -10,6 +11,10 @@ import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.thecodelabs.versionizer.VersionizerItem;
+import de.thecodelabs.versionizer.config.Artifact;
+import de.thecodelabs.versionizer.config.Repository;
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
@@ -51,6 +56,8 @@ public class PlayPadImpl implements PlayPad {
 	private MainViewController mainViewController;
 	private Project currentProject;
 	private static Module module;
+
+	private UpdateService updateService;
 
 	protected GlobalSettings globalSettings;
 	private ModernDesign modernDesign;
@@ -190,6 +197,14 @@ public class PlayPadImpl implements PlayPad {
 
 		modernDesign = new ModernDesignHandlerImpl();
 
+		// Register Update Service
+		Artifact playpadArtifact = app.getClasspathResource("build-app.json").deserialize(StorageTypes.JSON, Artifact.class);
+		Repository repository = app.getClasspathResource("repository.yml").deserialize(StorageTypes.YAML, Repository.class);
+
+		VersionizerItem versionizerItem = new VersionizerItem(repository, SystemUtils.getRunPath().toString());
+		updateService = UpdateService.startVersionizer(versionizerItem, UpdateService.Strategy.JAR, UpdateService.InteractionType.GUI);
+		updateService.addArtifact(playpadArtifact, SystemUtils.getRunPath());
+
 		registerComponents(resourceBundle);
 		configureServer(delegate);
 	}
@@ -257,6 +272,11 @@ public class PlayPadImpl implements PlayPad {
 
 	public ModernDesign getModernDesign() {
 		return modernDesign;
+	}
+
+	@Override
+	public UpdateService getUpdateService() {
+		return updateService;
 	}
 
 	@Override

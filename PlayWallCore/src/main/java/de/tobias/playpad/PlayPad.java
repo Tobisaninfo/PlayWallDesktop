@@ -1,5 +1,6 @@
 package de.tobias.playpad;
 
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
@@ -107,4 +108,6 @@ public interface PlayPad {
 	 * @return project
 	 */
 	Project getCurrentProject();
+
+	UpdateService getUpdateService();
 }

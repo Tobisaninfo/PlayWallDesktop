@@ -1,27 +1,26 @@
 package de.tobias.playpad.plugin
 
+import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.OS
 import de.thecodelabs.utils.util.OS.OSType
+import de.thecodelabs.versionizer.config.Artifact
 import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoader}
-import de.tobias.updater.client.Updatable
 
 /**
   * Created by tobias on 16.04.17.
   */
-class NativeAudioPluginImpl extends AdvancedPlugin {
+class NativeAudioPluginImpl extends PlayPadPluginStub {
 
 	private val NAME = "NativeAudioMac"
 	private val IDENTIFIER = "de.tobias.playwall.plugin.nativeaudio"
-	private val currentBuild = 1
-	private val currentVersion = "1.0"
 
 	private var module: Module = _
-	private var updatable: Updatable = _
+	private var artifact: Artifact = _
 
 
 	override def startup(): Unit = {
 		module = new Module(NAME, IDENTIFIER)
-		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module)
+		artifact = Storage.load(classOf[NativeAudioPluginImpl].getClassLoader.getResourceAsStream("build.json"), StorageTypes.JSON, classOf[Artifact])
 
 		// Init Audio Implementation
 		val loader = OS.getType match {
@@ -42,5 +41,5 @@ class NativeAudioPluginImpl extends AdvancedPlugin {
 
 	override def getModule: Module = module
 
-	override def getUpdatable: Updatable = updatable
+	override def getArtifact: Artifact = artifact
 }

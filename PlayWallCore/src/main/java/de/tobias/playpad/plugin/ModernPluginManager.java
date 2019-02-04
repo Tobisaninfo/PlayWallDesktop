@@ -4,8 +4,7 @@ import de.thecodelabs.plugins.Plugin;
 import de.thecodelabs.plugins.PluginManager;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
-import de.tobias.updater.client.Updatable;
-import de.tobias.updater.client.UpdateRegistery;
+import de.tobias.playpad.PlayPadPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +25,7 @@ public class ModernPluginManager {
 
 	private PluginManager pluginManager;
 	private Set<Path> deletedPlugins;
+
 	private Set<Module> modules;
 
 	private static ModernPluginManager instance;
@@ -63,15 +63,13 @@ public class ModernPluginManager {
 		}
 		pluginManager.loadPlugins();
 
-		// Registriert Funktionen aus Plugin (Module und Update, ...)
+		// Registriert Funktionen aus Plugin (Module)
 		for (Plugin p : pluginManager.getPlugins()) {
-			if (p instanceof AdvancedPlugin) {
-				AdvancedPlugin advancedPlugin = (AdvancedPlugin) p;
-				Module module = advancedPlugin.getModule();
-				Updatable updatable = advancedPlugin.getUpdatable();
+			if (p instanceof PlayPadPluginStub) {
+				PlayPadPluginStub advancedPlugin = (PlayPadPluginStub) p;
+				modules.add(advancedPlugin.getModule());
 
-				modules.add(module);
-				UpdateRegistery.registerUpdateable(updatable);
+				PlayPadPlugin.getImplementation().getUpdateService().addArtifact(advancedPlugin.getArtifact(), path);
 			}
 		}
 	}
@@ -134,4 +132,5 @@ public class ModernPluginManager {
 	public Set<Module> getModules() {
 		return modules;
 	}
+
 }

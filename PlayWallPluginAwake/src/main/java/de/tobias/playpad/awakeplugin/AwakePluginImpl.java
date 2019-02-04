@@ -1,17 +1,21 @@
 package de.tobias.playpad.awakeplugin;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.storage.settings.Storage;
+import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.plugin.*;
+import de.thecodelabs.versionizer.config.Artifact;
+import de.tobias.playpad.plugin.Module;
+import de.tobias.playpad.plugin.PlayPadPluginStub;
+import de.tobias.playpad.plugin.SettingsListener;
+import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
-import de.tobias.updater.client.Updatable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
@@ -23,15 +27,13 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
+public class AwakePluginImpl implements PlayPadPluginStub, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
 	private static final String NAME = "AwakePlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
-	private static final int currentBuild = 3;
-	private static final String currentVersion = "2.1";
 
 	private Module module;
-	private Updatable updatable;
+	private Artifact artifact;
 
 	private static final String SETTINGS_FILENAME = "Awake.xml";
 
@@ -47,10 +49,10 @@ public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainView
 		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
 
 		module = new Module(NAME, IDENTIFIER);
-		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
+		artifact = Storage.load(AwakePluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
-		PlayPadPlugin.getImplementation().addMainViewListener(this);
-		PlayPadPlugin.getImplementation().addSettingsListener(this);
+		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
+		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
 		Logger.info("Enable Awake Plugin");
 	}
 
@@ -121,7 +123,7 @@ public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainView
 		activeSleep(activeMenu.isSelected());
 		settings.active = activeMenu.isSelected();
 
-		MenuToolbarViewController toolbarController = PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
+		MenuToolbarViewController toolbarController = de.tobias.playpad.PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
 		if (settings.active) {
 			toolbarController.addToolbarItem(iconLabel);
 		} else {
@@ -139,7 +141,7 @@ public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainView
 	}
 
 	@Override
-	public Updatable getUpdatable() {
-		return updatable;
+	public Artifact getArtifact() {
+		return artifact;
 	}
 }

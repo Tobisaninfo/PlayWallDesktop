@@ -12,6 +12,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.ModernPlugin;
@@ -36,7 +37,6 @@ import de.tobias.playpad.server.sync.command.project.ProjectAddCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectRemoveCommand;
 import de.tobias.playpad.server.sync.command.project.ProjectUpdateCommand;
 import de.tobias.playpad.server.sync.conflict.Version;
-import de.tobias.updater.client.UpdateChannel;
 import io.github.openunirest.http.HttpResponse;
 import io.github.openunirest.http.JsonNode;
 import io.github.openunirest.http.Unirest;
@@ -139,13 +139,12 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
-	public void loadPlugin(ModernPlugin plugin, UpdateChannel channel) throws IOException {
+	public void loadPlugin(ModernPlugin plugin, UpdateService.RepositoryType channel) throws IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 		loadSource(plugin.getPath(), channel, path);
 	}
 
-	@Override
-	public void loadSource(String path, UpdateChannel channel, Path destination) throws IOException {
+	private void loadSource(String path, UpdateService.RepositoryType channel, Path destination) throws IOException {
 		String url = "https://" + host + "/" + channel + path;
 		Logger.debug("Load server resource: {0}", path);
 		try {

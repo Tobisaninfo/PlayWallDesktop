@@ -2,27 +2,28 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import de.thecodelabs.utils.ui.AdvancedDialog;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.versionizer.config.Artifact;
+import de.thecodelabs.versionizer.model.Version;
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.updater.client.Updatable;
-import de.tobias.updater.client.UpdateRegistery;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Window;
 
-import java.util.Set;
+import java.util.Map;
 
 public class AutoUpdateDialog extends AdvancedDialog {
 
-	public AutoUpdateDialog(Window owner) {
+	public AutoUpdateDialog(UpdateService updateService, Window owner) {
 		super(owner);
-		Set<Updatable> updates = UpdateRegistery.getAvailableUpdates();
+		final Map<Artifact, Version> remoteVersions = updateService.getRemoteVersions();
 
 		StringBuilder builder = new StringBuilder();
-		for (Updatable update : updates) {
-			builder.append(update.name());
+		for (Artifact artifact : remoteVersions.keySet()) {
+			builder.append(artifact.getArtifactId());
 			builder.append(" ");
-			builder.append(update.getNewVersion());
+			builder.append(remoteVersions.get(artifact).toVersionString());
 			builder.append("\n");
 		}
 

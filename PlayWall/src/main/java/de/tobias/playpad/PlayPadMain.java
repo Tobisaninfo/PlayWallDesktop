@@ -15,6 +15,7 @@ import de.thecodelabs.utils.util.Localization.LocalizationDelegate;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
+import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
@@ -24,14 +25,11 @@ import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.ServerHandlerImpl;
 import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.update.PlayPadUpdater;
-import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.update.VersionUpdater;
 import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.LaunchDialog;
 import de.tobias.playpad.viewcontroller.LoginViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
-import de.tobias.updater.client.UpdateRegistery;
 import io.github.openunirest.http.Unirest;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -75,7 +73,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	public static final long displayTimeMillis = 1500;
 
-	public static final String projectType = "*.xml";
 	public static final String projectZIPType = "*.zip";
 	public static final String midiPresetType = "*.pre";
 
@@ -157,11 +154,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			/*
 			 * Setup
 			 */
-			PlayPadUpdater updater = new PlayPadUpdater();
-			UpdateRegistery.registerUpdateable(updater);
 
 			impl.startup(Localization.getBundle(), new LoginViewController());
 
+			// App Setup
 			NativeApplication.sharedInstance().setDockIcon(new Image("gfx/Logo-large.png"));
 			NativeApplication.sharedInstance().setAppearance(true);
 
@@ -220,29 +216,32 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			// Show Launch Stage
 			new LaunchDialog(stage);
 
-			// Check Updates
 			checkUpdates(impl.globalSettings, stage);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	@SuppressWarnings("Duplicates")
 	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
 		if (globalSettings.isAutoUpdate() && !globalSettings.isIgnoreUpdate()) {
 			Worker.runLater(() ->
 			{
-				UpdateRegistery.lookupUpdates(globalSettings.getUpdateChannel());
-				if (!UpdateRegistery.getAvailableUpdates().isEmpty()) {
+				UpdateService updateService = impl.getUpdateService();
+				updateService.fetchCurrentVersion();
+				if (updateService.isUpdateAvailable()) {
 					Platform.runLater(() ->
 					{
-						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(owner);
+						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(updateService, owner);
 						autoUpdateDialog.showAndWait().filter(item -> item.getButtonData() == ButtonData.APPLY).ifPresent(result ->
 						{
+							Logger.info("Install update");
 							try {
-								Updates.startUpdate();
+								updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
+							System.exit(0);
 						});
 						if (autoUpdateDialog.isSelected()) {
 							globalSettings.setIgnoreUpdate(true);

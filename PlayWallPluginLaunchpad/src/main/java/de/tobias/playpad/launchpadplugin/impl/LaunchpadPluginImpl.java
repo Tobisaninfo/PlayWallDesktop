@@ -1,32 +1,32 @@
 package de.tobias.playpad.launchpadplugin.impl;
 
+import de.thecodelabs.storage.settings.Storage;
+import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.launchpadplugin.midi.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.s.LaunchPadS;
 import de.tobias.playpad.midi.device.DeviceRegistry;
-import de.tobias.playpad.plugin.AdvancedPlugin;
 import de.tobias.playpad.plugin.Module;
-import de.tobias.playpad.plugin.StandardPluginUpdater;
-import de.tobias.updater.client.Updatable;
+import de.tobias.playpad.plugin.PlayPadPluginStub;
 
 import java.util.ResourceBundle;
 
-public class LaunchpadPluginImpl implements AdvancedPlugin {
+public class LaunchpadPluginImpl implements PlayPadPluginStub {
 
 	private static final String NAME = "LaunchPadPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.launchpad";
-	private static final int currentBuild = 4;
-	private static final String currentVersion = "3.1";
 
 	private static ResourceBundle bundle;
-	private StandardPluginUpdater updater;
+
+	private Artifact artifact;
 	private Module module;
 
 	@Override
 	public void startup() {
 		bundle = Localization.loadBundle("lang/launchpad", LaunchpadPluginImpl.class.getClassLoader());
 		module = new Module(NAME, IDENTIFIER);
-		updater = new StandardPluginUpdater(currentBuild, currentVersion, module);
+		artifact = Storage.load(LaunchpadPluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
 		DeviceRegistry deviceFactory = DeviceRegistry.getFactoryInstance();
 		deviceFactory.registerDevice(LaunchPadMK2.NAME, LaunchPadMK2.class);
@@ -50,7 +50,7 @@ public class LaunchpadPluginImpl implements AdvancedPlugin {
 	}
 
 	@Override
-	public Updatable getUpdatable() {
-		return updater;
+	public Artifact getArtifact() {
+		return artifact;
 	}
 }

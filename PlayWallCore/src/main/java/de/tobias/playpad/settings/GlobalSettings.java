@@ -4,7 +4,6 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.settings.keys.KeyCollection;
-import de.tobias.updater.client.UpdateChannel;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -17,6 +16,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static de.thecodelabs.versionizer.service.UpdateService.RepositoryType;
 
 /**
  * Globale Einstellungen für das Programm. Eine Instanz von diesen Einstellungen wird in {@link PlayPad} verwaltet.
@@ -35,7 +36,7 @@ public class GlobalSettings {
 	// Update
 	private boolean autoUpdate = true;
 	private boolean ignoreUpdate = false;
-	private UpdateChannel updateChannel = UpdateChannel.STABLE;
+	private RepositoryType updateChannel = RepositoryType.RELEASE;
 
 	// Live Mode
 	private boolean liveMode = false;
@@ -61,7 +62,7 @@ public class GlobalSettings {
 		return autoUpdate;
 	}
 
-	public UpdateChannel getUpdateChannel() {
+	public RepositoryType getUpdateChannel() {
 		return updateChannel;
 	}
 
@@ -110,7 +111,7 @@ public class GlobalSettings {
 		this.autoUpdate = autoUpdate;
 	}
 
-	public void setUpdateChannel(UpdateChannel updateChannel) {
+	public void setUpdateChannel(RepositoryType updateChannel) {
 		this.updateChannel = updateChannel;
 	}
 
@@ -190,7 +191,12 @@ public class GlobalSettings {
 				}
 
 				if (root.element(UPDATE_CHANNEL_ELEMENT) != null) {
-					settings.setUpdateChannel(UpdateChannel.valueOf(root.element(UPDATE_CHANNEL_ELEMENT).getStringValue()));
+					try {
+						final RepositoryType repositoryType = RepositoryType.valueOf(root.element(UPDATE_CHANNEL_ELEMENT).getStringValue());
+						settings.setUpdateChannel(repositoryType);
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					}
 				}
 
 				Element liveElement = root.element(LIVE_MODE_ELEMENT);

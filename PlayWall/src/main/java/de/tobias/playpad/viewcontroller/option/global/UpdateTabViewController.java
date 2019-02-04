@@ -1,22 +1,22 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.versionizer.model.Version;
+import de.thecodelabs.versionizer.service.UpdateService;
+import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.update.Updates;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.UpdateCell;
 import de.tobias.playpad.viewcontroller.dialog.UpdaterDialog;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
-import de.tobias.updater.client.Updatable;
-import de.tobias.updater.client.UpdateChannel;
-import de.tobias.updater.client.UpdateRegistery;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,12 +36,12 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private Button manualSearchButton;
 
 	@FXML
-	private ListView<Updatable> openUpdateList;
+	private ListView<Version> openUpdateList;
 	@FXML
 	private Button updateButton;
 
 	@FXML
-	private ComboBox<UpdateChannel> updateChannelComboBox;
+	private ComboBox<UpdateService.RepositoryType> updateChannelComboBox;
 
 	@FXML
 	private Label infoCLabel;
@@ -49,16 +49,17 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private Label infoELabel;
 
 	// Placeholder for List
-	private ProgressIndicator progressIndecator;
+	private ProgressIndicator progressIndicator;
 	private Label placeholderLabel;
 
 	UpdateTabViewController() {
 		load("view/option/global", "UpdateTab", PlayPadMain.getUiResourceBundle());
 
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		final PlayPad playPad = PlayPadPlugin.getImplementation();
+		GlobalSettings globalSettings = playPad.getGlobalSettings();
 
 		updateChannelComboBox.setValue(globalSettings.getUpdateChannel());
-		openUpdateList.getItems().setAll(UpdateRegistery.getAvailableUpdates());
+		openUpdateList.getItems().setAll(playPad.getUpdateService().getRemoteVersions().values());
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
 
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
@@ -70,7 +71,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	@Override
 	public void init() {
 		openUpdateList.setCellFactory(list -> new UpdateCell());
-		updateChannelComboBox.getItems().setAll(UpdateChannel.values());
+		updateChannelComboBox.getItems().setAll(UpdateService.RepositoryType.RELEASE, UpdateService.RepositoryType.SNAPSHOT);
 		updateChannelComboBox.setCellFactory(list -> new EnumCell<>(Strings.Update_Channel_BaseName));
 		updateChannelComboBox.setButtonCell(new EnumCell<>(Strings.Update_Channel_BaseName));
 
@@ -83,9 +84,9 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		infoCLabel.setGraphic(new ImageView("gfx/class_obj.png"));
 		infoELabel.setGraphic(new ImageView("gfx/enum_obj.png"));
 
-		progressIndecator = new ProgressIndicator(-1);
-		progressIndecator.setMinSize(75, 75);
-		progressIndecator.setMaxSize(75, 75);
+		progressIndicator = new ProgressIndicator(-1);
+		progressIndicator.setMinSize(75, 75);
+		progressIndicator.setMaxSize(75, 75);
 
 		placeholderLabel = new Label(Localization.getString(Strings.UI_Placeholder_Updates));
 		openUpdateList.setPlaceholder(placeholderLabel);
@@ -99,18 +100,19 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 		Profile profile = Profile.currentProfile();
 		if (profile != null) {
-			openUpdateList.setPlaceholder(progressIndecator);
+			openUpdateList.setPlaceholder(progressIndicator);
 
 			Worker.runLater(() ->
 			{
+				final UpdateService updateService = PlayPadPlugin.getImplementation().getUpdateService();
+
 				// Search for updates
-				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
-				UpdateRegistery.lookupUpdates(globalSettings.getUpdateChannel());
+				updateService.fetchCurrentVersion();
 
 				Platform.runLater(() ->
 				{
 					openUpdateList.setPlaceholder(placeholderLabel);
-					openUpdateList.getItems().setAll(UpdateRegistery.getAvailableUpdates());
+					openUpdateList.getItems().setAll(updateService.getRemoteVersions().values());
 					updateButton.setDisable(openUpdateList.getItems().isEmpty());
 				});
 			});
@@ -118,6 +120,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		}
 	}
 
+	@SuppressWarnings("Duplicates")
 	@FXML
 	private void updateHandler(ActionEvent event) {
 		UpdaterDialog dialog = new UpdaterDialog(getContainingWindow());
@@ -128,11 +131,15 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 		Worker.runLater(() ->
 		{
+			final UpdateService updateService = PlayPadPlugin.getImplementation().getUpdateService();
+
+			Logger.info("Install update");
 			try {
-				Updates.startUpdate();
+				updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			System.exit(0);
 		});
 	}
 

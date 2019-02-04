@@ -12,15 +12,6 @@
 
     <artifactId>PlayWallCore</artifactId>
 
-    <properties>
-        <jlayer.version>1.0.1</jlayer.version>
-
-        <jna.version>5.2.0</jna.version>
-
-        <scala-library.version>2.12.7</scala-library.version>
-        <junit.version>4.12</junit.version>
-    </properties>
-
     <dependencies>
         <!--Own libraries-->
         <dependency>
@@ -37,9 +28,9 @@
             <version>${libPlugins.version}</version>
         </dependency>
         <dependency>
-            <groupId>de.tobias</groupId>
-            <artifactId>Updater</artifactId>
-            <version>${Updater.version}</version>
+            <groupId>de.thecodelabs.versionizer</groupId>
+            <artifactId>api</artifactId>
+            <version>${versionizer-api.version}</version>
         </dependency>
 
         <!--Audio-->
