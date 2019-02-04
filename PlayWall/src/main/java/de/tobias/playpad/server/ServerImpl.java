@@ -134,11 +134,8 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	public ModernPlugin getPlugin(String name) throws IOException {
 		URL url = new URL("https://" + host + "/plugin/" + name);
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
-		Type listType = new TypeToken<ModernPlugin>() {
-		}.getType();
-
 		Gson gson = new Gson();
-		return gson.fromJson(reader, listType);
+		return gson.fromJson(reader, ModernPlugin.class);
 	}
 
 	@Override

@@ -1,23 +1,17 @@
 package de.tobias.playpad.awakeplugin;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.utils.util.OS;
-import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.server.Server;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import de.tobias.updater.client.Updatable;
-import de.tobias.updater.client.UpdateChannel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
@@ -25,7 +19,6 @@ import javafx.scene.control.Label;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
@@ -56,15 +49,6 @@ public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainView
 		module = new Module(NAME, IDENTIFIER);
 		updatable = new StandardPluginUpdater(currentBuild, currentVersion, module);
 
-		if (OS.getType() == OSType.Windows) {
-			try {
-				loadJNA();
-				ModernPluginManager.getInstance().loadFile(ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
 		PlayPadPlugin.getImplementation().addMainViewListener(this);
 		PlayPadPlugin.getImplementation().addSettingsListener(this);
 		Logger.info("Enable Awake Plugin");
@@ -75,26 +59,6 @@ public class AwakePluginImpl implements AdvancedPlugin, WindowListener<IMainView
 		Logger.info("Deactivate sleep prevention for shutdown");
 		activeSleep(false); // Disable for shutdown
 		Logger.info("Disable Awake Plugin");
-	}
-
-	private void loadJNA() throws IOException {
-		Path folder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, "jna");
-
-		if (Files.notExists(folder)) {
-			Files.createDirectories(folder);
-		}
-
-		final Server server = PlayPadPlugin.getServerHandler().getServer();
-		final Path jnaFile = folder.resolve("jna.jar");
-		final Path jnaPlatformFile = folder.resolve("jna-platform.jar");
-
-		if (Files.notExists(jnaFile)) {
-			server.loadSource("/plugins/libAwake/jna.jar", UpdateChannel.STABLE, jnaFile);
-		}
-
-		if (Files.notExists(jnaPlatformFile)) {
-			server.loadSource("/plugins/libAwake/jna-platform.jar", UpdateChannel.STABLE, jnaPlatformFile);
-		}
 	}
 
 	@Override

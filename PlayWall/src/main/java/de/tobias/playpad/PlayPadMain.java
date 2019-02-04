@@ -180,7 +180,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 						setupPlugins(pluginFolder);
 					}
 				}
-			} catch (IOException e) {
+			} catch (Exception e) {
 				System.err.println("Cannot load plugins:");
 				e.printStackTrace();
 			}
@@ -195,31 +195,26 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				e.printStackTrace();
 			}
 
-			try {
-				// Auto Open Project
-				if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
-					UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
-					if (value != null) {
-						ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
-						// TODO Load indicator
-						Project project = loader.load();
-						impl.openProject(project, null);
-						return;
-					}
+			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
+				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
+				if (value != null) {
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
+					// TODO Load indicator
+					Project project = loader.load();
+					impl.openProject(project, null);
+					return;
 				}
+			}
 
-				// Auto Open Project DEBUG
-				if (getParameters().getRaw().size() > 0) {
-					if (getParameters().getNamed().containsKey("project")) {
-						UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-						ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
-						Project project = loader.load();
-						impl.openProject(project, null);
-						return;
-					}
+			// Auto Open Project DEBUG
+			if (getParameters().getRaw().size() > 0) {
+				if (getParameters().getNamed().containsKey("project")) {
+					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
+					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
+					Project project = loader.load();
+					impl.openProject(project, null);
+					return;
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 
 			// Show Launch Stage

@@ -2,7 +2,7 @@ name: "PlayWall"
 version: "6.2.0"
 build: 40
 identifier: "de.tobias.playpad.v7"
-date: "2018-07-15"
+date: "2019-02-04"
 
 main: "de.tobias.playpad.PlayPadMain"
 author: "Tobias Ullerich"
@@ -11,15 +11,9 @@ basePath: "PlayWall"
 
 serverBaseURL: "https://playwall.thecodelabs.de/files"
 
-updateURL: "https://playwall.thecodelabs.de/resources/executables"
-
 userInfo:
   Website: "https://playwall.thecodelabs.de/"
-  Repository: https://thecodelabs.de/PlayWall/PlayWallDesktop"
-  PluginsURL:
-    Stable: "https://playwall.thecodelabs.de/resources/executables/stable/plugins.yml"
-    Beta: "https://playwall.thecodelabs.de/resources/executables/beta/plugins.yml"
+  Repository: "https://thecodelabs.de/PlayWall/PlayWallDesktop"
   ChangelogURL: "https://playwall.thecodelabs.de/php/roadmap/index.php?id=4"
-  UpdaterProgram: "https://playwall.thecodelabs.de/resources/executables/utils/"
   Server: "playwall.thecodelabs.de:8090"
   AccountRegister: "https://playwall.thecodelabs.de/php/index.php"

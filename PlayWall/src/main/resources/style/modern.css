@@ -58,20 +58,21 @@
 .pad-grid {
 	-fx-background-color: rgb(60, 60, 60);
 
-	-fx-hgap: 8px;
-	-fx-vgap: 8px;
+	-fx-hgap: 7px;
+	-fx-vgap: 7px;
 
 	-fx-padding: 6px;
 }
 
 .pad {
-	-fx-background-radius: 10px;
+	-fx-background-radius: 5px;
+
 
 	/*-fx-border-color: rgb(20, 20, 20);*/
 	/*-fx-border-width: 2px;*/
 	/*-fx-border-radius: 8px;*/
 
-	-fx-padding: 5 10 5 10;
+	-fx-padding: 5 5 5 5;
 }
 
 .pad-root {

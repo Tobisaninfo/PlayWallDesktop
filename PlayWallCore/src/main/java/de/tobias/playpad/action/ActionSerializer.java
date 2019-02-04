@@ -9,6 +9,7 @@ import de.tobias.playpad.action.mapper.MapperSerializer;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.registry.Registry;
 import org.dom4j.Element;
 
 import java.util.List;
@@ -38,10 +39,11 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 
 	@Override
 	public Action loadElement(Element element) {
-		String tpye = element.attributeValue(ACTION_TYPE);
+		String type = element.attributeValue(ACTION_TYPE);
 
 		try {
-			Action action = PlayPadPlugin.getRegistryCollection().getActions().getFactory(tpye).newInstance();
+			final Registry<ActionFactory> actions = PlayPadPlugin.getRegistryCollection().getActions();
+			Action action = actions.getFactory(type).newInstance();
 			action.load(element);
 
 			boolean added = mapping.addActionIfNotContains(action);
