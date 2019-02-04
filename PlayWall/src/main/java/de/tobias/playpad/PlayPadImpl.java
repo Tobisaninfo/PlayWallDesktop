@@ -204,6 +204,7 @@ public class PlayPadImpl implements PlayPad {
 		VersionizerItem versionizerItem = new VersionizerItem(repository, SystemUtils.getRunPath().toString());
 		updateService = UpdateService.startVersionizer(versionizerItem, UpdateService.Strategy.JAR, UpdateService.InteractionType.GUI);
 		updateService.addArtifact(playpadArtifact, SystemUtils.getRunPath());
+		updateService.setRepositoryType(globalSettings.getUpdateChannel());
 
 		registerComponents(resourceBundle);
 		configureServer(delegate);
