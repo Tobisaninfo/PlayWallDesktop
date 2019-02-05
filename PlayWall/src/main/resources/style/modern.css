@@ -9,6 +9,10 @@
 	src: url("Lato/Lato-Bold.ttf");
 }
 
+/**
+Default elements
+ */
+
 .root {
 	-fx-base: rgb(20, 20, 20);
 	-fx-font-family: Lato sans-serif;
@@ -39,6 +43,31 @@
 .progress-bar .bar {
 	-fx-background-color: #EEEEEE;
 }
+
+.list {
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
+}
+
+.tool-bar {
+	-fx-background-color: #333333;
+	-fx-border-width: 1px 0 1px 0;
+	-fx-border-color: #222222;
+}
+
+.menu-bar {
+	-fx-background-color: #333333;
+}
+
+.fonticon {
+	-fx-text-fill: white;
+}
+
+/**
+PlayPad Elements
+ */
 
 /*noinspection CssInvalidPseudoSelector*/
 .pad:drag {
@@ -94,7 +123,7 @@
 }
 
 .pad-button:hover {
-    -fx-background-color: #00000030;
+	-fx-background-color: #00000030;
 }
 
 .pad-notfound {
@@ -103,26 +132,6 @@
 
 .fonticon-notfound:pressed {
 	-fx-text-fill: lightgray;
-}
-
-/* Needed ? */
-.font-icon:selected {
-	-fx-text-fill: red;
-}
-
-.fonticon {
-	-fx-text-fill: white;
-	/*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 4, 0.1, 1, 1);*/
-}
-
-.tool-bar {
-	-fx-background-color: #333333;
-	-fx-border-width: 1px 0 1px 0;
-	-fx-border-color: #222222;
-}
-
-.menu-bar {
-	-fx-background-color: #333333;
 }
 
 .current-page-button {
