@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 public interface ModernGlobalDesignHandler {
 
-	void applyStyleSheet(ModernGlobalDesign design, Stage stage);
+	void applyStyleSheet(Stage stage);
 
 	void applyStyleSheetToMainViewController(ModernGlobalDesign design, IMainViewController controller, Stage stage, Project project);
 

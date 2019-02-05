@@ -25,9 +25,20 @@ import scala.collection.JavaConverters._
 
 class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with ColorModeHandler {
 
-	override def applyStyleSheet(design: ModernGlobalDesign, stage: Stage): Unit = {
+	val styleSheets: Array[String] = Array(
+		"style/components/button.css",
+		"style/components/checkbox.css",
+		"style/components/scrollbar.css",
+		"style/components/textfield.css",
+		"style/components/radiobutton.css",
+		"style/components/list.css",
+		"style/components/dialog.css"
+	)
+
+	override def applyStyleSheet(stage: Stage): Unit = {
+		styleSheets.foreach(stage.getScene.getStylesheets.add)
+
 		stage.getScene.getStylesheets.add("style/style.css")
-		stage.getScene.getStylesheets.add("style/list.css")
 		stage.getScene.getStylesheets.add("style/modern.css")
 
 		// Custom style for playwall available
@@ -38,7 +49,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	override def applyStyleSheetToMainViewController(design: ModernGlobalDesign, controller: IMainViewController, stage: Stage, project: Project): Unit = {
-		applyStyleSheet(design, stage)
+		applyStyleSheet(stage)
 
 		controller.setGridColor(Color.TRANSPARENT)
 

@@ -1,0 +1,24 @@
+.radio-button .radio {
+	-fx-background-color: transparent;
+	-fx-background-insets: 1;
+	-fx-border-color: #CCCCCC;
+	-fx-border-radius: 30px;
+	-fx-border-width: 2px;
+}
+
+.radio-button .dot {
+	-fx-background-color: transparent;
+	-fx-background-insets: 1 0 -1 0, 0;
+	-fx-padding: 0.333333em;
+	-fx-shape: "Z";
+	-fx-scale-x: 1.5;
+	-fx-scale-y: 1.5;
+}
+
+.radio-button:selected .dot {
+	-fx-background-color: #3E4251;
+}
+
+.radio-button:selected .radio {
+	-fx-background-color: #CCCCCC;
+}
