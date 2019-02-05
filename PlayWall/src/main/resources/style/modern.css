@@ -15,7 +15,7 @@ Default elements
 
 .root {
 	-fx-base: rgb(20, 20, 20);
-	-fx-font-family: Lato sans-serif;
+	/*-fx-font-family: Lato sans-serif;*/
 }
 
 .button {
@@ -26,7 +26,8 @@ Default elements
 }
 
 .button:focused {
-	-fx-background-color: #878787;
+	-fx-background-color: #358dab;
+	/*-fx-background-color: #878787;*/
 	-fx-text-fill: #EEEEEE !important;
 }
 

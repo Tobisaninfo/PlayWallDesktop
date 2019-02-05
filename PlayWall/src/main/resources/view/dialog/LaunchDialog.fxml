@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
@@ -21,11 +20,7 @@
                         <Button fx:id="newProjectButton" layoutX="115.0" layoutY="259.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newProjectButtonHandler" text="%launch.button.new" VBox.vgrow="ALWAYS" />
                         <Button fx:id="importProject" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#importProjectButtonHandler" text="%launch.button.import" VBox.vgrow="ALWAYS" />
                         <Button fx:id="convertProjectButton" layoutX="109.0" layoutY="292.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#convertProjectButtonHandler" text="%launch.button.convert" VBox.vgrow="ALWAYS" />
-                    <HBox>
-                        <children>
-                            <Label fx:id="cloudLabel" onMouseClicked="#cloudIconClicked" />
-                        </children>
-                    </HBox>
+                      <Label fx:id="cloudLabel" graphicTextGap="8.0" onMouseClicked="#cloudIconClicked" />
                     </children>
                 </VBox>
             </children>
@@ -35,7 +30,7 @@
         </VBox>
       <VBox spacing="14.0" HBox.hgrow="ALWAYS">
          <children>
-              <ListView id="projectList" fx:id="projectListView" fixedCellSize="40.0" VBox.vgrow="ALWAYS" />
+              <ListView id="projectList" styleClass="dark-list" fx:id="projectListView" fixedCellSize="40.0" VBox.vgrow="ALWAYS" />
               <HBox spacing="14.0">
                   <children>
                       <Button fx:id="deleteButton" layoutX="494.0" layoutY="305.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%launch.button.delete" HBox.hgrow="ALWAYS" />

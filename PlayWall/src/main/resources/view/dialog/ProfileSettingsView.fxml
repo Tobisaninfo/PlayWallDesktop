@@ -7,7 +7,7 @@
 <HBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <ListView fx:id="profileList" layoutX="14.0" layoutY="14.0" prefHeight="376.0" prefWidth="200.0"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" styleClass="dark-list"/>
         <VBox spacing="14.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label styleClass="headline" text="%profile.label.headline"/>

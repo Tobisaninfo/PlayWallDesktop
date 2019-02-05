@@ -6,7 +6,7 @@
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ListView fx:id="projectList"/>
+        <ListView fx:id="projectList" styleClass="dark-list"/>
         <VBox spacing="14.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label text="%project.label.details" underline="true"/>

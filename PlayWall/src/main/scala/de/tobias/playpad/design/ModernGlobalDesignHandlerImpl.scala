@@ -27,6 +27,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 
 	override def applyStyleSheet(design: ModernGlobalDesign, stage: Stage): Unit = {
 		stage.getScene.getStylesheets.add("style/style.css")
+		stage.getScene.getStylesheets.add("style/list.css")
 		stage.getScene.getStylesheets.add("style/modern.css")
 
 		// Custom style for playwall available
