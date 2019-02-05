@@ -24,8 +24,11 @@
         </dependency>
         <dependency>
             <groupId>de.thecodelabs</groupId>
-            <artifactId>libPlugins</artifactId>
-            <version>${libPlugins.version}</version>
+            <artifactId>libPlugins-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libPlugins-versionizer</artifactId>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs.versionizer</groupId>

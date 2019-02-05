@@ -1,4 +1,6 @@
 main: "de.tobias.playpad.equalizerplugin.impl.EqualizerPluginImpl"
 name: "EqualizerPlugin"
-version: "4.1"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
 build: 5

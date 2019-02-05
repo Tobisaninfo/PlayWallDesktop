@@ -1,6 +1,7 @@
 package de.tobias.playpad.plugin;
 
 import de.thecodelabs.plugins.Plugin;
+import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginManager;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -66,10 +67,11 @@ public class ModernPluginManager {
 		// Registriert Funktionen aus Plugin (Module)
 		for (Plugin p : pluginManager.getPlugins()) {
 			if (p instanceof PlayPadPluginStub) {
-				PlayPadPluginStub advancedPlugin = (PlayPadPluginStub) p;
-				modules.add(advancedPlugin.getModule());
+				modules.add(((PlayPadPluginStub) p).getModule());
+			}
 
-				PlayPadPlugin.getImplementation().getUpdateService().addArtifact(advancedPlugin.getArtifact(), path);
+			if (p instanceof PluginArtifact) {
+				PlayPadPlugin.getImplementation().getUpdateService().addArtifact(((PluginArtifact) p).getArtifact(), path);
 			}
 		}
 	}

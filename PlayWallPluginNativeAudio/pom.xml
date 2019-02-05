@@ -49,7 +49,7 @@
                 <artifactId>versionizer-maven-plugin</artifactId>
                 <version>1.0.1</version>
                 <configuration>
-                    <resourceFile>build.json</resourceFile>
+                    <resourceFile>plugin.yml</resourceFile>
                 </configuration>
                 <executions>
                     <execution>

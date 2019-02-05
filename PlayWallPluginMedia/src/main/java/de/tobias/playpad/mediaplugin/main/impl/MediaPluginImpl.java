@@ -1,12 +1,10 @@
 package de.tobias.playpad.mediaplugin.main.impl;
 
-import de.thecodelabs.storage.settings.Storage;
-import de.thecodelabs.storage.settings.StorageTypes;
+import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.action.ActionFactory;
 import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.pad.content.PadContentFactory;
@@ -30,13 +28,12 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-public class MediaPluginImpl implements PlayPadPluginStub, SettingsListener, ChangeListener<Boolean> {
+public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, SettingsListener, ChangeListener<Boolean> {
 
 	private static final String NAME = "MediaPlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
 
 	private static Module module;
-	private static Artifact artifact;
 
 	private static MediaPluginImpl instance;
 	private MediaViewController videoViewController;
@@ -53,7 +50,6 @@ public class MediaPluginImpl implements PlayPadPluginStub, SettingsListener, Cha
 		// Init
 		instance = this;
 		module = new Module(NAME, IDENTIFIER);
-		artifact = Storage.load(MediaPluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
 		blindProperty = new SimpleBooleanProperty();
 
@@ -175,8 +171,4 @@ public class MediaPluginImpl implements PlayPadPluginStub, SettingsListener, Cha
 		return module;
 	}
 
-	@Override
-	public Artifact getArtifact() {
-		return artifact;
-	}
 }

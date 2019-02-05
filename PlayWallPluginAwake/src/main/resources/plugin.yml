@@ -1,4 +1,6 @@
 main: "de.tobias.playpad.awakeplugin.AwakePluginImpl"
 name: "AwakePlugin"
-version: "2.1"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
 build: 3

@@ -1,4 +1,6 @@
 main: "de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl"
 name: "MediaPlugin"
-version: "4.2.2"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
 build: 8

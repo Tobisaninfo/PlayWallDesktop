@@ -1,4 +1,6 @@
 main: "de.tobias.playpad.launchpadplugin.impl.LaunchpadPluginImpl"
 name: "LaunchpadPlugin"
-version: "3.1"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
 build: 4

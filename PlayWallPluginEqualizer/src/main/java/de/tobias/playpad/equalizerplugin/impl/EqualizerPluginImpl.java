@@ -1,12 +1,10 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
-import de.thecodelabs.storage.settings.Storage;
-import de.thecodelabs.storage.settings.StorageTypes;
+import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
@@ -28,13 +26,12 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-public class EqualizerPluginImpl implements PlayPadPluginStub, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
+public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
 	private static final String NAME = "Equalizer";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
 
 	private Module module;
-	private Artifact artifact;
 
 	private Stage mainStage;
 	private EqualizerViewController equalizerViewController;
@@ -56,7 +53,6 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, WindowListener<IM
 		}
 
 		module = new Module(NAME, IDENTIFIER);
-		artifact = Storage.load(EqualizerPluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addPadListener(this);
@@ -136,8 +132,4 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, WindowListener<IM
 		return module;
 	}
 
-	@Override
-	public Artifact getArtifact() {
-		return artifact;
-	}
 }

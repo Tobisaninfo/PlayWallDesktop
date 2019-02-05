@@ -1,6 +1,0 @@
-{
-    "build.artifactId": "${pom.artifactId}",
-    "build.groupId": "${pom.groupId}",
-    "build.version": "${pom.version}",
-    "build.type": "PLUGIN"
-}

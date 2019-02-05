@@ -1,13 +1,11 @@
 package de.tobias.playpad.awakeplugin;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.storage.settings.Storage;
-import de.thecodelabs.storage.settings.StorageTypes;
+import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.versionizer.config.Artifact;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
@@ -27,13 +25,12 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
-public class AwakePluginImpl implements PlayPadPluginStub, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
+public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
 
 	private static final String NAME = "AwakePlugin";
 	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
 
 	private Module module;
-	private Artifact artifact;
 
 	private static final String SETTINGS_FILENAME = "Awake.xml";
 
@@ -49,7 +46,6 @@ public class AwakePluginImpl implements PlayPadPluginStub, WindowListener<IMainV
 		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
 
 		module = new Module(NAME, IDENTIFIER);
-		artifact = Storage.load(AwakePluginImpl.class.getClassLoader().getResourceAsStream("build.json"), StorageTypes.JSON, Artifact.class);
 
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
@@ -140,8 +136,4 @@ public class AwakePluginImpl implements PlayPadPluginStub, WindowListener<IMainV
 		return module;
 	}
 
-	@Override
-	public Artifact getArtifact() {
-		return artifact;
-	}
 }
