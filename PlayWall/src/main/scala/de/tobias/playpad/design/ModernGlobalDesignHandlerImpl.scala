@@ -27,6 +27,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 
 	val styleSheets: Array[String] = Array(
 		"style/components/button.css",
+		"style/components/menu-button.css",
 		"style/components/combobox.css",
 		"style/components/checkbox.css",
 		"style/components/scrollbar.css",

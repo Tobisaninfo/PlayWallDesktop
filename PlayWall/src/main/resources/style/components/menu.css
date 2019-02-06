@@ -2,8 +2,13 @@
 	-fx-background-color: #333333;
 }
 
-.menu:showing, .menu:hover {
+.menu-bar .menu-button {
+	-fx-background-color: #333333;
+}
+
+.menu-bar .menu:showing, .menu-bar .menu:hover {
 	-fx-background-color: #358dab;
+	-fx-background-radius: 0px;
 }
 
 .menu-item:selected, .menu-item:focused {
