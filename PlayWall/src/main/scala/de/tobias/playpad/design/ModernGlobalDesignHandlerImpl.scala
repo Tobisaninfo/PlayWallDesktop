@@ -31,6 +31,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		"style/components/scrollbar.css",
 		"style/components/textfield.css",
 		"style/components/radiobutton.css",
+		"style/components/slider.css",
 		"style/components/list.css",
 		"style/components/dialog.css"
 	)
