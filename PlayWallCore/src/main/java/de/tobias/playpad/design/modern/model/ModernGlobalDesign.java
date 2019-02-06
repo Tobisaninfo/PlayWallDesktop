@@ -14,7 +14,7 @@ public class ModernGlobalDesign implements DesignColorAssociator {
 	private int infoFontSize = 14;
 	private int titleFontSize = 16;
 
-	private boolean flatDesign;
+	private boolean flatDesign = true;
 
 	public ModernColor getBackgroundColor() {
 		return backgroundColor;
