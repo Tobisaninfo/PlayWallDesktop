@@ -6,7 +6,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -69,6 +68,8 @@ public class ProjectNewDialog extends NVC {
 	@Override
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		stage.initModality(Modality.WINDOW_MODAL);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProject_Title));
 		stage.setWidth(560);
@@ -78,12 +79,6 @@ public class ProjectNewDialog extends NVC {
 		stage.setMinHeight(380);
 
 		stage.setMaxWidth(560);
-
-		stage.initModality(Modality.WINDOW_MODAL);
-
-		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyleSheet(stage);
-		}
 	}
 
 	public Optional<ProjectReference> showAndWait() {
@@ -92,7 +87,7 @@ public class ProjectNewDialog extends NVC {
 	}
 
 	@FXML
-	private void finishButtonHandler(ActionEvent evenet) {
+	private void finishButtonHandler(ActionEvent event) {
 		try {
 			ProfileReference profileReference = profileComboBox.getSelectionModel().getSelectedItem();
 

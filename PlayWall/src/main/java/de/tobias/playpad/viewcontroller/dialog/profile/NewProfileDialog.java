@@ -65,6 +65,8 @@ public class NewProfileDialog extends NVC {
 	@Override
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		stage.initModality(Modality.WINDOW_MODAL);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProfile_Title));
 		stage.setWidth(400);
@@ -75,11 +77,6 @@ public class NewProfileDialog extends NVC {
 
 		stage.setMaxWidth(500);
 
-		stage.initModality(Modality.WINDOW_MODAL);
-
-		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyleSheet(stage);
-		}
 	}
 
 	@FXML
