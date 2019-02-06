@@ -1,0 +1,14 @@
+/*noinspection CssInvalidPseudoSelector*/
+.tab-pane:top *.tab-header-background {
+	-fx-background-color: #333333;
+}
+
+.tab-pane:top *.tab {
+	-fx-background-color: #5c5c5c;
+}
+
+.tab-pane:top *.tab:selected {
+	-fx-background-color: #358dab;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+}
