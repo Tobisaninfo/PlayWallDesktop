@@ -1,6 +1,7 @@
 package de.tobias.playpad.design.modern;
 
 import de.tobias.playpad.DisplayableColor;
+import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.util.FadeableColor;
 import javafx.scene.paint.*;
 
@@ -106,8 +107,12 @@ public enum ModernColor implements DisplayableColor {
 
 	@Override
 	public Paint getPaint() {
-		return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
-				new Stop(1, Color.web(colorLow)));
+		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
+			return Color.web(paint());
+		} else {
+			return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
+					new Stop(1, Color.web(colorLow)));
+		}
 	}
 
 	public String linearGradient() {

@@ -69,6 +69,10 @@ public class ModernGlobalDesignViewController extends NVC {
 		flatDesignCheckbox.selectedProperty().addListener((a, b, c) ->
 		{
 			design.setFlatDesign(c);
+
+			// Update button preview
+			backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
+			playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
