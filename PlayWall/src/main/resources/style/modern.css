@@ -15,7 +15,7 @@ Default elements
 
 .root {
 	-fx-base: rgb(20, 20, 20);
-	/*-fx-font-family: Lato sans-serif;*/
+	-fx-font-family: Lato sans-serif;
 }
 
 .progress-bar .bar {
@@ -41,6 +41,10 @@ Default elements
 
 .fonticon {
 	-fx-text-fill: white;
+}
+
+.toggle-button:selected .fonticon {
+	-fx-text-fill: #333333;
 }
 
 /**
@@ -115,10 +119,6 @@ PlayPad Elements
 .current-page-button {
 	-fx-background-color: #dbdbdb;
 	-fx-text-fill: #333333;
-}
-
-.slider .thumb {
-	-fx-base: white;
 }
 
 .volume-item {

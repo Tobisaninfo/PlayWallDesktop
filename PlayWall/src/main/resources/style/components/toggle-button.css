@@ -1,0 +1,20 @@
+.toggle-button {
+	-fx-background-color: #5c5c5c;
+	-fx-text-fill: #efefef;
+}
+
+.toggle-button:focused {
+	-fx-background-color: #358dab;
+	/*-fx-background-color: #878787;*/
+	-fx-text-fill: #EEEEEE !important;
+}
+
+.toggle-button:hover {
+	-fx-background-color: #878787;
+	-fx-text-fill: #EEEEEE !important;
+}
+
+.toggle-button:selected {
+	-fx-background-color: #dbdbdb;
+	-fx-text-fill: #333333 !important;
+}
