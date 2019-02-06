@@ -9,7 +9,7 @@
 
 .combo-box .list-cell {
 	-fx-background-color: #333333;
-	-fx-text-fill: efefef;
+	-fx-text-fill: #efefef;
 	-fx-pref-height: 30px;
 }
 
