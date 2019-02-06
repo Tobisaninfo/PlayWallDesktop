@@ -123,9 +123,10 @@ public class ModernGlobalDesignViewController extends NVC {
 	}
 
 	private String getLinearGradientCss(ModernColor color) {
-		String css = "-fx-background-color: " + color.linearGradient() + ";";
-		css += "-fx-border-color: rgb(20, 20, 20);-fx-border-width: 1.5px;-fx-border-radius: 3px;";
-		return css;
+		if (design.isFlatDesign()) {
+			return "-fx-background-color: " + color.paint() + ";";
+		} else {
+			return "-fx-background-color: " + color.linearGradient() + ";";
+		}
 	}
-
 }
