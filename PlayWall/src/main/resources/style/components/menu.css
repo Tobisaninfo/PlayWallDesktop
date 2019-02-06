@@ -1,0 +1,11 @@
+.menu-bar {
+	-fx-background-color: #333333;
+}
+
+.menu:showing, .menu:hover {
+	-fx-background-color: #358dab;
+}
+
+.menu-item:selected, .menu-item:focused {
+	-fx-background-color: #358dab;
+}
