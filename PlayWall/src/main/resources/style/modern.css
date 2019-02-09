@@ -18,10 +18,6 @@ Default elements
 	-fx-font-family: Lato sans-serif;
 }
 
-.progress-bar .bar {
-	-fx-background-color: #EEEEEE;
-}
-
 .list-view {
 	-fx-focus-color: transparent;
 	-fx-faint-focus-color: transparent;
@@ -73,12 +69,6 @@ PlayPad Elements
 
 .pad {
 	-fx-background-radius: 5px;
-
-
-	/*-fx-border-color: rgb(20, 20, 20);*/
-	/*-fx-border-width: 2px;*/
-	/*-fx-border-radius: 8px;*/
-
 	-fx-padding: 5 5 5 5;
 }
 
@@ -119,6 +109,10 @@ PlayPad Elements
 
 .volume-item {
 	-fx-text-fill: white !important;
+}
+
+.progress-bar .bar {
+	-fx-background-color: #EEEEEE;
 }
 
 .progress-indicator .percentage {
