@@ -19,3 +19,13 @@
 	-fx-pref-height: 25px;
 	-fx-pref-width: 25px;
 }
+
+.close-button > .graphic {
+	-fx-background-color: white;
+	-fx-scale-shape: false;
+	-fx-padding: 1;
+
+	-fx-scale-x: 1.8;
+	-fx-scale-y: 1.8;
+	-fx-shape: "M395.992,296.758l1.794-1.794l7.292,7.292l-1.795,1.794 L395.992,296.758z M403.256,294.992l1.794,1.794l-7.292,7.292l-1.794-1.795 L403.256,294.992z";
+}

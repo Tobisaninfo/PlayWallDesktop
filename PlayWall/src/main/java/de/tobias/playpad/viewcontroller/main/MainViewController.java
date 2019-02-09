@@ -151,8 +151,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		padGridPane.getStyleClass().add("pad-grid");
 
 		notificationPane = new NotificationPane(padGridPane);
-		notificationPane.getStyleClass().add(org.controlsfx.control.NotificationPane.STYLE_CLASS_DARK);
-
 		gridContainer.getChildren().add(notificationPane);
 		setAnchor(notificationPane, 0, 0, 0, 0);
 

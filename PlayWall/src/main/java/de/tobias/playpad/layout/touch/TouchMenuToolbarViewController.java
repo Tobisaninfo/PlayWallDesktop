@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.StackPane;
 
 public class TouchMenuToolbarViewController extends BasicMenuToolbarViewController {
 
@@ -48,6 +49,10 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	public void init() {
 		super.init();
 		volumeSlider.focusedProperty().addListener(i -> mainViewController.getParent().requestFocus());
+
+		StackPane graphic = new StackPane();
+		graphic.getStyleClass().setAll("graphic");
+		closeButton.setGraphic(graphic);
 	}
 
 	@Override

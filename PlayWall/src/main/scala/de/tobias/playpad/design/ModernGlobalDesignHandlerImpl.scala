@@ -35,6 +35,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		"style/components/radiobutton.css",
 		"style/components/slider.css",
 		"style/components/tabs.css",
+		"style/components/notification-pane.css",
 		"style/components/menu.css",
 		"style/components/toggle-button.css",
 		"style/components/list.css",

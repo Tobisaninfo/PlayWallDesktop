@@ -10,7 +10,7 @@
 	-fx-background-color: transparent;
 	-fx-background-insets: 0 0 0 0 0, 0;
 	-fx-padding: 0.333333em;
-	-fx-shape: "M-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0";
+	-fx-shape: "M-1,0a1,1 0 1,0 2,0a1,1 0 1,0 -2,0"; /* http://complexdan.com/svg-circleellipse-to-path-converter/ */
 	-fx-scale-x: 1.5;
 	-fx-scale-y: 1.5;
 }

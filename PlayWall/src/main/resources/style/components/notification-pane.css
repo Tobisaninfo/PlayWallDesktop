@@ -1,0 +1,16 @@
+.notification-pane {
+	-fx-background-color: #282828;
+}
+
+.notification-pane.top .notification-bar > .pane {
+	-fx-effect: none;
+}
+
+.notification-pane .notification-bar > .pane .label {
+	-fx-text-fill: #CCCCCC;
+}
+
+.notification-pane .notification-bar > .pane .close-button:hover {
+	-fx-background-color: #878787;
+	-fx-text-fill: #EEEEEE !important;
+}

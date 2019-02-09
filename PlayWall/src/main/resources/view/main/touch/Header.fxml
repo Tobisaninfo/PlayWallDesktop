@@ -35,6 +35,6 @@
                 </Label>
             </children>
         </HBox>
-          <Button fx:id="closeButton" focusTraversable="false" mnemonicParsing="false" onAction="#closeMenuItemHandler" text="X" />
+          <Button fx:id="closeButton" styleClass="close-button" focusTraversable="false" mnemonicParsing="false" onAction="#closeMenuItemHandler" minWidth="60" />
     </children>
 </HBox>
