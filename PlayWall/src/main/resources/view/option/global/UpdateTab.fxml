@@ -3,62 +3,51 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox spacing="14.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox layoutX="14.0" layoutY="14.0" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefWidth="150.0"
-                       text="%settings.update.label.current"/>
-                <Label fx:id="currentVersionLabel" layoutX="175.0" layoutY="14.0" text="5.0.1 (stable)"/>
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="14.0" prefWidth="150.0" text="%settings.update.label.current" />
+                <Label fx:id="currentVersionLabel" layoutX="175.0" layoutY="14.0" text="5.0.1 (stable)" />
             </children>
         </HBox>
-        <Separator prefWidth="200.0"/>
+        <Separator prefWidth="200.0" />
         <HBox spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="183.0" prefWidth="150.0"
-                       text="%settings.update.label.search"/>
-                <CheckBox fx:id="automaticSearchCheckBox" layoutX="275.0" layoutY="183.0" mnemonicParsing="false"
-                          text="Automatisch"/>
+                <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="183.0" prefWidth="150.0" text="%settings.update.label.search" />
+                <CheckBox fx:id="automaticSearchCheckBox" layoutX="275.0" layoutY="183.0" mnemonicParsing="false" text="Automatisch" />
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.update.label.channel"/>
-                <ComboBox fx:id="updateChannelComboBox" prefWidth="150.0"/>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.update.label.channel" />
+                <ComboBox fx:id="updateChannelComboBox" prefWidth="150.0" />
             </children>
         </HBox>
         <HBox spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="222.0" prefWidth="150.0"/>
-                <Button fx:id="manualSearchButton" layoutX="275.0" layoutY="217.0" mnemonicParsing="false"
-                        onAction="#manualSearchHandler" text="%settings.update.button.search"/>
+                <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="222.0" prefWidth="150.0" />
+                <Button fx:id="manualSearchButton" layoutX="275.0" layoutY="217.0" mnemonicParsing="false" onAction="#manualSearchHandler" text="%settings.update.button.search" />
             </children>
         </HBox>
-        <Separator prefWidth="200.0"/>
+        <Separator prefWidth="200.0" />
         <HBox spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.update.label.available"/>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.update.label.available" />
                 <VBox spacing="14.0" HBox.hgrow="ALWAYS">
                     <children>
-                        <ListView fx:id="openUpdateList" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS"/>
-                        <HBox spacing="14.0">
-                            <children>
-                                <Label fx:id="infoCLabel" text="%settings.update.label.infoC"/>
-                                <Label fx:id="infoELabel" text="%settings.update.label.infoE"/>
-                            </children>
-                        </HBox>
+                        <ListView fx:id="openUpdateList" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                     </children>
                 </VBox>
             </children>
         </HBox>
         <HBox alignment="TOP_RIGHT">
             <children>
-                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateHandler"
-                        text="%settings.update.button.install"/>
+                <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateHandler" text="%settings.update.button.install" />
             </children>
         </HBox>
     </children>
     <padding>
-        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
     </padding>
 </VBox>

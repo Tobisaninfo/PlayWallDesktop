@@ -21,7 +21,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 
@@ -42,11 +41,6 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	private ComboBox<UpdateService.RepositoryType> updateChannelComboBox;
-
-	@FXML
-	private Label infoCLabel;
-	@FXML
-	private Label infoELabel;
 
 	// Placeholder for List
 	private ProgressIndicator progressIndicator;
@@ -80,9 +74,6 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
 			globalSettings.setUpdateChannel(c);
 		});
-
-		infoCLabel.setGraphic(new ImageView("gfx/class_obj.png"));
-		infoELabel.setGraphic(new ImageView("gfx/enum_obj.png"));
 
 		progressIndicator = new ProgressIndicator(-1);
 		progressIndicator.setMinSize(75, 75);
