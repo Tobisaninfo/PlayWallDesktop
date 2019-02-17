@@ -108,6 +108,7 @@ public class Project {
 				}
 			}
 		}
+
 		Page page = pages.get(index.getPagePosition());
 		page.setPad(index.getId(), pad);
 	}

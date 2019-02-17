@@ -205,9 +205,8 @@ public class Page implements Cloneable {
 	 * @param pad pad
 	 */
 	public void setPad(int id, Pad pad) {
-		if (pad == null) {
-			pads.removeIf(p -> p.getPosition() == id);
-		} else {
+		pads.removeIf(p -> p.getPosition() == id);
+		if (pad != null) {
 			pads.add(pad);
 			pad.setPage(this);
 			pad.setPosition(id);
