@@ -133,7 +133,7 @@ public class CartAction extends Action implements ColorAdjustable {
 		}
 
 		if (pad.hasVisibleContent()) {
-			handler.performAction(type, this, pad, project);
+			handler.performAction(type, this, pad);
 		}
 	}
 
