@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 public class ProjectSettings {
 
-	public static final int MAX_PAGES = 8;
+	public static final int MAX_PAGES = 10;
 
 	public static final int MAX_COLUMNS = 15;
 	public static final int MAX_ROWS = 15;
