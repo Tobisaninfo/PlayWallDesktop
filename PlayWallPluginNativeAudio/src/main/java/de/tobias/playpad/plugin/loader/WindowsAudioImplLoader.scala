@@ -18,7 +18,7 @@ class WindowsAudioImplLoader extends AudioModuleLoader {
 
 	override def preInit(): Unit = {
 		val app: App = ApplicationUtils.getApplication
-		val resourceFolder = app.getPath(PathType.LIBRARY, "Native")
+		val resourceFolder = app.getPath(PathType.LIBRARY, "NativeAudio")
 
 		if (!app.isDebug) {
 			if (Files.notExists(resourceFolder))

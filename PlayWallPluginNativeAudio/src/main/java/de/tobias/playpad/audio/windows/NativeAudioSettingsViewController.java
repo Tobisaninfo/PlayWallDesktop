@@ -32,7 +32,7 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 	private NativeAudio audioPlayer;
 
 	NativeAudioSettingsViewController() {
-		super("nawinSettings", "de/tobias/playpad/assets/win/", null);
+		super("nawinSettings", "win", null);
 
 		testButton.setGraphic(new FontIcon(FontAwesomeType.PLAY));
 
