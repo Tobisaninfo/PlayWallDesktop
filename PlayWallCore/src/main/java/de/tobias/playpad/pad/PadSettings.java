@@ -25,6 +25,7 @@ public class PadSettings implements Cloneable {
 
 	// Settings
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
+	private DoubleProperty speedProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
@@ -34,7 +35,6 @@ public class PadSettings implements Cloneable {
 	private ModernCartDesign design;
 
 	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
-
 	private HashMap<String, Object> customSettings = new HashMap<>();
 
 	// Sync Listener
@@ -71,6 +71,19 @@ public class PadSettings implements Cloneable {
 	public DoubleProperty volumeProperty() {
 		return volumeProperty;
 	}
+
+	public double getSpeed() {
+		return speedProperty.get();
+	}
+
+	public void setSpeed(double rate) {
+		this.speedProperty.set(rate);
+	}
+
+	public DoubleProperty speedProperty() {
+		return speedProperty;
+	}
+
 
 	public boolean isLoop() {
 		return loopProperty.get();

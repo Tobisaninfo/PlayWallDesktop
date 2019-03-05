@@ -29,6 +29,7 @@ import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -601,7 +602,7 @@ public class Pad implements Cloneable {
 
 		Pad pad = (Pad) o;
 
-		return uuid != null ? uuid.equals(pad.uuid) : pad.uuid == null;
+		return Objects.equals(uuid, pad.uuid);
 	}
 
 	// Clone

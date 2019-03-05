@@ -6,10 +6,7 @@ import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.play.Durationable;
-import de.tobias.playpad.pad.content.play.Equalizeable;
-import de.tobias.playpad.pad.content.play.Pauseable;
-import de.tobias.playpad.pad.content.play.Seekable;
+import de.tobias.playpad.pad.content.play.*;
 import de.tobias.playpad.pad.fade.Fade;
 import de.tobias.playpad.pad.fade.FadeDelegate;
 import de.tobias.playpad.pad.fade.Fadeable;
@@ -26,7 +23,8 @@ import javafx.util.Duration;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable, Equalizeable, FadeDelegate, Seekable {
+public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable,
+		Equalizeable, FadeDelegate, Seekable, SpeedAdjustable {
 
 	private final String type;
 
@@ -36,6 +34,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	private ObjectProperty<Duration> positionProperty = new SimpleObjectProperty<>();
 
 	private ChangeListener<Number> volumeListener;
+	private ChangeListener<Number> rateListener;
 
 	private Fade fade;
 
@@ -45,7 +44,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		fade = new Fade(this);
 
 		// Pad Volume Listener
-		volumeListener = (a, b, c) -> updateVolume();
+		volumeListener = (a, oldValue, newValue) -> updateVolume();
+		rateListener = (a, oldValue, newValue) -> setCurrentRate(newValue.doubleValue());
 	}
 
 	@Override
@@ -80,6 +80,21 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	public void seekToStart() {
 		if (audioHandler instanceof Seekable) {
 			((Seekable) audioHandler).seekToStart();
+		}
+	}
+
+	@Override
+	public double currentRate() {
+		if (audioHandler instanceof SpeedAdjustable) {
+			return ((SpeedAdjustable) audioHandler).currentRate();
+		}
+		return -1;
+	}
+
+	@Override
+	public void setCurrentRate(double rate) {
+		if (audioHandler instanceof SpeedAdjustable) {
+			((SpeedAdjustable) audioHandler).setCurrentRate(rate);
 		}
 	}
 
@@ -171,6 +186,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 			positionProperty.bind(audioHandler.positionProperty());
 
 			getPad().getPadSettings().volumeProperty().addListener(volumeListener);
+			getPad().getPadSettings().speedProperty().addListener(rateListener);
 
 			updateVolume();
 		} else {
@@ -194,6 +210,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 		positionProperty.unbind();
 
 		getPad().getPadSettings().volumeProperty().removeListener(volumeListener);
+		getPad().getPadSettings().speedProperty().removeListener(rateListener);
 
 		if (audioHandler != null)
 			audioHandler.unloadMedia();

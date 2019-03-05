@@ -3,6 +3,7 @@ package de.tobias.playpad.audio;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Seekable;
+import de.tobias.playpad.pad.content.play.SpeedAdjustable;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.media.AudioEqualizer;
@@ -12,7 +13,7 @@ import javafx.util.Duration;
 
 import java.nio.file.Path;
 
-public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeable, Seekable {
+public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeable, Seekable, SpeedAdjustable {
 
 	private Media media;
 	private MediaPlayer player;
@@ -81,6 +82,16 @@ public class JavaFXAudioHandler extends AudioHandler implements AudioEqualizeabl
 		if (player != null) {
 			player.setVolume(volume);
 		}
+	}
+
+	@Override
+	public double currentRate() {
+		return player.getCurrentRate();
+	}
+
+	@Override
+	public void setCurrentRate(double rate) {
+		player.setRate(rate);
 	}
 
 	@Override
