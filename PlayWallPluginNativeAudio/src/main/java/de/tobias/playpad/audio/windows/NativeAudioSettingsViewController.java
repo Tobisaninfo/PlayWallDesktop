@@ -19,7 +19,7 @@ import java.nio.file.Path;
 
 public class NativeAudioSettingsViewController extends AudioHandlerViewController {
 
-	private  static final String TEST_SOUND_WAV = "Test-Sound.wav";
+	private static final String TEST_SOUND_WAV = "Test-Sound.wav";
 
 	@FXML
 	private ComboBox<String> soundCardComboBox;
@@ -31,7 +31,7 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 	private NativeAudio audioPlayer;
 
 	NativeAudioSettingsViewController() {
-		super("nawinSettings", "de/tobias/playpad/assets/win/", null);
+		super("nawinSettings", "win", null);
 
 		testButton.setGraphic(new FontIcon(FontAwesomeType.PLAY));
 
@@ -74,11 +74,11 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 
 	@FXML
 	private void testButtonHandler(ActionEvent event) {
-		final App app = ApplicationUtils.getApplication();
-		Path file = app.getPath(PathType.RESOURCES, TEST_SOUND_WAV);
-		app.getClasspathResource("Test-Sound.wav").copy(PathType.RESOURCES, "TestSound.wav");
-
 		if (audioPlayer == null) {
+			final App app = ApplicationUtils.getApplication();
+			Path file = app.getPath(PathType.RESOURCES, TEST_SOUND_WAV);
+			app.getClasspathResource(TEST_SOUND_WAV).copy(PathType.RESOURCES, TEST_SOUND_WAV);
+
 			audioPlayer = new NativeAudio();
 			audioPlayer.load(file.toString());
 			audioPlayer.setDevice(soundCardComboBox.getValue());
