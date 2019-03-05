@@ -84,7 +84,6 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	@Override
 	public void setVolume(double volume) {
 		NativeAudio.setVolume(id, volume);
-
 	}
 
 	@Override
@@ -106,6 +105,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 						getContent().getPad().getController().getView().showBusyView(false);
 					}
 				});
+				getContent().updateVolume();
 			}
 		});
 	}

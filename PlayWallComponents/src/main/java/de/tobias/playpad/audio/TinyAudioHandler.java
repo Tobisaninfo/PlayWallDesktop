@@ -230,6 +230,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 
 				// Load
 				music = TinySound.loadMusic(url, true);
+				getContent().updateVolume();
 				calcDuration(url);
 
 				Platform.runLater(() ->
