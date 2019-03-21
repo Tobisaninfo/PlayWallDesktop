@@ -111,7 +111,11 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				Page clone = page.clone();
 
 				// Show Rename dialog for cloned page
-				showPageNameDialog(clone);
+				boolean success = showPageNameDialog(clone);
+
+				if (!success) {
+					return;
+				}
 
 				Project project = page.getProject();
 				project.addPage(clone);
@@ -146,7 +150,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		}
 	}
 
-	private void showPageNameDialog(Page page) {
+	private boolean showPageNameDialog(Page page) {
 		TextInputDialog dialog = new TextInputDialog(page.getName());
 
 		dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Name_Header));
@@ -158,6 +162,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(page::setName);
+		return result.isPresent();
 	}
 
 }
