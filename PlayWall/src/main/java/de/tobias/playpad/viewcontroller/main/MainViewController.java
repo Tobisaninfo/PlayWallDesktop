@@ -220,7 +220,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 		stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(KeyCombination.SHIFT_DOWN + "+Esc"));
-		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title));
+		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
 		stage.show();
 	}
 
@@ -746,7 +746,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
 						Profile.currentProfile().getRef().getName()));
 			} else {
-				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title));
+				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
 			}
 		});
 	}
