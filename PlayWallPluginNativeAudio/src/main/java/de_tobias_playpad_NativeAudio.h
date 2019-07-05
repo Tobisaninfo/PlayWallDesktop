@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     de_tobias_playpad_NativeAudio
+ * Method:    initialize
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_initialize
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     de_tobias_playpad_NativeAudio
  * Method:    play
  * Signature: (I)V
  */
@@ -30,6 +38,22 @@ JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_pause
  */
 JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_stop
   (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     de_tobias_playpad_NativeAudio
+ * Method:    seek
+ * Signature: (ID)V
+ */
+JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_seek
+  (JNIEnv *, jclass, jint, jdouble);
+
+/*
+ * Class:     de_tobias_playpad_NativeAudio
+ * Method:    setLoop
+ * Signature: (IZ)V
+ */
+JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_setLoop
+  (JNIEnv *, jclass, jint, jboolean);
 
 /*
  * Class:     de_tobias_playpad_NativeAudio
@@ -78,6 +102,14 @@ JNIEXPORT jdouble JNICALL Java_de_tobias_playpad_NativeAudio_getDuration
  */
 JNIEXPORT jdouble JNICALL Java_de_tobias_playpad_NativeAudio_getPosition
   (JNIEnv *, jclass, jint);
+
+/*
+ * Class:     de_tobias_playpad_NativeAudio
+ * Method:    setRate
+ * Signature: (ID)V
+ */
+JNIEXPORT void JNICALL Java_de_tobias_playpad_NativeAudio_setRate
+  (JNIEnv *, jclass, jint, jdouble);
 
 #ifdef __cplusplus
 }

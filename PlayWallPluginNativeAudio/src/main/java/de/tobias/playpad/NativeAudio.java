@@ -26,6 +26,8 @@ public class NativeAudio {
 
 	public static native double getPosition(int id);
 
+	public static native void setRate(int id, double rate);
+
 	public static void onPeakMeter(int id, float left, float right) {
 		if (delegate != null) {
 			delegate.onPeakMeter(id, left, right);
