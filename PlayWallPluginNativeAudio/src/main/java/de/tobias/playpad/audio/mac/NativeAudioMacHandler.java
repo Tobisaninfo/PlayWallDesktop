@@ -48,6 +48,9 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	@Override
 	public void play() {
 		bridge.setLoop(getContent().getPad().getPadSettings().isLoop());
+		if (!getContent().getPad().isPaused()) {
+			bridge.seek(0); // Force player to seek to 0 sec for playing from start
+		}
 		bridge.play();
 	}
 
