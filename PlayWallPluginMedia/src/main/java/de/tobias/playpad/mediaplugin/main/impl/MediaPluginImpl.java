@@ -1,6 +1,7 @@
 package de.tobias.playpad.mediaplugin.main.impl;
 
 import de.thecodelabs.plugins.PluginArtifact;
+import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;
@@ -30,9 +31,6 @@ import java.util.ResourceBundle;
 
 public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, SettingsListener, ChangeListener<Boolean> {
 
-	private static final String NAME = "MediaPlugin";
-	private static final String IDENTIFIER = "de.tobias.playwall.plugin.media";
-
 	private static Module module;
 
 	private static MediaPluginImpl instance;
@@ -46,10 +44,10 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 	private static final String SETTINGS_FILENAME = "Media.xml";
 
 	@Override
-	public void startup() {
+	public void startup(PluginDescriptor descriptor) {
 		// Init
 		instance = this;
-		module = new Module(NAME, IDENTIFIER);
+		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
 		blindProperty = new SimpleBooleanProperty();
 

@@ -2,6 +2,7 @@ package de.tobias.playpad.awakeplugin;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.plugins.PluginArtifact;
+import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -25,10 +26,8 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ResourceBundle;
 
+@SuppressWarnings("unused")
 public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
-
-	private static final String NAME = "AwakePlugin";
-	private static final String IDENTIFIER = "de.tobias.playwall.plugin.awake";
 
 	private Module module;
 
@@ -42,10 +41,10 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 	private ResourceBundle bundle;
 
 	@Override
-	public void startup() {
+	public void startup(PluginDescriptor descriptor) {
 		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
 
-		module = new Module(NAME, IDENTIFIER);
+		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
@@ -83,7 +82,7 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 		try {
 			settings.save(path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

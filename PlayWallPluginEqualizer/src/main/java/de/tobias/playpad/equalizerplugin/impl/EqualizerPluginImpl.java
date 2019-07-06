@@ -1,6 +1,7 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
 import de.thecodelabs.plugins.PluginArtifact;
+import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -28,9 +29,6 @@ import java.util.ResourceBundle;
 
 public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
-	private static final String NAME = "Equalizer";
-	private static final String IDENTIFIER = "de.tobias.playwall.plugin.equalizer";
-
 	private Module module;
 
 	private Stage mainStage;
@@ -44,7 +42,7 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 	}
 
 	@Override
-	public void startup() {
+	public void startup(PluginDescriptor descriptor) {
 		bundle = Localization.loadBundle("lang/equalizer", EqualizerPluginImpl.class.getClassLoader());
 		try {
 			Equalizer.load(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
@@ -52,7 +50,7 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 			e.printStackTrace();
 		}
 
-		module = new Module(NAME, IDENTIFIER);
+		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
 		de.tobias.playpad.PlayPadPlugin.getImplementation().addPadListener(this);

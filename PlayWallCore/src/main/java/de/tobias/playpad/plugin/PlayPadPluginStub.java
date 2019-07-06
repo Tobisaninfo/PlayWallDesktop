@@ -3,12 +3,12 @@ package de.tobias.playpad.plugin;
 import de.thecodelabs.plugins.Plugin;
 
 /**
- * Schnittatelle, von der Plugins erben, damit diese alle notwendigen Services unterstützen.
+ * Interface for plugins, to define own modules in playpad for project consistency.
  *
- * @author tobias - s0553746
+ * @author tobias
+ * @version 6.2.0
  */
 public interface PlayPadPluginStub extends Plugin {
 
 	Module getModule();
-
 }

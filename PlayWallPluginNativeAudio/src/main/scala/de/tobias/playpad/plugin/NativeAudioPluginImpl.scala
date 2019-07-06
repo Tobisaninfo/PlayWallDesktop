@@ -1,6 +1,6 @@
 package de.tobias.playpad.plugin
 
-import de.thecodelabs.plugins.PluginArtifact
+import de.thecodelabs.plugins.{PluginArtifact, PluginDescriptor}
 import de.thecodelabs.utils.util.OS
 import de.thecodelabs.utils.util.OS.OSType
 import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoader}
@@ -10,14 +10,11 @@ import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoad
   */
 class NativeAudioPluginImpl extends PlayPadPluginStub with PluginArtifact {
 
-	private val NAME = "NativeAudio"
-	private val IDENTIFIER = "de.tobias.playwall.plugin.nativeaudio"
-
 	private var module: Module = _
 
+	override def startup(descriptor: PluginDescriptor): Unit = {
+		module = new Module(descriptor.getName, descriptor.getArtifactId)
 
-	override def startup(): Unit = {
-		module = new Module(NAME, IDENTIFIER)
 		// Init Audio Implementation
 		val loader = OS.getType match {
 			case OSType.MacOSX => new MacAudioImplLoader

@@ -1,9 +1,11 @@
 package de.tobias.playpad.plugin;
 
+import java.util.Objects;
+
 /**
- * Ein Modul beschreibt ein Plugin. Es wird verwendet, um Components der Registry einem Mpdul zuzuordnen.
+ * Definition a plugin module content. Plugin components are registered with its module.
  *
- * @author tobias - s0553746
+ * @author tobias
  */
 public class Module {
 
@@ -21,34 +23,15 @@ public class Module {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Module)) return false;
+		Module module = (Module) o;
+		return Objects.equals(identifier, module.identifier);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Module other = (Module) obj;
-		if (identifier == null) {
-			if (other.identifier != null)
-				return false;
-		} else if (!identifier.equals(other.identifier))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public int hashCode() {
+		return Objects.hash(identifier);
 	}
-
 }
