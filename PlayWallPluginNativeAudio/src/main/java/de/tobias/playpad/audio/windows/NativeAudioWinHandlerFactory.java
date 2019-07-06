@@ -27,9 +27,9 @@ public class NativeAudioWinHandlerFactory extends AudioHandlerFactory {
 	}
 
 	@Override
-	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapablility) {
-		if (audioCapablility == AudioCapability.SOUNDCARD) {
-			return new NativeAudioSettingsViewController();
+	public AudioHandlerViewController getAudioFeatureSettings(AudioCapability audioCapability) {
+		if (audioCapability == AudioCapability.SOUNDCARD) {
+			return new NativeAudioWinSettingsViewController();
 		}
 		return null;
 	}

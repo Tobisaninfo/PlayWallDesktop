@@ -37,7 +37,6 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 	public static final String SOUND_CARD = "SoundCard";
 
 	static final String TYPE = "TinyAudio";
-	public static final String NAME = "Java Audiostream";
 	private static final String MP3 = "mp3";
 
 	private static final int SLEEP_TIME_POSITION = 50;

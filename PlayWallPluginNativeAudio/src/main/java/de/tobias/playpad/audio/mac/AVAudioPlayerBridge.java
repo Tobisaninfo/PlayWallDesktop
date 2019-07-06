@@ -14,9 +14,7 @@ public class AVAudioPlayerBridge {
 
 
 	static {
-		System.out.println("static init start");
 		initialize();
-		System.out.println("static init end");
 	}
 
 	private static native void initialize();
@@ -28,6 +26,8 @@ public class AVAudioPlayerBridge {
 	private native void init();
 
 	public native void play();
+
+	public native boolean isPlaying();
 
 	public native void pause();
 
@@ -51,6 +51,14 @@ public class AVAudioPlayerBridge {
 
 	public native void setRate(double rate);
 
+	public static native AudioDevice[] getAudioDevices();
+
+	public native void setCurrentAudioDevice(String id);
+
+	/*
+	Delegate methods
+	 */
+
 	public void onPeakMeter(float left, float right) {
 		if (delegate != null) {
 			delegate.onPeakMeter(this, left, right);
@@ -69,10 +77,10 @@ public class AVAudioPlayerBridge {
 		}
 	}
 
-	private static NativeAudioDelegate delegate;
+	private NativeAudioDelegate delegate;
 
-	public static void setDelegate(NativeAudioDelegate delegate) {
-		AVAudioPlayerBridge.delegate = delegate;
+	public void setDelegate(NativeAudioDelegate delegate) {
+		this.delegate = delegate;
 	}
 
 	public interface NativeAudioDelegate {

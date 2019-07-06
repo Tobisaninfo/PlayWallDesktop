@@ -7,6 +7,7 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -17,7 +18,7 @@ import nativeaudio.NativeAudio;
 
 import java.nio.file.Path;
 
-public class NativeAudioSettingsViewController extends AudioHandlerViewController {
+public class NativeAudioWinSettingsViewController extends AudioHandlerViewController {
 
 	private static final String TEST_SOUND_WAV = "Test-Sound.wav";
 
@@ -30,15 +31,15 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 
 	private NativeAudio audioPlayer;
 
-	NativeAudioSettingsViewController() {
+	NativeAudioWinSettingsViewController() {
 		super("nawinSettings", "win", null);
+		final ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		testButton.setGraphic(new FontIcon(FontAwesomeType.PLAY));
 
 		soundCardComboBox.getItems().setAll(NativeAudio.getDevices());
 
-		String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo()
-				.get(NativeAudioWinHandler.SOUND_CARD);
+		String name = (String) profileSettings.getAudioUserInfo().get(NativeAudioWinHandler.SOUND_CARD);
 		for (String info : NativeAudio.getDevices()) {
 			if (info.equals(name)) {
 				soundCardComboBox.getSelectionModel().select(info);
@@ -60,7 +61,7 @@ public class NativeAudioSettingsViewController extends AudioHandlerViewControlle
 			}
 
 			isChanged = true;
-			Profile.currentProfile().getProfileSettings().getAudioUserInfo().put(NativeAudioWinHandler.SOUND_CARD, c);
+			profileSettings.getAudioUserInfo().put(NativeAudioWinHandler.SOUND_CARD, c);
 		});
 	}
 

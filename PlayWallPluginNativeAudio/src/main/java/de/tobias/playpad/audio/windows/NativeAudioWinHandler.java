@@ -162,7 +162,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 		audioHandler.load(paths[0].toString());
 
 		String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(NativeAudioWinHandler.SOUND_CARD);
-		audioHandler.setDevice(name);
+		setOutputDevice(name);
 
 		Platform.runLater(() ->
 		{

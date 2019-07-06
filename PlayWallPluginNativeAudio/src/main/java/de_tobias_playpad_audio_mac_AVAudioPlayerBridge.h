@@ -33,6 +33,14 @@ JNIEXPORT void JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_play
 
 /*
  * Class:     de_tobias_playpad_audio_mac_AVAudioPlayerBridge
+ * Method:    isPlaying
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_isPlaying
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     de_tobias_playpad_audio_mac_AVAudioPlayerBridge
  * Method:    pause
  * Signature: ()V
  */
@@ -118,6 +126,22 @@ JNIEXPORT jdouble JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_g
  */
 JNIEXPORT void JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_setRate
   (JNIEnv *, jobject, jdouble);
+
+/*
+ * Class:     de_tobias_playpad_audio_mac_AVAudioPlayerBridge
+ * Method:    getAudioDevices
+ * Signature: ()[Lde/tobias/playpad/audio/mac/AudioDevice;
+ */
+JNIEXPORT jobjectArray JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_getAudioDevices
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     de_tobias_playpad_audio_mac_AVAudioPlayerBridge
+ * Method:    setCurrentAudioDevice
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_de_tobias_playpad_audio_mac_AVAudioPlayerBridge_setCurrentAudioDevice
+  (JNIEnv *, jobject, jstring);
 
 #ifdef __cplusplus
 }

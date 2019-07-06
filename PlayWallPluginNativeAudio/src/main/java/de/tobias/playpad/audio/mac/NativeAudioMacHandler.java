@@ -3,18 +3,24 @@ package de.tobias.playpad.audio.mac;
 import de.thecodelabs.utils.threading.Worker;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
+import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Seekable;
+import de.tobias.playpad.profile.Profile;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.util.Duration;
 
 import java.nio.file.Path;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-public class NativeAudioMacHandler extends AudioHandler implements Peakable, Seekable {
+public class NativeAudioMacHandler extends AudioHandler implements Peakable, Seekable, Soundcardable {
 
-	ObjectProperty<Duration> positionProperty;
+	public static final String SOUND_CARD = "SoundCardMac";
+
+	private ObjectProperty<Duration> positionProperty;
 	private ObjectProperty<Duration> durationProperty;
 	private boolean isLoaded;
 
@@ -66,7 +72,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	}
 
 	@Override
-	public ReadOnlyObjectProperty<Duration> positionProperty() {
+	public ObjectProperty<Duration> positionProperty() {
 		return positionProperty;
 	}
 
@@ -96,6 +102,9 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 		{
 			isLoaded = bridge.load(paths[0].toString());
 			if (isLoaded) {
+				String name = (String) Profile.currentProfile().getProfileSettings().getAudioUserInfo().get(SOUND_CARD);
+				setOutputDevice(name);
+
 				Platform.runLater(() ->
 				{
 					durationProperty.set(Duration.seconds(bridge.getDuration()));
@@ -127,5 +136,20 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	@Override
 	public double getAudioLevel(Channel channel) {
 		return audioLevelProperty(channel).get();
+	}
+
+	private AudioDevice[] devices;
+
+	@Override
+	public void setOutputDevice(String name) {
+		if (devices == null) {
+			devices = AVAudioPlayerBridge.getAudioDevices();
+		}
+
+		final Optional<String> first = Stream.of(devices)
+				.filter(device -> device.getName().equals(name))
+				.map(AudioDevice::getId)
+				.findFirst();
+		first.ifPresent(s -> bridge.setCurrentAudioDevice(s));
 	}
 }
