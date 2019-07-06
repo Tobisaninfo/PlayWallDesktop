@@ -1,10 +1,10 @@
 package de.tobias.playpad.audio.mac;
 
-import de.tobias.playpad.audio.mac.AVAudioPlayerBridge.NativeAudioDelegate;
 import de.tobias.playpad.audio.AudioCapability;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.AudioHandlerFactory;
 import de.tobias.playpad.audio.Peakable.Channel;
+import de.tobias.playpad.audio.mac.AVAudioPlayerBridge.NativeAudioDelegate;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;

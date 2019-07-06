@@ -137,7 +137,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	@Override
 	public void initStage(Stage stage) {
 		PlayPadPlugin.styleable().applyStyleSheet(stage);
-		
+
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
 
