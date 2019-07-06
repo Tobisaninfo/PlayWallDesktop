@@ -10,7 +10,7 @@ import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoad
   */
 class NativeAudioPluginImpl extends PlayPadPluginStub with PluginArtifact {
 
-	private val NAME = "NativeAudioMac"
+	private val NAME = "NativeAudio"
 	private val IDENTIFIER = "de.tobias.playwall.plugin.nativeaudio"
 
 	private var module: Module = _

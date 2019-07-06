@@ -14,6 +14,17 @@ import net.sf.jni4net.Bridge
   */
 class WindowsAudioImplLoader extends AudioModuleLoader {
 
+	val resources = Array(
+		"jni4net.j-0.8.8.0.jar",
+		"jni4net.n-0.8.8.0.dll",
+		"jni4net.n.w32.v40-0.8.8.0.dll",
+		"jni4net.n.w64.v40-0.8.8.0.dll",
+		"NativeAudio.dll",
+		"NativeAudio.j4n.dll",
+		"NativeAudio.j4n.jar",
+		"NAudio.dll"
+	)
+
 	private val ASSETS = "win/"
 
 	override def preInit(): Unit = {
@@ -23,19 +34,13 @@ class WindowsAudioImplLoader extends AudioModuleLoader {
 		if (!app.isDebug) {
 			if (Files.notExists(resourceFolder))
 				Files.createDirectories(resourceFolder)
-			copyResource(resourceFolder, ASSETS, "jni4net.j-0.8.8.0.jar")
-			copyResource(resourceFolder, ASSETS, "jni4net.n-0.8.8.0.dll")
-			copyResource(resourceFolder, ASSETS, "jni4net.n.w32.v40-0.8.8.0.dll")
-			copyResource(resourceFolder, ASSETS, "jni4net.n.w64.v40-0.8.8.0.dll")
-			copyResource(resourceFolder, ASSETS, "NativeAudio.dll")
-			copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.dll")
-			copyResource(resourceFolder, ASSETS, "NativeAudio.j4n.jar")
-			copyResource(resourceFolder, ASSETS, "NAudio.dll")
+
+			resources.foreach(copyResource(resourceFolder, ASSETS, _))
 		}
 
-		Bridge.setVerbose(app isDebug)
-		Bridge.init(resourceFolder toFile)
-		Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve("NativeAudio.j4n.dll") toFile)
+		Bridge.setVerbose(app.isDebug)
+		Bridge.init(resourceFolder.toFile)
+		Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve("NativeAudio.j4n.dll").toFile)
 	}
 
 	override def init(module: Module): Unit = {

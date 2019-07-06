@@ -53,7 +53,6 @@ public class ModernPluginManager {
 		if (Files.notExists(path)) {
 			throw new IOException("File not found: " + path);
 		}
-		loadFile(path);
 	}
 
 	public void loadFile(Path path) {

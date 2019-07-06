@@ -1,7 +1,6 @@
 package de.tobias.playpad.audio.mac;
 
 import de.thecodelabs.utils.threading.Worker;
-import de.tobias.playpad.NativeAudio;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Peakable;
 import de.tobias.playpad.pad.PadStatus;
@@ -15,9 +14,6 @@ import java.nio.file.Path;
 
 public class NativeAudioMacHandler extends AudioHandler implements Peakable, Seekable {
 
-	private static int counter = 0;
-
-	private final int id;
 	ObjectProperty<Duration> positionProperty;
 	private ObjectProperty<Duration> durationProperty;
 	private boolean isLoaded;
@@ -25,10 +21,13 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	private DoubleProperty leftPeak;
 	private DoubleProperty rightPeak;
 
+	private AVAudioPlayerBridge bridge;
+
 	NativeAudioMacHandler(PadContent content) {
 		super(content);
 
-		id = counter++;
+		bridge = new AVAudioPlayerBridge();
+
 		positionProperty = new SimpleObjectProperty<>();
 		durationProperty = new SimpleObjectProperty<>();
 
@@ -36,29 +35,29 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 		rightPeak = new SimpleDoubleProperty();
 	}
 
-	int getId() {
-		return id;
+	AVAudioPlayerBridge getBridge() {
+		return bridge;
 	}
 
 	@Override
 	public void play() {
-		NativeAudio.setLoop(id, getContent().getPad().getPadSettings().isLoop());
-		NativeAudio.play(id);
+		bridge.setLoop(getContent().getPad().getPadSettings().isLoop());
+		bridge.play();
 	}
 
 	@Override
 	public void pause() {
-		NativeAudio.pause(id);
+		bridge.pause();
 	}
 
 	@Override
 	public void stop() {
-		NativeAudio.stop(id);
+		bridge.stop();
 	}
 
 	@Override
 	public void seekToStart() {
-		NativeAudio.seek(id, 0);
+		bridge.seek(0);
 	}
 
 	@Override
@@ -83,7 +82,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 
 	@Override
 	public void setVolume(double volume) {
-		NativeAudio.setVolume(id, volume);
+		bridge.setVolume(volume);
 	}
 
 	@Override
@@ -95,11 +94,11 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 	public void loadMedia(Path[] paths) {
 		Worker.runLater(() ->
 		{
-			isLoaded = NativeAudio.load(id, paths[0].toString());
+			isLoaded = bridge.load(paths[0].toString());
 			if (isLoaded) {
 				Platform.runLater(() ->
 				{
-					durationProperty.set(Duration.seconds(NativeAudio.getDuration(id)));
+					durationProperty.set(Duration.seconds(bridge.getDuration()));
 					getContent().getPad().setStatus(PadStatus.READY);
 					if (getContent().getPad().isPadVisible()) {
 						getContent().getPad().getController().getView().showBusyView(false);
@@ -112,7 +111,7 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 
 	@Override
 	public void unloadMedia() {
-		NativeAudio.dispose(id);
+		bridge.dispose();
 	}
 
 	@Override
