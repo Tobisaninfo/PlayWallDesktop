@@ -1,5 +1,6 @@
 package de.tobias.playpad.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.storage.settings.annotation.Key;
 import de.tobias.playpad.PlayPadPlugin;
@@ -24,10 +25,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileSettings {
-
-	private static final long serialVersionUID = 1L;
 
 	@Key
 	private BooleanProperty lockedProperty = new SimpleBooleanProperty(false);
@@ -42,7 +42,7 @@ public class ProfileSettings {
 	@Key
 	private String audioClass = PlayPadPlugin.getRegistryCollection().getAudioHandlers().getDefaultID();
 	@Key
-	private HashMap<String, Object> audioUserInfo = new HashMap<>();
+	private Map<String, Object> audioUserInfo = new HashMap<>();
 
 	// Layout
 	@Key
@@ -65,7 +65,7 @@ public class ProfileSettings {
 	@Key
 	private Fade fade = new Fade();
 	@Key
-	private TimeMode player_timeDisplayMode = TimeMode.REST;
+	private TimeMode playerTimeDisplayMode = TimeMode.REST;
 
 	public boolean isLocked() {
 		return lockedProperty.get();
@@ -113,14 +113,14 @@ public class ProfileSettings {
 	}
 
 	public TimeMode getPlayerTimeDisplayMode() {
-		return player_timeDisplayMode;
+		return playerTimeDisplayMode;
 	}
 
 	public String getAudioClass() {
 		return audioClass;
 	}
 
-	public HashMap<String, Object> getAudioUserInfo() {
+	public Map<String, Object> getAudioUserInfo() {
 		return audioUserInfo;
 	}
 
@@ -161,8 +161,8 @@ public class ProfileSettings {
 		this.fade = fade;
 	}
 
-	public void setPlayerTimeDisplayMode(TimeMode player_timeDisplayMode) {
-		this.player_timeDisplayMode = player_timeDisplayMode;
+	public void setPlayerTimeDisplayMode(TimeMode playerTimeDisplayMode) {
+		this.playerTimeDisplayMode = playerTimeDisplayMode;
 	}
 
 	public void setAudioClass(String audioClass) {
@@ -242,7 +242,7 @@ public class ProfileSettings {
 					TimeMode timeMode = TimeMode.valueOf(root.element(TIME_DISPLAY_ELEMENT).getStringValue());
 					profileSettings.setPlayerTimeDisplayMode(timeMode);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 
@@ -286,7 +286,7 @@ public class ProfileSettings {
 
 		root.addElement(WARNING_ELEMENT).addText(warningTime.toString());
 		fade.save(root.addElement(FADE_ELEMENT));
-		root.addElement(TIME_DISPLAY_ELEMENT).addText(player_timeDisplayMode.name());
+		root.addElement(TIME_DISPLAY_ELEMENT).addText(playerTimeDisplayMode.name());
 
 		root.addElement(MULTIPLE_PLAYER_ELEMENT).addText(String.valueOf(multiplePlayer));
 

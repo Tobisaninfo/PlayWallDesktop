@@ -1,5 +1,6 @@
 package de.tobias.playpad.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -108,19 +109,23 @@ public class Profile {
 	public void save() throws IOException {
 		ref.getRequestedModules().clear();
 
-		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->
-		{
-			try {
-				l.onSave(this);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		});
 		App app = ApplicationUtils.getApplication();
 
 		Path root = app.getPath(PathType.CONFIGURATION, ref.getFileName());
-		if (Files.notExists(root))
+		if (Files.notExists(root)) {
 			Files.createDirectories(root);
+		}
+
+		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l -> {
+			try {
+				l.onSave(this);
+			} catch (Exception ex) {
+				Logger.error(ex);
+			}
+		});
+
+		// Add audio settings to module list
+		ref.addRequestedModule(PlayPadPlugin.getRegistryCollection().getAudioHandlers().getModule(profileSettings.getAudioClass()));
 
 		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
 		mappings.save(getProfilePath(MAPPING_XML));
