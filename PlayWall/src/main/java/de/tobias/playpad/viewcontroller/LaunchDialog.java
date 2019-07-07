@@ -57,28 +57,28 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	static final String IMAGE = "gfx/Logo-large.png";
 
 	@FXML
-	private Label infoLabel;
+	Label infoLabel;
 	@FXML
-	private ImageView imageView;
+	ImageView imageView;
 
 	@FXML
-	private ListView<ProjectReference> projectListView;
+	ListView<ProjectReference> projectListView;
 
 	@FXML
-	private Button newProjectButton;
+	Button newProjectButton;
 	@FXML
-	private Button importProjectButton;
+	Button importProjectButton;
 	@FXML
-	private Button convertProjectButton;
+	Button convertProjectButton;
 
 	@FXML
-	private Button openButton;
+	Button openButton;
 	@FXML
-	private Button deleteButton;
+	Button deleteButton;
 
 	@FXML
-	private Label cloudLabel;
-	private FontIcon cloudIcon;
+	Label cloudLabel;
+	FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
 		load("view/dialog", "LaunchDialog", PlayPadMain.getUiResourceBundle());
@@ -172,13 +172,14 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	}
 
 	@FXML
-	private void newProjectButtonHandler(ActionEvent event) {
+	void newProjectButtonHandler(ActionEvent event) {
+		Logger.info("einfo");
 		ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow());
 		dialog.showAndWait().ifPresent(this::launchProject);
 	}
 
 	@FXML
-	private void importProjectButtonHandler(ActionEvent event) {
+	void importProjectButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 
 		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
@@ -199,7 +200,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	}
 
 	@FXML
-	private void convertProjectButtonHandler(ActionEvent event) {
+	void convertProjectButtonHandler(ActionEvent event) {
 		try {
 			List<ProjectReference> projects = ConverterV6.loadProjectReferences();
 			ChoiceDialog<ProjectReference> dialog = new ChoiceDialog<>(null, projects);
@@ -230,12 +231,12 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	}
 
 	@FXML
-	private void openButtonHandler(ActionEvent event) {
+	void openButtonHandler(ActionEvent event) {
 		launchProject(getSelectedProject());
 	}
 
 	@FXML
-	private void deleteButtonHandler(ActionEvent event) {
+	void deleteButtonHandler(ActionEvent event) {
 		if (getSelectedProject() != null) {
 			ProjectReference ref = getSelectedProject();
 
@@ -260,7 +261,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	}
 
 	@FXML
-	private void cloudIconClicked(MouseEvent event) {
+	void cloudIconClicked(MouseEvent event) {
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		if (server.getConnectionState() == ConnectionState.DISCONNECTED) {
 			SessionDelegate sessionDelegate = new LoginViewController();
@@ -268,7 +269,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			try {
 				server.connect(session.getKey());
 			} catch (IOException | WebSocketException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			} catch (SessionNotExisitsException ignored) {
 				Logger.warning("Session not exists");
 			}
@@ -310,7 +311,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			Project project = loader.load();
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
 
 			// Choose new profile
@@ -322,10 +323,10 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			ref.setProfileReference(profile);
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		} catch (ProjectNotFoundException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
 		}
 	}

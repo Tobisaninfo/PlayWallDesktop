@@ -141,6 +141,12 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
 		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
+
+		/*
+		 * Setup
+		 */
+
+		impl.startup(Localization.getBundle(), new LoginViewController());
 	}
 
 	@Override
@@ -150,12 +156,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			Image stageIcon = new Image(iconPath);
 			PlayPadMain.stageIcon = Optional.of(stageIcon);
 			Alerts.getInstance().setDefaultIcon(stageIcon);
-
-			/*
-			 * Setup
-			 */
-
-			impl.startup(Localization.getBundle(), new LoginViewController());
 
 			// App Setup
 			NativeApplication.sharedInstance().setDockIcon(new Image("gfx/Logo-large.png"));

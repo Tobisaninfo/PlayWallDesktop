@@ -24,9 +24,11 @@ public class ServerHandlerImpl implements ServerHandler {
 			PlayPadImpl impl = PlayPadMain.getProgramInstance();
 			Application.Parameters parameters = impl.getParameters();
 
-			Map<String, String> named = parameters.getNamed();
-			if (named.containsKey(SERVER_PARAM)) {
-				url = named.get(SERVER_PARAM);
+			if (parameters != null) {
+				Map<String, String> named = parameters.getNamed();
+				if (named.containsKey(SERVER_PARAM)) {
+					url = named.get(SERVER_PARAM);
+				}
 			}
 
 			server = new ServerImpl(url);

@@ -1,5 +1,6 @@
 package de.tobias.playpad.project.ref;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -144,8 +145,8 @@ public final class ProjectReferenceManager {
 		if (!loadedProjectOverview)
 			try {
 				loadProjects();
-			} catch (DocumentException | IOException e) {
-				e.printStackTrace();
+			} catch (IOException e) {
+				Logger.error(e);
 			}
 		return projects;
 	}
@@ -155,46 +156,50 @@ public final class ProjectReferenceManager {
 	public static final String PROJECT_ELEMENT = "Project";
 	private static final String ROOT_ELEMENT = "Settings";
 
-	public static void loadProjects() throws DocumentException, IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
-		if (Files.exists(path)) {
-			XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
-			projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
-		}
-
-		Server server = PlayPadPlugin.getServerHandler().getServer();
+	public static void loadProjects() throws IOException {
 		try {
-			List<ProjectReference> syncedProjects = server.getSyncedProjects();
-
-			// Add new synced projects in client
-			for (ProjectReference project : syncedProjects) {
-				if (projects.contains(project)) {
-					project.setSync(true);
-				} else {
-					projects.add(project);
-				}
+			Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, FILE_NAME);
+			if (Files.exists(path)) {
+				XMLHandler<ProjectReference> loader = new XMLHandler<>(path);
+				projects = loader.loadElements(PROJECT_ELEMENT, new ProjectReferenceSerializer());
 			}
 
-			// Remove old projects from client
-			List<ProjectReference> removeProjects = new ArrayList<>();
+			Server server = PlayPadPlugin.getServerHandler().getServer();
+			try {
+				List<ProjectReference> syncedProjects = server.getSyncedProjects();
 
-			for (ProjectReference project : projects) {
-				if (project.isSync()) {
-					if (!syncedProjects.contains(project)) {
-						removeProjects.add(project);
+				// Add new synced projects in client
+				for (ProjectReference project : syncedProjects) {
+					if (projects.contains(project)) {
+						project.setSync(true);
+					} else {
+						projects.add(project);
 					}
 				}
-			}
-			for (ProjectReference project : removeProjects) {
-				removeProject(project);
+
+				// Remove old projects from client
+				List<ProjectReference> removeProjects = new ArrayList<>();
+
+				for (ProjectReference project : projects) {
+					if (project.isSync()) {
+						if (!syncedProjects.contains(project)) {
+							removeProjects.add(project);
+						}
+					}
+				}
+				for (ProjectReference project : removeProjects) {
+					removeProject(project);
+				}
+
+			} catch (IOException | LoginException e) {
+				Logger.error(e);
 			}
 
-		} catch (IOException | LoginException e) {
-			e.printStackTrace();
+			saveProjects();
+			loadedProjectOverview = true;
+		} catch (DocumentException ex) {
+			throw new RuntimeException(ex);
 		}
-
-		saveProjects();
-		loadedProjectOverview = true;
 	}
 
 	public static void saveProjects() throws IOException {
@@ -216,12 +221,11 @@ public final class ProjectReferenceManager {
 		if (!loadedProjectOverview)
 			try {
 				loadProjects();
-			} catch (DocumentException | IOException e) {
-				e.printStackTrace();
+			} catch (IOException e) {
+				Logger.error(e);
 			}
 
-		List<ProjectReference> items = new ArrayList<>();
-		items.addAll(projects);
+		List<ProjectReference> items = new ArrayList<>(projects);
 		items.sort((o1, o2) -> Long.compare(o2.getLastModified(), o1.getLastModified()));
 		return items;
 	}

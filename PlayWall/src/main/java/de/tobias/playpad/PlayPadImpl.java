@@ -260,7 +260,7 @@ public class PlayPadImpl implements PlayPad {
 			try {
 				server.connect(session.getKey());
 			} catch (IOException | WebSocketException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			} catch (SessionNotExisitsException ignored) {
 
 			}
