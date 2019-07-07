@@ -6,7 +6,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.factory.CartActionFactory;
+import de.tobias.playpad.action.factory.CartActionProvider;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -101,7 +101,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		try {
 			// Mapping Auto Matched Colors
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistries().getActions().getFactory(CartActionFactory.class));
+			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistries().getActions().getFactory(CartActionProvider.class));
 			// Update die Mapper der CartAction
 			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
 					.forEach(item -> item.init(pad.getProject(), mainViewController));

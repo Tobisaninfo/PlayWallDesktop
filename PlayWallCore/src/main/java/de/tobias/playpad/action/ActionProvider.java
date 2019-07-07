@@ -13,9 +13,9 @@ import java.util.List;
  * @see Action Implementierung der eigentlichen Action.
  * @since 5.0.0
  */
-public abstract class ActionFactory extends Component {
+public abstract class ActionProvider extends Component {
 
-	public ActionFactory(String type) {
+	public ActionProvider(String type) {
 		super(type);
 	}
 

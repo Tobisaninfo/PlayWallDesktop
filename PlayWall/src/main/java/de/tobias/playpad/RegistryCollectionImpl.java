@@ -1,6 +1,6 @@
 package de.tobias.playpad;
 
-import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.pad.content.PadContentRegistry;
@@ -14,7 +14,7 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
 
 public class RegistryCollectionImpl implements Registries {
 
-	private Registry<ActionFactory> actionRegistry;
+	private Registry<ActionProvider> actionRegistry;
 	private AudioRegistry audioHandlerRegistry;
 	private Registry<PadDragMode> dragModeRegistry;
 	private Registry<MapperFactory> mapperRegistry;
@@ -33,7 +33,7 @@ public class RegistryCollectionImpl implements Registries {
 	}
 
 	@Override
-	public Registry<ActionFactory> getActions() {
+	public Registry<ActionProvider> getActions() {
 		return actionRegistry;
 	}
 

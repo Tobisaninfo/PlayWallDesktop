@@ -57,11 +57,11 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T extends Action> List<T> getActions(ActionFactory type) {
+	public <T extends Action> List<T> getActions(ActionProvider type) {
 		return (List<T>) getActionsOfType(type);
 	}
 
-	public List<Action> getActionsOfType(ActionFactory actionFactory) {
+	public List<Action> getActionsOfType(ActionProvider actionFactory) {
 		return mapping.keySet().stream().filter(i -> i.getType().equals(actionFactory.getType())).collect(Collectors.toList());
 	}
 
@@ -102,8 +102,8 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initActionType(Profile profile) {
-		Registry<ActionFactory> actions = PlayPadPlugin.getRegistries().getActions();
-		for (ActionFactory component : actions.getComponents()) {
+		Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
+		for (ActionProvider component : actions.getComponents()) {
 			component.initActionType(this, profile);
 		}
 	}

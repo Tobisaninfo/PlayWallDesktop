@@ -8,7 +8,7 @@ import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
@@ -87,7 +87,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		}
 
 		try {
-			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistries().getActions();
+			Registry<ActionProvider> padContents = PlayPadPlugin.getRegistries().getActions();
 			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			Logger.error(e);

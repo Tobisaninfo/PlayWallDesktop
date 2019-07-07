@@ -142,7 +142,7 @@ public class CartAction extends Action implements ColorAdjustable {
 		return FeedbackType.DOUBLE;
 	}
 
-	void setPad(Pad newPad) {
+	private void setPad(Pad newPad) {
 		Pad oldPad = this.pad;
 		if (newPad == null || !newPad.equals(oldPad)) {
 			removeOldListener(oldPad);
@@ -203,7 +203,7 @@ public class CartAction extends Action implements ColorAdjustable {
 	// UI Helper
 	@Override
 	public String toString() {
-		return Localization.getString(Strings.Action_Cart_toString, String.valueOf(x) + ", " + String.valueOf(y));
+		return Localization.getString(Strings.Action_Cart_toString, x + ", " + y);
 	}
 
 	@Override
@@ -216,9 +216,9 @@ public class CartAction extends Action implements ColorAdjustable {
 	@Override
 	public NVC getSettingsViewController() {
 		if (cartActionViewController == null) {
-			cartActionViewController = new CartActionViewController();
+			CartAction.cartActionViewController = new CartActionViewController();
 		}
-		cartActionViewController.setCartAction(this);
+		CartAction.cartActionViewController.setCartAction(this);
 		return cartActionViewController;
 	}
 
@@ -231,11 +231,11 @@ public class CartAction extends Action implements ColorAdjustable {
 	@Override
 	public void load(Element root) {
 		if (root.attributeValue(X_ATTR) != null)
-			x = Integer.valueOf(root.attributeValue(X_ATTR));
+			x = Integer.parseInt(root.attributeValue(X_ATTR));
 		if (root.attributeValue(Y_ATTR) != null)
-			y = Integer.valueOf(root.attributeValue(Y_ATTR));
+			y = Integer.parseInt(root.attributeValue(Y_ATTR));
 		setMode(CartActionMode.valueOf(root.attributeValue(CONTROL_MODE)));
-		autoFeedbackColors = Boolean.valueOf(root.attributeValue(AUTO_FEEDBACK_COLORS));
+		autoFeedbackColors = Boolean.parseBoolean(root.attributeValue(AUTO_FEEDBACK_COLORS));
 	}
 
 	@Override

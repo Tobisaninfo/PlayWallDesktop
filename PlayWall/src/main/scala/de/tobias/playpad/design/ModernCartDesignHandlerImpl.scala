@@ -29,7 +29,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-pad.css")
 		val string = resource.getAsString
 
-		val values = Map[String, AnyRef](
+		val values = Map[String, Any](
 			"prefix" -> padIdentifier,
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,

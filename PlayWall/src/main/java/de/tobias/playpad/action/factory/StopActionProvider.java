@@ -7,9 +7,9 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class StopActionFactory extends ActionFactory {
+public class StopActionProvider extends ActionProvider {
 
-	public StopActionFactory(String type) {
+	public StopActionProvider(String type) {
 		super(type);
 	}
 

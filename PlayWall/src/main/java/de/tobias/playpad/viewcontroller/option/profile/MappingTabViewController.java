@@ -131,8 +131,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
-		Collection<ActionFactory> types = PlayPadPlugin.getRegistries().getActions().getComponents();
-		List<ActionFactory> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
+		Collection<ActionProvider> types = PlayPadPlugin.getRegistries().getActions().getComponents();
+		List<ActionProvider> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
 
 		// Sort the tpyes for the treeview
 		for (ActionType actionType : ActionType.values()) {
@@ -142,8 +142,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		return rootItem;
 	}
 
-	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<ActionFactory> sortedTypes, ActionType type) {
-		for (ActionFactory actionFactory : sortedTypes) {
+	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<ActionProvider> sortedTypes, ActionType type) {
+		for (ActionProvider actionFactory : sortedTypes) {
 			List<Action> actions = mapping.getActionsOfType(actionFactory);
 			if (actionFactory.geActionType() == type) {
 				TreeItem<ActionDisplayable> item = actionFactory.getTreeViewForActions(actions, mapping);

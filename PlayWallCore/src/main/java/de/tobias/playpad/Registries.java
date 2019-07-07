@@ -1,6 +1,6 @@
 package de.tobias.playpad;
 
-import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.mapper.MapperFactory;
 import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.pad.content.PadContentRegistry;
@@ -19,7 +19,7 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
  */
 public interface Registries {
 
-	Registry<ActionFactory> getActions();
+	Registry<ActionProvider> getActions();
 
 	AudioRegistry getAudioHandlers();
 

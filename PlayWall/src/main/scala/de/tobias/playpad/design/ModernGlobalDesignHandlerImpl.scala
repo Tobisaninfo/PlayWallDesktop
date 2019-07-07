@@ -94,7 +94,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-global.css")
 		val string = resource.getAsString
 
-		val values = Map[String, AnyRef](
+		val values = Map[String, Any](
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
@@ -102,7 +102,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 			"padColor" -> (if (design.isFlatDesign) color.paint() else color.linearGradient()),
 			"fontColor" -> color.getFontColor,
 			"infoFontSize" -> s"${design.getInfoFontSize}",
-			"titleFontSize" -> s"${design.getTitleFontSize}",
+			"titleFontSize" -> s"${design.getTitleFontSize}"
 		)
 
 		context.setVariables(values.asJava)

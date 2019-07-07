@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class BlackActionFactory extends ActionFactory {
+public class BlackActionFactory extends ActionProvider {
 
 	static final String TYPE = "BLACK";
 

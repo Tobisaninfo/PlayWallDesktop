@@ -2,17 +2,16 @@ package de.tobias.playpad.action.factory;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.action.*;
-import de.tobias.playpad.action.actions.PageAction;
+import de.tobias.playpad.action.actions.NavigateAction;
+import de.tobias.playpad.action.actions.NavigateAction.NavigationType;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.project.ProjectSettings;
 import javafx.scene.control.TreeItem;
 
-import java.util.Collections;
 import java.util.List;
 
-public class PageActionFactory extends ActionFactory implements ActionDisplayable {
+public class NavigateActionProvider extends ActionProvider implements ActionDisplayable {
 
-	public PageActionFactory(String type) {
+	public NavigateActionProvider(String type) {
 		super(type);
 	}
 
@@ -20,12 +19,12 @@ public class PageActionFactory extends ActionFactory implements ActionDisplayabl
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
 
-		Collections.sort(actions, (o1, o2) ->
+		actions.sort((o1, o2) ->
 		{
-			if (o1 instanceof PageAction && o2 instanceof PageAction) {
-				PageAction c1 = (PageAction) o1;
-				PageAction c2 = (PageAction) o2;
-				return Long.compare(c1.getPage(), c2.getPage());
+			if (o1 instanceof NavigateAction && o2 instanceof NavigateAction) {
+				NavigateAction c1 = (NavigateAction) o1;
+				NavigateAction c2 = (NavigateAction) o2;
+				return Long.compare(c1.getAction().ordinal(), c2.getAction().ordinal());
 			} else {
 				return -1;
 			}
@@ -35,16 +34,13 @@ public class PageActionFactory extends ActionFactory implements ActionDisplayabl
 			TreeItem<ActionDisplayable> actionItem = new TreeItem<>(action);
 			rootItem.getChildren().add(actionItem);
 		}
-
 		return rootItem;
 	}
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
-			PageAction action = new PageAction(getType(), i);
-			mapping.addActionIfNotContains(action);
-		}
+		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.PREVIOUS));
+		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.NEXT));
 	}
 
 	@Override
@@ -54,7 +50,7 @@ public class PageActionFactory extends ActionFactory implements ActionDisplayabl
 
 	@Override
 	public Action newInstance() {
-		return new PageAction(getType());
+		return new NavigateAction(getType());
 	}
 
 	@Override

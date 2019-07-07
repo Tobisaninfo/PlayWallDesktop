@@ -9,6 +9,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.Element;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -102,7 +103,7 @@ public abstract class Action implements ActionDisplayable, Cloneable {
 	 */
 	public List<Mapper> getMapperSorted() {
 		List<Mapper> list = mapping.getMapperForAction(this);
-		list.sort((Mapper o1, Mapper o2) -> o1.getType().compareTo(o2.getType()));
+		list.sort(Comparator.comparing(Mapper::getType));
 		return Collections.unmodifiableList(list);
 	}
 

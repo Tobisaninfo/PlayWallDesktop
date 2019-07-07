@@ -12,16 +12,15 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class CartActionFactory extends ActionFactory implements ActionDisplayable {
+public class CartActionProvider extends ActionProvider implements ActionDisplayable {
 
-	public CartActionFactory(String type) {
+	public CartActionProvider(String type) {
 		super(type);
 	}
 
 	@Override
 	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
-		return rootItem;
+		return new TreeItem<>(this);
 	}
 
 	@Override
@@ -34,8 +33,6 @@ public class CartActionFactory extends ActionFactory implements ActionDisplayabl
 		}
 	}
 
-	// Settings View (Übersicht mit den Buttons). Die Buttons rufen dann die jeweilige CartAction auf. Da muss dann auch die MapperView
-	// manuell gesetzt werden.
 	@Override
 	public NVC getActionSettingsViewController(Mapping mapping, IMappingTabViewController controller) {
 		return new CartActionTypeViewController(mapping, controller);

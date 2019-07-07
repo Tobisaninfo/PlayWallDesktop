@@ -3,10 +3,10 @@ package de.tobias.playpad.viewcontroller.actions;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionFactory;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.factory.CartActionFactory;
+import de.tobias.playpad.action.factory.CartActionProvider;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -95,7 +95,7 @@ public class CartActionTypeViewController extends NVC {
 						int currentY = data[1];
 
 						try {
-							ActionFactory actionFactory = PlayPadPlugin.getRegistries().getActions().getFactory(CartActionFactory.class);
+							ActionProvider actionFactory = PlayPadPlugin.getRegistries().getActions().getFactory(CartActionProvider.class);
 
 							List<CartAction> cartActions = mapping.getActions(actionFactory);
 							for (CartAction action : cartActions) {

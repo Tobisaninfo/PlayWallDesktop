@@ -42,7 +42,7 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 		String type = element.attributeValue(ACTION_TYPE);
 
 		try {
-			final Registry<ActionFactory> actions = PlayPadPlugin.getRegistries().getActions();
+			final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
 			Action action = actions.getFactory(type).newInstance();
 			action.load(element);
 
