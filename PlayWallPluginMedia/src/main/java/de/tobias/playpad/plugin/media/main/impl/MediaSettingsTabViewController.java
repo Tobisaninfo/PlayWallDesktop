@@ -1,6 +1,6 @@
-package de.tobias.playpad.mediaplugin.main.impl;
+package de.tobias.playpad.plugin.media.main.impl;
 
-import de.tobias.playpad.mediaplugin.main.VideoSettings;
+import de.tobias.playpad.plugin.media.main.VideoSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;

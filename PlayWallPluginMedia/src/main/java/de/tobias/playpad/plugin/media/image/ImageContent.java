@@ -1,10 +1,10 @@
-package de.tobias.playpad.mediaplugin.image;
+package de.tobias.playpad.plugin.media.image;
 
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import javafx.application.Platform;
 
 import java.nio.file.Files;

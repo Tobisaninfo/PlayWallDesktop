@@ -1,6 +1,6 @@
 <Actions>
-    <Component id="video" name="Content.Video.Name">de.tobias.playpad.mediaplugin.video.VideoPadContentFactory
+    <Component id="video" name="Content.Video.Name">de.tobias.playpad.plugin.media.video.VideoPadContentFactory
     </Component>
-    <Component id="image" name="Content.Image.Name">de.tobias.playpad.mediaplugin.image.ImagePadContentFactory
+    <Component id="image" name="Content.Image.Name">de.tobias.playpad.plugin.media.image.ImagePadContentFactory
     </Component>
 </Actions>

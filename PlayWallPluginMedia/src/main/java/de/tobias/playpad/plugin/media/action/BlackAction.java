@@ -1,4 +1,4 @@
-package de.tobias.playpad.mediaplugin.blindaction;
+package de.tobias.playpad.plugin.media.action;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -7,7 +7,7 @@ import de.tobias.playpad.action.Action;
 import de.tobias.playpad.action.InputType;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
+import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.property.BooleanProperty;
@@ -18,11 +18,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import org.dom4j.Element;
 
-public class BlindAction extends Action implements Displayable {
+public class BlackAction extends Action implements Displayable {
 
 	private ChangeListener<Boolean> blindFeedbackListener;
 
-	BlindAction() {
+	BlackAction() {
 		blindFeedbackListener = (a, b, c) ->
 		{
 			if (c) {
@@ -68,7 +68,7 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public String getType() {
-		return BlindActionFactory.TYPE;
+		return BlackActionFactory.TYPE;
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public StringProperty displayProperty() {
-		return new SimpleStringProperty(MediaPluginImpl.getInstance().getBundle().getString("blindaction.name"));
+		return new SimpleStringProperty(MediaPluginImpl.getInstance().getBundle().getString("black_action.name"));
 	}
 
 	@Override
@@ -96,6 +96,6 @@ public class BlindAction extends Action implements Displayable {
 
 	@Override
 	public Action cloneAction() throws CloneNotSupportedException {
-		return (BlindAction) super.clone();
+		return (BlackAction) super.clone();
 	}
 }

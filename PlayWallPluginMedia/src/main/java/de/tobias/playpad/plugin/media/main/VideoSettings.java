@@ -1,4 +1,4 @@
-package de.tobias.playpad.mediaplugin.main;
+package de.tobias.playpad.plugin.media.main;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

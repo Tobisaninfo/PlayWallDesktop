@@ -1,4 +1,4 @@
-package de.tobias.playpad.mediaplugin.blindaction;
+package de.tobias.playpad.plugin.media.action;
 
 import de.tobias.playpad.action.*;
 import de.tobias.playpad.profile.Profile;
@@ -6,11 +6,11 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class BlindActionFactory extends ActionFactory {
+public class BlackActionFactory extends ActionFactory {
 
-	static final String TYPE = "BLIND";
+	static final String TYPE = "BLACK";
 
-	public BlindActionFactory(String type) {
+	public BlackActionFactory(String type) {
 		super(type);
 	}
 
@@ -21,12 +21,12 @@ public class BlindActionFactory extends ActionFactory {
 
 	@Override
 	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(new BlindAction());
+		mapping.addActionIfNotContains(new BlackAction());
 	}
 
 	@Override
 	public Action newInstance() {
-		return new BlindAction();
+		return new BlackAction();
 	}
 
 	@Override

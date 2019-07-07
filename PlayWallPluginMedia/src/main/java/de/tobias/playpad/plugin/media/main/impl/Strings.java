@@ -1,4 +1,4 @@
-package de.tobias.playpad.mediaplugin.main.impl;
+package de.tobias.playpad.plugin.media.main.impl;
 
 public class Strings {
 

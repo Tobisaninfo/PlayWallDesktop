@@ -1,17 +1,19 @@
-package de.tobias.playpad.mediaplugin.main.impl;
+package de.tobias.playpad.plugin.media.main.impl;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionFactory;
-import de.tobias.playpad.mediaplugin.main.VideoSettings;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
+import de.tobias.playpad.plugin.media.main.VideoSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.Registry;
 import javafx.application.Platform;
@@ -46,23 +48,23 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 	@Override
 	public void startup(PluginDescriptor descriptor) {
 		// Init
-		instance = this;
-		module = new Module(descriptor.getName(), descriptor.getArtifactId());
+		MediaPluginImpl.instance = this;
+		MediaPluginImpl.module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
-		blindProperty = new SimpleBooleanProperty();
+		MediaPluginImpl.blindProperty = new SimpleBooleanProperty();
 
 		bundle = Localization.loadBundle("lang/video", getClass().getClassLoader());
 		videoViewController = new MediaViewController(settings);
 
 		// Load Content Types
 		try {
-			Registry<PadContentFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistries().getPadContents();
+			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistries().getPadContents();
 			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
-		de.tobias.playpad.PlayPadPlugin.getInstance().addSettingsListener(this);
+		PlayPadPlugin.getInstance().addSettingsListener(this);
 
 		if (Profile.currentProfile() != null) {
 			onLoad(Profile.currentProfile());
@@ -85,14 +87,14 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		}
 
 		try {
-			Registry<ActionFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistries().getActions();
+			Registry<ActionFactory> padContents = PlayPadPlugin.getRegistries().getActions();
 			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		blindProperty.addListener(this);
 
-		System.out.println("Enable Media Plugin");
+		Logger.debug("Enable Media Plugin");
 	}
 
 	@Override
@@ -101,7 +103,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 			videoViewController.getStage().setFullScreen(false);
 			videoViewController.getStage().close();
 		});
-		System.out.println("Disable Media Plugin");
+		Logger.debug("Disable Media Plugin");
 	}
 
 	@Override
@@ -111,9 +113,9 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		try {
 			settings.load(path);
 		} catch (NoSuchFileException e) {
-			System.out.println("No Media.xml config on folder");
+			Logger.debug("No Media.xml config on folder");
 		} catch (DocumentException | IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -124,7 +126,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		try {
 			settings.save(path);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -154,7 +156,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		{
 			if (newValue) {
 				videoViewController.blind(true);
-				Pane root = (Pane) de.tobias.playpad.PlayPadPlugin.getInstance().getMainViewController().getParent();
+				Pane root = (Pane) PlayPadPlugin.getInstance().getMainViewController().getParent();
 				if (blindHUD != null)
 					blindHUD.addToParent(root);
 			} else {

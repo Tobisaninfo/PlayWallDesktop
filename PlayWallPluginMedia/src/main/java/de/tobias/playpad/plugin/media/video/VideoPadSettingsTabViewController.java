@@ -1,7 +1,7 @@
-package de.tobias.playpad.mediaplugin.video;
+package de.tobias.playpad.plugin.media.video;
 
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

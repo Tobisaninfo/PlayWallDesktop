@@ -1,6 +1,5 @@
-package de.tobias.playpad.mediaplugin.video;
+package de.tobias.playpad.plugin.media.video;
 
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
@@ -9,6 +8,7 @@ import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;

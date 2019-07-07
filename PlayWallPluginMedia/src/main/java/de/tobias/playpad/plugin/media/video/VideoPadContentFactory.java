@@ -1,11 +1,11 @@
-package de.tobias.playpad.mediaplugin.video;
+package de.tobias.playpad.plugin.media.video;
 
-import de.tobias.playpad.mediaplugin.main.impl.MediaPluginImpl;
-import de.tobias.playpad.mediaplugin.main.impl.MediaSettingsTabViewController;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
+import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
+import de.tobias.playpad.plugin.media.main.impl.MediaSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import javafx.geometry.Pos;

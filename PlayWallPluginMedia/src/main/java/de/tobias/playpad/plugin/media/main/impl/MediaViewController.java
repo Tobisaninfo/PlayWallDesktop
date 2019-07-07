@@ -1,15 +1,15 @@
-package de.tobias.playpad.mediaplugin.main.impl;
+package de.tobias.playpad.plugin.media.main.impl;
 
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.mediaplugin.image.ImageContent;
-import de.tobias.playpad.mediaplugin.main.VideoSettings;
-import de.tobias.playpad.mediaplugin.video.VideoContent;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.plugin.media.image.ImageContent;
+import de.tobias.playpad.plugin.media.main.VideoSettings;
+import de.tobias.playpad.plugin.media.video.VideoContent;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileListener;
 import javafx.application.Platform;
