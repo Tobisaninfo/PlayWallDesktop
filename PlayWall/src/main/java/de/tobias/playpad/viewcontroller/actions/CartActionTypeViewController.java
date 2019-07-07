@@ -95,7 +95,7 @@ public class CartActionTypeViewController extends NVC {
 						int currentY = data[1];
 
 						try {
-							ActionFactory actionFactory = PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class);
+							ActionFactory actionFactory = PlayPadPlugin.getRegistries().getActions().getFactory(CartActionFactory.class);
 
 							List<CartAction> cartActions = mapping.getActions(actionFactory);
 							for (CartAction action : cartActions) {

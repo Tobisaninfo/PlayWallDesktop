@@ -30,7 +30,7 @@ public class PadAddListener implements ServerListener {
 				contentType = json.get(PropertyDef.PAD_CONTENT_TYPE).getAsString();
 			}
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Page page = project.getPage(pageId);
 				if (page != null) {

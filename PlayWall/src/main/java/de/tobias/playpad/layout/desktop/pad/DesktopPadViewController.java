@@ -196,7 +196,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	}
 
 	private void onNew(ActionEvent event) throws NoSuchComponentException {
-		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (pad.getProject() != null) {
 			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
 				return;
@@ -204,7 +204,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 
 		FileChooser chooser = new FileChooser();
-		PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 		// File Extension
 		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
@@ -256,8 +256,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	}
 
 	private void onSettings() {
-		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
-		IMainViewController mvc = PlayPadPlugin.getImplementation().getMainViewController();
+		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
+		IMainViewController mvc = PlayPadPlugin.getInstance().getMainViewController();
 
 		if (mvc != null) {
 			if (pad.getProject() != null) {

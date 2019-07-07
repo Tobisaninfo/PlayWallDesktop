@@ -49,7 +49,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	UpdateTabViewController() {
 		load("view/option/global", "UpdateTab", PlayPadMain.getUiResourceBundle());
 
-		final PlayPad playPad = PlayPadPlugin.getImplementation();
+		final PlayPad playPad = PlayPadPlugin.getInstance();
 		GlobalSettings globalSettings = playPad.getGlobalSettings();
 
 		updateChannelComboBox.setValue(globalSettings.getUpdateChannel());
@@ -71,7 +71,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 		updateChannelComboBox.valueProperty().addListener((a, b, c) ->
 		{
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			globalSettings.setUpdateChannel(c);
 		});
 
@@ -95,7 +95,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 			Worker.runLater(() ->
 			{
-				final UpdateService updateService = PlayPadPlugin.getImplementation().getUpdateService();
+				final UpdateService updateService = PlayPadPlugin.getInstance().getUpdateService();
 
 				// Search for updates
 				updateService.fetchCurrentVersion();
@@ -117,12 +117,12 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		UpdaterDialog dialog = new UpdaterDialog(getContainingWindow());
 		dialog.show();
 
-		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		settings.setIgnoreUpdate(false);
 
 		Worker.runLater(() ->
 		{
-			final UpdateService updateService = PlayPadPlugin.getImplementation().getUpdateService();
+			final UpdateService updateService = PlayPadPlugin.getInstance().getUpdateService();
 
 			Logger.info("Install update");
 			try {

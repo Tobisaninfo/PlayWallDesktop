@@ -21,7 +21,7 @@ public class PageRemoveListener implements ServerListener {
 			JsonObject json = (JsonObject) element;
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Page page = project.getPage(uuid);
 				if (page != null) {

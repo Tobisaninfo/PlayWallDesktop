@@ -83,19 +83,19 @@ public class PlayoutLogViewController extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	@FXML
 	private void startButtonHandler(ActionEvent event) {
-		final MenuToolbarViewController controller = PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
+		final MenuToolbarViewController controller = PlayPadPlugin.getInstance().getMainViewController().getMenuToolbarController();
 
 		if (LogSeasons.getInstance() == null) { // Start
 			if (nameTextField.getText().isEmpty()) {
 				return;
 			}
 
-			final Project currentProject = PlayPadPlugin.getImplementation().getCurrentProject();
+			final Project currentProject = PlayPadPlugin.getInstance().getCurrentProject();
 			final ProjectSettings settings = currentProject.getSettings();
 
 			LogSeason logSeason = LogSeasons.createLogSeason(nameTextField.getText(), settings.getColumns(), settings.getRows());

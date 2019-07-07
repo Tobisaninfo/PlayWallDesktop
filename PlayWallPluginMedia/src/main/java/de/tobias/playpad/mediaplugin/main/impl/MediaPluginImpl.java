@@ -56,13 +56,13 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 
 		// Load Content Types
 		try {
-			Registry<PadContentFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistryCollection().getPadContents();
+			Registry<PadContentFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistries().getPadContents();
 			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
+		de.tobias.playpad.PlayPadPlugin.getInstance().addSettingsListener(this);
 
 		if (Profile.currentProfile() != null) {
 			onLoad(Profile.currentProfile());
@@ -85,7 +85,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		}
 
 		try {
-			Registry<ActionFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistryCollection().getActions();
+			Registry<ActionFactory> padContents = de.tobias.playpad.PlayPadPlugin.getRegistries().getActions();
 			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -154,7 +154,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		{
 			if (newValue) {
 				videoViewController.blind(true);
-				Pane root = (Pane) de.tobias.playpad.PlayPadPlugin.getImplementation().getMainViewController().getParent();
+				Pane root = (Pane) de.tobias.playpad.PlayPadPlugin.getInstance().getMainViewController().getParent();
 				if (blindHUD != null)
 					blindHUD.addToParent(root);
 			} else {

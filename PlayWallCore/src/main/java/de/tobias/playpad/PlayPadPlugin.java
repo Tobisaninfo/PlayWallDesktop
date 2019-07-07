@@ -6,18 +6,21 @@ import de.tobias.playpad.server.sync.command.CommandExecutorHandler;
 
 public final class PlayPadPlugin {
 
-	private static PlayPad implementation;
+	private static PlayPad instance;
 	private static Styleable modernDesignHandler;
-	private static RegistryCollection registryCollection;
+	private static Registries registryCollection;
 	private static ServerHandler serverHandler;
 	private static CommandExecutorHandler commandExecutorHandler;
 
-	public static PlayPad getImplementation() {
-		return implementation;
+	private PlayPadPlugin() {
 	}
 
-	static void setImplementation(PlayPad playPadMain) {
-		implementation = playPadMain;
+	public static PlayPad getInstance() {
+		return instance;
+	}
+
+	static void setInstance(PlayPad playPadMain) {
+		instance = playPadMain;
 	}
 
 	/**
@@ -25,11 +28,11 @@ public final class PlayPadPlugin {
 	 *
 	 * @return Registry Collection Impl
 	 */
-	public static RegistryCollection getRegistryCollection() {
+	public static Registries getRegistries() {
 		return registryCollection;
 	}
 
-	static void setRegistryCollection(RegistryCollection registryCollection) {
+	static void setRegistryCollection(Registries registryCollection) {
 		PlayPadPlugin.registryCollection = registryCollection;
 	}
 

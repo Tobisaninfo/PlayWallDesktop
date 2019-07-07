@@ -122,6 +122,6 @@ public class AboutDialog extends NVC {
 
 		stage.getScene().setFill(Color.TRANSPARENT);
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 }

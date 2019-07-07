@@ -27,7 +27,7 @@ public class DesignUpdateListener implements ServerListener {
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 			UUID padId = UUID.fromString(json.get(PropertyDef.DESIGN_PAD_SETTINGS_REF).getAsString());
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {
@@ -36,7 +36,7 @@ public class DesignUpdateListener implements ServerListener {
 
 						String field = json.get(PropertyDef.FIELD).getAsString();
 						ModernColor color = ModernColor.valueOf(json.get(PropertyDef.VALUE).getAsString());
-						IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+						IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 
 						if (field.equals(PropertyDef.DESIGN_BACKGROUND_COLOR)) {
 							Platform.runLater(() -> {

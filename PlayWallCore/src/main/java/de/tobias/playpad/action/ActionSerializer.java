@@ -42,7 +42,7 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 		String type = element.attributeValue(ACTION_TYPE);
 
 		try {
-			final Registry<ActionFactory> actions = PlayPadPlugin.getRegistryCollection().getActions();
+			final Registry<ActionFactory> actions = PlayPadPlugin.getRegistries().getActions();
 			Action action = actions.getFactory(type).newInstance();
 			action.load(element);
 
@@ -64,7 +64,7 @@ public class ActionSerializer implements XMLSerializer<Action>, XMLDeserializer<
 
 	@Override
 	public void saveElement(Element newElement, Action data) {
-		Module module = PlayPadPlugin.getRegistryCollection().getActions().getModule(data.getType());
+		Module module = PlayPadPlugin.getRegistries().getActions().getModule(data.getType());
 		if (profile != null) {
 			profile.getRef().addRequestedModule(module);
 		}

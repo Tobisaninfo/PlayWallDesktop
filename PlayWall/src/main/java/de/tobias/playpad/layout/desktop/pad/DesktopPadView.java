@@ -148,7 +148,7 @@ public class DesktopPadView implements IPadView {
 			PadContent content = pad.getContent();
 			if (content != null) {
 				try {
-					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+					PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 					PadContentFactory connect = registry.getFactory(content.getType());
 
 					previewContent = connect.getPadContentPreview(pad, preview);

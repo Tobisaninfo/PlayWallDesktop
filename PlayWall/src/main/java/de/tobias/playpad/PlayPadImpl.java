@@ -125,7 +125,7 @@ public class PlayPadImpl implements PlayPad {
 	@Override
 	public void shutdown() {
 		// Shutdown components
-		PlayPadPlugin.getRegistryCollection().getAudioHandlers().getComponents().forEach(i ->
+		PlayPadPlugin.getRegistries().getAudioHandlers().getComponents().forEach(i ->
 		{
 			if (i instanceof AutoCloseable) {
 				try {
@@ -216,7 +216,7 @@ public class PlayPadImpl implements PlayPad {
 
 		try {
 			// Load Components
-			RegistryCollection registryCollection = PlayPadPlugin.getRegistryCollection();
+			Registries registryCollection = PlayPadPlugin.getRegistries();
 
 			registryCollection.getActions().loadComponentsFromFile("components/Actions.xml", module, resourceBundle);
 			registryCollection.getAudioHandlers().loadComponentsFromFile("components/AudioHandler.xml", module, resourceBundle);

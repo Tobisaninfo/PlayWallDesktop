@@ -40,7 +40,7 @@ public class ProfileSettings {
 
 	// Audio Output
 	@Key
-	private String audioClass = PlayPadPlugin.getRegistryCollection().getAudioHandlers().getDefaultID();
+	private String audioClass = PlayPadPlugin.getRegistries().getAudioHandlers().getDefaultID();
 	@Key
 	private Map<String, Object> audioUserInfo = new HashMap<>();
 
@@ -48,7 +48,7 @@ public class ProfileSettings {
 	@Key
 	private ModernGlobalDesign design = new ModernGlobalDesign();
 	@Key
-	private String mainLayoutType = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefaultID();
+	private String mainLayoutType = PlayPadPlugin.getRegistries().getMainLayouts().getDefaultID();
 
 	// Cart Settings
 	@Key

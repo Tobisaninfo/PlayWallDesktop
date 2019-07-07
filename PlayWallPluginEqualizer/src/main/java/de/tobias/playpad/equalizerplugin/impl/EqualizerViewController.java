@@ -91,13 +91,13 @@ public class EqualizerViewController extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadPlugin.getImplementation().getIcon().ifPresent(stage.getIcons()::add);
+		PlayPadPlugin.getInstance().getIcon().ifPresent(stage.getIcons()::add);
 
 		stage.setTitle(EqualizerPluginImpl.getBundle().getString("eq.title"));
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.getScene().getStylesheets().add("style/style.css");
 	}
 

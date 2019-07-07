@@ -37,11 +37,11 @@ public class TriggerPointViewController extends NVC {
 
 	@Override
 	public void init() {
-		Set<String> types = PlayPadPlugin.getRegistryCollection().getTriggerItems().getTypes();
+		Set<String> types = PlayPadPlugin.getRegistries().getTriggerItems().getTypes();
 		types.stream().sorted().forEach(item ->
 		{
 			try {
-				TriggerItemFactory conntect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getFactory(item);
+				TriggerItemFactory conntect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item);
 				Button button = new Button(conntect.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 				button.setContentDisplay(ContentDisplay.TOP);
 				button.setPrefWidth(150);
@@ -63,7 +63,7 @@ public class TriggerPointViewController extends NVC {
 
 	private void showTriggerItem(TriggerItem item) {
 		try {
-			TriggerItemFactory connect = PlayPadPlugin.getRegistryCollection().getTriggerItems().getFactory(item.getType());
+			TriggerItemFactory connect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item.getType());
 
 			VBox itemBox = new VBox(14);
 			NVC controller = connect.getSettingsController(item);

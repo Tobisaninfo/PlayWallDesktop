@@ -32,7 +32,7 @@ public class PadContentRegistry extends ComponentRegistry<PadContentFactory> {
 			String[] fileExtensions = connect.getSupportedTypes();
 			Collections.addAll(extensions, fileExtensions);
 		}
-		return extensions.toArray(new String[extensions.size()]);
+		return extensions.toArray(new String[0]);
 	}
 
 }

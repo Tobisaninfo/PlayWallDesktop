@@ -44,7 +44,7 @@ class WindowsAudioImplLoader extends AudioModuleLoader {
 	}
 
 	override def init(module: Module): Unit = {
-		val registry = PlayPadPlugin.getRegistryCollection.getAudioHandlers
+		val registry = PlayPadPlugin.getRegistries.getAudioHandlers
 		val nativeWin = new NativeAudioWinHandlerFactory("NativeAudio")
 		nativeWin.setName("NativeAudio")
 		registry.registerComponent(nativeWin, module)

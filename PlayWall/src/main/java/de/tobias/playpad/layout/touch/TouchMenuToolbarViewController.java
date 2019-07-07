@@ -152,7 +152,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	// Event Handler
 	@FXML
 	void closeMenuItemHandler(ActionEvent event) {
-		MainLayoutFactory defaultLayout = PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault();
+		MainLayoutFactory defaultLayout = PlayPadPlugin.getRegistries().getMainLayouts().getDefault();
 
 		Profile.currentProfile().getProfileSettings().setMainLayoutType(defaultLayout.getType());
 		mainViewController.setMainLayout(defaultLayout);

@@ -64,7 +64,7 @@ public class MediaViewController implements ProfileListener {
 
 		stage = new Stage();
 		stage.setScene(new Scene(stackPane, Color.BLACK));
-		PlayPadPlugin.getImplementation().getIcon().ifPresent(stage.getIcons()::add);
+		PlayPadPlugin.getInstance().getIcon().ifPresent(stage.getIcons()::add);
 
 		Path path = ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "style.css");
 		if (Files.exists(path))

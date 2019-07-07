@@ -463,7 +463,7 @@ public class Pad implements Cloneable {
 		}
 
 		if (contentType != null) {
-			PadContentFactory factory = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(contentType);
+			PadContentFactory factory = PlayPadPlugin.getRegistries().getPadContents().getFactory(contentType);
 			PadContent newContent = factory.newInstance(this);
 			contentProperty.set(newContent);
 			if (!getPaths().isEmpty()) {

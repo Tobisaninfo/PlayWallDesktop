@@ -52,7 +52,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 			try {
 				// Get Pad Type specific tab
 				String type = pad.getContent().getType();
-				PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+				PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 				PadContentFactory padContentFactory = registry.getFactory(type);
 				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
@@ -136,7 +136,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	private void showCurrentSettings() {

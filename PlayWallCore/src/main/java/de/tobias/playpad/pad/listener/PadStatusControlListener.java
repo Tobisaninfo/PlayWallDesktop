@@ -30,7 +30,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
 		if (newValue == PadStatus.PLAY) {
 			if (pad.getContent() != null) {
-				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onPlay(pad));
+				PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onPlay(pad));
 
 				pad.getProject().updateActivePlayerProperty();
 
@@ -66,7 +66,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 			}
 		} else if (newValue == PadStatus.STOP) {
 			if (pad.getContent() != null) {
-				PlayPadPlugin.getImplementation().getPadListener().forEach(listener -> listener.onStop(pad));
+				PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStop(pad));
 				pad.getProject().updateActivePlayerProperty();
 
 				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad

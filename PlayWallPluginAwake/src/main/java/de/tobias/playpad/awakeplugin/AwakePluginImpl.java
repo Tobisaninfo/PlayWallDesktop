@@ -7,6 +7,7 @@ import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
@@ -18,7 +19,6 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Label;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 	private static final String SETTINGS_FILENAME = "Awake.xml";
 
 	private CheckMenuItem activeMenu;
-	private Label iconLabel;
+	private FontIcon toolbarIcon;
 
 	private AwakeSettings settings = new AwakeSettings();
 
@@ -46,8 +46,8 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
-		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
-		de.tobias.playpad.PlayPadPlugin.getImplementation().addSettingsListener(this);
+		PlayPadPlugin.getInstance().addMainViewListener(this);
+		PlayPadPlugin.getInstance().addSettingsListener(this);
 		Logger.info("Enable Awake Plugin");
 	}
 
@@ -87,30 +87,29 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 	}
 
 	@Override
-	public void onInit(IMainViewController t) {
+	public void onInit(IMainViewController viewController) {
 		activeMenu = new CheckMenuItem();
 		activeMenu.setOnAction(this);
 		activeMenu.setText(bundle.getString("menutitle"));
 		activeMenu.setSelected(settings.active);
 
-		t.performLayoutDependedAction((oldToolbar, newToolbar) ->
+		viewController.performLayoutDependedAction((oldToolbar, newToolbar) ->
 		{
 			if (oldToolbar != null)
 				oldToolbar.removeMenuItem(activeMenu);
 			newToolbar.addMenuItem(activeMenu, MenuType.EXTENSION);
 
-			if (iconLabel != null) {
+			if (toolbarIcon != null) {
 				if (settings.active) {
 					if (oldToolbar != null)
-						oldToolbar.removeToolbarItem(iconLabel);
-					newToolbar.addToolbarItem(iconLabel);
+						oldToolbar.removeToolbarItem(toolbarIcon);
+					newToolbar.addToolbarItem(toolbarIcon);
 				} else {
-					newToolbar.removeToolbarItem(iconLabel);
+					newToolbar.removeToolbarItem(toolbarIcon);
 				}
 			}
 		});
-		iconLabel = new Label();
-		iconLabel.setGraphic(new FontIcon(FontAwesomeType.MOON_ALT));
+		toolbarIcon = new FontIcon(FontAwesomeType.MOON_ALT);
 	}
 
 	@Override
@@ -118,11 +117,11 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 		activeSleep(activeMenu.isSelected());
 		settings.active = activeMenu.isSelected();
 
-		MenuToolbarViewController toolbarController = de.tobias.playpad.PlayPadPlugin.getImplementation().getMainViewController().getMenuToolbarController();
+		MenuToolbarViewController toolbarController = PlayPadPlugin.getInstance().getMainViewController().getMenuToolbarController();
 		if (settings.active) {
-			toolbarController.addToolbarItem(iconLabel);
+			toolbarController.addToolbarItem(toolbarIcon);
 		} else {
-			toolbarController.removeToolbarItem(iconLabel);
+			toolbarController.removeToolbarItem(toolbarIcon);
 		}
 	}
 

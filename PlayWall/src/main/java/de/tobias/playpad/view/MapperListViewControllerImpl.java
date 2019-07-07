@@ -58,7 +58,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		headline.setUnderline(true);
 		root.getChildren().addAll(headline, mappingView, addMappingBox);
 
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
 		Set<String> types = registry.getTypes();
 		types.stream().sorted().forEach(item ->
 		{
@@ -97,7 +97,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 	}
 
 	private MapperViewController onAddMapper(String type) throws NoSuchComponentException {
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
 
 		Mapper mapper = registry.getFactory(type).createNewMapper();
 		action.addMapper(mapper);

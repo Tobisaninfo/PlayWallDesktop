@@ -222,7 +222,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 
 				// Convert wenn mp3
 				if (PathUtils.getFileExtension(url.getFile()).toLowerCase().endsWith(MP3)) {
-					GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+					GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 					Path wavPath = globalSettings.getCachePath().resolve(path.getFileName().toString() + ".wav");
 					url = convertMp3ToWav(path, wavPath, getContent().getPad());
 				}

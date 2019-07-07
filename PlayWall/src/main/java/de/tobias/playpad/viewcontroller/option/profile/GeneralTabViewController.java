@@ -97,7 +97,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		File folder = chooser.showDialog(getContainingWindow());
 		if (folder != null) {
 			Path folderPath = folder.toPath();
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			globalSettings.setCachePath(folderPath);
 			cacheTextField.setText(folderPath.toString());
 		}
@@ -134,7 +134,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	private void calcCacheSize() {
 		try {
 			double size = 0;
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			Path path = globalSettings.getCachePath();
 			if (Files.notExists(path))
 				Files.createDirectories(path);

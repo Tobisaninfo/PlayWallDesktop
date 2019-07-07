@@ -52,8 +52,8 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
-		de.tobias.playpad.PlayPadPlugin.getImplementation().addMainViewListener(this);
-		de.tobias.playpad.PlayPadPlugin.getImplementation().addPadListener(this);
+		de.tobias.playpad.PlayPadPlugin.getInstance().addMainViewListener(this);
+		de.tobias.playpad.PlayPadPlugin.getInstance().addPadListener(this);
 
 		System.out.println("Enable Equalizer Plugin");
 	}

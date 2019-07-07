@@ -176,7 +176,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		};
 
 		// Default Layout
-		setMainLayout(PlayPadPlugin.getRegistryCollection().getMainLayouts().getDefault());
+		setMainLayout(PlayPadPlugin.getRegistries().getMainLayouts().getDefault());
 
 		Profile.registerListener(this);
 
@@ -264,7 +264,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			menuToolbarViewController.setNotFoundNumber(openProject.getNotFoundMedia());
 
 		// Keyboard Shortcuts
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 		menuToolbarViewController.loadKeybinding(globalSettings.getKeyCollection());
 
 		// Update Locked Listener
@@ -280,7 +280,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private boolean closeRequest() {
 		if (Profile.currentProfile() != null) {
 			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
 			// wenn ein Pad noch im Status Play ist
@@ -618,7 +618,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 
 		try {
-			DefaultRegistry<MainLayoutFactory> registry = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+			DefaultRegistry<MainLayoutFactory> registry = PlayPadPlugin.getRegistries().getMainLayouts();
 			MainLayoutFactory connect = registry.getFactory(currentProfile.getProfileSettings().getMainLayoutType());
 			setMainLayout(connect);
 		} catch (NoSuchComponentException e) {

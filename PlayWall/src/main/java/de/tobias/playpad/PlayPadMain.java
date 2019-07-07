@@ -136,7 +136,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
-		PlayPadPlugin.setImplementation(impl);
+		PlayPadPlugin.setInstance(impl);
 		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
 		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
 		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
@@ -191,7 +191,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				e.printStackTrace();
 			}
 
-			if (PlayPadPlugin.getImplementation().getGlobalSettings().isOpenLastDocument()) {
+			if (PlayPadPlugin.getInstance().getGlobalSettings().isOpenLastDocument()) {
 				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
 				if (value != null) {
 					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));

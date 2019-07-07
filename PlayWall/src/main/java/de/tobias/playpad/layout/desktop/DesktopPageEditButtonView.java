@@ -79,7 +79,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				project.setPage(rightIndex, leftPage);
 				project.setPage(leftIndex, page);
 
-				IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+				IMainViewController controller = PlayPadPlugin.getInstance().getMainViewController();
 				if (controller.getMenuToolbarController() != null)
 					controller.getMenuToolbarController().initPageButtons();
 				controller.showPage(leftIndex);
@@ -96,7 +96,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				project.setPage(leftIndex, rightPage);
 				project.setPage(rightIndex, page);
 
-				IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+				IMainViewController controller = PlayPadPlugin.getInstance().getMainViewController();
 				if (controller.getMenuToolbarController() != null)
 					controller.getMenuToolbarController().initPageButtons();
 				controller.showPage(rightIndex);

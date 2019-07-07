@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 public class ModernStyleableImpl implements Styleable {
 
 	@Override
-	public void applyStyleSheet(Stage stage) {
+	public void applyStyle(Stage stage) {
 		PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheet(stage);
 	}
 }

@@ -71,7 +71,7 @@ public class PrintDialog extends NVC {
 		stage.setMinHeight(400);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	private void createPreview(int pageIndex) {

@@ -77,7 +77,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	// Utils
 	protected void doAction(Runnable run) {
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (!(project.getActivePlayers() > 0 && globalSettings.isLiveMode())) {
 			run.run();
 		}

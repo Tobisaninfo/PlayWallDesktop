@@ -66,7 +66,7 @@ public class Trigger {
 				Element itemElement = (Element) itemObj;
 				String type = itemElement.attributeValue(TYPE_ATTR);
 
-				Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistryCollection().getTriggerItems();
+				Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistries().getTriggerItems();
 				try {
 					TriggerItemFactory connect = registry.getFactory(type);
 					TriggerItem item = connect.newInstance(this);

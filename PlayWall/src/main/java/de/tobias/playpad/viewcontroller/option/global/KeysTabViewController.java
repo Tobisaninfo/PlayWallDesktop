@@ -58,7 +58,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 		shortcutTableColumn.setCellValueFactory(param -> param.getValue().displayProperty());
 		nameTableColumn.setCellValueFactory(param ->
 		{
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			return new SimpleStringProperty(globalSettings.getKeyCollection().getName(param.getValue().getId()));
 		});
 
@@ -84,7 +84,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 		currentKey = key;
 
 		if (key != null) {
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 			String name = globalSettings.getKeyCollection().getName(key.getId());
 			nameLabel.setText(name);
@@ -106,7 +106,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 	@FXML
 	void deleteHandler(ActionEvent event) {
 		if (currentKey != null) {
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			globalSettings.getKeyCollection().removeKeyBinding(currentKey);
 		}
 	}
@@ -130,7 +130,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 
 				Key newKey = new Key(currentKey.getId(), key, ev.isControlDown(), ev.isAltDown(), ev.isMetaDown(), ev.isShiftDown());
 
-				GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+				GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 				KeyCollection keyCollection = globalSettings.getKeyCollection();
 
 				boolean conflict = keyCollection.keysConflict(newKey);
@@ -192,7 +192,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 		if (search == null || search.length() == 0) {
 			filteredData.setPredicate(s -> true);
 		} else {
-			GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			filteredData.setPredicate(s -> globalSettings.getKeyCollection().getName(s.getId()).toLowerCase().startsWith(search.toLowerCase()));
 		}
 		table.setItems(filteredData);

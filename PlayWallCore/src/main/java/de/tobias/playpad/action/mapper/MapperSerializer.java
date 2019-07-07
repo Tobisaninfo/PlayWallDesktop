@@ -28,7 +28,7 @@ public class MapperSerializer implements XMLSerializer<Mapper>, XMLDeserializer<
 		String mapperType = element.attributeValue(MAPPER_TYPE);
 
 		try {
-			MapperFactory component = PlayPadPlugin.getRegistryCollection().getMappers().getFactory(mapperType);
+			MapperFactory component = PlayPadPlugin.getRegistries().getMappers().getFactory(mapperType);
 
 			Mapper mapper = component.createNewMapper();
 			mapper.load(element, action);

@@ -17,7 +17,7 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
  * @author tobias
  * @since 5.1.0
  */
-public interface RegistryCollection {
+public interface Registries {
 
 	Registry<ActionFactory> getActions();
 

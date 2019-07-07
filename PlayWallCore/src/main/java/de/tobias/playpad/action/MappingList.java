@@ -29,7 +29,7 @@ public class MappingList extends ArrayList<Mapping> {
 	public MappingList(Profile profile) {
 		add(new Mapping(true));
 
-		this.profile = new WeakReference<Profile>(profile);
+		this.profile = new WeakReference<>(profile);
 	}
 
 	public Mapping getActiveMapping() {

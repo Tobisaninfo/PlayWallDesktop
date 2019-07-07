@@ -29,7 +29,7 @@ public class PadTriggerDurationListener implements ChangeListener<Duration> {
 			if (totalDuration != null) {
 				Duration leftTime = totalDuration.subtract(newValue);
 
-				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+				IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 				Profile currentProfile = Profile.currentProfile();
 				PadSettings padSettings = pad.getPadSettings();
 

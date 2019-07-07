@@ -24,7 +24,7 @@ public class PadSettingsUpdateListener implements ServerListener {
 
 			UUID uuid = UUID.fromString(json.get(PropertyDef.ID).getAsString());
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Optional<PadSettings> padSettingsOpt = project.getPads().stream().filter(pad -> pad.getPadSettings().getId().equals(uuid)).map(Pad::getPadSettings).findFirst();
 				padSettingsOpt.ifPresent(padSettings -> {

@@ -90,7 +90,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 				// Build In Filesupport
 				try {
-					PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+					PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 					Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 
 					if (!connects.isEmpty()) {
@@ -113,7 +113,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 			PadIndex index = (PadIndex) event.getDragboard().getContent(dataFormat); // TODO Check cast
 			if (!currentPad.getPadIndex().equals(index)) {
 
-				Collection<PadDragMode> connects = PlayPadPlugin.getRegistryCollection().getDragModes().getComponents();
+				Collection<PadDragMode> connects = PlayPadPlugin.getRegistries().getDragModes().getComponents();
 
 				if (!connects.isEmpty()) {
 					if (padHud == null) {
@@ -179,7 +179,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				padHud.hide();
 
 				// Update der Pad Views nach dem DnD
-				IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+				IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 				mainViewController.showPage(mainViewController.getPage());
 
 				if (project.getProjectReference().isSync()) {
@@ -224,7 +224,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 	// Utils
 	private boolean checkLiveMode() {
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (currentPad.getProject() != null) {
 			if (globalSettings.isLiveMode() && globalSettings.isLiveModeFile() && currentPad.getProject().getActivePlayers() > 0) {
 				return true;

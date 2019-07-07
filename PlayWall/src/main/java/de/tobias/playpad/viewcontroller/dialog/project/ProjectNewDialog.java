@@ -68,7 +68,7 @@ public class ProjectNewDialog extends NVC {
 	@Override
 	public void initStage(Stage stage) {
 		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProject_Title));

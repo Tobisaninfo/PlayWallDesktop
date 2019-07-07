@@ -59,7 +59,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		// Audio Classes
-		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistries().getAudioHandlers();
 		audioTypeComboBox.getItems().addAll(audioHandlerRegistry.getTypes());
 
 		// Listener for selection
@@ -81,7 +81,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 		options.getChildren().clear();
 
-		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistryCollection().getAudioHandlers();
+		AudioRegistry audioHandlerRegistry = PlayPadPlugin.getRegistries().getAudioHandlers();
 		AudioHandlerFactory audio = audioHandlerRegistry.getFactory(classID);
 
 		for (AudioCapability audioCapability : AudioCapability.getFeatures()) {

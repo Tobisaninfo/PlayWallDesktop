@@ -35,7 +35,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 	private Clip clip;
 
 	public TinySoundSettingsViewController() {
-		super("TinySoundSettings", "view/audio", PlayPadPlugin.getImplementation().getUIResourceBundle());
+		super("TinySoundSettings", "view/audio", PlayPadPlugin.getInstance().getUIResourceBundle());
 
 		// Mixer (ohne Port)
 		List<Info> infos = Arrays.stream(AudioSystem.getMixerInfo()).filter(info -> !info.getName().startsWith("Port"))

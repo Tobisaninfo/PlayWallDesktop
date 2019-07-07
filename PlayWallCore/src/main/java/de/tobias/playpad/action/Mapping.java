@@ -102,7 +102,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initActionType(Profile profile) {
-		Registry<ActionFactory> actions = PlayPadPlugin.getRegistryCollection().getActions();
+		Registry<ActionFactory> actions = PlayPadPlugin.getRegistries().getActions();
 		for (ActionFactory component : actions.getComponents()) {
 			component.initActionType(this, profile);
 		}
@@ -117,7 +117,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void initFeedbackType() {
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
 		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).initFeedbackType();
@@ -126,7 +126,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void prepareFeedback(Project project) {
-		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+		IMainViewController controller = PlayPadPlugin.getInstance().getMainViewController();
 
 		for (Action action : mapping.keySet()) {
 			try {
@@ -138,7 +138,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void showFeedback(Project project) {
-		IMainViewController controller = PlayPadPlugin.getImplementation().getMainViewController();
+		IMainViewController controller = PlayPadPlugin.getInstance().getMainViewController();
 		showFeedback(project, controller);
 	}
 
@@ -153,7 +153,7 @@ public class Mapping implements Cloneable, ActionDisplayable {
 	}
 
 	public void clearFeedback() {
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistryCollection().getMappers();
+		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
 		for (MapperFactory mapper : registry.getComponents()) {
 			if (mapper instanceof MapperConnectFeedbackable) {
 				((MapperConnectFeedbackable) mapper).clearFeedbackType();

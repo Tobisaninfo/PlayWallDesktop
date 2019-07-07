@@ -69,14 +69,14 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	/**
 	 * Zeigt die aktuellen Einstellungen für die Tabs an.
 	 */
 	private void loadTabs() {
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 		for (GlobalSettingsTabViewController controller : tabs) {
 			controller.loadSettings(globalSettings);
@@ -87,7 +87,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	 * Speichert die Einstellungen der Tabs.
 	 */
 	private void saveTabs() {
-		GlobalSettings globalSettings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 		for (GlobalSettingsTabViewController controller : tabs) {
 			controller.saveSettings(globalSettings);

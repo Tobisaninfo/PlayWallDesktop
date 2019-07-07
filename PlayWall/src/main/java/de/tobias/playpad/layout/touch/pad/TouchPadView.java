@@ -123,7 +123,7 @@ public class TouchPadView implements IPadView {
 			PadContent content = pad.getContent();
 			if (content != null) {
 				try {
-					PadContentFactory connect = PlayPadPlugin.getRegistryCollection().getPadContents().getFactory(content.getType());
+					PadContentFactory connect = PlayPadPlugin.getRegistries().getPadContents().getFactory(content.getType());
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 

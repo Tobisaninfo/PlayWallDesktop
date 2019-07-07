@@ -31,7 +31,7 @@ class MacAudioImplLoader extends AudioModuleLoader {
 	}
 
 	override def init(module: Module): Unit = {
-		val registry = PlayPadPlugin.getRegistryCollection.getAudioHandlers
+		val registry = PlayPadPlugin.getRegistries.getAudioHandlers
 		val nativeMac = new NativeAudioMacHandlerFactory("NativeAudio")
 		nativeMac.setName("NativeAudio")
 		registry.registerComponent(nativeMac, module)

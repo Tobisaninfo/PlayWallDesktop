@@ -33,7 +33,7 @@ public class PadSettingsAddListener implements ServerListener {
 				warning = Duration.millis(json.get(PropertyDef.PAD_SETTINGS_WARNING).getAsDouble());
 			}
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {

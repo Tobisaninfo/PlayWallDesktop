@@ -190,7 +190,7 @@ public class PathMatchDialog extends NVC {
 		stage.setMaxHeight(600);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	public void showAndWait() {
@@ -220,7 +220,7 @@ public class PathMatchDialog extends NVC {
 
 	public void showFileChooser(TempMediaPath item) {
 		FileChooser chooser = new FileChooser();
-		PadContentRegistry registry = PlayPadPlugin.getRegistryCollection().getPadContents();
+		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 		// File Extension
 		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Media),

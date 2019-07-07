@@ -25,7 +25,7 @@ public class PathAddListener implements ServerListener {
 			UUID pad_id = UUID.fromString(json.get(PropertyDef.PATH_PAD_REF).getAsString());
 			String filename = json.get(PropertyDef.PATH_FILENAME).getAsString();
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Pad pad = project.getPad(pad_id);
 				if (pad != null) {

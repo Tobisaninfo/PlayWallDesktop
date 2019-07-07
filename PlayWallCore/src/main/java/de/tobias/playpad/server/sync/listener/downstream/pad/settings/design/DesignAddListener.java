@@ -27,7 +27,7 @@ public class DesignAddListener implements ServerListener {
 			ModernColor backgroundColor = ModernColor.valueOf(json.get(PropertyDef.DESIGN_BACKGROUND_COLOR).getAsString());
 			ModernColor playColor = ModernColor.valueOf(json.get(PropertyDef.DESIGN_PLAY_COLOR).getAsString());
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {

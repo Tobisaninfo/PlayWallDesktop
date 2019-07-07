@@ -12,7 +12,7 @@ import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 
-public class RegistryCollectionImpl implements RegistryCollection {
+public class RegistryCollectionImpl implements Registries {
 
 	private Registry<ActionFactory> actionRegistry;
 	private AudioRegistry audioHandlerRegistry;

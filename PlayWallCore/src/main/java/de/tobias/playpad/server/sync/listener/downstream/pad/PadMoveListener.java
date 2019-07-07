@@ -12,8 +12,8 @@ import javafx.application.Platform;
 public class PadMoveListener implements ServerListener {
 	@Override
 	public void listen(JsonElement element) {
-		if (PlayPadPlugin.getImplementation().getCurrentProject() != null) {
-			IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+		if (PlayPadPlugin.getInstance().getCurrentProject() != null) {
+			IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 			Platform.runLater(() -> mainViewController.showPage(mainViewController.getPage()));
 		}
 	}

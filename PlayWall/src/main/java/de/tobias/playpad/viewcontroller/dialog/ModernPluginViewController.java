@@ -99,7 +99,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
 
 		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyleSheet(stage);
+			PlayPadPlugin.styleable().applyStyle(stage);
 		} else {
 			// Add Stylesheet manuel
 			stage.getScene().getStylesheets().add("style/style.css");
@@ -119,7 +119,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		if (plugin != null) {
 			if (!ModernPluginManager.getInstance().isActive(plugin)) {
 				try {
-					GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+					GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 					PlayPadPlugin.getServerHandler().getServer().loadPlugin(plugin, settings.getUpdateChannel());
 					ModernPluginManager.getInstance().loadPlugin(plugin);
 				} catch (IOException e) {

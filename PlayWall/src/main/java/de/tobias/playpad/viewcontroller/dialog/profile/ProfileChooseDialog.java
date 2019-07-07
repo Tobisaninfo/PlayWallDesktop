@@ -63,7 +63,7 @@ public class ProfileChooseDialog extends NVC {
 		stage.initModality(Modality.WINDOW_MODAL);
 
 		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyleSheet(stage);
+			PlayPadPlugin.styleable().applyStyle(stage);
 		}
 	}
 

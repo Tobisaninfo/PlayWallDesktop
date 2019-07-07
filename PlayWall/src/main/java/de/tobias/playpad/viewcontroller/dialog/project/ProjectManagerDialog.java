@@ -176,7 +176,7 @@ public class ProjectManagerDialog extends NVC {
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	public Optional<ProjectReference> showAndWait() {

@@ -57,7 +57,7 @@ public class AuthViewController extends NVC {
 		stage.setHeight(250);
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Login_Title));
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	@FXML

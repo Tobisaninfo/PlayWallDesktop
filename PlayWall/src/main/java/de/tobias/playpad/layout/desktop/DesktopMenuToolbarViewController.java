@@ -256,7 +256,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			playButton.setSelected(true);
 		} else if (newValue == DesktopEditMode.DRAG) {
 			// Wenn Live Mode on, dann zum alten Wert zurück
-			GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+			GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 			if (settings.isLiveMode() && settings.isLiveModeDrag() && openProject.getActivePlayers() != 0) {
 				connect.setEditMode(oldValue);
 				return;
@@ -297,7 +297,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	private void initLayoutMenu() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-		Registry<MainLayoutFactory> mainLayouts = PlayPadPlugin.getRegistryCollection().getMainLayouts();
+		Registry<MainLayoutFactory> mainLayouts = PlayPadPlugin.getRegistries().getMainLayouts();
 
 		int index = 1; // Für Tastenkombination
 		for (MainLayoutFactory connect : mainLayouts.getComponents()) {
@@ -661,7 +661,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void profileSettingsHandler(ActionEvent event) {
 		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
-		GlobalSettings settings = PlayPadPlugin.getImplementation().getGlobalSettings();
+		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getActivePlayers() > 0) {
 			return;
 		}

@@ -39,7 +39,7 @@ public class PadTriggerStatusListener implements ChangeListener<PadStatus> {
 	}
 
 	private void executeTrigger(Trigger trigger) {
-		IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 		Profile currentProfile = Profile.currentProfile();
 
 		trigger.handle(pad, Duration.ZERO, pad.getProject(), mainViewController, currentProfile);

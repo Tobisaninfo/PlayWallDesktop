@@ -54,7 +54,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		addTab(new PlayerTabViewController());
 
 		// Custom Tabs - Content Types
-		PadContentRegistry padContents = PlayPadPlugin.getRegistryCollection().getPadContents();
+		PadContentRegistry padContents = PlayPadPlugin.getRegistries().getPadContents();
 		for (String type : padContents.getTypes()) {
 			PadContentFactory component = padContents.getFactory(type);
 			ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
@@ -102,7 +102,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		stage.setMinHeight(700);
 		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
 
-		PlayPadPlugin.styleable().applyStyleSheet(stage);
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	/**

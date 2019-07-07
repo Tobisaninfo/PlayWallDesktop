@@ -87,7 +87,7 @@ public class Profile {
 			profile.profileSettings = ProfileSettings.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), PROFILE_SETTINGS_XML));
 
 			// Listener
-			PlayPadPlugin.getImplementation().getSettingsListener().forEach(l ->
+			PlayPadPlugin.getInstance().getSettingsListener().forEach(l ->
 			{
 				try {
 					l.onLoad(profile);
@@ -116,7 +116,7 @@ public class Profile {
 			Files.createDirectories(root);
 		}
 
-		PlayPadPlugin.getImplementation().getSettingsListener().forEach(l -> {
+		PlayPadPlugin.getInstance().getSettingsListener().forEach(l -> {
 			try {
 				l.onSave(this);
 			} catch (Exception ex) {
@@ -125,7 +125,7 @@ public class Profile {
 		});
 
 		// Add audio settings to module list
-		ref.addRequestedModule(PlayPadPlugin.getRegistryCollection().getAudioHandlers().getModule(profileSettings.getAudioClass()));
+		ref.addRequestedModule(PlayPadPlugin.getRegistries().getAudioHandlers().getModule(profileSettings.getAudioClass()));
 
 		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
 		mappings.save(getProfilePath(MAPPING_XML));

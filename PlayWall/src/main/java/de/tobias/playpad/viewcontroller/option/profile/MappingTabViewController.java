@@ -131,7 +131,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
 		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
-		Collection<ActionFactory> types = PlayPadPlugin.getRegistryCollection().getActions().getComponents();
+		Collection<ActionFactory> types = PlayPadPlugin.getRegistries().getActions().getComponents();
 		List<ActionFactory> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
 
 		// Sort the tpyes for the treeview

@@ -95,13 +95,13 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void saveSettings(Pad pad) {
 		// CSS
-		IMainViewController mainViewController = PlayPadPlugin.getImplementation().getMainViewController();
+		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 		mainViewController.loadUserCss();
 
 		try {
 			// Mapping Auto Matched Colors
 			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistryCollection().getActions().getFactory(CartActionFactory.class));
+			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistries().getActions().getFactory(CartActionFactory.class));
 			// Update die Mapper der CartAction
 			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
 					.forEach(item -> item.init(pad.getProject(), mainViewController));

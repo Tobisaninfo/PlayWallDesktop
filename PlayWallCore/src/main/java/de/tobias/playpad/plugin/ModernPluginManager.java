@@ -70,7 +70,7 @@ public class ModernPluginManager {
 			}
 
 			if (p instanceof PluginArtifact) {
-				PlayPadPlugin.getImplementation().getUpdateService().addArtifact(((PluginArtifact) p).getArtifact(), path);
+				PlayPadPlugin.getInstance().getUpdateService().addArtifact(((PluginArtifact) p).getArtifact(), path);
 			}
 		}
 	}

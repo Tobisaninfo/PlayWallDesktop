@@ -1,12 +1,12 @@
 package de.tobias.playpad.audio;
 
-import de.tobias.playpad.RegistryCollection;
+import de.tobias.playpad.Registries;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
 
 /**
- * Factory to create an instance of an audio handler implementation. The factories are collected in {@link RegistryCollection#getAudioHandlers()}
+ * Factory to create an instance of an audio handler implementation. The factories are collected in {@link Registries#getAudioHandlers()}
  * If an AudioHandler have some cleanups on shutdown to do, it must implement {@link AutoCloseable}
  *
  * @author tobias

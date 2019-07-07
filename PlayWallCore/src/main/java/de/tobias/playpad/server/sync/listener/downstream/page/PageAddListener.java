@@ -25,7 +25,7 @@ public class PageAddListener implements ServerListener {
 			String name = json.get(PropertyDef.PAGE_NAME).getAsString();
 			int position = json.get(PropertyDef.PAGE_POSITION).getAsInt();
 
-			Project project = PlayPadPlugin.getImplementation().getCurrentProject();
+			Project project = PlayPadPlugin.getInstance().getCurrentProject();
 			if (project != null) {
 				if (project.getProjectReference().getUuid().equals(project_id)) {
 					Page page = new Page(uuid, position, name, project);
