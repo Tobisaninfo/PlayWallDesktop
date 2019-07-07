@@ -1,10 +1,12 @@
 package de.tobias.playpad.midi;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.midi.device.DeviceRegistry;
 
 import javax.sound.midi.*;
 import javax.sound.midi.MidiDevice.Info;
+import java.lang.reflect.InvocationTargetException;
 
 public class Midi implements AutoCloseable {
 
@@ -92,8 +94,8 @@ public class Midi implements AutoCloseable {
 		// Hier wird die DeviceImpl aufgerufen
 		try {
 			this.midiMidiDeviceImplImpl = DeviceRegistry.getFactoryInstance().getDevice(input.getName());
-		} catch (InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+			Logger.error(e);
 		}
 		setupMidiDevice();
 	}
@@ -143,7 +145,7 @@ public class Midi implements AutoCloseable {
 			try {
 				listener.onMidiAction(msg);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
@@ -157,7 +159,7 @@ public class Midi implements AutoCloseable {
 		return inputDevice != null && outputDevice != null && inputDevice.isOpen() && outputDevice.isOpen();
 	}
 
-	public void sendClearCommand() throws InvalidMidiDataException, MidiUnavailableException {
+	public void sendClearCommand() {
 		if (midiMidiDeviceImplImpl != null) {
 			midiMidiDeviceImplImpl.clearFeedback();
 		}

@@ -21,7 +21,7 @@ import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
 import org.springframework.expression.spel.support.StandardEvaluationContext
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with ColorModeHandler {
 
