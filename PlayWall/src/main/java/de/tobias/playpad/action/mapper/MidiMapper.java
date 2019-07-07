@@ -146,7 +146,7 @@ public class MidiMapper extends Mapper implements ColorAssociator, MapperFeedbac
 		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
 		if (midiDeviceImpl != null) {
 			if (midiDeviceImpl instanceof DeviceColorAssociatorConnector) {
-				return ((DeviceColorAssociatorConnector) midiDeviceImpl).map(color);
+				return ((DeviceColorAssociatorConnector) midiDeviceImpl).getPreferColorMapping(color);
 			}
 		}
 		return null;

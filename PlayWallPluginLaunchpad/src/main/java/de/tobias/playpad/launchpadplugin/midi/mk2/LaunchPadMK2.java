@@ -1,5 +1,6 @@
 package de.tobias.playpad.launchpadplugin.midi.mk2;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
@@ -22,12 +23,12 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 	// Modern Colors mapped to the colors of the launchpad
 	private static Map<String, String> mapProperties;
 
-	public LaunchPadMK2() {
+	static {
 		try {
-			URL resource = getClass().getClassLoader().getResource("launchpad_mk2.map");
+			URL resource = LaunchPadMK2.class.getClassLoader().getResource("launchpad_mk2.map");
 			mapProperties = MapParser.load(resource);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -43,6 +44,7 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 
 	@Override
 	public void initDevice() {
+		// nothing to do
 	}
 
 	@Override
@@ -56,13 +58,13 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 					Midi.getInstance().sendMessage(144, key, value);
 				}
 			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		} else {
 			try {
 				Midi.getInstance().sendMessage(145, key, feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
 			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}
@@ -76,7 +78,7 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 			try {
 				Midi.getInstance().sendMessage(ShortMessage.NOTE_ON, i, 0);
 			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
@@ -89,7 +91,7 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 			try {
 				Midi.getInstance().sendMessage(ShortMessage.CONTROL_CHANGE, i, 0);
 			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}
@@ -115,7 +117,7 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 	}
 
 	@Override
-	public DisplayableFeedbackColor map(Color color) {
+	public DisplayableFeedbackColor getPreferColorMapping(Color color) {
 		if (mapProperties.containsKey(color.toString())) {
 			String nameOfConst = mapProperties.get(color.toString());
 			return LaunchPadMK2Color.valueOf(nameOfConst);

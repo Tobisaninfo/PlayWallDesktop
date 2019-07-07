@@ -11,5 +11,5 @@ public interface DeviceColorAssociatorConnector {
 
 	DisplayableFeedbackColor[] getColors();
 
-	DisplayableFeedbackColor map(Color color);
+	DisplayableFeedbackColor getPreferColorMapping(Color color);
 }

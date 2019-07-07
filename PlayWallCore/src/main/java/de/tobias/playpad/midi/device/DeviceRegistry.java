@@ -6,6 +6,8 @@ import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
 import de.tobias.playpad.event.Event;
 import de.tobias.playpad.event.EventDispatcher;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,12 +51,16 @@ public class DeviceRegistry extends EventDispatcher {
 	 * @see DeviceRegistry#registerDevice(String, Class)
 	 * @see DefaultMidiDeviceImpl
 	 */
-	public MidiDeviceImpl getDevice(String id) throws InstantiationException, IllegalAccessException {
+	public MidiDeviceImpl getDevice(String id) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (devices.containsKey(id)) {
-			System.out.println("Recognize known MIDI device: " + id);
-			return devices.get(id).newInstance();
+			Logger.debug("Recognize known MIDI device: " + id);
+
+			final Class<? extends MidiDeviceImpl> deviceClass = devices.get(id);
+			final Constructor<? extends MidiDeviceImpl> constructor = deviceClass.getConstructor();
+
+			return constructor.newInstance();
 		} else {
-			System.out.println("Use Default MIDI device");
+			Logger.debug("Use Default MIDI device");
 			return new DefaultMidiDeviceImpl();
 		}
 	}

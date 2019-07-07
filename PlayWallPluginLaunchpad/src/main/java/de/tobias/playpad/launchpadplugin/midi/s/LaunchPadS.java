@@ -1,5 +1,6 @@
 package de.tobias.playpad.launchpadplugin.midi.s;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
 import de.tobias.playpad.action.feedback.Feedback;
 import de.tobias.playpad.action.feedback.FeedbackMessage;
@@ -31,7 +32,7 @@ public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorC
 		try {
 			Midi.getInstance().sendMessage(176, 0, 40);
 		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -54,7 +55,7 @@ public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorC
 				Midi.getInstance().sendMessage(command, key, midiVelocity);
 			}
 		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -63,7 +64,7 @@ public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorC
 		try {
 			Midi.getInstance().sendMessage(176, 0, 0);
 		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -88,7 +89,7 @@ public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorC
 	}
 
 	@Override
-	public DisplayableFeedbackColor map(Color color) {
+	public DisplayableFeedbackColor getPreferColorMapping(Color color) {
 		return null;
 	}
 }
