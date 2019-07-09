@@ -7,6 +7,6 @@
 .slider .thumb {
 	-fx-background-color: #CCCCCC;
 	-fx-padding: 0.333333em;
-	-fx-scale-x: 1.5;
-	-fx-scale-y: 1.5;
+	-fx-scale-x: 2;
+	-fx-scale-y: 2;
 }
