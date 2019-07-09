@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -82,11 +83,9 @@ public class ProjectManagerDialog extends NVC {
 
 		// Mouse Open Handler
 		projectList.setOnMouseClicked(mouseEvent -> {
-			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-				if (mouseEvent.getClickCount() == 2) {
-					if (!projectList.getSelectionModel().isEmpty()) {
-						openHandler(null);
-					}
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) && mouseEvent.getClickCount() == 2) {
+				if (!projectList.getSelectionModel().isEmpty()) {
+					openHandler(null);
 				}
 			}
 		});
@@ -146,7 +145,7 @@ public class ProjectManagerDialog extends NVC {
 					ProjectReferenceManager.setSync(reference, newValue);
 				} catch (ProjectNotFoundException | ProfileNotFoundException | DocumentException | IOException e) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_Sync_Change, e.getLocalizedMessage()));
-					e.printStackTrace();
+					Logger.error(e);
 				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			}
@@ -211,7 +210,7 @@ public class ProjectManagerDialog extends NVC {
 				Optional<ProjectReference> importedProject = dialog.showAndWait();
 				importedProject.ifPresent(projectList.getItems()::add);
 			} catch (IOException | DocumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}
@@ -248,7 +247,7 @@ public class ProjectManagerDialog extends NVC {
 					projectList.getItems().remove(reference);
 				} catch (IOException e) {
 					showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			});
 

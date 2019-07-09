@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -75,7 +76,7 @@ public class ProfileChooseDialog extends NVC {
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
 			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -87,9 +88,9 @@ public class ProfileChooseDialog extends NVC {
 	@FXML
 	private void newProfileButtonHandler(ActionEvent event) {
 		NewProfileDialog dialog = new NewProfileDialog(getContainingWindow());
-		dialog.showAndWait().ifPresent(profile -> {
+		dialog.showAndWait().ifPresent(created -> {
 			// Add new Profile to combo box and select it
-			profileComboBox.getItems().add(profile.getRef());
+			profileComboBox.getItems().add(created.getRef());
 			profileComboBox.getSelectionModel().selectLast();
 		});
 	}

@@ -9,15 +9,15 @@ public class DisplayableCell<T extends Displayable> extends ListCell<T> {
 	private Displayable action;
 
 	@Override
-	protected void updateItem(T action, boolean empty) {
-		super.updateItem(action, empty);
+	protected void updateItem(T item, boolean empty) {
+		super.updateItem(item, empty);
 		if (!empty) {
-			if (this.action == null || this.action != action) {
-				Node graphics = action.getGraphics();
+			if (this.action == null || this.action != item) {
+				Node graphics = item.getGraphics();
 				setGraphic(graphics);
 
-				textProperty().bind(action.displayProperty());
-				this.action = action;
+				textProperty().bind(item.displayProperty());
+				this.action = item;
 			}
 		} else {
 			this.action = null;

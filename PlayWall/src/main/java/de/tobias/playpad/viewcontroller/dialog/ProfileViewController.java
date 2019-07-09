@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -80,7 +81,8 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 						ref.setName(newValue);
 						return;
 					}
-				} catch (Exception ignored) {
+				} catch (Exception e) {
+					Logger.error(e);
 				}
 			}
 			nameTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
@@ -110,7 +112,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		try {
 			Profile.load(ref);
 		} catch (ProfileNotFoundException | DocumentException | IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		getStageContainer().ifPresent(NVCStage::close);
 	}
@@ -156,8 +158,8 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 				ProfileReferenceManager.removeProfile(ref);
 				profileList.getItems().remove(ref);
 			} catch (Exception e) {
-				e.printStackTrace();
 				showErrorMessage(Localization.getString(Strings.Error_Profile_Delete, e.getMessage()));
+				Logger.error(e);
 			}
 		});
 	}
