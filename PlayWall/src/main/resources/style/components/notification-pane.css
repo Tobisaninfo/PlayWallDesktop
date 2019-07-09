@@ -3,6 +3,7 @@
 }
 
 .notification-pane.top .notification-bar > .pane {
+	-fx-background-color: #282828;
 	-fx-effect: none;
 }
 
