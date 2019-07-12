@@ -4,9 +4,9 @@
 0xe53935ff=C1_2
 
 % DARK_RED
-0xD92349ff=C1_2
-0xC92349ff=C1_2
-0xA90329ff=C1_2
+0xd92349ff=C1_2
+0xc92349ff=C1_2
+0xa90329ff=C1_2
 
 % PINK
 0xf48fb1ff=C14_2
@@ -44,9 +44,9 @@
 0xfdd835ff=C3_2
 
 % ORANGE
-0xffcc80ff=C3_2
-0xffa726ff=C3_2
-0xfb8c00ff=C3_2
+0xffcc80ff=C2_2
+0xffa726ff=C2_2
+0xfb8c00ff=C2_2
 
 % GRAY
 0xeeeeeeff=C0_3
