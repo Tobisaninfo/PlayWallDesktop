@@ -108,12 +108,12 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 
 	@Override
 	public DisplayableFeedbackColor getDefaultEventColor() {
-		return LaunchPadMK2Color.C5;
+		return LaunchPadMK2Color.C1_2;
 	}
 
 	@Override
 	public DisplayableFeedbackColor getDefaultStandardColor() {
-		return LaunchPadMK2Color.C36;
+		return LaunchPadMK2Color.C5_2;
 	}
 
 	@Override

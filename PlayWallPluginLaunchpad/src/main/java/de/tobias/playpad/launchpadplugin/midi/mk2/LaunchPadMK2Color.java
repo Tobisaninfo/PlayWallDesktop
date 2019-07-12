@@ -5,62 +5,118 @@ import javafx.scene.paint.Color;
 
 public enum LaunchPadMK2Color implements DisplayableFeedbackColor {
 
-	C0(0, Color.rgb(0, 0, 0)), // BLACK
-	C2(2, Color.rgb(125, 125, 125)), // GRAY
-	C3(3, Color.rgb(255, 255, 255)), // WHITE
-	C4(4, Color.rgb(255, 74, 76)), // RED
-	C5(5, Color.rgb(255, 0, 24)), // RED
-	C6(6, Color.rgb(93, 1, 3)), // DARK_RED
-	C8(8, Color.rgb(254, 188, 112)), // LIGHT_ORANGE
-	C9(9, Color.rgb(255, 83, 35)), // ORANGE
-	C10(10, Color.rgb(92, 28, 6)), // BROWN
-	C11(11, Color.rgb(255, 189, 112)), // ORANGE ! DARK
-	C12(12, Color.rgb(253, 252, 91)), // YELLOW
-	C13(13, Color.rgb(253, 252, 85)), // YELLOW
-	C14(14, Color.rgb(88, 88, 24)), // YELLOW
-	C16(16, Color.rgb(117, 253, 92)), // LIGHT_GREEN
-	C17(17, Color.rgb(117, 253, 92)), // LIGHT_GREEN
-	C21(21, Color.rgb(0, 253, 81)), // LIGHT_GREEN
-	C25(25, Color.rgb(0, 253, 81)), // LIGHT_GREEN
-	C28(28, Color.rgb(0, 253, 143)), // LIGHT GREEN
-	C32(32, Color.rgb(0, 252, 184)), // TURQUOISESingle
-	C36(36, Color.rgb(36, 194, 250)), // LIGHT_BLUE
-	C37(37, Color.rgb(0, 169, 249)), // LIGHT_BLUE
-	C40(40, Color.rgb(60, 137, 248)), // BLUE
-	C41(41, Color.rgb(0, 87, 246)), // BLUE
-	C45(45, Color.rgb(7, 32, 245)), // BLUE
-	C52(52, Color.rgb(255, 78, 247)), // PURPLE
-	C53(53, Color.rgb(255, 23, 246)), // PINK
-	C56(56, Color.rgb(255, 76, 131)), // PINK
-	C57(57, Color.rgb(255, 0, 83)), // PINK
-	C58(58, Color.rgb(93, 1, 27)), // PINK
-	C59(59, Color.rgb(34, 0, 16)), // PINK
-	C60(60, Color.rgb(255, 12, 25)), // RED
-	C61(61, Color.rgb(159, 52, 18)), // ORANGE !
-	C67(67, Color.rgb(7, 32, 245)), // BLUE !
-	C72(72, Color.rgb(255, 0, 24)), // RED
-	C76(76, Color.rgb(0, 136, 40)), // GREEN
-	C78(78, Color.rgb(0, 169, 249)), // LIGHT_BLUE
-	C79(79, Color.rgb(5, 44, 245)), // BLUE
-	C90(90, Color.rgb(0, 252, 207)), // TURQUOISE
-	C81(81, Color.rgb(123, 31, 245)), // PURPLE
-	C82(82, Color.rgb(185, 24, 123)), // PURPLE
-	C84(84, Color.rgb(255, 71, 32)), // ORANGE !
-	C88(88, Color.rgb(0, 253, 81)), // GREEN !
-	C92(92, Color.rgb(37, 81, 194)), // BLUE
-	C96(96, Color.rgb(255, 189, 112)), // ORANGE
-	C106(106, Color.rgb(176, 0, 12)), // RED
-	C107(107, Color.rgb(230, 79, 61)), // RED
-	C116(116, Color.rgb(142, 102, 247)), // PURPLE
-	C119(119, Color.rgb(221, 252, 252)), // WHITE
-	C120(120, Color.rgb(168, 2, 12)); // RED
+	// White
+	C0_1(1, Color.rgb(255, 255, 255), LightMode.LOW),
+	C0_2(2, Color.rgb(255, 255, 255), LightMode.NORMAL),
+	C0_3(3, Color.rgb(255, 255, 255), LightMode.HIGH),
+
+	// RED
+	C1_1(4, Color.rgb(255, 0, 0), LightMode.HIGH),
+	C1_2(5, Color.rgb(255, 0, 0), LightMode.NORMAL),
+	C1_3(6, Color.rgb(255, 0, 0), LightMode.MIDDLE),
+	C1_4(7, Color.rgb(255, 0, 0), LightMode.LOW),
+
+	// Orange
+	C2_1(8, Color.rgb(255, 127, 0), LightMode.HIGH),
+	C2_2(9, Color.rgb(255, 127, 0), LightMode.NORMAL),
+	C2_3(10, Color.rgb(255, 127, 0), LightMode.MIDDLE),
+	C2_4(11, Color.rgb(255, 127, 0), LightMode.LOW),
+
+	// LIME
+	C3_1(12, Color.rgb(235, 255, 39), LightMode.HIGH),
+	C3_2(13, Color.rgb(235, 255, 39), LightMode.NORMAL),
+	C3_3(14, Color.rgb(235, 255, 39), LightMode.MIDDLE),
+	C3_4(15, Color.rgb(235, 255, 39), LightMode.LOW),
+
+	// LIGHT GREEN
+	C4_1(16, Color.rgb(123, 255, 66), LightMode.HIGH),
+	C4_2(17, Color.rgb(123, 255, 66), LightMode.NORMAL),
+	C4_3(18, Color.rgb(123, 255, 66), LightMode.MIDDLE),
+	C4_4(19, Color.rgb(123, 255, 66), LightMode.LOW),
+
+	// GREEN
+	C5_1(20, Color.rgb(0, 255, 0), LightMode.HIGH),
+	C5_2(21, Color.rgb(0, 255, 0), LightMode.NORMAL),
+	C5_3(22, Color.rgb(0, 255, 0), LightMode.MIDDLE),
+	C5_4(23, Color.rgb(0, 255, 0), LightMode.LOW),
+
+	// GREEN
+	C6_1(24, Color.rgb(62, 255, 112), LightMode.HIGH),
+	C6_2(25, Color.rgb(62, 255, 112), LightMode.NORMAL),
+	C6_3(26, Color.rgb(62, 255, 112), LightMode.MIDDLE),
+	C6_4(27, Color.rgb(62, 255, 112), LightMode.LOW),
+
+	// TURKEY
+	C7_1(28, Color.rgb(62, 255, 112), LightMode.HIGH),
+	C7_2(29, Color.rgb(62, 255, 112), LightMode.NORMAL),
+	C7_3(30, Color.rgb(62, 255, 112), LightMode.MIDDLE),
+	C7_4(31, Color.rgb(62, 255, 112), LightMode.LOW),
+
+	// TURKEY
+	C8_1(32, Color.rgb(101, 255, 196), LightMode.HIGH),
+	C8_2(33, Color.rgb(101, 255, 196), LightMode.NORMAL),
+	C8_3(34, Color.rgb(101, 255, 196), LightMode.MIDDLE),
+	C8_4(35, Color.rgb(101, 255, 196), LightMode.LOW),
+
+	// LIGHT BLUE
+	C9_1(36, Color.rgb(91, 255, 253), LightMode.HIGH),
+	C9_2(37, Color.rgb(91, 255, 253), LightMode.NORMAL),
+	C9_3(38, Color.rgb(91, 255, 253), LightMode.MIDDLE),
+	C9_4(39, Color.rgb(91, 255, 253), LightMode.LOW),
+
+	// BLUE
+	C10_1(40, Color.rgb(69, 169, 255), LightMode.HIGH),
+	C10_2(41, Color.rgb(69, 169, 255), LightMode.NORMAL),
+	C10_3(42, Color.rgb(69, 169, 255), LightMode.MIDDLE),
+	C10_4(43, Color.rgb(69, 169, 255), LightMode.LOW),
+
+	// DARK BLUE
+	C11_1(44, Color.rgb(30, 67, 255), LightMode.HIGH),
+	C11_2(45, Color.rgb(30, 67, 255), LightMode.NORMAL),
+	C11_3(46, Color.rgb(30, 67, 255), LightMode.MIDDLE),
+	C11_4(47, Color.rgb(30, 67, 255), LightMode.LOW),
+
+	// PURPLE
+	C12_1(48, Color.rgb(125, 73, 255), LightMode.HIGH),
+	C12_2(49, Color.rgb(125, 73, 255), LightMode.NORMAL),
+	C12_3(50, Color.rgb(125, 73, 255), LightMode.MIDDLE),
+	C12_4(51, Color.rgb(125, 73, 255), LightMode.LOW),
+
+	// VIOLET
+	C13_1(52, Color.rgb(254, 85, 255), LightMode.HIGH),
+	C13_2(53, Color.rgb(254, 85, 255), LightMode.NORMAL),
+	C13_3(54, Color.rgb(254, 85, 255), LightMode.MIDDLE),
+	C13_4(55, Color.rgb(254, 85, 255), LightMode.LOW),
+
+	// VIOLET
+	C14_1(56, Color.rgb(255, 75, 191), LightMode.HIGH),
+	C14_2(57, Color.rgb(255, 75, 191), LightMode.NORMAL),
+	C14_3(58, Color.rgb(255, 75, 191), LightMode.MIDDLE),
+	C14_4(59, Color.rgb(255, 75, 191), LightMode.LOW),
+
+	// BROWN
+	C15_1(60, Color.rgb(255, 100, 69), LightMode.HIGH),
+	C15_2(61, Color.rgb(255, 100, 69), LightMode.NORMAL),
+	C15_3(62, Color.rgb(255, 100, 69), LightMode.MIDDLE),
+	C15_4(63, Color.rgb(255, 100, 69), LightMode.LOW),
+
+	;
+
+	public enum LightMode {
+		LOW,
+		MIDDLE,
+		NORMAL,
+		HIGH
+	}
 
 	private int midi;
 	private Color color;
+	private LightMode lightMode;
 
-	LaunchPadMK2Color(int midi, Color color) {
+	LaunchPadMK2Color(int midi, Color color, LightMode lightMode) {
 		this.midi = midi;
 		this.color = color;
+		this.lightMode = lightMode;
 	}
 
 	@Override

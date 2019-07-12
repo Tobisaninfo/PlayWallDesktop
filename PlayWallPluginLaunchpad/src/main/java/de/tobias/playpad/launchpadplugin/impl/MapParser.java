@@ -12,6 +12,13 @@ public class MapParser {
 	public static Map<String, String> load(URL resource) throws IOException {
 		Map<String, String> items = new HashMap<>();
 		for (String line : IOUtils.readURL(resource).split("\n")) {
+			line = line.trim();
+
+			// Comment
+			if (line.startsWith("%")) {
+				continue;
+			}
+
 			String[] split = line.split("=");
 			if (split.length == 2) {
 				String color = split[0];
