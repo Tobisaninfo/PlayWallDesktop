@@ -1,95 +1,50 @@
 package de.tobias.playpad.launchpadplugin.midi.s;
 
-import de.thecodelabs.logger.Logger;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.Feedback;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
-import de.tobias.playpad.midi.Midi;
-import javafx.scene.paint.Color;
+import de.thecodelabs.midi.feedback.Feedback;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.feedback.FeedbackValue;
+import de.thecodelabs.midi.mapping.MidiKey;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.midi.MidiCommand;
+import de.thecodelabs.midi.midi.MidiCommandType;
+import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-
-public class LaunchPadS extends MidiDeviceImpl implements DeviceColorAssociatorConnector {
+public class LaunchPadS implements MidiFeedbackTranscript {
 
 	public static final String NAME = "Launchpad S";
 
 	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	@Override
-	public boolean supportFeedback() {
-		return true;
-	}
-
-	@Override
-	public void initDevice() {
-		// Flash Enable
-		try {
-			Midi.getInstance().sendMessage(176, 0, 40);
-		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			Logger.error(e);
-		}
-	}
-
-	@Override
-	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {
+	public void sendFeedback(MidiKey midiKey, FeedbackType feedbackType) {
 		initDevice();
 
-		int command = 144;
+		MidiCommandType command = MidiCommandType.NOTE_ON;
+		byte key = midiKey.getValue();
 
 		if (key >= 104 && key <= 111) {
-			command = 176;
+			command = MidiCommandType.CONTROL_CHANGE;
 		}
 
-		try {
-			if (type != FeedbackMessage.WARNING) {
-				int value = feedback.getValueForFeedbackMessage(type);
-				Midi.getInstance().sendMessage(command, key, value);
-			} else {
-				int midiVelocity = feedback.getValueForFeedbackMessage(FeedbackMessage.EVENT) - 4;
-				Midi.getInstance().sendMessage(command, key, midiVelocity);
-			}
-		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			Logger.error(e);
+		Feedback feedback = midiKey.getFeedbackForType(feedbackType);
+		if (feedbackType != FeedbackType.WARNING) {
+
+			Midi.getInstance().sendMessage(new MidiCommand(command, key, feedback.getValue()));
+		} else {
+			Midi.getInstance().sendMessage(new MidiCommand(command, key, (byte) (feedback.getValue() - 4)));
 		}
+	}
+
+	@Override
+	public FeedbackValue[] getFeedbackValues() {
+		return LaunchPadSColor.values();
+	}
+
+	public void initDevice() {
+		// Flash Enable
+		Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, (byte) 0, (byte) 40));
 	}
 
 	@Override
 	public void clearFeedback() {
-		try {
-			Midi.getInstance().sendMessage(176, 0, 0);
-		} catch (MidiUnavailableException | InvalidMidiDataException e) {
-			Logger.error(e);
-		}
-	}
-
-	@Override
-	public DisplayableFeedbackColor getColor(int id) {
-		return LaunchPadSColor.valueOf(id);
-	}
-
-	@Override
-	public DisplayableFeedbackColor[] getColors() {
-		return LaunchPadSColor.values();
-	}
-
-	@Override
-	public DisplayableFeedbackColor getDefaultEventColor() {
-		return LaunchPadSColor.RED;
-	}
-
-	@Override
-	public DisplayableFeedbackColor getDefaultStandardColor() {
-		return LaunchPadSColor.GREEN;
-	}
-
-	@Override
-	public DisplayableFeedbackColor getPreferColorMapping(Color color) {
-		return null;
+		Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, (byte) 0, (byte) 0));
 	}
 }

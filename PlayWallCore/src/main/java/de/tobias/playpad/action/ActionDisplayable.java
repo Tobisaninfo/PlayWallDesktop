@@ -1,5 +1,6 @@
 package de.tobias.playpad.action;
 
+import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.Displayable;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;

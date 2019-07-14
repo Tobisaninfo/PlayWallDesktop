@@ -1,5 +1,6 @@
 package de.tobias.playpad.action.actions.cart;
 
+import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
 import javafx.beans.value.ChangeListener;
@@ -7,10 +8,10 @@ import javafx.beans.value.ObservableValue;
 
 public class PadContentFeedbackListener implements ChangeListener<PadContent> {
 
-	private CartAction action;
+	private PadPositionWarningListener warningListener;
 
-	public void setAction(CartAction action) {
-		this.action = action;
+	public PadContentFeedbackListener(Pad pad) {
+		warningListener = new PadPositionWarningListener(pad);
 	}
 
 	@Override
@@ -18,14 +19,14 @@ public class PadContentFeedbackListener implements ChangeListener<PadContent> {
 		if (oldValue != null) {
 			if (oldValue instanceof Durationable) {
 				Durationable durationable = (Durationable) oldValue;
-				durationable.positionProperty().addListener(action.getPadPositionListener());
+				durationable.positionProperty().addListener(warningListener);
 			}
 		}
 
 		if (newValue != null) {
 			if (newValue instanceof Durationable) {
 				Durationable durationable = (Durationable) newValue;
-				durationable.positionProperty().addListener(action.getPadPositionListener());
+				durationable.positionProperty().addListener(warningListener);
 			}
 		}
 	}

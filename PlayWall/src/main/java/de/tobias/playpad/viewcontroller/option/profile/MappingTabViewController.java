@@ -1,17 +1,26 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.MappingCollection;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.device.MidiDeviceInfo;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.serialize.MappingSerializer;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.*;
-import de.tobias.playpad.midi.Midi;
+import de.tobias.playpad.action.ActionDisplayable;
+import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Component;
+import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
@@ -27,7 +36,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 
-import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.File;
 import java.io.IOException;
@@ -72,9 +80,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private VBox detailView;
 	private BaseMapperListViewController mapperListViewController;
 
-	private Mapping oldMapping;
-	private Mapping mapping;
-
 	MappingTabViewController() {
 		load("view/option/profile", "Mapping", PlayPadMain.getUiResourceBundle());
 	}
@@ -86,15 +91,14 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 		mappingComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
-			mapping = c;
 			Profile.currentProfile().getMappings().setActiveMapping(c);
 			createTreeViewContent();
 		});
 
 		// Midi
-		MidiDevice.Info[] data = Midi.getMidiDevices();
+		MidiDeviceInfo[] data = Midi.getInstance().getMidiDevices();
 		// Gerät anzeigen - Doppelte weg
-		for (MidiDevice.Info item : data) {
+		for (MidiDeviceInfo item : data) {
 			if (item != null) {
 				if (!deviceComboBox.getItems().contains(item.getName())) {
 					deviceComboBox.getItems().add(item.getName());
@@ -109,20 +113,21 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		midiActiveCheckBox.selectedProperty().addListener((a, b, c) -> deviceComboBox.setDisable(!c));
 
 		// Main View
-		treeView.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
+		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
 		{
 			detailView.getChildren().clear();
 
-			if (c != null) {
-				NVC controller = c.getValue().getSettingsViewController();
+			if (newValue != null) {
+				NVC controller = newValue.getValue().getSettingsViewController();
 				if (controller == null) {
-					controller = c.getValue().getActionSettingsViewController(mapping, this);
+					Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
+					controller = newValue.getValue().getActionSettingsViewController(mapping, this);
 				}
 				if (controller != null) {
 					detailView.getChildren().add(controller.getParent());
 				}
-				if (c.getValue() instanceof Action) {
-					showMapperFor((Action) c.getValue());
+				if (newValue.getValue() instanceof Action) {
+					showMapperFor((Action) newValue.getValue());
 				}
 			}
 		});
@@ -143,25 +148,24 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	}
 
 	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<ActionProvider> sortedTypes, ActionType type) {
-		for (ActionProvider actionFactory : sortedTypes) {
-			List<Action> actions = mapping.getActionsOfType(actionFactory);
-			if (actionFactory.geActionType() == type) {
-				TreeItem<ActionDisplayable> item = actionFactory.getTreeViewForActions(actions, mapping);
+		for (ActionProvider provider : sortedTypes) {
+			List<Action> actions = mapping.getActionsForType(provider.getType());
+			if (provider.geActionType() == type) {
+				TreeItem<ActionDisplayable> item = provider.getTreeViewForActions(actions, mapping);
 				rootItem.getChildren().add(item);
 			}
 		}
 	}
 
 	private void createTreeViewContent() {
+		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
 		TreeItem<ActionDisplayable> rootItem = createTreeView(mapping);
 		treeView.setRoot(rootItem);
 	}
 
 	private void setMappingItemsToList() {
-		mappingComboBox.getItems().setAll(Profile.currentProfile().getMappings());
-		mappingComboBox.setValue(Profile.currentProfile().getMappings().getActiveMapping());
-
-		mapping = mappingComboBox.getValue();
+		mappingComboBox.getItems().setAll(Profile.currentProfile().getMappings().getMappings());
+		Profile.currentProfile().getMappings().getActiveMapping().ifPresent(m -> mappingComboBox.setValue(m));
 	}
 
 	@Override
@@ -174,7 +178,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				detailView.getChildren().remove(mapperListViewController.getParent());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -185,37 +189,41 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	// Event Handler
 	@FXML
 	private void deviceHandler(ActionEvent event) {
-		ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		String device = deviceComboBox.getValue();
 
 		// Ändern und Speichern
 		if (device != null) {
 			if (isMidiActive()) {
 				Midi midi = Midi.getInstance();
-				if (!device.equals(profilSettings.getMidiDevice()) || !midi.isOpen()) {
+				if (!device.equals(profileSettings.getMidiDevice()) || !midi.isOpen()) {
 					try {
 						// Setup
-						midi.lookupMidiDevice(device);
-						profilSettings.setMidiDeviceName(device);
+						final MidiDeviceInfo midiDeviceInfo = midi.getMidiDeviceInfo(device);
+						midi.openDevice(midiDeviceInfo);
 
 						// UI Rückmeldung
-						if (midi.getInputDevice() != null) {
+						if (midi.isOpen()) {
 							showInfoMessage(Localization.getString(Strings.Info_Midi_Device_Connected, device));
+							profileSettings.setMidiDeviceName(device);
 						}
 					} catch (NullPointerException e) {
 						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Unavailible, device));
-						e.printStackTrace();
+						Logger.error(e);
 					} catch (IllegalArgumentException | MidiUnavailableException e) {
 						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 			}
 		}
 	}
 
+	@SuppressWarnings("Duplicates")
 	@FXML
 	private void mappingRenameHandler(ActionEvent event) {
+		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
+
 		TextInputDialog dialog = new TextInputDialog(mapping.getName());
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(getContainingWindow());
@@ -227,6 +235,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private void mappingExportHandler(ActionEvent event) {
+		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
 		if (mapping != null) {
 			FileChooser chooser = new FileChooser();
 
@@ -240,9 +249,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				Worker.runLater(() ->
 				{
 					try {
-						MappingList.exportMidiPreset(path, mapping);
+						MappingSerializer.save(mapping, path);
 					} catch (IOException e) {
-						e.printStackTrace();
+						Logger.error(e);
 						showErrorMessage(Localization.getString(Strings.Error_Preset_Export, e.getLocalizedMessage()));
 					}
 				});
@@ -252,18 +261,19 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private void mappingDeleteHandler(ActionEvent event) {
-		final MappingList mappings = Profile.currentProfile().getMappings();
-		int preset = mappingComboBox.getSelectionModel().getSelectedIndex();
+		final MappingCollection mappings = Profile.currentProfile().getMappings();
+		Mapping preset = mappingComboBox.getSelectionModel().getSelectedItem();
 
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setContentText("Soll das Mapping Profile " + mappings.get(preset) + " wirklich gelöscht werden?");
+		// TODO Localize
+		alert.setContentText("Soll das Mapping Profile " + preset.getName() + " wirklich gelöscht werden?");
 		alert.initModality(Modality.WINDOW_MODAL);
 		alert.initOwner(getContainingWindow());
 		alert.showAndWait().filter(b -> b == ButtonType.OK).ifPresent(result -> {
-			mappings.remove(preset);
+			mappings.removeMapping(preset);
 			mappingComboBox.getItems().remove(preset);
 
-			if (mappings.size() == 1) {
+			if (mappings.count() == 1) {
 				mappingDeleteButton.setDisable(true);
 			}
 		});
@@ -271,42 +281,45 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private void mappingDuplicateHandler(ActionEvent event) {
-		try {
-			Mapping clonedMapping = mapping.clone();
-			clonedMapping.setName(Localization.getString(Strings.Standard_Copy, clonedMapping.getName()));
+		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
 
-			// Model
-			Profile.currentProfile().getMappings().add(clonedMapping);
-			// UI
-			mappingComboBox.getItems().add(clonedMapping);
-			mappingComboBox.getSelectionModel().select(clonedMapping);
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		Mapping clonedMapping = new Mapping(mapping);
+		clonedMapping.setName(Localization.getString(Strings.Standard_Copy, clonedMapping.getName()));
+
+		// Model
+		Profile.currentProfile().getMappings().addMapping(clonedMapping);
+		// UI
+		mappingComboBox.getItems().add(clonedMapping);
+		mappingComboBox.getSelectionModel().select(clonedMapping);
 	}
 
 	@FXML
 	private void mappingNewHandler(ActionEvent event) {
-		Mapping preset = new Mapping(true);
-		preset.initActionType(Profile.currentProfile());
+		Mapping preset = new Mapping();
 
-		TextInputDialog dialog = new TextInputDialog(mapping.getName());
+		// Add default actions
+		final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
+		actions.getComponents().forEach(provider -> provider.createDefaultActions(preset));
+
+
+		TextInputDialog dialog = new TextInputDialog();
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(getContainingWindow());
 		dialog.setHeaderText("Umbenennen");
 		dialog.setContentText("Geben Sie einen Namen für das Mapping Profil ein."); // TODO Localize
 		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(preset::setName);
 
-		final MappingList mappings = Profile.currentProfile().getMappings();
-		mappings.add(preset);
+		final MappingCollection mappings = Profile.currentProfile().getMappings();
+		mappings.addMapping(preset);
 		mappingComboBox.getItems().add(preset);
 		mappingComboBox.getSelectionModel().select(preset);
 
-		if (mappings.size() > 1) {
+		if (mappings.count() > 1) {
 			mappingDeleteButton.setDisable(false);
 		}
 	}
 
+	@SuppressWarnings("Duplicates")
 	@FXML
 	private void mappingImportHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
@@ -318,33 +331,28 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 			Worker.runLater(() ->
 			{
 				try {
-					Mapping preset = MappingList.importMappingPreset(path, Profile.currentProfile());
-					final MappingList mappingList = Profile.currentProfile().getMappings();
-					mappingList.add(preset);
+					Mapping preset = MappingSerializer.load(path);
+					final MappingCollection mappingList = Profile.currentProfile().getMappings();
+					mappingList.addMapping(preset);
 					Platform.runLater(() ->
 					{
 						mappingComboBox.getItems().add(preset);
 						mappingComboBox.getSelectionModel().select(preset);
-
-						if (mappingList.size() == 1) {
-							mappingDeleteButton.setDisable(true);
-						} else {
-							mappingDeleteButton.setDisable(false);
-						}
+						mappingDeleteButton.setDisable(mappingList.count() == 1);
 
 						// Rename preset if name already esists
 						if (mappingList.containsName(preset.getName())) {
-							TextInputDialog dialog = new TextInputDialog(mapping.getName());
+							TextInputDialog dialog = new TextInputDialog(preset.getName());
 							dialog.initModality(Modality.WINDOW_MODAL);
 							dialog.initOwner(getContainingWindow());
 							dialog.setHeaderText("Umbenennen");
 							dialog.setContentText("Geben Sie einen neuen Namen für das Mapping Profil ein."); // TODO Localize
-							dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(mapping::setName);
+							dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(preset::setName);
 						}
 					});
 
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 					showErrorMessage(Localization.getString(Strings.Error_Preset_Import, e.getLocalizedMessage()));
 				}
 			});
@@ -355,7 +363,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	// Tab Utils
 	@Override
 	public void loadSettings(Profile profile) {
-		oldMapping = profile.getMappings().getActiveMapping();
 		setMappingItemsToList();
 		createTreeViewContent();
 
@@ -380,13 +387,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	@Override
 	public Runnable getTask(ProfileSettings settings, Project project, IMainViewController controller) {
 		return () -> {
-			Profile.currentProfile().getMappings().getActiveMapping().adjustPadColorToMapper();
-
-			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-
-			oldMapping.clearFeedback();
-			activeMapping.showFeedback(project);
-			activeMapping.initFeedbackType();
+			Midi.getInstance().clearFeedback();
+			// TODO Color adjustment
+			Midi.getInstance().showFeedback();
 		};
 	}
 

@@ -1,19 +1,18 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
+import de.thecodelabs.midi.device.MidiDevice;
+import de.thecodelabs.midi.mapping.Key;
+import de.thecodelabs.midi.mapping.MidiKey;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.midi.MidiCommand;
+import de.thecodelabs.midi.midi.MidiCommandHandler;
+import de.thecodelabs.midi.midi.MidiListener;
+import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.feedback.FeedbackType;
-import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperViewController;
-import de.tobias.playpad.action.mapper.MidiMapper;
-import de.tobias.playpad.action.mapper.feedback.DoubleMidiFeedback;
-import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
-import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.midi.MidiListener;
-import de.tobias.playpad.viewcontroller.option.feedback.DoubleFeedbackViewController;
 import de.tobias.playpad.viewcontroller.option.feedback.SingleFeedbackViewController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -27,8 +26,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.sound.midi.MidiMessage;
-
 public class MidiMapperViewController extends MapperViewController implements MidiListener {
 
 	@FXML
@@ -39,7 +36,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	@FXML
 	private VBox root;
 
-	private MidiMapper mapper;
+	private MidiKey key;
 
 	private NVC feedbackController;
 
@@ -48,8 +45,8 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	}
 
 	@Override
-	public Mapper getMapper() {
-		return mapper;
+	public Key getKey() {
+		return key;
 	}
 
 	@Override
@@ -62,22 +59,17 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	@Override
 	public void showFeedback() {
 		if (feedbackController != null) {
-			if (root.getChildren().contains(feedbackController.getParent()))
-				root.getChildren().remove(feedbackController.getParent());
+			root.getChildren().remove(feedbackController.getParent());
 			root.getChildren().add(feedbackController.getParent());
 			VBox.setVgrow(feedbackController.getParent(), Priority.ALWAYS);
 		}
 	}
 
 	/**
-	 * Midi Listener von SettingsViewController, damit dieser wiederhergestellt werden kann am Ende.
-	 */
-	private MidiListener currentListener;
-
-	/**
 	 * Current Alert for mapping.
 	 */
 	private Alert alert;
+
 	// Hilfsvariable um zu speichern, ob der Input Dialog abgebrochen wurde
 	private boolean canceled = false;
 
@@ -85,8 +77,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	private void midiInputRecordButtonHandler(ActionEvent event) {
 		canceled = false;
 
-		currentListener = Midi.getInstance().getListener();
-		Midi.getInstance().setListener(this);
+		MidiCommandHandler.getInstance().addMidiListener(this);
 
 		alert = new Alert(AlertType.NONE);
 		alert.setTitle(Localization.getString(Strings.Mapper_Midi_Name));
@@ -96,19 +87,18 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		alert.showAndWait().ifPresent(result ->
 		{
 			if (result == ButtonType.CANCEL) {
-				Midi.getInstance().setListener(currentListener);
-				currentListener = null;
 				alert = null;
 				canceled = true;
+				MidiCommandHandler.getInstance().removeMidiListener(this);
 			}
 		});
 	}
 
-	/**
-	 * Record new Midi Key
-	 */
 	@Override
-	public void onMidiAction(MidiMessage message) {
+	public void onMidiMessage(MidiCommand midiCommand) {
+		key.setValue(midiCommand.getPayload()[0]);
+		midiCommand.consume();
+
 		Platform.runLater(() ->
 		{
 			if (alert != null) {
@@ -116,13 +106,10 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				stage.close();
 				alert = null;
 			}
-			mapper.setCommand(message.getMessage()[0]);
-			mapper.setKey(message.getMessage()[1]);
-
-			midiInputKeyLabel.setText(String.valueOf(mapper.getKey()));
+			midiInputKeyLabel.setText(String.valueOf(key.getValue()));
 		});
-		Midi.getInstance().setListener(currentListener);
-		currentListener = null;
+
+		MidiCommandHandler.getInstance().removeMidiListener(this);
 	}
 
 	@Override
@@ -131,26 +118,23 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		return !canceled;
 	}
 
-	public void setMapper(MidiMapper midiMapper) {
-		this.mapper = midiMapper;
+	public void setKey(MidiKey midiMapper) {
+		this.key = midiMapper;
 
-		midiInputKeyLabel.setText(String.valueOf(mapper.getKey()));
+		midiInputKeyLabel.setText(String.valueOf(key.getValue()));
 
-		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
-		if (midiDeviceImpl != null) {
-			if (midiDeviceImpl.supportFeedback()) {
+		final MidiDevice device = Midi.getInstance().getDevice();
+		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
+
+		if (device != null) {
+			if (device.isModeSupported(Midi.Mode.OUTPUT)) { // TODO Change
 				// remove old Elements
 				if (feedbackController != null) {
 					root.getChildren().remove(feedbackController.getParent());
 				}
-				// add new Elements
-				if (mapper.getFeedbackType() == FeedbackType.SINGLE) {
-					feedbackController = new SingleFeedbackViewController((SingleMidiFeedback) mapper.getFeedback(), midiDeviceImpl.getColors());
-				} else if (mapper.getFeedbackType() == FeedbackType.DOUBLE) {
-					feedbackController = new DoubleFeedbackViewController((DoubleMidiFeedback) mapper.getFeedback(), midiDeviceImpl.getColors());
-				}
-				showFeedback();
+				feedbackController = new SingleFeedbackViewController(key.getDefaultFeedback(), transcript.getFeedbackValues());
 			}
+			showFeedback();
 		}
 	}
 }

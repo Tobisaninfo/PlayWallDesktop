@@ -1,5 +1,7 @@
 package de.tobias.playpad.action.feedback;
 
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 
 /**
@@ -8,20 +10,18 @@ import de.tobias.playpad.pad.Pad;
  * @author tobias
  * @since 5.0.0
  */
-public interface ColorAdjustable {
+public interface ActionFeedbackSuggester {
 
 	/**
 	 * Ist dieses Feature ative.
 	 *
 	 * @return <code>true</code> Active
 	 */
-	boolean isAutoFeedbackColors();
+	boolean isAutoFeedbackColors(Action action);
 
-	/**
-	 * Kachel, die mit dieser Action verkünpft ist.
-	 *
-	 * @return Pad
-	 */
-	Pad getPad();
+	void suggestFeedback(Action action);
 
+	byte suggestFeedbackChannel(FeedbackType type);
+
+	Pad getPad(Action action);
 }

@@ -1,12 +1,11 @@
 package de.tobias.playpad.viewcontroller.actions;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.ActionProvider;
-import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.factory.CartActionProvider;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -36,6 +35,8 @@ public class CartActionTypeViewController extends NVC {
 	@FXML
 	private VBox cartActionContainer;
 
+	private CartActionViewController cartActionViewController;
+
 	private Mapping mapping;
 	private IMappingTabViewController parentController;
 
@@ -43,6 +44,8 @@ public class CartActionTypeViewController extends NVC {
 		load("view/actions", "CartActions", PlayPadMain.getUiResourceBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
+
+		cartActionViewController = new CartActionViewController();
 
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		ProjectSettings settings = currentProject.getSettings();
@@ -56,6 +59,7 @@ public class CartActionTypeViewController extends NVC {
 		buttonVbox.minHeightProperty().bind(buttonVbox.heightProperty());
 	}
 
+	@SuppressWarnings("Duplicates")
 	private void showCartButtons(ProjectSettings settings) {
 		gridPane.getChildren().clear();
 
@@ -87,36 +91,34 @@ public class CartActionTypeViewController extends NVC {
 				button.getStyleClass().add(SegmentedButton.STYLE_CLASS_DARK);
 
 				// Show the right cart settings
-				button.selectedProperty().addListener((a, b, c) ->
-				{
-					if (c) {
-						int[] data = (int[]) button.getUserData();
-						int currentX = data[0];
-						int currentY = data[1];
-
-						try {
-							ActionProvider actionFactory = PlayPadPlugin.getRegistries().getActions().getFactory(CartActionProvider.class);
-
-							List<CartAction> cartActions = mapping.getActions(actionFactory);
-							for (CartAction action : cartActions) {
-								if (action.getX() == currentX && action.getY() == currentY) {
-									NVC actionViewController = action.getSettingsViewController();
-									cartActionContainer.getChildren().setAll(actionViewController.getParent());
-									cartActionContainer.setVisible(true);
-									parentController.showMapperFor(action);
-								}
-							}
-						} catch (NoSuchComponentException e) {
-							e.printStackTrace();
-						}
-					} else {
-						cartActionContainer.setVisible(false);
-						parentController.showMapperFor(null);
-					}
-				});
+				button.selectedProperty().addListener((observable, oldValue, newValue) -> toggleButtonHandler(button, newValue));
 				gridPane.add(button, x, y);
 				cartsToggle.getToggles().add(button);
 			}
+		}
+	}
+
+	private void toggleButtonHandler(ToggleButton button, Boolean newValue) {
+		if (newValue) {
+			int[] data = (int[]) button.getUserData();
+			int currentX = data[0];
+			int currentY = data[1];
+
+			try {
+				List<Action> cartActions = mapping.getActionsForType(CartAction.TYPE);
+				for (Action action : cartActions) {
+					if (CartAction.getX(action) == currentX && CartAction.getY(action) == currentY) {
+						cartActionContainer.getChildren().setAll(cartActionViewController.getParent());
+						cartActionContainer.setVisible(true);
+						parentController.showMapperFor(action);
+					}
+				}
+			} catch (NoSuchComponentException e) {
+				Logger.error(e);
+			}
+		} else {
+			cartActionContainer.setVisible(false);
+			parentController.showMapperFor(null);
 		}
 	}
 }

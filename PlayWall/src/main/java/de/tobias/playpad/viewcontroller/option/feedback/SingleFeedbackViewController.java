@@ -1,14 +1,12 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
+import de.thecodelabs.midi.feedback.Feedback;
+import de.thecodelabs.midi.feedback.FeedbackColor;
+import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mapper.feedback.SingleMidiFeedback;
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
-import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.view.ColorPickerView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,20 +30,32 @@ public class SingleFeedbackViewController extends NVC {
 
 	private PopOver colorChooser;
 
-	private SingleMidiFeedback feedback;
+	private FeedbackColor[] colors;
+	private Feedback feedback;
 
-	public SingleFeedbackViewController(SingleMidiFeedback feedback, DisplayableFeedbackColor[] colors) {
+	public SingleFeedbackViewController(Feedback feedback, FeedbackValue[] values) {
 		load("view/option/feedback", "SingleFeedback", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
-		MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
-		if (midiDeviceImpl != null) {
-			DisplayableFeedbackColor colorDefault = midiDeviceImpl.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
-			if (colorDefault != null) {
-				colorPreviewDefault.setFill(colorDefault.getPaint());
-				setColorChooseButtonColor(colorDefault.getPaint(), colorChooseDefaultButton);
+		if (!(values instanceof FeedbackColor[])) {
+			throw new IllegalArgumentException("FeedbackValues are not of type FeedbackColor");
+		}
+
+		colors = (FeedbackColor[]) values;
+
+		final FeedbackColor feedbackColor = getFeedbackColor(feedback);
+		if (feedbackColor != null) {
+			setColorChooseButtonColor(feedbackColor.getColor(), colorChooseDefaultButton);
+		}
+	}
+
+	private FeedbackColor getFeedbackColor(Feedback feedback) {
+		for (FeedbackColor color : colors) {
+			if (color.getValue() == feedback.getValue()) {
+				return color;
 			}
 		}
+		return null;
 	}
 
 	@Override
@@ -60,33 +70,29 @@ public class SingleFeedbackViewController extends NVC {
 	private void colorChooseButtonHandler(ActionEvent event) {
 		if (colorChooser == null) {
 			colorChooser = new PopOver();
-			MidiDeviceImpl midiDeviceImpl = Midi.getInstance().getMidiDevice();
-			if (midiDeviceImpl != null) {
-				DisplayableFeedbackColor color = midiDeviceImpl.getColor(feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
+			final FeedbackColor feedbackColor = getFeedbackColor(feedback);
 
-				ColorPickerView colorView = new ColorPickerView(color, midiDeviceImpl.getColors(), item ->
-				{
-					colorChooser.hide();
-					if (item instanceof DisplayableFeedbackColor) {
-						if (event.getSource() == colorChooseDefaultButton) {
-							feedback.setFeedbackValue(((DisplayableFeedbackColor) item).mapperFeedbackValue());
-							colorPreviewDefault.setFill(item.getPaint());
-							setColorChooseButtonColor(item.getPaint(), colorChooseDefaultButton);
-						}
-					}
-				});
+			ColorPickerView colorView = new ColorPickerView(feedbackColor, colors, item ->
+			{
+				colorChooser.hide();
+				if (event.getSource() == colorChooseDefaultButton) {
+					feedback.setValue(item.getValue());
+					setColorChooseButtonColor(item.getColor(), colorChooseDefaultButton);
+				}
+			});
 
-				colorChooser.setContentNode(colorView);
-				colorChooser.setDetachable(false);
-				colorChooser.setOnHiding(e -> colorChooser = null);
-				colorChooser.setCornerRadius(5);
-				colorChooser.setArrowLocation(ArrowLocation.LEFT_CENTER);
-				colorChooser.show((Node) event.getSource());
-			}
+			colorChooser.setContentNode(colorView);
+			colorChooser.setDetachable(false);
+			colorChooser.setOnHiding(e -> colorChooser = null);
+			colorChooser.setCornerRadius(5);
+			colorChooser.setArrowLocation(ArrowLocation.LEFT_CENTER);
+			colorChooser.show((Node) event.getSource());
 		}
 	}
 
+
 	private void setColorChooseButtonColor(Paint inputColor, Button button) {
+		colorPreviewDefault.setFill(inputColor);
 		Color color;
 		if (inputColor.equals(Color.BLACK))
 			color = Color.WHITE;

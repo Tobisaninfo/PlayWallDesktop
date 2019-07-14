@@ -15,7 +15,6 @@ import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.layout.desktop.listener.DesktopSearchController;
 import de.tobias.playpad.layout.desktop.listener.PadRemoveMouseListener;
 import de.tobias.playpad.layout.desktop.listener.PageButtonDragHandler;
-import de.tobias.playpad.midi.Midi;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
@@ -659,7 +658,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void profileSettingsHandler(ActionEvent event) {
-		Midi midi = Midi.getInstance();
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (settings.isLiveMode() && settings.isLiveModeSettings() && currentProject.getActivePlayers() > 0) {
@@ -671,8 +669,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Runnable onFinish = () ->
 			{
-				midi.setListener(mainViewController.getMidiHandler());
-
 				profileSettingsViewController = null;
 				mainStage.toFront();
 			};

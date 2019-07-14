@@ -20,8 +20,6 @@ import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
-import de.tobias.playpad.midi.PD12;
-import de.tobias.playpad.midi.device.DeviceRegistry;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.*;
@@ -212,7 +210,8 @@ public class PlayPadImpl implements PlayPad {
 
 	private void registerComponents(ResourceBundle resourceBundle) {
 		// Midi
-		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
+		// TODO Handle PD12
+		//DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
 
 		try {
 			// Load Components
@@ -221,7 +220,6 @@ public class PlayPadImpl implements PlayPad {
 			registryCollection.getActions().loadComponentsFromFile("components/Actions.xml", module, resourceBundle);
 			registryCollection.getAudioHandlers().loadComponentsFromFile("components/AudioHandler.xml", module, resourceBundle);
 			registryCollection.getDragModes().loadComponentsFromFile("components/DragMode.xml", module, resourceBundle);
-			registryCollection.getMappers().loadComponentsFromFile("components/Mapper.xml", module, resourceBundle);
 			registryCollection.getPadContents().loadComponentsFromFile("components/PadContent.xml", module, resourceBundle);
 			registryCollection.getTriggerItems().loadComponentsFromFile("components/Trigger.xml", module, resourceBundle);
 			registryCollection.getMainLayouts().loadComponentsFromFile("components/Layout.xml", module, resourceBundle);
@@ -230,7 +228,7 @@ public class PlayPadImpl implements PlayPad {
 			// TODO Set Default
 			registryCollection.getAudioHandlers().setDefaultID(JavaFXHandlerFactory.class);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		// Volume Management

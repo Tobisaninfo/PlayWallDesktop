@@ -9,20 +9,20 @@ import javafx.scene.paint.Color;
  * @author tobias
  * @since 5.0.0
  */
-public interface DesignColorAssociator {
+public interface FeedbackDesignColorSuggester {
 
 	/**
 	 * Gibt die Standardfarbe (Kacheln ohne Aktion) zurück.
 	 *
 	 * @return Farbe der Kachel
 	 */
-	Color getAssociatedStandardColor();
+	Color getDesignDefaultColor();
 
 	/**
 	 * Gibt die Eventfarbe (Kacheln mit Aktion) zurück.
 	 *
 	 * @return Farbe der Kachel
 	 */
-	Color getAssociatedEventColor();
+	Color getDesignEventColor();
 
 }

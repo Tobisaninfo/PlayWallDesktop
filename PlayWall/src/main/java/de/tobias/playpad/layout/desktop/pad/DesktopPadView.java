@@ -5,7 +5,7 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -409,7 +409,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
 		if (show) {
-			DesignColorAssociator associator;
+			FeedbackDesignColorSuggester associator;
 			if (pad.getPadSettings().isCustomDesign()) {
 				associator = pad.getPadSettings().getDesign();
 			} else {
@@ -417,7 +417,7 @@ public class DesktopPadView implements IPadView {
 			}
 
 			if (associator != null) {
-				Color color = associator.getAssociatedStandardColor();
+				Color color = associator.getDesignDefaultColor();
 				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
 			} else {
 				notFoundLabel.setColor(Color.RED);

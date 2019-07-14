@@ -106,7 +106,7 @@ public enum ModernColor implements DisplayableColor {
 	}
 
 	@Override
-	public Paint getPaint() {
+	public Paint getColor() {
 		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return Color.web(paint());
 		} else {

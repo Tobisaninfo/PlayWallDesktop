@@ -1,6 +1,5 @@
 package de.tobias.playpad.action.actions.cart;
 
-import de.tobias.playpad.action.feedback.FeedbackMessage;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.content.play.Durationable;
@@ -11,39 +10,33 @@ import javafx.util.Duration;
 public class PadPositionWarningListener implements ChangeListener<Duration> {
 
 	private Pad pad;
-	private CartAction action;
 
-	boolean send = false;
+	private boolean send = false;
 
-	public PadPositionWarningListener(CartAction action) {
-		this.action = action;
-	}
-
-	public void setPad(Pad pad) {
+	public PadPositionWarningListener(Pad pad) {
 		this.pad = pad;
 	}
 
 	@Override
 	public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-		// Nur wenn Pad Sichtbar ist
 		if (pad != null && pad.isPadVisible()) {
 			if (pad.getContent() instanceof Durationable) {
 				Durationable durationable = (Durationable) pad.getContent();
 				PadSettings padSettings = pad.getPadSettings();
 
-				// Warning nur wenn kein Loop
-				if (!padSettings.isLoop()) {
-					// Warning
-					Duration warning = padSettings.getWarning();
-					Duration totalDuration = durationable.getDuration();
-					if (totalDuration != null) {
-						Duration rest = totalDuration.subtract(newValue);
-						double seconds = rest.toSeconds();
+				if (padSettings.isLoop()) {
+					return;
+				}
 
-						if (warning.toSeconds() > seconds && !send) {
-							action.handleFeedback(FeedbackMessage.WARNING);
-							send = true;
-						}
+				Duration warning = padSettings.getWarning();
+				Duration totalDuration = durationable.getDuration();
+				if (totalDuration != null) {
+					Duration rest = totalDuration.subtract(newValue);
+					double seconds = rest.toSeconds();
+
+					if (warning.toSeconds() > seconds && !send) {
+						CartAction.refreshFeedback(pad);
+						send = true;
 					}
 				}
 			}

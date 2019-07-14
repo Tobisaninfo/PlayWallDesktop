@@ -1,249 +1,169 @@
 package de.tobias.playpad.action.actions.cart;
 
-import de.thecodelabs.utils.ui.NVC;
-import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.InputType;
-import de.tobias.playpad.action.actions.cart.handler.CartActionHandler;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.event.KeyEvent;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.MidiKey;
+import de.thecodelabs.midi.midi.Midi;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.actions.cart.handler.CartActionHandlerFactory;
-import de.tobias.playpad.action.feedback.ColorAdjustable;
-import de.tobias.playpad.action.feedback.FeedbackType;
+import de.tobias.playpad.action.feedback.ActionFeedbackSuggester;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.viewcontroller.actions.CartActionViewController;
+import de.tobias.playpad.project.page.PageCoordinate;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import org.dom4j.Element;
+import javafx.util.Duration;
 
-public class CartAction extends Action implements ColorAdjustable {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+public class CartAction extends ActionHandler implements ActionFeedbackSuggester {
+
+	public static final String TYPE = "CartAction";
+	public static final String PAYLOAD_X = "x";
+	public static final String PAYLOAD_Y = "y";
+	public static final String PAYLOAD_MODE = "mode";
 
 	public enum CartActionMode {
 		PLAY_PAUSE,
 		PLAY_STOP,
 		PLAY_HOLD,
-		PLAY_PLAY
-	}
+		PLAY_PLAY;
 
-	private final String type;
-
-	private int x;
-	private int y;
-
-	private CartActionMode mode;
-	private CartActionHandler handler;
-	private boolean autoFeedbackColors;
-
-	private transient Pad pad;
-	private transient PadContentFeedbackListener padContentFeedbackListener = new PadContentFeedbackListener();
-	private transient PadStatusFeedbackListener padStatusFeedbackListener = new PadStatusFeedbackListener();
-	private transient PadPositionWarningListener padPositionListener = new PadPositionWarningListener(this);
-
-	public CartAction(String type) {
-		this(type, 0, 0, CartActionMode.PLAY_STOP);
-		this.autoFeedbackColors = true;
-	}
-
-	public CartAction(String type, int x, int y, CartActionMode mode) {
-		this.type = type;
-		this.x = x;
-		this.y = y;
-
-		setMode(mode);
-		this.autoFeedbackColors = true;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public CartActionMode getMode() {
-		return mode;
-	}
-
-	public void setMode(CartActionMode mode) {
-		this.mode = mode;
-		this.handler = CartActionHandlerFactory.getInstance(mode);
-	}
-
-	@Override
-	public boolean isAutoFeedbackColors() {
-		return autoFeedbackColors;
-	}
-
-	public void setAutoFeedbackColors(boolean autoFeedbackColors) {
-		this.autoFeedbackColors = autoFeedbackColors;
-	}
-
-	// Helper
-	@Override
-	public Pad getPad() {
-		return pad;
-	}
-
-	@Override
-	public void init(Project project, IMainViewController controller) {
-		Pad pad = project.getPad(x, y, controller.getPage());
-		if (pad != null) {
-			setPad(pad);
+		public static CartActionMode valueOf(Action action) {
+			return valueOf(action.getPayload(PAYLOAD_MODE));
 		}
 	}
 
+	// TODO: Add listener
+
 	@Override
-	public void showFeedback(Project project, IMainViewController controller) {
-		if (pad != null) {
-			// init first feedback
-			padStatusFeedbackListener.changed(null, null, pad.getStatus());
-		}
+	public String actionType() {
+		return TYPE;
 	}
 
 	@Override
-	public void clearFeedback() {
-		setPad(null);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof CartAction) {
-			CartAction action2 = (CartAction) obj;
-			if (action2.x == x && action2.y == y) {
-				return true;
-			}
-		}
-		return super.equals(obj);
-	}
-
-	@Override
-	public String getType() {
-		return type;
-	}
-
-	@Override
-	public void performAction(InputType type, Project project, IMainViewController mainViewController) {
-		setPad(project.getPad(x, y, mainViewController.getPage()));
+	public FeedbackType handle(KeyEvent keyEvent, Action action) {
+		Pad pad = getPad(action);
+		CartActionMode mode = getMode(action);
 
 		if (pad == null) {
-			return;
+			return FeedbackType.NONE;
 		}
 
 		if (pad.hasVisibleContent()) {
-			handler.performAction(type, this, pad);
+			CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
 		}
+		return null;
 	}
 
+	public static CartActionMode getMode(Action action) {
+		return CartActionMode.valueOf(action);
+	}
+
+	public static int getY(Action action) {
+		return Integer.parseInt(action.getPayload(PAYLOAD_Y));
+	}
+
+	public static int getX(Action action) {
+		return Integer.parseInt(action.getPayload(PAYLOAD_X));
+	}
+
+	@SuppressWarnings("DuplicateBranchesInSwitch")
 	@Override
-	public FeedbackType geFeedbackType() {
-		return FeedbackType.DOUBLE;
-	}
+	public FeedbackType getCurrentFeedbackType(Action action) {
+		Project project = PlayPadPlugin.getInstance().getCurrentProject();
+		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 
-	private void setPad(Pad newPad) {
-		Pad oldPad = this.pad;
-		if (newPad == null || !newPad.equals(oldPad)) {
-			removeOldListener(oldPad);
-			this.pad = newPad;
-			addNewListener(newPad);
-		}
-	}
+		int x = getX(action);
+		int y = getY(action);
 
-	private void removeOldListener(Pad oldPad) {
-		if (oldPad != null) {
-			if (oldPad.getContent() != null) {
-				if (oldPad.getContent() instanceof Durationable) {
-					Durationable durationable = (Durationable) oldPad.getContent();
-					durationable.positionProperty().removeListener(padPositionListener);
+		Pad pad = project.getPad(x, y, mainViewController.getPage());
+
+		switch (pad.getStatus()) {
+			case EMPTY:
+			case ERROR:
+				return FeedbackType.NONE;
+			case PLAY:
+				if (pad.getContent() instanceof Durationable) {
+					Durationable durationable = (Durationable) pad.getContent();
+					PadSettings padSettings = pad.getPadSettings();
+
+					if (!padSettings.isLoop()) {
+						Duration warning = padSettings.getWarning();
+						Duration rest = durationable.getDuration().subtract(durationable.getPosition());
+						double seconds = rest.toSeconds();
+
+						if (warning.toSeconds() > seconds) {
+							return FeedbackType.WARNING;
+						}
+					}
 				}
-			}
-			oldPad.contentProperty().removeListener(padContentFeedbackListener);
-			oldPad.statusProperty().removeListener(padStatusFeedbackListener);
+				return FeedbackType.EVENT;
+			case PAUSE:
+			case READY:
+			case STOP:
+				return FeedbackType.DEFAULT;
+			default:
+				return FeedbackType.NONE;
 		}
 	}
 
-	private void addNewListener(Pad newPad) {
-		padPositionListener.setPad(newPad);
-		padStatusFeedbackListener.setAction(this);
-		padContentFeedbackListener.setAction(this);
+	public static void refreshFeedback(Pad pad) {
+		final Mapping mapping = Mapping.getCurrentMapping();
+		final PageCoordinate coordinate = pad.getPageCoordinate();
 
-		if (newPad != null) {
-			// Add new listener
-			if (newPad.getContent() != null) {
-				if (newPad.getContent() instanceof Durationable) {
-					Durationable durationable = (Durationable) newPad.getContent();
-					durationable.positionProperty().addListener(padPositionListener);
-				}
-			}
+		Map<String, String> payload = new HashMap<>();
+		payload.put(CartAction.PAYLOAD_X, String.valueOf(coordinate.getX()));
+		payload.put(CartAction.PAYLOAD_Y, String.valueOf(coordinate.getY()));
 
-			newPad.statusProperty().addListener(padStatusFeedbackListener);
-			newPad.contentProperty().addListener(padContentFeedbackListener);
+		final Optional<Action> action = mapping.getActionForTypeWithPayload(CartAction.TYPE, payload);
+		action.ifPresent(value -> Midi.getInstance().showFeedback(value));
+	}
+
+	/*
+	Color Adjustable
+	 */
+
+	@Override
+	public boolean isAutoFeedbackColors(Action action) {
+		return Boolean.parseBoolean(action.getPayload("autoFeedback"));
+	}
+
+	@Override
+	public void suggestFeedback(Action action) {
+		for (MidiKey midiKey : action.getKeysForType(MidiKey.class)) {
+			ColorAdjuster.setSuggestedFeedbackColors(this, action, midiKey);
 		}
 	}
 
-	public PadPositionWarningListener getPadPositionListener() {
-		return padPositionListener;
-	}
-
-	// Helper
 	@Override
-	public Action cloneAction() throws CloneNotSupportedException {
-		CartAction action = (CartAction) super.clone();
-
-		action.autoFeedbackColors = autoFeedbackColors;
-		action.x = x;
-		action.y = y;
-		action.setMode(mode);
-
-		return action;
-	}
-
-	// UI Helper
-	@Override
-	public String toString() {
-		return Localization.getString(Strings.Action_Cart_toString, x + ", " + y);
-	}
-
-	@Override
-	public StringProperty displayProperty() {
-		return new SimpleStringProperty(toString());
-	}
-
-	private static CartActionViewController cartActionViewController;
-
-	@Override
-	public NVC getSettingsViewController() {
-		if (cartActionViewController == null) {
-			CartAction.cartActionViewController = new CartActionViewController();
+	public byte suggestFeedbackChannel(FeedbackType type) {
+		switch (type) {
+			case DEFAULT:
+				return 0;
+			case EVENT:
+				return 2;
+			case WARNING:
+				return 1;
 		}
-		CartAction.cartActionViewController.setCartAction(this);
-		return cartActionViewController;
-	}
-
-	// Serialization
-	private static final String X_ATTR = "x";
-	private static final String Y_ATTR = "y";
-	private static final String CONTROL_MODE = "mode";
-	private static final String AUTO_FEEDBACK_COLORS = "autoColor";
-
-	@Override
-	public void load(Element root) {
-		if (root.attributeValue(X_ATTR) != null)
-			x = Integer.parseInt(root.attributeValue(X_ATTR));
-		if (root.attributeValue(Y_ATTR) != null)
-			y = Integer.parseInt(root.attributeValue(Y_ATTR));
-		setMode(CartActionMode.valueOf(root.attributeValue(CONTROL_MODE)));
-		autoFeedbackColors = Boolean.parseBoolean(root.attributeValue(AUTO_FEEDBACK_COLORS));
+		return 0;
 	}
 
 	@Override
-	public void save(Element root) {
-		root.addAttribute(X_ATTR, String.valueOf(x));
-		root.addAttribute(Y_ATTR, String.valueOf(y));
-		root.addAttribute(CONTROL_MODE, mode.name());
-		root.addAttribute(AUTO_FEEDBACK_COLORS, String.valueOf(autoFeedbackColors));
-	}
+	public Pad getPad(Action action) {
+		Project project = PlayPadPlugin.getInstance().getCurrentProject();
+		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 
+		int x = getX(action);
+		int y = getY(action);
+
+		return project.getPad(x, y, mainViewController.getPage());
+	}
 }

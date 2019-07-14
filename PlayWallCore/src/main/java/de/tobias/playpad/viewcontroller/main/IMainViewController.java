@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.main;
 import de.thecodelabs.utils.ui.Alertable;
 import de.thecodelabs.utils.ui.NotificationHandler;
 import de.thecodelabs.utils.ui.scene.NotificationPane;
-import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
@@ -123,13 +122,6 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 * @return Liste der PadViews
 	 */
 	List<IPadView> getPadViews();
-
-	/**
-	 * Gibt den MIDI Handler des Hauptfensters für die Kacheln zurück.
-	 *
-	 * @return MIDI Handler
-	 */
-	MidiListener getMidiHandler();
 
 	/**
 	 * Setzt das MainLayout des Hauptfensters.

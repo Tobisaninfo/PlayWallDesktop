@@ -6,7 +6,7 @@ import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.win.User32X;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
@@ -304,7 +304,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
 		if (show) {
-			DesignColorAssociator associator = null;
+			FeedbackDesignColorSuggester associator = null;
 			if (pad.getPadSettings().isCustomDesign()) {
 				associator = pad.getPadSettings().getDesign();
 			} else {
@@ -312,7 +312,7 @@ public class TouchPadView implements IPadView {
 			}
 
 			if (associator != null) {
-				Color color = associator.getAssociatedStandardColor();
+				Color color = associator.getDesignDefaultColor();
 				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
 			} else {
 				notFoundLabel.setColor(Color.RED);

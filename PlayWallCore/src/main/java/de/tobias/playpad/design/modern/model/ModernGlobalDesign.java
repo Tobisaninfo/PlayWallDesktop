@@ -1,10 +1,10 @@
 package de.tobias.playpad.design.modern.model;
 
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.design.modern.ModernColor;
 import javafx.scene.paint.Color;
 
-public class ModernGlobalDesign implements DesignColorAssociator {
+public class ModernGlobalDesign implements FeedbackDesignColorSuggester {
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;
@@ -77,12 +77,12 @@ public class ModernGlobalDesign implements DesignColorAssociator {
 	}
 
 	@Override
-	public Color getAssociatedEventColor() {
+	public Color getDesignEventColor() {
 		return Color.web(playColor.getColorHi());
 	}
 
 	@Override
-	public Color getAssociatedStandardColor() {
+	public Color getDesignDefaultColor() {
 		return Color.web(backgroundColor.getColorHi());
 	}
 }

@@ -43,6 +43,12 @@
             <version>${jlayer.version}</version>
         </dependency>
 
+        <!--Midi-->
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libMidi</artifactId>
+        </dependency>
+
         <!--Network/Json-->
         <dependency>
             <groupId>com.google.code.gson</groupId>

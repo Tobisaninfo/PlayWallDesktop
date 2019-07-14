@@ -1,17 +1,17 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.Mapping;
 import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.factory.CartActionProvider;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -20,6 +20,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DesignPadTabViewController extends PadSettingsTabViewController {
 
@@ -52,7 +53,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 					setLayoutViewController(pad);
 				} catch (Exception e) {
 					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			} else if (!c && padSettings.isCustomDesign()) {
 				padSettings.setCustomDesign(false);
@@ -84,7 +85,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 				ModernCartDesignViewController controller = new ModernCartDesignViewController(design);
 				layoutContainer.getChildren().setAll(controller.getParent());
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
 			}
 		} else {
@@ -98,15 +99,17 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 		mainViewController.loadUserCss();
 
-		try {
-			// Mapping Auto Matched Colors
-			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-			List<CartAction> actions = activeMapping.getActions(PlayPadPlugin.getRegistries().getActions().getFactory(CartActionProvider.class));
+		// Mapping Auto Matched Colors
+		Optional<Mapping> activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
+		activeMapping.ifPresent(mapping -> {
+			List<Action> actions = mapping.getActionsForType(CartAction.TYPE);
 			// Update die Mapper der CartAction
-			actions.stream().filter(action -> action.getPad() != null).filter(action -> action.getPad().getPosition() == pad.getPosition())
+			/* actions.stream()
+					.filter(action -> action.getPad() != null)
+					.filter(action -> action.getPad().getPosition() == pad.getPosition())
 					.forEach(item -> item.init(pad.getProject(), mainViewController));
-		} catch (NoSuchComponentException e) {
-			e.printStackTrace();
-		}
+					TODO Fix
+			 */
+		});
 	}
 }

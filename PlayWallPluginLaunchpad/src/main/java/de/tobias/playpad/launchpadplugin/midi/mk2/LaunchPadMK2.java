@@ -1,22 +1,23 @@
 package de.tobias.playpad.launchpadplugin.midi.mk2;
 
 import de.thecodelabs.logger.Logger;
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.Feedback;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.DeviceColorAssociatorConnector;
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
+import de.thecodelabs.midi.feedback.Feedback;
+import de.thecodelabs.midi.feedback.FeedbackColor;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.feedback.FeedbackValue;
+import de.thecodelabs.midi.mapping.MidiKey;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.midi.MidiCommand;
+import de.thecodelabs.midi.midi.MidiCommandType;
+import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
+import de.tobias.playpad.action.feedback.FeedbackColorSuggester;
 import de.tobias.playpad.launchpadplugin.impl.MapParser;
-import de.tobias.playpad.midi.Midi;
 import javafx.scene.paint.Color;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.ShortMessage;
 import java.net.URL;
 import java.util.Map;
 
-public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociatorConnector {
+public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSuggester {
 
 	public static final String NAME = "Launchpad MK2";
 
@@ -33,91 +34,43 @@ public class LaunchPadMK2 extends MidiDeviceImpl implements DeviceColorAssociato
 	}
 
 	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	@Override
-	public boolean supportFeedback() {
-		return true;
-	}
-
-	@Override
-	public void initDevice() {
-		// nothing to do
-	}
-
-	@Override
-	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {
-		if (type != FeedbackMessage.WARNING) {
-			try {
-				int value = feedback.getValueForFeedbackMessage(type);
-				if (key >= 104 && key <= 111) {
-					Midi.getInstance().sendMessage(176, key, value);
-				} else {
-					Midi.getInstance().sendMessage(144, key, value);
-				}
-			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				Logger.error(e);
-			}
-		} else {
-			try {
-				Midi.getInstance().sendMessage(145, key, feedback.getValueForFeedbackMessage(FeedbackMessage.STANDARD));
-			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				Logger.error(e);
-			}
-		}
-	}
-
-	@Override
 	public void clearFeedback() {
 		final int maxMainKeyNumber = 89;
 
-		for (int i = 11; i <= maxMainKeyNumber; i++) {
-			// Node_On = 144
-			try {
-				Midi.getInstance().sendMessage(ShortMessage.NOTE_ON, i, 0);
-			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				Logger.error(e);
-			}
+		for (byte i = 11; i <= maxMainKeyNumber; i++) {
+			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.NOTE_ON, i, (byte) 0));
 		}
 
 		// Obere Reihe an Tasten
 		final int liveKeyMin = 104;
 		final int liveKeyMax = 111;
 
-		for (int i = liveKeyMin; i <= liveKeyMax; i++) {
-			// Control_Change = 176
-			try {
-				Midi.getInstance().sendMessage(ShortMessage.CONTROL_CHANGE, i, 0);
-			} catch (MidiUnavailableException | InvalidMidiDataException e) {
-				Logger.error(e);
-			}
+		for (byte i = liveKeyMin; i <= liveKeyMax; i++) {
+			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, i, (byte) 0));
 		}
 	}
 
 	@Override
-	public DisplayableFeedbackColor getColor(int id) {
-		return LaunchPadMK2Color.valueOf(id);
+	public void sendFeedback(MidiKey midiKey, FeedbackType feedbackType) {
+		Feedback feedback = midiKey.getFeedbackForType(feedbackType);
+
+		final byte key = midiKey.getValue();
+		final byte value = feedback.getValue();
+
+		if (key >= 104 && key <= 111) {
+			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, key, value));
+		} else {
+			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.NOTE_ON, feedback.getChannel(), key, value));
+		}
 	}
 
 	@Override
-	public DisplayableFeedbackColor[] getColors() {
+	public FeedbackValue[] getFeedbackValues() {
 		return LaunchPadMK2Color.values();
 	}
 
 	@Override
-	public DisplayableFeedbackColor getDefaultEventColor() {
-		return LaunchPadMK2Color.C1_2;
-	}
-
-	@Override
-	public DisplayableFeedbackColor getDefaultStandardColor() {
-		return LaunchPadMK2Color.C5_2;
-	}
-
-	@Override
-	public DisplayableFeedbackColor getPreferColorMapping(Color color) {
+	public FeedbackColor suggest(Color color) {
 		if (mapProperties.containsKey(color.toString())) {
 			String nameOfConst = mapProperties.get(color.toString());
 			return LaunchPadMK2Color.valueOf(nameOfConst);

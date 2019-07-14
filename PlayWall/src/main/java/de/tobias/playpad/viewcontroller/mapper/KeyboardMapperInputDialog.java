@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
+import de.thecodelabs.midi.mapping.KeyboardKey;
 import de.thecodelabs.utils.util.StringUtils;
-import de.tobias.playpad.action.mapper.KeyboardMapper;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class KeyboardMapperInputDialog extends Alert {
 
-	public KeyboardMapperInputDialog(KeyboardMapper mapper) {
+	public KeyboardMapperInputDialog(KeyboardKey mapper) {
 		super(AlertType.NONE);
 
 		Scene scene = getDialogPane().getScene();

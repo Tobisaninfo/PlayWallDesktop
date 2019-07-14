@@ -38,7 +38,6 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	private final Pane padView; // Node der PadView
 
 	private DesktopMainLayoutFactory connect;
-	private static Project project;
 
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
@@ -139,6 +138,8 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 	// Drag Content ist los gelassen am Ziel
 	private void dragDropped(DragEvent event) {
+		Project project = PlayPadPlugin.getInstance().getCurrentProject();
+
 		Dragboard db = event.getDragboard();
 		boolean success = false;
 
@@ -232,9 +233,4 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 		}
 		return false;
 	}
-
-	public static void setProject(Project project) {
-		DesktopPadDragListener.project = project;
-	}
-
 }

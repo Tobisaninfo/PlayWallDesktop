@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.mapper.Mapper;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.mapping.Key;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
@@ -23,7 +23,7 @@ public abstract class BaseMapperListViewController {
 
 	public interface MapperAddListener {
 
-		void onAdd(Mapper mapper, MapperViewController controller);
+		void onAdd(Key mapper, MapperViewController controller);
 	}
 
 	public abstract List<MapperViewController> getControllers();

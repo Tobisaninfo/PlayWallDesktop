@@ -17,8 +17,10 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.page.PageCoordinate;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
@@ -266,6 +268,14 @@ public class Pad implements Cloneable {
 	 */
 	public PadIndex getPadIndex() {
 		return new PadIndex(getPosition(), getPage().getPosition());
+	}
+
+	public PageCoordinate getPageCoordinate() {
+		ProjectSettings projectSettings = project.getSettings();
+
+		int x = getPosition() % projectSettings.getColumns();
+		int y = getPosition() / projectSettings.getColumns();
+		return new PageCoordinate(x, y);
 	}
 
 	/**

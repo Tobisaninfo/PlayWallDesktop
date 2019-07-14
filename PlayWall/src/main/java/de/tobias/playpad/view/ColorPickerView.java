@@ -31,12 +31,12 @@ public class ColorPickerView extends GridPane {
 
 					// Style in CSS
 					Rectangle rectangle = new Rectangle(40, 40);
-					rectangle.setFill(color.getPaint());
+					rectangle.setFill(color.getColor());
 
 					rectangle.getStyleClass().add("color-view-item");
 
 					// Gestrichelte Linie
-					if (color == startColor) {
+					if (color.equals(startColor)) {
 						rectangle.getStrokeDashArray().addAll(3.0);
 					}
 

@@ -1,36 +1,28 @@
 package de.tobias.playpad.action.factory;
 
-import de.tobias.playpad.action.*;
-import de.tobias.playpad.action.actions.StopAction;
-import de.tobias.playpad.profile.Profile;
-import javafx.scene.control.TreeItem;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.tobias.playpad.action.ActionProvider;
 
-import java.util.List;
+import static de.tobias.playpad.action.actions.StopAction.TYPE;
 
 public class StopActionProvider extends ActionProvider {
 
-	public StopActionProvider(String type) {
-		super(type);
+	public StopActionProvider() {
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		return new TreeItem<>(actions.get(0));
+	public String getType() {
+		return TYPE;
 	}
 
 	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(newInstance());
+	public void createDefaultActions(Mapping mapping) {
+		mapping.addUniqueAction(newInstance());
 	}
 
-	@Override
-	public Action newInstance() {
-		return new StopAction(getType());
+	private Action newInstance() {
+		return new Action(getType());
 	}
-
-	@Override
-	public ActionType geActionType() {
-		return ActionType.CONTROL;
-	}
-
 }

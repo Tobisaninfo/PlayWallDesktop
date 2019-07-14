@@ -1,9 +1,10 @@
 package de.tobias.playpad.launchpadplugin.midi.s;
 
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
+import de.thecodelabs.midi.feedback.FeedbackColor;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
-public enum LaunchPadSColor implements DisplayableFeedbackColor {
+public enum LaunchPadSColor implements FeedbackColor {
 
 	YELLOW(62, Color.YELLOW),
 	AMBER(63, Color.WHEAT),
@@ -19,22 +20,22 @@ public enum LaunchPadSColor implements DisplayableFeedbackColor {
 		this.color = color;
 	}
 
-	@Override
-	public int mapperFeedbackValue() {
-		return midi;
-	}
-
-	@Override
-	public Color getPaint() {
-		return color;
-	}
-
-	public static DisplayableFeedbackColor valueOf(int id) {
+	public static FeedbackColor valueOf(byte id) {
 		for (LaunchPadSColor color : values()) {
-			if (color.mapperFeedbackValue() == id) {
+			if (color.getValue() == id) {
 				return color;
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Paint getColor() {
+		return color;
+	}
+
+	@Override
+	public byte getValue() {
+		return (byte) midi;
 	}
 }

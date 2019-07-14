@@ -1,65 +1,35 @@
 package de.tobias.playpad.action.factory;
 
-import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.action.*;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.actions.PageAction;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.ProjectSettings;
-import javafx.scene.control.TreeItem;
 
-import java.util.Collections;
-import java.util.List;
+import static de.tobias.playpad.action.actions.PageAction.TYPE;
 
-public class PageActionProvider extends ActionProvider implements ActionDisplayable {
+public class PageActionProvider extends ActionProvider {
 
-	public PageActionProvider(String type) {
-		super(type);
+	public PageActionProvider() {
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
-
-		Collections.sort(actions, (o1, o2) ->
-		{
-			if (o1 instanceof PageAction && o2 instanceof PageAction) {
-				PageAction c1 = (PageAction) o1;
-				PageAction c2 = (PageAction) o2;
-				return Long.compare(c1.getPage(), c2.getPage());
-			} else {
-				return -1;
-			}
-		});
-
-		for (Action action : actions) {
-			TreeItem<ActionDisplayable> actionItem = new TreeItem<>(action);
-			rootItem.getChildren().add(actionItem);
-		}
-
-		return rootItem;
+	public String getType() {
+		return TYPE;
 	}
 
 	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
+	public void createDefaultActions(Mapping mapping) {
 		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
-			PageAction action = new PageAction(getType(), i);
-			mapping.addActionIfNotContains(action);
+			Action action = newInstance(i);
+			mapping.addUniqueAction(action);
 		}
 	}
 
-	@Override
-	public NVC getSettingsViewController() {
-		return null;
+	private Action newInstance(int i) {
+		Action action = new Action(getType());
+		action.addPayloadEntry(PageAction.PAYLOAD_PAGE, String.valueOf(i));
+		return action;
 	}
-
-	@Override
-	public Action newInstance() {
-		return new PageAction(getType());
-	}
-
-	@Override
-	public ActionType geActionType() {
-		return ActionType.CONTROL;
-	}
-
 }

@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.actions;
 
+import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
@@ -59,10 +60,10 @@ public class CartActionViewController extends NVC {
 		});
 	}
 
-	public void setCartAction(CartAction action) {
+	public void setCartAction(Action action) {
 		this.action = action;
 
-		controlMode.setValue(action.getMode());
+		controlMode.setValue(CartAction.getMode(action));
 		autoColorCheckbox.setSelected(action.isAutoFeedbackColors());
 	}
 

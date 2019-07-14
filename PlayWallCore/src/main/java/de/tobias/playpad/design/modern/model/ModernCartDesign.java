@@ -1,6 +1,6 @@
 package de.tobias.playpad.design.modern.model;
 
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.sync.command.CommandManager;
@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.util.UUID;
 
-public class ModernCartDesign implements DesignColorAssociator, Cloneable {
+public class ModernCartDesign implements FeedbackDesignColorSuggester, Cloneable {
 
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
@@ -87,12 +87,12 @@ public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 
 	// Color Associator
 	@Override
-	public Color getAssociatedEventColor() {
+	public Color getDesignEventColor() {
 		return Color.web(playColor.get().getColorHi());
 	}
 
 	@Override
-	public Color getAssociatedStandardColor() {
+	public Color getDesignDefaultColor() {
 		return Color.web(backgroundColor.get().getColorHi());
 	}
 
