@@ -131,7 +131,7 @@ public class PlayPadImpl implements PlayPad {
 				try {
 					((AutoCloseable) i).close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});

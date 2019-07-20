@@ -52,13 +52,22 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 
 	@Override
 	public void sendFeedback(MidiKey midiKey, FeedbackType feedbackType) {
+		final byte key = midiKey.getValue();
+
+		if (feedbackType == FeedbackType.NONE) {
+			if (key >= 104 && key <= 111) {
+				Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, key, (byte) 0));
+			} else {
+				Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.NOTE_ON, key, (byte) 0));
+			}
+		}
+
 		Feedback feedback = midiKey.getFeedbackForType(feedbackType);
 
 		if (feedback == null) {
 			return;
 		}
 
-		final byte key = midiKey.getValue();
 		final byte value = feedback.getValue();
 
 		if (key >= 104 && key <= 111) {

@@ -160,8 +160,9 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 
 		int x = getX(action);
 		int y = getY(action);
+		final int page = mainViewController.getPage();
 
-		return project.getPad(x, y, mainViewController.getPage());
+		return project.getPad(x, y, page);
 	}
 
 	/*

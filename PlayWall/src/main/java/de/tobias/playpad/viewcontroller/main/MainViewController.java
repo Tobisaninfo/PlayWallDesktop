@@ -15,6 +15,7 @@ import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
@@ -517,6 +518,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
+			// Adjust colors
+			ColorAdjuster.applyColorsToKeys();
 			Midi.getInstance().showFeedback();
 		}
 	}

@@ -55,6 +55,10 @@ public class ColorAdjuster {
 
 	public static void setSuggestedFeedbackColors(ActionFeedbackSuggester suggester, Action action, MidiKey key) {
 		MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
+		if (transcript == null) {
+			return;
+		}
+
 		Pad pad = suggester.getPad(action);
 
 		Color layoutStdColor = null;

@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -17,16 +16,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
-import java.util.Optional;
-
 public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML
 	private VBox layoutContainer;
 	@FXML
 	private CheckBox enableLayoutCheckBox;
-
-	private ModernCartDesignViewController layoutViewController;
 
 	private Pad pad;
 
@@ -95,18 +90,5 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 		// CSS
 		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 		mainViewController.loadUserCss();
-
-		// Mapping Auto Matched Colors
-		Optional<Mapping> activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-		activeMapping.ifPresent(mapping -> {
-			// List<Action> actions = mapping.getActionsForType(CartAction.TYPE);
-			// Update die Mapper der CartAction
-			/* actions.stream()
-					.filter(action -> action.getPad() != null)
-					.filter(action -> action.getPad().getPosition() == pad.getPosition())
-					.forEach(item -> item.init(pad.getProject(), mainViewController));
-					TODO Fix
-			 */
-		});
 	}
 }
