@@ -24,6 +24,7 @@ import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
+import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
@@ -129,8 +130,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				}
 			}
 		});
-		// TODO Cell labeling
-		//treeView.setCellFactory(list -> new DisplayableTreeCell<>());
+
+		treeView.setCellFactory(list -> new DisplayableTreeCell<>());
 	}
 
 	private TreeItem<ActionSettingsEntry> createTreeView(Mapping mapping) {
