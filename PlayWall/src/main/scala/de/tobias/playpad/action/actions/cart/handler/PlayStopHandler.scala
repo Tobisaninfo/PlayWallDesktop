@@ -1,7 +1,7 @@
 package de.tobias.playpad.action.actions.cart.handler
 
 import de.thecodelabs.midi.event.KeyEventType
-import de.tobias.playpad.action.actions.cart.CartAction
+import de.tobias.playpad.action.actions.CartAction
 import de.tobias.playpad.pad.Pad
 
 class PlayStopHandler extends CartActionHandler {
