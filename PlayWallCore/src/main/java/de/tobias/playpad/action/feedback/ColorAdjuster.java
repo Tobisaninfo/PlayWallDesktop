@@ -83,6 +83,12 @@ public class ColorAdjuster {
 			final byte channel = suggester.suggestFeedbackChannel(FeedbackType.EVENT);
 			key.setEventFeedback(new Feedback(channel, matchedColor.getValue()));
 		}
+
+		if (layoutEvColor != null) {
+			FeedbackColor matchedColor = searchColor(transcript, layoutEvColor);
+			final byte channel = suggester.suggestFeedbackChannel(FeedbackType.WARNING);
+			key.setWarningFeedback(new Feedback(channel, matchedColor.getValue()));
+		}
 	}
 
 	/**

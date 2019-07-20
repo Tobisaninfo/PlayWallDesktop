@@ -15,6 +15,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.ActionSettingsMappable;
 import de.tobias.playpad.profile.Profile;
@@ -388,7 +389,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	public Runnable getTask(ProfileSettings settings, Project project, IMainViewController controller) {
 		return () -> {
 			Midi.getInstance().clearFeedback();
-			// TODO Color adjustment
+			ColorAdjuster.applyColorsToKeys();
 			Midi.getInstance().showFeedback();
 		};
 	}
