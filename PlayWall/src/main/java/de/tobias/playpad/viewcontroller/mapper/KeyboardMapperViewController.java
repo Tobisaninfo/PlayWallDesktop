@@ -40,7 +40,7 @@ public class KeyboardMapperViewController extends MapperViewController {
 	}
 
 	private String getReadableName() {
-		if (!StringUtils.isStringNotVisable(mapper.getKey())) {
+		if (mapper.getKey() == null || !StringUtils.isStringNotVisable(mapper.getKey())) {
 			return mapper.getKey();
 		} else {
 			return mapper.getCode().getName();
