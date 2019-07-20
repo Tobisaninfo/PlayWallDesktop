@@ -7,7 +7,7 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.view.ColorPickerView;
+import de.tobias.playpad.view.FeedbackColorPickerView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -72,7 +72,7 @@ public class SingleFeedbackViewController extends NVC {
 			colorChooser = new PopOver();
 			final FeedbackColor feedbackColor = getFeedbackColor(feedback);
 
-			ColorPickerView colorView = new ColorPickerView(feedbackColor, colors, item ->
+			FeedbackColorPickerView colorView = new FeedbackColorPickerView(feedbackColor, colors, item ->
 			{
 				colorChooser.hide();
 				if (event.getSource() == colorChooseDefaultButton) {

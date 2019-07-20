@@ -1,10 +1,9 @@
 package de.tobias.playpad.viewcontroller.main;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.midi.Mapping;
-import de.thecodelabs.midi.Midi;
 import de.thecodelabs.midi.device.CloseException;
 import de.thecodelabs.midi.device.MidiDeviceInfo;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -317,13 +316,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				showErrorMessage(Localization.getString(Strings.Error_Profile_Save));
 			}
 
-			// Mapper Clear Feedback
-			Profile.currentProfile().getMappings().getActiveMapping().ifPresent(Mapping::clearFeedback);
-
 			// MIDI Shutdown
 			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
 			if (profilSettings.isMidiActive()) {
 				try {
+					Midi.getInstance().clearFeedback();
 					Midi.getInstance().close();
 				} catch (CloseException e) {
 					Logger.error(e);
@@ -366,7 +363,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		volumeChangeListener.setOpenProject(openProject);
 
-		Profile.currentProfile().getMappings().getActiveMapping().ifPresent(Mapping::showFeedback);
+		Midi.getInstance().showFeedback();
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -520,13 +517,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
-			// Mapping feedback
-			Optional<Mapping> activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-			activeMapping.ifPresent(mapping -> {
-				mapping.clearFeedback();
-				// TODO Add color adjustment
-				mapping.showFeedback();
-			});
+			if (Midi.getInstance().isOpen())
+				Midi.getInstance().showFeedback();
 		}
 	}
 
@@ -564,27 +556,25 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	@Override
 	public void reloadSettings(Profile old, Profile currentProfile) {
 
-		final DoubleProperty volumeFaderValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
+		final DoubleProperty volumeFadeValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
 
 		if (old != null) {
 			// Unbind Volume Slider
-			volumeFaderValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
-			volumeFaderValueProperty.removeListener(volumeChangeListener);
+			volumeFadeValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			volumeFadeValueProperty.removeListener(volumeChangeListener);
 
 			// Clear Feedback on Device (LaunchPad Light off)
-			old.getMappings().getActiveMapping().ifPresent(Mapping::clearFeedback);
+			Midi.getInstance().clearFeedback();
 
 			// LockedListener
 			old.getProfileSettings().lockedProperty().removeListener(lockedListener);
 		}
 
 		// Volume
-		volumeFaderValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
-		volumeFaderValueProperty.addListener(volumeChangeListener);
+		volumeFadeValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		volumeFadeValueProperty.addListener(volumeChangeListener);
 
 		final ProfileSettings profileSettings = currentProfile.getProfileSettings();
-		final Optional<Mapping> activeMapping = currentProfile.getMappings().getActiveMapping();
-
 		// LockedListener
 		profileSettings.lockedProperty().addListener(lockedListener);
 
@@ -599,10 +589,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				{
 					// Handle Mapper
 					if (openProject != null) {
-						activeMapping.ifPresent(mapping -> {
-							mapping.showFeedback();
-							// TODO Add color adjustment
-						});
+						Midi.getInstance().showFeedback();
 					}
 				});
 			});

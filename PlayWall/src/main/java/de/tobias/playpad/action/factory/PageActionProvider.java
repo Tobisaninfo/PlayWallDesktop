@@ -3,8 +3,15 @@ package de.tobias.playpad.action.factory;
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.PageAction;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.PageActionSettingsEntry;
+import de.tobias.playpad.action.settings.PageActionTypeSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;
+import javafx.scene.control.TreeItem;
+
+import java.util.List;
 
 import static de.tobias.playpad.action.actions.PageAction.TYPE;
 
@@ -31,5 +38,33 @@ public class PageActionProvider extends ActionProvider {
 		Action action = new Action(getType());
 		action.addPayloadEntry(PageAction.PAYLOAD_PAGE, String.valueOf(i));
 		return action;
+	}
+
+	/*
+
+	 */
+
+	@Override
+	public ActionType getActionType() {
+		return ActionType.CONTROL;
+	}
+
+	@Override
+	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
+		TreeItem<ActionSettingsEntry> rootItem = new TreeItem<>(new PageActionTypeSettingsEntry());
+
+		actions.sort((o1, o2) ->
+		{
+			int page1 = PageAction.getPageForAction(o1);
+			int page2 = PageAction.getPageForAction(o2);
+			return Long.compare(page1, page2);
+		});
+
+		for (Action action : actions) {
+			TreeItem<ActionSettingsEntry> actionItem = new TreeItem<>(new PageActionSettingsEntry(action));
+			rootItem.getChildren().add(actionItem);
+		}
+
+		return rootItem;
 	}
 }

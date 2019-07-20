@@ -21,6 +21,10 @@ public abstract class BaseMapperListViewController {
 		BaseMapperListViewController.instance = instance;
 	}
 
+	/*
+
+	 */
+
 	public interface MapperAddListener {
 
 		void onAdd(Key mapper, MapperViewController controller);

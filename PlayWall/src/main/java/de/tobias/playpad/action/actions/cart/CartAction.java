@@ -29,6 +29,7 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 	public static final String PAYLOAD_X = "x";
 	public static final String PAYLOAD_Y = "y";
 	public static final String PAYLOAD_MODE = "mode";
+	public static final String PAYLOAD_AUTO_FEEDBACK = "autoFeedback";
 
 	public enum CartActionMode {
 		PLAY_PAUSE,
@@ -61,18 +62,6 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 			CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
 		}
 		return null;
-	}
-
-	public static CartActionMode getMode(Action action) {
-		return CartActionMode.valueOf(action);
-	}
-
-	public static int getY(Action action) {
-		return Integer.parseInt(action.getPayload(PAYLOAD_Y));
-	}
-
-	public static int getX(Action action) {
-		return Integer.parseInt(action.getPayload(PAYLOAD_X));
 	}
 
 	@SuppressWarnings("DuplicateBranchesInSwitch")
@@ -133,7 +122,7 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 
 	@Override
 	public boolean isAutoFeedbackColors(Action action) {
-		return Boolean.parseBoolean(action.getPayload("autoFeedback"));
+		return isAutoFeedback(action);
 	}
 
 	@Override
@@ -165,5 +154,40 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		int y = getY(action);
 
 		return project.getPad(x, y, mainViewController.getPage());
+	}
+
+	/*
+
+	 */
+	public static CartActionMode getMode(Action action) {
+		return CartActionMode.valueOf(action);
+	}
+
+	public static int getY(Action action) {
+		return Integer.parseInt(action.getPayload(PAYLOAD_Y));
+	}
+
+	public static int getX(Action action) {
+		return Integer.parseInt(action.getPayload(PAYLOAD_X));
+	}
+
+	public static boolean isAutoFeedback(Action action) {
+		return Boolean.parseBoolean(action.getPayload(PAYLOAD_AUTO_FEEDBACK));
+	}
+
+	public static void setMode(Action action, CartActionMode mode) {
+		action.addPayloadEntry(CartAction.PAYLOAD_MODE, mode.name());
+	}
+
+	public static void getY(Action action, int y) {
+		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(y));
+	}
+
+	public static void getX(Action action, int x) {
+		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(x));
+	}
+
+	public static void setAutoFeedback(Action action, boolean enable) {
+		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(enable));
 	}
 }

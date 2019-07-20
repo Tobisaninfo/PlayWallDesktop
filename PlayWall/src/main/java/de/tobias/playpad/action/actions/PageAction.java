@@ -40,7 +40,7 @@ public class PageAction extends ActionHandler {
 		return FeedbackType.DEFAULT;
 	}
 
-	private int getPageForAction(Action action) {
+	public static int getPageForAction(Action action) {
 		return Integer.parseInt(action.getPayload(PAYLOAD_PAGE));
 	}
 }

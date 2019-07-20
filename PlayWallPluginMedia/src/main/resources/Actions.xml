@@ -1,4 +1,4 @@
 <Actions>
-    <Component id="BLIND" name="black_action.name">de.tobias.playpad.plugin.media.action.BlackActionFactory
+    <Component id="BLACK" name="black_action.name">de.tobias.playpad.plugin.media.action.BlackActionProvider
     </Component>
 </Actions>

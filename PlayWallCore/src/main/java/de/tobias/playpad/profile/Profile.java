@@ -1,6 +1,7 @@
 package de.tobias.playpad.profile;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.MappingCollection;
 import de.thecodelabs.midi.serialize.MappingCollectionSerializer;
 import de.thecodelabs.utils.application.App;
@@ -99,6 +100,7 @@ public class Profile {
 
 			// Mapping erst danach, weil das auf current Profile zugreifen muss
 			profile.mappings = MappingCollectionSerializer.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_JSON));
+			Mapping.setCurrentMapping(profile.getMappings().getActiveMapping().orElse(null));
 
 			setCurrentProfile(profile);
 

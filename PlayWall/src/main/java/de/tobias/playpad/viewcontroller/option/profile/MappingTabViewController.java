@@ -13,9 +13,10 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.ActionDisplayable;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.ActionSettingsMappable;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
@@ -23,8 +24,6 @@ import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.playpad.viewcontroller.cell.DisplayableCell;
-import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
@@ -74,7 +73,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	// Main View
 	@FXML
-	private TreeView<ActionDisplayable> treeView;
+	private TreeView<ActionSettingsEntry> treeView;
 
 	@FXML
 	private VBox detailView;
@@ -86,8 +85,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@Override
 	public void init() {
-		mappingComboBox.setCellFactory(list -> new DisplayableCell<>());
-		mappingComboBox.setButtonCell(new DisplayableCell<>());
+		// TODO Show correct names
+		// mappingComboBox.setCellFactory(list -> new DisplayableCell<>());
+		// mappingComboBox.setButtonCell(new DisplayableCell<>());
 
 		mappingComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
@@ -116,26 +116,25 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		treeView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->
 		{
 			detailView.getChildren().clear();
+			Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
 
 			if (newValue != null) {
-				NVC controller = newValue.getValue().getSettingsViewController();
-				if (controller == null) {
-					Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
-					controller = newValue.getValue().getActionSettingsViewController(mapping, this);
-				}
+				NVC controller = newValue.getValue().getDetailSettingsController(mapping, this);
+
 				if (controller != null) {
 					detailView.getChildren().add(controller.getParent());
 				}
-				if (newValue.getValue() instanceof Action) {
-					showMapperFor((Action) newValue.getValue());
+				if (newValue.getValue() instanceof ActionSettingsMappable) {
+					showMapperFor(((ActionSettingsMappable) newValue.getValue()).getAction());
 				}
 			}
 		});
-		treeView.setCellFactory(list -> new DisplayableTreeCell<>());
+		// TODO Cell labeling
+		//treeView.setCellFactory(list -> new DisplayableTreeCell<>());
 	}
 
-	private TreeItem<ActionDisplayable> createTreeView(Mapping mapping) {
-		TreeItem<ActionDisplayable> rootItem = new TreeItem<>();
+	private TreeItem<ActionSettingsEntry> createTreeView(Mapping mapping) {
+		TreeItem<ActionSettingsEntry> rootItem = new TreeItem<>();
 		Collection<ActionProvider> types = PlayPadPlugin.getRegistries().getActions().getComponents();
 		List<ActionProvider> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
 
@@ -147,11 +146,11 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		return rootItem;
 	}
 
-	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionDisplayable> rootItem, List<ActionProvider> sortedTypes, ActionType type) {
+	private void createTreeViewForActionType(Mapping mapping, TreeItem<ActionSettingsEntry> rootItem, List<ActionProvider> sortedTypes, ActionType type) {
 		for (ActionProvider provider : sortedTypes) {
 			List<Action> actions = mapping.getActionsForType(provider.getType());
-			if (provider.geActionType() == type) {
-				TreeItem<ActionDisplayable> item = provider.getTreeViewForActions(actions, mapping);
+			if (provider.getActionType() == type) {
+				TreeItem<ActionSettingsEntry> item = provider.getTreeItemForActions(actions, mapping);
 				rootItem.getChildren().add(item);
 			}
 		}
@@ -159,7 +158,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	private void createTreeViewContent() {
 		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
-		TreeItem<ActionDisplayable> rootItem = createTreeView(mapping);
+		TreeItem<ActionSettingsEntry> rootItem = createTreeView(mapping);
 		treeView.setRoot(rootItem);
 	}
 

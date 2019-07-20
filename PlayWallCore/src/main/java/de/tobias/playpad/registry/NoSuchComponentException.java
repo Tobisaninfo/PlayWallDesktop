@@ -7,4 +7,8 @@ public class NoSuchComponentException extends RuntimeException {
 	public NoSuchComponentException(String id) {
 		super("No component for id: " + id);
 	}
+
+	public NoSuchComponentException(Throwable cause) {
+		super(cause);
+	}
 }

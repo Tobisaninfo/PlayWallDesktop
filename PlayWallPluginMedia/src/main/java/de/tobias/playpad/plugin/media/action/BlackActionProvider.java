@@ -1,20 +1,20 @@
-package de.tobias.playpad.action.factory;
+package de.tobias.playpad.plugin.media.action;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
-import de.tobias.playpad.action.settings.StopActionTypeSettingsEntry;
+import de.tobias.playpad.plugin.media.action.settings.BlackActionTypeSettingsEntry;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-import static de.tobias.playpad.action.actions.StopAction.TYPE;
+import static de.tobias.playpad.plugin.media.action.BlackAction.TYPE;
 
-public class StopActionProvider extends ActionProvider {
+public class BlackActionProvider extends ActionProvider {
 
-	public StopActionProvider() {
+	public BlackActionProvider() {
 		super(TYPE);
 	}
 
@@ -25,11 +25,7 @@ public class StopActionProvider extends ActionProvider {
 
 	@Override
 	public void createDefaultActions(Mapping mapping) {
-		mapping.addUniqueAction(newInstance());
-	}
-
-	private Action newInstance() {
-		return new Action(getType());
+		mapping.addUniqueAction(new Action(getType()));
 	}
 
 	/*
@@ -38,11 +34,11 @@ public class StopActionProvider extends ActionProvider {
 
 	@Override
 	public ActionType getActionType() {
-		return ActionType.CONTROL;
+		return ActionType.SETTINGS;
 	}
 
 	@Override
 	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
-		return new TreeItem<>(new StopActionTypeSettingsEntry(actions.stream().findFirst().orElse(null)));
+		return new TreeItem<>(new BlackActionTypeSettingsEntry(actions.stream().findFirst().orElse(null)));
 	}
 }
