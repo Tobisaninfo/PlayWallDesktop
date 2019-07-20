@@ -64,6 +64,9 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 		if (key >= 104 && key <= 111) {
 			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.CONTROL_CHANGE, key, value));
 		} else {
+			if (feedbackType == FeedbackType.WARNING) {
+				sendFeedback(midiKey, FeedbackType.DEFAULT);
+			}
 			Midi.getInstance().sendMessage(new MidiCommand(MidiCommandType.NOTE_ON, feedback.getChannel(), key, value));
 		}
 	}
