@@ -118,8 +118,9 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		return !canceled;
 	}
 
-	public void setKey(MidiKey midiMapper) {
-		this.key = midiMapper;
+	@Override
+	public void setKey(Key midiKey) {
+		this.key = (MidiKey) midiKey;
 
 		midiInputKeyLabel.setText(String.valueOf(key.getValue()));
 

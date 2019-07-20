@@ -69,10 +69,10 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 			String name = "";
 			switch (item) {
 				case MIDI:
-					Localization.getString(Strings.Mapper_Midi_Name);
+					name = Localization.getString(Strings.Mapper_Midi_Name);
 					break;
 				case KEYBOARD:
-					Localization.getString(Strings.Mapper_Keyboard_Name);
+					name = Localization.getString(Strings.Mapper_Keyboard_Name);
 					break;
 			}
 
@@ -113,7 +113,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		}
 	}
 
-	private MapperViewController addMapperView(KeyType type, Key mapper) {
+	private MapperViewController addMapperView(KeyType type, Key key) {
 		MapperViewController controller = null;
 
 		// TODO Extract
@@ -127,6 +127,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		}
 
 		if (controller != null) {
+			controller.setKey(key);
 			Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
 
 			HBox hbox = new HBox(controller.getParent(), deleteButton);
@@ -134,15 +135,15 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 
 			mappingView.getChildren().addAll(hbox);
 
-			deleteButton.setOnAction((e) ->
+			deleteButton.setOnAction(e ->
 			{
-				action.removeKey(mapper);
+				action.removeKey(key);
 				mappingView.getChildren().removeAll(hbox);
 			});
 		}
 		controllers.add(controller);
 		MapperViewController finalController = controller;
-		addListeners.forEach(i -> i.onAdd(mapper, finalController));
+		addListeners.forEach(i -> i.onAdd(key, finalController));
 		return controller;
 	}
 

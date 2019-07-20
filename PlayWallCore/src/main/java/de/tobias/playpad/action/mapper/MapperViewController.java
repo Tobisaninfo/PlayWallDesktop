@@ -15,6 +15,8 @@ public abstract class MapperViewController extends NVC {
 
 	public abstract void hideFeedback();
 
+	public abstract void setKey(Key midiKey);
+
 	public abstract Key getKey();
 
 	/**

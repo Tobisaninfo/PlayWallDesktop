@@ -73,8 +73,9 @@ public class KeyboardMapperViewController extends MapperViewController {
 		return inputDialog();
 	}
 
-	public void setMapper(KeyboardKey keyboardMapper) {
-		this.mapper = keyboardMapper;
+	@Override
+	public void setKey(Key keyboardMapper) {
+		this.mapper = (KeyboardKey) keyboardMapper;
 		setLabel();
 	}
 }

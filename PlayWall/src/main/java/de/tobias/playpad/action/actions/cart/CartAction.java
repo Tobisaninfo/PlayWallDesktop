@@ -198,6 +198,6 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 	}
 
 	public static void setAutoFeedback(Action action, boolean enable) {
-		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(enable));
+		action.addPayloadEntry(CartAction.PAYLOAD_AUTO_FEEDBACK, String.valueOf(enable));
 	}
 }
