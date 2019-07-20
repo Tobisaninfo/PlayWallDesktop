@@ -25,6 +25,11 @@ public class LaunchPadS implements MidiFeedbackTranscript {
 		}
 
 		Feedback feedback = midiKey.getFeedbackForType(feedbackType);
+
+		if (feedback == null) {
+			return;
+		}
+
 		if (feedbackType != FeedbackType.WARNING) {
 
 			Midi.getInstance().sendMessage(new MidiCommand(command, key, feedback.getValue()));

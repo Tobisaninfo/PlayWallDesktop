@@ -128,7 +128,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
 
 		if (device != null) {
-			if (device.isModeSupported(Midi.Mode.OUTPUT)) { // TODO Change
+			if (device.isModeSupported(Midi.Mode.OUTPUT)) {
 				// remove old Elements
 				if (feedbackController != null) {
 					root.getChildren().remove(feedbackController.getParent());

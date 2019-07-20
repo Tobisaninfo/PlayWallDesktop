@@ -54,6 +54,10 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 	public void sendFeedback(MidiKey midiKey, FeedbackType feedbackType) {
 		Feedback feedback = midiKey.getFeedbackForType(feedbackType);
 
+		if (feedback == null) {
+			return;
+		}
+
 		final byte key = midiKey.getValue();
 		final byte value = feedback.getValue();
 

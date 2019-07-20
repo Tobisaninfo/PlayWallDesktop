@@ -9,7 +9,9 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
@@ -84,7 +86,8 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 			{
 				// Adds a mapper to the action
 				try {
-					MapperViewController controller = onAddMapper(item, action);
+					ActionProvider provider = PlayPadPlugin.getRegistries().getActions().getFactory(action.getActionType());
+					MapperViewController controller = onAddMapper(item, action, provider);
 					boolean result = controller.showInputMapperUI();
 
 					// Delete Mapper wenn Eingabe abgebrochen wurde
@@ -102,10 +105,10 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		});
 	}
 
-	private MapperViewController onAddMapper(KeyType type, Action action) throws NoSuchComponentException {
+	private MapperViewController onAddMapper(KeyType type, Action action, ActionProvider provider) throws NoSuchComponentException {
 		try {
 			KeyRegistry registry = KeyRegistry.getInstance();
-			Key mapper = registry.getType(type).newInstance();
+			Key mapper = registry.createInstance(type, provider.supportedFeedbackOptions(action, type));
 			action.addKey(mapper);
 			return addMapperView(type, mapper);
 		} catch (Exception e) {

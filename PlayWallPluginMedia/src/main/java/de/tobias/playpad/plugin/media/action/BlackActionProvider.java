@@ -3,6 +3,8 @@ package de.tobias.playpad.plugin.media.action;
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
@@ -33,6 +35,18 @@ public class BlackActionProvider extends ActionProvider {
 	public ActionHandler getActionHandler() {
 		return new BlackAction();
 	}
+
+	@Override
+	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
+		switch (keyType) {
+			case KEYBOARD:
+				return new FeedbackType[0];
+			case MIDI:
+				return new FeedbackType[]{FeedbackType.DEFAULT, FeedbackType.EVENT};
+		}
+		return new FeedbackType[0];
+	}
+
 	/*
 
 	 */
