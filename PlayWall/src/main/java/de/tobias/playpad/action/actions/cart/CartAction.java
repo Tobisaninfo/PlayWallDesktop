@@ -42,8 +42,6 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		}
 	}
 
-	// TODO: Add listener
-
 	@Override
 	public String actionType() {
 		return TYPE;

@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.listener;
 
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.view.PseudoClasses;
@@ -18,6 +19,9 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
 		controller.updateButtonDisable();
 		controller.updateTimeLabel();
+
+		// Show Feedback on Midi
+		CartAction.refreshFeedback(controller.getPad());
 
 		// Reset
 		controller.getView().setErrorLabelActive(false);
@@ -40,19 +44,13 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				break;
 
 			case STOP:
+			case READY:
+			case EMPTY:
 				controller.getPadPositionListener().stopWaning();
 				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
 				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
 				controller.getView().setStyle("");
-				break;
-
-			case READY:
-				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
-				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-				controller.getView().setStyle(""); // Cleanup from warning UI
 				break;
 
 			case ERROR:
@@ -75,13 +73,6 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 				controller.getView().setStyle(""); // Cleanup from warning UI
 				break;
 
-			case EMPTY:
-				controller.getPadPositionListener().stopWaning();
-				controller.getView().pseudoClassState(PseudoClasses.PLAY_CLASS, false);
-				controller.getView().pseudoClassState(PseudoClasses.FADE_CLASS, false);
-				controller.getView().pseudoClassState(PseudoClasses.WARN_CLASS, false);
-				controller.getView().setStyle(""); // Cleanup from warning UI
-				break;
 			default:
 				break;
 		}

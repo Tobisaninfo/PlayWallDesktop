@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
@@ -55,6 +56,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 				if (totalDuration != null) {
 					updateDuration(newValue, durationable, totalDuration);
+					CartAction.refreshFeedback(pad);
 				}
 			}
 		}
