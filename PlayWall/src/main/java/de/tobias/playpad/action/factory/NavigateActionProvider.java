@@ -2,6 +2,7 @@ package de.tobias.playpad.action.factory;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.NavigateAction;
@@ -17,7 +18,7 @@ import static de.tobias.playpad.action.actions.NavigateAction.TYPE;
 
 public class NavigateActionProvider extends ActionProvider {
 
-	public NavigateActionProvider() {
+	public NavigateActionProvider(String type) {
 		super(TYPE);
 	}
 
@@ -37,6 +38,15 @@ public class NavigateActionProvider extends ActionProvider {
 		action.addPayloadEntry(NavigateAction.PAYLOAD_TYPE, navigationType.name());
 		return action;
 	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new NavigateAction();
+	}
+
+	/*
+
+	 */
 
 	@Override
 	public ActionType getActionType() {

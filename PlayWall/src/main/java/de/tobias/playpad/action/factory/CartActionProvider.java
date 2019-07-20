@@ -2,8 +2,10 @@ package de.tobias.playpad.action.factory;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
+import de.tobias.playpad.action.actions.cart.CartAction;
 import de.tobias.playpad.action.actions.cart.CartAction.*;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.CartActionSettingsEntry;
@@ -12,12 +14,11 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-import static de.tobias.playpad.action.actions.StopAction.TYPE;
 import static de.tobias.playpad.action.actions.cart.CartAction.*;
 
 public class CartActionProvider extends ActionProvider {
 
-	public CartActionProvider() {
+	public CartActionProvider(String type) {
 		super(TYPE);
 	}
 
@@ -43,6 +44,11 @@ public class CartActionProvider extends ActionProvider {
 		action.addPayloadEntry(PAYLOAD_MODE, CartActionMode.PLAY_STOP.name());
 		action.addPayloadEntry(PAYLOAD_AUTO_FEEDBACK, String.valueOf(true));
 		return action;
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new CartAction();
 	}
 
 	/*

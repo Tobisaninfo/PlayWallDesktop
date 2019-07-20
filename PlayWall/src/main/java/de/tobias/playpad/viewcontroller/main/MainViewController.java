@@ -517,8 +517,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
-			if (Midi.getInstance().isOpen())
-				Midi.getInstance().showFeedback();
+			Midi.getInstance().showFeedback();
 		}
 	}
 

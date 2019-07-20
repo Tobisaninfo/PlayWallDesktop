@@ -2,6 +2,7 @@ package de.tobias.playpad.action.factory;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.PageAction;
@@ -17,7 +18,7 @@ import static de.tobias.playpad.action.actions.PageAction.TYPE;
 
 public class PageActionProvider extends ActionProvider {
 
-	public PageActionProvider() {
+	public PageActionProvider(String type) {
 		super(TYPE);
 	}
 
@@ -38,6 +39,11 @@ public class PageActionProvider extends ActionProvider {
 		Action action = new Action(getType());
 		action.addPayloadEntry(PageAction.PAYLOAD_PAGE, String.valueOf(i));
 		return action;
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new PageAction();
 	}
 
 	/*

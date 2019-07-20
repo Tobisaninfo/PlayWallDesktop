@@ -1,6 +1,7 @@
 package de.tobias.playpad.plugin.media.main.impl;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.action.ActionRegistry;
 import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -13,6 +14,7 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
+import de.tobias.playpad.plugin.media.action.BlackAction;
 import de.tobias.playpad.plugin.media.main.VideoSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.Registry;
@@ -60,6 +62,8 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		try {
 			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistries().getPadContents();
 			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
+
+			ActionRegistry.registerActionHandler(new BlackAction());
 		} catch (Exception e) {
 			Logger.error(e);
 		}

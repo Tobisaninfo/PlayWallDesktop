@@ -3,6 +3,7 @@ package de.tobias.playpad;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.action.ActionRegistry;
 import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -223,6 +224,11 @@ public class PlayPadImpl implements PlayPad {
 			registryCollection.getPadContents().loadComponentsFromFile("components/PadContent.xml", module, resourceBundle);
 			registryCollection.getTriggerItems().loadComponentsFromFile("components/Trigger.xml", module, resourceBundle);
 			registryCollection.getMainLayouts().loadComponentsFromFile("components/Layout.xml", module, resourceBundle);
+
+			// Register Handlers in Midi Library
+			registryCollection.getActions().getComponents().forEach(actionProvider -> {
+				ActionRegistry.registerActionHandler(actionProvider.getActionHandler());
+			});
 
 			// Set Default
 			// TODO Set Default

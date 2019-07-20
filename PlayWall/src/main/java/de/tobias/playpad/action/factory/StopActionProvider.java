@@ -2,8 +2,10 @@ package de.tobias.playpad.action.factory;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
+import de.tobias.playpad.action.actions.StopAction;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.StopActionTypeSettingsEntry;
 import javafx.scene.control.TreeItem;
@@ -14,7 +16,7 @@ import static de.tobias.playpad.action.actions.StopAction.TYPE;
 
 public class StopActionProvider extends ActionProvider {
 
-	public StopActionProvider() {
+	public StopActionProvider(String type) {
 		super(TYPE);
 	}
 
@@ -30,6 +32,11 @@ public class StopActionProvider extends ActionProvider {
 
 	private Action newInstance() {
 		return new Action(getType());
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new StopAction();
 	}
 
 	/*

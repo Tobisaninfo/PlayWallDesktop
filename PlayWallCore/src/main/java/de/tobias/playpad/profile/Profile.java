@@ -8,6 +8,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import org.dom4j.DocumentException;
@@ -99,7 +100,23 @@ public class Profile {
 			});
 
 			// Mapping erst danach, weil das auf current Profile zugreifen muss
-			profile.mappings = MappingCollectionSerializer.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_JSON));
+			try {
+				profile.mappings = MappingCollectionSerializer.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_JSON));
+			} catch (IOException e) {
+				final List<Mapping> mappings = new ArrayList<>();
+				final Mapping mapping = new Mapping();
+				final MappingCollection collection = new MappingCollection(mappings);
+
+				mappings.add(mapping);
+				collection.setActiveMapping(mapping);
+
+				// Create default actions for new mapping
+				for (ActionProvider component : PlayPadPlugin.getRegistries().getActions().getComponents()) {
+					component.createDefaultActions(mapping);
+				}
+
+				profile.mappings = collection;
+			}
 			Mapping.setCurrentMapping(profile.getMappings().getActiveMapping().orElse(null));
 
 			setCurrentProfile(profile);

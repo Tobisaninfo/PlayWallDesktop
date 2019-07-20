@@ -2,6 +2,7 @@ package de.tobias.playpad.plugin.media.action;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
@@ -14,7 +15,7 @@ import static de.tobias.playpad.plugin.media.action.BlackAction.TYPE;
 
 public class BlackActionProvider extends ActionProvider {
 
-	public BlackActionProvider() {
+	public BlackActionProvider(String type) {
 		super(TYPE);
 	}
 
@@ -28,6 +29,10 @@ public class BlackActionProvider extends ActionProvider {
 		mapping.addUniqueAction(new Action(getType()));
 	}
 
+	@Override
+	public ActionHandler getActionHandler() {
+		return new BlackAction();
+	}
 	/*
 
 	 */

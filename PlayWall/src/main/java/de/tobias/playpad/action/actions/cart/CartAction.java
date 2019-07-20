@@ -17,6 +17,7 @@ import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PageCoordinate;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import javafx.application.Platform;
 import javafx.util.Duration;
 
 import java.util.HashMap;
@@ -59,7 +60,9 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		}
 
 		if (pad.hasVisibleContent()) {
-			CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
+			Platform.runLater(() -> {
+				CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
+			});
 		}
 		return null;
 	}
@@ -74,6 +77,10 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		int y = getY(action);
 
 		Pad pad = project.getPad(x, y, mainViewController.getPage());
+
+		if (pad == null) {
+			return FeedbackType.NONE;
+		}
 
 		switch (pad.getStatus()) {
 			case EMPTY:
