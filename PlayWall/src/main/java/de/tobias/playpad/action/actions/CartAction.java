@@ -1,4 +1,4 @@
-package de.tobias.playpad.action.actions.cart;
+package de.tobias.playpad.action.actions;
 
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;

@@ -5,7 +5,7 @@ import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.action.actions.cart.CartAction;
+import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;

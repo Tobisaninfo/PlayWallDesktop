@@ -7,8 +7,8 @@ import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.mapping.KeyType;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.actions.cart.CartAction.*;
+import de.tobias.playpad.action.actions.CartAction;
+import de.tobias.playpad.action.actions.CartAction.*;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.CartActionSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;
@@ -16,7 +16,7 @@ import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-import static de.tobias.playpad.action.actions.cart.CartAction.*;
+import static de.tobias.playpad.action.actions.CartAction.*;
 
 public class CartActionProvider extends ActionProvider {
 
