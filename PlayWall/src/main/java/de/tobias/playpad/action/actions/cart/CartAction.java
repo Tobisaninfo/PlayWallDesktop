@@ -17,7 +17,6 @@ import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PageCoordinate;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import javafx.application.Platform;
 import javafx.util.Duration;
 
 import java.util.HashMap;
@@ -60,11 +59,9 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		}
 
 		if (pad.hasVisibleContent()) {
-			Platform.runLater(() -> {
-				CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
-			});
+			CartActionHandlerFactory.getInstance(mode).performAction(keyEvent.getKeyEventType(), this, pad);
 		}
-		return null;
+		return getCurrentFeedbackType(action);
 	}
 
 	@SuppressWarnings("DuplicateBranchesInSwitch")
@@ -92,12 +89,18 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 					PadSettings padSettings = pad.getPadSettings();
 
 					if (!padSettings.isLoop()) {
-						Duration warning = padSettings.getWarning();
-						Duration rest = durationable.getDuration().subtract(durationable.getPosition());
-						double seconds = rest.toSeconds();
+						final Duration warning = padSettings.getWarning();
 
-						if (warning.toSeconds() > seconds) {
-							return FeedbackType.WARNING;
+						final Duration position = durationable.getPosition();
+						if (position != null) {
+							final Duration duration = durationable.getDuration();
+
+							Duration rest = duration.subtract(position);
+							double seconds = rest.toSeconds();
+
+							if (warning.toSeconds() > seconds) {
+								return FeedbackType.WARNING;
+							}
 						}
 					}
 				}

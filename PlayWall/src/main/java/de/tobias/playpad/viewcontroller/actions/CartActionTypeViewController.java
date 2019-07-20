@@ -110,6 +110,7 @@ public class CartActionTypeViewController extends NVC {
 					if (CartAction.getX(action) == currentX && CartAction.getY(action) == currentY) {
 						cartActionContainer.getChildren().setAll(cartActionViewController.getParent());
 						cartActionContainer.setVisible(true);
+						cartActionViewController.setCartAction(action);
 						parentController.showMapperFor(action);
 					}
 				}
