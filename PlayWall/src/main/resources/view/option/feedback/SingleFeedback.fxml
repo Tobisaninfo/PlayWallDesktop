@@ -9,8 +9,7 @@
     <children>
         <HBox fx:id="defaultColorParent" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="24.0" layoutY="237.0" prefWidth="150.0"
-                       text="%doubleFeedback.label.colorDefault"/>
+                <Label fx:id="nameLabel" alignment="CENTER_RIGHT" layoutX="24.0" layoutY="237.0" prefWidth="150.0"/>
                 <StackPane layoutX="122.0" layoutY="232.0" maxWidth="1.7976931348623157E308" prefWidth="150.0"
                            HBox.hgrow="ALWAYS">
                     <children>

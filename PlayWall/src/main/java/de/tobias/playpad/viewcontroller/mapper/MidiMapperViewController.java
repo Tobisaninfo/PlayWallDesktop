@@ -1,6 +1,9 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.device.MidiDevice;
+import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.mapping.Key;
 import de.thecodelabs.midi.mapping.MidiKey;
 import de.thecodelabs.midi.midi.Midi;
@@ -11,7 +14,9 @@ import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.viewcontroller.option.feedback.SingleFeedbackViewController;
 import javafx.application.Platform;
@@ -38,7 +43,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 
 	private MidiKey key;
 
-	private NVC feedbackController;
+	private NVC[] feedbackControllers;
 
 	public MidiMapperViewController() {
 		load("view/mapper", "Midi", PlayPadMain.getUiResourceBundle());
@@ -51,17 +56,21 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 
 	@Override
 	public void hideFeedback() {
-		if (feedbackController != null) {
-			root.getChildren().remove(feedbackController.getParent());
+		if (feedbackControllers != null) {
+			for (NVC feedbackController : feedbackControllers) {
+				root.getChildren().remove(feedbackController.getParent());
+			}
 		}
 	}
 
 	@Override
 	public void showFeedback() {
-		if (feedbackController != null) {
-			root.getChildren().remove(feedbackController.getParent());
-			root.getChildren().add(feedbackController.getParent());
-			VBox.setVgrow(feedbackController.getParent(), Priority.ALWAYS);
+		if (feedbackControllers != null) {
+			for (NVC feedbackController : feedbackControllers) {
+				root.getChildren().remove(feedbackController.getParent());
+				root.getChildren().add(feedbackController.getParent());
+				VBox.setVgrow(feedbackController.getParent(), Priority.ALWAYS);
+			}
 		}
 	}
 
@@ -130,10 +139,22 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		if (device != null) {
 			if (device.isModeSupported(Midi.Mode.OUTPUT)) {
 				// remove old Elements
-				if (feedbackController != null) {
-					root.getChildren().remove(feedbackController.getParent());
+				if (feedbackControllers != null) {
+					for (NVC feedbackController : feedbackControllers) {
+						root.getChildren().remove(feedbackController.getParent());
+					}
 				}
-				feedbackController = new SingleFeedbackViewController(key.getDefaultFeedback(), transcript.getFeedbackValues());
+
+				final Action action = Mapping.getCurrentMapping().getActionForMidiKey(key.getValue());
+				final ActionProvider actionProvider = PlayPadPlugin.getRegistries().getActions().getFactory(action.getActionType());
+				final FeedbackType[] feedbackTypes = actionProvider.supportedFeedbackOptions(action, key.getType());
+
+				this.feedbackControllers = new NVC[feedbackTypes.length];
+				for (int i = 0; i < feedbackTypes.length; i++) {
+					final FeedbackType feedbackType = feedbackTypes[i];
+					NVC controller = new SingleFeedbackViewController(key.getFeedbackForType(feedbackType), feedbackType, transcript.getFeedbackValues());
+					this.feedbackControllers[i] = controller;
+				}
 			}
 			showFeedback();
 		}

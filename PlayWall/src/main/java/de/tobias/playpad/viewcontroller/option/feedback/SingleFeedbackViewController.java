@@ -2,6 +2,7 @@ package de.tobias.playpad.viewcontroller.option.feedback;
 
 import de.thecodelabs.midi.feedback.Feedback;
 import de.thecodelabs.midi.feedback.FeedbackColor;
+import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -12,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,6 +23,8 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 public class SingleFeedbackViewController extends NVC {
 
+	@FXML
+	private Label nameLabel;
 	@FXML
 	private HBox defaultColorParent;
 	@FXML
@@ -33,12 +37,24 @@ public class SingleFeedbackViewController extends NVC {
 	private FeedbackColor[] colors;
 	private Feedback feedback;
 
-	public SingleFeedbackViewController(Feedback feedback, FeedbackValue[] values) {
+	public SingleFeedbackViewController(Feedback feedback, FeedbackType type, FeedbackValue[] values) {
 		load("view/option/feedback", "SingleFeedback", PlayPadMain.getUiResourceBundle());
 		this.feedback = feedback;
 
 		if (!(values instanceof FeedbackColor[])) {
 			throw new IllegalArgumentException("FeedbackValues are not of type FeedbackColor");
+		}
+
+		switch (type) {
+			case DEFAULT:
+				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorDefault"));
+				break;
+			case EVENT:
+				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorEvent"));
+				break;
+			case WARNING:
+				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorWarning"));
+				break;
 		}
 
 		colors = (FeedbackColor[]) values;
