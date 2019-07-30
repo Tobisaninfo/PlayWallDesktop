@@ -173,7 +173,6 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 
 	@FXML
 	void newProjectButtonHandler(ActionEvent event) {
-		Logger.info("einfo");
 		ProjectNewDialog dialog = new ProjectNewDialog(getContainingWindow());
 		dialog.showAndWait().ifPresent(this::launchProject);
 	}

@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.listener;
 
+import de.thecodelabs.midi.Mapping;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
@@ -21,7 +22,9 @@ public class PadStatusListener implements ChangeListener<PadStatus> {
 		controller.updateTimeLabel();
 
 		// Show Feedback on Midi
-		CartAction.refreshFeedback(controller.getPad());
+		if (Mapping.getCurrentMapping() != null) {
+			CartAction.refreshFeedback(controller.getPad());
+		}
 
 		// Reset
 		controller.getView().setErrorLabelActive(false);

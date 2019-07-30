@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.main;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.device.CloseException;
 import de.thecodelabs.midi.device.MidiDeviceInfo;
 import de.thecodelabs.midi.midi.Midi;
@@ -364,7 +365,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		volumeChangeListener.setOpenProject(openProject);
 
-		Midi.getInstance().showFeedback();
+		Profile profile = Profile.currentProfile();
+		profile.getMappings().getActiveMapping().ifPresent(mapping -> {
+			Mapping.setCurrentMapping(mapping);
+			Midi.getInstance().showFeedback();
+		});
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -519,8 +524,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
 			// Adjust colors
-			ColorAdjuster.applyColorsToKeys();
-			Midi.getInstance().showFeedback();
+			if (Mapping.getCurrentMapping() != null) {
+				ColorAdjuster.applyColorsToKeys();
+				Midi.getInstance().showFeedback();
+			}
 		}
 	}
 

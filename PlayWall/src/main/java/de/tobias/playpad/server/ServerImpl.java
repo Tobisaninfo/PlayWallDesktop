@@ -71,6 +71,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
 	private static final String CACHE_FOLDER = "Cache";
+	private static final String PROTOCOL = "https";
 
 	private String host;
 	private WebSocket websocket;
@@ -121,7 +122,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public List<ModernPlugin> getPlugins() throws IOException {
-		URL url = new URL("https://" + host + "/plugins");
+		URL url = new URL(PROTOCOL + "://" + host + "/plugins");
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
 		Type listType = new TypeToken<List<ModernPlugin>>() {
 		}.getType();
@@ -132,7 +133,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public ModernPlugin getPlugin(String name) throws IOException {
-		URL url = new URL("https://" + host + "/plugin/" + name);
+		URL url = new URL(PROTOCOL + "://" + host + "/plugin/" + name);
 		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
 		Gson gson = new Gson();
 		return gson.fromJson(reader, ModernPlugin.class);
@@ -145,7 +146,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	private void loadSource(String path, UpdateService.RepositoryType channel, Path destination) throws IOException {
-		String url = "https://" + host + "/" + channel + path;
+		String url = PROTOCOL + "://" + host + "/" + channel + path;
 		Logger.debug("Load server resource: {0}", path);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
@@ -157,7 +158,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public String getSession(String username, String password) throws IOException, LoginException {
-		String url = "https://" + host + "/sessions";
+		String url = PROTOCOL + "://" + host + "/sessions";
 		try {
 			HttpResponse<JsonNode> response = Unirest.post(url)
 					.queryString("username", username)
@@ -178,7 +179,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void logout(String username, String password, String key) throws IOException {
-		String url = "https://" + host + "/sessions";
+		String url = PROTOCOL + "://" + host + "/sessions";
 		try {
 			Unirest.post(url)
 					.queryString("username", username)
@@ -192,7 +193,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
-		String url = "https://" + host + "/projects";
+		String url = PROTOCOL + "://" + host + "/projects";
 		try {
 			Session session = PlayPadMain.getProgramInstance().getSession();
 			HttpResponse<JsonNode> request = Unirest.get(url)
@@ -225,7 +226,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public Project getProject(ProjectReference ref) throws IOException {
-		String url = "https://" + host + "/projects/" + ref.getUuid();
+		String url = PROTOCOL + "://" + host + "/projects/" + ref.getUuid();
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			HttpResponse<JsonNode> response = Unirest.get(url)
@@ -244,7 +245,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void postProject(Project project) throws IOException {
-		String url = "https://" + host + "/projects";
+		String url = PROTOCOL + "://" + host + "/projects";
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			ProjectJsonWriter writer = new ProjectJsonWriter();
@@ -264,7 +265,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public Version getLastServerModification(ProjectReference ref) throws IOException {
-		String url = "https://" + host + "/projects/modification/" + ref.getUuid();
+		String url = PROTOCOL + "://" + host + "/projects/modification/" + ref.getUuid();
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			HttpResponse<JsonNode> response = Unirest.get(url)
