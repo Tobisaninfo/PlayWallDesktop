@@ -55,7 +55,7 @@ public class CommandExecutorImpl implements CommandExecutor, CommandStore {
 		Command command = commandMap.get(name);
 		JsonObject sendData = command.execute(data);
 
-		// Handle Last midication date
+		// Handle Last modification date
 		long lastModified = System.currentTimeMillis();
 		sendData.addProperty(PropertyDef.TIME, lastModified);
 		sendData.addProperty(PropertyDef.PROJECT_REF, projectReference.getUuid().toString());
