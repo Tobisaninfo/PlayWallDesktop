@@ -11,6 +11,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
+import de.tobias.playpad.registry.Registry;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Profile {
 
@@ -42,6 +44,16 @@ public class Profile {
 		this.ref = ref;
 		this.profileSettings = new ProfileSettings();
 		this.mappings = new MappingCollection();
+	}
+
+	public static Mapping createMappingWithDefaultActions() {
+		Mapping preset = new Mapping();
+		preset.setName("Default");
+
+		// Add default actions
+		final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
+		actions.getComponents().forEach(provider -> provider.createDefaultActions(preset));
+		return preset;
 	}
 
 	public static void registerListener(ProfileListener listener) {
@@ -103,21 +115,17 @@ public class Profile {
 			try {
 				profile.mappings = MappingCollectionSerializer.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_JSON));
 			} catch (IOException e) {
-				final List<Mapping> mappings = new ArrayList<>();
-				final Mapping mapping = new Mapping();
-				final MappingCollection collection = new MappingCollection(mappings);
-
-				mappings.add(mapping);
-				collection.setActiveMapping(mapping);
-
-				// Create default actions for new mapping
-				for (ActionProvider component : PlayPadPlugin.getRegistries().getActions().getComponents()) {
-					component.createDefaultActions(mapping);
-				}
-
-				profile.mappings = collection;
+				profile.mappings = new MappingCollection();
 			}
-			Mapping.setCurrentMapping(profile.getMappings().getActiveMapping().orElse(null));
+
+			final Optional<Mapping> activeMapping = profile.getMappings().getActiveMapping();
+			final Optional<Mapping> anyMapping = profile.mappings.getMappings().stream().findAny();
+			final Mapping currentMapping = activeMapping.orElse(anyMapping.orElseGet(() -> {
+				final Mapping mapping = createMappingWithDefaultActions();
+				profile.mappings.addMapping(mapping);
+				return mapping;
+			}));
+			Mapping.setCurrentMapping(currentMapping);
 
 			setCurrentProfile(profile);
 

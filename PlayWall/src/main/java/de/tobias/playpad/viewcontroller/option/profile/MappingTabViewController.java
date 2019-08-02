@@ -22,7 +22,6 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.registry.Component;
-import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
@@ -159,7 +158,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	}
 
 	private void createTreeViewContent() {
-		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
+		Mapping mapping = Mapping.getCurrentMapping();
 		TreeItem<ActionSettingsEntry> rootItem = createTreeView(mapping);
 		treeView.setRoot(rootItem);
 	}
@@ -296,11 +295,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@FXML
 	private void mappingNewHandler(ActionEvent event) {
-		Mapping preset = new Mapping();
-
-		// Add default actions
-		final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
-		actions.getComponents().forEach(provider -> provider.createDefaultActions(preset));
+		Mapping preset = Profile.createMappingWithDefaultActions();
 
 
 		TextInputDialog dialog = new TextInputDialog();
