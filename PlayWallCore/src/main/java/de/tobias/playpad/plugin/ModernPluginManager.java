@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.plugins.Plugin;
 import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginManager;
@@ -53,6 +54,7 @@ public class ModernPluginManager {
 		if (Files.notExists(path)) {
 			throw new IOException("File not found: " + path);
 		}
+		loadFile(path.getParent());
 	}
 
 	public void loadFile(Path path) {
@@ -94,13 +96,13 @@ public class ModernPluginManager {
 
 		// Delete Plugin
 		if (Files.exists(pluginInfoPath)) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(pluginInfoPath)));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				Path plugin = Paths.get(line);
-				Files.deleteIfExists(plugin);
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(pluginInfoPath)))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					Path plugin = Paths.get(line);
+					Files.deleteIfExists(plugin);
+				}
 			}
-			reader.close();
 			Files.delete(pluginInfoPath);
 		}
 	}
@@ -119,7 +121,7 @@ public class ModernPluginManager {
 			}
 			deleteWriter.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		pluginManager.shutdown();

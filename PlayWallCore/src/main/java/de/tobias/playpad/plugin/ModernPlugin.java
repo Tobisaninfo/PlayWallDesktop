@@ -59,7 +59,7 @@ public class ModernPlugin {
 	}
 
 	public String getFileName() {
-		return getName() + EXTENSION;
+		return getPath();
 	}
 
 	@Override

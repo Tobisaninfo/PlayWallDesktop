@@ -130,8 +130,8 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
-	public ModernPlugin getPlugin(String name) throws IOException {
-		URL url = new URL(PROTOCOL + "://" + host + "/plugin/" + name);
+	public ModernPlugin getPlugin(String id) throws IOException {
+		URL url = new URL(PROTOCOL + "://" + host + "/plugins/" + id);
 		Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
 		Gson gson = new Gson();
 		return gson.fromJson(reader, ModernPlugin.class);
@@ -139,13 +139,10 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateService.RepositoryType channel) throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-		loadSource(plugin.getPath(), channel, path);
-	}
+		Path destination = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 
-	private void loadSource(String path, UpdateService.RepositoryType channel, Path destination) throws IOException {
-		String url = PROTOCOL + "://" + host + "/" + channel + path;
-		Logger.debug("Load server resource: {0}", path);
+		String url = PROTOCOL + "://" + host + "/plugins/raw/" + plugin.getId();
+		Logger.debug("Load server resource: {0}", destination);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
 			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
