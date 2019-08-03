@@ -86,11 +86,17 @@ public class Profile {
 
 	public static Profile load(ProfileReference ref) throws DocumentException, IOException, ProfileNotFoundException {
 		if (ref == null) {
-			throw new IllegalArgumentException("Profile is null"); // TODO Check if to catch exception somewhere
+			throw new IllegalArgumentException("Profile is null");
 		}
 		// Altes Speichern bevor neues Geladen
-		if (currentProfile != null)
+		if (currentProfile != null) {
 			currentProfile.save();
+		}
+
+		// Dont load profile, that is currently loaded
+		if (currentProfile != null && currentProfile.getRef().equals(ref)) {
+			return currentProfile;
+		}
 
 		App app = ApplicationUtils.getApplication();
 		Profile profile = new Profile(ref);
