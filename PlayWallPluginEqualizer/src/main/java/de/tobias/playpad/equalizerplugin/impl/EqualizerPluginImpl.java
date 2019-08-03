@@ -1,5 +1,6 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
 
@@ -33,21 +33,14 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 
 	private Stage mainStage;
 	private EqualizerViewController equalizerViewController;
-	private static ResourceBundle bundle;
-
-	private MenuItem eqMenuItem;
-
-	static ResourceBundle getBundle() {
-		return bundle;
-	}
 
 	@Override
 	public void startup(PluginDescriptor descriptor) {
-		bundle = Localization.loadBundle("lang/equalizer", EqualizerPluginImpl.class.getClassLoader());
+		Localization.addResourceBundle("lang/equalizer", EqualizerPluginImpl.class.getClassLoader());
 		try {
 			Equalizer.load(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
 		} catch (DocumentException | IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
@@ -55,20 +48,20 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 		de.tobias.playpad.PlayPadPlugin.getInstance().addMainViewListener(this);
 		de.tobias.playpad.PlayPadPlugin.getInstance().addPadListener(this);
 
-		System.out.println("Enable Equalizer Plugin");
+		Logger.info("Enable Equalizer Plugin");
 	}
 
 	@Override
 	public void shutdown() {
-		System.out.println("Disable Equalizer Plugin");
+		Logger.info("Disable Equalizer Plugin");
 	}
 
 	@Override
 	public void onInit(IMainViewController t) {
 		mainStage = t.getStage();
 
-		eqMenuItem = new MenuItem();
-		eqMenuItem.setText(bundle.getString("eq.menuitem.name"));
+		MenuItem eqMenuItem = new MenuItem();
+		eqMenuItem.setText(Localization.getString("plugin.equalizer.menuitem.name"));
 		eqMenuItem.setOnAction(this);
 
 		t.performLayoutDependedAction((oldToolbar, newToolbar) ->

@@ -24,7 +24,6 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.ResourceBundle;
 
 @SuppressWarnings("unused")
 public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
@@ -38,11 +37,9 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 
 	private AwakeSettings settings = new AwakeSettings();
 
-	private ResourceBundle bundle;
-
 	@Override
 	public void startup(PluginDescriptor descriptor) {
-		bundle = Localization.loadBundle("lang/awake", getClass().getClassLoader());
+		Localization.addResourceBundle("lang/awake", getClass().getClassLoader());
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
@@ -90,7 +87,7 @@ public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, Windo
 	public void onInit(IMainViewController viewController) {
 		activeMenu = new CheckMenuItem();
 		activeMenu.setOnAction(this);
-		activeMenu.setText(bundle.getString("menutitle"));
+		activeMenu.setText(Localization.getString("plugin.awake.menu_item"));
 		activeMenu.setSelected(settings.active);
 
 		viewController.performLayoutDependedAction((oldToolbar, newToolbar) ->

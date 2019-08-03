@@ -40,7 +40,7 @@ public class EqualizerViewController extends NVC {
 	private CheckBox enableCheckBox;
 
 	public EqualizerViewController(Window owner) {
-		load("view", "equalizerView", EqualizerPluginImpl.getBundle());
+		load("view", "equalizerView", Localization.getBundle());
 
 		applyViewControllerToStage().initOwner(owner);
 
@@ -61,7 +61,7 @@ public class EqualizerViewController extends NVC {
 			slider.getStyleClass().add("equalizer-slider");
 			slider.setUserData(band);
 
-			Label infoLabel = new Label(NumberUtils.convertBytesToAppropriateFormat(band, 0) + EqualizerPluginImpl.getBundle().getString("eq.slider"));
+			Label infoLabel = new Label(NumberUtils.convertBytesToAppropriateFormat(band, 0) + Localization.getString("plugin.equalizer.slider"));
 			infoLabel.getStyleClass().add("equalizer-label");
 
 			bandBox.getChildren().addAll(slider, infoLabel);
@@ -93,7 +93,7 @@ public class EqualizerViewController extends NVC {
 	public void initStage(Stage stage) {
 		PlayPadPlugin.getInstance().getIcon().ifPresent(stage.getIcons()::add);
 
-		stage.setTitle(EqualizerPluginImpl.getBundle().getString("eq.title"));
+		stage.setTitle(Localization.getString("plugin.equalizer.title"));
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);
 

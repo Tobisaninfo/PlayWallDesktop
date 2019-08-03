@@ -9,9 +9,9 @@
         <HBox spacing="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <children>
                 <Label alignment="BASELINE_RIGHT" maxHeight="1.7976931348623157E308" prefWidth="150.0"
-                       text="%pad.label.lastFrame"/>
+                       text="%plugin.media.pad.label.lastFrame"/>
                 <CheckBox fx:id="lastFrameCheckBox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false"
-                          text="%pad.checkbox.lastFrame"/>
+                          text="%plugin.media.pad.checkbox.lastFrame"/>
             </children>
         </HBox>
     </children>

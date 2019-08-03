@@ -24,7 +24,7 @@ class AwakeSettings {
 		Document document = reader.read(Files.newInputStream(path));
 
 		Element rootElement = document.getRootElement();
-		settings.active = Boolean.valueOf(rootElement.element(ACTIVE_ELEMENT).getStringValue());
+		settings.active = Boolean.parseBoolean(rootElement.element(ACTIVE_ELEMENT).getStringValue());
 
 		return settings;
 	}

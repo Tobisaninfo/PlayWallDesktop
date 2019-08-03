@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.media.main.impl;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.plugin.media.main.VideoSettings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
@@ -19,7 +20,6 @@ import javafx.stage.Screen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class MediaSettingsTabViewController extends ProfileSettingsTabViewController implements IProfileReloadTask {
 
@@ -33,14 +33,12 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 	private CheckBox videoOpenAtLaunchCheckBox;
 
 	private VideoSettings settings;
-	private ResourceBundle bundle;
 
 	private boolean changeSettings = false;
 
 	public MediaSettingsTabViewController(VideoSettings settings) {
-		load("view", "SettingsPane", MediaPluginImpl.getInstance().getBundle());
+		load("view", "SettingsPane", Localization.getBundle());
 		this.settings = settings;
-		this.bundle = MediaPluginImpl.getInstance().getBundle();
 	}
 
 	@Override
@@ -135,6 +133,6 @@ public class MediaSettingsTabViewController extends ProfileSettingsTabViewContro
 
 	@Override
 	public String name() {
-		return bundle.getString("settings.tab");
+		return Localization.getString("plugin.media.settings.tab");
 	}
 }

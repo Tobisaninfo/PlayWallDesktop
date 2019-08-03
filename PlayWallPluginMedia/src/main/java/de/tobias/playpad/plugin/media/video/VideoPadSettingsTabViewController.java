@@ -1,7 +1,7 @@
 package de.tobias.playpad.plugin.media.video;
 
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -12,12 +12,12 @@ public class VideoPadSettingsTabViewController extends PadSettingsTabViewControl
 	private CheckBox lastFrameCheckBox;
 
 	VideoPadSettingsTabViewController() {
-		load("view/", "SettingsPadPane", MediaPluginImpl.getInstance().getBundle());
+		load("view/", "SettingsPadPane", Localization.getBundle());
 	}
 
 	@Override
 	public String getName() {
-		return MediaPluginImpl.getInstance().getBundle().getString("settings.video.tab");
+		return Localization.getString("plugin.media.settings.video.tab");
 	}
 
 	@Override

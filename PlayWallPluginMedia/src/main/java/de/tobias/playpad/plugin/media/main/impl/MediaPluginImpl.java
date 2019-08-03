@@ -31,7 +31,6 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.util.ResourceBundle;
 
 public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, SettingsListener, ChangeListener<Boolean> {
 
@@ -41,7 +40,6 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 	private MediaViewController videoViewController;
 	private VideoSettings settings = new VideoSettings();
 
-	private ResourceBundle bundle;
 	private HUD blindHUD;
 	private static BooleanProperty blindProperty;
 
@@ -55,13 +53,13 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 
 		MediaPluginImpl.blindProperty = new SimpleBooleanProperty();
 
-		bundle = Localization.loadBundle("lang/video", getClass().getClassLoader());
+		Localization.addResourceBundle("lang/video", getClass().getClassLoader());
 		videoViewController = new MediaViewController(settings);
 
 		// Load Content Types
 		try {
 			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistries().getPadContents();
-			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, bundle);
+			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, Localization.getBundle());
 
 			ActionRegistry.registerActionHandler(new BlackAction());
 		} catch (Exception e) {
@@ -92,7 +90,7 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 
 		try {
 			Registry<ActionProvider> padContents = PlayPadPlugin.getRegistries().getActions();
-			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, bundle);
+			padContents.loadComponentsFromFile("Actions.xml", getClass().getClassLoader(), module, Localization.getBundle());
 		} catch (Exception e) {
 			Logger.error(e);
 		}
@@ -144,10 +142,6 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 
 	public MediaViewController getVideoViewController() {
 		return videoViewController;
-	}
-
-	public ResourceBundle getBundle() {
-		return bundle;
 	}
 
 	public static BooleanProperty blindProperty() {

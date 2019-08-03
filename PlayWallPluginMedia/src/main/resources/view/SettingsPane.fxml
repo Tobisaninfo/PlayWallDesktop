@@ -9,7 +9,7 @@
         <VBox prefHeight="200.0" prefWidth="645.0" spacing="14.0" AnchorPane.bottomAnchor="14.0"
               AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
             <children>
-                <Label text="%settings.video.label.screens"/>
+                <Label text="%plugin.media.settings.video.label.screens"/>
                 <VBox alignment="TOP_CENTER">
                     <children>
                         <Pane fx:id="screenViewPane" prefWidth="617.0" VBox.vgrow="ALWAYS"/>
@@ -17,7 +17,7 @@
                 </VBox>
                 <HBox prefHeight="100.0" prefWidth="200.0" spacing="14.0">
                     <children>
-                        <Label text="%settings.video.label.screenChoice">
+                        <Label text="%plugin.media.settings.video.label.screenChoice">
                             <HBox.margin>
                                 <Insets top="4.0"/>
                             </HBox.margin>
@@ -26,9 +26,9 @@
                             <children>
                                 <ComboBox fx:id="screenComboBox" prefWidth="150.0"/>
                                 <CheckBox fx:id="fullscreenCheckBox" mnemonicParsing="false"
-                                          text="%settings.video.checkbox.fullscreen"/>
+                                          text="%plugin.media.settings.video.checkbox.fullscreen"/>
                                 <CheckBox fx:id="videoOpenAtLaunchCheckBox" mnemonicParsing="false"
-                                          text="%settings.video.checkbox.openAtLaunch"/>
+                                          text="%plugin.media.settings.video.checkbox.openAtLaunch"/>
                             </children>
                         </VBox>
                     </children>
