@@ -4,6 +4,9 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.device.CloseException;
 import de.thecodelabs.midi.device.MidiDeviceInfo;
+import de.thecodelabs.midi.event.KeyEventDispatcher;
+import de.thecodelabs.midi.event.KeyEventType;
+import de.thecodelabs.midi.mapping.KeyType;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
@@ -53,6 +56,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -113,7 +117,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			stage.addCloseHook(this::closeRequest);
 
 			// Init with existing stage
-			initMapper();
+			initKeyboardMapper();
 			reloadSettings(null, Profile.currentProfile());
 			onFinish.accept(e);
 
@@ -219,8 +223,36 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		stage.show();
 	}
 
-	private void initMapper() {
-		// TODO Init Keyboard mapper
+	private void initKeyboardMapper() {
+		registerKeyboardListener(KeyEvent.ANY, event -> {
+			if (event.getTarget() instanceof AnchorPane) {
+				if(!event.isShortcutDown())
+				{
+					KeyCode code = null;
+					KeyEventType type = null;
+
+					if(event.getEventType() == KeyEvent.KEY_PRESSED)
+					{
+						code = event.getCode();
+						type = KeyEventType.DOWN;
+
+					}
+					else if(event.getEventType() == KeyEvent.KEY_RELEASED)
+					{
+						code = event.getCode();
+						type = KeyEventType.UP;
+
+					}
+
+					// Only execute this, then the right event is triggered and this var is set
+					if(code != null)
+					{
+						de.thecodelabs.midi.event.KeyEvent keyEvent = new de.thecodelabs.midi.event.KeyEvent(KeyType.KEYBOARD, type, code.ordinal());
+						KeyEventDispatcher.dispatchEvent(keyEvent);
+					}
+				}
+			}
+		});
 
 		// Request Focus for key listener
 		getParent().requestFocus();
