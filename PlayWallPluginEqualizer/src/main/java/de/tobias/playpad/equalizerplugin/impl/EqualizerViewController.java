@@ -1,5 +1,6 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.NVC;
@@ -39,7 +40,7 @@ public class EqualizerViewController extends NVC {
 	@FXML
 	private CheckBox enableCheckBox;
 
-	public EqualizerViewController(Window owner) {
+	EqualizerViewController(Window owner) {
 		load("view", "equalizerView", Localization.getBundle());
 
 		applyViewControllerToStage().initOwner(owner);
@@ -119,7 +120,7 @@ public class EqualizerViewController extends NVC {
 			Equalizer.save(ApplicationUtils.getApplication().getPath(PathType.CONFIGURATION, "equalizer.xml"));
 		} catch (IOException e) {
 			showErrorMessage(Localization.getString("error.file.save", e.getLocalizedMessage()));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		getStageContainer().ifPresent(NVCStage::close);
 	}

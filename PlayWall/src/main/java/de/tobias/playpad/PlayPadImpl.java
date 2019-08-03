@@ -49,27 +49,27 @@ public class PlayPadImpl implements PlayPad {
 
 	private Application.Parameters parameters;
 
-	protected List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
-	protected List<SettingsListener> settingsListeners = new ArrayList<>();
-	protected List<PadListener> padListeners = new ArrayList<>();
+	private List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
+	private List<SettingsListener> settingsListeners = new ArrayList<>();
+	private List<PadListener> padListeners = new ArrayList<>();
 
 	private MainViewController mainViewController;
 	private Project currentProject;
-	private static Module module;
+	private Module module;
 
 	private UpdateService updateService;
 
 	protected GlobalSettings globalSettings;
 	private ModernDesign modernDesign;
 
-	protected Session session;
+	private Session session;
 
 	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
 		this.parameters = parameters;
 		this.globalSettings = globalSettings;
 
 		App app = ApplicationUtils.getApplication();
-		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
+		this.module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
 		ModernPluginManager.getInstance().addModule(module);
 	}
 
