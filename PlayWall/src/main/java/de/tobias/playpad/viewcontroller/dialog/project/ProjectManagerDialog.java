@@ -64,7 +64,7 @@ public class ProjectManagerDialog extends NVC {
 	private Button openButton;
 
 	public ProjectManagerDialog(Window owner) {
-		load("view/dialog/project", "ProjectManagementDialog.fxml", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "ProjectManagementDialog.fxml", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

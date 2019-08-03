@@ -77,7 +77,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 	}
 
 	private void loadView(Window owner) {
-		load("view/dialog", "PluginDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "PluginDialog", Localization.getBundle());
 		NVCStage stage = applyViewControllerToStage();
 		stage.initOwner(owner);
 		stage.initModality(Modality.WINDOW_MODAL);

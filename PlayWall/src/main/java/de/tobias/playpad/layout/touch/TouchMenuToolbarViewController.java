@@ -2,7 +2,6 @@ package de.tobias.playpad.layout.touch;
 
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -35,7 +34,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	private IMainViewController mainViewController;
 
 	TouchMenuToolbarViewController(IMainViewController mainViewController) {
-		super("Header", "view/main/touch", PlayPadMain.getUiResourceBundle());
+		super("Header", "view/main/touch", Localization.getBundle());
 		this.mainViewController = mainViewController;
 
 		// Schriftgröße Icons

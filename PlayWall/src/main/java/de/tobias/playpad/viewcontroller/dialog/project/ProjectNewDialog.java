@@ -49,7 +49,7 @@ public class ProjectNewDialog extends NVC {
 	private ProjectReference project;
 
 	public ProjectNewDialog(Window owner) {
-		load("view/dialog", "NewProjectDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NewProjectDialog", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

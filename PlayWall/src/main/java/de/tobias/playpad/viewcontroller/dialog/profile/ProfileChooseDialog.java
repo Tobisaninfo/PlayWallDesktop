@@ -38,7 +38,7 @@ public class ProfileChooseDialog extends NVC {
 	private Profile profile;
 
 	public ProfileChooseDialog(Window owner) {
-		load("view/dialog", "ProfileChooseDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "ProfileChooseDialog", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

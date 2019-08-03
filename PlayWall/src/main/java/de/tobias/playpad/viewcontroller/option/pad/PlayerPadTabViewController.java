@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -31,7 +30,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	private Pad pad;
 
 	PlayerPadTabViewController(Pad pad) {
-		load("view/option/pad", "PlayerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "PlayerTab", Localization.getBundle());
 		this.pad = pad;
 	}
 

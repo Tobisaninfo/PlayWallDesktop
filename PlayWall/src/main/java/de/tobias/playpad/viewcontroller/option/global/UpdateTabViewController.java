@@ -8,7 +8,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.PlayPad;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -47,7 +46,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private Label placeholderLabel;
 
 	UpdateTabViewController() {
-		load("view/option/global", "UpdateTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "UpdateTab", Localization.getBundle());
 
 		final PlayPad playPad = PlayPadPlugin.getInstance();
 		GlobalSettings globalSettings = playPad.getGlobalSettings();

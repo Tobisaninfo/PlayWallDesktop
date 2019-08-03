@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
@@ -21,7 +20,7 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 	private VBox layoutContainer;
 
 	DesignTabViewController() {
-		load("view/option/profile", "LayoutTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "LayoutTab", Localization.getBundle());
 
 		ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 		ModernGlobalDesignViewController globalLayoutViewController = new ModernGlobalDesignViewController(design);

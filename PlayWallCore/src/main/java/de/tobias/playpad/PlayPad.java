@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -20,8 +19,6 @@ import java.util.ResourceBundle;
  * @since 5.0.0
  */
 public interface PlayPad {
-
-	ResourceBundle getUIResourceBundle();
 
 	/**
 	 * Fügt einen Listener für das Hauptfenster hinzu.

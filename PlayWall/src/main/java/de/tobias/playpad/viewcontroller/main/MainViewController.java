@@ -107,7 +107,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private InvalidationListener pagesListener;
 
 	public MainViewController(Consumer<NVC> onFinish) {
-		load("view/main", "MainView", PlayPadMain.getUiResourceBundle(), e ->
+		load("view/main", "MainView", Localization.getBundle(), e ->
 		{
 			NVCStage stage = e.applyViewControllerToStage();
 			stage.addCloseHook(this::closeRequest);

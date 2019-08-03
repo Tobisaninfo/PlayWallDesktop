@@ -40,7 +40,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	private Runnable onFinish;
 
 	public GlobalSettingsViewController(Window owner, Runnable onFinish) {
-		load("view/option/global", "GlobalSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "GlobalSettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 
 		NVCStage nvcStage = applyViewControllerToStage();

@@ -54,7 +54,6 @@ import java.nio.file.Paths;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 /*
@@ -76,14 +75,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public static final String projectZIPType = "*.zip";
 	public static final String midiPresetType = "*.pre";
 
-	private static ResourceBundle uiResourceBundle;
-
 	private static PlayPadImpl impl;
-
-	public static ResourceBundle getUiResourceBundle() {
-		return uiResourceBundle;
-	}
-
 	public static SSLContext sslContext;
 
 	public static void main(String[] args) {
@@ -131,7 +123,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		Logger.debug("Load global settings");
 		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
 		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
-		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", uiResourceBundle);
+		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", Localization.getBundle());
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
 		// Set Factory Implementations
@@ -177,8 +169,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 					}
 				}
 			} catch (Exception e) {
-				System.err.println("Cannot load plugins:");
-				e.printStackTrace();
+				Logger.error("Unable to load plugins");
+				Logger.error(e);
 			}
 
 			/*
@@ -188,7 +180,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 				ProfileReferenceManager.loadProfiles();
 				ProjectReferenceManager.loadProjects();
 			} catch (IOException | DocumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 
 			if (PlayPadPlugin.getInstance().getGlobalSettings().isOpenLastDocument()) {
@@ -203,7 +195,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			}
 
 			// Auto Open Project DEBUG
-			if (getParameters().getRaw().size() > 0) {
+			if (!getParameters().getRaw().isEmpty()) {
 				if (getParameters().getNamed().containsKey("project")) {
 					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
 					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
@@ -218,7 +210,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 			checkUpdates(impl.globalSettings, stage);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -238,10 +230,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 							Logger.info("Install update");
 							try {
 								updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
+								System.exit(0);
 							} catch (IOException e) {
-								e.printStackTrace();
+								Logger.error(e);
 							}
-							System.exit(0);
 						});
 						if (autoUpdateDialog.isSelected()) {
 							globalSettings.setIgnoreUpdate(true);
@@ -266,7 +258,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();
 		} catch (Exception e) {
-			e.printStackTrace(); // Speichern Fehler
+			Logger.error(e);
 		}
 
 		impl.shutdown();
@@ -286,13 +278,19 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	private void setupLocalization() {
 		Localization.setDelegate(this);
 		Localization.load();
-
-		uiResourceBundle = Localization.loadBundle("lang/ui", getClass().getClassLoader());
 	}
 
 	@Override
-	public String getBaseResource() {
-		return "lang/";
+	public String[] getBaseResources() {
+		return new String[]{
+				"lang/",
+				"lang/ui"
+		};
+	}
+
+	@Override
+	public boolean useMultipleResourceBundles() {
+		return true;
 	}
 
 	@Override

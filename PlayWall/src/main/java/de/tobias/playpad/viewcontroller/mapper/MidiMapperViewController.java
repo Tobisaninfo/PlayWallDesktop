@@ -13,7 +13,6 @@ import de.thecodelabs.midi.midi.MidiListener;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.ActionProvider;
@@ -46,7 +45,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 	private NVC[] feedbackControllers;
 
 	public MidiMapperViewController() {
-		load("view/mapper", "Midi", PlayPadMain.getUiResourceBundle());
+		load("view/mapper", "Midi", Localization.getBundle());
 	}
 
 	@Override

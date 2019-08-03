@@ -48,7 +48,7 @@ public class PlayoutLogViewController extends NVC {
 
 	// TODO l10n
 	public PlayoutLogViewController(Window owner) {
-		load("view/dialog", "PlayoutLogDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "PlayoutLogDialog", Localization.getBundle());
 
 		NVCStage stage = applyViewControllerToStage();
 		stage.initOwner(owner);

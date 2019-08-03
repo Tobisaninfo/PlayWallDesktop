@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -35,7 +34,7 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	private Pad pad;
 
 	GeneralPadTabViewController(Pad pad) {
-		load("view/option/pad", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "GeneralTab", Localization.getBundle());
 		this.pad = pad;
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {

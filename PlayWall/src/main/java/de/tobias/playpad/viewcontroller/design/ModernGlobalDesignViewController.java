@@ -1,8 +1,8 @@
 package de.tobias.playpad.viewcontroller.design;
 
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorPickerView;
@@ -43,7 +43,7 @@ public class ModernGlobalDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernGlobalDesignViewController(ModernGlobalDesign design) {
-		load("view/option/layout", "ModernLayoutGlobal", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutGlobal", Localization.getBundle());
 
 		this.design = design;
 		setLayout();

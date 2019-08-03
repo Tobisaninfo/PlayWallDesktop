@@ -3,7 +3,7 @@ package de.tobias.playpad.audio.viewcontroller;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playpad.PlayPadPlugin;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.audio.TinyAudioHandler;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.AudioHandlerViewController;
@@ -35,7 +35,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 	private Clip clip;
 
 	public TinySoundSettingsViewController() {
-		super("TinySoundSettings", "view/audio", PlayPadPlugin.getInstance().getUIResourceBundle());
+		super("TinySoundSettings", "view/audio", Localization.getBundle());
 
 		// Mixer (ohne Port)
 		List<Info> infos = Arrays.stream(AudioSystem.getMixerInfo()).filter(info -> !info.getName().startsWith("Port"))

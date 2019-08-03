@@ -159,7 +159,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private DesktopMainLayoutFactory connect;
 
 	DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
-		super("Header", "view/main/desktop", PlayPadMain.getUiResourceBundle());
+		super("Header", "view/main/desktop", Localization.getBundle());
 		this.mainViewController = controller;
 		this.connect = connect;
 		this.connect.editModeProperty().addListener(this);

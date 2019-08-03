@@ -8,7 +8,6 @@ import de.thecodelabs.midi.mapping.KeyType;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.ActionProvider;
@@ -60,7 +59,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 
 		addMappingBox = new HBox(14);
 
-		Label headline = new Label(PlayPadMain.getUiResourceBundle().getString("action.mapper.headline"));
+		Label headline = new Label(Localization.getString("action.mapper.headline"));
 		headline.setUnderline(true);
 		root.getChildren().addAll(headline, mappingView, addMappingBox);
 

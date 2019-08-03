@@ -81,7 +81,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
-		load("view/dialog", "LaunchDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "LaunchDialog", Localization.getBundle());
 		setProjectListValues();
 
 		applyViewControllerToStage(stage);

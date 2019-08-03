@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.profile.Profile;
@@ -30,7 +29,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	private ComboBox<TimeMode> timeDisplayComboBox;
 
 	PlayerTabViewController() {
-		load("view/option/profile", "PlayerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "PlayerTab", Localization.getBundle());
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();

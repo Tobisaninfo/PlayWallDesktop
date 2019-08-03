@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.tigger.Trigger;
@@ -30,7 +29,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	private Pad pad;
 
 	TriggerPadTabViewController(Pad pad) {
-		load("view/option/pad", "TriggerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "TriggerTab", Localization.getBundle());
 		this.pad = pad;
 	}
 

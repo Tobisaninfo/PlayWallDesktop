@@ -44,7 +44,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	private Runnable onFinish;
 
 	public ProfileSettingsViewController(Window owner, Project project, Runnable onFinish) {
-		load("view/option/profile", "SettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "SettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasActivePlayers();

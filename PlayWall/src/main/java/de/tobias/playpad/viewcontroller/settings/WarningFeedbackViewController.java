@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.settings;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.profile.Profile;
@@ -20,7 +19,7 @@ public class WarningFeedbackViewController extends NVC {
 	private Label warningFeedbackTimeLabel;
 
 	public WarningFeedbackViewController() {
-		load("view/settings", "WarningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/settings", "WarningFeedbackSettingsView", Localization.getBundle());
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		warningFeedbackTimeSlider.setValue(profileSettings.getWarningFeedback().toSeconds());
@@ -31,7 +30,7 @@ public class WarningFeedbackViewController extends NVC {
 	}
 
 	public WarningFeedbackViewController(Pad pad) {
-		load("view/settings/", "WarningFeedbackSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/settings/", "WarningFeedbackSettingsView", Localization.getBundle());
 	}
 
 	@Override

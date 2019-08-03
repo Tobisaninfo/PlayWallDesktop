@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
@@ -26,7 +25,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 	private Pad pad;
 
 	DesignPadTabViewController(Pad pad) {
-		load("view/option/pad", "LayoutTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "LayoutTab", Localization.getBundle());
 		this.pad = pad;
 	}
 

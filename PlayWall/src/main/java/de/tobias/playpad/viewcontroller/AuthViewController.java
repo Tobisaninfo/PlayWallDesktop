@@ -39,7 +39,7 @@ public class AuthViewController extends NVC {
 	private AuthBasedRunnable authBasedRunnable;
 
 	public AuthViewController(String info, AuthBasedRunnable authBasedRunnable) {
-		load("view/dialog", "AuthDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "AuthDialog", Localization.getBundle());
 		infoLabel.setText(info);
 
 		applyViewControllerToStage();

@@ -285,9 +285,4 @@ public class PlayPadImpl implements PlayPad {
 	public UpdateService getUpdateService() {
 		return updateService;
 	}
-
-	@Override
-	public ResourceBundle getUIResourceBundle() {
-		return PlayPadMain.getUiResourceBundle();
-	}
 }

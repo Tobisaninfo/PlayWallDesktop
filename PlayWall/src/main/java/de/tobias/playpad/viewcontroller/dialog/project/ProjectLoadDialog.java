@@ -25,7 +25,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	private ProgressBar progressbar;
 
 	public ProjectLoadDialog() {
-		load("view/dialog/project", "LoadDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "LoadDialog", Localization.getBundle());
 		applyViewControllerToStage();
 	}
 

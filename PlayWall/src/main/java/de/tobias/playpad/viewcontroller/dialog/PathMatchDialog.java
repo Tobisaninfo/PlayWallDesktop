@@ -132,7 +132,7 @@ public class PathMatchDialog extends NVC {
 	private List<TempMediaPath> mediaPaths;
 
 	public PathMatchDialog(Project project, Window owner) {
-		load("view/dialog", "NotFoundDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NotFoundDialog", Localization.getBundle());
 
 		NVCStage stage = applyViewControllerToStage();
 		stage.initOwner(owner);

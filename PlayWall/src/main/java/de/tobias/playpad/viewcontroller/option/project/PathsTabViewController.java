@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.option.project;
 import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.io.PathUtils;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -47,7 +46,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	private transient Optional<Path> oldMediaPath = Optional.empty();
 
 	PathsTabViewController() {
-		load("view/option/project", "PathTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "PathTab", Localization.getBundle());
 	}
 
 	@FXML

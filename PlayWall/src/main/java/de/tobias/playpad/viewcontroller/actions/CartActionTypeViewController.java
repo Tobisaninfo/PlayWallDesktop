@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.project.Project;
@@ -41,7 +42,7 @@ public class CartActionTypeViewController extends NVC {
 	private IMappingTabViewController parentController;
 
 	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController) {
-		load("view/actions", "CartActions", PlayPadMain.getUiResourceBundle());
+		load("view/actions", "CartActions", Localization.getBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
 

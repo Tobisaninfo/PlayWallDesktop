@@ -40,7 +40,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private Button finishButton;
 
 	public PadSettingsViewController(Pad pad, Window owner) {
-		load("view/option/pad", "PadSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "PadSettingsView", Localization.getBundle());
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
@@ -82,7 +82,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		if (pad.getContent() != null) {
 			final ObservableList<MediaPath> paths = pad.getPaths();
 			if (paths.size() == 1) {
-				Button button = new Button(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
+				Button button = new Button(Localization.getString("padSettings.button.path"));
 
 				MediaPath path = paths.get(0);
 				button.setUserData(path);
@@ -90,7 +90,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 
 				pathLookupButton = button;
 			} else if (paths.size() > 1) {
-				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
+				MenuButton button = new MenuButton(Localization.getString("padSettings.button.path"));
 
 				for (MediaPath path : paths) {
 					MenuItem item = new MenuItem(path.getFileName());

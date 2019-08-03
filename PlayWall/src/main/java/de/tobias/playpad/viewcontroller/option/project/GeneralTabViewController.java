@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.project;
 
 import de.thecodelabs.utils.ui.Alertable;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.project.Project;
@@ -48,7 +47,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	private Label rowErrorLabel;
 
 	GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
-		load("view/option/project", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "GeneralTab", Localization.getBundle());
 
 		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;

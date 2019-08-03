@@ -4,7 +4,6 @@ import de.thecodelabs.midi.mapping.Key;
 import de.thecodelabs.midi.mapping.KeyboardKey;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.StringUtils;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import javafx.event.ActionEvent;
@@ -23,7 +22,7 @@ public class KeyboardMapperViewController extends MapperViewController {
 	private KeyboardKey mapper;
 
 	public KeyboardMapperViewController() {
-		load("view/mapper", "Keyboard", PlayPadMain.getUiResourceBundle());
+		load("view/mapper", "Keyboard", Localization.getBundle());
 	}
 
 	@Override

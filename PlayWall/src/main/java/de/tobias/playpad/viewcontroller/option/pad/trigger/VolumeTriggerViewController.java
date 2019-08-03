@@ -35,7 +35,7 @@ public class VolumeTriggerViewController extends NVC {
 	private VolumeTriggerItem item;
 
 	public VolumeTriggerViewController(VolumeTriggerItem item) {
-		load("view/option/pad/trigger", "VolumeTrigger", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "VolumeTrigger", Localization.getBundle());
 		this.item = item;
 
 		volumeSlider.setValue(item.getVolume() * 100.0);

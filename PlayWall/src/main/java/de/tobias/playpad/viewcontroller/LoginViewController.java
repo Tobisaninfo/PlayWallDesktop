@@ -4,6 +4,7 @@ import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
@@ -108,7 +109,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@Override
 	public Session getSession() {
-		load("view/dialog", "LoginDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "LoginDialog", Localization.getBundle());
 		applyViewControllerToStage();
 
 		Optional<NVCStage> stage = getStageContainer();

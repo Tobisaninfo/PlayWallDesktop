@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.actions;
 
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.action.actions.CartAction.CartActionMode;
@@ -29,7 +29,7 @@ public class CartActionViewController extends NVC {
 	private Action action;
 
 	public CartActionViewController() {
-		load("view/actions", "CartAction", PlayPadMain.getUiResourceBundle());
+		load("view/actions", "CartAction", Localization.getBundle());
 	}
 
 	@Override

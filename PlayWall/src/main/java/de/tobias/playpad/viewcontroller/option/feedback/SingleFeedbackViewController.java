@@ -7,7 +7,7 @@ import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.view.FeedbackColorPickerView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -38,7 +38,7 @@ public class SingleFeedbackViewController extends NVC {
 	private Feedback feedback;
 
 	public SingleFeedbackViewController(Feedback feedback, FeedbackType type, FeedbackValue[] values) {
-		load("view/option/feedback", "SingleFeedback", PlayPadMain.getUiResourceBundle());
+		load("view/option/feedback", "SingleFeedback", Localization.getBundle());
 		this.feedback = feedback;
 
 		if (!(values instanceof FeedbackColor[])) {
@@ -47,13 +47,13 @@ public class SingleFeedbackViewController extends NVC {
 
 		switch (type) {
 			case DEFAULT:
-				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorDefault"));
+				nameLabel.setText(Localization.getString("feedback.label.colorDefault"));
 				break;
 			case EVENT:
-				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorEvent"));
+				nameLabel.setText(Localization.getString("feedback.label.colorEvent"));
 				break;
 			case WARNING:
-				nameLabel.setText(PlayPadMain.getUiResourceBundle().getString("feedback.label.colorWarning"));
+				nameLabel.setText(Localization.getString("feedback.label.colorWarning"));
 				break;
 		}
 

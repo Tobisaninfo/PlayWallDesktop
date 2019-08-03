@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.settings;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.Fade;
 import javafx.fxml.FXML;
@@ -34,7 +33,7 @@ public class FadeViewController extends NVC {
 	private Fade fade;
 
 	public FadeViewController() {
-		load("view/settings", "FadeView", PlayPadMain.getUiResourceBundle());
+		load("view/settings", "FadeView", Localization.getBundle());
 	}
 
 	@Override

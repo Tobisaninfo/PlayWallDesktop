@@ -5,7 +5,6 @@ import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.Alertable;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.NumberUtils;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -57,7 +56,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
-		load("view/option/global", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "GeneralTab", Localization.getBundle());
 		this.alertable = alertable;
 
 		calcCacheSize();

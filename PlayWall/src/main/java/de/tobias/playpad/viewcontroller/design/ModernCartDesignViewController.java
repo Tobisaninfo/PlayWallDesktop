@@ -1,8 +1,8 @@
 package de.tobias.playpad.viewcontroller.design;
 
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
@@ -34,7 +34,7 @@ public class ModernCartDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernCartDesignViewController(ModernCartDesign layout) {
-		load("view/option/layout", "ModernLayoutCart", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutCart", Localization.getBundle());
 
 		this.design = layout;
 		setLayout();
