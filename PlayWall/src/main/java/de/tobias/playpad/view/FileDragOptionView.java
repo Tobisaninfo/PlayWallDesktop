@@ -132,17 +132,11 @@ public class FileDragOptionView {
 			if (node instanceof Label) {
 				Label label = (Label) node;
 				label.setOnMouseClicked(ev ->
-				{
-					onFinish.accept((PadContentFactory) label.getUserData());
-				});
+						onFinish.accept((PadContentFactory) label.getUserData()));
 				label.setOnMouseEntered(e ->
-				{
-					label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, true);
-				});
+						label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, true));
 				label.setOnMouseExited(e ->
-				{
-					label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, false);
-				});
+						label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, false));
 			}
 		}
 	}

@@ -116,7 +116,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void setContentView(Pad pad) {
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 
 		if (pad != null) {
@@ -286,7 +286,7 @@ public class TouchPadView implements IPadView {
 
 	void clearPreviewContent() {
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 		setContentView(null);
 	}

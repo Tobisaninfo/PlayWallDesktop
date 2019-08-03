@@ -5,7 +5,7 @@ import de.thecodelabs.midi.feedback.FeedbackType;
 import de.tobias.playpad.pad.Pad;
 
 /**
- * Eine Action implementiert dieses Interface, falls die Feedbackfarbe automatisch an die Farbe der Kachel angepasst werden soll.
+ * The interface provides methods for handling automatic feedback color choosing for an action.
  *
  * @author tobias
  * @since 5.0.0
@@ -13,7 +13,7 @@ import de.tobias.playpad.pad.Pad;
 public interface ActionFeedbackSuggester {
 
 	/**
-	 * Ist dieses Feature ative.
+	 * Is automatic feedback suggestion enabled
 	 *
 	 * @return <code>true</code> Active
 	 */

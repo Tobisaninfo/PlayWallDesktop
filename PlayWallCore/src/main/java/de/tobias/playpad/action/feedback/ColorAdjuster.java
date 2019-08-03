@@ -21,15 +21,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Eine Klasse mit nützlichen Methoden um die Farben bei den Mappern anzupassen.
+ * This class provides methods for calculating the best matched feedback color
  *
  * @author tobias
  * @since 5.1.0
  */
 public class ColorAdjuster {
 
+	private ColorAdjuster() {
+	}
+
 	/**
-	 * Übernimmt die Farben des Pads und den verknüpften Aktionen zu einem Pad auf die Mapper.
+	 * Suggest for all actions in the current mapping feedback values
 	 */
 	public static void applyColorsToKeys() {
 		// Apply Layout to Mapper
@@ -41,18 +44,23 @@ public class ColorAdjuster {
 				final ActionHandler actionHandler = ActionRegistry.getActionHandler(action.getActionType());
 
 				if (actionHandler instanceof ActionFeedbackSuggester) {
-					ActionFeedbackSuggester adjustable = (ActionFeedbackSuggester) actionHandler;
+					ActionFeedbackSuggester suggester = (ActionFeedbackSuggester) actionHandler;
 
-					if (adjustable.isAutoFeedbackColors(action)) {
-						adjustable.suggestFeedback(action);
+					if (suggester.isAutoFeedbackColors(action)) {
+						suggester.suggestFeedback(action);
 					}
 				}
 			}
 		});
 	}
 
-	// COMMENT ColorAdjuster
-
+	/**
+	 * Suggest the feedback for a midi key depending on an action.
+	 *
+	 * @param suggester feedback suggester
+	 * @param action    action
+	 * @param key       midi key
+	 */
 	public static void setSuggestedFeedbackColors(ActionFeedbackSuggester suggester, Action action, MidiKey key) {
 		MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
 		if (transcript == null) {
@@ -77,21 +85,24 @@ public class ColorAdjuster {
 		}
 
 		if (layoutStdColor != null) {
-			FeedbackColor matchedColor = searchColor(transcript, layoutStdColor);
-			final byte channel = suggester.suggestFeedbackChannel(FeedbackType.DEFAULT);
-			key.setDefaultFeedback(new Feedback(channel, matchedColor.getValue()));
+			searchColor(transcript, layoutStdColor).ifPresent(matchedColor -> {
+				final byte channel = suggester.suggestFeedbackChannel(FeedbackType.DEFAULT);
+				key.setDefaultFeedback(new Feedback(channel, matchedColor.getValue()));
+			});
 		}
 
 		if (layoutEvColor != null) {
-			FeedbackColor matchedColor = searchColor(transcript, layoutEvColor);
-			final byte channel = suggester.suggestFeedbackChannel(FeedbackType.EVENT);
-			key.setEventFeedback(new Feedback(channel, matchedColor.getValue()));
+			searchColor(transcript, layoutEvColor).ifPresent(matchedColor -> {
+				final byte channel = suggester.suggestFeedbackChannel(FeedbackType.EVENT);
+				key.setEventFeedback(new Feedback(channel, matchedColor.getValue()));
+			});
 		}
 
 		if (layoutEvColor != null) {
-			FeedbackColor matchedColor = searchColor(transcript, layoutEvColor);
-			final byte channel = suggester.suggestFeedbackChannel(FeedbackType.WARNING);
-			key.setWarningFeedback(new Feedback(channel, matchedColor.getValue()));
+			searchColor(transcript, layoutEvColor).ifPresent(matchedColor -> {
+				final byte channel = suggester.suggestFeedbackChannel(FeedbackType.WARNING);
+				key.setWarningFeedback(new Feedback(channel, matchedColor.getValue()));
+			});
 		}
 	}
 
@@ -102,16 +113,23 @@ public class ColorAdjuster {
 	 * @param color      ui color
 	 * @return feedback color
 	 */
-	protected static FeedbackColor searchColor(MidiFeedbackTranscript transcript, Color color) {
+	private static Optional<FeedbackValue> searchColor(MidiFeedbackTranscript transcript, Color color) {
+
+		// Look for predefined colors
 		if (transcript instanceof FeedbackColorSuggester) {
 			FeedbackColorSuggester suggester = (FeedbackColorSuggester) transcript;
 
 			final FeedbackColor suggest = suggester.suggest(color);
 			if (suggest != null) {
-				return suggest;
+				return Optional.of(suggest);
 			}
 		}
 
+		// Calculate
+		return calculateNearestColor(transcript, color);
+	}
+
+	private static Optional<FeedbackValue> calculateNearestColor(MidiFeedbackTranscript transcript, Color color) {
 		FeedbackColor minColor = null;
 		double minVal = 1;
 
@@ -130,9 +148,9 @@ public class ColorAdjuster {
 			}
 		}
 		if (minColor != null && minVal < 0.35) {
-			return minColor;
+			return Optional.of(minColor);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 }

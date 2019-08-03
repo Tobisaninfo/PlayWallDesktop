@@ -141,7 +141,7 @@ public class DesktopPadView implements IPadView {
 		superRoot.setUserData(pad);
 
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 
 		if (pad != null) {
@@ -391,7 +391,7 @@ public class DesktopPadView implements IPadView {
 
 	void clearPreviewContentView() {
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 		setContentView(null);
 	}

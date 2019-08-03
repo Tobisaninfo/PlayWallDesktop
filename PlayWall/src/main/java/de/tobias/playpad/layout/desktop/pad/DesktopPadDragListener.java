@@ -11,7 +11,6 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
-import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -88,28 +87,24 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				}
 
 				// Build In Filesupport
-				try {
-					PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
-					Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+				PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
+				Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
 
-					if (!connects.isEmpty()) {
-						if (fileHud == null) {
-							fileHud = new FileDragOptionView(padView);
-						}
-						fileHud.showDropOptions(connects);
-
-						event.acceptTransferModes(TransferMode.LINK);
-						return;
+				if (!connects.isEmpty()) {
+					if (fileHud == null) {
+						fileHud = new FileDragOptionView(padView);
 					}
-				} catch (NoSuchComponentException e) {
-					e.printStackTrace();
+					fileHud.showDropOptions(connects);
+
+					event.acceptTransferModes(TransferMode.LINK);
+					return;
 				}
 			}
 		}
 
 		// Drag and Drop von Pads
 		if (event.getDragboard().hasContent(dataFormat)) {
-			PadIndex index = (PadIndex) event.getDragboard().getContent(dataFormat); // TODO Check cast
+			PadIndex index = (PadIndex) event.getDragboard().getContent(dataFormat);
 			if (!currentPad.getPadIndex().equals(index)) {
 
 				Collection<PadDragMode> connects = PlayPadPlugin.getRegistries().getDragModes().getComponents();

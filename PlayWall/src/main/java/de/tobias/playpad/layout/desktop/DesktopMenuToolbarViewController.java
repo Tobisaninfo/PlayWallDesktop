@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -504,7 +505,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					Project project = loader.load();
 					PlayPadMain.getProgramInstance().openProject(project, null);
 				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException | ProjectReader.ProjectReaderDelegate.ProfileAbortException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			});
 		});
@@ -532,7 +533,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 					createRecentDocumentMenuItems();
 				} catch (ProfileNotFoundException e) {
-					e.printStackTrace();
+					Logger.error(e);
 
 					// Error Message
 					String errorMessage = Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(),
@@ -547,10 +548,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					}
 					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
-					e.printStackTrace();
+					Logger.error(e);
 					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 					mainViewController.showError(Localization.getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
 				}
 			}
@@ -564,7 +565,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -649,10 +650,13 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Runnable onFinish = () -> projectSettingsViewController = null;
 
 			projectSettingsViewController = new ProjectSettingsViewController(mainViewController.getScreen(), mainStage, openProject, onFinish);
-
-			projectSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
-		} else if (projectSettingsViewController.getStageContainer().isPresent() && projectSettingsViewController.getStageContainer().get().getStage().isShowing()) {
-			projectSettingsViewController.getStageContainer().get().getStage().toFront();
+			projectSettingsViewController.showStage();
+		} else {
+			projectSettingsViewController.getStageContainer().ifPresent(stage -> {
+				if (stage.getStage().isShowing()) {
+					stage.getStage().toFront();
+				}
+			});
 		}
 	}
 
@@ -667,17 +671,19 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (profileSettingsViewController == null) {
 			Stage mainStage = mainViewController.getStage();
 
-			Runnable onFinish = () ->
-			{
+			Runnable onFinish = () -> {
 				profileSettingsViewController = null;
 				mainStage.toFront();
 			};
 
 			profileSettingsViewController = new ProfileSettingsViewController(mainStage, openProject, onFinish);
-
-			profileSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
-		} else if (profileSettingsViewController.getStageContainer().isPresent() && profileSettingsViewController.getStageContainer().get().getStage().isShowing()) {
-			profileSettingsViewController.getStageContainer().get().getStage().toFront();
+			profileSettingsViewController.showStage();
+		} else {
+			profileSettingsViewController.getStageContainer().ifPresent(stage -> {
+				if (stage.getStage().isShowing()) {
+					stage.getStage().toFront();
+				}
+			});
 		}
 	}
 
@@ -686,8 +692,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (globalSettingsViewController == null) {
 
 			Stage mainStage = mainViewController.getStage();
-			Runnable onFinish = () ->
-			{
+			Runnable onFinish = () -> {
 				globalSettingsViewController = null;
 				mainStage.toFront();
 			};
@@ -695,7 +700,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			globalSettingsViewController = new GlobalSettingsViewController(mainStage, onFinish);
 			globalSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
 		} else {
-			globalSettingsViewController.getStageContainer().ifPresent(e -> e.getStage().toFront());
+			globalSettingsViewController.getStageContainer().ifPresent(stage -> {
+				if (stage.getStage().isShowing()) {
+					stage.getStage().toFront();
+				}
+			});
 		}
 	}
 
@@ -742,7 +751,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		try {
 			Desktop.getDesktop().browse(new URI(website));
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -752,7 +761,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		try {
 			Desktop.getDesktop().browse(new URI(website));
 		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -775,45 +784,52 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void handle(ActionEvent event) {
 		if (event.getSource() instanceof Button) {
-			Button button = (Button) event.getSource();
-			int page = (int) button.getUserData();
-			mainViewController.showPage(page);
+			handlePageButton(event);
 		} else if (event.getSource() instanceof MenuItem) {
-			// Zuletzt verwendete Projects
-			doAction(() ->
-			{
-				// TODO Rewrite mit openProject von BasicMenuToolbarViewController
-				MenuItem item = (MenuItem) event.getSource();
-				ProjectReference ref = (ProjectReference) item.getUserData();
-
-				ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getContainingWindow());
-				try {
-					// Speichern das alte Project in mvc.setProject(Project)
-					ProjectLoader loader = new ProjectLoader(ref);
-					loader.setDelegate(delegate);
-					loader.setListener(new ProjectLoadDialog());
-					Project project = loader.load();
-					PlayPadMain.getProgramInstance().openProject(project, null);
-				} catch (ProfileNotFoundException e) {
-					e.printStackTrace();
-					mainViewController.showError(
-							Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
-
-					// Neues Profile wählen
-					ProfileReference profile = null;
-					try {
-						profile = delegate.getProfileReference();
-					} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
-					}
-					ref.setProfileReference(profile);
-				} catch (ProjectNotFoundException e) {
-					e.printStackTrace();
-					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
-				} catch (Exception e) {
-					e.printStackTrace();
-					mainViewController.showError(Localization.getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
-				}
-			});
+			handleMenuItem(event);
 		}
+	}
+
+	private void handleMenuItem(ActionEvent event) {
+		doAction(() ->
+		{
+			// TODO Rewrite mit openProject von BasicMenuToolbarViewController
+			MenuItem item = (MenuItem) event.getSource();
+			ProjectReference ref = (ProjectReference) item.getUserData();
+
+			ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getContainingWindow());
+			try {
+				// Speichern das alte Project in mvc.setProject(Project)
+				ProjectLoader loader = new ProjectLoader(ref);
+				loader.setDelegate(delegate);
+				loader.setListener(new ProjectLoadDialog());
+				Project project = loader.load();
+				PlayPadMain.getProgramInstance().openProject(project, null);
+			} catch (ProfileNotFoundException e) {
+				Logger.error(e);
+				mainViewController.showError(
+						Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
+
+				// Neues Profile wählen
+				ProfileReference profile = null;
+				try {
+					profile = delegate.getProfileReference();
+				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+				}
+				ref.setProfileReference(profile);
+			} catch (ProjectNotFoundException e) {
+				Logger.error(e);
+				mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
+			} catch (Exception e) {
+				Logger.error(e);
+				mainViewController.showError(Localization.getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
+			}
+		});
+	}
+
+	private void handlePageButton(ActionEvent event) {
+		Button button = (Button) event.getSource();
+		int page = (int) button.getUserData();
+		mainViewController.showPage(page);
 	}
 }

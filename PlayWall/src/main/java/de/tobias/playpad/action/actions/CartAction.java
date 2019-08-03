@@ -87,18 +87,12 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 					PadSettings padSettings = pad.getPadSettings();
 
 					if (!padSettings.isLoop()) {
-						final Duration warning = padSettings.getWarning();
+						Duration warning = padSettings.getWarning();
+						Duration rest = durationable.getRemaining(padSettings);
+						double seconds = rest.toSeconds();
 
-						final Duration position = durationable.getPosition();
-						if (position != null) {
-							final Duration duration = durationable.getDuration();
-
-							Duration rest = duration.subtract(position);
-							double seconds = rest.toSeconds();
-
-							if (warning.toSeconds() > seconds) {
-								return FeedbackType.WARNING;
-							}
+						if (warning.toSeconds() > seconds) {
+							return FeedbackType.WARNING;
 						}
 					}
 				}
@@ -149,8 +143,9 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 				return 2;
 			case WARNING:
 				return 1;
+			default:
+				throw new UnsupportedOperationException("No suggested channel supported for the feedback type: " + type);
 		}
-		return 0;
 	}
 
 	@Override
@@ -188,12 +183,12 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		action.addPayloadEntry(CartAction.PAYLOAD_MODE, mode.name());
 	}
 
-	public static void getY(Action action, int y) {
-		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(y));
+	public static void setX(Action action, int x) {
+		action.addPayloadEntry(CartAction.PAYLOAD_X, String.valueOf(x));
 	}
 
-	public static void getX(Action action, int x) {
-		action.addPayloadEntry(CartAction.PAYLOAD_MODE, String.valueOf(x));
+	public static void setY(Action action, int y) {
+		action.addPayloadEntry(CartAction.PAYLOAD_Y, String.valueOf(y));
 	}
 
 	public static void setAutoFeedback(Action action, boolean enable) {

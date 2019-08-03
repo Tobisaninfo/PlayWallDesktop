@@ -96,7 +96,7 @@ public class ImagePadContentFactory extends PadContentFactory {
 		}
 
 		@Override
-		public void deinit() {
+		public void deInit() {
 			nameLabel.textProperty().unbind();
 		}
 

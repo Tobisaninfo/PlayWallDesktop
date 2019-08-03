@@ -271,7 +271,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	private boolean closeRequest() {
 		if (Profile.currentProfile() != null) {
-			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
@@ -286,9 +286,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
 
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.isPresent())
-					if (result.get() != ButtonType.OK)
-						return false;
+				if (result.isPresent() && result.get() != ButtonType.OK) {
+					return false;
+				}
 			}
 
 			// Save Dialog
@@ -320,7 +320,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 			// MIDI Shutdown
 			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
-			if (profilSettings.isMidiActive()) {
+			if (profileSettings.isMidiActive()) {
 				try {
 					Midi.getInstance().clearFeedback();
 					Midi.getInstance().close();
