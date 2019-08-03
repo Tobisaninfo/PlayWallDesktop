@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.profile.ProfileSettings;
 import javafx.util.Duration;
@@ -136,20 +137,20 @@ public class Fade {
 
 			Element fadeInElement = container.element(FADE_IN);
 			if (fadeInElement.attributeValue(ON_PAUSE_ATTR) != null)
-				fade.setFadeInStart(Boolean.valueOf(fadeInElement.attributeValue(ON_START_ATTR)));
+				fade.setFadeInStart(Boolean.parseBoolean(fadeInElement.attributeValue(ON_START_ATTR)));
 			if (fadeInElement.attributeValue(ON_STOP_ATTR) != null)
-				fade.setFadeInPause(Boolean.valueOf(fadeInElement.attributeValue(ON_PAUSE_ATTR)));
+				fade.setFadeInPause(Boolean.parseBoolean(fadeInElement.attributeValue(ON_PAUSE_ATTR)));
 			fade.setFadeIn(Duration.valueOf(fadeInElement.getStringValue().replace(" ", "")));
 
 			Element fadeOutElement = container.element(FADE_OUT);
 			if (fadeOutElement.attributeValue(ON_PAUSE_ATTR) != null)
-				fade.setFadeOutPause(Boolean.valueOf(fadeOutElement.attributeValue(ON_PAUSE_ATTR)));
+				fade.setFadeOutPause(Boolean.parseBoolean(fadeOutElement.attributeValue(ON_PAUSE_ATTR)));
 			if (fadeOutElement.attributeValue(ON_STOP_ATTR) != null)
-				fade.setFadeOutStop(Boolean.valueOf(fadeOutElement.attributeValue(ON_STOP_ATTR)));
+				fade.setFadeOutStop(Boolean.parseBoolean(fadeOutElement.attributeValue(ON_STOP_ATTR)));
 			fade.setFadeOut(Duration.valueOf(fadeOutElement.getStringValue().replace(" ", "")));
 			return fade;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings.keys;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -141,8 +142,7 @@ public class KeyCollection {
 
 				if (root.element(GlobalSettings.KEYS_ELEMENT) != null) {
 					XMLHandler<Key> handler = new XMLHandler<>(root.element(GlobalSettings.KEYS_ELEMENT));
-					List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
-					for (Key key : keys) {
+					for (Key key : handler.loadElements(KEY_ELEMENT, new KeySerializer())) {
 						updateKey(key);
 					}
 				}
@@ -193,8 +193,7 @@ public class KeyCollection {
 							try {
 								register(entry);
 							} catch (KeyConflictException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								Logger.error(e);
 							}
 						} catch (MissingResourceException ignored) {
 						}
@@ -202,7 +201,7 @@ public class KeyCollection {
 				}
 			}
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

@@ -17,19 +17,19 @@ public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 	public Key loadElement(Element element) {
 		boolean shift = false;
 		if (element.attributeValue(SHIFT_ATTR) != null) {
-			shift = Boolean.valueOf(element.attributeValue(SHIFT_ATTR));
+			shift = Boolean.parseBoolean(element.attributeValue(SHIFT_ATTR));
 		}
 		boolean meta = false;
 		if (element.attributeValue(META_ATTR) != null) {
-			meta = Boolean.valueOf(element.attributeValue(META_ATTR));
+			meta = Boolean.parseBoolean(element.attributeValue(META_ATTR));
 		}
 		boolean ctrl = false;
 		if (element.attributeValue(CTRL_ATTR) != null) {
-			ctrl = Boolean.valueOf(element.attributeValue(CTRL_ATTR));
+			ctrl = Boolean.parseBoolean(element.attributeValue(CTRL_ATTR));
 		}
 		boolean alt = false;
 		if (element.attributeValue(ALT_ATTR) != null) {
-			alt = Boolean.valueOf(element.attributeValue(ALT_ATTR));
+			alt = Boolean.parseBoolean(element.attributeValue(ALT_ATTR));
 		}
 
 		String key = "";

@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPad;
@@ -183,11 +184,11 @@ public class GlobalSettings {
 				Element root = document.getRootElement();
 
 				if (root.element(AUTO_UPDATE_ELEMENT) != null) {
-					settings.setAutoUpdate(Boolean.valueOf(root.element(AUTO_UPDATE_ELEMENT).getStringValue()));
+					settings.setAutoUpdate(Boolean.parseBoolean(root.element(AUTO_UPDATE_ELEMENT).getStringValue()));
 				}
 
 				if (root.element(IGNORE_UPDATE_ELEMENT) != null) {
-					settings.setIgnoreUpdate(Boolean.valueOf(root.element(IGNORE_UPDATE_ELEMENT).getStringValue()));
+					settings.setIgnoreUpdate(Boolean.parseBoolean(root.element(IGNORE_UPDATE_ELEMENT).getStringValue()));
 				}
 
 				if (root.element(UPDATE_CHANNEL_ELEMENT) != null) {
@@ -195,24 +196,24 @@ public class GlobalSettings {
 						final RepositoryType repositoryType = RepositoryType.valueOf(root.element(UPDATE_CHANNEL_ELEMENT).getStringValue());
 						settings.setUpdateChannel(repositoryType);
 					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 
 				Element liveElement = root.element(LIVE_MODE_ELEMENT);
 				if (liveElement != null) {
-					settings.setLiveMode(Boolean.valueOf(liveElement.getStringValue()));
+					settings.setLiveMode(Boolean.parseBoolean(liveElement.getStringValue()));
 					if (liveElement.attributeValue(LIVE_MODE_PAGE_ATTR) != null) {
-						settings.setLiveModePage(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_PAGE_ATTR)));
+						settings.setLiveModePage(Boolean.parseBoolean(liveElement.attributeValue(LIVE_MODE_PAGE_ATTR)));
 					}
 					if (liveElement.attributeValue(LIVE_MODE_DRAG_ATTR) != null) {
-						settings.setLiveModeDrag(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_DRAG_ATTR)));
+						settings.setLiveModeDrag(Boolean.parseBoolean(liveElement.attributeValue(LIVE_MODE_DRAG_ATTR)));
 					}
 					if (liveElement.attributeValue(LIVE_MODE_FILE_ATTR) != null) {
-						settings.setLiveModeFile(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_FILE_ATTR)));
+						settings.setLiveModeFile(Boolean.parseBoolean(liveElement.attributeValue(LIVE_MODE_FILE_ATTR)));
 					}
 					if (liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR) != null) {
-						settings.setLiveModeSettings(Boolean.valueOf(liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR)));
+						settings.setLiveModeSettings(Boolean.parseBoolean(liveElement.attributeValue(LIVE_MODE_SETTINGS_ATTR)));
 					}
 				}
 
@@ -222,12 +223,12 @@ public class GlobalSettings {
 
 				// Dialogs
 				if (root.element(IGNORE_SAVE_DIALOG_ELEMENT) != null) {
-					settings.setIgnoreSaveDialog(Boolean.valueOf(root.element(IGNORE_SAVE_DIALOG_ELEMENT).getStringValue()));
+					settings.setIgnoreSaveDialog(Boolean.parseBoolean(root.element(IGNORE_SAVE_DIALOG_ELEMENT).getStringValue()));
 				}
 
 				// Behaviour
 				if (root.element(OPEN_LAST_DOCUMENT_ELEMENT) != null) {
-					settings.setOpenLastDocument(Boolean.valueOf(root.element(OPEN_LAST_DOCUMENT_ELEMENT).getStringValue()));
+					settings.setOpenLastDocument(Boolean.parseBoolean(root.element(OPEN_LAST_DOCUMENT_ELEMENT).getStringValue()));
 				}
 			}
 			return settings;
