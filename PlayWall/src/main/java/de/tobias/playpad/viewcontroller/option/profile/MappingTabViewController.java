@@ -8,6 +8,7 @@ import de.thecodelabs.midi.device.MidiDeviceInfo;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.serialize.MappingSerializer;
 import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
@@ -25,6 +26,7 @@ import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
+import de.tobias.playpad.viewcontroller.cell.MappingListCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
@@ -86,9 +88,8 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@Override
 	public void init() {
-		// TODO Show correct names
-		// mappingComboBox.setCellFactory(list -> new DisplayableCell<>());
-		// mappingComboBox.setButtonCell(new DisplayableCell<>());
+		mappingComboBox.setCellFactory(list -> new MappingListCell());
+		mappingComboBox.setButtonCell(new MappingListCell());
 
 		mappingComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
@@ -263,6 +264,17 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private void mappingDeleteHandler(ActionEvent event) {
 		final MappingCollection mappings = Profile.currentProfile().getMappings();
 		Mapping preset = mappingComboBox.getSelectionModel().getSelectedItem();
+
+		if (mappings.getMappings().size() <= 1) {
+			Alerts.getInstance()
+					.createAlert(
+							Alert.AlertType.INFORMATION,
+							"Mapping",
+							"Das Mapping kann nicht gelöscht werden, da kein anders existiert.",
+							getContainingWindow()
+					).show();
+			return;
+		}
 
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		// TODO Localize
