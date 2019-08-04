@@ -12,6 +12,7 @@ import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 public class LaunchPadS implements MidiFeedbackTranscript {
 
 	public static final String NAME = "Launchpad S";
+	public static final String NATIVE_NAME = "CoreMIDI4J - Launchpad S";
 
 	@Override
 	public void sendFeedback(MidiKey midiKey, FeedbackType feedbackType) {

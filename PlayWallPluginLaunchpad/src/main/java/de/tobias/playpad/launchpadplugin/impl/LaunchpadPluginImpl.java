@@ -20,7 +20,9 @@ public class LaunchpadPluginImpl implements PlayPadPluginStub, PluginArtifact {
 
 		final MidiFeedbackTranscriptionRegistry registry = MidiFeedbackTranscriptionRegistry.getInstance();
 		registry.register(LaunchPadMK2.NAME, new LaunchPadMK2());
+		registry.register(LaunchPadMK2.NATIVE_NAME, new LaunchPadMK2());
 		registry.register(LaunchPadS.NAME, new LaunchPadS());
+		registry.register(LaunchPadS.NATIVE_NAME, new LaunchPadS());
 
 		Logger.debug("Enable LaunchPad Plugin");
 	}

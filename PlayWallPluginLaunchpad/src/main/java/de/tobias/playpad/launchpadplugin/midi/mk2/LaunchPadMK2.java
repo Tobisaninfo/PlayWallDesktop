@@ -20,6 +20,7 @@ import java.util.Map;
 public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSuggester {
 
 	public static final String NAME = "Launchpad MK2";
+	public static final String NATIVE_NAME = "CoreMIDI4J - Launchpad MK2";
 
 	// Modern Colors mapped to the colors of the launchpad
 	private static Map<String, String> mapProperties;
