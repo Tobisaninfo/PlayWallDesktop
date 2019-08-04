@@ -11,19 +11,15 @@ import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
-import de.thecodelabs.utils.util.Localization.LocalizationDelegate;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.plugin.ModernPluginManager;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.server.ServerHandlerImpl;
-import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.VersionUpdater;
 import de.tobias.playpad.util.UUIDSerializer;
@@ -42,7 +38,6 @@ import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.dom4j.DocumentException;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -52,7 +47,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.cert.X509Certificate;
-import java.util.Locale;
 import java.util.UUID;
 
 /*
@@ -64,10 +58,9 @@ import java.util.UUID;
 // FEATURE lnk für Windows mit Dateiparameter
 // FEATURE Backups irgendwann löschen
 
-public class PlayPadMain extends Application implements LocalizationDelegate {
+public class PlayPadMain extends Application {
 
 	private static final String ICON_PATH = "icon_small.png";
-	public static Image stageIcon;
 
 	public static final long NOTIFICATION_DISPLAY_TIME = 1500;
 
@@ -110,10 +103,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void init() {
 		App app = ApplicationUtils.getApplication();
 
-		if (!app.isDebug()) {
-			Logger.setFileOutput(FileOutputOption.COMBINED);
-		}
-
 		// Init SSLContext
 		if (app.isDebug()) {
 			disableSSL();
@@ -121,30 +110,21 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
-		// Localization
-		setupLocalization();
+		//// Load Localization
+		//// Load Global Settings
+		//// Load Keyboard Mapping
+		//// Loading Profiles
 
-		// Setup Global Settings
-		Logger.debug("Load global settings");
-		Path globalSettingsPath = app.getPath(PathType.CONFIGURATION, "GlobalSettings.xml");
-		GlobalSettings globalSettings = GlobalSettings.load(globalSettingsPath);
-		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", Localization.getBundle());
-		globalSettings.getKeyCollection().load(globalSettingsPath);
-
-		// Setup Profiles
-		try {
-			ProfileReferenceManager.loadProfiles();
-		} catch (IOException | DocumentException e) {
-			Logger.error(e);
-		}
+		//// Set Service/Interface Implementations
 
 		// Set Factory Implementations
-		impl = new PlayPadImpl(globalSettings, getParameters());
+		impl = new PlayPadImpl(getParameters());
+
+		Image stageIcon = new Image(ICON_PATH);
+		Alerts.getInstance().setDefaultIcon(stageIcon);
+		impl.setIcon(stageIcon);
+
 		PlayPadPlugin.setInstance(impl);
-		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
-		PlayPadPlugin.setRegistryCollection(new RegistryCollectionImpl());
-		PlayPadPlugin.setServerHandler(new ServerHandlerImpl());
-		PlayPadPlugin.setCommandExecutorHandler(new CommandExecutorHandlerImpl());
 
 		/*
 		 * Setup
@@ -156,49 +136,11 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	@Override
 	public void start(Stage stage) {
 		try {
-			// Assets
-			PlayPadMain.stageIcon = new Image(ICON_PATH);
-			Alerts.getInstance().setDefaultIcon(stageIcon);
+			//// Native Application
+			//// Load Plugins
+			//// Load Projects
 
-			// App Setup
-			NativeApplication.sharedInstance().setDockIcon(new Image("gfx/Logo-large.png"));
-			NativeApplication.sharedInstance().setAppearance(true);
-
-			try {
-				// Load Plugin Path
-				if (!getParameters().getRaw().contains("noplugins")) {
-					Path pluginFolder;
-					if (getParameters().getNamed().containsKey("plugin")) {
-						String pluginParam = getParameters().getNamed().get("plugin");
-						for (String part : pluginParam.split(":")) {
-							pluginFolder = Paths.get(part);
-							setupPlugins(pluginFolder);
-						}
-					} else {
-						pluginFolder = ApplicationUtils.getApplication().getPath(PathType.LIBRARY);
-						setupPlugins(pluginFolder);
-					}
-				}
-			} catch (Exception e) {
-				Logger.error("Unable to load plugins");
-				Logger.error(e);
-			}
-
-			/*
-			 * Load Projects
-			 */
-			ProjectReferenceManager.loadProjects();
-
-			if (PlayPadPlugin.getInstance().getGlobalSettings().isOpenLastDocument()) {
-				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
-				if (value != null) {
-					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(value));
-					// TODO Load indicator
-					Project project = loader.load();
-					impl.openProject(project, null);
-					return;
-				}
-			}
+			//// Open Last Project
 
 			// Auto Open Project DEBUG
 			if (!getParameters().getRaw().isEmpty()) {
@@ -255,7 +197,8 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			// Save last open project
 			Project project = impl.getCurrentProject();
 			if (project != null) {
-				ApplicationUtils.getApplication().getUserDefaults().setData("project", project.getProjectReference().getUuid());
+				ApplicationUtils.getApplication().getUserDefaults()
+						.setData("project", project.getProjectReference().getUuid());
 			}
 
 
@@ -270,37 +213,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 
 		Platform.exit();
 		System.exit(0);
-	}
-
-	private void setupPlugins(Path pluginPath) throws IOException {
-		// Delete old plugins
-		ModernPluginManager.getInstance().deletePlugins();
-
-		// Load Plugins
-		ModernPluginManager.getInstance().loadFile(pluginPath);
-	}
-
-	private void setupLocalization() {
-		Localization.setDelegate(this);
-		Localization.load();
-	}
-
-	@Override
-	public String[] getBaseResources() {
-		return new String[]{
-				"lang/",
-				"lang/ui"
-		};
-	}
-
-	@Override
-	public boolean useMultipleResourceBundles() {
-		return true;
-	}
-
-	@Override
-	public Locale getLocale() {
-		return Locale.getDefault();
 	}
 
 	/**

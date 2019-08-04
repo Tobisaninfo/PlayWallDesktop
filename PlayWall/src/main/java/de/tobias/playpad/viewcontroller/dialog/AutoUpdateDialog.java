@@ -6,6 +6,7 @@ import de.thecodelabs.versionizer.config.Artifact;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -32,7 +33,7 @@ public class AutoUpdateDialog extends AdvancedDialog {
 		setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
 		setCheckboxText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Checkbox));
 
-		setIcon(PlayPadMain.stageIcon);
+		setIcon(PlayPadPlugin.getInstance().getIcon());
 
 		ButtonType updateButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Update), ButtonData.APPLY);
 		ButtonType cancelButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Cancel), ButtonData.CANCEL_CLOSE);

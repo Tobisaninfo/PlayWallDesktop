@@ -3,44 +3,27 @@ package de.tobias.playpad;
 import com.neovisionaries.ws.client.WebSocketException;
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.midi.action.ActionKeyHandler;
-import de.thecodelabs.midi.action.ActionRegistry;
-import de.thecodelabs.midi.midi.MidiCommandHandler;
-import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.thecodelabs.versionizer.VersionizerItem;
-import de.thecodelabs.versionizer.config.Artifact;
-import de.thecodelabs.versionizer.config.Repository;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.audio.JavaFXHandlerFactory;
 import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.log.LogSeasons;
-import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
-import de.tobias.playpad.midi.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.*;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.view.MapperListViewControllerImpl;
-import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
-import de.tobias.playpad.volume.GlobalVolume;
-import de.tobias.playpad.volume.PadVolume;
-import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -55,19 +38,19 @@ public class PlayPadImpl implements PlayPad {
 	private List<PadListener> padListeners = new ArrayList<>();
 
 	private MainViewController mainViewController;
+	private Image stageIcon;
 	private Project currentProject;
+
 	private Module module;
 
 	private UpdateService updateService;
-
 	protected GlobalSettings globalSettings;
 	private ModernDesign modernDesign;
 
 	private Session session;
 
-	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
+	PlayPadImpl(Application.Parameters parameters) {
 		this.parameters = parameters;
-		this.globalSettings = globalSettings;
 
 		App app = ApplicationUtils.getApplication();
 		this.module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
@@ -119,8 +102,8 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public Image getIcon() {
-		return PlayPadMain.stageIcon;
+	public GlobalSettings getGlobalSettings() {
+		return globalSettings;
 	}
 
 	@Override
@@ -159,11 +142,6 @@ public class PlayPadImpl implements PlayPad {
 		Worker.shutdown();
 	}
 
-	@Override
-	public GlobalSettings getGlobalSettings() {
-		return globalSettings;
-	}
-
 	public void openProject(Project project, Consumer<NVC> onLoaded) {
 		if (mainViewController == null) {
 			mainViewController = new MainViewController(e -> {
@@ -186,66 +164,15 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
-		App app = ApplicationUtils.getApplication();
-		// Setup PlayoutLog
-		try {
-			Path playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db");
-			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath));
-			Logger.info("Setup LogSeasonStorageHandler in path: " + playOutLogPath);
-		} catch (SQLException e) {
-			Logger.error("Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
-		}
-
 		modernDesign = new ModernDesignHandlerImpl();
 
-		// Register Update Service
-		Artifact playpadArtifact = app.getClasspathResource("build-app.json").deserialize(StorageTypes.JSON, Artifact.class);
-		Repository repository = app.getClasspathResource("repository.yml").deserialize(StorageTypes.YAML, Repository.class);
+		//// Setup PlayOutLog
+		//// Versionizer Register Update Service
+		//// Load Components
+		//// Load Midi Components
+		//// Volume Manager
 
-		VersionizerItem versionizerItem = new VersionizerItem(repository, SystemUtils.getRunPath().toString());
-		updateService = UpdateService.startVersionizer(versionizerItem, UpdateService.Strategy.JAR, UpdateService.InteractionType.GUI);
-		updateService.addArtifact(playpadArtifact, SystemUtils.getRunPath());
-		updateService.setRepositoryType(globalSettings.getUpdateChannel());
-
-		registerComponents(resourceBundle);
 		configureServer(delegate);
-	}
-
-	private void registerComponents(ResourceBundle resourceBundle) {
-		// Midi
-		MidiCommandHandler.getInstance().addMidiListener(new PD12());
-
-		try {
-			// Load Components
-			Registries registryCollection = PlayPadPlugin.getRegistries();
-
-			registryCollection.getActions().loadComponentsFromFile("components/Actions.xml", module, resourceBundle);
-			registryCollection.getAudioHandlers().loadComponentsFromFile("components/AudioHandler.xml", module, resourceBundle);
-			registryCollection.getDragModes().loadComponentsFromFile("components/DragMode.xml", module, resourceBundle);
-			registryCollection.getPadContents().loadComponentsFromFile("components/PadContent.xml", module, resourceBundle);
-			registryCollection.getTriggerItems().loadComponentsFromFile("components/Trigger.xml", module, resourceBundle);
-			registryCollection.getMainLayouts().loadComponentsFromFile("components/Layout.xml", module, resourceBundle);
-
-			// Register Handlers in Midi Library
-			ActionKeyHandler.setRunOnFxThread(true);
-			registryCollection.getActions().getComponents().forEach(actionProvider -> {
-				ActionRegistry.registerActionHandler(actionProvider.getActionHandler());
-			});
-
-			// Set Default
-			// TODO Set Default
-			registryCollection.getAudioHandlers().setDefaultID(JavaFXHandlerFactory.class);
-		} catch (Exception e) {
-			Logger.error(e);
-		}
-
-		// Volume Management
-		VolumeManager volumeManager = VolumeManager.getInstance();
-		volumeManager.addFilter(new GlobalVolume());
-		volumeManager.addFilter(new PadVolume());
-
-		// Mapper
-		BaseMapperListViewController.setInstance(new MapperListViewControllerImpl());
 	}
 
 	public Application.Parameters getParameters() {
@@ -284,5 +211,30 @@ public class PlayPadImpl implements PlayPad {
 	@Override
 	public UpdateService getUpdateService() {
 		return updateService;
+	}
+
+	/*
+	Getter / Setter
+	 */
+
+	@Override
+	public Image getIcon() {
+		return stageIcon;
+	}
+
+	public void setIcon(Image icon) {
+		this.stageIcon = icon;
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public void setGlobalSettings(GlobalSettings globalSettings) {
+		this.globalSettings = globalSettings;
+	}
+
+	public void setUpdateService(UpdateService updateService) {
+		this.updateService = updateService;
 	}
 }

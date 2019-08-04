@@ -29,6 +29,8 @@ import static de.thecodelabs.versionizer.service.UpdateService.RepositoryType;
  */
 public class GlobalSettings {
 
+	public static final String FILE_NAME = "GlobalSettings.xml";
+
 	private Path savePath;
 
 	// Key Binding

@@ -1,0 +1,60 @@
+package de.tobias.playpad.initialize;
+
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.tobias.playpad.PlayPadImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class PlayPadInitializer implements Runnable {
+
+	public interface Listener {
+		void startLoading(int count);
+
+		void startTask(PlayPadInitializeTask task);
+
+		void finishTask(PlayPadInitializeTask task);
+
+		void finishLoading();
+	}
+
+	private List<PlayPadInitializeTask> tasks;
+
+	private PlayPadImpl instance;
+	private Listener listener;
+
+	public PlayPadInitializer(PlayPadImpl instance, Listener listener) {
+		tasks = new ArrayList<>();
+		this.instance = instance;
+		this.listener = listener;
+	}
+
+	public void submit(PlayPadInitializeTask task) {
+		tasks.add(task);
+	}
+
+	public void start() {
+		Thread thread = new Thread(this);
+		thread.start();
+	}
+
+	@Override
+	public void run() {
+		App app = ApplicationUtils.getApplication();
+
+		listener.startLoading(tasks.size());
+
+		for (PlayPadInitializeTask task : tasks) {
+			listener.startTask(task);
+			try {
+				task.run(app, instance);
+			} catch (PlayPadInitializeAbortException ex) {
+				break;
+			}
+			listener.finishTask(task);
+		}
+
+		listener.finishLoading();
+	}
+}
