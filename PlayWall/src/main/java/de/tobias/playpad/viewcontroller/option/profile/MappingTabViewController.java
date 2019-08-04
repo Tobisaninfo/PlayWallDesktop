@@ -101,14 +101,12 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		MidiDeviceInfo[] data = Midi.getInstance().getMidiDevices();
 		// Gerät anzeigen - Doppelte weg
 		for (MidiDeviceInfo item : data) {
-			if (item != null) {
-				if (!deviceComboBox.getItems().contains(item.getName())) {
-					deviceComboBox.getItems().add(item.getName());
+			if (item != null && !deviceComboBox.getItems().contains(item.getName())) {
+				deviceComboBox.getItems().add(item.getName());
 
-					// aktives Gerät wählen
-					if (item.getName().equals(Profile.currentProfile().getProfileSettings().getMidiDevice())) {
-						deviceComboBox.getSelectionModel().select(item.getName());
-					}
+				// aktives Gerät wählen
+				if (item.getName().equals(Profile.currentProfile().getProfileSettings().getMidiDevice())) {
+					deviceComboBox.getSelectionModel().select(item.getName());
 				}
 			}
 		}
@@ -194,27 +192,24 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		String device = deviceComboBox.getValue();
 
 		// Ändern und Speichern
-		if (device != null) {
-			if (isMidiActive()) {
-				Midi midi = Midi.getInstance();
-				if (!device.equals(profileSettings.getMidiDevice()) || !midi.isOpen()) {
-					try {
-						// Setup
-						final MidiDeviceInfo midiDeviceInfo = midi.getMidiDeviceInfo(device);
-						midi.openDevice(midiDeviceInfo);
+		if (device != null && isMidiActive()) {
+			Midi midi = Midi.getInstance();
+			if (!device.equals(profileSettings.getMidiDevice()) || !midi.isOpen()) {
+				try {
+					// Setup
+					final MidiDeviceInfo midiDeviceInfo = midi.getMidiDeviceInfo(device);
+					midi.openDevice(midiDeviceInfo);
 
-						// UI Rückmeldung
-						if (midi.isOpen()) {
-							showInfoMessage(Localization.getString(Strings.Info_Midi_Device_Connected, device));
-							profileSettings.setMidiDeviceName(device);
-						}
-					} catch (NullPointerException e) {
-						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Unavailible, device));
-						Logger.error(e);
-					} catch (IllegalArgumentException | MidiUnavailableException e) {
-						showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
-						Logger.error(e);
+					// UI Rückmeldung
+					if (midi.isOpen()) {
+						profileSettings.setMidiDeviceName(device);
 					}
+				} catch (NullPointerException e) {
+					showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Unavailible, device));
+					Logger.error(e);
+				} catch (IllegalArgumentException | MidiUnavailableException e) {
+					showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+					Logger.error(e);
 				}
 			}
 		}
