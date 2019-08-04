@@ -111,10 +111,22 @@ PlayPad Elements
 	-fx-text-fill: white !important;
 }
 
-.progress-bar .bar {
-	-fx-background-color: #EEEEEE;
-}
-
 .progress-indicator .percentage {
 	-fx-fill: white;
 }
+
+
+/*
+	Custom classes
+ */
+
+.title {
+	-fx-font-size: 50;
+	-fx-font-weight: bold;
+}
+
+.subtitle {
+	-fx-font-size: 25;
+	-fx-font-weight: light;
+}
+
