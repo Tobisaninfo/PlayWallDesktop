@@ -125,6 +125,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		globalSettings.getKeyCollection().loadDefaultFromFile("components/Keys.xml", Localization.getBundle());
 		globalSettings.getKeyCollection().load(globalSettingsPath);
 
+		// Setup Profiles
+		try {
+			ProfileReferenceManager.loadProfiles();
+		} catch (IOException | DocumentException e) {
+			Logger.error(e);
+		}
+
 		// Set Factory Implementations
 		impl = new PlayPadImpl(globalSettings, getParameters());
 		PlayPadPlugin.setInstance(impl);
@@ -172,12 +179,11 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			}
 
 			/*
-			 * Load Data
+			 * Load Projects
 			 */
 			try {
-				ProfileReferenceManager.loadProfiles();
 				ProjectReferenceManager.loadProjects();
-			} catch (IOException | DocumentException e) {
+			} catch (IOException e) {
 				Logger.error(e);
 			}
 
