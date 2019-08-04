@@ -22,6 +22,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 
 import java.io.IOException;
@@ -152,6 +153,7 @@ public class PlayPadImpl implements PlayPad {
 					onLoaded.accept(e);
 				}
 				mainViewListeners.forEach(l -> l.onInit(mainViewController));
+				Platform.setImplicitExit(true);
 			});
 		} else {
 			currentProject = project;
@@ -181,7 +183,10 @@ public class PlayPadImpl implements PlayPad {
 		initializer.submit(new PluginLoadingTask());
 		initializer.submit(new ProjectsLoadingTask());
 
+		initializer.submit(new CheckUpdateTask());
+
 		initializer.submit(new OpenLastDocumentTask());
+		initializer.submit(new ProjectParameterOpenTask());
 
 		initializer.start();
 	}

@@ -62,4 +62,10 @@ public class SplashScreenViewController extends NVC implements PlayPadInitialize
 			new LaunchDialog(new Stage()); // Show Launch Stage
 		});
 	}
+
+	@Override
+	public void abortedLoading() {
+		Platform.setImplicitExit(false);
+		Platform.runLater(this::closeStage);
+	}
 }

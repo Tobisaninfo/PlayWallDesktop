@@ -7,30 +7,23 @@ import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
-import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
-import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.VersionUpdater;
 import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.SplashScreenViewController;
-import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import io.github.openunirest.http.Unirest;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
@@ -41,7 +34,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.UUID;
 
@@ -98,19 +90,17 @@ public class PlayPadMain extends Application {
 	@Override
 	public void init() {
 		App app = ApplicationUtils.getApplication();
+		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
 		// Init SSLContext
 		if (app.isDebug()) {
 			disableSSL();
 		}
 
-		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
-
 		// Set Factory Implementations
 		impl = new PlayPadImpl(getParameters());
 
 		Image stageIcon = new Image(ICON_PATH);
-
 		Alerts.getInstance().setDefaultIcon(stageIcon);
 		impl.setIcon(stageIcon);
 
@@ -122,53 +112,7 @@ public class PlayPadMain extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		try {
-			SplashScreenViewController.show(impl, stage);
-
-			// Auto Open Project DEBUG
-			if (!getParameters().getRaw().isEmpty()) {
-				if (getParameters().getNamed().containsKey("project")) {
-					UUID uuid = UUID.fromString(getParameters().getNamed().get("project"));
-					ProjectLoader loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid));
-					Project project = loader.load();
-					impl.openProject(project, null);
-					return;
-				}
-			}
-
-			// checkUpdates(impl.globalSettings, stage);
-		} catch (Exception e) {
-			Logger.error(e);
-		}
-	}
-
-	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
-		if (globalSettings.isAutoUpdate() && !globalSettings.isIgnoreUpdate()) {
-			Worker.runLater(() ->
-			{
-				UpdateService updateService = impl.getUpdateService();
-				updateService.fetchCurrentVersion();
-				if (updateService.isUpdateAvailable()) {
-					Platform.runLater(() ->
-					{
-						AutoUpdateDialog autoUpdateDialog = new AutoUpdateDialog(updateService, owner);
-						autoUpdateDialog.showAndWait().filter(item -> item.getButtonData() == ButtonData.APPLY).ifPresent(result ->
-						{
-							Logger.info("Install update");
-							try {
-								updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
-								System.exit(0);
-							} catch (IOException e) {
-								Logger.error(e);
-							}
-						});
-						if (autoUpdateDialog.isSelected()) {
-							globalSettings.setIgnoreUpdate(true);
-						}
-					});
-				}
-			});
-		}
+		SplashScreenViewController.show(impl, stage);
 	}
 
 	@Override
