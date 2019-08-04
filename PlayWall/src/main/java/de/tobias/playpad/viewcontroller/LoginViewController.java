@@ -6,7 +6,6 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.AppUserInfoStrings;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.server.LoginException;
@@ -66,7 +65,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 	@Override
 	public void initStage(Stage stage) {
 		stage.setTitle(getString(Strings.UI_Dialog_Login_Title));
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setResizable(false);
 		stage.setWidth(650);

@@ -53,7 +53,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -68,7 +67,7 @@ import java.util.UUID;
 public class PlayPadMain extends Application implements LocalizationDelegate {
 
 	private static final String iconPath = "icon_small.png";
-	public static Optional<Image> stageIcon = Optional.empty();
+	public static Image stageIcon;
 
 	public static final long displayTimeMillis = 1500;
 
@@ -145,8 +144,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void start(Stage stage) {
 		try {
 			// Assets
-			Image stageIcon = new Image(iconPath);
-			PlayPadMain.stageIcon = Optional.of(stageIcon);
+			PlayPadMain.stageIcon = new Image(iconPath);
 			Alerts.getInstance().setDefaultIcon(stageIcon);
 
 			// App Setup

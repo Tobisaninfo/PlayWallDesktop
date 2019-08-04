@@ -4,7 +4,6 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -138,7 +137,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(380);
 		stage.setMaxWidth(380);

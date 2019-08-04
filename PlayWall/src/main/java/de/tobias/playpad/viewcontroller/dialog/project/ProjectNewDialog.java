@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.dialog.project;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
@@ -67,7 +66,7 @@ public class ProjectNewDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.initModality(Modality.WINDOW_MODAL);
 

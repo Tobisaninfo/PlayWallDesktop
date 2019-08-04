@@ -165,7 +165,7 @@ public class ProjectManagerDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(600);
 		stage.setMinHeight(540);

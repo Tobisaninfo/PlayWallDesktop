@@ -6,7 +6,6 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.log.LogSeason;
@@ -75,7 +74,7 @@ public class PlayoutLogViewController extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_PlayoutLog_Title));
 		stage.setMinWidth(375);

@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
@@ -23,6 +23,6 @@ public class UpdaterDialog extends Dialog<Void> {
 		initOwner(owner);
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialogStage = (Stage) getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialogStage.getIcons()::add);
+		dialogStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 	}
 }

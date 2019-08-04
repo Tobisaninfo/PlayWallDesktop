@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.server.Session;
@@ -49,7 +48,7 @@ public class AuthViewController extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(500);
 		stage.setMinHeight(250);

@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -96,7 +97,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(700);
@@ -128,7 +129,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 			profile.save();
 		} catch (Exception e) {
 			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

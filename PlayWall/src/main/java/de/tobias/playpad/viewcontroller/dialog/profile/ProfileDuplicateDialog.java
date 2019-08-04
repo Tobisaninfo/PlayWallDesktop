@@ -2,7 +2,7 @@ package de.tobias.playpad.viewcontroller.dialog.profile;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
@@ -25,7 +25,7 @@ public class ProfileDuplicateDialog extends TextInputDialog {
 		initOwner(controller.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
+		dialog.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		button.setDisable(true); // Initial disable

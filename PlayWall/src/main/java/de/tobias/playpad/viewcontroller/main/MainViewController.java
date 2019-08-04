@@ -217,7 +217,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				stage.setAlwaysOnTop(Profile.currentProfile().getProfileSettings().isWindowAlwaysOnTop());
 		});
 
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(KeyCombination.SHIFT_DOWN + "+Esc"));
 		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
 		stage.show();
@@ -315,7 +315,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				alert.initOwner(getStage());
 				alert.initModality(Modality.WINDOW_MODAL);
 				Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-				PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+				alertStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.isPresent() && result.get() != ButtonType.OK) {

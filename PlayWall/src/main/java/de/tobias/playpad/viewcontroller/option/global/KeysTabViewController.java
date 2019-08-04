@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.global;
 
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -151,7 +150,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+		alertStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		alert.showAndWait();
 	}
 

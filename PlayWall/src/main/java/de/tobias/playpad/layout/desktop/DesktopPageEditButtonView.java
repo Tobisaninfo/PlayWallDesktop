@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
@@ -124,8 +125,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				controller.highlightPageButton(page.getPosition());
 				event.consume();
 			} catch (CloneNotSupportedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		} else if (event.getSource() == deleteButton) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -135,7 +135,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 			alert.initOwner(controller.getContainingWindow());
 			alert.initModality(Modality.WINDOW_MODAL);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+			stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 			Optional<ButtonType> result = alert.showAndWait();
 			result.filter(r -> r == ButtonType.OK).ifPresent(r ->
@@ -158,7 +158,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		dialog.initOwner(controller.getContainingWindow());
 		dialog.initModality(Modality.WINDOW_MODAL);
 		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		Optional<String> result = dialog.showAndWait();
 		result.ifPresent(page::setName);

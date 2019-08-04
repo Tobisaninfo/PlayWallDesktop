@@ -99,6 +99,9 @@ public class Strings {
 	public static final String UI_Placeholder_Plugins = "UI.Placeholder.Plugins";
 	public static final String UI_Placeholder_Updates = "UI.Placeholder.Updates";
 
+	// Info - MIDI
+	public static final String Info_Midi_Device_Connected = "Info.Midi.Device.Connected";
+
 	// Info - Settings
 	public static final String Info_Settings_ResetWarning = "Info.Settings.ResetWarning";
 	public static final String Info_Settings_CacheDelete = "Info.Settings.CacheDelete";

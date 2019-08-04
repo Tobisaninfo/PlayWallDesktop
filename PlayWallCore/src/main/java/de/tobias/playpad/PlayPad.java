@@ -10,7 +10,6 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -85,7 +84,7 @@ public interface PlayPad {
 	 *
 	 * @return Programmicon
 	 */
-	Optional<Image> getIcon();
+	Image getIcon();
 
 	/**
 	 * Beendet PlayWall.

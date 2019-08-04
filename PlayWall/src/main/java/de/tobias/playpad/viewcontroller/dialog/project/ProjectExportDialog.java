@@ -59,7 +59,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
 		stage.setWidth(375);

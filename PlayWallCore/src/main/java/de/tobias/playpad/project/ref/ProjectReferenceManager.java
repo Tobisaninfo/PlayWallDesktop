@@ -7,7 +7,11 @@ import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
+import de.tobias.playpad.project.ProjectSerializer;
+import de.tobias.playpad.project.ProjectWriter;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
@@ -230,7 +234,7 @@ public final class ProjectReferenceManager {
 		return items;
 	}
 
-	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
+	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProfileAbortException {
 		if (newValue) {
 			ProjectLoader loader = new ProjectLoader(reference);
 			Project project = loader.load();
@@ -247,7 +251,9 @@ public final class ProjectReferenceManager {
 	}
 
 	public static boolean validateProjectName(ProjectReference reference, String newValue) {
-		return getProjects().stream().filter(r -> r != reference).noneMatch(p -> p.getName().equals(newValue));
+		return getProjects().stream()
+				.filter(r -> r != reference)
+				.noneMatch(p -> p.getName().equals(newValue));
 	}
 
 	public static boolean validateProjectName(String newValue) {

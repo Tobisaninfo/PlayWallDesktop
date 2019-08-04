@@ -43,7 +43,6 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
@@ -120,7 +119,7 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public Optional<Image> getIcon() {
+	public Image getIcon() {
 		return PlayPadMain.stageIcon;
 	}
 

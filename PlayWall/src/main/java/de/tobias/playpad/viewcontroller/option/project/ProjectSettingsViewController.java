@@ -66,7 +66,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(500);

@@ -139,7 +139,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		PlayPadPlugin.styleable().applyStyle(stage);
 
 		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setResizable(false);
 		stage.setWidth(650);
@@ -193,7 +193,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 				Optional<ProjectReference> importedProject = dialog.showAndWait();
 				importedProject.ifPresent(projectListView.getItems()::add);
 			} catch (IOException | DocumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			dialog.initOwner(getContainingWindow());
 			dialog.initModality(Modality.WINDOW_MODAL);
 			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-			PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+			stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 			Optional<ProjectReference> result = dialog.showAndWait();
 			result.ifPresent((ref) -> {
@@ -243,7 +243,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			alert.setContentText(getString(Strings.UI_Dialog_ProjectManager_Delete_Content, ref));
 
 			Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
-			PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
+			dialog.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 			alert.initOwner(getContainingWindow());
 			alert.initModality(Modality.WINDOW_MODAL);
 

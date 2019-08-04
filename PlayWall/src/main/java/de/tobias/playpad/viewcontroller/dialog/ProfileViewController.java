@@ -4,7 +4,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -93,7 +92,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setTitle(Localization.getString(Strings.UI_Dialog_Profile_Title));
 		stage.setMinWidth(375);
@@ -147,7 +146,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
+		dialog.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 

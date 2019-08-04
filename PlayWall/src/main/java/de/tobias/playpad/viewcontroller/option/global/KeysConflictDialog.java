@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.settings.keys.KeyCollection;
@@ -27,7 +27,7 @@ public class KeysConflictDialog extends Alert {
 		setContentText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Content, keys));
 
 		Stage dialogStage = (Stage) getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialogStage.getIcons()::add);
+		dialogStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		initModality(Modality.WINDOW_MODAL);
 	}
 }
