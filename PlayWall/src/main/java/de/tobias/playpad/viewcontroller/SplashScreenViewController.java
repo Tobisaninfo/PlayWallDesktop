@@ -7,6 +7,7 @@ import de.tobias.playpad.initialize.PlayPadInitializeTask;
 import de.tobias.playpad.initialize.PlayPadInitializer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,6 +16,8 @@ public class SplashScreenViewController extends NVC implements PlayPadInitialize
 
 	@FXML
 	private ProgressBar progressBar;
+	@FXML
+	private Label loadingLabel;
 
 	private int maxValue;
 	private int currentValue;
@@ -43,14 +46,13 @@ public class SplashScreenViewController extends NVC implements PlayPadInitialize
 
 	@Override
 	public void startTask(PlayPadInitializeTask task) {
-
+		Platform.runLater(() -> loadingLabel.setText(task.name()));
 	}
 
 	@Override
 	public void finishTask(PlayPadInitializeTask task) {
 		currentValue++;
-
-		progressBar.setProgress(currentValue / (double) maxValue);
+		Platform.runLater(() -> progressBar.setProgress(currentValue / (double) maxValue));
 	}
 
 	@Override

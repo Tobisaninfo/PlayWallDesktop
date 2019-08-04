@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
@@ -13,8 +12,9 @@
          </image>
       </ImageView>
       <ProgressBar fx:id="progressBar" layoutX="14.0" layoutY="366.0" prefHeight="7.0" prefWidth="772.0" progress="0.39" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
-      <Label layoutX="14.0" layoutY="369.0" text="Loading ..." AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="14.0" />
+      <Label layoutX="14.0" layoutY="352.0" text="Loading ..." AnchorPane.bottomAnchor="46.0" AnchorPane.leftAnchor="14.0" />
       <Label layoutX="25.0" layoutY="29.0" styleClass="title" text="PlayWall" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0" />
       <Label layoutX="25.0" layoutY="93.0" styleClass="subtitle" text="Version 6.2.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="90.0" />
+      <Label fx:id="loadingLabel" layoutX="14.0" layoutY="368.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="14.0" />
    </children>
 </AnchorPane>
