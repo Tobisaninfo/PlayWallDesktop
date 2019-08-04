@@ -66,7 +66,7 @@ import java.util.UUID;
 
 public class PlayPadMain extends Application implements LocalizationDelegate {
 
-	private static final String iconPath = "icon_small.png";
+	private static final String ICON_PATH = "icon_small.png";
 	public static Image stageIcon;
 
 	public static final long displayTimeMillis = 1500;
@@ -78,27 +78,36 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public static SSLContext sslContext;
 
 	public static void main(String[] args) {
-		try {
-			// Verhindert einen Bug unter Windows 10 mit comboboxen
-			if (OS.getType() == OSType.Windows) {
-				System.setProperty("glass.accessible.force", "false");
-			}
-
-			// Register UserDefaults Serializer
-			UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
-
-			App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
-			ApplicationUtils.registerUpdateSercive(new VersionUpdater());
-
-			Logger.init(app.getPath(PathType.LOG));
-			Logger.setLevelFilter(LogLevelFilter.DEBUG);
-			Logger.debug("Start JavaFX Application");
-
-			app.start(args);
-		} catch (Exception e) {
-			e.printStackTrace();
+		// Verhindert einen Bug unter Windows 10 mit comboboxen
+		if (OS.getType() == OSType.Windows) {
+			System.setProperty("glass.accessible.force", "false");
 		}
+
+		// Register UserDefaults Serializer
+		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
+
+		ApplicationUtils.addAppListener(PlayPadMain::applicationWillStart);
+		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
+		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+
+		app.start(args);
 	}
+
+	private static void applicationWillStart(App app)
+	{
+		Logger.init(app.getPath(PathType.LOG));
+		if(app.isDebug())
+		{
+			Logger.setLevelFilter(LogLevelFilter.DEBUG);
+			Logger.setFileOutput(FileOutputOption.DISABLED);
+		}
+		else
+		{
+			Logger.setFileOutput(FileOutputOption.COMBINED);
+		}
+		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
+	}
+
 
 	@Override
 	public void init() {
@@ -151,7 +160,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	public void start(Stage stage) {
 		try {
 			// Assets
-			PlayPadMain.stageIcon = new Image(iconPath);
+			PlayPadMain.stageIcon = new Image(ICON_PATH);
 			Alerts.getInstance().setDefaultIcon(stageIcon);
 
 			// App Setup
