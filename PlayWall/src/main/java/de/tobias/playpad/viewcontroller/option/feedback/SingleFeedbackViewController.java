@@ -7,6 +7,7 @@ import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.ColorUtils;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.view.FeedbackColorPickerView;
 import javafx.event.ActionEvent;
@@ -109,11 +110,10 @@ public class SingleFeedbackViewController extends NVC {
 
 	private void setColorChooseButtonColor(Paint inputColor, Button button) {
 		colorPreviewDefault.setFill(inputColor);
-		Color color;
-		if (inputColor.equals(Color.BLACK))
-			color = Color.WHITE;
-		else
-			color = Color.BLACK;
-		((FontIcon) button.getGraphic()).setColor(color);
+		if (inputColor instanceof Color) {
+			((FontIcon) button.getGraphic()).setColor(ColorUtils.getAppropriateTextColor((Color) inputColor));
+		} else {
+			((FontIcon) button.getGraphic()).setColor(Color.BLACK);
+		}
 	}
 }

@@ -66,7 +66,6 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		final KeyType[] keys = KeyType.values();
 		Stream.of(keys).forEach(item ->
 		{
-			// TODO Extract
 			String name = "";
 			switch (item) {
 				case MIDI:
@@ -95,7 +94,6 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 						action.removeKey(controller.getKey());
 					}
 				} catch (NoSuchComponentException ex) {
-					// TODO Error Handling
 					Logger.error(e);
 				}
 

@@ -13,7 +13,7 @@
                 <StackPane layoutX="122.0" layoutY="232.0" maxWidth="1.7976931348623157E308" prefWidth="150.0"
                            HBox.hgrow="ALWAYS">
                     <children>
-                        <Rectangle fx:id="colorPreviewDefault" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE"
+                        <Rectangle fx:id="colorPreviewDefault" arcHeight="5.0" arcWidth="5.0" fill="WHITE"
                                    height="26.0" layoutX="122.0" layoutY="272.0" stroke="BLACK" strokeType="INSIDE"
                                    width="128.0" StackPane.alignment="CENTER_LEFT"/>
                         <Button fx:id="colorChooseDefaultButton" alignment="CENTER_RIGHT" layoutX="122.0"
