@@ -124,6 +124,7 @@ public class Profile {
 				profile.mappings = new MappingCollection();
 			}
 
+			// Set current mapping
 			final Optional<Mapping> activeMapping = profile.getMappings().getActiveMapping();
 			final Optional<Mapping> anyMapping = profile.mappings.getMappings().stream().findAny();
 			final Mapping currentMapping = activeMapping.orElse(anyMapping.orElseGet(() -> {
@@ -131,6 +132,7 @@ public class Profile {
 				profile.mappings.addMapping(mapping);
 				return mapping;
 			}));
+			profile.mappings.setActiveMapping(currentMapping);
 			Mapping.setCurrentMapping(currentMapping);
 
 			setCurrentProfile(profile);
