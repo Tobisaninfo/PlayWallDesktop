@@ -4,6 +4,7 @@ import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.device.MidiDevice;
 import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.midi.mapping.Key;
 import de.thecodelabs.midi.mapping.MidiKey;
 import de.thecodelabs.midi.midi.Midi;
@@ -135,7 +136,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		final MidiDevice device = Midi.getInstance().getDevice();
 		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
 
-		if (device != null) {
+		if (device != null && transcript != null) {
 			if (device.isModeSupported(Midi.Mode.OUTPUT)) {
 				// remove old Elements
 				if (feedbackControllers != null) {
@@ -148,10 +149,11 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				final ActionProvider actionProvider = PlayPadPlugin.getRegistries().getActions().getFactory(action.getActionType());
 				final FeedbackType[] feedbackTypes = actionProvider.supportedFeedbackOptions(action, key.getType());
 
+				final FeedbackValue[] feedbackValues = transcript.getFeedbackValues();
 				this.feedbackControllers = new NVC[feedbackTypes.length];
 				for (int i = 0; i < feedbackTypes.length; i++) {
 					final FeedbackType feedbackType = feedbackTypes[i];
-					NVC controller = new SingleFeedbackViewController(key.getFeedbackForType(feedbackType), feedbackType, transcript.getFeedbackValues());
+					NVC controller = new SingleFeedbackViewController(key.getFeedbackForType(feedbackType), feedbackType, feedbackValues);
 					this.feedbackControllers[i] = controller;
 				}
 			}
