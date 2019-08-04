@@ -1,6 +1,5 @@
 package de.tobias.playpad;
 
-import com.neovisionaries.ws.client.WebSocketException;
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
@@ -11,11 +10,14 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.design.ModernDesign;
-import de.tobias.playpad.design.ModernDesignHandlerImpl;
+import de.tobias.playpad.initialize.*;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.*;
+import de.tobias.playpad.server.ConnectionState;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.Session;
+import de.tobias.playpad.server.SessionDelegate;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
@@ -26,7 +28,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class PlayPadImpl implements PlayPad {
@@ -158,54 +159,43 @@ public class PlayPadImpl implements PlayPad {
 		}
 	}
 
-	@Override
-	public Project getCurrentProject() {
-		return currentProject;
-	}
+	public void startup(SessionDelegate delegate, PlayPadInitializer.Listener listener) {
+		PlayPadInitializer initializer = new PlayPadInitializer(this, listener);
 
-	void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
-		modernDesign = new ModernDesignHandlerImpl();
+		initializer.submit(new LocalizationLoadingTask());
+		initializer.submit(new GlobalSettingsLoadingTask());
+		initializer.submit(new KeyboardMappingLoadingTask());
+		initializer.submit(new ProfileLoadingTask());
 
-		//// Setup PlayOutLog
-		//// Versionizer Register Update Service
-		//// Load Components
-		//// Load Midi Components
-		//// Volume Manager
+		initializer.submit(new ServiceInitializationTask());
 
-		configureServer(delegate);
+		initializer.submit(new PlayOutLogSetupTask());
+		initializer.submit(new VersionizerSetupTask());
+		initializer.submit(new ComponentLoadingTask());
+		initializer.submit(new MidiActionsInitializerTask());
+		initializer.submit(new VolumeInitializerTask());
+
+		initializer.submit(new ServerInitializeTask(delegate));
+
+		initializer.submit(new NativeAppInitializerTask());
+		initializer.submit(new PluginLoadingTask());
+		initializer.submit(new ProjectsLoadingTask());
+
+		initializer.submit(new OpenLastDocumentTask());
+
+		initializer.start();
 	}
 
 	public Application.Parameters getParameters() {
 		return parameters;
 	}
 
-	private void configureServer(SessionDelegate delegate) {
-		// Load Server session key
-		session = Session.load();
-
-		if (session == null) {
-			session = delegate.getSession();
-		}
-
-		if (session != Session.EMPTY) {
-			// Connect to Server
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			try {
-				server.connect(session.getKey());
-			} catch (IOException | WebSocketException e) {
-				Logger.error(e);
-			} catch (SessionNotExisitsException ignored) {
-
-			}
-		}
-	}
-
-	public Session getSession() {
-		return session;
-	}
-
 	public ModernDesign getModernDesign() {
 		return modernDesign;
+	}
+
+	public void setModernDesign(ModernDesign modernDesign) {
+		this.modernDesign = modernDesign;
 	}
 
 	@Override
@@ -216,6 +206,11 @@ public class PlayPadImpl implements PlayPad {
 	/*
 	Getter / Setter
 	 */
+
+	@Override
+	public Project getCurrentProject() {
+		return currentProject;
+	}
 
 	@Override
 	public Image getIcon() {
@@ -236,5 +231,13 @@ public class PlayPadImpl implements PlayPad {
 
 	public void setUpdateService(UpdateService updateService) {
 		this.updateService = updateService;
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 }

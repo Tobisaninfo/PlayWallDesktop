@@ -1,5 +1,6 @@
 package de.tobias.playpad.initialize;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playpad.PlayPadImpl;
@@ -36,25 +37,30 @@ public class PlayPadInitializer implements Runnable {
 
 	public void start() {
 		Thread thread = new Thread(this);
+		thread.setName("PlayPad Initializer Thread");
 		thread.start();
 	}
 
 	@Override
 	public void run() {
-		App app = ApplicationUtils.getApplication();
+		try {
+			App app = ApplicationUtils.getApplication();
 
-		listener.startLoading(tasks.size());
+			listener.startLoading(tasks.size());
 
-		for (PlayPadInitializeTask task : tasks) {
-			listener.startTask(task);
-			try {
-				task.run(app, instance);
-			} catch (PlayPadInitializeAbortException ex) {
-				break;
+			for (PlayPadInitializeTask task : tasks) {
+				listener.startTask(task);
+				try {
+					task.run(app, instance);
+				} catch (PlayPadInitializeAbortException ex) {
+					break;
+				}
+				listener.finishTask(task);
 			}
-			listener.finishTask(task);
-		}
 
-		listener.finishLoading();
+			listener.finishLoading();
+		} catch (Exception e) {
+			Logger.error(e);
+		}
 	}
 }

@@ -39,6 +39,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		"style/components/menu.css",
 		"style/components/toggle-button.css",
 		"style/components/list.css",
+		"style/components/progress-bar.css",
 		"style/components/dialog.css"
 	)
 

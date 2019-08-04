@@ -7,15 +7,14 @@ import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
-import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
-import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.plugin.ModernPluginManager;
+import de.tobias.playpad.design.ModernDesignHandlerImpl;
+import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.loader.ProjectLoader;
@@ -23,8 +22,7 @@ import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.update.VersionUpdater;
 import de.tobias.playpad.util.UUIDSerializer;
-import de.tobias.playpad.viewcontroller.LaunchDialog;
-import de.tobias.playpad.viewcontroller.LoginViewController;
+import de.tobias.playpad.viewcontroller.SplashScreenViewController;
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog;
 import io.github.openunirest.http.Unirest;
 import javafx.application.Application;
@@ -44,8 +42,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.cert.X509Certificate;
 import java.util.UUID;
 
@@ -110,37 +106,24 @@ public class PlayPadMain extends Application {
 
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
-		//// Load Localization
-		//// Load Global Settings
-		//// Load Keyboard Mapping
-		//// Loading Profiles
-
-		//// Set Service/Interface Implementations
-
 		// Set Factory Implementations
 		impl = new PlayPadImpl(getParameters());
 
 		Image stageIcon = new Image(ICON_PATH);
+
 		Alerts.getInstance().setDefaultIcon(stageIcon);
 		impl.setIcon(stageIcon);
 
+		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
+		impl.setModernDesign(new ModernDesignHandlerImpl());
+
 		PlayPadPlugin.setInstance(impl);
-
-		/*
-		 * Setup
-		 */
-
-		impl.startup(Localization.getBundle(), new LoginViewController());
 	}
 
 	@Override
 	public void start(Stage stage) {
 		try {
-			//// Native Application
-			//// Load Plugins
-			//// Load Projects
-
-			//// Open Last Project
+			SplashScreenViewController.show(impl, stage);
 
 			// Auto Open Project DEBUG
 			if (!getParameters().getRaw().isEmpty()) {
@@ -153,10 +136,7 @@ public class PlayPadMain extends Application {
 				}
 			}
 
-			// Show Launch Stage
-			new LaunchDialog(stage);
-
-			checkUpdates(impl.globalSettings, stage);
+			// checkUpdates(impl.globalSettings, stage);
 		} catch (Exception e) {
 			Logger.error(e);
 		}
