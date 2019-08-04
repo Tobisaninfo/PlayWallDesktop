@@ -118,7 +118,6 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 	private MapperViewController addMapperView(KeyType type, Key key) {
 		MapperViewController controller = null;
 
-		// TODO Extract
 		switch (type) {
 			case MIDI:
 				controller = new MidiMapperViewController();
@@ -128,21 +127,20 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 				break;
 		}
 
-		if (controller != null) {
-			controller.setKey(key);
-			Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+		controller.setKey(key);
+		Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
 
-			HBox hbox = new HBox(controller.getParent(), deleteButton);
-			hbox.setSpacing(14);
+		HBox hbox = new HBox(controller.getParent(), deleteButton);
+		hbox.setSpacing(14);
 
-			mappingView.getChildren().addAll(hbox);
+		mappingView.getChildren().addAll(hbox);
 
-			deleteButton.setOnAction(e ->
-			{
-				action.removeKey(key);
-				mappingView.getChildren().removeAll(hbox);
-			});
-		}
+		deleteButton.setOnAction(e ->
+		{
+			action.removeKey(key);
+			mappingView.getChildren().removeAll(hbox);
+		});
+
 		controllers.add(controller);
 		MapperViewController finalController = controller;
 		addListeners.forEach(i -> i.onAdd(key, finalController));

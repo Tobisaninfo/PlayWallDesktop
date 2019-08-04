@@ -5,6 +5,7 @@ import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.action.ActionKeyHandler;
 import de.thecodelabs.midi.action.ActionRegistry;
+import de.thecodelabs.midi.midi.MidiCommandHandler;
 import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -22,6 +23,7 @@ import de.tobias.playpad.design.ModernDesign;
 import de.tobias.playpad.design.ModernDesignHandlerImpl;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
+import de.tobias.playpad.midi.PD12;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.server.*;
@@ -151,7 +153,7 @@ public class PlayPadImpl implements PlayPad {
 			Path applicationSupportPath = SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain");
 			FileUtils.deleteDirectory(applicationSupportPath);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		ModernPluginManager.getInstance().showdown();
@@ -212,8 +214,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private void registerComponents(ResourceBundle resourceBundle) {
 		// Midi
-		// TODO Handle PD12
-		//DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
+		MidiCommandHandler.getInstance().addMidiListener(new PD12());
 
 		try {
 			// Load Components
