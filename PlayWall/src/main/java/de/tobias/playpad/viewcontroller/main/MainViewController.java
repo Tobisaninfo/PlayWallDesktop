@@ -661,7 +661,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			if (midiDeviceInfo != null) {
 				Midi.getInstance().openDevice(midiDeviceInfo, Midi.Mode.INPUT, Midi.Mode.OUTPUT);
 			}
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
+			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 		} catch (NullPointerException e) {
 			Logger.error(e);
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));

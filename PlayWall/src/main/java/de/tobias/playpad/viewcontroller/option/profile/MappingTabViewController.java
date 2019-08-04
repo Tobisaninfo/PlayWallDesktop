@@ -235,7 +235,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		if (mapping != null) {
 			FileChooser chooser = new FileChooser();
 
-			FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.midiPresetType);
+			FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.PRESET_TYPE);
 			chooser.getExtensionFilters().add(filter);
 
 			File file = chooser.showSaveDialog(getContainingWindow());
@@ -326,7 +326,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	@FXML
 	private void mappingImportHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.midiPresetType));
+		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.PRESET_TYPE));
 		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
 			Path path = file.toPath();

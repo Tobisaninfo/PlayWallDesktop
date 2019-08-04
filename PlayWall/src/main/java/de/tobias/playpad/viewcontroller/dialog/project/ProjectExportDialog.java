@@ -80,7 +80,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 
 		// Extension Filter in FileChooser
 		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
-		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
 		File file = chooser.showSaveDialog(getContainingWindow());

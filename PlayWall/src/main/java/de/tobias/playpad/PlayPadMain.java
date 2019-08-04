@@ -69,10 +69,10 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 	private static final String ICON_PATH = "icon_small.png";
 	public static Image stageIcon;
 
-	public static final long displayTimeMillis = 1500;
+	public static final long NOTIFICATION_DISPLAY_TIME = 1500;
 
-	public static final String projectZIPType = "*.zip";
-	public static final String midiPresetType = "*.pre";
+	public static final String ZIP_TYPE = "*.zip";
+	public static final String PRESET_TYPE = "*.pre";
 
 	private static PlayPadImpl impl;
 	public static SSLContext sslContext;
@@ -93,16 +93,13 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		app.start(args);
 	}
 
-	private static void applicationWillStart(App app)
-	{
+	private static void applicationWillStart(App app) {
 		Logger.init(app.getPath(PathType.LOG));
-		if(app.isDebug())
-		{
+		if (app.isDebug()) {
 			Logger.setLevelFilter(LogLevelFilter.DEBUG);
 			Logger.setFileOutput(FileOutputOption.DISABLED);
-		}
-		else
-		{
+			Logger.addFilter(message -> !message.getCaller().getClassName().contains("org.apache.commons.logging.impl.SLF4JLog"));
+		} else {
 			Logger.setFileOutput(FileOutputOption.COMBINED);
 		}
 		Logger.info("Logging initialized (Running in LogLevel: {0})", Logger.getLevelFilter().toString());
@@ -190,11 +187,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			/*
 			 * Load Projects
 			 */
-			try {
-				ProjectReferenceManager.loadProjects();
-			} catch (IOException e) {
-				Logger.error(e);
-			}
+			ProjectReferenceManager.loadProjects();
 
 			if (PlayPadPlugin.getInstance().getGlobalSettings().isOpenLastDocument()) {
 				UUID value = (UUID) ApplicationUtils.getApplication().getUserDefaults().getData("project");
@@ -227,7 +220,6 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 		}
 	}
 
-	@SuppressWarnings("Duplicates")
 	private void checkUpdates(GlobalSettings globalSettings, Window owner) {
 		if (globalSettings.isAutoUpdate() && !globalSettings.isIgnoreUpdate()) {
 			Worker.runLater(() ->
@@ -349,7 +341,7 @@ public class PlayPadMain extends Application implements LocalizationDelegate {
 			CloseableHttpClient httpclient = HttpClients.custom().setSSLSocketFactory(sslsf).build();
 			Unirest.setHttpClient(httpclient);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 }

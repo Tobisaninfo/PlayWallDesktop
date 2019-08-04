@@ -182,7 +182,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		FileChooser chooser = new FileChooser();
 
 		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
-		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
 		File file = chooser.showOpenDialog(getContainingWindow());

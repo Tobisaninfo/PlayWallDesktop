@@ -562,7 +562,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	void saveMenuHandler(ActionEvent event) {
 		try {
 			ProjectReferenceManager.saveProject(openProject);
-			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.displayTimeMillis);
+			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
 			Logger.error(e);
