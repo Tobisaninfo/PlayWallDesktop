@@ -1,5 +1,7 @@
 package de.tobias.playpad.viewcontroller;
 
+import de.thecodelabs.utils.application.App;
+import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.PlayPadImpl;
 import de.tobias.playpad.PlayPadPlugin;
@@ -12,8 +14,13 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class SplashScreenViewController extends NVC implements PlayPadInitializer.Listener {
+public class
+SplashScreenViewController extends NVC implements PlayPadInitializer.Listener {
 
+	@FXML
+	private Label titleLabel;
+	@FXML
+	private Label versionLabel;
 	@FXML
 	private ProgressBar progressBar;
 	@FXML
@@ -31,6 +38,13 @@ public class SplashScreenViewController extends NVC implements PlayPadInitialize
 			controller.applyViewControllerToStage(primaryStage).show();
 			instance.startup(new LoginViewController(), this);
 		});
+	}
+
+	@Override
+	public void init() {
+		App app = ApplicationUtils.getApplication();
+		titleLabel.setText(app.getInfo().getName());
+		versionLabel.setText(app.getInfo().getVersion());
 	}
 
 	@Override

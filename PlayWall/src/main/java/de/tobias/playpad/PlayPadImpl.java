@@ -167,7 +167,6 @@ public class PlayPadImpl implements PlayPad {
 		initializer.submit(new LocalizationLoadingTask());
 		initializer.submit(new GlobalSettingsLoadingTask());
 		initializer.submit(new KeyboardMappingLoadingTask());
-		initializer.submit(new ProfileLoadingTask());
 
 		initializer.submit(new ServiceInitializationTask());
 
@@ -176,6 +175,8 @@ public class PlayPadImpl implements PlayPad {
 		initializer.submit(new ComponentLoadingTask());
 		initializer.submit(new MidiActionsInitializerTask());
 		initializer.submit(new VolumeInitializerTask());
+
+		initializer.submit(new ProfileLoadingTask());
 
 		initializer.submit(new ServerInitializeTask(delegate));
 
