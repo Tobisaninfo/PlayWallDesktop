@@ -20,6 +20,8 @@ public class PlayPadInitializer implements Runnable {
 		void finishLoading();
 
 		void abortedLoading();
+
+		void errorLoading(PlayPadInitializeTask task, Exception e);
 	}
 
 	private List<PlayPadInitializeTask> tasks;
@@ -45,12 +47,14 @@ public class PlayPadInitializer implements Runnable {
 
 	@Override
 	public void run() {
+		PlayPadInitializeTask currentTask = null;
 		try {
 			App app = ApplicationUtils.getApplication();
 
 			listener.startLoading(tasks.size());
 
 			for (PlayPadInitializeTask task : tasks) {
+				currentTask = task;
 				listener.startTask(task);
 				task.run(app, instance);
 				listener.finishTask(task);
@@ -61,6 +65,7 @@ public class PlayPadInitializer implements Runnable {
 			listener.abortedLoading();
 			Logger.debug("Initialization aborted at task: " + e.getTask().name());
 		} catch (Exception e) {
+			listener.errorLoading(currentTask, e);
 			Logger.error(e);
 		}
 	}

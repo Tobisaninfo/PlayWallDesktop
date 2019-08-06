@@ -13,9 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.dialog.ExceptionDialog;
 
-public class
-SplashScreenViewController extends NVC implements PlayPadInitializer.Listener {
+public class SplashScreenViewController extends NVC implements PlayPadInitializer.Listener {
 
 	@FXML
 	private Label titleLabel;
@@ -81,5 +81,16 @@ SplashScreenViewController extends NVC implements PlayPadInitializer.Listener {
 	public void abortedLoading() {
 		Platform.setImplicitExit(false);
 		Platform.runLater(this::closeStage);
+	}
+
+	@Override
+	public void errorLoading(PlayPadInitializeTask task, Exception e) {
+		Platform.runLater(() -> {
+			ExceptionDialog dialog = new ExceptionDialog(e);
+			dialog.setHeaderText("Error while loading PlayWall (" + task.name() + ")");
+			dialog.initOwner(getContainingWindow());
+			dialog.showAndWait();
+			Platform.exit();
+		});
 	}
 }
