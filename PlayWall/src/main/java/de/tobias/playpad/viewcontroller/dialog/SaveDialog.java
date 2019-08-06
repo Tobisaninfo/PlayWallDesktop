@@ -3,6 +3,7 @@ package de.tobias.playpad.viewcontroller.dialog;
 import de.thecodelabs.utils.ui.AdvancedDialog;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -17,7 +18,7 @@ public class SaveDialog extends AdvancedDialog {
 		setContent(Localization.getString(Strings.UI_Dialog_Save_Content));
 		setHeaderText(Localization.getString(Strings.UI_Dialog_Save_Header));
 		setCheckboxText(Localization.getString(Strings.UI_Dialog_Save_Checkbox));
-		setIcon(PlayPadMain.stageIcon);
+		setIcon(PlayPadPlugin.getInstance().getIcon());
 
 		ButtonType saveButton = new ButtonType(Localization.getString(Strings.UI_Dialog_Save_Button_Yes), ButtonData.YES);
 		ButtonType notSaveButton = new ButtonType(Localization.getString(Strings.UI_Dialog_Save_Button_No), ButtonData.NO);

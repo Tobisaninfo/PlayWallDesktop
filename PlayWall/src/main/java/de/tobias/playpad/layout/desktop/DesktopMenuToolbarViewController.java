@@ -30,7 +30,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.server.Session;
-import de.tobias.playpad.server.SessionNotExisitsException;
+import de.tobias.playpad.server.SessionNotExistsException;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
@@ -594,7 +594,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				session.delete();
 				Platform.exit();
 				return true;
-			} catch (SessionNotExisitsException e) {
+			} catch (SessionNotExistsException e) {
 				return false;
 			}
 		});

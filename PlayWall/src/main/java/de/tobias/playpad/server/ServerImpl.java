@@ -214,7 +214,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			}
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return new ArrayList<>();
 		}
 	}
@@ -233,7 +233,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			return reader.read(ref);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return null;
 		}
 	}
@@ -253,7 +253,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 					.asJson();
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage(), e);
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 		}
 	}
 
@@ -272,7 +272,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			return new Version(time, remoteSession, false);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return null;
 		}
 	}

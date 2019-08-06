@@ -53,10 +53,8 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 
 		MediaPluginImpl.blindProperty = new SimpleBooleanProperty();
 
-		Localization.addResourceBundle("lang/video", getClass().getClassLoader());
-		videoViewController = new MediaViewController(settings);
-
 		// Load Content Types
+		Localization.addResourceBundle("lang/video", getClass().getClassLoader());
 		try {
 			Registry<PadContentFactory> padContents = PlayPadPlugin.getRegistries().getPadContents();
 			padContents.loadComponentsFromFile("PadContent.xml", getClass().getClassLoader(), module, Localization.getBundle());
@@ -67,26 +65,29 @@ public class MediaPluginImpl implements PlayPadPluginStub, PluginArtifact, Setti
 		}
 
 		PlayPadPlugin.getInstance().addSettingsListener(this);
-
 		if (Profile.currentProfile() != null) {
 			onLoad(Profile.currentProfile());
 			onChange(Profile.currentProfile());
 		}
 
-		if (blindHUD == null) {
-			Platform.runLater(() ->
-			{
-				FontIcon icon = new FontIcon(FontAwesomeType.DESKTOP);
-				icon.setSize(60);
-				icon.getStyleClass().remove(FontIcon.STYLE_CLASS);
-				icon.setColor(Color.WHITE);
-				icon.setAlignment(Pos.CENTER);
-				blindHUD = new HUD(icon);
-				blindHUD.setPosition(Pos.TOP_CENTER);
-				blindHUD.setMinWidth(200);
-				blindHUD.setMinHeight(100);
-			});
-		}
+		Platform.runLater(() -> {
+			videoViewController = new MediaViewController(settings);
+
+			if (blindHUD == null) {
+				Platform.runLater(() ->
+				{
+					FontIcon icon = new FontIcon(FontAwesomeType.DESKTOP);
+					icon.setSize(60);
+					icon.getStyleClass().remove(FontIcon.STYLE_CLASS);
+					icon.setColor(Color.WHITE);
+					icon.setAlignment(Pos.CENTER);
+					blindHUD = new HUD(icon);
+					blindHUD.setPosition(Pos.TOP_CENTER);
+					blindHUD.setMinWidth(200);
+					blindHUD.setMinHeight(100);
+				});
+			}
+		});
 
 		try {
 			Registry<ActionProvider> padContents = PlayPadPlugin.getRegistries().getActions();

@@ -22,9 +22,9 @@ public class Session {
 		this.key = key;
 	}
 
-	public String getKey() throws SessionNotExisitsException {
+	public String getKey() throws SessionNotExistsException {
 		if (key == null) {
-			throw new SessionNotExisitsException();
+			throw new SessionNotExistsException();
 		}
 		return key;
 	}

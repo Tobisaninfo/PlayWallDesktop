@@ -269,7 +269,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 				server.connect(session.getKey());
 			} catch (IOException | WebSocketException e) {
 				Logger.error(e);
-			} catch (SessionNotExisitsException ignored) {
+			} catch (SessionNotExistsException ignored) {
 				Logger.warning("Session not exists");
 			}
 		}

@@ -32,7 +32,7 @@ public final class PlayPadPlugin {
 		return registryCollection;
 	}
 
-	static void setRegistryCollection(Registries registryCollection) {
+	public static void setRegistryCollection(Registries registryCollection) {
 		PlayPadPlugin.registryCollection = registryCollection;
 	}
 
@@ -40,7 +40,7 @@ public final class PlayPadPlugin {
 		return serverHandler;
 	}
 
-	static void setServerHandler(ServerHandler handler) {
+	public static void setServerHandler(ServerHandler handler) {
 		serverHandler = handler;
 	}
 
@@ -48,7 +48,7 @@ public final class PlayPadPlugin {
 		return commandExecutorHandler;
 	}
 
-	static void setCommandExecutorHandler(CommandExecutorHandler handler) {
+	public static void setCommandExecutorHandler(CommandExecutorHandler handler) {
 		commandExecutorHandler = handler;
 	}
 
@@ -56,7 +56,7 @@ public final class PlayPadPlugin {
 		return modernDesignHandler;
 	}
 
-	static void setStyleable(Styleable modernDesignHandler) {
+	public static void setStyleable(Styleable modernDesignHandler) {
 		PlayPadPlugin.modernDesignHandler = modernDesignHandler;
 	}
 }
