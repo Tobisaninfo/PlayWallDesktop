@@ -1,6 +1,5 @@
 package de.tobias.playpad.initialize
 
-import java.nio.file.Path
 import java.sql.SQLException
 
 import de.thecodelabs.logger.Logger

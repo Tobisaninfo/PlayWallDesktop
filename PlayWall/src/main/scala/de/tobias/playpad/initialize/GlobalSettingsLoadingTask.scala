@@ -1,9 +1,7 @@
 package de.tobias.playpad.initialize
-import java.nio.file.Path
 
 import de.thecodelabs.utils.application.App
 import de.thecodelabs.utils.application.container.PathType
-import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.settings.GlobalSettings
 

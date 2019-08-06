@@ -1,10 +1,11 @@
 package de.tobias.playpad.initialize
+
 import java.io.IOException
 
 import com.neovisionaries.ws.client.WebSocketException
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application
-import de.tobias.playpad.server.{Session, SessionDelegate, SessionNotExisitsException}
+import de.tobias.playpad.server.{Session, SessionDelegate, SessionNotExistsException}
 import de.tobias.playpad.{PlayPadImpl, PlayPadPlugin}
 
 class ServerInitializeTask(delegate: SessionDelegate) extends PlayPadInitializeTask {
@@ -16,14 +17,16 @@ class ServerInitializeTask(delegate: SessionDelegate) extends PlayPadInitializeT
 		if (session == null) session = delegate.getSession
 		instance.setSession(session)
 
-		if (session != Session.EMPTY) { // Connect to Server
-			val server = PlayPadPlugin.getServerHandler.getServer
-			try server.connect(session.getKey)
-			catch {
-				case e@(_: IOException | _: WebSocketException) =>
-					Logger.error(e)
-				case ignored: SessionNotExisitsException =>
-			}
+		if (session == Session.EMPTY) { // Connect to Server
+			return
+		}
+
+		val server = PlayPadPlugin.getServerHandler.getServer
+		try server.connect(session.getKey)
+		catch {
+			case e@(_: IOException | _: WebSocketException) =>
+				Logger.error(e)
+			case _: SessionNotExistsException =>
 		}
 	}
 }

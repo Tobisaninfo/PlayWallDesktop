@@ -186,8 +186,8 @@ public class PlayPadImpl implements PlayPad {
 
 		initializer.submit(new CheckUpdateTask());
 
-		initializer.submit(new OpenLastDocumentTask());
-		initializer.submit(new ProjectParameterOpenTask());
+		initializer.submit(new OpenLastDocumentTask()); // abort if project is opened
+		initializer.submit(new ProjectParameterOpenTask()); // abort if project is opened
 
 		initializer.start();
 	}
