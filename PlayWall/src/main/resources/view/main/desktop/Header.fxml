@@ -92,8 +92,6 @@
                                                     shortcut="DOWN"/>
                             </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="logMenuItem" mnemonicParsing="false" onAction="#logMenuItemHandler"
-                                  text="%main.menuitem.log"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler"
                                   text="%main.menuitem.plugins"/>

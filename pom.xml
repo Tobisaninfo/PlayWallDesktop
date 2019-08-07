@@ -23,6 +23,8 @@
 
         <jlayer.version>1.0.1</jlayer.version>
 
+        <itextpdf.version>5.5.13</itextpdf.version>
+
         <jna.version>5.2.0</jna.version>
 
         <scala-library.version>2.13.0</scala-library.version>
@@ -49,6 +51,7 @@
         <module>PlayWallPluginLaunchpad</module>
         <module>PlayWallPluginMedia</module>
         <module>PlayWallPluginNativeAudio</module>
+        <module>PlayWallPluginPlayoutLog</module>
     </modules>
 
     <dependencyManagement>

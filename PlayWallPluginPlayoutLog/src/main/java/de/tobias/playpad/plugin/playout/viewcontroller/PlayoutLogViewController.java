@@ -1,16 +1,17 @@
-package de.tobias.playpad.viewcontroller.dialog;
+package de.tobias.playpad.plugin.playout.viewcontroller;
 
 import com.itextpdf.text.DocumentException;
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
-import de.tobias.playpad.log.PlayoutLogPdfExport;
+import de.tobias.playpad.plugin.playout.Strings;
+import de.tobias.playpad.plugin.playout.export.PlayoutLogPdfExport;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -123,7 +124,7 @@ public class PlayoutLogViewController extends NVC {
 				try {
 					PlayoutLogPdfExport.createPdfFile(file.toPath(), LogSeasons.getLogSeason(season.getId()));
 				} catch (IOException | DocumentException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});

@@ -1,11 +1,7 @@
 package de.tobias.playpad.util;
 
-import com.itextpdf.text.BaseColor;
 import javafx.scene.paint.Color;
 
-/**
- * Created by tobias on 26.03.17.
- */
 public class ColorUtils {
 	/**
 	 * Get the color for the not found warning sign in a pad view.
@@ -22,14 +18,5 @@ public class ColorUtils {
 		} else {
 			return Color.WHITE;
 		}
-	}
-
-	public static BaseColor toBaseColor(String hexCode) {
-		hexCode = hexCode.replace("#", "");
-		return new BaseColor(
-				Integer.valueOf(hexCode.substring(0, 2), 16),
-				Integer.valueOf(hexCode.substring(2, 4), 16),
-				Integer.valueOf(hexCode.substring(4, 6), 16)
-		);
 	}
 }

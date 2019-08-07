@@ -109,8 +109,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private MenuItem colorMenu;
 
 	@FXML
-	private MenuItem logMenuItem;
-	@FXML
 	private MenuItem notFoundMenu;
 	@FXML
 	private MenuItem pluginMenu;
@@ -619,12 +617,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void colorMenuHandler(ActionEvent event) {
 		connect.setEditMode(DesktopEditMode.COLOR);
-	}
-
-	@FXML
-	void logMenuItemHandler(ActionEvent event) {
-		PlayoutLogViewController playoutLogViewController = new PlayoutLogViewController(mainViewController.getStage());
-		playoutLogViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
 	}
 
 	@FXML

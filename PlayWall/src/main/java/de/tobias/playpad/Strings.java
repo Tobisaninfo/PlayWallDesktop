@@ -35,7 +35,6 @@ public class Strings {
 	public static final String UI_Dialog_Plugins_Title = "UI.Dialog.Plugins.Title";
 	public static final String UI_Dialog_Print_Title = "UI.Dialog.Print.Title";
 	public static final String UI_Dialog_Profile_Title = "UI.Dialog.Profile.Title";
-	public static final String UI_Dialog_PlayoutLog_Title = "UI.Dialog.PlayoutLog.Title";
 
 	// UI - Window - Main
 	public static final String UI_Window_Main_CloseRequest = "UI.Window.Main.CloseRequest";
