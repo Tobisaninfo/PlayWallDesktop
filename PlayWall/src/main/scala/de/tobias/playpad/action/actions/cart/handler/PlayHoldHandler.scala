@@ -8,8 +8,7 @@ class PlayHoldHandler extends CartActionHandler {
 
 	override def performAction(keyEventType: KeyEventType, cartAction: CartAction, pad: Pad): Unit = {
 		if (keyEventType eq KeyEventType.DOWN) {
-			if (pad.isReady) { // Allow the listener to send the feedback
-				// cartAction.getPadPositionListener.setSend(false) TODO Fix
+			if (pad.isReady) {
 				pad.play()
 			}
 		} else if (keyEventType eq KeyEventType.UP) {
