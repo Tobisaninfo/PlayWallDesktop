@@ -6,14 +6,14 @@
 
     <parent>
         <groupId>de.tobias.playpad</groupId>
-        <artifactId>PlayWallDesktop</artifactId>
+        <artifactId>PlayWallPlugins</artifactId>
         <version>6.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>PlayWallPluginMedia</artifactId>
+    <artifactId>PlayWallPluginLaunchpad</artifactId>
 
     <properties>
-        <project.outputDirectory>../build/${project.version}</project.outputDirectory>
+        <project.outputDirectory>../../build/${project.version}</project.outputDirectory>
         <project.artifactName>${project.artifactId}-v${project.version}</project.artifactName>
     </properties>
 

@@ -6,12 +6,13 @@
       <module fileurl="file://$PROJECT_DIR$/PlayWallComponents/PlayWallComponents.iml" filepath="$PROJECT_DIR$/PlayWallComponents/PlayWallComponents.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" filepath="$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallDesktop.iml" filepath="$PROJECT_DIR$/PlayWallDesktop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginAwake/PlayWallPluginAwake.iml" filepath="$PROJECT_DIR$/PlayWallPluginAwake/PlayWallPluginAwake.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" filepath="$PROJECT_DIR$/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" filepath="$PROJECT_DIR$/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PlayWallPluginMedia/PlayWallPluginMedia.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" filepath="$PROJECT_DIR$/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" filepath="$PROJECT_DIR$/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/PlayWallPluginAwake.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/PlayWallPluginAwake.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPlugins.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPlugins.iml" />
     </modules>
   </component>
 </project>

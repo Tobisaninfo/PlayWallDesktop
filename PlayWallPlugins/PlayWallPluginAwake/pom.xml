@@ -4,22 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <parent>
         <groupId>de.tobias.playpad</groupId>
-        <artifactId>PlayWallDesktop</artifactId>
+        <artifactId>PlayWallPlugins</artifactId>
         <version>6.2.0-SNAPSHOT</version>
     </parent>
 
-    <properties>
-        <jni4net.j.version>0.8.8.0</jni4net.j.version>
-        <nativeAudio.version>1.0.0</nativeAudio.version>
+    <artifactId>PlayWallPluginAwake</artifactId>
 
-        <project.outputDirectory>../build/${project.version}</project.outputDirectory>
+    <properties>
+        <project.outputDirectory>../../build/${project.version}</project.outputDirectory>
         <project.artifactName>${project.artifactId}-v${project.version}</project.artifactName>
     </properties>
-
-    <artifactId>PlayWallPluginNativeAudio</artifactId>
 
     <dependencies>
         <dependency>
@@ -27,17 +23,6 @@
             <artifactId>PlayWallCore</artifactId>
             <version>${core.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>net.sf.jni4net</groupId>
-            <artifactId>jni4net.j</artifactId>
-            <version>${jni4net.j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>de.tobias.playpad</groupId>
-            <artifactId>NativeAudioWin</artifactId>
-            <version>${nativeAudio.version}</version>
         </dependency>
     </dependencies>
 
@@ -61,28 +46,6 @@
                 </executions>
             </plugin>
 
-            <!--Scala Plugin-->
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -104,15 +67,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -152,4 +106,5 @@
             </snapshots>
         </repository>
     </repositories>
+
 </project>

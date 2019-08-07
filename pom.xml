@@ -46,12 +46,7 @@
         <module>PlayWall</module>
         <module>PlayWallCore</module>
         <module>PlayWallComponents</module>
-        <module>PlayWallPluginAwake</module>
-        <module>PlayWallPluginEqualizer</module>
-        <module>PlayWallPluginLaunchpad</module>
-        <module>PlayWallPluginMedia</module>
-        <module>PlayWallPluginNativeAudio</module>
-        <module>PlayWallPluginPlayoutLog</module>
+        <module>PlayWallPlugins</module>
     </modules>
 
     <dependencyManagement>
