@@ -12,7 +12,6 @@
     </parent>
 
     <properties>
-        <scala-library.version>2.13.0</scala-library.version>
         <jni4net.j.version>0.8.8.0</jni4net.j.version>
         <nativeAudio.version>1.0.0</nativeAudio.version>
 

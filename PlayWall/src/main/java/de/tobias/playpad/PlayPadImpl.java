@@ -170,7 +170,6 @@ public class PlayPadImpl implements PlayPad {
 
 		initializer.submit(new ServiceInitializationTask());
 
-		initializer.submit(new PlayOutLogSetupTask());
 		initializer.submit(new VersionizerSetupTask());
 		initializer.submit(new ComponentLoadingTask());
 		initializer.submit(new MidiActionsInitializerTask());

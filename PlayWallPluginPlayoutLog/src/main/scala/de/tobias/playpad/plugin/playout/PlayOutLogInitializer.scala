@@ -1,18 +1,18 @@
-package de.tobias.playpad.initialize
+package de.tobias.playpad.plugin.playout
 
 import java.sql.SQLException
 
 import de.thecodelabs.logger.Logger
-import de.thecodelabs.utils.application
+import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
-import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.log.LogSeasons
-import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler
+import de.tobias.playpad.plugin.playout.storage.SqlLiteLogSeasonStorageHandler
 
-class PlayOutLogSetupTask extends PlayPadInitializeTask {
-	override def name(): String = "PlayOutLog"
+object PlayOutLogInitializer {
 
-	override def run(app: application.App, instance: PlayPadImpl): Unit = {
+	def init(): Unit = {
+		val app = ApplicationUtils.getApplication
+
 		try {
 			val playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db")
 			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath))

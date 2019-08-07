@@ -22,5 +22,5 @@ public interface LogSeasonStorageHandler {
 	 *
 	 * @throws RuntimeException fail to close handler (e.g. sql error)
 	 */
-	void close() throws RuntimeException;
+	void close();
 }
