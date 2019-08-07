@@ -68,10 +68,7 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 		Project project = PlayPadPlugin.getInstance().getCurrentProject();
 		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 
-		int x = getX(action);
-		int y = getY(action);
-
-		Pad pad = project.getPad(x, y, mainViewController.getPage());
+		Pad pad = project.getPad(getX(action), getY(action), mainViewController.getPage());
 
 		if (pad == null) {
 			return FeedbackType.NONE;
@@ -82,19 +79,8 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 			case ERROR:
 				return FeedbackType.NONE;
 			case PLAY:
-				if (pad.getContent() instanceof Durationable) {
-					Durationable durationable = (Durationable) pad.getContent();
-					PadSettings padSettings = pad.getPadSettings();
-
-					if (!padSettings.isLoop()) {
-						Duration warning = padSettings.getWarning();
-						Duration rest = durationable.getRemaining(padSettings);
-						double seconds = rest.toSeconds();
-
-						if (warning.toSeconds() > seconds) {
-							return FeedbackType.WARNING;
-						}
-					}
+				if (isWarningState(pad)) {
+					return FeedbackType.WARNING;
 				}
 				return FeedbackType.EVENT;
 			case PAUSE:
@@ -104,6 +90,23 @@ public class CartAction extends ActionHandler implements ActionFeedbackSuggester
 			default:
 				return FeedbackType.NONE;
 		}
+	}
+
+	private boolean isWarningState(Pad pad) {
+		if (pad.getContent() instanceof Durationable) {
+			Durationable durationable = (Durationable) pad.getContent();
+			PadSettings padSettings = pad.getPadSettings();
+
+			if (!padSettings.isLoop()) {
+				Duration warning = padSettings.getWarning();
+				Duration rest = durationable.getRemaining(padSettings);
+				if (rest != null) {
+					double seconds = rest.toSeconds();
+					return warning.toSeconds() > seconds;
+				}
+			}
+		}
+		return false;
 	}
 
 	public static void refreshFeedback(Pad pad) {

@@ -34,7 +34,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setWidth(400);
-		stage.setHeight(100);
+		stage.setHeight(70);
 
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.initStyle(StageStyle.UNDECORATED);

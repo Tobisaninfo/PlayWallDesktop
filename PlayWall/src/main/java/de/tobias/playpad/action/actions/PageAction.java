@@ -5,6 +5,7 @@ import de.thecodelabs.midi.action.ActionHandler;
 import de.thecodelabs.midi.event.KeyEvent;
 import de.thecodelabs.midi.feedback.FeedbackType;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.application.Platform;
 
@@ -20,8 +21,13 @@ public class PageAction extends ActionHandler {
 
 	@Override
 	public FeedbackType handle(KeyEvent keyEvent, Action action) {
+		Project project = PlayPadPlugin.getInstance().getCurrentProject();
 		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 		int targetPage = getPageForAction(action);
+
+		if (targetPage < 0 || targetPage >= project.getPages().size()) {
+			return FeedbackType.DEFAULT;
+		}
 
 		Platform.runLater(() -> mainViewController.showPage(targetPage));
 

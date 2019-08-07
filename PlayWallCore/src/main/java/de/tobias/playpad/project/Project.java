@@ -130,11 +130,11 @@ public class Project {
 	}
 
 	// Pages
-	public Page getPage(int psotion) {
-		if (psotion >= pages.size() && psotion < ProjectSettings.MAX_PAGES) {
-			addPage(new Page(psotion, this));
+	public Page getPage(int position) {
+		if (position >= pages.size() && position < ProjectSettings.MAX_PAGES) {
+			addPage(new Page(position, this));
 		}
-		return pages.get(psotion);
+		return pages.get(position);
 	}
 
 
