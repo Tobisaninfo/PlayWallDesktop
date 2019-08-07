@@ -17,6 +17,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.feedback.ColorAdjuster;
+import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.ActionSettingsMappable;
 import de.tobias.playpad.profile.Profile;
@@ -26,6 +27,7 @@ import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
+import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.cell.MappingListCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
@@ -73,6 +75,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private CheckBox midiActiveCheckBox;
 	@FXML
 	private ComboBox<String> deviceComboBox;
+
+	@FXML
+	private ComboBox<LightMode> lightModeComboBox;
 
 	// Main View
 	@FXML
@@ -129,8 +134,11 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				}
 			}
 		});
-
 		treeView.setCellFactory(list -> new DisplayableTreeCell<>());
+
+		lightModeComboBox.getItems().setAll(LightMode.values());
+		lightModeComboBox.setCellFactory(list -> new EnumCell<>("LightMode."));
+		lightModeComboBox.setButtonCell(new EnumCell<>("LightMode."));
 	}
 
 	private TreeItem<ActionSettingsEntry> createTreeView(Mapping mapping) {
@@ -138,7 +146,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		Collection<ActionProvider> types = PlayPadPlugin.getRegistries().getActions().getComponents();
 		List<ActionProvider> sortedTypes = types.stream().sorted(Comparator.comparing(Component::getType)).collect(Collectors.toList());
 
-		// Sort the tpyes for the treeview
+		// Sort the types for the tree view
 		for (ActionType actionType : ActionType.values()) {
 			createTreeViewForActionType(mapping, rootItem, sortedTypes, actionType);
 		}
@@ -369,9 +377,11 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		setMappingItemsToList();
 		createTreeViewContent();
 
-		midiActiveCheckBox.setSelected(profile.getProfileSettings().isMidiActive());
-		deviceComboBox.setDisable(!profile.getProfileSettings().isMidiActive());
-		deviceComboBox.setValue(profile.getProfileSettings().getMidiDevice());
+		final ProfileSettings profileSettings = profile.getProfileSettings();
+		midiActiveCheckBox.setSelected(profileSettings.isMidiActive());
+		deviceComboBox.setDisable(!profileSettings.isMidiActive());
+		deviceComboBox.setValue(profileSettings.getMidiDevice());
+		lightModeComboBox.setValue(profileSettings.getLightMode());
 	}
 
 	@Override
@@ -380,6 +390,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 		// Midi
 		profileSettings.setMidiActive(isMidiActive());
+		profileSettings.setLightMode(lightModeComboBox.getValue());
 	}
 
 	@Override

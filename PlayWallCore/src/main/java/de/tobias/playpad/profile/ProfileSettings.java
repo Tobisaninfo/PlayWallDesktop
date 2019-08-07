@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.storage.settings.annotation.Key;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
@@ -37,6 +38,8 @@ public class ProfileSettings {
 	private String midiDevice;
 	@Key
 	private boolean midiActive = false;
+	@Key
+	private LightMode lightMode = LightMode.NORMAL;
 
 	// Audio Output
 	@Key
@@ -82,6 +85,10 @@ public class ProfileSettings {
 	// Getter
 	public String getMidiDevice() {
 		return midiDevice;
+	}
+
+	public LightMode getLightMode() {
+		return lightMode;
 	}
 
 	public String getMainLayoutType() {
@@ -131,6 +138,10 @@ public class ProfileSettings {
 	// Setter
 	public void setMidiDeviceName(String midiDevice) {
 		this.midiDevice = midiDevice;
+	}
+
+	public void setLightMode(LightMode lightMode) {
+		this.lightMode = lightMode;
 	}
 
 	public void setMainLayoutType(String mainLayoutType) {
@@ -193,6 +204,7 @@ public class ProfileSettings {
 	private static final String DESIGN_ELEMENT = "Design";
 	private static final String MIDI_ACTIVE_ELEMENT = "MidiActive";
 	private static final String MIDI_DEVICE_ELEMENT = "MidiDevice";
+	private static final String LIGHT_MODE = "LightMode";
 
 	// File Handler
 	public static ProfileSettings load(Path path) throws DocumentException, IOException {
@@ -204,11 +216,13 @@ public class ProfileSettings {
 			Element root = document.getRootElement();
 
 			if (root.element(LOCKED_ELEMENT) != null)
-				profileSettings.setLocked(Boolean.valueOf(root.element(LOCKED_ELEMENT).getStringValue()));
+				profileSettings.setLocked(Boolean.parseBoolean(root.element(LOCKED_ELEMENT).getStringValue()));
 			if (root.element(MIDI_DEVICE_ELEMENT) != null)
 				profileSettings.setMidiDeviceName(root.element(MIDI_DEVICE_ELEMENT).getStringValue());
 			if (root.element(MIDI_ACTIVE_ELEMENT) != null)
-				profileSettings.setMidiActive(Boolean.valueOf(root.element(MIDI_ACTIVE_ELEMENT).getStringValue()));
+				profileSettings.setMidiActive(Boolean.parseBoolean(root.element(MIDI_ACTIVE_ELEMENT).getStringValue()));
+			if (root.element(LIGHT_MODE) != null)
+				profileSettings.setLightMode(LightMode.valueOf(root.element(LIGHT_MODE).getStringValue()));
 
 			if (root.element(DESIGN_ELEMENT) != null) {
 				Element element = root.element(DESIGN_ELEMENT);
@@ -220,7 +234,7 @@ public class ProfileSettings {
 			}
 
 			if (root.element(MULTIPLE_PLAYER_ELEMENT) != null) {
-				profileSettings.setMultiplePlayer(Boolean.valueOf(root.element(MULTIPLE_PLAYER_ELEMENT).getStringValue()));
+				profileSettings.setMultiplePlayer(Boolean.parseBoolean(root.element(MULTIPLE_PLAYER_ELEMENT).getStringValue()));
 			}
 
 			if (root.element(WARNING_ELEMENT) != null) {
@@ -247,7 +261,7 @@ public class ProfileSettings {
 			}
 
 			if (root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT) != null)
-				profileSettings.setWindowAlwaysOnTop(Boolean.valueOf(root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT).getStringValue()));
+				profileSettings.setWindowAlwaysOnTop(Boolean.parseBoolean(root.element(WINDOW_ALWAYS_ON_TOP_ELEMENT).getStringValue()));
 			if (root.element(AUDIO_CLASS_ELEMENT) != null)
 				profileSettings.setAudioClass(root.element(AUDIO_CLASS_ELEMENT).getStringValue());
 
@@ -263,7 +277,7 @@ public class ProfileSettings {
 				}
 			}
 			if (root.element(VOLUME_ELEMENT) != null)
-				profileSettings.setVolume(Double.valueOf(root.element(VOLUME_ELEMENT).getStringValue()));
+				profileSettings.setVolume(Double.parseDouble(root.element(VOLUME_ELEMENT).getStringValue()));
 		}
 		return profileSettings;
 	}
@@ -278,6 +292,7 @@ public class ProfileSettings {
 		if (midiDevice != null)
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
 		root.addElement(MIDI_ACTIVE_ELEMENT).addText(String.valueOf(midiActive));
+		root.addElement(LIGHT_MODE).addText(String.valueOf(lightMode.name()));
 
 		Element designElement = root.addElement(DESIGN_ELEMENT);
 		ModernGlobalDesignSerializer serializer = new ModernGlobalDesignSerializer();

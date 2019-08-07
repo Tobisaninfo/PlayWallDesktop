@@ -173,12 +173,13 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 
 	@Override
 	public void showAction(Action action, Pane parent) {
+		this.addListeners.clear();
 		this.action = action;
 
 		createSubViews(action);
 
 		if (this.parent != null) {
-			this.parent.getChildren().remove(getParent()); // Rmeove from old Parent
+			this.parent.getChildren().remove(getParent()); // Remove from old Parent
 		}
 		if (this.scrollPane != null) {
 			this.scrollPane.setContent(null);
@@ -195,7 +196,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		createSubViews(action);
 
 		if (this.parent != null) {
-			this.parent.getChildren().remove(getParent()); // Rmeove from old Parent
+			this.parent.getChildren().remove(getParent()); // Remove from old Parent
 		}
 		if (this.scrollPane != null) {
 			this.scrollPane.setContent(null);

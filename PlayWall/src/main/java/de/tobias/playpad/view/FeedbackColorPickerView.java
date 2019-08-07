@@ -5,14 +5,15 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class FeedbackColorPickerView extends GridPane {
 
 	private Rectangle currentSelected;
 
-	public FeedbackColorPickerView(FeedbackColor startColor, FeedbackColor[] colors, Consumer<FeedbackColor> finish) {
-		double size = Math.sqrt(colors.length);
+	public FeedbackColorPickerView(FeedbackColor startColor, List<? extends FeedbackColor> colors, Consumer<FeedbackColor> finish) {
+		double size = Math.sqrt(colors.size());
 		int iSize = (int) size;
 		if (size != iSize) {
 			iSize++;
@@ -26,8 +27,8 @@ public class FeedbackColorPickerView extends GridPane {
 		int index = 0;
 		for (int y = 0; y < iSize; y++) {
 			for (int x = 0; x < iSize; x++) {
-				if (index < colors.length) {
-					FeedbackColor color = colors[index++];
+				if (index < colors.size()) {
+					FeedbackColor color = colors.get(index++);
 
 					// Style in CSS
 					Rectangle rectangle = new Rectangle(40, 40);

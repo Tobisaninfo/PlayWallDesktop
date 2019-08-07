@@ -1,10 +1,11 @@
 package de.tobias.playpad.launchpadplugin.midi.mk2;
 
 import de.thecodelabs.midi.feedback.FeedbackColor;
+import de.tobias.playpad.action.feedback.LightMode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public enum LaunchPadMK2Color implements FeedbackColor {
+public enum LaunchPadMK2Color implements FeedbackColor, LightMode.ILightMode {
 
 	// White
 	C0_1(1, Color.rgb(255, 255, 255), LightMode.LOW),
@@ -99,15 +100,7 @@ public enum LaunchPadMK2Color implements FeedbackColor {
 	C15_1(60, Color.rgb(255, 100, 69), LightMode.HIGH),
 	C15_2(61, Color.rgb(255, 100, 69), LightMode.NORMAL),
 	C15_3(62, Color.rgb(255, 100, 69), LightMode.MIDDLE),
-	C15_4(63, Color.rgb(255, 100, 69), LightMode.LOW),
-	;
-
-	public enum LightMode {
-		LOW,
-		MIDDLE,
-		NORMAL,
-		HIGH
-	}
+	C15_4(63, Color.rgb(255, 100, 69), LightMode.LOW);
 
 	private int midi;
 	private Color color;
@@ -128,6 +121,11 @@ public enum LaunchPadMK2Color implements FeedbackColor {
 	@Override
 	public byte getValue() {
 		return (byte) midi;
+	}
+
+	@Override
+	public LightMode getLightMode() {
+		return lightMode;
 	}
 
 	public static FeedbackColor valueOf(int id) {
