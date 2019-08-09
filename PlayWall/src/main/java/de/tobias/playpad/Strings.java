@@ -151,7 +151,10 @@ public class Strings {
 	public static final String Error_Midi_Send = "Error.Midi.Send";
 
 	// Error - Plugins
+	public static final String Error_Plugins_Header = "Error.Plugins.Header";
 	public static final String Error_Plugins_Missing = "Error.Plugins.Missing";
+	public static final String Error_Plugins_Loading = "Error.Plugins.Loading";
+	public static final String Error_Plugins_Install = "Error.Plugins.Install";
 
 	// Error - Screen
 	public static final String Error_Screen_TooMuch = "Error.Screen.TooMuch";

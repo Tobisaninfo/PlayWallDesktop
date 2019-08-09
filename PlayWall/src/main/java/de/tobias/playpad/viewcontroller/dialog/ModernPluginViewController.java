@@ -1,6 +1,8 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -14,12 +16,12 @@ import de.tobias.playpad.settings.GlobalSettings;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -48,14 +50,30 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 	@FXML
 	private ListView<ModernPlugin> pluginList;
 
+	private ObservableList<ModernPlugin> data = FXCollections.observableArrayList();
+	private FilteredList<ModernPlugin> filteredData = new FilteredList<>(data, s -> true);
+
+
 	public ModernPluginViewController(Window owner) {
 		loadView(owner);
 		Worker.runLater(() -> {
 			try {
 				List<ModernPlugin> plugins = PlayPadPlugin.getServerHandler().getServer().getPlugins();
-				Platform.runLater(() -> pluginList.getItems().setAll(plugins));
+				Platform.runLater(() -> {
+					data.addAll(plugins);
+					pluginList.getSelectionModel().selectFirst();
+				});
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
+				Platform.runLater(() -> {
+					Alerts.getInstance()
+							.createAlert(Alert.AlertType.ERROR,
+									Localization.getString(Strings.Error_Plugins_Header),
+									Localization.getString(Strings.Error_Plugins_Loading),
+									getContainingWindow()
+							).showAndWait();
+					closeStage();
+				});
 			}
 		});
 	}
@@ -68,9 +86,21 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 						.filter(p -> missedModules.parallelStream().anyMatch(m -> m.identifier.equals(p.getName())))
 						.collect(Collectors.toList());
 
-				Platform.runLater(() -> pluginList.getItems().setAll(plugins));
+				Platform.runLater(() -> {
+					data.addAll(plugins);
+					pluginList.getSelectionModel().selectFirst();
+				});
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
+				Platform.runLater(() -> {
+					Alerts.getInstance()
+							.createAlert(Alert.AlertType.ERROR,
+									Localization.getString(Strings.Error_Plugins_Header),
+									Localization.getString(Strings.Error_Plugins_Loading),
+									getContainingWindow()
+							).showAndWait();
+					closeStage();
+				});
 			}
 		});
 	}
@@ -81,12 +111,21 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		stage.initOwner(owner);
 		stage.initModality(Modality.WINDOW_MODAL);
 		addCloseKeyShortcut(stage::close);
-
 	}
 
 	@Override
 	public void init() {
+		pluginList.setItems(filteredData);
 		pluginList.getSelectionModel().selectedItemProperty().addListener(this);
+
+		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+			if(newValue == null || newValue.length() == 0) {
+				filteredData.setPredicate(s -> true);
+			}
+			else {
+				filteredData.setPredicate(p -> p.getDisplayName().contains(newValue));
+			}
+		});
 	}
 
 	@Override
@@ -107,9 +146,18 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 
 	@Override
 	public void changed(ObservableValue<? extends ModernPlugin> observable, ModernPlugin oldValue, ModernPlugin newValue) {
-		pluginHeadlineLabel.setText(newValue.getDisplayName());
-		pluginInfoLabel.setText(newValue.getDescription());
-		pluginVersionLabel.setText(newValue.getVersion());
+		if (newValue != null) {
+			pluginInstallButton.setText(ModernPluginManager.getInstance().isActive(newValue) ?
+					Localization.getString("plugins.button.uninstall") :
+					Localization.getString("plugins.button.install"));
+			pluginHeadlineLabel.setText(newValue.getDisplayName());
+			pluginInfoLabel.setText(newValue.getDescription());
+			pluginVersionLabel.setText(newValue.getVersion());
+		} else {
+			pluginHeadlineLabel.setText("");
+			pluginInfoLabel.setText("");
+			pluginVersionLabel.setText("");
+		}
 	}
 
 	@FXML
@@ -122,7 +170,13 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 					PlayPadPlugin.getServerHandler().getServer().loadPlugin(plugin, settings.getUpdateChannel());
 					ModernPluginManager.getInstance().loadPlugin(plugin);
 				} catch (IOException e) {
-					e.printStackTrace(); // TODO Error handling
+					Logger.error(e);
+					Alerts.getInstance()
+							.createAlert(Alert.AlertType.ERROR,
+									Localization.getString(Strings.Error_Plugins_Header),
+									Localization.getString(Strings.Error_Plugins_Install, e.getMessage()),
+									getContainingWindow()
+							).showAndWait();
 				}
 			} else {
 				ModernPluginManager.getInstance().unloadPlugin(plugin);
