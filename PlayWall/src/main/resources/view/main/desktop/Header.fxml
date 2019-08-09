@@ -137,7 +137,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#aboutMenuHandler" text="%main.menuitem.about"/>
                         <MenuItem mnemonicParsing="false" onAction="#showChangelogMenuHandler"
                                   text="%main.menuitem.changelog"/>
-                        <MenuItem mnemonicParsing="false" onAction="#visiteWebsiteMenuHandler"
+                        <MenuItem mnemonicParsing="false" onAction="#visitWebsiteMenuHandler"
                                   text="%main.menuitem.website"/>
                     </items>
                 </Menu>

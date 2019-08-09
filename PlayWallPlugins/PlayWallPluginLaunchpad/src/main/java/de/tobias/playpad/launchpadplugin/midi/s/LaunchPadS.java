@@ -9,6 +9,8 @@ import de.thecodelabs.midi.midi.MidiCommand;
 import de.thecodelabs.midi.midi.MidiCommandType;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 
+import java.util.Optional;
+
 public class LaunchPadS implements MidiFeedbackTranscript {
 
 	public static final String NAME = "Launchpad S";
@@ -41,6 +43,11 @@ public class LaunchPadS implements MidiFeedbackTranscript {
 	@Override
 	public FeedbackValue[] getFeedbackValues() {
 		return LaunchPadSColor.values();
+	}
+
+	@Override
+	public Optional<FeedbackValue> getFeedbackValueOfByte(byte b) {
+		return Optional.ofNullable(LaunchPadSColor.valueOf(b));
 	}
 
 	public void initDevice() {

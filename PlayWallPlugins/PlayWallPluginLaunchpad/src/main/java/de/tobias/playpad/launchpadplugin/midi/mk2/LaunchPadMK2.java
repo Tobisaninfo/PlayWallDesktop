@@ -11,11 +11,14 @@ import de.thecodelabs.midi.midi.MidiCommand;
 import de.thecodelabs.midi.midi.MidiCommandType;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.tobias.playpad.action.feedback.FeedbackColorSuggester;
+import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.launchpadplugin.impl.MapParser;
+import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 
 public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSuggester {
 
@@ -87,10 +90,18 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 	}
 
 	@Override
+	public Optional<FeedbackValue> getFeedbackValueOfByte(byte b) {
+		return Optional.ofNullable(LaunchPadMK2Color.valueOf(b));
+	}
+
+	@Override
 	public FeedbackColor suggest(Color color) {
 		if (mapProperties.containsKey(color.toString())) {
 			String nameOfConst = mapProperties.get(color.toString());
-			return LaunchPadMK2Color.valueOf(nameOfConst);
+			final LaunchPadMK2Color mk2Color = LaunchPadMK2Color.valueOf(nameOfConst);
+
+			LightMode lightMode = Profile.currentProfile().getProfileSettings().getLightMode();
+			return mk2Color.translate(lightMode);
 		}
 		return null;
 	}

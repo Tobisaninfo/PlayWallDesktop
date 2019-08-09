@@ -128,6 +128,19 @@ public enum LaunchPadMK2Color implements FeedbackColor, LightMode.ILightMode {
 		return lightMode;
 	}
 
+	@Override
+	public FeedbackColor translate(LightMode lightMode) {
+		for (LaunchPadMK2Color instance : values()) {
+			if (instance.getColor().equals(this.getColor())) {
+				if (instance.lightMode == lightMode) {
+					return instance;
+				}
+			}
+		}
+		return null;
+	}
+
+
 	public static FeedbackColor valueOf(int id) {
 		for (LaunchPadMK2Color color : values()) {
 			if (color.getValue() == id) {

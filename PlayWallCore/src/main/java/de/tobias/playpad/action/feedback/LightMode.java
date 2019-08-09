@@ -14,6 +14,8 @@ public enum LightMode {
 
 	public interface ILightMode extends FeedbackColor {
 		LightMode getLightMode();
+
+		FeedbackColor translate(LightMode lightMode);
 	}
 
 	public static List<ILightMode> filter(ILightMode[] values, LightMode filter) {
