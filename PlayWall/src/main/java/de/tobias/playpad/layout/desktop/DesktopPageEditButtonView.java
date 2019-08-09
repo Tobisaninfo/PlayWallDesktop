@@ -30,13 +30,14 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 	private Button cloneButton;
 	private Button deleteButton;
 
-	private transient Button pageButton;
 	private transient MenuToolbarViewController controller;
+	private transient IMainViewController mainViewController;
 
-	DesktopPageEditButtonView(MenuToolbarViewController controller, Page page, Button pageButton) {
+	DesktopPageEditButtonView(MenuToolbarViewController controller, IMainViewController mainViewController, Page page) {
 		this.page = page;
-		this.pageButton = pageButton;
+
 		this.controller = controller;
+		this.mainViewController = mainViewController;
 
 		leftMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_LEFT));
 		leftMoveButton.setOnAction(this);
@@ -122,7 +123,7 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 				project.addPage(clone);
 
 				controller.initPageButtons();
-				controller.highlightPageButton(page.getPosition());
+				mainViewController.showPage(clone);
 				event.consume();
 			} catch (CloneNotSupportedException e) {
 				Logger.error(e);

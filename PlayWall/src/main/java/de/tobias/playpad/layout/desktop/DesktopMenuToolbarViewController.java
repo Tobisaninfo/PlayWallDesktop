@@ -484,7 +484,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 				if (newNode instanceof Button && connect.getEditMode() == DesktopEditMode.PAGE) { // Nur bei Drag And Drop mode
 					Button button = (Button) newNode;
-					DesktopPageEditButtonView editBox = new DesktopPageEditButtonView(this, openProject.getPage(index), button);
+					DesktopPageEditButtonView editBox = new DesktopPageEditButtonView(this, mainViewController, openProject.getPage(index));
 					button.setGraphic(editBox);
 				}
 			}
