@@ -12,20 +12,17 @@ public class ModernPlugin {
 	private String displayName;
 	private String description;
 
-	private String path;
-
 	private String version;
 	private int build;
 
 	public ModernPlugin() {
 	}
 
-	public ModernPlugin(int id, String name, String displayName, String description, String path, String version, int build) {
+	public ModernPlugin(int id, String name, String displayName, String description, String version, int build) {
 		this.id = id;
 		this.name = name;
 		this.displayName = displayName;
 		this.description = description;
-		this.path = path;
 		this.version = version;
 		this.build = build;
 	}
@@ -54,12 +51,8 @@ public class ModernPlugin {
 		return build;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
 	public String getFileName() {
-		return getPath();
+		return getName() + EXTENSION;
 	}
 
 	@Override
