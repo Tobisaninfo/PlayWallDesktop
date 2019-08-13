@@ -109,10 +109,8 @@ public class PadSettings implements Cloneable {
 	}
 
 	public TimeMode getTimeMode() {
-		if (timeModeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getPlayerTimeDisplayMode();
-			}
+		if (timeModeProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getPlayerTimeDisplayMode();
 		}
 		return timeModeProperty.get();
 	}
@@ -139,10 +137,8 @@ public class PadSettings implements Cloneable {
 	 * @return Fade
 	 */
 	public Fade getFade() {
-		if (fadeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getFade();
-			}
+		if (fadeProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getFade();
 		}
 		return fadeProperty.get();
 	}
@@ -164,10 +160,8 @@ public class PadSettings implements Cloneable {
 	}
 
 	public Duration getWarning() {
-		if (warningProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getWarningFeedback();
-			}
+		if (warningProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getWarningFeedback();
 		}
 		return warningProperty.get();
 	}
@@ -194,13 +188,13 @@ public class PadSettings implements Cloneable {
 
 	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign design = new ModernCartDesign(pad);
+			ModernCartDesign newDesign = new ModernCartDesign(pad);
 
 			if (pad.getProject().getProjectReference().isSync()) {
-				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
+				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), newDesign);
 			}
 
-			setDesign(design);
+			setDesign(newDesign);
 
 		}
 		return design;
