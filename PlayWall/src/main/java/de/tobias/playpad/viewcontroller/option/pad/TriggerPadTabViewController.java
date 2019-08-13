@@ -17,7 +17,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class TriggerPadTabViewController extends PadSettingsTabViewController implements ChangeListener<TreeItem<TriggerDisplayable>> {
 
@@ -40,7 +40,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	}
 
 	private void createTreeView() {
-		HashMap<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
+		Map<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
 		TreeItem<TriggerDisplayable> rootItem = new TreeItem<>();
 
 		// Sort the tpyes for the treeview

@@ -647,7 +647,7 @@ public class Pad implements Cloneable {
 			clone.addSyncListener();
 		}
 
-		clone.padSettings = padSettings.clone(clone);
+		clone.padSettings = padSettings.clone();
 
 		clone.controller = null;
 		clone.project = project;

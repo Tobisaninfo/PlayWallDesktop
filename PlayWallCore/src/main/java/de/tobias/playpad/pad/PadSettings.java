@@ -3,6 +3,7 @@ package de.tobias.playpad.pad;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadSettingsUpdateListener;
@@ -13,7 +14,9 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.util.Duration;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class PadSettings implements Cloneable {
@@ -34,8 +37,8 @@ public class PadSettings implements Cloneable {
 	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
 
-	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
-	private HashMap<String, Object> customSettings = new HashMap<>();
+	private Map<TriggerPoint, Trigger> triggers = new EnumMap<>(TriggerPoint.class);
+	private Map<String, Object> customSettings = new HashMap<>();
 
 	// Sync Listener
 	private PadSettingsUpdateListener syncListener;
@@ -219,11 +222,11 @@ public class PadSettings implements Cloneable {
 
 	}
 
-	public HashMap<String, Object> getCustomSettings() {
+	public Map<String, Object> getCustomSettings() {
 		return customSettings;
 	}
 
-	public HashMap<TriggerPoint, Trigger> getTriggers() {
+	public Map<TriggerPoint, Trigger> getTriggers() {
 		return triggers;
 	}
 
@@ -248,7 +251,8 @@ public class PadSettings implements Cloneable {
 		return false;
 	}
 
-	public PadSettings clone(Pad pad) throws CloneNotSupportedException {
+	@Override
+	public PadSettings clone() throws CloneNotSupportedException {
 		PadSettings clone = (PadSettings) super.clone();
 		clone.id = UUID.randomUUID();
 
@@ -275,13 +279,14 @@ public class PadSettings implements Cloneable {
 			clone.design = design.clone(pad);
 		}
 
-		clone.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
+		clone.triggers = new EnumMap<>(TriggerPoint.class); // TODO Trigger werden nicht Kopiert
 		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
 
 		clone.updateTrigger();
 
-		if (pad.getProject().getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PAD_SETTINGS_ADD, pad.getProject().getProjectReference(), clone);
+		final ProjectReference projectReference = pad.getProject().getProjectReference();
+		if (projectReference.isSync()) {
+			CommandManager.execute(Commands.PAD_SETTINGS_ADD, projectReference, clone);
 		}
 
 		return clone;

@@ -352,7 +352,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 			// MIDI Shutdown
 			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
-			if (profileSettings.isMidiActive()) {
+			if (profileSettings.isMidiActive() && Midi.getInstance().isOpen()) {
 				try {
 					Midi.getInstance().clearFeedback();
 					Midi.getInstance().close();
@@ -660,8 +660,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			final MidiDeviceInfo midiDeviceInfo = Midi.getInstance().getMidiDeviceInfo(name);
 			if (midiDeviceInfo != null) {
 				Midi.getInstance().openDevice(midiDeviceInfo, Midi.Mode.INPUT, Midi.Mode.OUTPUT);
+				notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 			}
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 		} catch (NullPointerException e) {
 			Logger.error(e);
 			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
