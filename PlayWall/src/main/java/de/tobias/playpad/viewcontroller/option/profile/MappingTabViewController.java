@@ -402,6 +402,10 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
 
+		if (transcript == null) {
+			return;
+		}
+
 		Mapping.getCurrentMapping().getActions().forEach(action ->
 				action.getKeysForType(MidiKey.class).forEach(key ->
 					Stream.of(FeedbackType.values()).forEach(type -> {

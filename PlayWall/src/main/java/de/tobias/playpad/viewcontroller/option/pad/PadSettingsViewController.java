@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -59,7 +60,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 				if (contentTab != null)
 					addTab(contentTab);
 			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 

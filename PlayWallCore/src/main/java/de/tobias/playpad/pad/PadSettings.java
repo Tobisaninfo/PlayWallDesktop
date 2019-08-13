@@ -33,6 +33,7 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
+	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
@@ -174,6 +175,18 @@ public class PadSettings implements Cloneable {
 		return warningProperty;
 	}
 
+	public Duration getCueIn() {
+		return cueInProperty.get();
+	}
+
+	public void setCueIn(Duration cueIn) {
+		cueInProperty.set(cueIn);
+	}
+
+	public Duration cueInProperty() {
+		return cueInProperty.get();
+	}
+
 	public boolean isCustomDesign() {
 		return customDesignProperty.get();
 	}
@@ -200,20 +213,11 @@ public class PadSettings implements Cloneable {
 		return design;
 	}
 
-	public ModernColor getBackgroundColor() {
-		if (isCustomDesign()) {
-			return design.getBackgroundColor();
-		} else {
-			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
-		}
-	}
-
 	public void setDesign(ModernCartDesign design) {
 		this.design = design;
 		if (pad.getProject().getProjectReference().isSync()) {
 			design.addListener();
 		}
-
 	}
 
 	public Map<String, Object> getCustomSettings() {
@@ -299,4 +303,13 @@ public class PadSettings implements Cloneable {
 		syncListener.removeListener();
 	}
 
+	//// Computed
+
+	public ModernColor getBackgroundColor() {
+		if (isCustomDesign()) {
+			return design.getBackgroundColor();
+		} else {
+			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
+		}
+	}
 }

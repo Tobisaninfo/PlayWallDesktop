@@ -23,6 +23,7 @@ public class PadSettingsSerializer {
 	private static final String TIME_MODE_ELEMENT = "TimeMode";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
+	private static final String CUE_IN_ELEMENT = "CueIn";
 
 	private static final String DESIGN_ELEMENT = "Design";
 	private static final String CUSTOM_DESIGN_ELEMENT = "custom";
@@ -41,9 +42,9 @@ public class PadSettingsSerializer {
 		}
 
 		if (settingsElement.element(VOLUME_ELEMENT) != null)
-			padSettings.setVolume(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
+			padSettings.setVolume(Double.parseDouble(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
 		if (settingsElement.element(LOOP_ELEMENT) != null)
-			padSettings.setLoop(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
+			padSettings.setLoop(Boolean.parseBoolean(settingsElement.element(LOOP_ELEMENT).getStringValue()));
 		if (settingsElement.element(TIME_MODE_ELEMENT) != null)
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIME_MODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
@@ -56,12 +57,20 @@ public class PadSettingsSerializer {
 				padSettings.setWarning(Duration.seconds(5));
 			}
 		}
+		if (settingsElement.element(CUE_IN_ELEMENT) != null) {
+			try {
+				Duration duration = Duration.valueOf(settingsElement.element(CUE_IN_ELEMENT).getStringValue().replace(" ", ""));
+				padSettings.setCueIn(duration);
+			} catch (Exception e) {
+				padSettings.setCueIn(null);
+			}
+		}
 
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
 			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
-				padSettings.setCustomDesign(Boolean.valueOf(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
+				padSettings.setCustomDesign(Boolean.parseBoolean(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
 			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign design = serializer.load(designElement, pad);
@@ -108,6 +117,9 @@ public class PadSettingsSerializer {
 			settingsElement.addElement(WARNING_ELEMENT).addText(padSettings.getWarning().toString());
 		if (padSettings.isCustomFade())
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
+
+		if (padSettings.getCueIn() != null)
+		settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
 
 		// Layout
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
