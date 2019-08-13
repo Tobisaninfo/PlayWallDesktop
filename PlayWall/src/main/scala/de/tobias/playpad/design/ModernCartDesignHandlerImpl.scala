@@ -36,6 +36,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 			"playbarTrackColor" -> color.getPlaybarColor,
 			"playbarBarColor" -> color.getPlaybarTrackColor,
 			"padColor" -> (if (flat) color.paint() else color.linearGradient()),
+			"padCueInColor" -> (if (flat) color.paintBrighter() else color.linearGradient()),
 			"fontColor" -> color.getFontColor
 		)
 

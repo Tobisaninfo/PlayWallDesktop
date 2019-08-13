@@ -1,5 +1,6 @@
 package de.tobias.playpad.design.modern;
 
+import de.thecodelabs.utils.util.ColorUtils;
 import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.util.FadeableColor;
@@ -121,6 +122,10 @@ public enum ModernColor implements DisplayableColor {
 
 	public String paint() {
 		return getColorLow();
+	}
+
+	public String paintBrighter() {
+		return ColorUtils.toRGBHex(Color.web(getColorLow()).brighter());
 	}
 
 	public static ModernColor modernColorByBackgroundColor(String color) {

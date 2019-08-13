@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.touch.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -137,8 +138,7 @@ public class TouchPadView implements IPadView {
 					preview.getChildren().setAll(node);
 					return;
 				} catch (NoSuchComponentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		}
@@ -299,6 +299,11 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void setPlayBarProgress(double value) {
 		playBar.setProgress(value);
+	}
+
+	@Override
+	public void setCueInProgress(double value) {
+
 	}
 
 	@Override

@@ -59,10 +59,10 @@ public interface IPadView {
 	/**
 	 * Aktiviert eine Pseudoclass für die View
 	 *
-	 * @param playCalss Pseudoclass
-	 * @param b         <code>true</code> Aktiv
+	 * @param playClass Pseudo class
+	 * @param b         <code>true</code> active
 	 */
-	void pseudoClassState(PseudoClass playCalss, boolean b);
+	void pseudoClassState(PseudoClass playClass, boolean b);
 
 	/**
 	 * Setzt den Style für den Root Node der PadView.
@@ -74,9 +74,9 @@ public interface IPadView {
 	/**
 	 * Hebt eine Kachel hervor (Beispiel mit einer Animation.
 	 *
-	 * @param milliSecounds Dauer in Millisekunden
+	 * @param milliSeconds Dauer in Millisekunden
 	 */
-	void highlightView(int milliSecounds);
+	void highlightView(int milliSeconds);
 
 	/**
 	 * Aktiviert des Error Labels, damit es angezeigt wird.
@@ -91,6 +91,13 @@ public interface IPadView {
 	 * @param value [0, 1]
 	 */
 	void setPlayBarProgress(double value);
+
+	/**
+	 * Set the cue in progress value.
+	 *
+	 * @param value value between 0 and 1
+	 */
+	void setCueInProgress(double value);
 
 	/**
 	 * Setzt die Playbar sichtbar.

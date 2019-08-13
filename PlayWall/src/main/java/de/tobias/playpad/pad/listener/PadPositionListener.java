@@ -66,6 +66,16 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		double value = newValue.toMillis() / totalDuration.toMillis();
 		controller.getView().setPlayBarProgress(value);
 
+		Duration cueInDuration = pad.getPadSettings().getCueIn();
+		if (cueInDuration != null) {
+			if (cueInDuration.greaterThan(newValue)) {
+				double cueInProgress = newValue.toMillis() / cueInDuration.toMillis();
+				controller.getView().setCueInProgress(cueInProgress);
+			} else {
+				controller.getView().setCueInProgress(0);
+			}
+		}
+
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();
 

@@ -293,7 +293,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 					if (pad.getStatus() == PadStatus.READY || position == null) {
 						String time = durationToString(duration);
 						padView.setTime(time);
-						padView.getPlayBar().setProgress(0);
+						padView.setPlayBarProgress(0);
+						padView.setCueInProgress(0);
 					} else {
 						// Play/Gesamtzeit anzeigen
 						TimeMode timeMode = pad.getPadSettings().getTimeMode();
@@ -315,7 +316,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				return;
 			}
 		}
-		padView.getPlayBar().setProgress(0);
+		padView.setPlayBarProgress(0);
+		padView.setCueInProgress(0);
 		padView.setTime(null);
 	}
 

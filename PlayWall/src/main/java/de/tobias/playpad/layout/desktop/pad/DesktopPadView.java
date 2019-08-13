@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.animation.PulseTranslation;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -31,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class DesktopPadView implements IPadView {
 
@@ -59,6 +61,9 @@ public class DesktopPadView implements IPadView {
 	private VBox root;
 	private BusyView busyView;
 
+	private VBox cueInContainer;
+	private Rectangle cueInLayer;
+
 	private transient DesktopPadViewController controller; // Reference to its controller
 
 	public DesktopPadView(DesktopMainLayoutFactory connect) {
@@ -70,6 +75,10 @@ public class DesktopPadView implements IPadView {
 		superRoot = new StackPane();
 		root = new VBox();
 		busyView = new BusyView(superRoot);
+
+		cueInLayer = new Rectangle();
+		cueInLayer.heightProperty().bind(root.heightProperty());
+		cueInContainer = new VBox(cueInLayer);
 
 		indexLabel = new Label();
 
@@ -128,7 +137,7 @@ public class DesktopPadView implements IPadView {
 		buttonBox = new HBox(); // childern in addDefaultButton()
 
 		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
-		superRoot.getChildren().addAll(root, notFoundLabel);
+		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 	}
 
 	@Override
@@ -164,8 +173,7 @@ public class DesktopPadView implements IPadView {
 					preview.getChildren().setAll(node);
 					return;
 				} catch (NoSuchComponentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		}
@@ -209,6 +217,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void pseudoClassState(PseudoClass pseudoClass, boolean active) {
 		superRoot.pseudoClassStateChanged(pseudoClass, active);
+		cueInLayer.pseudoClassStateChanged(pseudoClass, active);
 		indexLabel.pseudoClassStateChanged(pseudoClass, active);
 		timeLabel.pseudoClassStateChanged(pseudoClass, active);
 		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
@@ -231,7 +240,6 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setStyle(String string) {
 		superRoot.setStyle(string);
-
 	}
 
 	@Override
@@ -318,6 +326,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void applyStyleClasses(PadIndex index) {
 		superRoot.getStyleClass().addAll("pad", "pad" + index);
+		cueInLayer.getStyleClass().addAll("pad-cue-in", "pad" + index + "-cue-in");
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
 		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
@@ -348,6 +357,7 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		cueInLayer.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
@@ -404,6 +414,11 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void setPlayBarProgress(double value) {
 		playBar.setProgress(value);
+	}
+
+	@Override
+	public void setCueInProgress(double value) {
+		cueInLayer.setWidth(root.getWidth() * value);
 	}
 
 	@Override
