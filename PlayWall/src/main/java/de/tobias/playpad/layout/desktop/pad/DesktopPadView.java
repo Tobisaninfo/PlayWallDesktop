@@ -279,7 +279,8 @@ public class DesktopPadView implements IPadView {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	void setTime(String time) {
+	void
+	setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
 		} else {

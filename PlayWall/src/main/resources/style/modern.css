@@ -69,11 +69,16 @@ PlayPad Elements
 
 .pad {
 	-fx-background-radius: 5px;
-	-fx-padding: 5 5 5 5;
+}
+
+.pad-cue-in {
+	-fx-arc-height: 5px;
+	-fx-arc-width: 5px;
 }
 
 .pad-root {
 	-fx-spacing: 4px;
+	-fx-padding: 5 5 5 5;
 }
 
 .pad-button-box {
