@@ -1,9 +1,11 @@
 package de.tobias.playpad.viewcontroller.option.feedback;
 
+import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.feedback.Feedback;
 import de.thecodelabs.midi.feedback.FeedbackColor;
 import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.feedback.FeedbackValue;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -43,10 +45,12 @@ public class SingleFeedbackViewController extends NVC {
 
 	private FeedbackColor[] colors;
 	private Feedback feedback;
+	private Action action;
 
-	public SingleFeedbackViewController(Feedback feedback, FeedbackType type, FeedbackValue[] values) {
+	public SingleFeedbackViewController(Feedback feedback, FeedbackType type, FeedbackValue[] values, Action action) {
 		load("view/option/feedback", "SingleFeedback", Localization.getBundle());
 		this.feedback = feedback;
+		this.action = action;
 
 		if (!(values instanceof FeedbackColor[])) {
 			throw new IllegalArgumentException("FeedbackValues are not of type FeedbackColor");
@@ -107,6 +111,10 @@ public class SingleFeedbackViewController extends NVC {
 				if (event.getSource() == colorChooseDefaultButton) {
 					feedback.setValue(item.getValue());
 					setColorChooseButtonColor(item.getColor(), colorChooseDefaultButton);
+
+					// highlight current button on device
+					Midi.getInstance().clearFeedback();
+					Midi.getInstance().showFeedback(action);
 				}
 			});
 

@@ -153,7 +153,7 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 				this.feedbackControllers = new NVC[feedbackTypes.length];
 				for (int i = 0; i < feedbackTypes.length; i++) {
 					final FeedbackType feedbackType = feedbackTypes[i];
-					NVC controller = new SingleFeedbackViewController(key.getFeedbackForType(feedbackType), feedbackType, feedbackValues);
+					NVC controller = new SingleFeedbackViewController(key.getFeedbackForType(feedbackType), feedbackType, feedbackValues, action);
 					this.feedbackControllers[i] = controller;
 				}
 			}

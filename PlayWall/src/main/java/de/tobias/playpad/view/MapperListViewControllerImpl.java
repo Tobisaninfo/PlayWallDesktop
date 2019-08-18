@@ -5,6 +5,7 @@ import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.mapping.Key;
 import de.thecodelabs.midi.mapping.KeyRegistry;
 import de.thecodelabs.midi.mapping.KeyType;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
@@ -137,6 +138,9 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		{
 			action.removeKey(key);
 			mappingView.getChildren().removeAll(hbox);
+
+			// disable highlight for current button on device
+			Midi.getInstance().clearFeedback();
 		});
 
 		controllers.add(controller);

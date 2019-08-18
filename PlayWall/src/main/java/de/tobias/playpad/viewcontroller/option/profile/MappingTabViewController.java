@@ -187,6 +187,10 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 			if (action != null) {
 				mapperListViewController = BaseMapperListViewController.getInstance();
 				mapperListViewController.showAction(action, detailView);
+
+				// highlight current button on device
+				Midi.getInstance().clearFeedback();
+				Midi.getInstance().showFeedback(action);
 			} else {
 				detailView.getChildren().remove(mapperListViewController.getParent());
 			}
