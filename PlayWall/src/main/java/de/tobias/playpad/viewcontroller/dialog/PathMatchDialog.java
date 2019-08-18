@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
@@ -283,7 +284,7 @@ public class PathMatchDialog extends NVC {
 									mediaPath.setSelected(true);
 								}
 							} catch (IOException e) {
-								e.printStackTrace();
+								Logger.error(e);
 							}
 						}
 					}

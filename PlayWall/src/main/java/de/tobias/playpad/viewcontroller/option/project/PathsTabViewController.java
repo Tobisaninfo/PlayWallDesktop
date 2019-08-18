@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.io.PathUtils;
 import de.thecodelabs.utils.util.Localization;
@@ -151,7 +152,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 
@@ -159,7 +160,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 				try {
 					FileUtils.deleteDirectory(oldMediaPath.get());
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 		};
 	}

@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -110,7 +111,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padDragListener = new DesktopPadDragListener(pad, padView, connect);
 			padDragListener.addListener();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		padView.applyStyleClasses(pad.getPadIndex());
@@ -169,7 +170,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 					onNew(event);
 				} catch (NoSuchComponentException e) {
 					// TODO Error Handling
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			} else if (event.getSource() == padView.getSettingsButton()) {
 				onSettings();

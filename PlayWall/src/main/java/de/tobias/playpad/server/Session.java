@@ -1,5 +1,6 @@
 package de.tobias.playpad.server;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 
@@ -52,7 +53,7 @@ public class Session {
 			}
 			Files.write(path, key.getBytes());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

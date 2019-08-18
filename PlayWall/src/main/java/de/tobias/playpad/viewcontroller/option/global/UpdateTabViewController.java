@@ -127,7 +127,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 			try {
 				updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 			System.exit(0);
 		});

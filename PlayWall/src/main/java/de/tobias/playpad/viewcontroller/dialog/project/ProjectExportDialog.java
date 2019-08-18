@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -106,9 +107,9 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 
 					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
 					showErrorMessage(errorMessage);
-					e.printStackTrace();
+					Logger.error(e);
 				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			});

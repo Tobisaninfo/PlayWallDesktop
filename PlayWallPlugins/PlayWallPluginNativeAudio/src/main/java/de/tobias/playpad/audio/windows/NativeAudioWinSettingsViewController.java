@@ -1,5 +1,6 @@
 package de.tobias.playpad.audio.windows;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -95,7 +96,7 @@ public class NativeAudioWinSettingsViewController extends AudioHandlerViewContro
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 				if (audioPlayer != null)

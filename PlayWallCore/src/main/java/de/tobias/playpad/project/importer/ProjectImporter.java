@@ -1,5 +1,6 @@
 package de.tobias.playpad.project.importer;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -135,7 +136,7 @@ public class ProjectImporter {
 				zip.getFile(Paths.get(entry.getName()), dest);
 				System.out.println("Copied Profile Data: \"" + entry.getName() + "\" to location: " + dest);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		});
 

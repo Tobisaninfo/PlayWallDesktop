@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -200,7 +201,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(Localization.getString(Strings.Error_Project_Export));
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		}

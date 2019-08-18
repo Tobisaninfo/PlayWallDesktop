@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -98,7 +99,7 @@ public class ProjectNewDialog extends NVC {
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException e) {
 			showErrorMessage(Localization.getString(Strings.Error_Project_Create, e.getLocalizedMessage()));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

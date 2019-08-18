@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -55,8 +56,7 @@ public class TriggerPointViewController extends NVC {
 				});
 				buttonBox.getChildren().add(button);
 			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		});
 	}
@@ -88,8 +88,7 @@ public class TriggerPointViewController extends NVC {
 				});
 			}
 		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 }

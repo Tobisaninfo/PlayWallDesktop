@@ -2,6 +2,7 @@ package de.tobias.playpad.server.sync.listener.downstream.project;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.PropertyDef;
@@ -24,7 +25,7 @@ public class ProjectRemoveListener implements ServerListener {
 			try {
 				ProjectReferenceManager.removeProject(ref);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}

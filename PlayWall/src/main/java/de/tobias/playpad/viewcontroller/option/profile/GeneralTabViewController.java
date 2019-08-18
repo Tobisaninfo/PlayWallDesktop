@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.Alertable;
@@ -112,7 +113,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 						Files.delete(path);
 						deleteFiles++;
 					} catch (Exception e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 			}
@@ -120,7 +121,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 			calcCacheSize();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(Localization.getString(Strings.Error_Settings_CacheClear, e.getLocalizedMessage()));
 		}
 	}
@@ -145,7 +146,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 			directoryStream.close();
 			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.convertBytesToAppropriateFormat(size)));
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()));
 		}
 	}

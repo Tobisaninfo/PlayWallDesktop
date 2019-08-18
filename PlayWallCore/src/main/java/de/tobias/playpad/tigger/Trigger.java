@@ -1,5 +1,6 @@
 package de.tobias.playpad.tigger;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -73,7 +74,7 @@ public class Trigger {
 					item.load(itemElement);
 					items.add(item);
 				} catch (NoSuchComponentException e) {
-					e.printStackTrace();
+					Logger.error(e);
 					// TODO Error Handling
 				}
 			}

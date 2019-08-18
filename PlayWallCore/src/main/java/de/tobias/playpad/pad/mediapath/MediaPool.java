@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.mediapath;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -32,7 +33,7 @@ public class MediaPool {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -45,7 +46,7 @@ public class MediaPool {
 			try {
 				Files.createDirectories(path.getParent());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		try {
@@ -56,7 +57,7 @@ public class MediaPool {
 			subjectCreateStmt.execute();
 			subjectCreateStmt.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -77,20 +78,20 @@ public class MediaPool {
 					return Paths.get(localPath);
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			} finally {
 				if (result != null) {
 					try {
 						result.close();
 					} catch (SQLException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 				if (stmt != null) {
 					try {
 						stmt.close();
 					} catch (SQLException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 			}
@@ -112,13 +113,13 @@ public class MediaPool {
 				stmt.setString(3, localPath != null ? localPath.toString() : null);
 				stmt.executeUpdate();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			} finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
 					} catch (SQLException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 			}
@@ -138,13 +139,13 @@ public class MediaPool {
 				stmt.setString(2, path.getId().toString());
 				stmt.executeUpdate();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			} finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
 					} catch (SQLException e) {
-						e.printStackTrace();
+						Logger.error(e);
 					}
 				}
 			}
@@ -155,7 +156,7 @@ public class MediaPool {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		} finally {
 			connection = null;
 		}
@@ -171,7 +172,7 @@ public class MediaPool {
 				try {
 					result.add(find(filename, path, false));
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});

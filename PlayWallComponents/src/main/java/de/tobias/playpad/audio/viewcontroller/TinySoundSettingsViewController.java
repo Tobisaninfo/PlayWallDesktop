@@ -1,5 +1,6 @@
 package de.tobias.playpad.audio.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
@@ -111,7 +112,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 						try {
 							Thread.sleep(100);
 						} catch (Exception e) {
-							e.printStackTrace();
+							Logger.error(e);
 						}
 					}
 				});
@@ -119,7 +120,7 @@ public class TinySoundSettingsViewController extends AudioHandlerViewController 
 			}
 
 		} catch (IOException | LineUnavailableException | UnsupportedAudioFileException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

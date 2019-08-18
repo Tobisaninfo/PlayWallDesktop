@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
@@ -45,7 +46,7 @@ public class ProfileDuplicateDialog extends TextInputDialog {
 				newRef = new ProfileReference(name);
 				ProfileReferenceManager.duplicate(cloneableProfile, newRef);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 				controller.showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getMessage()));
 			}
 		});

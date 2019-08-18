@@ -1,5 +1,6 @@
 package de.tobias.playpad.audio.windows;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.audio.AudioHandler;
 import de.tobias.playpad.audio.Soundcardable;
 import de.tobias.playpad.pad.Pad;
@@ -72,7 +73,7 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 				} catch (InterruptedException e) {
 					break;
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});

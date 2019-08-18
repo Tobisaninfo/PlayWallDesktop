@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.drag;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.PadIndex;
@@ -22,7 +23,7 @@ public class DuplicateDragMode extends PadDragMode {
 			project.setPad(newIndex, copyPad);
 			return true;
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 		return false;
 	}

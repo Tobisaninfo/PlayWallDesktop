@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -97,7 +98,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 			globalSettings.save();
 		} catch (Exception e) {
 			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

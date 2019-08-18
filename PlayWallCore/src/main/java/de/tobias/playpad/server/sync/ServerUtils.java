@@ -1,5 +1,6 @@
 package de.tobias.playpad.server.sync;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.server.sync.listener.ServerListener;
 
 /**
@@ -17,7 +18,7 @@ public class ServerUtils {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		return false;

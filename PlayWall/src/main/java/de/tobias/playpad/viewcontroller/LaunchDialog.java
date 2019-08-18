@@ -219,12 +219,12 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 					ProjectReferenceManager.addProjectReference(ref);
 					setProjectListValues();
 				} catch (IOException | DocumentException e) {
-					e.printStackTrace();
+					Logger.error(e);
 					showErrorMessage(Localization.getString(Strings.Error_Project_Convert));
 				}
 			});
 		} catch (IOException | DocumentException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(Localization.getString(Strings.Error_Standard_Gen));
 		}
 	}

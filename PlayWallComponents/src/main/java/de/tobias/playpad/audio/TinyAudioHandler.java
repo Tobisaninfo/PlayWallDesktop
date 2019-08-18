@@ -1,5 +1,6 @@
 package de.tobias.playpad.audio;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
@@ -93,7 +94,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 					Thread.sleep(SLEEP_TIME_POSITION);
 				} catch (InterruptedException | ConcurrentModificationException ignored) {
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});
@@ -240,7 +241,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 			} catch (Exception e) {
 				loadedProperty.set(false);
 				// getContent().getPad().throwException(path, e); TODO Error Handling User
-				e.printStackTrace();
+				Logger.error(e);
 			} finally {
 				Platform.runLater(() ->
 				{
@@ -310,7 +311,7 @@ public class TinyAudioHandler extends AudioHandler implements Soundcardable, See
 				}
 
 			} catch (SecurityException | IllegalArgumentException | LineUnavailableException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 			// Init mit Default Sound Card, wenn keine Ausgewählt wurde
 			if (!TinySound.isInitialized()) {

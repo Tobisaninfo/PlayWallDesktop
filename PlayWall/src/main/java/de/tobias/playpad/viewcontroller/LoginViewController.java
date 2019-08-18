@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
@@ -58,7 +59,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		try {
 			imageView.setImage(new Image(LaunchDialog.IMAGE));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -86,7 +87,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 			session.save();
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | LoginException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(e.getMessage());
 		}
 	}
@@ -97,7 +98,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		try {
 			Desktop.getDesktop().browse(uri);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

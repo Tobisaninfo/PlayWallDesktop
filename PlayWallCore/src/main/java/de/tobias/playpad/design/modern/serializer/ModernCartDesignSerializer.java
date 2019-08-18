@@ -1,5 +1,6 @@
 package de.tobias.playpad.design.modern.serializer;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
@@ -23,7 +24,7 @@ public class ModernCartDesignSerializer {
 			try {
 				design.setBackgroundColor(ModernColor.valueOf(backgroundElement.getStringValue()));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
@@ -32,7 +33,7 @@ public class ModernCartDesignSerializer {
 			try {
 				design.setPlayColor(ModernColor.valueOf(playElement.getStringValue()));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		return design;

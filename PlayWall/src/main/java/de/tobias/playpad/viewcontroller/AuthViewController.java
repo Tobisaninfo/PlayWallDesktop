@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
@@ -70,7 +71,7 @@ public class AuthViewController extends NVC {
 				closeStage();
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 			showErrorMessage(e.getMessage());
 		}
 	}

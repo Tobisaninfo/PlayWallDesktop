@@ -1,5 +1,6 @@
 package de.tobias.playpad.project.export;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -68,7 +69,7 @@ public class ProjectExporter {
 				XMLWriter writer = new XMLWriter(os, OutputFormat.createPrettyPrint());
 				writer.write(infoDocument);
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		});
 	}
