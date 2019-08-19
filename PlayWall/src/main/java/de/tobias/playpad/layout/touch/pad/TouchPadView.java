@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.thecodelabs.utils.util.ColorUtils;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.win.User32X;
 import de.tobias.playpad.PlayPadPlugin;
@@ -17,7 +18,6 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.beans.property.Property;
@@ -318,7 +318,7 @@ public class TouchPadView implements IPadView {
 
 			if (associator != null) {
 				Color color = associator.getDesignDefaultColor();
-				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
+				notFoundLabel.setColor(ColorUtils.getAppropriateTextColor(color));
 			} else {
 				notFoundLabel.setColor(Color.RED);
 			}
