@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.drag.PadDragMode;
@@ -144,6 +145,11 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 			PadContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
+				// stop pad if playing
+				if(currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
+					currentPad.getContent().stop();
+				}
+
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
 					currentPad.setContentType(connect.getType());
 				}
