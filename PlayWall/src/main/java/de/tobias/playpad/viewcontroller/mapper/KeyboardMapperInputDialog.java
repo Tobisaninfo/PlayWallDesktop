@@ -39,10 +39,7 @@ public class KeyboardMapperInputDialog extends Alert {
 	}
 
 	private boolean checkControlKeys(KeyEvent ev) {
-		if (ev.isShortcutDown() || ev.isAltDown() || ev.isShiftDown()) {
-			return true;
-		}
-		return false;
+		return ev.isShortcutDown() || ev.isAltDown() || ev.isShiftDown();
 	}
 
 	public boolean showInputDialog() {

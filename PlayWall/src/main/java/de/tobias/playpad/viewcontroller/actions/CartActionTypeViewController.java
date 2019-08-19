@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.actions;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.action.Action;
-import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;

@@ -292,7 +292,7 @@ public class ProfileSettings {
 		if (midiDevice != null)
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
 		root.addElement(MIDI_ACTIVE_ELEMENT).addText(String.valueOf(midiActive));
-		root.addElement(LIGHT_MODE).addText(String.valueOf(lightMode.name()));
+		root.addElement(LIGHT_MODE).addText(lightMode.name());
 
 		Element designElement = root.addElement(DESIGN_ELEMENT);
 		ModernGlobalDesignSerializer serializer = new ModernGlobalDesignSerializer();

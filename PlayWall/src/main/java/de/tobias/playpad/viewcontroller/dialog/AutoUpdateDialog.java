@@ -5,7 +5,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.versionizer.config.Artifact;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;

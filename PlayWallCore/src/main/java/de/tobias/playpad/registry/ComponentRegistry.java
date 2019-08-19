@@ -108,7 +108,7 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 					if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
 						String icon = element.attributeValue("icon");
 						Class iconClass = Class.forName(element.attributeValue("class"));
-						int size = Integer.valueOf(element.attributeValue("size"));
+						int size = Integer.parseInt(element.attributeValue("size"));
 						Object iconObj = Enum.valueOf(iconClass, icon);
 						if (iconObj instanceof FontIconType) {
 							FontIconType iconType = (FontIconType) iconObj;

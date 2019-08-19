@@ -52,7 +52,7 @@ public abstract class TriggerItem {
 	 */
 	public void load(Element element) {
 		if (element.attributeValue(DURATION_ATTR) != null) {
-			durationFromPoint = Duration.millis(Double.valueOf(element.attributeValue(DURATION_ATTR)));
+			durationFromPoint = Duration.millis(Double.parseDouble(element.attributeValue(DURATION_ATTR)));
 		}
 	}
 

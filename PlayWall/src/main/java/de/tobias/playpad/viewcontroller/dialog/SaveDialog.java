@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.dialog;
 
 import de.thecodelabs.utils.ui.AdvancedDialog;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;

@@ -83,7 +83,7 @@ public class CartTriggerItem extends TriggerItem {
 		if (element.attributeValue(STATUS_ATTR) != null)
 			setNewStatus(PadStatus.valueOf(element.attributeValue(STATUS_ATTR)));
 		if (element.attributeValue(ALLCARTS_ATTR) != null)
-			setAllCarts(Boolean.valueOf(element.attributeValue(ALLCARTS_ATTR)));
+			setAllCarts(Boolean.parseBoolean(element.attributeValue(ALLCARTS_ATTR)));
 
 		for (Object cartObj : element.elements(CART_ELEMENT)) {
 			if (cartObj instanceof Element) {

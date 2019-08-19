@@ -63,7 +63,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		columnTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.valueOf(c), Dimension.COLUMNS);
+				ValidationState validationState = validate(Integer.parseInt(c), Dimension.COLUMNS);
 				if (validationState == ValidationState.NORMAL) {
 					columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					columnErrorLabel.setText("");
@@ -88,7 +88,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		rowTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.valueOf(c), Dimension.ROWS);
+				ValidationState validationState = validate(Integer.parseInt(c), Dimension.ROWS);
 				if (validationState == ValidationState.NORMAL) {
 					rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					rowErrorLabel.setText("");
@@ -146,8 +146,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
 
 		try {
-			Integer column = Integer.valueOf(columnTextField.getText());
-			Integer rows = Integer.valueOf(rowTextField.getText());
+			int column = Integer.parseInt(columnTextField.getText());
+			int rows = Integer.parseInt(rowTextField.getText());
 
 			if (column < 3 || rows < 1) {
 				return false;
@@ -182,8 +182,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 	@Override
 	public void saveSettings(ProjectSettings settings) {
-		int columns = Integer.valueOf(columnTextField.getText());
-		int rows = Integer.valueOf(rowTextField.getText());
+		int columns = Integer.parseInt(columnTextField.getText());
+		int rows = Integer.parseInt(rowTextField.getText());
 
 		changeSettings = settings.getColumns() != columns || settings.getRows() != rows;
 
@@ -200,8 +200,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	@Override
 	public boolean validSettings() {
 		try {
-			return validate(Integer.valueOf(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
-					validate(Integer.valueOf(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
+			return validate(Integer.parseInt(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
+					validate(Integer.parseInt(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
 		} catch (NumberFormatException e) {
 			return false;
 		}

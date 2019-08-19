@@ -43,7 +43,7 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 
 		if (element.attributeValue(UUID_ATTR) != null)
 			pad.setUuid(UUID.fromString(element.attributeValue(UUID_ATTR)));
-		pad.setPosition(Integer.valueOf(element.attributeValue(INDEX_ATTR)));
+		pad.setPosition(Integer.parseInt(element.attributeValue(INDEX_ATTR)));
 		pad.setName(element.attributeValue(NAME_ATTR));
 		PadStatus status = PadStatus.valueOf(element.attributeValue(STATUS_ATTR));
 		if (status == PadStatus.EMPTY || status == PadStatus.READY)

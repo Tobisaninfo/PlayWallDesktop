@@ -52,7 +52,7 @@ public class ConflictSolverImpl implements ConflictSolver {
 				return ConflictType.LOCAL_CHANGES;
 			}
 		}
-		return ConflictType.NON;
+		return ConflictType.NONE;
 	}
 
 	@Override

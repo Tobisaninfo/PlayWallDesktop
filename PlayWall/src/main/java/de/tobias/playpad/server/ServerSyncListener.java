@@ -92,7 +92,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 		// Find new conflicts
 		for (ProjectReference reference : ProjectReferenceManager.getProjects()) {
 			ConflictType conflictType = solver.checkConflict(commandExecutor, reference);
-			if (conflictType != ConflictType.NON) {
+			if (conflictType != ConflictType.NONE) {
 				List<Version> versions = solver.getVersions(reference);
 
 				Conflict conflict = new Conflict(reference, conflictType, versions);

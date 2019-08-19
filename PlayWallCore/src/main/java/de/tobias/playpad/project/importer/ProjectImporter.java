@@ -90,14 +90,14 @@ public class ProjectImporter {
 
 		Element profileElement = rootElement.element("Profile");
 		if (profileElement != null) {
-			includeProfile = Boolean.valueOf(profileElement.attributeValue("export"));
+			includeProfile = Boolean.parseBoolean(profileElement.attributeValue("export"));
 			profileUUID = UUID.fromString(profileElement.attributeValue("uuid"));
 			profileName = profileElement.attributeValue("name");
 		}
 
 		Element mediaElement = rootElement.element("Media");
 		if (mediaElement != null) {
-			includeMedia = Boolean.valueOf(mediaElement.attributeValue("export"));
+			includeMedia = Boolean.parseBoolean(mediaElement.attributeValue("export"));
 		}
 	}
 

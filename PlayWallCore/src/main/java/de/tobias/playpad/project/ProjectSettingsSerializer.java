@@ -18,14 +18,14 @@ class ProjectSettingsSerializer {
 	public static ProjectSettings load(Element element) {
 		ProjectSettings settings = new ProjectSettings();
 		if (element.element(COLUMNS_ELEMENT) != null)
-			settings.setColumns(Integer.valueOf(element.element(COLUMNS_ELEMENT).getStringValue()));
+			settings.setColumns(Integer.parseInt(element.element(COLUMNS_ELEMENT).getStringValue()));
 		if (element.element(ROWS_ELEMENT) != null)
-			settings.setRows(Integer.valueOf(element.element(ROWS_ELEMENT).getStringValue()));
+			settings.setRows(Integer.parseInt(element.element(ROWS_ELEMENT).getStringValue()));
 
 		Element mediaElement = element.element(MEDIA_PATH_ELEMENT);
 		if (mediaElement != null) {
 			settings.setMediaPath(Paths.get(mediaElement.getStringValue()));
-			settings.setUseMediaPath(Boolean.valueOf(mediaElement.attributeValue(MEDIA_PATH_ACTIVE_ATTR)));
+			settings.setUseMediaPath(Boolean.parseBoolean(mediaElement.attributeValue(MEDIA_PATH_ACTIVE_ATTR)));
 		}
 
 		return settings;

@@ -16,15 +16,15 @@ public class KeysConflictDialog extends Alert {
 	KeysConflictDialog(List<Key> conflicts, KeyCollection collection) {
 		super(AlertType.ERROR);
 
-		String keys = "";
+		StringBuilder keys = new StringBuilder();
 		for (int i = 0; i < conflicts.size(); i++) {
-			keys += "- " + collection.getName(conflicts.get(i).getId());
+			keys.append("- ").append(collection.getName(conflicts.get(i).getId()));
 			if (i + 1 < conflicts.size()) {
-				keys += "\n";
+				keys.append("\n");
 			}
 		}
 		setHeaderText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Header));
-		setContentText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Content, keys));
+		setContentText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Content, keys.toString()));
 
 		Stage dialogStage = (Stage) getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());

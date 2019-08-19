@@ -84,9 +84,9 @@ public class VolumeTriggerItem extends TriggerItem {
 	public void load(Element element) {
 		super.load(element);
 		if (element.attributeValue(VOLUME_ATTR) != null)
-			volume = Double.valueOf(element.attributeValue(VOLUME_ATTR));
+			volume = Double.parseDouble(element.attributeValue(VOLUME_ATTR));
 		if (element.attributeValue(DURATION_ATTR) != null)
-			duration = Duration.millis(Double.valueOf(element.attributeValue(DURATION_ATTR)));
+			duration = Duration.millis(Double.parseDouble(element.attributeValue(DURATION_ATTR)));
 
 		for (Object cartObj : element.elements(CART_ELEMENT)) {
 			if (cartObj instanceof Element) {

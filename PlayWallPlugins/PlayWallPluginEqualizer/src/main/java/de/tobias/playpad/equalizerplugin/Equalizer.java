@@ -108,12 +108,12 @@ public class Equalizer {
 			Element root = document.getRootElement();
 			for (Object bandObj : root.elements(BAND_ELEMENT)) {
 				Element element = (Element) bandObj;
-				int bandwidth = Integer.valueOf(element.attribute(WIDTH_ATTR).getValue());
-				double gain = Double.valueOf(element.getStringValue());
+				int bandwidth = Integer.parseInt(element.attribute(WIDTH_ATTR).getValue());
+				double gain = Double.parseDouble(element.getStringValue());
 				instance.setGain(bandwidth, gain);
 			}
 			if (root.element(ENABLE_ELEMENT) != null)
-				instance.setEnable(Boolean.valueOf(root.element(ENABLE_ELEMENT).getStringValue()));
+				instance.setEnable(Boolean.parseBoolean(root.element(ENABLE_ELEMENT).getStringValue()));
 		}
 	}
 }

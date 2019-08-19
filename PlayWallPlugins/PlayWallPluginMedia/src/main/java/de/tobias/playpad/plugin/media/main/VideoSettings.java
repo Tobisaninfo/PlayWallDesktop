@@ -52,11 +52,11 @@ public class VideoSettings {
 			Document document = reader.read(Files.newInputStream(path));
 			Element root = document.getRootElement();
 			if (root.element(SCREEN_ID_ELEMENT) != null)
-				setScreenId(Integer.valueOf(root.element(SCREEN_ID_ELEMENT).getStringValue()));
+				setScreenId(Integer.parseInt(root.element(SCREEN_ID_ELEMENT).getStringValue()));
 			if (root.element(FULL_SCREEN_ELEMENT) != null)
-				setFullScreen(Boolean.valueOf(root.element(FULL_SCREEN_ELEMENT).getStringValue()));
+				setFullScreen(Boolean.parseBoolean(root.element(FULL_SCREEN_ELEMENT).getStringValue()));
 			if (root.element(OPEN_AT_LAUNCH_ELEMENT) != null)
-				setOpenAtLaunch(Boolean.valueOf(root.element(OPEN_AT_LAUNCH_ELEMENT).getStringValue()));
+				setOpenAtLaunch(Boolean.parseBoolean(root.element(OPEN_AT_LAUNCH_ELEMENT).getStringValue()));
 		}
 	}
 

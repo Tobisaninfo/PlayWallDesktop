@@ -31,14 +31,14 @@ public class ModernGlobalDesignSerializer {
 		if (animationElement != null) {
 			Element warnAnimationElement = animationElement.element("Warn");
 			if (warnAnimationElement != null) {
-				design.setWarnAnimation(Boolean.valueOf(warnAnimationElement.getStringValue()));
+				design.setWarnAnimation(Boolean.parseBoolean(warnAnimationElement.getStringValue()));
 			}
 		}
 
 		Element infoFontSizeElement = rootElement.element("InfoFontSize");
 		if (infoFontSizeElement != null) {
 			try {
-				design.setInfoFontSize(Integer.valueOf(infoFontSizeElement.getStringValue()));
+				design.setInfoFontSize(Integer.parseInt(infoFontSizeElement.getStringValue()));
 			} catch (NumberFormatException e) {
 				Logger.error(e);
 			}
@@ -47,14 +47,14 @@ public class ModernGlobalDesignSerializer {
 		Element titleFontSizeElement = rootElement.element("TitleFontSize");
 		if (titleFontSizeElement != null) {
 			try {
-				design.setTitleFontSize(Integer.valueOf(titleFontSizeElement.getStringValue()));
+				design.setTitleFontSize(Integer.parseInt(titleFontSizeElement.getStringValue()));
 			} catch (NumberFormatException e) {
 				Logger.error(e);
 			}
 		}
 		Element flatDesignElement = rootElement.element("FlatDesign");
 		if (flatDesignElement != null) {
-			design.setFlatDesign(Boolean.valueOf(flatDesignElement.getStringValue()));
+			design.setFlatDesign(Boolean.parseBoolean(flatDesignElement.getStringValue()));
 		}
 
 		return design;
