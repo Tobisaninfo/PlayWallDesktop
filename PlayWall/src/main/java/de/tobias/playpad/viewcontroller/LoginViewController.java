@@ -20,6 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -65,13 +66,19 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@Override
 	public void initStage(Stage stage) {
+		PlayPadPlugin.styleable().applyStyle(stage);
+
 		stage.setTitle(getString(Strings.UI_Dialog_Login_Title));
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
+
+		stage.initModality(Modality.APPLICATION_MODAL);
 
 		stage.setResizable(false);
 		stage.setWidth(650);
 		stage.setHeight(350);
 		stage.centerOnScreen();
+
+		usernameTextField.requestFocus();
 	}
 
 	@FXML
