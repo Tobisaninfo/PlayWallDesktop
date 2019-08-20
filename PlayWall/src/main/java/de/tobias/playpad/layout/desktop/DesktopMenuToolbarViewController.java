@@ -21,6 +21,7 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.profile.ref.ProfileReference;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
@@ -559,7 +560,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
 		try {
-			ProjectReferenceManager.saveProject(openProject);
+			ProjectReferenceManager.saveProjects();
+			ProjectReferenceManager.saveSingleProject(openProject);
+			ProfileReferenceManager.saveProfiles();
+			Profile.currentProfile().save();
+			PlayPadPlugin.getInstance().getGlobalSettings().save();
+
 			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 		} catch (IOException e) {
 			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));

@@ -164,7 +164,7 @@ public class ProjectImporter {
 				path.setPath(newMediaPath, false);
 			}
 		}
-		ProjectReferenceManager.saveProject(project);
+		ProjectReferenceManager.saveSingleProject(project);
 	}
 
 	public ProjectReference getProjectReference() {

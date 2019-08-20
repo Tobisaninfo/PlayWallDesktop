@@ -367,7 +367,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				ProjectReferenceManager.saveProject(openProject);
+				ProjectReferenceManager.saveSingleProject(openProject);
 				Logger.info("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {

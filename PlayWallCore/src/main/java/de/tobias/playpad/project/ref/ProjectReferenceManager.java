@@ -59,7 +59,7 @@ public final class ProjectReferenceManager {
 		return null;
 	}
 
-	public static void saveProject(Project project) throws IOException {
+	public static void saveSingleProject(Project project) throws IOException {
 		ProjectWriter writer = new ProjectSerializer();
 		writer.write(project);
 	}
@@ -78,7 +78,7 @@ public final class ProjectReferenceManager {
 		Project project = new Project(ref);
 
 		// Save To Disk
-		saveProject(project);
+		saveSingleProject(project);
 
 		// Save To Cloud
 		if (ref.isSync()) {

@@ -118,13 +118,12 @@ public class PlayPadMain extends Application {
 	@Override
 	public void stop() {
 		try {
-			// Save last open project
+			// Save last opened project
 			Project project = impl.getCurrentProject();
 			if (project != null) {
 				ApplicationUtils.getApplication().getUserDefaults()
 						.setData("project", project.getProjectReference().getUuid());
 			}
-
 
 			ProfileReferenceManager.saveProfiles();
 			ProjectReferenceManager.saveProjects();
