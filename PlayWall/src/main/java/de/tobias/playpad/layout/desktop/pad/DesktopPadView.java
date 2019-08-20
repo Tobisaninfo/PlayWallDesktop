@@ -62,7 +62,7 @@ public class DesktopPadView implements IPadView {
 	private BusyView busyView;
 
 	private VBox cueInContainer;
-	private Rectangle cueInLayer;
+	private Label cueInLayer;
 
 	private transient DesktopPadViewController controller; // Reference to its controller
 
@@ -76,8 +76,8 @@ public class DesktopPadView implements IPadView {
 		root = new VBox();
 		busyView = new BusyView(superRoot);
 
-		cueInLayer = new Rectangle();
-		cueInLayer.heightProperty().bind(root.heightProperty());
+		cueInLayer = new Label();
+		cueInLayer.prefHeightProperty().bind(root.heightProperty());
 		cueInContainer = new VBox(cueInLayer);
 
 		indexLabel = new Label();
@@ -419,7 +419,7 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void setCueInProgress(double value) {
-		cueInLayer.setWidth(root.getWidth() * value);
+		cueInLayer.setPrefWidth(root.getWidth() * value);
 	}
 
 	@Override

@@ -22,7 +22,7 @@
 }
 
 .pad-cue-in${#class} {
-	-fx-fill: ${#padCueInColor};
+	-fx-background-color: ${#padCueInColor};
 }
 
 .pad-info${#class} {
