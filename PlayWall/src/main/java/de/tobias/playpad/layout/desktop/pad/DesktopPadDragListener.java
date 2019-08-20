@@ -148,6 +148,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				// stop pad if playing
 				if(currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
 					currentPad.getContent().stop();
+					currentPad.stop();
 				}
 
 				if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
