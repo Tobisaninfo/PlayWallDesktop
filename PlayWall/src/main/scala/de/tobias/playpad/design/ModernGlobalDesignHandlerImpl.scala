@@ -2,6 +2,7 @@ package de.tobias.playpad.design
 
 import java.nio.file.Files
 import java.util.function.Consumer
+import java.util.stream.Collectors
 
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
@@ -17,6 +18,7 @@ import de.tobias.playpad.{DisplayableColor, PlayPadMain}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.Duration
+import org.apache.commons.lang3.StringUtils
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
@@ -68,15 +70,14 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		stringBuilder.append(generateCss(design))
 
 		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.cart
-
-		project.getPage(controller.getPage).getPads.forEach(pad => {
-			val padSettings = pad.getPadSettings
-
-			if (padSettings.isCustomDesign) {
-				val cartDesign = padSettings.getDesign
-				stringBuilder.append(cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
+		stringBuilder ++= project.getPage(controller.getPage).getPads.parallelStream().map(pad => {
+			if (pad.getPadSettings.isCustomDesign) {
+				val cartDesign = pad.getPadSettings.getDesign
+				cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign)
+			} else {
+				""
 			}
-		})
+		}).collect(Collectors.joining())
 		Files.write(customCss, stringBuilder.toString().getBytes())
 
 		stage.getScene.getStylesheets.remove(customCss.toUri.toString)
@@ -84,9 +85,11 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	private def generateCss(design: ModernGlobalDesign): String = {
-		generateCss(design, design.getBackgroundColor) +
-			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
+		StringUtils.join(
+			generateCss(design, design.getBackgroundColor),
+			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}"),
 			generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
+		)
 	}
 
 	private def generateCss(design: ModernGlobalDesign, color: ModernColor, styleState: String = ""): String = {
@@ -96,7 +99,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-global.css")
 		val string = Minifier minify resource.getAsString
 
-		val values = Map[String, Any](
+		val values: Map[String, Any] = Map(
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
@@ -115,8 +118,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	override def handleWarning(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
 		if (design.isWarnAnimation) {
 			warnAnimation(design, controller, warning)
-		}
-		else {
+		} else {
 			ModernDesignAnimator.warnFlash(controller)
 		}
 	}
@@ -126,17 +128,17 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val playColor = if (design.isFlatDesign) design.getPlayColor.toFlatFadeableColor else design.getPlayColor.toFadeableColor
 
 		val pad = controller.getPad
-		var duration = warning
-		pad.getContent match {
+		val duration = pad.getContent match {
 			case durationable: Durationable =>
 				if (warning.greaterThan(durationable.getDuration)) {
-					duration = durationable.getDuration
+					durationable.getDuration
+				} else {
+					warning
 				}
-			case _ =>
+			case _ => warning
 		}
 		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, duration)
 	}
-
 
 	override def stopWarning(design: ModernGlobalDesign, controller: IPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 

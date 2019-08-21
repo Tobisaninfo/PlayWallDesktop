@@ -4,6 +4,9 @@ import javafx.css.PseudoClass;
 
 public class PseudoClasses {
 
+	private PseudoClasses() {
+	}
+
 	public static final PseudoClass ERROR_CLASS = PseudoClass.getPseudoClass("error");
 	public static final PseudoClass PLAY_CLASS = PseudoClass.getPseudoClass("play");
 	public static final PseudoClass FADE_CLASS = PseudoClass.getPseudoClass("fade");
