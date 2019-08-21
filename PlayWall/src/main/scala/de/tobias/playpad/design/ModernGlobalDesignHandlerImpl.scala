@@ -68,7 +68,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 
 		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.cart
 
-		project.getPads.forEach(pad => {
+		project.getPage(controller.getPage).getPads.forEach(pad => {
 			val padSettings = pad.getPadSettings
 
 			if (padSettings.isCustomDesign) {
