@@ -12,8 +12,8 @@ basePath: "PlayWall"
 serverBaseURL: "https://playwall.thecodelabs.de/files"
 
 userInfo:
-  Website: "https://playwall.thecodelabs.de/"
-  Repository: "https://thecodelabs.de/PlayWall/PlayWallDesktop"
-  ChangelogURL: "https://playwall.thecodelabs.de/php/roadmap.php"
-  Server: "playwall.thecodelabs.de:8090"
-  AccountRegister: "https://playwall.thecodelabs.de/php/index.php"
+  website: "https://playwall.thecodelabs.de/"
+  repository: "https://thecodelabs.de/PlayWall/PlayWallDesktop"
+  changelogURL: "https://playwall.thecodelabs.de/php/roadmap.php"
+  server: "playwall.thecodelabs.de:8090"
+  accountRegister: "https://playwall.thecodelabs.de/php/index.php"

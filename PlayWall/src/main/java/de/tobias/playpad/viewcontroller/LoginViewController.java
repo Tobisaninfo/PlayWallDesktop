@@ -101,7 +101,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 
 	@FXML
 	private void registerHandler(ActionEvent event) {
-		URI uri = URI.create(ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.ACCOUNT_REGISTER).toString());
+		URI uri = URI.create(ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).accountRegister());
 		try {
 			Desktop.getDesktop().browse(uri);
 		} catch (IOException e) {

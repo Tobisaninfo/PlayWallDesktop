@@ -745,7 +745,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void showChangelogMenuHandler(ActionEvent event) {
-		String website = ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.CHANGELOG_URL);
+		String website = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).changelogURL();
 		try {
 			Desktop.getDesktop().browse(new URI(website));
 		} catch (IOException | URISyntaxException e) {
@@ -755,7 +755,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void visitWebsiteMenuHandler(ActionEvent event) {
-		String website = ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.WEBSITE);
+		String website = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).website();
 		try {
 			Desktop.getDesktop().browse(new URI(website));
 		} catch (IOException | URISyntaxException e) {

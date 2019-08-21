@@ -19,7 +19,7 @@ public class ServerHandlerImpl implements ServerHandler {
 
 	public Server getServer() {
 		if (server == null) {
-			String url = ApplicationUtils.getApplication().getInfo().getUserInfo().get(AppUserInfoStrings.SERVER).toString();
+			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).server();
 
 			PlayPadImpl impl = PlayPadMain.getProgramInstance();
 			Application.Parameters parameters = impl.getParameters();

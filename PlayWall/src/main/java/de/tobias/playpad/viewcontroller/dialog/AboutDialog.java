@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
@@ -79,7 +80,7 @@ public class AboutDialog extends NVC {
 		websiteLink.setPadding(Insets.EMPTY);
 		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
-			String url = info.getUserInfo().get(AppUserInfoStrings.WEBSITE).toString();
+			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).website();
 			openWebsite(url);
 		});
 		websiteContainer.getChildren().add(websiteLink);
@@ -88,7 +89,7 @@ public class AboutDialog extends NVC {
 		codeLink.setPadding(Insets.EMPTY);
 		codeLink.setFocusTraversable(false);
 		codeLink.setOnAction(e -> {
-			String url = info.getUserInfo().get(AppUserInfoStrings.REPOSITORY).toString();
+			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).repository();
 			openWebsite(url);
 		});
 		codeContainer.getChildren().add(codeLink);
@@ -98,8 +99,8 @@ public class AboutDialog extends NVC {
 		if (Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().browse(new URI(url));
-			} catch (IOException | URISyntaxException e1) {
-				e1.printStackTrace();
+			} catch (IOException | URISyntaxException e) {
+				Logger.error(e);
 			}
 		}
 	}
