@@ -5,6 +5,7 @@ import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesi
 import de.tobias.playpad.design.modern.{ModernCartDesignHandler, ModernColor}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
+import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.PseudoClasses
 import javafx.util.Duration
 import org.springframework.expression.ExpressionParser
@@ -27,7 +28,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		val context = new StandardEvaluationContext()
 
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-pad.css")
-		val string = resource.getAsString
+		val string = Minifier minify resource.getAsString
 
 		val values = Map[String, Any](
 			"prefix" -> padIdentifier,

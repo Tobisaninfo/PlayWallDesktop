@@ -1,16 +1,12 @@
 package de.tobias.playpad.project.page;
 
-import java.io.Serializable;
-
 /**
  * Struktur um den Index eines Pads zu beschrieben.
  *
  * @author tobias
  * @since 6.0.0
  */
-public class PadIndex implements Serializable {
-
-	private static final long serialVersionUID = 2026743397726990321L;
+public class PadIndex {
 
 	private final int id;
 	private final int page;
@@ -53,7 +49,7 @@ public class PadIndex implements Serializable {
 
 	@Override
 	public String toString() {
-		return id + "-" + page;
+		return String.valueOf(id);
 	}
 
 }

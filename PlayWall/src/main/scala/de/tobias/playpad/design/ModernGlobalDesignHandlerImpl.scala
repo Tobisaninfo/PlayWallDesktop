@@ -10,6 +10,7 @@ import de.tobias.playpad.design.modern.{ModernColor, ModernGlobalDesignHandler}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
+import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
 import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.{DisplayableColor, PlayPadMain}
@@ -93,7 +94,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val context = new StandardEvaluationContext()
 
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-global.css")
-		val string = resource.getAsString
+		val string = Minifier minify resource.getAsString
 
 		val values = Map[String, Any](
 			"class" -> styleState,
