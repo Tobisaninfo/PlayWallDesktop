@@ -2,7 +2,6 @@ package de.tobias.playpad.design
 
 import java.nio.file.Files
 import java.util.function.Consumer
-import java.util.stream.Collectors
 
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
@@ -70,14 +69,14 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		stringBuilder.append(generateCss(design))
 
 		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.cart
-		stringBuilder ++= project.getPage(controller.getPage).getPads.parallelStream().map(pad => {
-			if (pad.getPadSettings.isCustomDesign) {
-				val cartDesign = pad.getPadSettings.getDesign
-				cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign)
-			} else {
-				""
+		project.getPage(controller.getPage).getPads.forEach(pad => {
+			val padSettings = pad.getPadSettings
+
+			if (padSettings.isCustomDesign) {
+				val cartDesign = padSettings.getDesign
+				stringBuilder.append(cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
 			}
-		}).collect(Collectors.joining())
+		})
 		Files.write(customCss, stringBuilder.toString().getBytes())
 
 		stage.getScene.getStylesheets.remove(customCss.toUri.toString)
