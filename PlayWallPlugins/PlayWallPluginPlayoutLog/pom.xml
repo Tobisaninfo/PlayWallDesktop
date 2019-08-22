@@ -21,6 +21,7 @@
             <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallCore</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- PDF-->
