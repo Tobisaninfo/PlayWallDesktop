@@ -72,8 +72,7 @@ PlayPad Elements
 }
 
 .pad-cue-in {
-	-fx-arc-height: 5px;
-	-fx-arc-width: 5px;
+	-fx-background-radius: 5px;
 }
 
 .pad-root {
