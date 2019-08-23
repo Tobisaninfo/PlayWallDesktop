@@ -107,8 +107,8 @@ PlayPad Elements
 }
 
 .current-page-button {
-	-fx-background-color: #dbdbdb;
-	-fx-text-fill: #333333;
+	-fx-background-color: #dbdbdb !important;
+	-fx-text-fill: #333333 !important;
 }
 
 .volume-item {

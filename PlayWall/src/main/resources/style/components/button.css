@@ -8,16 +8,15 @@
 
 .button:focused {
 	-fx-background-color: #358dab;
-	/*-fx-background-color: #878787;*/
-	-fx-text-fill: #EEEEEE !important;
+	-fx-text-fill: #EEEEEE;
 }
 
 .button:hover {
 	-fx-background-color: #878787;
-	-fx-text-fill: #EEEEEE !important;
+	-fx-text-fill: #EEEEEE;
 }
 
 .button:default {
 	-fx-background-color: #358dab;
-	-fx-text-fill: #EEEEEE !important;
+	-fx-text-fill: #EEEEEE;
 }
