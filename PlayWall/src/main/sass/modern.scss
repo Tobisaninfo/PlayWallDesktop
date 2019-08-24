@@ -1,3 +1,20 @@
+
+@import "components/button";
+@import "components/menu-button";
+@import "components/combobox";
+@import "components/checkbox";
+@import "components/scrollbar";
+@import "components/textfield";
+@import "components/radiobutton";
+@import "components/slider";
+@import "components/tabs";
+@import "components/notification-pane";
+@import "components/menu";
+@import "components/toggle-button";
+@import "components/list";
+@import "components/progress-bar";
+@import "components/dialog";
+
 @font-face {
 	font-family: "Lato";
 	src: url("Lato/Lato-Regular.ttf");
@@ -43,12 +60,10 @@ Default elements
 PlayPad Elements
  */
 
-/*noinspection CssInvalidPseudoSelector*/
 .pad:drag {
 	-fx-opacity: 0.8;
 }
 
-/*noinspection CssInvalidPseudoSelector*/
 .text-field:error {
 	-fx-text-box-border: red;
 	-fx-focus-color: red;

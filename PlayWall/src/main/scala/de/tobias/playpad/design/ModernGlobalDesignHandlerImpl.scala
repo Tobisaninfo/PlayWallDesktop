@@ -27,27 +27,7 @@ import scala.jdk.CollectionConverters._
 
 class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with ColorModeHandler {
 
-	val styleSheets: Array[String] = Array(
-		"style/components/button.css",
-		"style/components/menu-button.css",
-		"style/components/combobox.css",
-		"style/components/checkbox.css",
-		"style/components/scrollbar.css",
-		"style/components/textfield.css",
-		"style/components/radiobutton.css",
-		"style/components/slider.css",
-		"style/components/tabs.css",
-		"style/components/notification-pane.css",
-		"style/components/menu.css",
-		"style/components/toggle-button.css",
-		"style/components/list.css",
-		"style/components/progress-bar.css",
-		"style/components/dialog.css"
-	)
-
 	override def applyStyleSheet(stage: Stage): Unit = {
-		styleSheets.foreach(stage.getScene.getStylesheets.add)
-
 		stage.getScene.getStylesheets.add("style/style.css")
 		stage.getScene.getStylesheets.add("style/modern.css")
 
