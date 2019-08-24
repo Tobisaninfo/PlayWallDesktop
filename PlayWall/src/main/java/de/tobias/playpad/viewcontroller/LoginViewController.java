@@ -3,8 +3,10 @@ package de.tobias.playpad.viewcontroller;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
+import de.thecodelabs.utils.ui.scene.HUD;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.AppUserInfoStrings;
 import de.tobias.playpad.PlayPadPlugin;
@@ -13,13 +15,18 @@ import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
 import de.tobias.playpad.server.SessionDelegate;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -88,15 +95,25 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		String username = usernameTextField.getText();
 		String password = passwordTextField.getText();
 
-		try {
-			String key = server.getSession(username, password);
-			session = new Session(key);
-			session.save();
-			getStageContainer().ifPresent(NVCStage::close);
-		} catch (IOException | LoginException e) {
-			Logger.error(e);
-			showErrorMessage(e.getMessage());
-		}
+		final ProgressIndicator progressIndicator = new ProgressIndicator(-1);
+		progressIndicator.setMinSize(100, 100);
+		HUD hud = new HUD(progressIndicator);
+		hud.setPadding(new Insets(14));
+		hud.setPosition(Pos.CENTER);
+		hud.addToParent((Pane) getParent());
+
+		Worker.runLater(() -> {
+			try {
+				String key = server.getSession(username, password);
+				session = new Session(key);
+				session.save();
+				Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
+			} catch (IOException | LoginException e) {
+				Logger.error(e);
+				showErrorMessage(e.getMessage());
+			}
+			Platform.runLater(hud::removeFromParent);
+		});
 	}
 
 	@FXML

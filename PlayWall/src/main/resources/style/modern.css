@@ -115,6 +115,10 @@ PlayPad Elements
 	-fx-text-fill: white !important;
 }
 
+.progress-indicator {
+	-fx-progress-color: white;
+}
+
 .progress-indicator .percentage {
 	-fx-fill: white;
 }
