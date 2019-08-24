@@ -138,3 +138,14 @@ PlayPad Elements
 	-fx-font-weight: lighter;
 }
 
+
+.projectname {
+	-fx-font-size: 14px;
+	-fx-text-fill: #FFFFFF;
+	-fx-font-weight: bold;
+}
+
+.profilename {
+	-fx-font-size: 10px;
+	-fx-text-fill: #DDDDDD;
+}

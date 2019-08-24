@@ -1,0 +1,16 @@
+@import "variables";
+
+.slider {
+	.track {
+		-fx-background-color: $component-background-color;
+		-fx-background-radius: 3px;
+		-fx-background-insets: 1px;
+	}
+
+	.thumb {
+		-fx-background-color: #CCCCCC;
+		-fx-padding: 0.333333em;
+		-fx-scale-x: 2;
+		-fx-scale-y: 2;
+	}
+}

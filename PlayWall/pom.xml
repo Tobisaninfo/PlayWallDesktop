@@ -92,6 +92,24 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>3.7.2</version>
+                <executions>
+                    <execution>
+                        <id>translate-css</id>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <destination>target/classes/style</destination>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!--Fat Jar-->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>

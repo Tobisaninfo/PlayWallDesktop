@@ -1,3 +1,5 @@
+@import "variables";
+
 .notification-pane {
 	-fx-background-color: #282828;
 }
@@ -12,6 +14,6 @@
 }
 
 .notification-pane .notification-bar > .pane .close-button:hover {
-	-fx-background-color: #878787;
-	-fx-text-fill: #EEEEEE !important;
+	-fx-background-color: $component-hover-background-color;
+	-fx-text-fill: $component-text-color !important;
 }
