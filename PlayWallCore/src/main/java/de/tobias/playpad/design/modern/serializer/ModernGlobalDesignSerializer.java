@@ -27,6 +27,15 @@ public class ModernGlobalDesignSerializer {
 			}
 		}
 
+		Element cueInElement = rootElement.element("CueInColor");
+		if (cueInElement != null) {
+			try {
+				design.setCueInColor(ModernColor.valueOf(cueInElement.getStringValue()));
+			} catch (IllegalArgumentException e) {
+				Logger.error(e);
+			}
+		}
+
 		Element animationElement = rootElement.element("Animation");
 		if (animationElement != null) {
 			Element warnAnimationElement = animationElement.element("Warn");
@@ -63,6 +72,8 @@ public class ModernGlobalDesignSerializer {
 	public void save(Element rootElement, ModernGlobalDesign design) {
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
+		rootElement.addElement("CueInColor").addText(design.getCueInColor().name());
+
 		Element animationElement = rootElement.addElement("Animation");
 		animationElement.addElement("Warn").addText(String.valueOf(design.isWarnAnimation()));
 		rootElement.addElement("InfoFontSize").addText(String.valueOf(design.getInfoFontSize()));

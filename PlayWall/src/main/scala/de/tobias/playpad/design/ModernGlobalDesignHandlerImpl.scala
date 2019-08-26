@@ -84,7 +84,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 			"playbarTrackColor" -> color.getPlaybarColor,
 			"playbarBarColor" -> color.getPlaybarTrackColor,
 			"padColor" -> (if (design.isFlatDesign) color.paint() else color.linearGradient()),
-			"padCueInColor" -> (if (design.isFlatDesign) color.paintBrighter() else color.linearGradient()),
+			"padCueInColor" -> (if (design.isFlatDesign) design.getCueInColor.paint() else design.getCueInColor.linearGradient()),
 			"fontColor" -> color.getFontColor,
 			"infoFontSize" -> s"${design.getInfoFontSize}",
 			"titleFontSize" -> s"${design.getTitleFontSize}"

@@ -36,6 +36,14 @@ public class ModernCartDesignSerializer {
 				Logger.error(e);
 			}
 		}
+		Element cueInElement = rootElement.element("CueInColor");
+		if (cueInElement != null) {
+			try {
+				design.setCueInColor(ModernColor.valueOf(cueInElement.getStringValue()));
+			} catch (IllegalArgumentException e) {
+				Logger.error(e);
+			}
+		}
 		return design;
 	}
 
@@ -43,5 +51,6 @@ public class ModernCartDesignSerializer {
 		rootElement.addAttribute("id", design.getId().toString());
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
+		rootElement.addElement("CueInColor").addText(design.getCueInColor().name());
 	}
 }

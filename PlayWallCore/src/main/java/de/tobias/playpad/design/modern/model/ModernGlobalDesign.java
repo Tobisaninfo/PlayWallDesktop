@@ -8,6 +8,7 @@ public class ModernGlobalDesign implements FeedbackDesignColorSuggester {
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;
+	private ModernColor cueInColor = ModernColor.RED2;
 
 	private boolean isWarnAnimation = true;
 
@@ -30,6 +31,14 @@ public class ModernGlobalDesign implements FeedbackDesignColorSuggester {
 
 	public void setPlayColor(ModernColor playColor) {
 		this.playColor = playColor;
+	}
+
+	public ModernColor getCueInColor() {
+		return cueInColor;
+	}
+
+	public void setCueInColor(ModernColor cueInColor) {
+		this.cueInColor = cueInColor;
 	}
 
 	public boolean isWarnAnimation() {
@@ -66,7 +75,8 @@ public class ModernGlobalDesign implements FeedbackDesignColorSuggester {
 
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
-		playColor = ModernColor.RED1;
+		playColor = ModernColor.RED3;
+		cueInColor = ModernColor.RED2;
 
 		isWarnAnimation = true;
 
