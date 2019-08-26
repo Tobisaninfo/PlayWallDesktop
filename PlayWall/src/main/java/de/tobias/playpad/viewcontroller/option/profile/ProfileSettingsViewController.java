@@ -99,8 +99,8 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setMinWidth(715);
-		stage.setMinHeight(700);
+		stage.setMinWidth(800);
+		stage.setMinHeight(800);
 		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
 
 		PlayPadPlugin.styleable().applyStyle(stage);

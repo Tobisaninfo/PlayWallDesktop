@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.design;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.DisplayableColor;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorPickerView;
@@ -23,6 +22,8 @@ public class ModernGlobalDesignViewController extends NVC implements IColorButto
 	private Button backgroundColorButton;
 	@FXML
 	private Button playColorButton;
+	@FXML
+	private Button cueInColorButton;
 
 	@FXML
 	private CheckBox warnAnimationCheckBox;
@@ -52,6 +53,7 @@ public class ModernGlobalDesignViewController extends NVC implements IColorButto
 	private void setLayout() {
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
+		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 
 		warnAnimationCheckBox.setSelected(design.isWarnAnimation());
 		flatDesignCheckbox.setSelected(design.isFlatDesign());
@@ -83,6 +85,7 @@ public class ModernGlobalDesignViewController extends NVC implements IColorButto
 
 		addIconToButton(backgroundColorButton);
 		addIconToButton(playColorButton);
+		addIconToButton(cueInColorButton);
 	}
 
 	@FXML
@@ -101,13 +104,18 @@ public class ModernGlobalDesignViewController extends NVC implements IColorButto
 		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
 	}
 
+	@FXML
+	private void cueInColorButtonHandler(ActionEvent event) {
+		colorChooser(cueInColorButton, design.getPlayColor(), color -> design.setCueInColor(color));
+	}
+
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
-		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), (DisplayableColor t) ->
+		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), newValue ->
 		{
 			colorChooser.hide();
 
-			if (t instanceof ModernColor) {
-				ModernColor color = (ModernColor) t;
+			if (newValue instanceof ModernColor) {
+				ModernColor color = (ModernColor) newValue;
 				onFinish.accept(color);
 				anchorNode.setStyle(getLinearGradientCss(color));
 			}

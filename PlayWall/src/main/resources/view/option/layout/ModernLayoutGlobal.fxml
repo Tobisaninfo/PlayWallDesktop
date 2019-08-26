@@ -28,11 +28,20 @@
                 <VBox layoutX="243.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="150.0" spacing="14.0">
                     <children>
                         <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0"
-                               text="%layout.label.playground" wrapText="true" VBox.vgrow="ALWAYS"/>
+                               text="%layout.label.play" wrapText="true" VBox.vgrow="ALWAYS"/>
                         <Button fx:id="playColorButton" focusTraversable="false" mnemonicParsing="false"
                                 onAction="#playColorButtonHandler" prefWidth="150.0"/>
                     </children>
                 </VBox>
+                <VBox layoutX="243.0" layoutY="8.0" maxWidth="1.7976931348623157E308" prefWidth="150.0" spacing="14.0">
+                    <children>
+                        <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0"
+                               text="%layout.label.cueIn" wrapText="true" VBox.vgrow="ALWAYS"/>
+                        <Button fx:id="cueInColorButton" focusTraversable="false" mnemonicParsing="false"
+                                onAction="#cueInColorButtonHandler" prefWidth="150.0"/>
+                    </children>
+                </VBox>
+
                 <VBox maxWidth="1.7976931348623157E308" prefWidth="150.0" spacing="14.0">
                     <children>
                         <Label alignment="BOTTOM_LEFT" layoutX="243.0" layoutY="8.0" prefHeight="60.0" prefWidth="150.0"
