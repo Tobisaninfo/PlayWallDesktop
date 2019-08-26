@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/PlayWallPluginNativeAudio.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/PlayWallPluginPlayoutLog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginWebAPI/PlayWallPluginWebAPI.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginWebAPI/PlayWallPluginWebAPI.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPlugins.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPlugins.iml" />
     </modules>
   </component>

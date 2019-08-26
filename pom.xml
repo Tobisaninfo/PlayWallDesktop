@@ -25,6 +25,8 @@
 
         <itextpdf.version>5.5.13</itextpdf.version>
 
+        <spark-core.version>[2.9.0,)</spark-core.version>
+
         <jna.version>5.2.0</jna.version>
 
         <scala-library.version>2.13.0</scala-library.version>
