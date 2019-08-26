@@ -68,6 +68,8 @@ public class Project {
 
 	public void close() {
 		syncListener.removeListener();
+
+		getPads().forEach(Pad::stop);
 	}
 
 	public ProjectSettings getSettings() {
