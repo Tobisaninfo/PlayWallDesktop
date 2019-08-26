@@ -50,6 +50,9 @@ public class TouchPadView implements IPadView {
 	private VBox root;
 	private BusyView busyView;
 
+	private VBox cueInContainer;
+	private Label cueInLayer;
+
 	private transient TouchPadViewController controller; // Reference to its controller
 
 	public TouchPadView() {
@@ -61,6 +64,10 @@ public class TouchPadView implements IPadView {
 		superRoot = new StackPane();
 		root = new VBox();
 		busyView = new BusyView(superRoot);
+
+		cueInLayer = new Label();
+		cueInLayer.prefHeightProperty().bind(root.heightProperty());
+		cueInContainer = new VBox(cueInLayer);
 
 		indexLabel = new Label();
 
@@ -99,7 +106,7 @@ public class TouchPadView implements IPadView {
 		notFoundLabel.setVisible(false);
 
 		root.getChildren().addAll(infoBox, preview, playBar);
-		superRoot.getChildren().addAll(root, notFoundLabel);
+		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 
 		if (OS.isWindows() && User32X.isTouchAvailable()) {
 			superRoot.setOnTouchPressed(controller);
@@ -182,6 +189,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void pseudoClassState(PseudoClass pseudoClass, boolean active) {
 		superRoot.pseudoClassStateChanged(pseudoClass, active);
+		cueInLayer.pseudoClassStateChanged(pseudoClass, active);
 		indexLabel.pseudoClassStateChanged(pseudoClass, active);
 		timeLabel.pseudoClassStateChanged(pseudoClass, active);
 		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
@@ -240,6 +248,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void applyStyleClasses(PadIndex index) {
 		superRoot.getStyleClass().addAll("pad", "pad" + index);
+		cueInLayer.getStyleClass().addAll("pad-cue-in", "pad" + index + "-cue-in");
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
 		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
@@ -257,6 +266,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		cueInLayer.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
@@ -272,8 +282,8 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public void highlightView(int milliSecounds) {
-
+	public void highlightView(int milliSeconds) {
+		cueInLayer.setPrefWidth(root.getWidth() * milliSeconds);
 	}
 
 	void clearIndex() {
@@ -303,7 +313,7 @@ public class TouchPadView implements IPadView {
 
 	@Override
 	public void setCueInProgress(double value) {
-
+		cueInLayer.setPrefWidth(root.getWidth() * value);
 	}
 
 	@Override

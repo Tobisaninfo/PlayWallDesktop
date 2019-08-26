@@ -32,7 +32,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class DesktopPadView implements IPadView {
 
@@ -418,8 +417,8 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public void setCueInProgress(double value) {
-		cueInLayer.setPrefWidth(root.getWidth() * value);
+	public void setCueInProgress(double milliSeconds) {
+		cueInLayer.setPrefWidth(root.getWidth() * milliSeconds);
 	}
 
 	@Override
