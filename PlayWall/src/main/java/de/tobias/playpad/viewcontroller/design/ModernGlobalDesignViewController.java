@@ -17,7 +17,7 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.util.function.Consumer;
 
-public class ModernGlobalDesignViewController extends NVC {
+public class ModernGlobalDesignViewController extends NVC implements IColorButton {
 
 	@FXML
 	private Button backgroundColorButton;
@@ -62,13 +62,11 @@ public class ModernGlobalDesignViewController extends NVC {
 
 	@Override
 	public void init() {
-		warnAnimationCheckBox.selectedProperty().addListener((a, b, c) ->
+		warnAnimationCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> design.setWarnAnimation(newValue));
+
+		flatDesignCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 		{
-			design.setWarnAnimation(c);
-		});
-		flatDesignCheckbox.selectedProperty().addListener((a, b, c) ->
-		{
-			design.setFlatDesign(c);
+			design.setFlatDesign(newValue);
 
 			// Update button preview
 			backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
@@ -76,18 +74,15 @@ public class ModernGlobalDesignViewController extends NVC {
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
-		infoLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
-		{
-			design.setInfoFontSize(c);
-		});
+		infoLabelFontSizeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> design.setInfoFontSize(newValue));
 		infoLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
 
 		titleLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
-		titleLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
-		{
-			design.setTitleFontSize(c);
-		});
+		titleLabelFontSizeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> design.setTitleFontSize(newValue));
 		titleLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
+
+		addIconToButton(backgroundColorButton);
+		addIconToButton(playColorButton);
 	}
 
 	@FXML
@@ -98,12 +93,12 @@ public class ModernGlobalDesignViewController extends NVC {
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, design.getBackgroundColor(), (color) -> design.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), color -> design.setBackgroundColor(color));
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, design.getPlayColor(), (color) -> design.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {

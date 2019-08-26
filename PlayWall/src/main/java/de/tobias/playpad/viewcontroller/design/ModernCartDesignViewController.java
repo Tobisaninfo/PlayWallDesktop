@@ -17,7 +17,7 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.util.function.Consumer;
 
-public class ModernCartDesignViewController extends NVC {
+public class ModernCartDesignViewController extends NVC implements IColorButton {
 
 	@FXML
 	private Button backgroundColorButton;
@@ -47,6 +47,8 @@ public class ModernCartDesignViewController extends NVC {
 
 	@Override
 	public void init() {
+		addIconToButton(backgroundColorButton);
+		addIconToButton(playColorButton);
 	}
 
 	@FXML

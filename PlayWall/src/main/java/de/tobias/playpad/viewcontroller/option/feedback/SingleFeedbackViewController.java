@@ -7,7 +7,6 @@ import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.feedback.FeedbackValue;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.ui.NVC;
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.ColorUtils;
 import de.thecodelabs.utils.util.Localization;
@@ -15,6 +14,7 @@ import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.view.FeedbackColorPickerView;
+import de.tobias.playpad.viewcontroller.design.IColorButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -30,7 +30,7 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 import java.util.Arrays;
 import java.util.List;
 
-public class SingleFeedbackViewController extends NVC {
+public class SingleFeedbackViewController extends NVC implements IColorButton {
 
 	@FXML
 	private Label nameLabel;
@@ -87,9 +87,7 @@ public class SingleFeedbackViewController extends NVC {
 
 	@Override
 	public void init() {
-		FontIcon iconDefault = new FontIcon(FontAwesomeType.ARROW_CIRCLE_DOWN);
-		iconDefault.getStyleClass().remove(FontIcon.STYLE_CLASS);
-		colorChooseDefaultButton.setGraphic(iconDefault);
+		addIconToButton(colorChooseDefaultButton);
 		colorPreviewDefault.widthProperty().bind(colorChooseDefaultButton.widthProperty());
 	}
 
