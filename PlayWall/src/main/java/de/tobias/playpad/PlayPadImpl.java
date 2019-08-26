@@ -9,7 +9,7 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.design.ModernDesign;
+import de.tobias.playpad.design.ModernDesignHandler;
 import de.tobias.playpad.initialize.*;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.plugin.*;
@@ -47,7 +47,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private UpdateService updateService;
 	protected GlobalSettings globalSettings;
-	private ModernDesign modernDesign;
+	private ModernDesignHandler modernDesign;
 
 	private Session session;
 
@@ -195,11 +195,11 @@ public class PlayPadImpl implements PlayPad {
 		return parameters;
 	}
 
-	public ModernDesign getModernDesign() {
+	public ModernDesignHandler getModernDesign() {
 		return modernDesign;
 	}
 
-	public void setModernDesign(ModernDesign modernDesign) {
+	public void setModernDesign(ModernDesignHandler modernDesign) {
 		this.modernDesign = modernDesign;
 	}
 
