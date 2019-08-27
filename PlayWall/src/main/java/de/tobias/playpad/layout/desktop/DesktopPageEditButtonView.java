@@ -1,6 +1,5 @@
 package de.tobias.playpad.layout.desktop;
 
-import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
@@ -109,25 +108,21 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 
 			event.consume();
 		} else if (event.getSource() == cloneButton) {
-			try {
-				Page clone = page.clone();
+			Page clone = page.copy();
 
-				// Show Rename dialog for cloned page
-				boolean success = showPageNameDialog(clone);
+			// Show Rename dialog for cloned page
+			boolean success = showPageNameDialog(clone);
 
-				if (!success) {
-					return;
-				}
-
-				Project project = page.getProject();
-				project.addPage(clone);
-
-				controller.initPageButtons();
-				mainViewController.showPage(clone);
-				event.consume();
-			} catch (CloneNotSupportedException e) {
-				Logger.error(e);
+			if (!success) {
+				return;
 			}
+
+			Project project = page.getProject();
+			project.addPage(clone);
+
+			controller.initPageButtons();
+			mainViewController.showPage(clone);
+			event.consume();
 		} else if (event.getSource() == deleteButton) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 
