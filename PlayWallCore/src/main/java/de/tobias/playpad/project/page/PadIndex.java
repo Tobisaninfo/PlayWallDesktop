@@ -1,12 +1,15 @@
 package de.tobias.playpad.project.page;
 
+import java.io.Serializable;
+
 /**
  * Struktur um den Index eines Pads zu beschrieben.
  *
  * @author tobias
  * @since 6.0.0
  */
-public class PadIndex {
+// Serializable is for Pad Drag and Drop necessary
+public class PadIndex implements Serializable {
 
 	private final int id;
 	private final int page;
