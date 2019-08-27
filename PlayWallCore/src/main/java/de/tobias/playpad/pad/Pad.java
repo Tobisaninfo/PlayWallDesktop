@@ -641,7 +641,6 @@ public class Pad {
 		if (getContent() != null) {
 			clone.contentProperty.set(getContent().copy(clone));
 			clone.getContent().setPad(clone);
-			clone.getContent().loadMedia();
 		}
 
 		if (project.getProjectReference().isSync()) {

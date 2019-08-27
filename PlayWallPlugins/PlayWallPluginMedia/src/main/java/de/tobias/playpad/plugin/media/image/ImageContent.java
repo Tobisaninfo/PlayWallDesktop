@@ -86,8 +86,8 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public PadContent clone() throws CloneNotSupportedException {
-		ImageContent clone = (ImageContent) super.clone();
+	public PadContent copy(Pad pad) {
+		ImageContent clone = new ImageContent(getType(), pad);
 		clone.loadMedia();
 		return clone;
 	}

@@ -1,6 +1,5 @@
 package de.tobias.playpad.pad.content;
 
-import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 
@@ -72,7 +71,11 @@ public abstract class PadContent {
 		unloadMedia();
 	}
 
-	public PadContent copy(Pad pad) {
-		return PlayPadPlugin.getRegistries().getPadContents().getFactory(getType()).newInstance(pad);
-	}
+	/**
+	 * Create a copy of the PadContent instance
+	 *
+	 * @param pad target pad
+	 * @return copied content
+	 */
+	public abstract PadContent copy(Pad pad);
 }

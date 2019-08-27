@@ -212,8 +212,8 @@ public class VideoContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public PadContent clone() throws CloneNotSupportedException {
-		VideoContent clone = (VideoContent) super.clone();
+	public PadContent copy(Pad pad) {
+		VideoContent clone = new VideoContent(getType(), pad);
 		clone.loadMedia();
 		return clone;
 	}

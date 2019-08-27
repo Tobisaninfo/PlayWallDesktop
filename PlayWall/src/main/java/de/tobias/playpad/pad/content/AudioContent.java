@@ -228,8 +228,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public PadContent clone() throws CloneNotSupportedException {
-		AudioContent clone = (AudioContent) super.clone();
+	public PadContent copy(Pad pad) {
+		AudioContent clone = new AudioContent(getType(), pad);
 
 		AudioRegistry audioRegistry = PlayPadPlugin.getRegistries().getAudioHandlers();
 		clone.audioHandler = audioRegistry.getCurrentAudioHandler().createAudioHandler(this);
