@@ -264,7 +264,7 @@ public class Page implements Cloneable {
 
 		clone.pads = new HashSet<>();
 		for (Pad pad : pads) {
-			Pad padClone = pad.clone(clone);
+			Pad padClone = pad.copy(clone);
 			clone.pads.add(padClone);
 		}
 		return clone;

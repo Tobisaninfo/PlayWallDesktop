@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.util.UUID;
 
-public class ModernCartDesign implements FeedbackDesignColorSuggester, Cloneable {
+public class ModernCartDesign implements FeedbackDesignColorSuggester {
 
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
@@ -111,8 +111,8 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester, Cloneable
 		return Color.web(backgroundColor.get().getColorHi());
 	}
 
-	public ModernCartDesign clone(Pad pad) throws CloneNotSupportedException {
-		ModernCartDesign clone = (ModernCartDesign) super.clone();
+	public ModernCartDesign copy(Pad pad) {
+		ModernCartDesign clone = new ModernCartDesign(pad);
 
 		clone.backgroundColor = new SimpleObjectProperty<>(getBackgroundColor());
 		clone.playColor = new SimpleObjectProperty<>(getPlayColor());

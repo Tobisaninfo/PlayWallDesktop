@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PadSettings implements Cloneable {
+public class PadSettings {
 
 	// Pad Reference
 	private Pad pad;
@@ -249,9 +249,8 @@ public class PadSettings implements Cloneable {
 		return false;
 	}
 
-	@Override
-	public PadSettings clone() throws CloneNotSupportedException {
-		PadSettings clone = (PadSettings) super.clone();
+	public PadSettings copy(Pad pad) {
+		PadSettings clone = new PadSettings(pad);
 		clone.id = UUID.randomUUID();
 
 		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
@@ -274,7 +273,7 @@ public class PadSettings implements Cloneable {
 
 		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
 		if (design != null) {
-			clone.design = design.clone(pad);
+			clone.design = design.copy(pad);
 		}
 
 		clone.triggers = new EnumMap<>(TriggerPoint.class); // TODO Trigger werden nicht Kopiert

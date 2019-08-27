@@ -40,7 +40,7 @@ import java.util.UUID;
  * @author tobias
  * @version 6.2.0
  */
-public class Pad implements Cloneable {
+public class Pad {
 
 	private UUID uuid;
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();
@@ -608,16 +608,19 @@ public class Pad implements Cloneable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
+		if (!(o instanceof Pad)) return false;
 		Pad pad = (Pad) o;
-
 		return Objects.equals(uuid, pad.uuid);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(uuid);
+	}
+
 	// Clone
-	public Pad clone(Page page) throws CloneNotSupportedException {
-		Pad clone = (Pad) super.clone();
+	public Pad copy(Page page) {
+		Pad clone = new Pad(project);
 
 		clone.uuid = UUID.randomUUID();
 		clone.positionProperty = new SimpleIntegerProperty(getPosition());
@@ -629,16 +632,16 @@ public class Pad implements Cloneable {
 
 		clone.mediaPaths = FXCollections.observableArrayList();
 		for (MediaPath path : mediaPaths) {
-			MediaPath clonedPath = path.clone(clone);
+			MediaPath clonedPath = path.copy(clone);
 			clone.mediaPaths.add(clonedPath);
 		}
 
 		clone.contentTypeProperty = new SimpleStringProperty(getContentType());
+		clone.contentProperty = new SimpleObjectProperty<>();
 		if (getContent() != null) {
-			clone.contentProperty = new SimpleObjectProperty<>(getContent().clone());
+			clone.contentProperty.set(getContent().copy(clone));
 			clone.getContent().setPad(clone);
-		} else {
-			clone.contentProperty = new SimpleObjectProperty<>();
+			clone.getContent().loadMedia();
 		}
 
 		if (project.getProjectReference().isSync()) {
@@ -647,7 +650,7 @@ public class Pad implements Cloneable {
 			clone.addSyncListener();
 		}
 
-		clone.padSettings = padSettings.clone();
+		clone.padSettings = padSettings.copy(clone);
 
 		clone.controller = null;
 		clone.project = project;

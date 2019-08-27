@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.content;
 
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 
@@ -10,7 +11,7 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
  * @version 5.1.0
  * @see Pad
  */
-public abstract class PadContent implements Cloneable {
+public abstract class PadContent {
 
 	// reference
 	private Pad pad;
@@ -69,12 +70,9 @@ public abstract class PadContent implements Cloneable {
 	@Override
 	protected void finalize() throws Throwable {
 		unloadMedia();
-		this.pad = null;
 	}
 
-	@Override
-	public PadContent clone() throws CloneNotSupportedException {
-		return (PadContent) super.clone();
+	public PadContent copy(Pad pad) {
+		return PlayPadPlugin.getRegistries().getPadContents().getFactory(getType()).newInstance(pad);
 	}
-
 }
