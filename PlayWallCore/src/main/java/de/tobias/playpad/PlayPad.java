@@ -1,5 +1,6 @@
 package de.tobias.playpad;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
@@ -10,6 +11,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -105,5 +107,14 @@ public interface PlayPad {
 	 */
 	Project getCurrentProject();
 
+	/**
+	 * Open a project
+	 *
+	 * @param project  project
+	 * @param onLoaded on project loaded callback
+	 */
+	void openProject(Project project, Consumer<NVC> onLoaded);
+
 	UpdateService getUpdateService();
+
 }

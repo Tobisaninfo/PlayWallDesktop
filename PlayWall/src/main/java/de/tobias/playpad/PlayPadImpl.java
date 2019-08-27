@@ -144,6 +144,7 @@ public class PlayPadImpl implements PlayPad {
 		Worker.shutdown();
 	}
 
+	@Override
 	public void openProject(Project project, Consumer<NVC> onLoaded) {
 		if (mainViewController == null) {
 			mainViewController = new MainViewController(e -> {
