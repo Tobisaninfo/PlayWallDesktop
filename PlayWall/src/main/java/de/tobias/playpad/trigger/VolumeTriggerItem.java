@@ -10,6 +10,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.util.Duration;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -69,11 +70,21 @@ public class VolumeTriggerItem extends TriggerItem {
 
 
 				Fadeable fadeable = (Fadeable) destination.getContent();
-				fadeable.fade(start, volume, duration, () -> {
-					volumeCache.put(id, volume);
-				});
+				fadeable.fade(start, volume, duration, () -> volumeCache.put(id, volume));
 			}
 		}
+	}
+
+	@Override
+	public TriggerItem copy() {
+		VolumeTriggerItem clone = new VolumeTriggerItem(getType());
+
+		clone.uuids = new ArrayList<>();
+		clone.uuids.addAll(uuids);
+		clone.volume = volume;
+		clone.duration = new Duration(duration.toMillis());
+
+		return clone;
 	}
 
 	private static final String CART_ELEMENT = "Cart";

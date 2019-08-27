@@ -276,7 +276,9 @@ public class PadSettings {
 			clone.design = design.copy(pad);
 		}
 
-		clone.triggers = new EnumMap<>(TriggerPoint.class); // TODO Trigger werden nicht Kopiert
+		clone.triggers = new EnumMap<>(TriggerPoint.class);
+		triggers.forEach((key, value) -> clone.triggers.put(key, value.copy()));
+
 		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
 
 		clone.updateTrigger();
