@@ -232,7 +232,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			double min = volumeSlider.getMin();
 			double max = volumeSlider.getMax();
-			double value = volumeSlider.getValue() ;
+			double value = volumeSlider.getValue();
 
 			return createSliderStyle(min, max, value);
 
@@ -600,17 +600,18 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void logoutMenuHandler(ActionEvent event) {
-		AuthViewController authViewController = new AuthViewController(Localization.getString(Strings.Auth_Logout), (username, password) -> {
-			Session session = Session.load();
-			try {
-				PlayPadPlugin.getServerHandler().getServer().logout(username, password, session.getKey());
-				session.delete();
-				Platform.exit();
-				return true;
-			} catch (SessionNotExistsException e) {
-				return false;
-			}
-		});
+		AuthViewController authViewController = new AuthViewController(getContainingWindow(), Localization.getString(Strings.Auth_Logout),
+				(username, password) -> {
+					Session session = Session.load();
+					try {
+						PlayPadPlugin.getServerHandler().getServer().logout(username, password, session.getKey());
+						session.delete();
+						Platform.exit();
+						return true;
+					} catch (SessionNotExistsException e) {
+						return false;
+					}
+				});
 		authViewController.showStage();
 	}
 

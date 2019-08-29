@@ -2,10 +2,10 @@ package de.tobias.playpad.viewcontroller;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.server.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -34,15 +35,14 @@ public class AuthViewController extends NVC {
 	@FXML
 	private Label infoLabel;
 
-	private Session session;
-
 	private AuthBasedRunnable authBasedRunnable;
 
-	public AuthViewController(String info, AuthBasedRunnable authBasedRunnable) {
+	public AuthViewController(Window owner, String info, AuthBasedRunnable authBasedRunnable) {
 		load("view/dialog", "AuthDialog", Localization.getBundle());
 		infoLabel.setText(info);
 
-		applyViewControllerToStage();
+		final NVCStage nvcStage = applyViewControllerToStage();
+		nvcStage.initOwner(owner);
 
 		this.authBasedRunnable = authBasedRunnable;
 	}
