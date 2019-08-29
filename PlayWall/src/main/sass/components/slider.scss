@@ -1,10 +1,17 @@
 @import "variables";
 
 .slider {
+
+	-slider-track-color: $component-background-color;
+
 	.track {
-		-fx-background-color: $component-background-color;
 		-fx-background-radius: 3px;
 		-fx-background-insets: 1px;
+
+		-fx-background-color:
+				-fx-shadow-highlight-color,
+				linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
+				-slider-track-color ;
 	}
 
 	.thumb {

@@ -228,6 +228,15 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		iconHbox.getChildren().add(editButtons);
 
 		volumeSlider.focusedProperty().addListener(i -> mainViewController.getParent().requestFocus());
+		volumeSlider.styleProperty().bind(Bindings.createStringBinding(() -> {
+
+			double min = volumeSlider.getMin();
+			double max = volumeSlider.getMax();
+			double value = volumeSlider.getValue() ;
+
+			return createSliderStyle(min, max, value);
+
+		}, volumeSlider.valueProperty()));
 	}
 
 	// Desktop Edit Mode Change Listener --> Update Button

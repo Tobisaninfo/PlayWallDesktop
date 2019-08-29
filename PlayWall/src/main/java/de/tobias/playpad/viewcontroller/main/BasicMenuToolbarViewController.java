@@ -84,11 +84,9 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	}
 
 	protected void setKeyBindingForMenu(MenuItem menuItem, Key key) {
-		if (key != null) {
-			if (!key.getKeyCode().isEmpty()) {
-				KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
-				menuItem.setAccelerator(keyCode);
-			}
+		if (key != null && !key.getKeyCode().isEmpty()) {
+			KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
+			menuItem.setAccelerator(keyCode);
 		}
 	}
 
@@ -96,4 +94,22 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	public void setOpenProject(Project project) {
 		this.openProject = project;
 	}
+
+	@SuppressWarnings("StringBufferReplaceableByString")
+	protected String createSliderStyle(double min, double max, double value) {
+		StringBuilder gradient = new StringBuilder("-slider-track-color: ");
+		String defaultBG = "#5c5c5c ";
+		gradient.append("linear-gradient(to right, ").append(defaultBG).append("0%, ");
+
+		double valuePercent = 100.0 * (value - min) / (max - min);
+
+		gradient.append(defaultBG).append(min).append("%, ");
+		gradient.append("#358dab ").append(min).append("%, ");
+		gradient.append("#358dab ").append(valuePercent).append("%, ");
+		gradient.append(defaultBG).append(valuePercent).append("%, ");
+		gradient.append(defaultBG).append("100%); ");
+
+		return gradient.toString();
+	}
+
 }
