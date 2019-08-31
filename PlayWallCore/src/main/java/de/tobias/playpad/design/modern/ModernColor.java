@@ -1,108 +1,100 @@
 package de.tobias.playpad.design.modern;
 
+import de.thecodelabs.storage.settings.Storage;
+import de.thecodelabs.storage.settings.StorageTypes;
+import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playpad.DisplayableColor;
+import de.tobias.playpad.design.modern.model.ModernColorBean;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.util.FadeableColor;
 import javafx.scene.paint.*;
 
+import java.io.InputStream;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 public enum ModernColor implements DisplayableColor {
 
-	// - Color Hi -- Color Low -- Font ---- Button -- Bar BG -- Bar Track
-	RED1("#ef9a9a", "#ef5350", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	RED2("#ef5350", "#e53935", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	RED3("#e53935", "#c62828", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
+	RED1,
+	RED2,
+	RED3,
 
-	// --------- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	DARK_RED1("#D92349", "#AD2039", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	DARK_RED2("#C92349", "#8D2039", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	DARK_RED3("#A90329", "#6D0019", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
+	DARK_RED1,
+	DARK_RED2,
+	DARK_RED3,
 
-	// ---- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	PINK1("#f48fb1", "#ec407a", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	PINK2("#ec407a", "#d81b60", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	PINK3("#d81b60", "#ad1457", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
+	PINK1,
+	PINK2,
+	PINK3,
 
-	// -------- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	PURPLE1("#ce93d8", "#ab47bc", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	PURPLE2("#ab47bc", "#8e24aa", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
-	PURPLE3("#8e24aa", "#6a1b9a", "#FFFFFF", "#FFFFFF", "#FFFFFF", "#333333"),
+	PURPLE1,
+	PURPLE2,
+	PURPLE3,
 
-	// ---- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	LIGHT_BLUE1("#80deea", "#26c6da", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIGHT_BLUE2("#26c6da", "#00acc1", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIGHT_BLUE3("#00acc1", "#00838f", "#000000", "#000000", "#FFFFFF", "#333333"),
+	LIGHT_BLUE1,
+	LIGHT_BLUE2,
+	LIGHT_BLUE3,
 
-	// ---- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	BLUE1("#90caf9", "#42a5f5", "#000000", "#000000", "#FFFFFF", "#333333"),
-	BLUE2("#42a5f5", "#1e88e5", "#000000", "#000000", "#FFFFFF", "#333333"),
-	BLUE3("#1e88e5", "#1565c0", "#000000", "#000000", "#FFFFFF", "#333333"),
+	BLUE1,
+	BLUE2,
+	BLUE3,
 
-	// ------------ BG ------ PLAY ----- Font ---- Button --- Bar BG -- Bar Track
-	LIGHT_GREEN1("#c5e1a5", "#9ccc65", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIGHT_GREEN2("#9ccc65", "#7cb342", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIGHT_GREEN3("#7cb342", "#558b2f", "#000000", "#000000", "#FFFFFF", "#333333"),
+	LIGHT_GREEN1,
+	LIGHT_GREEN2,
+	LIGHT_GREEN3,
 
-	// ---- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	LIME1("#e6ee9c", "#d4e157", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIME2("#d4e157", "#c0ca33", "#000000", "#000000", "#FFFFFF", "#333333"),
-	LIME3("#c0ca33", "#9e9d24", "#000000", "#000000", "#FFFFFF", "#333333"),
+	LIME1,
+	LIME2,
+	LIME3,
 
-	// ------- BG ------ PLAY ------ Font ---- Button -- Bar BG -- Bar Track
-	YELLOW1("#fff59d", "#ffee58", "#000000", "#000000", "#FFFFFF", "#333333"),
-	YELLOW2("#ffee58", "#fdd835", "#000000", "#000000", "#FFFFFF", "#333333"),
-	YELLOW3("#fdd835", "#f9a825", "#000000", "#000000", "#FFFFFF", "#333333"),
+	YELLOW1,
+	YELLOW2,
+	YELLOW3,
 
-	// ------- BG ------ PLAY ----- Font ---- Button -- Bar BG -- Bar Track
-	ORANGE1("#ffcc80", "#ffa726", "#000000", "#000000", "#FFFFFF", "#333333"),
-	ORANGE2("#ffa726", "#fb8c00", "#000000", "#000000", "#FFFFFF", "#333333"),
-	ORANGE3("#fb8c00", "#ef6c00", "#000000", "#000000", "#FFFFFF", "#333333"),
+	ORANGE1,
+	ORANGE2,
+	ORANGE3,
 
-	// ---- BG ------ PLAY ----- Font ---- Button --- Bar BG --- Bar Track
-	GRAY1("#eeeeee", "#cccccc", "#000000", "#000000", "#FFFFFF", "#333333"),
-	GRAY2("#cccccc", "#aaaaaa", "#000000", "#000000", "#000000", "#FFFFFF"),
-	GRAY3("#aaaaaa", "#888888", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF"),
-	GRAY4("#888888", "#666666", "#FFFFFF", "#FFFFFF", "#000000", "#FFFFFF"),
-	GRAY5("#666666", "#444444", "#FFFFFF", "#FFFFFF", "#888888", "#FFFFFF"),
-	GRAY6("#444444", "#222222", "#FFFFFF", "#FFFFFF", "#888888", "#FFFFFF");
+	GRAY1,
+	GRAY2,
+	GRAY3,
+	GRAY4,
+	GRAY5,
+	GRAY6;
 
-	private final String colorHi;
-	private final String colorLow;
-	private final String fontColor;
-	private final String buttonColor;
-	private final String playbarColor;
-	private final String playbarTrackColor;
+	private static final ModernColorBean[] colors;
 
-	ModernColor(String colorHi, String colorLow, String fontColor, String buttonColor, String playbarColor, String playbarTrackColor) {
-		this.colorHi = colorHi;
-		this.colorLow = colorLow;
-		this.fontColor = fontColor;
-		this.buttonColor = buttonColor;
-		this.playbarColor = playbarColor;
-		this.playbarTrackColor = playbarTrackColor;
+	static {
+		final InputStream inputStream = ApplicationUtils.getApplication().getClasspathResource("colors", "ModernColor.json").getInputStream();
+		colors = Storage.load(inputStream, StorageTypes.JSON, ModernColorBean[].class);
+	}
+
+	private Optional<ModernColorBean> getCurrentModernColor() {
+		return Stream.of(colors).filter(color -> color.getName().equals(name())).findAny();
 	}
 
 	public String getColorHi() {
-		return colorHi;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getHi();
 	}
 
 	public String getColorLow() {
-		return colorLow;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getLow();
 	}
 
 	public String getFontColor() {
-		return fontColor;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getFont();
 	}
 
 	public String getButtonColor() {
-		return buttonColor;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getButton();
 	}
 
 	public String getPlaybarColor() {
-		return playbarColor;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getPlaybar().getBackground();
 	}
 
 	public String getPlaybarTrackColor() {
-		return playbarTrackColor;
+		return getCurrentModernColor().orElseThrow(IllegalArgumentException::new).getColors().getPlaybar().getTrack();
 	}
 
 	@Override
@@ -110,8 +102,8 @@ public enum ModernColor implements DisplayableColor {
 		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return Color.web(paint());
 		} else {
-			return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(colorHi)),
-					new Stop(1, Color.web(colorLow)));
+			return new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop(0, Color.web(getColorHi())),
+					new Stop(1, Color.web(getColorLow())));
 		}
 	}
 
