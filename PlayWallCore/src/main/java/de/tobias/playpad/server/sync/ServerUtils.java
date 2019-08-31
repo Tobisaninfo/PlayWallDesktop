@@ -7,6 +7,10 @@ import de.tobias.playpad.server.sync.listener.ServerListener;
  * Created by tobias on 19.02.17.
  */
 public class ServerUtils {
+
+	private ServerUtils() {
+	}
+
 	public static boolean isNewValueComingFromServer() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		for (StackTraceElement element : stackTrace) {

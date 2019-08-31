@@ -6,7 +6,6 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
@@ -101,13 +100,14 @@ public class Project {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
-		if (pad != null) {
-			// Remove Pad from old location
-			if (pad.getPage().getPosition() != index.getPagePosition()) {
-				Page oldPage = pad.getPage();
-				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
-					oldPage.setPad(index.getId(), null);
-				}
+		if (pad == null) {
+			return;
+		}
+		// Remove Pad from old location
+		if (pad.getPage().getPosition() != index.getPagePosition()) {
+			Page oldPage = pad.getPage();
+			if (oldPage.getPad(pad.getPosition()).equals(pad)) {
+				oldPage.setPad(index.getId(), null);
 			}
 		}
 
@@ -158,8 +158,7 @@ public class Project {
 	}
 
 	public void setPage(int index, Page page) {
-		if (pages.contains(page))
-			pages.remove(page);
+		pages.remove(page);
 
 		pages.add(index, page);
 		page.setPosition(index);
@@ -258,10 +257,8 @@ public class Project {
 	public List<Pad> findPads(String name) {
 		List<Pad> result = new ArrayList<>();
 		for (Pad pad : getPads()) {
-			if (pad.getStatus() != PadStatus.EMPTY) {
-				if (pad.getName().toLowerCase().contains(name.toLowerCase())) {
-					result.add(pad);
-				}
+			if (pad.getStatus() != PadStatus.EMPTY && pad.getName().toLowerCase().contains(name.toLowerCase())) {
+				result.add(pad);
 			}
 		}
 		return result;
@@ -276,15 +273,5 @@ public class Project {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Validate the name input for a project name
-	 *
-	 * @param name project name to test
-	 * @return <code>true</code> valid
-	 */
-	public static boolean validateNameInput(String name) {
-		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name));
 	}
 }

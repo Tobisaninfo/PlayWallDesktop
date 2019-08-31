@@ -8,7 +8,6 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
@@ -61,7 +60,7 @@ public class ProjectNewDialog extends NVC {
 
 	@Override
 	public void init() {
-		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(!Project.validateNameInput(c)));
+		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(!ProjectReferenceManager.validateProjectName(c)));
 		finishButton.setDisable(true);
 	}
 

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class KeyCollection {
 
-	// Schlüssel: ID, Value: Key
+	// Id -> Key Mapping
 	private HashMap<String, KeyCollectionEntry> keys;
 
 	/**
@@ -181,26 +181,23 @@ public class KeyCollection {
 			if (keysElement != null) {
 				KeySerializer keySerializer = new KeySerializer();
 
-				for (Object obj : keysElement.elements(KEY_ELEMENT)) {
-					if (obj instanceof Element) {
-						Element keyElement = (Element) obj;
-
-						try {
-							String name = loadName(keyElement, bundle);
-							Key key = keySerializer.loadElement(keyElement);
-							KeyCollectionEntry entry = new KeyCollectionEntry(name, key);
-
-							try {
-								register(entry);
-							} catch (KeyConflictException e) {
-								Logger.error(e);
-							}
-						} catch (MissingResourceException ignored) {
-						}
-					}
+				for (Element keyElement : keysElement.elements(KEY_ELEMENT)) {
+					loadKey(bundle, keySerializer, keyElement);
 				}
 			}
 		} catch (DocumentException e) {
+			Logger.error(e);
+		}
+	}
+
+	private void loadKey(ResourceBundle bundle, KeySerializer keySerializer, Element keyElement) {
+		try {
+			String name = loadName(keyElement, bundle);
+			Key key = keySerializer.loadElement(keyElement);
+			KeyCollectionEntry entry = new KeyCollectionEntry(name, key);
+
+			register(entry);
+		} catch (MissingResourceException | KeyConflictException e) {
 			Logger.error(e);
 		}
 	}

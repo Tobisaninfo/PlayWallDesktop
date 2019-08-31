@@ -46,10 +46,9 @@ public class FadeableColor implements Interpolatable<FadeableColor> {
 		if (t >= 1.0)
 			return endValue;
 
-		FadeableColor current = this;
-		List<Stop> stops = new ArrayList<>();
-		for (int i = 0; i < current.getStops().size(); i++) {
-			Color startColor = current.getStops().get(i).getColor();
+		List<Stop> stopList = new ArrayList<>();
+		for (int i = 0; i < this.getStops().size(); i++) {
+			Color startColor = this.getStops().get(i).getColor();
 			Color endColor = endValue.getStops().get(i).getColor();
 
 			double red = startColor.getRed() + (endColor.getRed() - startColor.getRed()) * t;
@@ -58,11 +57,11 @@ public class FadeableColor implements Interpolatable<FadeableColor> {
 			double opacity = startColor.getOpacity() + (endColor.getOpacity() - startColor.getOpacity()) * t;
 
 			Color color = new Color(red, green, blue, opacity);
-			Stop stop = new Stop(current.getStops().get(i).getOffset(), color);
-			stops.add(stop);
+			Stop stop = new Stop(this.getStops().get(i).getOffset(), color);
+			stopList.add(stop);
 		}
 
-		return new FadeableColor(stops);
+		return new FadeableColor(stopList);
 	}
 
 	@Override

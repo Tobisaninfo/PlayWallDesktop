@@ -57,28 +57,28 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	static final String IMAGE = "gfx/Logo-large.png";
 
 	@FXML
-	Label infoLabel;
+	private Label infoLabel;
 	@FXML
-	ImageView imageView;
+	private ImageView imageView;
 
 	@FXML
-	ListView<ProjectReference> projectListView;
+	private ListView<ProjectReference> projectListView;
 
 	@FXML
-	Button newProjectButton;
+	private Button newProjectButton;
 	@FXML
-	Button importProjectButton;
+	private Button importProjectButton;
 	@FXML
-	Button convertProjectButton;
+	private Button convertProjectButton;
 
 	@FXML
-	Button openButton;
+	private Button openButton;
 	@FXML
-	Button deleteButton;
+	private Button deleteButton;
 
 	@FXML
-	Label cloudLabel;
-	FontIcon cloudIcon;
+	private Label cloudLabel;
+	private FontIcon cloudIcon;
 
 	public LaunchDialog(Stage stage) {
 		load("view/dialog", "LaunchDialog", Localization.getBundle());
@@ -116,12 +116,10 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 
 		// Mouse Double Click on list
 		projectListView.setOnMouseClicked(mouseEvent -> {
-			if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-				if (mouseEvent.getClickCount() == 2) {
-					if (!projectListView.getSelectionModel().isEmpty()) {
-						launchProject(getSelectedProject());
-					}
-				}
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) &&
+					mouseEvent.getClickCount() == 2 &&
+					!projectListView.getSelectionModel().isEmpty()) {
+				launchProject(getSelectedProject());
 			}
 		});
 

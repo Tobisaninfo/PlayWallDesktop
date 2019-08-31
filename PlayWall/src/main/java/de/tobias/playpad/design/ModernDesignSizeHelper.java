@@ -2,22 +2,25 @@ package de.tobias.playpad.design;
 
 public class ModernDesignSizeHelper {
 
-	public static final double minWidth = 165;
-	public static final double minHeight = 115;
+	private static final double MIN_WIDTH = 165;
+	private static final double MIN_HEIGHT = 115;
+
+	private ModernDesignSizeHelper() {
+	}
 
 	public static double getMinHeight(int rows) {
-		return rows * minHeight;
+		return rows * MIN_HEIGHT;
 	}
 
 	public static double getMinWidth(int columns) {
-		return columns * minWidth;
+		return columns * MIN_WIDTH;
 	}
 
 	public static double getPadHeight() {
-		return minHeight;
+		return MIN_HEIGHT;
 	}
 
 	public static double getPadWidth() {
-		return minWidth;
+		return MIN_WIDTH;
 	}
 }

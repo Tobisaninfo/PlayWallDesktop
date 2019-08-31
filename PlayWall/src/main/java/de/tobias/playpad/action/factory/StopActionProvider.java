@@ -43,11 +43,8 @@ public class StopActionProvider extends ActionProvider {
 
 	@Override
 	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
-		switch (keyType) {
-			case KEYBOARD:
-				return new FeedbackType[0];
-			case MIDI:
-				return new FeedbackType[]{FeedbackType.DEFAULT};
+		if (keyType == KeyType.MIDI) {
+			return new FeedbackType[]{FeedbackType.DEFAULT};
 		}
 		return new FeedbackType[0];
 	}

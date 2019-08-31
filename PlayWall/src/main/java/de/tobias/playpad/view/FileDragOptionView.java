@@ -68,7 +68,7 @@ public class FileDragOptionView {
 
 		ParallelTransition parallelTransition = new ParallelTransition(fadeTransition, scaleTransition);
 
-		parallelTransition.setOnFinished((e) ->
+		parallelTransition.setOnFinished(event ->
 		{
 			if (!in)
 				parent.getChildren().remove(optionPane);

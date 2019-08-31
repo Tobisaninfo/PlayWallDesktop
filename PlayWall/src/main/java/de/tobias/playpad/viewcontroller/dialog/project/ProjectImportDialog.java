@@ -104,21 +104,15 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 	@Override
 	public void init() {
-		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue && mediaPath == null) {
-				importButton.setDisable(true);
-			} else {
-				importButton.setDisable(false);
-			}
-		});
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+				importButton.setDisable(newValue && mediaPath == null));
 
 		profileImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			validateInput();
 			profileNameTextField.setDisable(!newValue);
 		});
-		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			mediaPathButton.setDisable(!newValue);
-		});
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+				mediaPathButton.setDisable(!newValue));
 
 		projectNameTextField.textProperty().addListener(this);
 		projectNameTextField.textProperty().addListener((observable, oldValue, newValue) ->
@@ -162,11 +156,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		boolean validProjectName = ProjectReferenceManager.validateProjectName(projectNameTextField.getText());
 		boolean validProfileName = ProfileReferenceManager.validateName(profileNameTextField.getText());
 
-		if (!validProjectName || (!validProfileName && shouldImportProfile())) {
-			importButton.setDisable(true);
-		} else {
-			importButton.setDisable(false);
-		}
+		importButton.setDisable(!validProjectName || (!validProfileName && shouldImportProfile()));
 	}
 
 	// ActionHandler

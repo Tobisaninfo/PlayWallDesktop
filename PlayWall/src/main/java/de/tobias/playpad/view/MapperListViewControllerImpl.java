@@ -124,6 +124,8 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 			case KEYBOARD:
 				controller = new KeyboardMapperViewController();
 				break;
+			default:
+				return null;
 		}
 
 		controller.setKey(key);

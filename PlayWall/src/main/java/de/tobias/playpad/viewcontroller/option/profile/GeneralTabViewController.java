@@ -52,8 +52,6 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	@FXML
 	private RadioButton settingsDisable;
 
-	private boolean changeSettings;
-
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
@@ -74,10 +72,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		ToggleGroup settingsGroup = new ToggleGroup();
 		settingsGroup.getToggles().addAll(settingsEnable, settingsDisable);
 
-		liveModeCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			disableLiveSettings(c);
-		});
+		liveModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> disableLiveSettings(newValue));
 	}
 
 	private void disableLiveSettings(Boolean enableLiveSettings) {
@@ -105,16 +100,12 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	private void cacheResetButtonHandler(ActionEvent event) {
-		try {
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(ApplicationUtils.getApplication().getPath(PathType.CACHE))) {
 			int deleteFiles = 0;
-			for (Path path : Files.newDirectoryStream(ApplicationUtils.getApplication().getPath(PathType.CACHE))) {
+			for (Path path : directoryStream) {
 				if (Files.isRegularFile(path)) {
-					try {
-						Files.delete(path);
-						deleteFiles++;
-					} catch (Exception e) {
-						Logger.error(e);
-					}
+					Files.delete(path);
+					deleteFiles++;
 				}
 			}
 			alertable.showInfoMessage(Localization.getString(Strings.INFO_SETTINGS_CACHE_DELETE, deleteFiles));
@@ -132,18 +123,16 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	}
 
 	private void calcCacheSize() {
-		try {
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(globalSettings.getCachePath())) {
 			double size = 0;
-			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			Path path = globalSettings.getCachePath();
 			if (Files.notExists(path))
 				Files.createDirectories(path);
 
-			DirectoryStream<Path> directoryStream = Files.newDirectoryStream(globalSettings.getCachePath());
 			for (Path item : directoryStream) {
 				size += Files.size(item);
 			}
-			directoryStream.close();
 			cacheSizeLabel.setText(Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_CACHE_SIZE, NumberUtils.convertBytesToAppropriateFormat(size)));
 		} catch (IOException e) {
 			Logger.error(e);
@@ -196,7 +185,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public boolean needReload() {
-		return changeSettings;
+		return false;
 	}
 
 	@Override

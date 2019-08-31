@@ -69,9 +69,7 @@ public class ProjectImporter {
 	private void loadZipFile(Path zipFile) throws IOException, DocumentException {
 		zip = new ZipFile(zipFile, ZipFile.FileMode.READ);
 
-		App app = ApplicationUtils.getApplication();
-
-		// Load Zip Informations
+		// Load Zip informations
 		InputStream infoInputStream = zip.inputStream("info.xml");
 		if (infoInputStream == null) {
 			// TODO Throw exception
@@ -126,7 +124,7 @@ public class ProjectImporter {
 
 		Path localFolder = app.getPath(PathType.CONFIGURATION, localProfileUUID.toString());
 		Files.createDirectories(localFolder);
-		System.out.println("Create new profile for import: " + localProfileUUID);
+		Logger.info("Create new profile for import: " + localProfileUUID);
 
 		zip.stream().filter(entry -> entry.getName().startsWith(profileFolder.toString())).forEach(entry ->
 		{
@@ -134,7 +132,7 @@ public class ProjectImporter {
 			try {
 				Path dest = app.getPath(PathType.CONFIGURATION, localProfileUUIDString, name);
 				zip.getFile(Paths.get(entry.getName()), dest);
-				System.out.println("Copied Profile Data: \"" + entry.getName() + "\" to location: " + dest);
+				Logger.info("Copied Profile Data: \"" + entry.getName() + "\" to location: " + dest);
 			} catch (Exception e) {
 				Logger.error(e);
 			}

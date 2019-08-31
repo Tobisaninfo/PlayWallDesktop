@@ -10,7 +10,6 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ref.ProjectReference;
@@ -120,7 +119,7 @@ public class ProjectManagerDialog extends NVC {
 
 		// Name Change Listener
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (Project.validateNameInput(newValue)) {
+			if (ProjectReferenceManager.validateProjectName(newValue)) {
 				ProjectReference reference = getSelectedItem();
 				if (reference != null && ProjectReferenceManager.validateProjectName(reference, newValue)) {
 					reference.setName(newValue);

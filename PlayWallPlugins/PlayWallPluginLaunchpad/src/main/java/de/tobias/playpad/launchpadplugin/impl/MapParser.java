@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class MapParser {
 
+	private MapParser() {
+	}
+
 	public static Map<String, String> load(URL resource) throws IOException {
 		Map<String, String> items = new HashMap<>();
 		for (String line : IOUtils.readURL(resource).split("\n")) {
