@@ -68,7 +68,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(700);
-		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_GLOBAL_SETTINGS_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -97,7 +97,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		try {
 			globalSettings.save();
 		} catch (Exception e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}

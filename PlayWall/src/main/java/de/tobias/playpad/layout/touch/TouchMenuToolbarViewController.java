@@ -67,7 +67,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 			Button button = new Button();
 			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
-					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.then(Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (i + 1)))
 					.otherwise(page.nameProperty());
 			button.textProperty().bind(nameBinding);
 			button.setUserData(i);

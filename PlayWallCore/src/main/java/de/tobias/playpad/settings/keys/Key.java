@@ -149,6 +149,6 @@ public class Key implements Displayable {
 	}
 
 	public boolean isEmpty() {
-		return key.isEmpty() && !ctrl && !shift & !meta && !alt;
+		return key.isEmpty() && !ctrl && !shift && !meta && !alt;
 	}
 }

@@ -94,7 +94,7 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_Profile_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROFILE_TITLE));
 		stage.setMinWidth(375);
 		stage.setMinHeight(400);
 
@@ -150,14 +150,14 @@ public class ProfileViewController extends NVC implements ChangeListener<Profile
 
 		ProfileReference ref = profileList.getSelectionModel().getSelectedItem();
 
-		alert.setContentText(Localization.getString(Strings.UI_Dialog_Profile_Delete_Content, ref));
+		alert.setContentText(Localization.getString(Strings.UI_DIALOG_PROFILE_DELETE_CONTENT, ref));
 		alert.showAndWait().filter(button -> button == ButtonType.OK).ifPresent(button ->
 		{
 			try {
 				ProfileReferenceManager.removeProfile(ref);
 				profileList.getItems().remove(ref);
 			} catch (Exception e) {
-				showErrorMessage(Localization.getString(Strings.Error_Profile_Delete, e.getMessage()));
+				showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_DELETE, e.getMessage()));
 				Logger.error(e);
 			}
 		});

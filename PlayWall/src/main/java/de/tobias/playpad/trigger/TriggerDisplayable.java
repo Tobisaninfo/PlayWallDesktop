@@ -44,7 +44,7 @@ public class TriggerDisplayable implements Displayable {
 
 	@Override
 	public String toString() {
-		String triggerPointName = Localization.getString(Strings.TriggerPoint_BaseName + trigger.getTriggerPoint().name());
-		return Localization.getString(Strings.TriggerPoint_toString, triggerPointName, trigger.getItems().size());
+		String triggerPointName = Localization.getString(Strings.TRIGGER_POINT + trigger.getTriggerPoint().name());
+		return Localization.getString(Strings.TRIGGER_POINT_TO_STRING, triggerPointName, trigger.getItems().size());
 	}
 }

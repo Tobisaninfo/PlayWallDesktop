@@ -10,7 +10,7 @@ import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 public class NavigateActionTypeSettingsEntry implements ActionSettingsEntry {
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Navigate_Name);
+		return Localization.getString(Strings.ACTION_NAVIGATE_NAME);
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 			if (currentMediaPath.isPresent()) {
 				boolean subDirectory = PathUtils.isSubDirectory(currentMediaPath.get(), path);
 				if (subDirectory) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_MediaPath));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_MEDIA_PATH));
 					return;
 				}
 			}
@@ -103,7 +103,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Paths_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_PATHS_TITLE);
 	}
 
 	// Reload Data

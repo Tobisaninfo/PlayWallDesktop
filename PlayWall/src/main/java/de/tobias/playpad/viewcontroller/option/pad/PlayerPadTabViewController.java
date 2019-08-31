@@ -45,7 +45,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 		fadeViewController = new FadeViewController();
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 
-		warningFeedbackViewController = new WarningFeedbackViewController(null);
+		warningFeedbackViewController = WarningFeedbackViewController.newViewControllerForPad();
 		warningFeedbackContainer.getChildren().add(warningFeedbackViewController.getParent());
 
 		customFadeCheckBox.selectedProperty().addListener((a, b, c) ->
@@ -96,7 +96,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_Player_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_PLAYER_TITLE);
 	}
 
 	@Override

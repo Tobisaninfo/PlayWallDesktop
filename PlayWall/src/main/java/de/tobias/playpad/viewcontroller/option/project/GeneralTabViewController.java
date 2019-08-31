@@ -73,15 +73,15 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.Error_Screen_TooMuch, maxValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.COLUMNS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS));
 					}
 					columnErrorLabel.setText(errorText);
 				}
 			} else {
 				columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				columnErrorLabel.setText(Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.COLUMNS)));
+				columnErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS)));
 			}
 		});
 
@@ -98,15 +98,15 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.Error_Screen_TooMuch, maxValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.ROWS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS));
 					}
 					rowErrorLabel.setText(errorText);
 				}
 			} else {
 				rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				rowErrorLabel.setText(Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.ROWS)));
+				rowErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS)));
 			}
 		});
 	}
@@ -209,7 +209,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Gen_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_TITLE);
 	}
 
 	@Override

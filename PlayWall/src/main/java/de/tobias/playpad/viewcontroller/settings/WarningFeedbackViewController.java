@@ -18,19 +18,24 @@ public class WarningFeedbackViewController extends NVC {
 	@FXML
 	private Label warningFeedbackTimeLabel;
 
-	public WarningFeedbackViewController() {
+	private WarningFeedbackViewController() {
 		load("view/settings", "WarningFeedbackSettingsView", Localization.getBundle());
-		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-
-		warningFeedbackTimeSlider.setValue(profileSettings.getWarningFeedback().toSeconds());
-		setTimeLabel();
-
-		warningFeedbackTimeSlider.valueProperty().addListener((a, b, c) ->
-				profileSettings.setWarningTime(Duration.seconds(c.doubleValue())));
 	}
 
-	public WarningFeedbackViewController(Pad pad) {
-		load("view/settings/", "WarningFeedbackSettingsView", Localization.getBundle());
+	public static WarningFeedbackViewController newViewControllerForProfile() {
+		final WarningFeedbackViewController controller = new WarningFeedbackViewController();
+		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+
+		controller.warningFeedbackTimeSlider.setValue(profileSettings.getWarningFeedback().toSeconds());
+		controller.setTimeLabel();
+
+		controller.warningFeedbackTimeSlider.valueProperty().addListener((a, b, c) ->
+				profileSettings.setWarningTime(Duration.seconds(c.doubleValue())));
+		return controller;
+	}
+
+	public static  WarningFeedbackViewController newViewControllerForPad() {
+		return new WarningFeedbackViewController();
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class WarningFeedbackViewController extends NVC {
 
 	private void setTimeLabel() {
 		double displayedTime = Math.round(warningFeedbackTimeSlider.getValue() * 10) / 10.0;
-		warningFeedbackTimeLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, displayedTime));
+		warningFeedbackTimeLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, displayedTime));
 	}
 
 	public void setPadWarning(Pad pad) {

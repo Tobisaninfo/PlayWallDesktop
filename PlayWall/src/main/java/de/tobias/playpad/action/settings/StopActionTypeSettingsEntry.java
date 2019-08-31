@@ -23,7 +23,7 @@ public class StopActionTypeSettingsEntry implements ActionSettingsEntry, ActionS
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Stop_Name);
+		return Localization.getString(Strings.ACTION_STOP_NAME);
 	}
 
 	@Override

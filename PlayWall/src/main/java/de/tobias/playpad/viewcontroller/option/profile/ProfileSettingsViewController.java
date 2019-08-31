@@ -101,7 +101,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 
 		stage.setMinWidth(800);
 		stage.setMinHeight(800);
-		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_SETTINGS_TITLE, Profile.currentProfile().getRef().getName()));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -128,7 +128,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		try {
 			profile.save();
 		} catch (Exception e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}

@@ -56,6 +56,6 @@ public class DesignTabViewController extends ProfileSettingsTabViewController im
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Layout_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_LAYOUT_TITLE);
 	}
 }

@@ -7,6 +7,9 @@ import com.itextpdf.text.BaseColor;
  */
 public class ColorUtils {
 
+	private ColorUtils() {
+	}
+
 	public static BaseColor toBaseColor(String hexCode) {
 		hexCode = hexCode.replace("#", "");
 		return new BaseColor(

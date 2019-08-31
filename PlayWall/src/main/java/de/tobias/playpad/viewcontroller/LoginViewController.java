@@ -63,7 +63,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 		App app = ApplicationUtils.getApplication();
 
 		// Setup launchscreen labels and image
-		infoLabel.setText(getString(Strings.UI_Dialog_Launch_Info, app.getInfo().getName(), app.getInfo().getVersion()));
+		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		try {
 			imageView.setImage(new Image(LaunchDialog.IMAGE));
 		} catch (Exception e) {
@@ -75,7 +75,7 @@ public class LoginViewController extends NVC implements SessionDelegate {
 	public void initStage(Stage stage) {
 		PlayPadPlugin.styleable().applyStyle(stage);
 
-		stage.setTitle(getString(Strings.UI_Dialog_Login_Title));
+		stage.setTitle(getString(Strings.UI_DIALOG_LOGIN_TITLE));
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.initModality(Modality.APPLICATION_MODAL);

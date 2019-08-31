@@ -12,7 +12,7 @@ public class CartActionSettingsEntry implements ActionSettingsEntry {
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Cart_Name);
+		return Localization.getString(Strings.ACTION_CART_NAME);
 	}
 
 	@Override

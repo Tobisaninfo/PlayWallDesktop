@@ -219,7 +219,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(KeyCombination.SHIFT_DOWN + "+Esc"));
-		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, "-", "-"));
 		stage.show();
 	}
 
@@ -310,7 +310,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			// wenn ein Pad noch im Status Play ist
 			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
+				alert.setContentText(Localization.getString(Strings.UI_WINDOW_MAIN_CLOSE_REQUEST));
 
 				alert.initOwner(getStage());
 				alert.initModality(Modality.WINDOW_MODAL);
@@ -347,7 +347,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 					Profile.currentProfile().save();
 			} catch (Exception e) {
 				Logger.error(e);
-				showErrorMessage(Localization.getString(Strings.Error_Profile_Save));
+				showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE));
 			}
 
 			// MIDI Shutdown
@@ -372,7 +372,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			}
 		} catch (Exception e) {
 			Logger.error(e);
-			showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 		}
 	}
 
@@ -660,13 +660,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			final MidiDeviceInfo midiDeviceInfo = Midi.getInstance().getMidiDeviceInfo(name);
 			if (midiDeviceInfo != null) {
 				Midi.getInstance().openDevice(midiDeviceInfo, Midi.Mode.INPUT, Midi.Mode.OUTPUT);
-				notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
+				notificationPane.showAndHide(Localization.getString(Strings.INFO_MIDI_DEVICE_CONNECTED, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 			}
 		} catch (NullPointerException e) {
 			Logger.error(e);
-			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
+			showError(Localization.getString(Strings.ERROR_MIDI_DEVICE_UNAVAILABLE, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
-			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+			showError(Localization.getString(Strings.ERROR_MIDI_DEVICE_BUSY, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}
@@ -754,10 +754,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		getStageContainer().ifPresent(sc ->
 		{
 			if (openProject != null && Profile.currentProfile() != null) {
-				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
+				getStage().setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, openProject.getProjectReference().getName(),
 						Profile.currentProfile().getRef().getName()));
 			} else {
-				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
+				getStage().setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, "-", "-"));
 			}
 		});
 	}

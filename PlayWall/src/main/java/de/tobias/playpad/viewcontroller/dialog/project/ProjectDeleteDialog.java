@@ -16,8 +16,8 @@ class ProjectDeleteDialog extends Alert {
 
 	ProjectDeleteDialog(ProjectReference reference, Window owner) {
 		super(AlertType.CONFIRMATION);
-		setHeaderText(Localization.getString(Strings.UI_Dialog_ProjectManager_Delete_Header));
-		setContentText(Localization.getString(Strings.UI_Dialog_ProjectManager_Delete_Content, reference.getName()));
+		setHeaderText(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_HEADER));
+		setContentText(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_CONTENT, reference.getName()));
 
 		initOwner(owner);
 		initModality(Modality.WINDOW_MODAL);

@@ -223,10 +223,10 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 						profileSettings.setMidiDeviceName(device);
 					}
 				} catch (NullPointerException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Unavailible, device));
+					showErrorMessage(Localization.getString(Strings.ERROR_MIDI_DEVICE_UNAVAILABLE, device));
 					Logger.error(e);
 				} catch (IllegalArgumentException | MidiUnavailableException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_MIDI_DEVICE_BUSY, e.getLocalizedMessage()));
 					Logger.error(e);
 				}
 			}
@@ -253,7 +253,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		if (mapping != null) {
 			FileChooser chooser = new FileChooser();
 
-			FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.PRESET_TYPE);
+			FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(Localization.getString(Strings.FILE_FILTER_PRESET), PlayPadMain.PRESET_TYPE);
 			chooser.getExtensionFilters().add(filter);
 
 			File file = chooser.showSaveDialog(getContainingWindow());
@@ -266,7 +266,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 						MappingSerializer.save(mapping, path);
 					} catch (IOException e) {
 						Logger.error(e);
-						showErrorMessage(Localization.getString(Strings.Error_Preset_Export, e.getLocalizedMessage()));
+						showErrorMessage(Localization.getString(Strings.ERROR_PRESET_EXPORT, e.getLocalizedMessage()));
 					}
 				});
 			}
@@ -309,7 +309,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		Mapping mapping = mappingComboBox.getSelectionModel().getSelectedItem();
 
 		Mapping clonedMapping = new Mapping(mapping);
-		clonedMapping.setName(Localization.getString(Strings.Standard_Copy, clonedMapping.getName()));
+		clonedMapping.setName(Localization.getString(Strings.STANDARD_COPY, clonedMapping.getName()));
 
 		// Model
 		Profile.currentProfile().getMappings().addMapping(clonedMapping);
@@ -344,7 +344,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	@FXML
 	private void mappingImportHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
-		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Preset), PlayPadMain.PRESET_TYPE));
+		chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Localization.getString(Strings.FILE_FILTER_PRESET), PlayPadMain.PRESET_TYPE));
 		File file = chooser.showOpenDialog(getContainingWindow());
 		if (file != null) {
 			Path path = file.toPath();
@@ -374,7 +374,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 				} catch (Exception e) {
 					Logger.error(e);
-					showErrorMessage(Localization.getString(Strings.Error_Preset_Import, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_PRESET_IMPORT, e.getLocalizedMessage()));
 				}
 			});
 		}
@@ -448,6 +448,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Mapping_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_MAPPING_TITLE);
 	}
 }

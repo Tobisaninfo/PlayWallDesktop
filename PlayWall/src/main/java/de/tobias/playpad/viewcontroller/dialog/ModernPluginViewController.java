@@ -68,8 +68,8 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 				Platform.runLater(() -> {
 					Alerts.getInstance()
 							.createAlert(Alert.AlertType.ERROR,
-									Localization.getString(Strings.Error_Plugins_Header),
-									Localization.getString(Strings.Error_Plugins_Loading),
+									Localization.getString(Strings.ERROR_PLUGINS_HEADER),
+									Localization.getString(Strings.ERROR_PLUGINS_LOADING),
 									getContainingWindow()
 							).showAndWait();
 					closeStage();
@@ -95,8 +95,8 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 				Platform.runLater(() -> {
 					Alerts.getInstance()
 							.createAlert(Alert.AlertType.ERROR,
-									Localization.getString(Strings.Error_Plugins_Header),
-									Localization.getString(Strings.Error_Plugins_Loading),
+									Localization.getString(Strings.ERROR_PLUGINS_HEADER),
+									Localization.getString(Strings.ERROR_PLUGINS_LOADING),
 									getContainingWindow()
 							).showAndWait();
 					closeStage();
@@ -134,7 +134,7 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 
 		stage.setMinWidth(600);
 		stage.setMinHeight(400);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_Plugins_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PLUGINS_TITLE));
 
 		if (Profile.currentProfile() != null) {
 			PlayPadPlugin.styleable().applyStyle(stage);
@@ -173,8 +173,8 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 					Logger.error(e);
 					Alerts.getInstance()
 							.createAlert(Alert.AlertType.ERROR,
-									Localization.getString(Strings.Error_Plugins_Header),
-									Localization.getString(Strings.Error_Plugins_Install, e.getMessage()),
+									Localization.getString(Strings.ERROR_PLUGINS_HEADER),
+									Localization.getString(Strings.ERROR_PLUGINS_INSTALL, e.getMessage()),
 									getContainingWindow()
 							).showAndWait();
 				}

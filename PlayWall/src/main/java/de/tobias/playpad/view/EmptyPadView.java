@@ -12,7 +12,7 @@ import javafx.scene.text.TextAlignment;
 public class EmptyPadView extends Label {
 
 	public EmptyPadView(Pane parent) {
-		super(Localization.getString(Strings.Content_Empty));
+		super(Localization.getString(Strings.CONTENT_EMPTY));
 		setWrapText(true);
 		setAlignment(Pos.CENTER);
 		setTextAlignment(TextAlignment.CENTER);

@@ -89,8 +89,8 @@ public class MidiMapperViewController extends MapperViewController implements Mi
 		MidiCommandHandler.getInstance().addMidiListener(this);
 
 		alert = new Alert(AlertType.NONE);
-		alert.setTitle(Localization.getString(Strings.Mapper_Midi_Name));
-		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
+		alert.setTitle(Localization.getString(Strings.MAPPER_MIDI_NAME));
+		alert.setContentText(Localization.getString(Strings.INFO_MAPPER_PRESS_KEY));
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getContainingWindow());
 		alert.showAndWait().ifPresent(result ->

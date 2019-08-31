@@ -71,7 +71,7 @@ public class ProjectNewDialog extends NVC {
 		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProject_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_TITLE));
 		stage.setWidth(560);
 		stage.setHeight(380);
 
@@ -98,7 +98,7 @@ public class ProjectNewDialog extends NVC {
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException e) {
-			showErrorMessage(Localization.getString(Strings.Error_Project_Create, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_CREATE, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}

@@ -177,6 +177,6 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Audio_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_AUDIO_TITLE);
 	}
 }

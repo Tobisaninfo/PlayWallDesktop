@@ -24,7 +24,7 @@ public class PageActionSettingsEntry implements ActionSettingsEntry, ActionSetti
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Page_toString, String.valueOf(PageAction.getPageForAction(action) + 1));
+		return Localization.getString(Strings.ACTION_PAGE_TO_STRING, String.valueOf(PageAction.getPageForAction(action) + 1));
 	}
 
 	@Override

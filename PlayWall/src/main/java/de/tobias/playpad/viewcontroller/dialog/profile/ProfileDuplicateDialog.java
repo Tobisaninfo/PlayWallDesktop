@@ -39,7 +39,7 @@ public class ProfileDuplicateDialog extends TextInputDialog {
 			}
 		});
 
-		setContentText(Localization.getString(Strings.UI_Dialog_NewProfile_Content));
+		setContentText(Localization.getString(Strings.UI_DIALOG_NEW_PROFILE_CONTENT));
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
@@ -47,7 +47,7 @@ public class ProfileDuplicateDialog extends TextInputDialog {
 				ProfileReferenceManager.duplicate(cloneableProfile, newRef);
 			} catch (IOException e) {
 				Logger.error(e);
-				controller.showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getMessage()));
+				controller.showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getMessage()));
 			}
 		});
 	}

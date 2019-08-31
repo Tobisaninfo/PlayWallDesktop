@@ -79,8 +79,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		importer = new ProjectImporter(path, this);
 
 		// Set Default Values
-		projectNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProjectName()));
-		profileNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProfileName()));
+		projectNameTextField.setText(Localization.getString(Strings.STANDARD_COPY, importer.getProjectName()));
+		profileNameTextField.setText(Localization.getString(Strings.STANDARD_COPY, importer.getProfileName()));
 
 		profileSection.setDisable(!importer.isIncludeProfile());
 		profileImportCheckbox.setSelected(importer.isIncludeProfile());
@@ -144,7 +144,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		stage.setMaxWidth(380);
 
 		stage.setMinHeight(480);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectImport_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_IMPORT_TITLE));
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
@@ -202,7 +202,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
 			Logger.error(e);
-			showErrorMessage(Localization.getString(Strings.Error_Project_Export));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_EXPORT));
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		}
 	}

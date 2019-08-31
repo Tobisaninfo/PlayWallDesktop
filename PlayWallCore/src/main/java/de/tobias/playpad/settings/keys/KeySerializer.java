@@ -15,22 +15,10 @@ public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 
 	@Override
 	public Key loadElement(Element element) {
-		boolean shift = false;
-		if (element.attributeValue(SHIFT_ATTR) != null) {
-			shift = Boolean.parseBoolean(element.attributeValue(SHIFT_ATTR));
-		}
-		boolean meta = false;
-		if (element.attributeValue(META_ATTR) != null) {
-			meta = Boolean.parseBoolean(element.attributeValue(META_ATTR));
-		}
-		boolean ctrl = false;
-		if (element.attributeValue(CTRL_ATTR) != null) {
-			ctrl = Boolean.parseBoolean(element.attributeValue(CTRL_ATTR));
-		}
-		boolean alt = false;
-		if (element.attributeValue(ALT_ATTR) != null) {
-			alt = Boolean.parseBoolean(element.attributeValue(ALT_ATTR));
-		}
+		boolean shift = loadModifier(SHIFT_ATTR, element);
+		boolean meta = loadModifier(META_ATTR, element);
+		boolean ctrl = loadModifier(CTRL_ATTR, element);
+		boolean alt = loadModifier(ALT_ATTR, element);
 
 		String key = "";
 		if (element.attributeValue(KEY_ATTR) != null) {
@@ -43,6 +31,13 @@ public class KeySerializer implements XMLSerializer<Key>, XMLDeserializer<Key> {
 		}
 
 		return new Key(id, key, ctrl, alt, meta, shift);
+	}
+
+	private boolean loadModifier(String key, Element element) {
+		if (element.attributeValue(key) != null) {
+			return Boolean.parseBoolean(element.attributeValue(key));
+		}
+		return false;
 	}
 
 	@Override

@@ -61,7 +61,7 @@ public class VolumeTriggerViewController extends NVC {
 		volumeSlider.valueProperty().addListener((a, b, c) ->
 		{
 			item.setVolume(c.doubleValue() / 100.0);
-			volumeLabel.setText(Localization.getString(Strings.Standard_Time_Volume, Math.round(c.doubleValue())));
+			volumeLabel.setText(Localization.getString(Strings.STANDARD_TIME_VOLUME, Math.round(c.doubleValue())));
 		});
 
 		durationSlider.valueProperty().addListener((a, b, c) ->
@@ -69,7 +69,7 @@ public class VolumeTriggerViewController extends NVC {
 			item.setDuration(Duration.seconds(c.doubleValue()));
 
 			double seconds = Math.round(item.getDuration().toSeconds() * 10.0) / 10.0;
-			durationLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, seconds));
+			durationLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, seconds));
 		});
 
 	}

@@ -77,7 +77,7 @@ public class PlayoutLogViewController extends NVC {
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_PlayoutLog_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PLAYOUT_LOG_TITLE));
 		stage.setMinWidth(375);
 		stage.setMinHeight(400);
 

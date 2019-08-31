@@ -57,8 +57,8 @@ public class KeyboardMapperViewController extends MapperViewController {
 
 	private boolean inputDialog() {
 		KeyboardMapperInputDialog alert = new KeyboardMapperInputDialog(mapper);
-		alert.setTitle(Localization.getString(Strings.Mapper_Keyboard_Name));
-		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
+		alert.setTitle(Localization.getString(Strings.MAPPER_KEYBOARD_NAME));
+		alert.setContentText(Localization.getString(Strings.INFO_MAPPER_PRESS_KEY));
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getContainingWindow());

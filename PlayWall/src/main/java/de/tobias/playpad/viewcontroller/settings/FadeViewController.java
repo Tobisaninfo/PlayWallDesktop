@@ -42,7 +42,7 @@ public class FadeViewController extends NVC {
 		{
 			Duration seconds = Duration.seconds(c.doubleValue());
 			double displayedTime = Math.round(seconds.toSeconds() * 10) / 10.0;
-			fadeInLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, displayedTime));
+			fadeInLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, displayedTime));
 			fade.setFadeIn(seconds);
 		});
 
@@ -50,7 +50,7 @@ public class FadeViewController extends NVC {
 		{
 			Duration seconds = Duration.seconds(c.doubleValue());
 			double displayedTime = Math.round(seconds.toSeconds() * 10) / 10.0;
-			fadeOutLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, displayedTime));
+			fadeOutLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, displayedTime));
 			fade.setFadeOut(seconds);
 		});
 
@@ -66,11 +66,11 @@ public class FadeViewController extends NVC {
 		if (fade != null) {
 			fadeInSlider.setValue(fade.getFadeIn().toSeconds());
 			double displayedInTime = Math.round(fade.getFadeIn().toSeconds() * 10) / 10.0;
-			fadeInLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, displayedInTime));
+			fadeInLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, displayedInTime));
 
 			fadeOutSlider.setValue(fade.getFadeOut().toSeconds());
 			double displayedOutTime = Math.round(fade.getFadeOut().toSeconds() * 10) / 10.0;
-			fadeOutLabel.setText(Localization.getString(Strings.Standard_Time_Seconds, displayedOutTime));
+			fadeOutLabel.setText(Localization.getString(Strings.STANDARD_TIME_SECONDS, displayedOutTime));
 
 			fadeInStartCheckBox.setSelected(fade.isFadeInStart());
 			fadeInPauseCheckBox.setSelected(fade.isFadeInPause());

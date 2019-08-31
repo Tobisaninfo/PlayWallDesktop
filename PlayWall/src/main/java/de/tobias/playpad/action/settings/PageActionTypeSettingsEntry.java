@@ -10,7 +10,7 @@ import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 public class PageActionTypeSettingsEntry implements ActionSettingsEntry {
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Page_Name);
+		return Localization.getString(Strings.ACTION_PAGE_NAME);
 	}
 
 	@Override

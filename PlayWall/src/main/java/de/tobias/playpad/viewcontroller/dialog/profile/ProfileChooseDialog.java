@@ -55,7 +55,7 @@ public class ProfileChooseDialog extends NVC {
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ChooseProfile_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_CHOOSE_PROFILE_TITLE));
 		stage.setResizable(false);
 		stage.setWidth(560);
 		stage.setHeight(230);
@@ -74,7 +74,7 @@ public class ProfileChooseDialog extends NVC {
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}

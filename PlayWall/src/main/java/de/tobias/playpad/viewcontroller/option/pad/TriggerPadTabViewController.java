@@ -43,7 +43,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 		Map<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
 		TreeItem<TriggerDisplayable> rootItem = new TreeItem<>();
 
-		// Sort the tpyes for the treeview
+		// Sort the types for the tree view
 		for (TriggerPoint point : TriggerPoint.values()) {
 			Trigger trigger = triggers.get(point);
 
@@ -69,7 +69,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_Trigger_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TRIGGER_TITLE);
 	}
 
 	@Override

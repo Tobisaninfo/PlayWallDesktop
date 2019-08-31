@@ -32,8 +32,8 @@ public class CartActionViewController extends NVC {
 	@Override
 	public void init() {
 		controlMode.getItems().setAll(CartActionMode.values());
-		controlMode.setCellFactory(list -> new EnumCell<>(Strings.CartAction_Mode_BaseName));
-		controlMode.setButtonCell(new EnumCell<>(Strings.CartAction_Mode_BaseName));
+		controlMode.setCellFactory(list -> new EnumCell<>(Strings.CART_ACTION_MODE));
+		controlMode.setButtonCell(new EnumCell<>(Strings.CART_ACTION_MODE));
 		controlMode.valueProperty().addListener((observable, oldValue, newValue) -> CartAction.setMode(action, newValue));
 
 		autoColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> CartAction.setAutoFeedback(action, newValue));

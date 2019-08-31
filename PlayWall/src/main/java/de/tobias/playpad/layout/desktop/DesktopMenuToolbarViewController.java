@@ -179,16 +179,16 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		// Edit Mode Buttons
 		editButtons = new SegmentedButton();
 		playButton = new ToggleButton("", new FontIcon(FontAwesomeType.PLAY));
-		playButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PlayButton)));
+		playButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PLAY_BUTTON)));
 		playButton.setFocusTraversable(false);
 		dragButton = new ToggleButton("", new FontIcon(FontAwesomeType.ARROWS));
-		dragButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_DragButton)));
+		dragButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_DRAG_BUTTON)));
 		dragButton.setFocusTraversable(false);
 		pageButton = new ToggleButton("", new FontIcon(FontAwesomeType.FILES_ALT));
-		pageButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_PageButton)));
+		pageButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_BUTTON)));
 		pageButton.setFocusTraversable(false);
 		colorButton = new ToggleButton("", new FontIcon(FontAwesomeType.PENCIL));
-		colorButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_ColorButton)));
+		colorButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_COLOR_BUTTON)));
 		colorButton.setFocusTraversable(false);
 		editButtons.getButtons().addAll(playButton, dragButton, pageButton, colorButton);
 		editButtons.getToggleGroup().selectedToggleProperty().addListener((a, b, c) ->
@@ -221,7 +221,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				initPageButtons();
 				highlightPageButton(mainViewController.getPage());
 			} else {
-				showErrorMessage(Localization.getString(Strings.Error_Project_PageCount));
+				showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_PAGE_COUNT));
 			}
 		});
 
@@ -355,7 +355,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Button button = new Button();
 
 			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
-					.then(Localization.getString(Strings.UI_Window_Main_PageButton, (i + 1)))
+					.then(Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (i + 1)))
 					.otherwise(page.nameProperty());
 			button.textProperty().bind(nameBinding);
 			button.setUserData(i);
@@ -544,7 +544,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					Logger.error(e);
 
 					// Error Message
-					String errorMessage = Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(),
+					String errorMessage = Localization.getString(Strings.ERROR_PROFILE_NOT_FOUND, ref.getProfileReference(),
 							e.getLocalizedMessage());
 					mainViewController.showError(errorMessage);
 
@@ -557,10 +557,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
 					Logger.error(e);
-					mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
+					mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_NOT_FOUND, ref, e.getLocalizedMessage()));
 				} catch (Exception e) {
 					Logger.error(e);
-					mainViewController.showError(Localization.getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
+					mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_OPEN, ref, e.getLocalizedMessage()));
 				}
 			}
 		});
@@ -575,9 +575,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			Profile.currentProfile().save();
 			PlayPadPlugin.getInstance().getGlobalSettings().save();
 
-			mainViewController.notify(Localization.getString(Strings.Standard_File_Save), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
+			mainViewController.notify(Localization.getString(Strings.STANDARD_FILE_SAVE), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
 		} catch (IOException e) {
-			mainViewController.showError(Localization.getString(Strings.Error_Project_Save));
+			mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 			Logger.error(e);
 		}
 	}
@@ -600,7 +600,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void logoutMenuHandler(ActionEvent event) {
-		AuthViewController authViewController = new AuthViewController(getContainingWindow(), Localization.getString(Strings.Auth_Logout),
+		AuthViewController authViewController = new AuthViewController(getContainingWindow(), Localization.getString(Strings.AUTH_LOGOUT),
 				(username, password) -> {
 					Session session = Session.load();
 					try {
@@ -732,9 +732,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@FXML
 	void searchPadHandler(ActionEvent event) {
 		TextField searchField = TextFields.createClearableTextField();
-		searchField.setPromptText(Localization.getString(Strings.Search_Placeholder));
+		searchField.setPromptText(Localization.getString(Strings.SEARCH_PLACEHOLDER));
 
-		Button button = new Button(Localization.getString(Strings.Search_Button));
+		Button button = new Button(Localization.getString(Strings.SEARCH_BUTTON));
 		button.setDefaultButton(true);
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 		button.setOnAction(new DesktopSearchController(project, searchField, mainViewController));
@@ -817,7 +817,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			} catch (ProfileNotFoundException e) {
 				Logger.error(e);
 				mainViewController.showError(
-						Localization.getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
+						Localization.getString(Strings.ERROR_PROFILE_NOT_FOUND, ref.getProfileReference(), e.getLocalizedMessage()));
 
 				// Neues Profile wählen
 				ProfileReference profile = null;
@@ -828,10 +828,10 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				ref.setProfileReference(profile);
 			} catch (ProjectNotFoundException e) {
 				Logger.error(e);
-				mainViewController.showError(Localization.getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
+				mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_NOT_FOUND, ref, e.getLocalizedMessage()));
 			} catch (Exception e) {
 				Logger.error(e);
-				mainViewController.showError(Localization.getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
+				mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_OPEN, ref, e.getLocalizedMessage()));
 			}
 		});
 	}

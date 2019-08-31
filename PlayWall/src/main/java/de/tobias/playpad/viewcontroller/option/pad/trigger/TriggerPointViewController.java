@@ -81,7 +81,7 @@ public class TriggerPointViewController extends NVC {
 
 				itemView.getChildren().addAll(rootBox);
 
-				deleteButton.setOnAction((e) ->
+				deleteButton.setOnAction(event ->
 				{
 					triggerWrapper.removeItem(item);
 					itemView.getChildren().removeAll(rootBox);

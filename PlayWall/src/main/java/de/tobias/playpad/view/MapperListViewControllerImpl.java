@@ -70,10 +70,10 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 			String name = "";
 			switch (item) {
 				case MIDI:
-					name = Localization.getString(Strings.Mapper_Midi_Name);
+					name = Localization.getString(Strings.MAPPER_MIDI_NAME);
 					break;
 				case KEYBOARD:
-					name = Localization.getString(Strings.Mapper_Keyboard_Name);
+					name = Localization.getString(Strings.MAPPER_KEYBOARD_NAME);
 					break;
 			}
 

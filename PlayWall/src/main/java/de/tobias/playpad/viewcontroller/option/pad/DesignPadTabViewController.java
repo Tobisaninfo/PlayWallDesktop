@@ -43,7 +43,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 					setLayoutViewController(pad);
 				} catch (Exception e) {
-					showErrorMessage(Localization.getString(Strings.Error_Standard_Gen, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_STANDARD_GEN, e.getLocalizedMessage()));
 					Logger.error(e);
 				}
 			} else if (!c && padSettings.isCustomDesign()) {
@@ -55,7 +55,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_Layout_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_LAYOUT_TITLE);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 				layoutContainer.getChildren().setAll(controller.getParent());
 			} catch (Exception e) {
 				Logger.error(e);
-				showErrorMessage(Localization.getString(Strings.Error_Layout_Load, e.getMessage()));
+				showErrorMessage(Localization.getString(Strings.ERROR_LAYOUT_LOAD, e.getMessage()));
 			}
 		} else {
 			layoutContainer.getChildren().clear();

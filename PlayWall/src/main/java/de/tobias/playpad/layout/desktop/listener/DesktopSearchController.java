@@ -47,7 +47,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 		}
 
 		if (searchResult.isEmpty()) {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
+			mainView.showInfoMessage(Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES));
 			return;
 		}
 
@@ -58,7 +58,7 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 				result.getController().getView().highlightView(HIGHLIGHT_DURATION);
 			}
 		} else {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
+			mainView.showInfoMessage(Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES));
 			currentIndex = 0;
 		}
 	}

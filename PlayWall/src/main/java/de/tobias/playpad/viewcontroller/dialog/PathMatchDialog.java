@@ -188,7 +188,7 @@ public class PathMatchDialog extends NVC {
 		stage.setMinWidth(700);
 		stage.setMinHeight(400);
 		stage.setMaxHeight(600);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_NotFound_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NOT_FOUND_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -215,7 +215,7 @@ public class PathMatchDialog extends NVC {
 	}
 
 	private void setStatusLabel() {
-		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_Dialog_PathMatch_Status, getUnmatchedTracks())));
+		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_DIALOG_PATH_MATCH_STATUS, getUnmatchedTracks())));
 	}
 
 	public void showFileChooser(TempMediaPath item) {
@@ -223,7 +223,7 @@ public class PathMatchDialog extends NVC {
 		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 		// File Extension
-		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA),
 				registry.getSupportedFileTypes());
 		chooser.getExtensionFilters().add(extensionFilter);
 

@@ -40,27 +40,27 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 
 		leftMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_LEFT));
 		leftMoveButton.setOnAction(this);
-		leftMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_LeftMove)));
+		leftMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_LEFT_MOVE)));
 		leftMoveButton.setFocusTraversable(false);
 
 		rightMoveButton = new Button("", new FontIcon(FontAwesomeType.ARROW_RIGHT));
 		rightMoveButton.setOnAction(this);
-		rightMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_RightMove)));
+		rightMoveButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_RIGHT_MOVE)));
 		rightMoveButton.setFocusTraversable(false);
 
 		editTextButton = new Button("", new FontIcon(FontAwesomeType.EDIT));
 		editTextButton.setOnAction(this);
-		editTextButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Rename)));
+		editTextButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_RENAME)));
 		editTextButton.setFocusTraversable(false);
 
 		cloneButton = new Button("", new FontIcon(FontAwesomeType.COPY));
 		cloneButton.setOnAction(this);
-		cloneButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Clone)));
+		cloneButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_CLONE)));
 		cloneButton.setFocusTraversable(false);
 
 		deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
 		deleteButton.setOnAction(this);
-		deleteButton.setTooltip(new Tooltip(Localization.getString(Strings.Tooltip_Page_Delete)));
+		deleteButton.setTooltip(new Tooltip(Localization.getString(Strings.TOOLTIP_PAGE_DELETE)));
 		deleteButton.setFocusTraversable(false);
 
 		getChildren().addAll(leftMoveButton, rightMoveButton, editTextButton, cloneButton, deleteButton);
@@ -126,8 +126,8 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 		} else if (event.getSource() == deleteButton) {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 
-			alert.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Delete_Header));
-			alert.setContentText(Localization.getString(Strings.UI_Dialog_Page_Delete_Content));
+			alert.setHeaderText(Localization.getString(Strings.UI_DIALOG_PAGE_DELETE_HEADER));
+			alert.setContentText(Localization.getString(Strings.UI_DIALOG_PAGE_DELETE_CONTENT));
 			alert.initOwner(controller.getContainingWindow());
 			alert.initModality(Modality.WINDOW_MODAL);
 			Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -149,8 +149,8 @@ public class DesktopPageEditButtonView extends HBox implements EventHandler<Acti
 	private boolean showPageNameDialog(Page page) {
 		TextInputDialog dialog = new TextInputDialog(page.getName());
 
-		dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Page_Name_Header));
-		dialog.setContentText(Localization.getString(Strings.UI_Dialog_Page_Name_Content));
+		dialog.setHeaderText(Localization.getString(Strings.UI_DIALOG_PAGE_NAME_HEADER));
+		dialog.setContentText(Localization.getString(Strings.UI_DIALOG_PAGE_NAME_CONTENT));
 		dialog.initOwner(controller.getContainingWindow());
 		dialog.initModality(Modality.WINDOW_MODAL);
 		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();

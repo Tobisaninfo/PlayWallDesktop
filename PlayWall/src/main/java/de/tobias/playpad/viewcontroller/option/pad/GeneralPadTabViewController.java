@@ -60,13 +60,13 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 		});
 		timeDisplayComboBox.getItems().addAll(TimeMode.values());
-		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.Pad_TimeMode_BaseName));
-		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.Pad_TimeMode_BaseName));
+		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.PAD_TIME_MODE));
+		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.PAD_TIME_MODE));
 	}
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_General_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_GENERAL_TITLE);
 	}
 
 	@Override

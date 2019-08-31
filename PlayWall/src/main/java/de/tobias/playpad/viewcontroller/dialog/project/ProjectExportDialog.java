@@ -62,7 +62,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_EXPORT_TITLE));
 		stage.setWidth(375);
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -80,7 +80,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		FileChooser chooser = new FileChooser();
 
 		// Extension Filter in FileChooser
-		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
 		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
@@ -105,7 +105,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 				} catch (IOException e) {
 					busyView.showProgress(false);
 
-					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
+					String errorMessage = Localization.getString(Strings.ERROR_PROJECT_EXPORT, projectRef.getName(), e.getMessage());
 					showErrorMessage(errorMessage);
 					Logger.error(e);
 				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {

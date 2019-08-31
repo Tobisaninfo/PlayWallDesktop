@@ -27,15 +27,15 @@ public class AutoUpdateDialog extends AdvancedDialog {
 			builder.append("\n");
 		}
 
-		setTitle(Localization.getString(Strings.UI_Dialog_AutoUpdate_Title));
-		setContent(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content, builder.toString()));
-		setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-		setCheckboxText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Checkbox));
+		setTitle(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_TITLE));
+		setContent(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_CONTENT, builder.toString()));
+		setHeaderText(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_HEADER));
+		setCheckboxText(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_CHECKBOX));
 
 		setIcon(PlayPadPlugin.getInstance().getIcon());
 
-		ButtonType updateButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Update), ButtonData.APPLY);
-		ButtonType cancelButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Cancel), ButtonData.CANCEL_CLOSE);
+		ButtonType updateButton = new ButtonType(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_BUTTON_UPDATE), ButtonData.APPLY);
+		ButtonType cancelButton = new ButtonType(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_BUTTON_CANCEL), ButtonData.CANCEL_CLOSE);
 
 		addButtonType(updateButton);
 		addButtonType(cancelButton);

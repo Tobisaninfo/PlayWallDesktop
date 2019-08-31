@@ -117,9 +117,9 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getPositionReadable(), pad.getName());
+			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE, pad.getPositionReadable(), pad.getName());
 		} else {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getPositionReadable());
+			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
 	}

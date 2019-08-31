@@ -48,7 +48,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	@Override
 	public void startReadProject() {
 		getStageContainer().ifPresent(NVCStage::show);
-		statusLabel.setText(Localization.getString(Strings.UI_Dialog_ProjectLoad_StartProject));
+		statusLabel.setText(Localization.getString(Strings.UI_DIALOG_PROJECT_LOAD_START_PROJECT));
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	public void readMedia(String name) {
 		currentCount++;
 		Platform.runLater(() -> {
-			statusLabel.setText(Localization.getString(Strings.UI_Dialog_ProjectLoad_StartPad, name));
+			statusLabel.setText(Localization.getString(Strings.UI_DIALOG_PROJECT_LOAD_START_PAD, name));
 			progressbar.setProgress(currentCount / (double) itemCount);
 		});
 	}

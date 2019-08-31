@@ -70,7 +70,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(500);
-		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_PROJECT_SETTINGS_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}

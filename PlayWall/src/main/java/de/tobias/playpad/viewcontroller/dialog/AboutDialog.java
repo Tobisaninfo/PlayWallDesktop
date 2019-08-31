@@ -73,10 +73,10 @@ public class AboutDialog extends NVC {
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
-		graphicsLabel.setText(Localization.getString(Strings.UI_Dialog_About_Graphics));
-		libsLabel.setText(Localization.getString(Strings.UI_Dialog_About_Libraries));
+		graphicsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_GRAPHICS));
+		libsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_LIBRARIES));
 
-		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Website));
+		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_WEBSITE));
 		websiteLink.setPadding(Insets.EMPTY);
 		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
@@ -85,7 +85,7 @@ public class AboutDialog extends NVC {
 		});
 		websiteContainer.getChildren().add(websiteLink);
 
-		Hyperlink codeLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Code));
+		Hyperlink codeLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_CODE));
 		codeLink.setPadding(Insets.EMPTY);
 		codeLink.setFocusTraversable(false);
 		codeLink.setOnAction(e -> {

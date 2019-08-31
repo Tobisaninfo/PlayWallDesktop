@@ -78,12 +78,11 @@ public class VideoContent extends PadContent implements Pauseable, Durationable,
 	public boolean stop() {
 		PadSettings padSettings = getPad().getPadSettings();
 
-		if (padSettings.getCustomSettings().containsKey(VIDEO_LAST_FRAME) && !holdLastFrame && getPad().isEof()) {
-			if ((boolean) padSettings.getCustomSettings().get(VIDEO_LAST_FRAME)) {
-				getPad().setStatus(PadStatus.PAUSE);
-				holdLastFrame = true;
-				return false;
-			}
+		if (padSettings.getCustomSettings().containsKey(VIDEO_LAST_FRAME) && !holdLastFrame && getPad().isEof() &&
+				(boolean) padSettings.getCustomSettings().get(VIDEO_LAST_FRAME)) {
+			getPad().setStatus(PadStatus.PAUSE);
+			holdLastFrame = true;
+			return false;
 		}
 		player.stop();
 		MediaPluginImpl.getInstance().getVideoViewController().setMediaPlayer(null, null);

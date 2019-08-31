@@ -208,7 +208,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 		// File Extension
-		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
+		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA),
 				registry.getSupportedFileTypes());
 		chooser.getExtensionFilters().add(extensionFilter);
 

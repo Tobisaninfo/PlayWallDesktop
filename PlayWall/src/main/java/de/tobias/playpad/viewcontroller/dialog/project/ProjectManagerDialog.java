@@ -74,7 +74,7 @@ public class ProjectManagerDialog extends NVC {
 
 	@Override
 	public void init() {
-		projectList.setPlaceholder(new Label(Localization.getString(Strings.UI_Placeholder_Project)));
+		projectList.setPlaceholder(new Label(Localization.getString(Strings.UI_PLACEHOLDER_PROJECT)));
 		projectList.setCellFactory(list -> new ProjectCell(false));
 
 		// Set Items
@@ -144,7 +144,7 @@ public class ProjectManagerDialog extends NVC {
 				try {
 					ProjectReferenceManager.setSync(reference, newValue);
 				} catch (ProjectNotFoundException | ProfileNotFoundException | DocumentException | IOException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_Sync_Change, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SYNC_CHANGE, e.getLocalizedMessage()));
 					Logger.error(e);
 				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
@@ -171,7 +171,7 @@ public class ProjectManagerDialog extends NVC {
 		stage.setMinHeight(540);
 		stage.setWidth(600);
 		stage.setHeight(540);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_TITLE));
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
@@ -198,7 +198,7 @@ public class ProjectManagerDialog extends NVC {
 	private void projectImportHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 
-		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
 		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
@@ -246,7 +246,7 @@ public class ProjectManagerDialog extends NVC {
 					ProjectReferenceManager.removeProject(reference);
 					projectList.getItems().remove(reference);
 				} catch (IOException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_DELETE, e.getLocalizedMessage()));
 					Logger.error(e);
 				}
 			});

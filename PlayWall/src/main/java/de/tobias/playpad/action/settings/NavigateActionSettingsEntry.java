@@ -24,7 +24,7 @@ public class NavigateActionSettingsEntry implements ActionSettingsEntry, ActionS
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.Action_Navigate_toString, NavigateAction.NavigationType.valueOf(action).toString());
+		return Localization.getString(Strings.ACTION_NAVIGATE_TO_STRING, NavigateAction.NavigationType.valueOf(action).toString());
 	}
 
 	@Override

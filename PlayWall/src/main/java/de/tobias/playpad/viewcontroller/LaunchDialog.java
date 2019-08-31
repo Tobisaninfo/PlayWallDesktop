@@ -97,14 +97,14 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		App app = ApplicationUtils.getApplication();
 
 		// Setup launchscreen labels and image
-		infoLabel.setText(getString(Strings.UI_Dialog_Launch_Info, app.getInfo().getName(), app.getInfo().getVersion()));
+		infoLabel.setText(getString(Strings.UI_DIALOG_LAUNCH_INFO, app.getInfo().getName(), app.getInfo().getVersion()));
 		imageView.setImage(new Image(IMAGE));
 
 		openButton.setDisable(true);
 		deleteButton.setDisable(true);
 
 		// Load project to list
-		projectListView.setPlaceholder(new Label(getString(Strings.UI_Placeholder_Project)));
+		projectListView.setPlaceholder(new Label(getString(Strings.UI_PLACEHOLDER_PROJECT)));
 		projectListView.setId("list");
 		projectListView.setCellFactory(list -> new ProjectCell(true));
 
@@ -138,7 +138,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	public void initStage(Stage stage) {
 		PlayPadPlugin.styleable().applyStyle(stage);
 
-		stage.setTitle(getString(Strings.UI_Dialog_Launch_Title));
+		stage.setTitle(getString(Strings.UI_DIALOG_LAUNCH_TITLE));
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setResizable(false);
@@ -158,15 +158,15 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		switch (server.getConnectionState()) {
 			case CONNECTED:
 				cloudIcon.setColor(Color.BLACK);
-				cloudLabel.setText(Localization.getString(Strings.Server_Connected));
+				cloudLabel.setText(Localization.getString(Strings.SERVER_CONNECTED));
 				break;
 			case CONNECTION_LOST:
 				cloudIcon.setColor(Color.GRAY);
-				cloudLabel.setText(Localization.getString(Strings.Server_Connection_Lost));
+				cloudLabel.setText(Localization.getString(Strings.SERVER_CONNECTION_LOST));
 				break;
 			case DISCONNECTED:
 				cloudIcon.setColor(Color.RED);
-				cloudLabel.setText(Localization.getString(Strings.Server_Disconnected));
+				cloudLabel.setText(Localization.getString(Strings.SERVER_DISCONNECTED));
 				break;
 		}
 	}
@@ -181,7 +181,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 	void importProjectButtonHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 
-		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
+		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
 		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
@@ -204,8 +204,8 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			List<ProjectReference> projects = ConverterV6.loadProjectReferences();
 			ChoiceDialog<ProjectReference> dialog = new ChoiceDialog<>(null, projects);
 
-			dialog.setHeaderText(Localization.getString(Strings.UI_Dialog_Project_Convert_Header));
-			dialog.setContentText(Localization.getString(Strings.UI_Dialog_Project_Convert_Content));
+			dialog.setHeaderText(Localization.getString(Strings.UI_DIALOG_PROJECT_CONVERT_HEADER));
+			dialog.setContentText(Localization.getString(Strings.UI_DIALOG_PROJECT_CONVERT_CONTENT));
 
 			dialog.initOwner(getContainingWindow());
 			dialog.initModality(Modality.WINDOW_MODAL);
@@ -220,12 +220,12 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 					setProjectListValues();
 				} catch (IOException | DocumentException e) {
 					Logger.error(e);
-					showErrorMessage(Localization.getString(Strings.Error_Project_Convert));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_CONVERT));
 				}
 			});
 		} catch (IOException | DocumentException e) {
 			Logger.error(e);
-			showErrorMessage(Localization.getString(Strings.Error_Standard_Gen));
+			showErrorMessage(Localization.getString(Strings.ERROR_STANDARD_GEN));
 		}
 	}
 
@@ -240,7 +240,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			ProjectReference ref = getSelectedProject();
 
 			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setContentText(getString(Strings.UI_Dialog_ProjectManager_Delete_Content, ref));
+			alert.setContentText(getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_CONTENT, ref));
 
 			Stage dialog = (Stage) alert.getDialogPane().getScene().getWindow();
 			dialog.getIcons().add(PlayPadPlugin.getInstance().getIcon());
@@ -253,7 +253,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 					ProjectReferenceManager.removeProject(ref);
 					projectListView.getItems().remove(ref); // VIEW
 				} catch (IOException e) {
-					showErrorMessage(getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
+					showErrorMessage(getString(Strings.ERROR_PROJECT_DELETE, e.getLocalizedMessage()));
 				}
 			});
 		}
@@ -295,7 +295,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 
 		// Es fehlen Module
 		if (!ref.getMissedModules().isEmpty()) {
-			showInfoMessage(Localization.getString(Strings.Error_Plugins_Missing));
+			showInfoMessage(Localization.getString(Strings.ERROR_PLUGINS_MISSING));
 
 			ModernPluginViewController pluginViewController = new ModernPluginViewController(getContainingWindow(), ref.getMissedModules());
 			pluginViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
@@ -311,7 +311,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			Logger.error(e);
-			showErrorMessage(getString(Strings.Error_Profile_NotFound, ref.getProfileReference(), e.getLocalizedMessage()));
+			showErrorMessage(getString(Strings.ERROR_PROFILE_NOT_FOUND, ref.getProfileReference(), e.getLocalizedMessage()));
 
 			// Choose new profile
 			ProfileReference profile = null;
@@ -322,10 +322,10 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			ref.setProfileReference(profile);
 		} catch (ProjectNotFoundException e) {
 			Logger.error(e);
-			showErrorMessage(getString(Strings.Error_Project_NotFound, ref, e.getLocalizedMessage()));
+			showErrorMessage(getString(Strings.ERROR_PROJECT_NOT_FOUND, ref, e.getLocalizedMessage()));
 		} catch (Exception e) {
 			Logger.error(e);
-			showErrorMessage(getString(Strings.Error_Project_Open, ref, e.getLocalizedMessage()));
+			showErrorMessage(getString(Strings.ERROR_PROJECT_OPEN, ref, e.getLocalizedMessage()));
 		}
 	}
 }

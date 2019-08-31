@@ -23,8 +23,8 @@ public class KeysConflictDialog extends Alert {
 				keys.append("\n");
 			}
 		}
-		setHeaderText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Header));
-		setContentText(Localization.getString(Strings.UI_Settings_Keys_Conflict_Content, keys.toString()));
+		setHeaderText(Localization.getString(Strings.UI_SETTINGS_KEYS_CONFLICT_HEADER));
+		setContentText(Localization.getString(Strings.UI_SETTINGS_KEYS_CONFLICT_CONTENT, keys.toString()));
 
 		Stage dialogStage = (Stage) getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());

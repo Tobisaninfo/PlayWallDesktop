@@ -38,13 +38,13 @@ public class ProjectDuplicateDialog extends TextInputDialog {
 			}
 		});
 
-		setContentText(Localization.getString(Strings.UI_Dialog_NewProject_Content));
+		setContentText(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_CONTENT));
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
 				ref = ProjectReferenceManager.duplicate(cloneableProject, name);
 			} catch (Exception e) {
-				parent.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));
+				parent.showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SAVE, name, e.getMessage()));
 				Logger.error(e);
 			}
 		});

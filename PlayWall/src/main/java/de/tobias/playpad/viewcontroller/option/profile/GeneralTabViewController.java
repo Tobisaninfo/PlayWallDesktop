@@ -117,18 +117,18 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 					}
 				}
 			}
-			alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_CacheDelete, deleteFiles));
+			alertable.showInfoMessage(Localization.getString(Strings.INFO_SETTINGS_CACHE_DELETE, deleteFiles));
 
 			calcCacheSize();
 		} catch (IOException e) {
 			Logger.error(e);
-			showErrorMessage(Localization.getString(Strings.Error_Settings_CacheClear, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_SETTINGS_CACHE_CLEAR, e.getLocalizedMessage()));
 		}
 	}
 
 	@FXML
 	private void resetDialogs(ActionEvent event) {
-		alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_ResetWarning));
+		alertable.showInfoMessage(Localization.getString(Strings.INFO_SETTINGS_RESET_WARNING));
 	}
 
 	private void calcCacheSize() {
@@ -144,10 +144,10 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 				size += Files.size(item);
 			}
 			directoryStream.close();
-			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.convertBytesToAppropriateFormat(size)));
+			cacheSizeLabel.setText(Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_CACHE_SIZE, NumberUtils.convertBytesToAppropriateFormat(size)));
 		} catch (IOException e) {
 			Logger.error(e);
-			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()));
+			alertable.showErrorMessage(Localization.getString(Strings.ERROR_SETTINGS_CACHE_SIZE, e.getMessage()));
 		}
 	}
 
@@ -206,6 +206,6 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Gen_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_TITLE);
 	}
 }
