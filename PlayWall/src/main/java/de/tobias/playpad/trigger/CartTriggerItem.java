@@ -21,7 +21,7 @@ public class CartTriggerItem extends TriggerItem {
 
 	private String type;
 
-	public CartTriggerItem(String type) {
+	CartTriggerItem(String type) {
 		super();
 		this.type = type;
 		newStatus = PadStatus.PLAY;
@@ -98,11 +98,8 @@ public class CartTriggerItem extends TriggerItem {
 		if (element.attributeValue(ALLCARTS_ATTR) != null)
 			setAllCarts(Boolean.parseBoolean(element.attributeValue(ALLCARTS_ATTR)));
 
-		for (Object cartObj : element.elements(CART_ELEMENT)) {
-			if (cartObj instanceof Element) {
-				Element cartElement = (Element) cartObj;
-				uuids.add(UUID.fromString(cartElement.getStringValue()));
-			}
+		for (Element cartElement : element.elements(CART_ELEMENT)) {
+			uuids.add(UUID.fromString(cartElement.getStringValue()));
 		}
 	}
 

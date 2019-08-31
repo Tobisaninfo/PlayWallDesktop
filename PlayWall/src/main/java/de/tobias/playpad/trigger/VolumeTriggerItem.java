@@ -23,7 +23,7 @@ public class VolumeTriggerItem extends TriggerItem {
 
 	private String type;
 
-	public VolumeTriggerItem(String type) {
+	VolumeTriggerItem(String type) {
 		super();
 		this.type = type;
 		this.uuids = new UniqList<>();

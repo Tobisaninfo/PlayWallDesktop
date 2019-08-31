@@ -88,36 +88,33 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 			Document document = reader.read(url);
 
 			Element rootElement = document.getRootElement();
-			for (Object obj : rootElement.elements("Component")) {
-				if (obj instanceof Element) {
-					Element element = (Element) obj;
-					String type = element.attributeValue("id");
+			for (Element element : rootElement.elements("Component")) {
+				String type = element.attributeValue("id");
 
-					// Find the class of the type
-					@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue().trim());
-					Constructor<C> constructor = clazz.getConstructor(String.class);
-					C factory = constructor.newInstance(type);
+				// Find the class of the type
+				@SuppressWarnings("unchecked") Class<C> clazz = (Class<C>) loader.loadClass(element.getStringValue().trim());
+				Constructor<C> constructor = clazz.getConstructor(String.class);
+				C factory = constructor.newInstance(type);
 
-					// setup Displayable
-					if (element.attributeValue("name") != null) {
-						String name = element.attributeValue("name");
-						String localizedName = resourceBundle.getString(name);
-						factory.setName(localizedName);
-					}
-
-					if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
-						String icon = element.attributeValue("icon");
-						Class iconClass = Class.forName(element.attributeValue("class"));
-						int size = Integer.parseInt(element.attributeValue("size"));
-						Object iconObj = Enum.valueOf(iconClass, icon);
-						if (iconObj instanceof FontIconType) {
-							FontIconType iconType = (FontIconType) iconObj;
-							factory.setGraphics(iconType, size);
-						}
-					}
-
-					registerComponent(factory, module);
+				// setup Displayable
+				if (element.attributeValue("name") != null) {
+					String name = element.attributeValue("name");
+					String localizedName = resourceBundle.getString(name);
+					factory.setName(localizedName);
 				}
+
+				if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
+					String icon = element.attributeValue("icon");
+					Class iconClass = Class.forName(element.attributeValue("class"));
+					int size = Integer.parseInt(element.attributeValue("size"));
+					Object iconObj = Enum.valueOf(iconClass, icon);
+					if (iconObj instanceof FontIconType) {
+						FontIconType iconType = (FontIconType) iconObj;
+						factory.setGraphics(iconType, size);
+					}
+				}
+
+				registerComponent(factory, module);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

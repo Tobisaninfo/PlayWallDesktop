@@ -31,6 +31,8 @@ public class PadSettingsSerializer {
 	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
 	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
+	private static final String TRIGGERS_ELEMENT = "Triggers";
+	private static final String TRIGGER_ELEMENT = "Trigger";
 
 	public PadSettings loadElement(Element settingsElement, Pad pad) {
 		PadSettings padSettings;
@@ -79,29 +81,23 @@ public class PadSettingsSerializer {
 
 		Element userInfoElement = settingsElement.element(CUSTOM_SETTINGS_ELEMENT);
 		if (userInfoElement != null) {
-			for (Object object : userInfoElement.elements()) {
-				if (object instanceof Element) {
-					Element item = (Element) object;
-					String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
-					Object data = UserDefaults.loadElement(item);
-					padSettings.getCustomSettings().put(key, data);
-				}
+			for (Element item : userInfoElement.elements()) {
+				String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
+				Object data = UserDefaults.loadElement(item);
+				padSettings.getCustomSettings().put(key, data);
 			}
 		}
 
 		// Trigger
-		Element triggersElement = settingsElement.element("Triggers");
+		Element triggersElement = settingsElement.element(TRIGGERS_ELEMENT);
 		if (triggersElement != null) {
-			for (Object triggerObj : triggersElement.elements("Trigger")) {
-				if (triggerObj instanceof Element) {
-					Element triggerElement = (Element) triggerObj;
-					Trigger trigger = new Trigger();
-					trigger.load(triggerElement);
-					padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
-				}
+			for (Element triggerElement : triggersElement.elements(TRIGGER_ELEMENT)) {
+				Trigger trigger = new Trigger();
+				trigger.load(triggerElement);
+				padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
 			}
 		}
-		padSettings.updateTrigger(); // Damit alle Points da sind
+		padSettings.updateTrigger(); // Add missing trigger points
 
 		return padSettings;
 	}
@@ -119,7 +115,7 @@ public class PadSettingsSerializer {
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
 
 		if (padSettings.getCueIn() != null)
-		settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
+			settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
 
 		// Layout
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
@@ -136,10 +132,10 @@ public class PadSettingsSerializer {
 		}
 
 		// Trigger
-		Element triggersElement = settingsElement.addElement("Triggers");
+		Element triggersElement = settingsElement.addElement(TRIGGERS_ELEMENT);
 		for (TriggerPoint point : padSettings.getTriggers().keySet()) {
 			Trigger trigger = padSettings.getTriggers().get(point);
-			Element triggerElement = triggersElement.addElement("Trigger");
+			Element triggerElement = triggersElement.addElement(TRIGGER_ELEMENT);
 			trigger.save(triggerElement);
 		}
 	}

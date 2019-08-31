@@ -62,30 +62,27 @@ public class PadSerializer implements XMLSerializer<Pad>, XMLDeserializer<Pad> {
 			pad.setContentType(contentType);
 
 			Element pathsElement = contentElement.element(CONTENT_PATHS_ELEMENT);
-			for (Object obj : pathsElement.elements(CONTENT_PATH_ELEMENT)) {
-				if (obj instanceof Element) {
-					Element pathElement = (Element) obj;
-					UUID uuid = UUID.fromString(pathElement.attributeValue(CONTENT_PATH_UUID));
-					Path path = null;
-					String filename = null;
-					if (pathElement.attributeValue(CONTENT_PATH_PATH) != null) {
-						path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
-						filename = path.getFileName().toString();
-					}
-
-					if (pathElement.attributeValue(CONTENT_PATH_FILENAME) != null) {
-						filename = pathElement.attributeValue(CONTENT_PATH_FILENAME);
-					}
-
-					MediaPath mediaPath = new MediaPath(uuid, filename, pad);
-
-					// Convert old projects to mediapool
-					if (path != null) {
-						MediaPool.getInstance().create(mediaPath, path);
-					}
-
-					pad.getPaths().add(mediaPath);
+			for (Element pathElement : pathsElement.elements(CONTENT_PATH_ELEMENT)) {
+				UUID uuid = UUID.fromString(pathElement.attributeValue(CONTENT_PATH_UUID));
+				Path path = null;
+				String filename = null;
+				if (pathElement.attributeValue(CONTENT_PATH_PATH) != null) {
+					path = Paths.get(pathElement.attributeValue(CONTENT_PATH_PATH));
+					filename = path.getFileName().toString();
 				}
+
+				if (pathElement.attributeValue(CONTENT_PATH_FILENAME) != null) {
+					filename = pathElement.attributeValue(CONTENT_PATH_FILENAME);
+				}
+
+				MediaPath mediaPath = new MediaPath(uuid, filename, pad);
+
+				// Convert old projects to mediapool
+				if (path != null) {
+					MediaPool.getInstance().create(mediaPath, path);
+				}
+
+				pad.getPaths().add(mediaPath);
 			}
 		}
 

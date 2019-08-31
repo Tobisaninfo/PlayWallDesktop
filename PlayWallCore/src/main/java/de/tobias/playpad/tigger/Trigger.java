@@ -71,23 +71,20 @@ public class Trigger {
 		try {
 			triggerPoint = TriggerPoint.valueOf(element.attributeValue(POINT_ATTR));
 		} catch (Exception e) {
+			Logger.error(e);
 		}
 
-		for (Object itemObj : element.elements(ITEM_ELEMENT)) {
-			if (itemObj instanceof Element) {
-				Element itemElement = (Element) itemObj;
-				String type = itemElement.attributeValue(TYPE_ATTR);
+		for (Element itemElement : element.elements(ITEM_ELEMENT)) {
+			String type = itemElement.attributeValue(TYPE_ATTR);
 
-				Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistries().getTriggerItems();
-				try {
-					TriggerItemFactory connect = registry.getFactory(type);
-					TriggerItem item = connect.newInstance(this);
-					item.load(itemElement);
-					items.add(item);
-				} catch (NoSuchComponentException e) {
-					Logger.error(e);
-					// TODO Error Handling
-				}
+			Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistries().getTriggerItems();
+			try {
+				TriggerItemFactory connect = registry.getFactory(type);
+				TriggerItem item = connect.newInstance(this);
+				item.load(itemElement);
+				items.add(item);
+			} catch (NoSuchComponentException e) {
+				Logger.error(e);
 			}
 		}
 	}

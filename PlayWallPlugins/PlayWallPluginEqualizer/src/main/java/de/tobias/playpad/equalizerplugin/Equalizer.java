@@ -106,8 +106,7 @@ public class Equalizer {
 			Document document = reader.read(Files.newInputStream(path));
 
 			Element root = document.getRootElement();
-			for (Object bandObj : root.elements(BAND_ELEMENT)) {
-				Element element = (Element) bandObj;
+			for (Element element : root.elements(BAND_ELEMENT)) {
 				int bandwidth = Integer.parseInt(element.attribute(WIDTH_ATTR).getValue());
 				double gain = Double.parseDouble(element.getStringValue());
 				instance.setGain(bandwidth, gain);
