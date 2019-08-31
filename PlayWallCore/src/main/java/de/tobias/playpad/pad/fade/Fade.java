@@ -24,8 +24,8 @@ public class Fade {
 		fade(0, 1, duration, null);
 	}
 
-	public void fadeIn(Duration duration, Runnable onFinsih) {
-		fade(0, 1, duration, onFinsih);
+	public void fadeIn(Duration duration, Runnable onFinish) {
+		fade(0, 1, duration, onFinish);
 	}
 
 	public void fadeOut(Duration duration) {
@@ -52,7 +52,6 @@ public class Fade {
 		}
 
 		currentFadeTransition = new Transition() {
-
 			{
 				setCycleDuration(duration);
 			}
