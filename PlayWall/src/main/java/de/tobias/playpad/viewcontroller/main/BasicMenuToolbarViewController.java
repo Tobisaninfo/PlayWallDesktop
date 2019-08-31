@@ -7,6 +7,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -60,6 +61,16 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 			volumeSlider.setValue(volumeSlider.getValue() - ev.getDeltaY() * 0.001);
 			volumeSlider.setValue(volumeSlider.getValue() + ev.getDeltaX() * 0.001);
 		});
+
+		volumeSlider.styleProperty().bind(Bindings.createStringBinding(() -> {
+
+			double min = volumeSlider.getMin();
+			double max = volumeSlider.getMax();
+			double value = volumeSlider.getValue();
+
+			return createSliderStyle(min, max, value);
+
+		}, volumeSlider.valueProperty()));
 
 		FontIcon fontIcon = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
 		fontIcon.getStyleClass().add("pad-notfound");

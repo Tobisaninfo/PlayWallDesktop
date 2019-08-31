@@ -81,9 +81,6 @@ import java.util.Optional;
 public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
 		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
 
-	// TODO Page Buttons gleicher Margin wie pads
-
-	// meuBar
 	@FXML
 	private MenuBar menuBar;
 
@@ -163,7 +160,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		this.connect = connect;
 		this.connect.editModeProperty().addListener(this);
 
-		// Ist Zustand herstellen, indem Listener mit dem Initialen Wert bekannt gemacht wird.
 		changed(connect.editModeProperty(), null, connect.getEditMode());
 
 		initLayoutMenu();
@@ -228,15 +224,6 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		iconHbox.getChildren().add(editButtons);
 
 		volumeSlider.focusedProperty().addListener(i -> mainViewController.getParent().requestFocus());
-		volumeSlider.styleProperty().bind(Bindings.createStringBinding(() -> {
-
-			double min = volumeSlider.getMin();
-			double max = volumeSlider.getMax();
-			double value = volumeSlider.getValue();
-
-			return createSliderStyle(min, max, value);
-
-		}, volumeSlider.valueProperty()));
 	}
 
 	// Desktop Edit Mode Change Listener --> Update Button
@@ -795,11 +782,11 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		if (event.getSource() instanceof Button) {
 			handlePageButton(event);
 		} else if (event.getSource() instanceof MenuItem) {
-			handleMenuItem(event);
+			handleLastOpenProjectMenuItems(event);
 		}
 	}
 
-	private void handleMenuItem(ActionEvent event) {
+	private void handleLastOpenProjectMenuItems(ActionEvent event) {
 		doAction(() ->
 		{
 			// TODO Rewrite mit openProject von BasicMenuToolbarViewController
