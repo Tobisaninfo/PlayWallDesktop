@@ -17,6 +17,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -42,7 +43,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.IOException;
@@ -189,7 +189,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
 				Optional<ProjectReference> importedProject = dialog.showAndWait();
 				importedProject.ifPresent(projectListView.getItems()::add);
-			} catch (IOException | DocumentException e) {
+			} catch (IOException | ProjectImporter.ProjectImportCorruptedException e) {
 				Logger.error(e);
 			}
 		}

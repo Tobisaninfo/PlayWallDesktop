@@ -12,6 +12,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.view.PseudoClasses;
@@ -208,7 +209,7 @@ public class ProjectManagerDialog extends NVC {
 				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
 				Optional<ProjectReference> importedProject = dialog.showAndWait();
 				importedProject.ifPresent(projectList.getItems()::add);
-			} catch (IOException | DocumentException e) {
+			} catch (IOException | ProjectImporter.ProjectImportCorruptedException e) {
 				Logger.error(e);
 			}
 		}

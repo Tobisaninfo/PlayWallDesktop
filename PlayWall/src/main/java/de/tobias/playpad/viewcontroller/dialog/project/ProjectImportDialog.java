@@ -7,7 +7,6 @@ import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -70,7 +69,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 	private ProjectImporter importer;
 	private Path mediaPath;
 
-	public ProjectImportDialog(Path path, Window owner) throws IOException, DocumentException {
+	public ProjectImportDialog(Path path, Window owner) throws IOException, ProjectImporter.ProjectImportCorruptedException {
 		load("view/dialog/project", "ImportDialog", Localization.getBundle());
 		applyViewControllerToStage().initOwner(owner);
 
@@ -142,9 +141,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyle(stage);
-		}
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	@Override
@@ -190,7 +187,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 			canceled = false;
 
 			getStageContainer().ifPresent(NVCStage::close);
-		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
+		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException | ProjectImporter.ProjectImportCorruptedException e) {
 			Logger.error(e);
 			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_EXPORT));
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {

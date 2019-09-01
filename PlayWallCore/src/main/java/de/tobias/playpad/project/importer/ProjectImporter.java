@@ -26,12 +26,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Created by tobias on 11.03.17.
  */
 public class ProjectImporter {
+
+	public static class ProjectImportCorruptedException extends Exception {
+
+	}
 
 	private ProjectImporterDelegate delegate;
 
@@ -48,55 +55,103 @@ public class ProjectImporter {
 
 	private ProjectReference importedProjectReference;
 
-	public ProjectImporter(Path zipFile, ProjectImporterDelegate delegate) throws IOException, DocumentException {
+	public ProjectImporter(Path zipFile, ProjectImporterDelegate delegate) throws IOException, ProjectImportCorruptedException {
 		this.delegate = delegate;
 
 		loadZipFile(zipFile);
 	}
 
-	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
+	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProjectImportCorruptedException {
 		if (includeProfile && delegate.shouldImportProfile()) {
 			importProfile();
 		}
 
 		importedProjectReference = importProjectFile();
+		replaceMediaPathIds(loadMediaPaths());
 
 		if (includeMedia && delegate.shouldImportMedia()) {
 			importMedia();
 		}
 	}
 
-	private void loadZipFile(Path zipFile) throws IOException, DocumentException {
+	private void loadZipFile(Path zipFile) throws IOException, ProjectImportCorruptedException {
 		zip = new ZipFile(zipFile, ZipFile.FileMode.READ);
 
-		// Load Zip informations
+		// Load Zip meta information
 		InputStream infoInputStream = zip.inputStream("info.xml");
 		if (infoInputStream == null) {
-			// TODO Throw exception
+			throw new ProjectImportCorruptedException();
 		}
 
+		try {
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(infoInputStream);
+			Element rootElement = document.getRootElement();
 
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(infoInputStream);
-		Element rootElement = document.getRootElement();
+			Element projectElement = rootElement.element("Project");
+			if (projectElement != null) {
+				projectUUID = UUID.fromString(projectElement.attributeValue("uuid"));
+				projectName = projectElement.attributeValue("name");
+			}
 
-		Element projectElement = rootElement.element("Project");
-		if (projectElement != null) {
-			projectUUID = UUID.fromString(projectElement.attributeValue("uuid"));
-			projectName = projectElement.attributeValue("name");
+			Element profileElement = rootElement.element("Profile");
+			if (profileElement != null) {
+				includeProfile = Boolean.parseBoolean(profileElement.attributeValue("export"));
+				profileUUID = UUID.fromString(profileElement.attributeValue("uuid"));
+				profileName = profileElement.attributeValue("name");
+			}
+
+			Element mediaElement = rootElement.element("Media");
+			if (mediaElement != null) {
+				includeMedia = Boolean.parseBoolean(mediaElement.attributeValue("export"));
+			}
+		} catch (DocumentException e) {
+			throw new ProjectImportCorruptedException();
+		}
+	}
+
+	private List<MediaPath> loadMediaPaths() throws IOException, ProjectImportCorruptedException {
+		// Load Zip meta information
+		InputStream infoInputStream = zip.inputStream("media.xml");
+		if (infoInputStream == null) {
+			throw new ProjectImportCorruptedException();
 		}
 
-		Element profileElement = rootElement.element("Profile");
-		if (profileElement != null) {
-			includeProfile = Boolean.parseBoolean(profileElement.attributeValue("export"));
-			profileUUID = UUID.fromString(profileElement.attributeValue("uuid"));
-			profileName = profileElement.attributeValue("name");
-		}
+		try {
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(infoInputStream);
+			Element rootElement = document.getRootElement();
 
-		Element mediaElement = rootElement.element("Media");
-		if (mediaElement != null) {
-			includeMedia = Boolean.parseBoolean(mediaElement.attributeValue("export"));
+			List<MediaPath> mediaPathList = new ArrayList<>();
+
+			for (Element pathElement : rootElement.elements("Path")) {
+				UUID uuid = UUID.fromString(pathElement.attributeValue("uuid"));
+				Path path = Paths.get(pathElement.attributeValue("path"));
+
+				MediaPath mediaPath = new MediaPath(uuid, path, null);
+				mediaPathList.add(mediaPath);
+			}
+			return mediaPathList;
+		} catch (DocumentException e) {
+			throw new ProjectImportCorruptedException();
 		}
+	}
+
+	private void replaceMediaPathIds(List<MediaPath> mediaPaths) throws ProjectNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProfileNotFoundException, DocumentException, IOException {
+		ProjectLoader loader = new ProjectLoader(importedProjectReference);
+		loader.setLoadMedia(false);
+		Project project = loader.load();
+
+		for (Pad pad : project.getPads()) {
+			pad.getPaths().forEach(oldMediaPath -> find(mediaPaths, oldMediaPath.getId()).ifPresent(result -> {
+				pad.removePath(oldMediaPath);
+				pad.setPath(result.getPath());
+			}));
+		}
+	}
+
+	private Optional<MediaPath> find(List<MediaPath> mediaPaths, UUID id) {
+		return mediaPaths.parallelStream().filter(i -> i.getId().equals(id)).findFirst();
 	}
 
 	private ProjectReference importProjectFile() throws IOException {
@@ -148,7 +203,6 @@ public class ProjectImporter {
 		Path folder = delegate.getMediaPath();
 
 		ProjectLoader loader = new ProjectLoader(importedProjectReference);
-		loader.setLoadMedia(false);
 		loader.setLoadMedia(false);
 		Project project = loader.load();
 
