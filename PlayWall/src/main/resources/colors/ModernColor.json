@@ -4,8 +4,8 @@
         "colors": {
             "hi": "#ef9a9a",
             "low": "#ef5350",
-            "font": "#ffffff",
-            "button": "#ffffff",
+            "font": "#000000",
+            "button": "#000000",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -17,8 +17,8 @@
         "colors": {
             "hi": "#ef5350",
             "low": "#e53935",
-            "font": "#ffffff",
-            "button": "#ffffff",
+            "font": "#000000",
+            "button": "#000000",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -82,8 +82,8 @@
         "colors": {
             "hi": "#f48fb1",
             "low": "#ec407a",
-            "font": "#ffffff",
-            "button": "#ffffff",
+            "font": "#000000",
+            "button": "#000000",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -95,8 +95,8 @@
         "colors": {
             "hi": "#ec407a",
             "low": "#d81b60",
-            "font": "#ffffff",
-            "button": "#ffffff",
+            "font": "#000000",
+            "button": "#000000",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -173,8 +173,8 @@
         "colors": {
             "hi": "#26c6da",
             "low": "#00acc1",
-            "font": "#000000",
-            "button": "#000000",
+            "font": "#ffffff",
+            "button": "#ffffff",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -186,8 +186,8 @@
         "colors": {
             "hi": "#00acc1",
             "low": "#00838f",
-            "font": "#000000",
-            "button": "#000000",
+            "font": "#ffffff",
+            "button": "#ffffff",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -212,8 +212,8 @@
         "colors": {
             "hi": "#42a5f5",
             "low": "#1e88e5",
-            "font": "#000000",
-            "button": "#000000",
+            "font": "#ffffff",
+            "button": "#ffffff",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -251,8 +251,8 @@
         "colors": {
             "hi": "#9ccc65",
             "low": "#7cb342",
-            "font": "#000000",
-            "button": "#000000",
+            "font": "#ffffff",
+            "button": "#ffffff",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -264,8 +264,8 @@
         "colors": {
             "hi": "#7cb342",
             "low": "#558b2f",
-            "font": "#000000",
-            "button": "#000000",
+            "font": "#ffffff",
+            "button": "#ffffff",
             "playbar": {
                 "background": "#ffffff",
                 "track": "#333333"
@@ -301,7 +301,7 @@
     {
         "name": "LIME3",
         "colors": {
-            "hi": "##c0ca33",
+            "hi": "#c0ca33",
             "low": "#9e9d24",
             "font": "#000000",
             "button": "#000000",
@@ -319,8 +319,8 @@
             "font": "#000000",
             "button": "#000000",
             "playbar": {
-                "background": "#ffffff",
-                "track": "#333333"
+                "background": "#333333",
+                "track": "#FFFFFF"
             }
         }
     },
@@ -332,15 +332,15 @@
             "font": "#000000",
             "button": "#000000",
             "playbar": {
-                "background": "#ffffff",
-                "track": "#333333"
+                "background": "#333333",
+                "track": "#FFFFFF"
             }
         }
     },
     {
         "name": "YELLOW3",
         "colors": {
-            "hi": "##fdd835",
+            "hi": "#fdd835",
             "low": "#f9a825",
             "font": "#000000",
             "button": "#000000",
@@ -397,8 +397,8 @@
             "font": "#000000",
             "button": "#000000",
             "playbar": {
-                "background": "#ffffff",
-                "track": "#333333"
+                "background": "#333333",
+                "track": "#FFFFFF"
             }
         }
     },
@@ -410,8 +410,8 @@
             "font": "#000000",
             "button": "#000000",
             "playbar": {
-                "background": "#000000",
-                "track": "#FFFFFF"
+                "background": "#ffffff",
+                "track": "#333333"
             }
         }
     },
@@ -423,8 +423,8 @@
             "font": "#FFFFFF",
             "button": "#FFFFFF",
             "playbar": {
-                "background": "#000000",
-                "track": "#FFFFFF"
+                "background": "#ffffff",
+                "track": "#333333"
             }
         }
     },
@@ -436,8 +436,8 @@
             "font": "#FFFFFF",
             "button": "#FFFFFF",
             "playbar": {
-                "background": "#000000",
-                "track": "#FFFFFF"
+                "background": "#ffffff",
+                "track": "#333333"
             }
         }
     },
@@ -449,8 +449,8 @@
             "font": "#FFFFFF",
             "button": "#FFFFFF",
             "playbar": {
-                "background": "#888888",
-                "track": "#FFFFFF"
+                "background": "#ffffff",
+                "track": "#333333"
             }
         }
     },
@@ -462,8 +462,8 @@
             "font": "#FFFFFF",
             "button": "#FFFFFF",
             "playbar": {
-                "background": "#888888",
-                "track": "#FFFFFF"
+                "background": "#ffffff",
+                "track": "#333333"
             }
         }
     }
