@@ -1,4 +1,4 @@
-package de.tobias.playpad.viewcontroller.cell;
+package de.tobias.playpad.viewcontroller.cell.path;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;

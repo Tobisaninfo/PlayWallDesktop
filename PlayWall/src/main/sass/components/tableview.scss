@@ -21,6 +21,10 @@
 	-fx-text-fill: $component-text-color;
 }
 
+.table-cell:deactivated {
+	-fx-text-fill: $component-text-color-deactivated !important;
+}
+
 .table-view > .virtual-flow > .clipped-container > .sheet > .table-row-cell .table-cell:selected {
 	-fx-background-color: -fx-table-cell-border-color, -fx-background;
 	-fx-background-insets: 0, 0 0 1 0;

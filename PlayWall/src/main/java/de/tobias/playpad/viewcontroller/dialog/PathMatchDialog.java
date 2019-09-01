@@ -14,7 +14,8 @@ import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.viewcontroller.cell.PathMatchActionCell;
+import de.tobias.playpad.viewcontroller.cell.path.PathMatchActionCell;
+import de.tobias.playpad.viewcontroller.cell.path.PathMatchPathCell;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -60,7 +61,7 @@ public class PathMatchDialog extends NVC {
 			});
 		}
 
-		MediaPath getMediaPath() {
+		public MediaPath getMediaPath() {
 			return mediaPath;
 		}
 
@@ -73,7 +74,7 @@ public class PathMatchDialog extends NVC {
 			setStatusLabel();
 		}
 
-		ReadOnlyObjectProperty<Path> localPathProperty() {
+		public ReadOnlyObjectProperty<Path> localPathProperty() {
 			return localPath;
 		}
 
@@ -117,7 +118,7 @@ public class PathMatchDialog extends NVC {
 	@FXML
 	private TableColumn<TempMediaPath, String> filenameColumn;
 	@FXML
-	private TableColumn<TempMediaPath, Path> localPathColumn;
+	private TableColumn<TempMediaPath, TempMediaPath> localPathColumn;
 	@FXML
 	private TableColumn<TempMediaPath, TempMediaPath> actionColumn;
 
@@ -132,6 +133,7 @@ public class PathMatchDialog extends NVC {
 	private Project project;
 	private List<TempMediaPath> missingMediaPaths;
 
+	// TODO Localize fxml
 	public PathMatchDialog(Project project, Window owner) {
 		load("view/dialog", "NotFoundDialog", Localization.getBundle());
 
@@ -171,11 +173,12 @@ public class PathMatchDialog extends NVC {
 		table.setPlaceholder(new Label());
 
 		selectColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+		localPathColumn.setCellFactory(param -> new PathMatchPathCell());
 		actionColumn.setCellFactory(param -> new PathMatchActionCell(this));
 
 		selectColumn.setCellValueFactory(param -> param.getValue().selectedProperty());
 		filenameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMediaPath().getFileName()));
-		localPathColumn.setCellValueFactory(param -> param.getValue().localPathProperty());
+		localPathColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
 		actionColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue()));
 	}
 
@@ -183,7 +186,7 @@ public class PathMatchDialog extends NVC {
 	public void initStage(Stage stage) {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setMinWidth(700);
+		stage.setMinWidth(900);
 		stage.setMinHeight(400);
 		stage.setMaxHeight(600);
 		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NOT_FOUND_TITLE));
@@ -272,6 +275,7 @@ public class PathMatchDialog extends NVC {
 										}
 									});
 						});
+				Platform.runLater(() -> table.getItems().setAll(missingMediaPaths));
 			}
 		});
 	}
@@ -291,6 +295,7 @@ public class PathMatchDialog extends NVC {
 				.filter(mediaPath -> Files.exists(mediaPath.getLocalPath()))
 				.map(mediaPath -> mediaPath.getLocalPath().getParent())
 				.forEach(searchFolders::add);
+
 		return searchFolders;
 	}
 }
