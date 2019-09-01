@@ -83,11 +83,11 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 				cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 			} else {
 				try {
-					final Duration duration = Duration.valueOf(newValue.replace(" ", ""));
-					padSettings.setCueIn(duration);
+					final int seconds = Integer.parseInt(newValue);
+					padSettings.setCueIn(Duration.seconds(seconds));
 
 					cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
-				} catch (IllegalArgumentException e) {
+				} catch (NumberFormatException e) {
 					cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
 				}
 			}
@@ -118,7 +118,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 		final Duration cueIn = padSettings.getCueIn();
 		if (cueIn != null) {
-			cueInTextField.setText(cueIn.toString());
+			cueInTextField.setText(String.valueOf((int) cueIn.toSeconds()));
 		}
 	}
 
