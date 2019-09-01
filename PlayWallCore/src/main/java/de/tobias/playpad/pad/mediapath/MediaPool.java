@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by tobias on 20.03.17.
@@ -113,6 +114,17 @@ public class MediaPool {
 			try (PreparedStatement stmt = connection.prepareStatement("UPDATE Path SET path = ? WHERE id = ?")) {
 				stmt.setString(1, localPath.toString());
 				stmt.setString(2, path.getId().toString());
+				stmt.executeUpdate();
+			} catch (SQLException e) {
+				Logger.error(e);
+			}
+		}
+	}
+
+	public void deleteEntries(UUID projectId) {
+		if (connection != null) {
+			try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM Path WHERE project = ?")) {
+				stmt.setString(1, projectId.toString());
 				stmt.executeUpdate();
 			} catch (SQLException e) {
 				Logger.error(e);

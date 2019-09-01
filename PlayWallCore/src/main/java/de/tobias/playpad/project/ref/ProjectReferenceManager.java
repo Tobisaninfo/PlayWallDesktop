@@ -5,6 +5,7 @@ import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
@@ -107,8 +108,12 @@ public final class ProjectReferenceManager {
 	public static void removeProject(ProjectReference projectReference) throws IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + Project.FILE_EXTENSION);
 
+		// Remove media db entries
+		MediaPool.getInstance().deleteEntries(projectReference.getUuid());
+
 		Files.deleteIfExists(path); // Drive
 		projects.remove(projectReference); // Model
+
 		if (projectReference.isSync()) {
 			CommandManager.execute(Commands.PROJECT_REMOVE, projectReference, projectReference); // Cloud
 		}
