@@ -73,6 +73,7 @@ public class ModernGlobalDesignViewController extends NVC implements IColorButto
 			// Update button preview
 			backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 			playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
+			cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
