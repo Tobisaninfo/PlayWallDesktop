@@ -28,6 +28,8 @@ public interface ProjectReader {
 		void totalMedia(int size);
 
 		void finish();
+
+		void abort();
 	}
 
 	Project read(ProjectReference projectReference, ProjectReaderDelegate delegate) throws IOException, DocumentException, ProjectNotFoundException;

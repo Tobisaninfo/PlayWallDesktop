@@ -77,4 +77,9 @@ public class ProjectLoadDialog extends NVC implements ProjectReader.ProjectReade
 	public void finish() {
 		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
 	}
+
+	@Override
+	public void abort() {
+		Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
+	}
 }
