@@ -120,9 +120,10 @@ public class Project {
 	}
 
 	public Collection<Pad> getPads(Predicate<Pad> predicate) {
-		List<Pad> pads = new ArrayList<>();
-		pages.stream().map(Page::getPads).forEach(pads::addAll);
-		return pads.parallelStream().filter(predicate).collect(Collectors.toList());
+		return pages.parallelStream()
+				.flatMap(p -> p.getPads().stream())
+				.filter(predicate)
+				.collect(Collectors.toList());
 	}
 
 	public void removePad(UUID id) {

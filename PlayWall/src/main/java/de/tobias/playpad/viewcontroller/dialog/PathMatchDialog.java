@@ -9,7 +9,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.pad.DesktopPadViewController;
-import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.mediapath.MediaPath;
@@ -32,7 +31,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -129,7 +130,7 @@ public class PathMatchDialog extends NVC {
 	private Button finishButton;
 
 	private Project project;
-	private List<TempMediaPath> mediaPaths;
+	private List<TempMediaPath> missingMediaPaths;
 
 	public PathMatchDialog(Project project, Window owner) {
 		load("view/dialog", "NotFoundDialog", Localization.getBundle());
@@ -140,24 +141,21 @@ public class PathMatchDialog extends NVC {
 
 		this.project = project;
 
-		List<MediaPath> missingMediaPaths = new ArrayList<>();
-		project.getPads(p -> p.getStatus() == PadStatus.NOT_FOUND)
-				.stream()
-				.map(Pad::getPaths)
-				.forEach(missingMediaPaths::addAll);
-		mediaPaths = missingMediaPaths.stream()
+		missingMediaPaths = project.getPads(p -> p.getStatus() == PadStatus.NOT_FOUND)
+				.parallelStream()
+				.flatMap(pad -> pad.getPaths().stream())
 				.map(TempMediaPath::new)
 				.collect(Collectors.toList());
 
 		find(false);
 
-		table.getItems().setAll(mediaPaths);
+		table.getItems().setAll(missingMediaPaths);
 		setStatusLabel();
 	}
 
 	@Override
 	public void init() {
-		table.setRowFactory(table -> {
+		table.setRowFactory(param -> {
 			TableRow<TempMediaPath> row = new TableRow<>();
 			row.setOnMouseClicked(e -> {
 				if (e.getClickCount() == 2 && e.getButton() == MouseButton.PRIMARY) {
@@ -172,8 +170,8 @@ public class PathMatchDialog extends NVC {
 
 		table.setPlaceholder(new Label());
 
-		selectColumn.setCellFactory(table -> new CheckBoxTableCell<>());
-		actionColumn.setCellFactory(table -> new PathMatchActionCell(this));
+		selectColumn.setCellFactory(param -> new CheckBoxTableCell<>());
+		actionColumn.setCellFactory(param -> new PathMatchActionCell(this));
 
 		selectColumn.setCellValueFactory(param -> param.getValue().selectedProperty());
 		filenameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getMediaPath().getFileName()));
@@ -204,18 +202,18 @@ public class PathMatchDialog extends NVC {
 
 	@FXML
 	void finishHandler(ActionEvent event) {
-		mediaPaths.stream()
+		missingMediaPaths.stream()
 				.filter(TempMediaPath::isSelected)
 				.forEach(p -> p.getMediaPath().setPath(p.getLocalPath(), true));
 		getStageContainer().ifPresent(NVCStage::close);
 	}
 
-	private int getUnmatchedTracks() {
-		return (int) mediaPaths.stream().filter(p -> !p.isMatched()).count();
+	private int getUnmatchedTracksCount() {
+		return (int) missingMediaPaths.stream().filter(p -> !p.isMatched()).count();
 	}
 
 	private void setStatusLabel() {
-		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_DIALOG_PATH_MATCH_STATUS, getUnmatchedTracks())));
+		Platform.runLater(() -> statusLabel.setText(Localization.getString(Strings.UI_DIALOG_PATH_MATCH_STATUS, getUnmatchedTracksCount())));
 	}
 
 	public void showFileChooser(TempMediaPath item) {
@@ -245,51 +243,54 @@ public class PathMatchDialog extends NVC {
 		}
 	}
 
-	private List<Path> searchHistory = new ArrayList<>();
+	private Set<Path> searchHistory = new HashSet<>();
 
-	private void find(boolean subdirs) {
+	private void find(boolean subdirectories) {
 		// Check Project
 		Worker.runLater(() -> {
-			if (!mediaPaths.isEmpty()) {
-				Set<MediaPath> legalPaths = new HashSet<>();
-				project.getPads(p -> p.getStatus() == PadStatus.READY)
-						.stream()
-						.map(Pad::getPaths)
-						.forEach(legalPaths::addAll);
+			if (!missingMediaPaths.isEmpty()) {
+				Set<Path> searchFolders = calculateSearchPaths();
 
-				Collection<Path> folders = legalPaths.stream()
-						.filter(mediaPath -> mediaPath.getPath() != null)
-						.filter(mediaPath -> Files.exists(mediaPath.getPath()))
-						.map(mediaPath -> mediaPath.getPath().getParent())
-						.filter(path -> !searchHistory.contains(path))
-						.collect(Collectors.toSet());
-
-				// New Client Folders
-				mediaPaths.stream()
-						.filter(TempMediaPath::isMatched)
-						.filter(mediaPath -> Files.exists(mediaPath.getLocalPath()))
-						.map(mediaPath -> mediaPath.getLocalPath().getParent())
-						.filter(path -> !searchHistory.contains(path))
-						.forEach(folders::add);
-
-				for (Path folder : folders) {
-					searchHistory.add(folder);
-					System.out.println("Search in: " + folder);
-					for (TempMediaPath mediaPath : this.mediaPaths) {
-						if (!mediaPath.isMatched()) {
-							try {
-								Path result = MediaPool.find(mediaPath.getMediaPath().getFileName(), folder, subdirs);
-								Platform.runLater(() -> mediaPath.setLocalPath(result));
-								if (result != null) {
-									mediaPath.setSelected(true);
-								}
-							} catch (IOException e) {
-								Logger.error(e);
-							}
-						}
-					}
-				}
+				searchFolders.stream()
+						.filter(folder -> !searchHistory.contains(folder))
+						.forEach(folder -> {
+							searchHistory.add(folder);
+							Logger.info("Search in: " + folder);
+							this.missingMediaPaths.parallelStream()
+									.filter(entry -> !entry.isMatched())
+									.forEach(entry -> {
+										try {
+											Path result = MediaPool.find(entry.getMediaPath().getFileName(), folder, subdirectories);
+											if (result != null) {
+												Platform.runLater(() -> {
+													entry.setLocalPath(result);
+													entry.setSelected(true);
+												});
+											}
+										} catch (IOException e) {
+											Logger.error(e);
+										}
+									});
+						});
 			}
 		});
+	}
+
+	private Set<Path> calculateSearchPaths() {
+		Set<Path> searchFolders = project.getPads(p -> p.getStatus() == PadStatus.READY)
+				.stream()
+				.flatMap(pad -> pad.getPaths().stream())
+
+				.filter(mediaPath -> Files.exists(mediaPath.getPath()))
+				.map(mediaPath -> mediaPath.getPath().getParent())
+
+				.collect(Collectors.toSet());
+
+		missingMediaPaths.stream()
+				.filter(TempMediaPath::isMatched)
+				.filter(mediaPath -> Files.exists(mediaPath.getLocalPath()))
+				.map(mediaPath -> mediaPath.getLocalPath().getParent())
+				.forEach(searchFolders::add);
+		return searchFolders;
 	}
 }
