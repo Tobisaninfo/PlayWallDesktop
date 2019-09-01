@@ -37,7 +37,10 @@ import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.AuthViewController;
-import de.tobias.playpad.viewcontroller.dialog.*;
+import de.tobias.playpad.viewcontroller.dialog.AboutDialog;
+import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
+import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
+import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
@@ -49,7 +52,6 @@ import de.tobias.playpad.viewcontroller.option.profile.ProfileSettingsViewContro
 import de.tobias.playpad.viewcontroller.option.project.ProjectSettingsViewController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -339,16 +341,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
-			Button button = new Button();
 
-			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
-					.then(Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (i + 1)))
-					.otherwise(page.nameProperty());
-			button.textProperty().bind(nameBinding);
-			button.setUserData(i);
+			Button button = createPageButton(page, i);
 			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
-			button.setFocusTraversable(false);
-			button.setOnAction(this);
 			pageHBox.getChildren().add(button);
 		}
 	}
@@ -624,8 +619,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void notFoundMenuHandler(ActionEvent event) {
-		PathMatchDialog dialog = new PathMatchDialog(openProject, mainViewController.getStage());
-		dialog.showAndWait();
+		showNotMediaFoundDialog();
 	}
 
 	@FXML

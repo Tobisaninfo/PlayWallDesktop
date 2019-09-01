@@ -3,7 +3,6 @@ package de.tobias.playpad.layout.touch;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
@@ -12,8 +11,6 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.BasicMenuToolbarViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -65,14 +62,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 		for (int i = 0; i < openProject.getPages().size(); i++) {
 			Page page = openProject.getPage(i);
 
-			Button button = new Button();
-			StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
-					.then(Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (i + 1)))
-					.otherwise(page.nameProperty());
-			button.textProperty().bind(nameBinding);
-			button.setUserData(i);
-			button.setFocusTraversable(false);
-			button.setOnAction(this);
+			Button button = createPageButton(page, i);
 			pageHBox.getChildren().add(button);
 		}
 	}

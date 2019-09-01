@@ -18,9 +18,7 @@ public class PadStatusNotFoundListener implements ChangeListener<PadStatus> {
 
 	@Override
 	public void changed(ObservableValue<? extends PadStatus> observable, PadStatus oldValue, PadStatus newValue) {
-		if (newValue == PadStatus.NOT_FOUND) {
-			project.updateNotFoundProperty();
-		} else if (oldValue == PadStatus.NOT_FOUND) {
+		if (newValue == PadStatus.NOT_FOUND || oldValue == PadStatus.NOT_FOUND) {
 			project.updateNotFoundProperty();
 		}
 	}

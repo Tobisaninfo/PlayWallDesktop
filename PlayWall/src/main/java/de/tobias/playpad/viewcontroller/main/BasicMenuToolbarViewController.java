@@ -2,19 +2,21 @@ package de.tobias.playpad.viewcontroller.main;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.settings.keys.Key;
+import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 
@@ -75,8 +77,14 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		FontIcon fontIcon = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
 		fontIcon.getStyleClass().add("pad-notfound");
 		fontIcon.setSize(20);
+		fontIcon.setOnMouseClicked(e -> showNotMediaFoundDialog());
 
 		notFoundContainer.getChildren().add(0, fontIcon);
+	}
+
+	public void showNotMediaFoundDialog() {
+		PathMatchDialog dialog = new PathMatchDialog(openProject, getContainingWindow());
+		dialog.showAndWait();
 	}
 
 	@Override
@@ -107,7 +115,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	}
 
 	@SuppressWarnings("StringBufferReplaceableByString")
-	protected String createSliderStyle(double min, double max, double value) {
+	private String createSliderStyle(double min, double max, double value) {
 		StringBuilder gradient = new StringBuilder("-slider-track-color: ");
 		String defaultBG = "#5c5c5c ";
 		gradient.append("linear-gradient(to right, ").append(defaultBG).append("0%, ");
@@ -121,6 +129,20 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		gradient.append(defaultBG).append("100%); ");
 
 		return gradient.toString();
+	}
+
+	protected Button createPageButton(Page page, int index) {
+		Button button = new Button();
+
+		StringBinding nameBinding = Bindings.when(page.nameProperty().isEmpty())
+				.then(Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (index + 1)))
+				.otherwise(page.nameProperty());
+		button.textProperty().bind(nameBinding);
+		button.setUserData(index);
+		button.setFocusTraversable(false);
+		button.setOnAction(this);
+
+		return button;
 	}
 
 }
