@@ -17,7 +17,6 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
-import de.tobias.playpad.project.importer.ConverterV6;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -193,37 +192,6 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			} catch (IOException | DocumentException e) {
 				Logger.error(e);
 			}
-		}
-	}
-
-	@FXML
-	void convertProjectButtonHandler(ActionEvent event) {
-		try {
-			List<ProjectReference> projects = ConverterV6.loadProjectReferences();
-			ChoiceDialog<ProjectReference> dialog = new ChoiceDialog<>(null, projects);
-
-			dialog.setHeaderText(Localization.getString(Strings.UI_DIALOG_PROJECT_CONVERT_HEADER));
-			dialog.setContentText(Localization.getString(Strings.UI_DIALOG_PROJECT_CONVERT_CONTENT));
-
-			dialog.initOwner(getContainingWindow());
-			dialog.initModality(Modality.WINDOW_MODAL);
-			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-			stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
-
-			Optional<ProjectReference> result = dialog.showAndWait();
-			result.ifPresent((ref) -> {
-				try {
-					ConverterV6.convert(ref.getUuid(), ref.getName());
-					ProjectReferenceManager.addProjectReference(ref);
-					setProjectListValues();
-				} catch (IOException | DocumentException e) {
-					Logger.error(e);
-					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_CONVERT));
-				}
-			});
-		} catch (IOException | DocumentException e) {
-			Logger.error(e);
-			showErrorMessage(Localization.getString(Strings.ERROR_STANDARD_GEN));
 		}
 	}
 
