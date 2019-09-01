@@ -67,23 +67,49 @@ public class MediaPool {
 		}
 	}
 
-	public Path getPath(MediaPath path) {
-		if (connection != null) {
-			try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Path WHERE id = ?")) {
-				stmt.setString(1, path.getId().toString());
+	public List<MediaPath> getMediaPathsForProject(UUID projectId) {
+		List<MediaPath> paths = new ArrayList<>();
 
-				try (ResultSet result = stmt.executeQuery()) {
-					if (result.next()) {
-						String localPath = result.getString("path");
-						if (localPath == null) {
-							return null;
-						}
-						return Paths.get(localPath);
-					}
+		if (connection == null) {
+			return paths;
+		}
+
+		try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Path WHERE project = ?")) {
+			stmt.setString(1, projectId.toString());
+
+			try (ResultSet result = stmt.executeQuery()) {
+				while (result.next()) {
+					UUID id = UUID.fromString(result.getString("id"));
+					String localPath = result.getString("path");
+
+					MediaPath path = new MediaPath(id, localPath, null);
+					paths.add(path);
 				}
-			} catch (SQLException e) {
-				Logger.error(e);
 			}
+		} catch (SQLException e) {
+			Logger.error(e);
+		}
+		return paths;
+	}
+
+	public Path getPath(MediaPath path) {
+		if (connection == null) {
+			return null;
+		}
+		try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Path WHERE id = ?")) {
+			stmt.setString(1, path.getId().toString());
+
+			try (ResultSet result = stmt.executeQuery()) {
+				if (result.next()) {
+					String localPath = result.getString("path");
+					if (localPath == null) {
+						return null;
+					}
+					return Paths.get(localPath);
+				}
+			}
+		} catch (SQLException e) {
+			Logger.error(e);
 		}
 		return null;
 	}

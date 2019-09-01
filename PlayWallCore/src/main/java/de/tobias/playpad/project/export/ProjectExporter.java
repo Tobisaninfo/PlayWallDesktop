@@ -8,6 +8,7 @@ import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.util.zip.ZipFile;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.project.Project;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by tobias on 11.03.17.
@@ -42,6 +44,8 @@ public class ProjectExporter {
 		ZipFile zip = new ZipFile(zipFile, ZipFile.FileMode.WRITE);
 
 		exportProject(zip, reference);
+		exportMediaPoolEntries(zip, reference);
+
 		if (includeProfile) {
 			exportProfile(zip, reference.getProfileReference());
 		}
@@ -68,7 +72,7 @@ public class ProjectExporter {
 			try {
 				XMLWriter writer = new XMLWriter(os, OutputFormat.createPrettyPrint());
 				writer.write(infoDocument);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				Logger.error(e);
 			}
 		});
@@ -78,6 +82,28 @@ public class ProjectExporter {
 		App app = ApplicationUtils.getApplication();
 		Path projectLocalPath = app.getPath(PathType.DOCUMENTS, projectRef.getFileName());
 		zipFile.addFile(projectLocalPath, Paths.get(projectRef.getFileName()));
+	}
+
+	private void exportMediaPoolEntries(ZipFile zip, ProjectReference projectRef) throws IOException {
+		final List<MediaPath> paths = MediaPool.getInstance().getMediaPathsForProject(projectRef.getUuid());
+
+		Document document = DocumentHelper.createDocument();
+
+		Element rootElement = document.addElement("Paths");
+		for (MediaPath mediaPath : paths) {
+			rootElement.addElement("Path")
+					.addAttribute("uuid", String.valueOf(mediaPath.getId()))
+					.addAttribute("path", String.valueOf(mediaPath.getPath()));
+		}
+		zip.addFile(Paths.get("media.xml"), os ->
+		{
+			try {
+				XMLWriter writer = new XMLWriter(os, OutputFormat.createPrettyPrint());
+				writer.write(document);
+			} catch (IOException e) {
+				Logger.error(e);
+			}
+		});
 	}
 
 	private void exportProfile(ZipFile zip, ProfileReference reference) throws IOException {
