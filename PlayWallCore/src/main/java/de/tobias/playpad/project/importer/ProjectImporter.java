@@ -12,7 +12,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
-import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -55,13 +55,15 @@ public class ProjectImporter {
 
 	private ProjectReference importedProjectReference;
 
-	public ProjectImporter(Path zipFile, ProjectImporterDelegate delegate) throws IOException, ProjectImportCorruptedException {
+	public ProjectImporter(Path zipFile, ProjectImporterDelegate delegate) throws IOException,
+			ProjectImportCorruptedException {
 		this.delegate = delegate;
 
 		loadZipFile(zipFile);
 	}
 
-	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProjectImportCorruptedException {
+	public void execute() throws IOException, ProjectNotFoundException, DocumentException, ProfileNotFoundException,
+			ProfileAbortException, ProjectImportCorruptedException {
 		if (includeProfile && delegate.shouldImportProfile()) {
 			importProfile();
 		}
@@ -137,7 +139,8 @@ public class ProjectImporter {
 		}
 	}
 
-	private void replaceMediaPathIds(List<MediaPath> mediaPaths) throws ProjectNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProfileNotFoundException, DocumentException, IOException {
+	private void replaceMediaPathIds(List<MediaPath> mediaPaths) throws ProjectNotFoundException, ProfileAbortException,
+			ProfileNotFoundException, DocumentException, IOException {
 		ProjectLoader loader = new ProjectLoader(importedProjectReference);
 		loader.setLoadMedia(false);
 		Project project = loader.load();
@@ -183,7 +186,7 @@ public class ProjectImporter {
 
 		zip.stream().filter(entry -> entry.getName().startsWith(profileFolder.toString())).forEach(entry ->
 		{
-			String name = entry.getName().substring(entry.getName().lastIndexOf("/") + 1);
+			String name = entry.getName().substring(entry.getName().lastIndexOf('/') + 1);
 			try {
 				Path dest = app.getPath(PathType.CONFIGURATION, localProfileUUIDString, name);
 				zip.getFile(Paths.get(entry.getName()), dest);
@@ -199,7 +202,8 @@ public class ProjectImporter {
 		profileUUID = localProfileUUID; // Update Profile UUID with new local profile uuid
 	}
 
-	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
+	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException,
+			IOException, ProfileAbortException {
 		Path folder = delegate.getMediaPath();
 
 		ProjectLoader loader = new ProjectLoader(importedProjectReference);
