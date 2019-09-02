@@ -231,8 +231,11 @@ public class PathMatchDialog extends NVC {
 		// Last Folder
 		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(DesktopPadViewController.OPEN_FOLDER);
 		if (openFolder != null) {
+			Logger.info("Restore last file chooser location: {0}", openFolder);
 			File folder = new File(openFolder.toString());
-			chooser.setInitialDirectory(folder);
+			if (folder.exists()) {
+				chooser.setInitialDirectory(folder);
+			}
 		}
 
 		File file = chooser.showOpenDialog(getContainingWindow());
@@ -240,6 +243,10 @@ public class PathMatchDialog extends NVC {
 			Path path = file.toPath();
 			item.setLocalPath(path);
 			item.setSelected(true);
+
+			String lastFolder = file.getParent();
+			ApplicationUtils.getApplication().getUserDefaults().setData(DesktopPadViewController.OPEN_FOLDER, lastFolder);
+			Logger.info("Saved {0} as last file chooser location", lastFolder);
 
 			// Search for new local paths
 			find(true);
