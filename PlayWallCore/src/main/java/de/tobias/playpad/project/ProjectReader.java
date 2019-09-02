@@ -15,6 +15,9 @@ public interface ProjectReader {
 		ProfileReference getProfileReference() throws ProfileAbortException;
 
 		class ProfileAbortException extends Exception {
+			public ProfileAbortException() {
+				super("Profile is empty");
+			}
 		}
 	}
 

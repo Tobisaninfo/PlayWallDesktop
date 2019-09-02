@@ -288,10 +288,10 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			ref.setProfileReference(profile);
 		} catch (ProjectNotFoundException e) {
 			Logger.error(e);
-			showErrorMessage(getString(Strings.ERROR_PROJECT_NOT_FOUND, ref, e.getLocalizedMessage()));
+			showErrorMessage(getString(Strings.ERROR_PROJECT_NOT_FOUND, ref, e.getMessage()));
 		} catch (Exception e) {
 			Logger.error(e);
-			showErrorMessage(getString(Strings.ERROR_PROJECT_OPEN, ref, e.getLocalizedMessage()));
+			showErrorMessage(getString(Strings.ERROR_PROJECT_OPEN, ref, e.getMessage()));
 		}
 	}
 }
