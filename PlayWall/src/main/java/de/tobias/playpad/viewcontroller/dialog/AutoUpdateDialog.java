@@ -9,6 +9,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.util.Map;
@@ -39,5 +40,7 @@ public class AutoUpdateDialog extends AdvancedDialog {
 
 		addButtonType(updateButton);
 		addButtonType(cancelButton);
+
+		PlayPadPlugin.styleable().applyStyle((Stage) getDialogPane().getScene().getWindow());
 	}
 }
