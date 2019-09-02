@@ -168,6 +168,11 @@
 
     <repositories>
         <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+
+        <repository>
             <id>scala</id>
             <name>Scala Tools</name>
             <url>http://scala-tools.org/repo-releases/</url>
