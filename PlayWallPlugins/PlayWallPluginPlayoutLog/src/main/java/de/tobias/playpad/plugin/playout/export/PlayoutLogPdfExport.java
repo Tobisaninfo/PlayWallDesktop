@@ -59,7 +59,7 @@ public class PlayoutLogPdfExport {
 					break;
 				}
 			}
-			logItemList.add(new LogItem(UUID.randomUUID(), "", "FFFFFF", page, i, season)); // add empty car
+			logItemList.add(new LogItem(UUID.randomUUID(), "", "FFFFFF", page, i, season)); // add empty cart
 			logItemList.sort(Comparator.comparingInt(LogItem::getPosition));
 		}
 

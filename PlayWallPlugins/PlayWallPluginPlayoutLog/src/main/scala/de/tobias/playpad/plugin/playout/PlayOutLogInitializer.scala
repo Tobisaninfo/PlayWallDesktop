@@ -16,9 +16,9 @@ object PlayOutLogInitializer {
 		try {
 			val playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db")
 			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath))
-			Logger.info("Setup LogSeasonStorageHandler in path: " + playOutLogPath)
+			Logger.info("Setup LogSeasonStorageHandler in path: {0}", playOutLogPath)
 		} catch {
-			case e: SQLException => Logger.error("Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage + ")")
+			case e: SQLException => Logger.error("Cannot setup LogSeasonStorageHandler ({0})", e.getLocalizedMessage)
 		}
 	}
 }

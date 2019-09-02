@@ -24,7 +24,7 @@ public class LogItem {
 		this(
 				mediaPath.getId(),
 				mediaPath.getPad().getName(),
-				mediaPath.getPad().getPadSettings().getBackgroundColor().getColorHi(),
+				mediaPath.getPad().getPadSettings().getBackgroundColor().getColorLow(),
 				mediaPath.getPad().getPage().getPosition(),
 				mediaPath.getPad().getPosition(),
 				logSeason
