@@ -216,7 +216,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
 		if (openFolder != null) {
 			File folder = new File(openFolder.toString());
-			chooser.setInitialDirectory(folder);
+			if (folder.exists()) {
+				chooser.setInitialDirectory(folder);
+			}
 		}
 
 		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());

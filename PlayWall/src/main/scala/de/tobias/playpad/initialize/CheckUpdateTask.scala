@@ -8,7 +8,7 @@ import de.thecodelabs.utils.threading.Worker
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog
 import javafx.application.Platform
-import javafx.scene.control.ButtonBar.ButtonData
+import javafx.scene.control.ButtonType
 
 class CheckUpdateTask extends PlayPadInitializeTask {
 	override def name(): String = "Updates"
@@ -24,18 +24,21 @@ class CheckUpdateTask extends PlayPadInitializeTask {
 				if (updateService.isUpdateAvailable) {
 					Platform.runLater(() => {
 						val autoUpdateDialog = new AutoUpdateDialog(updateService, null)
-						autoUpdateDialog.showAndWait.filter(item => item.getButtonData == ButtonData.APPLY).ifPresent((_) => {
-							Logger.info("Install update")
-							try {
-								updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries)
-								System.exit(0)
-							} catch {
-								case e: IOException => Logger.error(e)
+						autoUpdateDialog.showAndWait.ifPresent(response => {
+							if (autoUpdateDialog.isSelected) {
+								globalSettings.setIgnoreUpdate(true)
+							}
+
+							if (response == ButtonType.APPLY) {
+								Logger.info("Install update")
+								try {
+									updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries)
+									System.exit(0)
+								} catch {
+									case e: IOException => Logger.error(e)
+								}
 							}
 						})
-						if (autoUpdateDialog.isSelected) {
-							globalSettings.setIgnoreUpdate(true)
-						}
 					})
 				}
 			})
