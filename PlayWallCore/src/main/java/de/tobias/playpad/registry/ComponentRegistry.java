@@ -123,7 +123,12 @@ public class ComponentRegistry<C extends Component> implements Registry<C> {
 
 	@Override
 	public Module getModule(String id) {
-		return components.get(id).module;
+		final Item<C> item = components.get(id);
+		if (item == null) {
+			Logger.warning("No module found for id: {0}", id);
+			return null;
+		}
+		return item.module;
 	}
 
 
