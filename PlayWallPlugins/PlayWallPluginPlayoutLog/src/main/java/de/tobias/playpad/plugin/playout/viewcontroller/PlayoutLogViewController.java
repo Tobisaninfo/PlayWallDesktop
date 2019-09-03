@@ -46,7 +46,6 @@ public class PlayoutLogViewController extends NVC {
 
 	private FontIcon logIcon;
 
-	// TODO l10n
 	public PlayoutLogViewController(Window owner) {
 		load("view/dialog", "PlayoutLogDialog", Localization.getBundle());
 
@@ -64,11 +63,11 @@ public class PlayoutLogViewController extends NVC {
 		logIcon = new FontIcon(FontAwesomeType.LIST);
 
 		if (LogSeasons.getInstance() != null) { // Running
-			startButton.setText("Stop"); // TODO l10n
+			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
 			nameTextField.setDisable(true);
 			nameTextField.setText(LogSeasons.getInstance().getName());
 		} else {
-			startButton.setText("Start"); // TODO l10n
+			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
 		}
 	}
@@ -102,12 +101,12 @@ public class PlayoutLogViewController extends NVC {
 			logSeason.createProjectSnapshot(currentProject);
 
 			controller.addToolbarItem(logIcon);
-			startButton.setText("Stop"); // TODO l10n
+			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
 			nameTextField.setDisable(false);
 		} else { // Stop
 			LogSeasons.stop();
 			controller.removeToolbarItem(logIcon);
-			startButton.setText("Start"); // TODO l10n
+			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
 		}
 	}
