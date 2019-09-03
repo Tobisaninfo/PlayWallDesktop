@@ -68,7 +68,9 @@ public class Project {
 	public void close() {
 		syncListener.removeListener();
 
-		getPads().forEach(Pad::stop);
+		getPads().parallelStream()
+				.filter(pad -> pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE)
+				.forEach(Pad::stop);
 	}
 
 	public ProjectSettings getSettings() {
