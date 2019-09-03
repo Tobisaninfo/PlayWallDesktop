@@ -17,6 +17,8 @@ import javafx.scene.media.MediaPlayer;
  */
 public class PathMatchActionCell extends TableCell<PathMatchDialog.TempMediaPath, PathMatchDialog.TempMediaPath> implements EventHandler<MouseEvent> {
 
+	private static final String FONTICON_NOTFOUND = "fonticon-notfound";
+
 	private PathMatchDialog parentDialog;
 	private PathMatchDialog.TempMediaPath currentItem;
 
@@ -40,9 +42,9 @@ public class PathMatchActionCell extends TableCell<PathMatchDialog.TempMediaPath
 		folderIcon.setOnMouseClicked(this);
 		playButton.setOnMouseClicked(this);
 
-		folderIcon.getStyleClass().add("fonticon-notfound");
-		playIcon.getStyleClass().add("fonticon-notfound");
-		stopIcon.getStyleClass().add("fonticon-notfound");
+		folderIcon.getStyleClass().add(FONTICON_NOTFOUND);
+		playIcon.getStyleClass().add(FONTICON_NOTFOUND);
+		stopIcon.getStyleClass().add(FONTICON_NOTFOUND);
 
 		playButton.getStyleClass().clear();
 	}

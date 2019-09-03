@@ -8,20 +8,20 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0"
       xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label text="Dateienverknüpfung:" underline="true"/>
+        <Label text="%PathMatchDialog.Label.Headline" styleClass="headline"/>
         <TableView fx:id="table" editable="true" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="selectColumn" prefWidth="75.0" text="Auswahl"/>
-                <TableColumn fx:id="filenameColumn" minWidth="200.0" prefWidth="75.0" text="Dateiname"/>
-                <TableColumn fx:id="localPathColumn" minWidth="500.0" prefWidth="75.0" text="Lokaler Pfad"/>
-                <TableColumn fx:id="actionColumn" prefWidth="75.0" text="Aktionen"/>
+                <TableColumn fx:id="selectColumn" prefWidth="75.0" text="%PathMatchDialog.Table.Column.Select"/>
+                <TableColumn fx:id="filenameColumn" minWidth="200.0" prefWidth="75.0" text="%PathMatchDialog.Table.Column.FileName"/>
+                <TableColumn fx:id="localPathColumn" minWidth="500.0" prefWidth="75.0" text="%PathMatchDialog.Table.Column.LocalPath"/>
+                <TableColumn fx:id="actionColumn" prefWidth="75.0" text="%PathMatchDialog.Table.Column.Action"/>
             </columns>
         </TableView>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
                 <Label fx:id="statusLabel" maxWidth="1.7976931348623157E308" text="Label" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelHandler" text="Abbrechen"/>
-                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishHandler" text="Übernehmen"/>
+                <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelHandler" text="%PathMatchDialog.Button.Cancel"/>
+                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#finishHandler" text="%PathMatchDialog.Button.Finish"/>
             </children>
         </HBox>
     </children>

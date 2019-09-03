@@ -133,9 +133,8 @@ public class PathMatchDialog extends NVC {
 	private Project project;
 	private List<TempMediaPath> missingMediaPaths;
 
-	// TODO Localize fxml
 	public PathMatchDialog(Project project, Window owner) {
-		load("view/dialog", "NotFoundDialog", Localization.getBundle());
+		load("view/dialog", "PathMatchDialog", Localization.getBundle());
 
 		NVCStage stage = applyViewControllerToStage();
 		stage.initOwner(owner);
