@@ -19,7 +19,7 @@
         <HBox maxWidth="1.7976931348623157E308" spacing="14.0" VBox.vgrow="ALWAYS">
             <children>
                 <ListView fx:id="logList" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="300.0"
-                          HBox.hgrow="ALWAYS"/>
+                          HBox.hgrow="ALWAYS" styleClass="dark-list"/>
                 <VBox maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Button fx:id="exportButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"

@@ -65,14 +65,14 @@
 
 	.list-cell:filled:hover {
 		-fx-background-color: -fx-hover-base;
-		-fx-text-fill: -fx-text-inner-color;
+		-fx-text-fill: $component-text-color;
 	}
 
 	.list-view:focused .list-cell:filled:focused:hover {
 		-fx-background-color: derive(-fx-hover-base, -50%);
 
 		-fx-background-insets: 0, 1, 2;
-		-fx-text-fill: -fx-text-inner-color;
+		-fx-text-fill: $component-text-color;
 	}
 
 	.list-view:horizontal .list-cell:filled:selected, .list-view:horizontal .list-cell:filled:selected:hover {
