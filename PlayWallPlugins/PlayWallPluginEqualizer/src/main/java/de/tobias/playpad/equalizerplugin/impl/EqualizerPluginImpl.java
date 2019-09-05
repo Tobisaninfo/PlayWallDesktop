@@ -9,6 +9,7 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.equalizerplugin.Equalizer;
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Equalizeable;
 import de.tobias.playpad.plugin.Module;
@@ -73,7 +74,15 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 	}
 
 	@Override
-	public void onPlay(Pad pad) {
+	public void onStatusChange(Pad pad, PadStatus newValue) {
+		if (newValue == PadStatus.PLAY) {
+			onPlay(pad);
+		} else if (newValue == PadStatus.STOP) {
+			onStop(pad);
+		}
+	}
+
+	private void onPlay(Pad pad) {
 		PadContent content = pad.getContent();
 		if (content instanceof Equalizeable) {
 
@@ -89,8 +98,7 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, W
 		}
 	}
 
-	@Override
-	public void onStop(Pad pad) {
+	private void onStop(Pad pad) {
 		PadContent content = pad.getContent();
 		if (content instanceof Equalizeable) {
 

@@ -1,6 +1,7 @@
 package de.tobias.playpad.plugin;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.PadStatus;
 
 /**
  * Listener für ein Pad.
@@ -11,17 +12,10 @@ import de.tobias.playpad.pad.Pad;
 public interface PadListener {
 
 	/**
-	 * Wird aufgerufen, sobald ein Pad wiedergegeben wird.
-	 *
-	 * @param pad Pad
+	 * Call then ever the status of a pad will be changed
+	 * @param pad corresponding pad
+	 * @param newValue new status value
 	 */
-	void onPlay(Pad pad);
-
-	/**
-	 * Wird aufgerufen, sobald ein Pad gestoppt wird.
-	 *
-	 * @param pad Pad
-	 */
-	void onStop(Pad pad);
+	void onStatusChange(Pad pad, PadStatus newValue);
 
 }

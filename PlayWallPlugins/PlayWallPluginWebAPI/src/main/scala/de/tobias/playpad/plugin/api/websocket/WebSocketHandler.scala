@@ -45,9 +45,21 @@ class WebSocketHandler {
 	@OnWebSocketError def onError(session: Session, error: Throwable): Unit = {
 		Logger.error(error)
 	}
+
+	def sendUpdate(message: String, jsonObject: JsonObject): Unit = {
+		jsonObject.addProperty("updateType", message)
+		val payload = WebSocketHandler.gson.toJson(jsonObject)
+
+		sessions.stream()
+			.filter(session => session.isOpen)
+			.forEach(session => session.getRemote.sendString(payload))
+	}
 }
 
 object WebSocketHandler {
+
+	lazy val instance: WebSocketHandler = new WebSocketHandler
+
 	private val gson = new Gson()
 
 	def sendResponse(session: Session, message: Message, response: JsonObject) = {
