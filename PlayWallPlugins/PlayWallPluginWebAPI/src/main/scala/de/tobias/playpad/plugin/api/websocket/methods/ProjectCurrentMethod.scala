@@ -11,6 +11,10 @@ class ProjectCurrentMethod extends MethodExecutable {
 	override def execute(session: Session, message: Message): JsonObject = {
 		val currentProject = PlayPadPlugin.getInstance().getCurrentProject
 
-		ProjectSerializer.serializeProject(currentProject)
+		if (currentProject == null) {
+			new JsonObject
+		} else {
+			ProjectSerializer.serializeProject(currentProject)
+		}
 	}
 }
