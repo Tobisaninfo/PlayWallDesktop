@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label styleClass="headline" text="%PlayoutLogDialog.Label.Headline"/>
         <HBox spacing="14.0">
@@ -20,7 +19,7 @@
         <HBox maxWidth="1.7976931348623157E308" spacing="14.0" VBox.vgrow="ALWAYS">
             <children>
                 <ListView fx:id="logList" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="300.0"
-                          HBox.hgrow="ALWAYS" styleClass="dark-list"/>
+                          styleClass="dark-list" HBox.hgrow="ALWAYS"/>
                 <VBox maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS">
                     <children>
                         <Button fx:id="exportButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
@@ -33,8 +32,10 @@
                 </VBox>
             </children>
         </HBox>
-        <HBox alignment="TOP_RIGHT">
+        <HBox alignment="CENTER_LEFT">
             <children>
+                <CheckBox fx:id="autoStartCheckbox" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                          text="%PlayoutLogDialog.Checkbox.AutoStart" HBox.hgrow="ALWAYS"/>
                 <Button fx:id="finishButton" defaultButton="true" mnemonicParsing="false"
                         onAction="#finishButtonHandler" text="Fertig"/>
             </children>

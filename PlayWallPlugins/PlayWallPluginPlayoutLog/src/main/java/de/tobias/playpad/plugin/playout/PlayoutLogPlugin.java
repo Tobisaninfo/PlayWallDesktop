@@ -20,6 +20,8 @@ public class PlayoutLogPlugin implements PlayPadPluginStub, PluginArtifact {
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 		PlayPadPlugin.getInstance().addMainViewListener(new MainViewControllerListener());
+		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener());
+
 		PlayOutLogInitializer.init();
 
 		Logger.debug("Enable Playout Log Plugin");

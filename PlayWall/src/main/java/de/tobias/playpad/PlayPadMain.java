@@ -3,6 +3,7 @@ package de.tobias.playpad;
 import de.thecodelabs.logger.FileOutputOption;
 import de.thecodelabs.logger.LogLevelFilter;
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.storage.proxy.SettingsProxy;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -128,6 +129,7 @@ public class PlayPadMain extends Application {
 			ProfileReferenceManager.saveProfiles();
 			ProjectReferenceManager.saveProjects();
 			impl.getGlobalSettings().save();
+			SettingsProxy.saveAll();
 		} catch (Exception e) {
 			Logger.error(e);
 		}

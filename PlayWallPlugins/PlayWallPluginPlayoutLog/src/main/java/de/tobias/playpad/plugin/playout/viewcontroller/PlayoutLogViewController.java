@@ -2,6 +2,7 @@ package de.tobias.playpad.plugin.playout.viewcontroller;
 
 import com.itextpdf.text.DocumentException;
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.storage.proxy.SettingsProxy;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
@@ -12,12 +13,14 @@ import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.plugin.playout.Strings;
 import de.tobias.playpad.plugin.playout.export.PlayoutLogPdfExport;
+import de.tobias.playpad.plugin.playout.storage.PlayoutLogSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -43,6 +46,8 @@ public class PlayoutLogViewController extends NVC {
 	private Button deleteButton;
 	@FXML
 	private Button finishButton;
+	@FXML
+	private CheckBox autoStartCheckbox;
 
 	private FontIcon logIcon;
 
@@ -70,6 +75,10 @@ public class PlayoutLogViewController extends NVC {
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
 		}
+
+		autoStartCheckbox.setSelected(SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging());
+		autoStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+				SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging(newValue));
 	}
 
 	@Override
@@ -77,8 +86,8 @@ public class PlayoutLogViewController extends NVC {
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PLAYOUT_LOG_TITLE));
-		stage.setMinWidth(375);
-		stage.setMinHeight(400);
+		stage.setMinWidth(450);
+		stage.setMinHeight(600);
 
 		stage.initModality(Modality.WINDOW_MODAL);
 

@@ -38,6 +38,7 @@ public class PlayPadImpl implements PlayPad {
 	private List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
 	private List<SettingsListener> settingsListeners = new ArrayList<>();
 	private List<PadListener> padListeners = new ArrayList<>();
+	private List<GlobalListener> globalListeners = new ArrayList<>();
 
 	private MainViewController mainViewController;
 	private Image stageIcon;
@@ -99,6 +100,21 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
+	public void addGlobalListener(GlobalListener globalListener) {
+		globalListeners.add(globalListener);
+	}
+
+	@Override
+	public void removeGlobalListener(GlobalListener globalListener) {
+		globalListeners.remove(globalListener);
+	}
+
+	@Override
+	public List<GlobalListener> getGlobalListeners() {
+		return globalListeners;
+	}
+
+	@Override
 	public IMainViewController getMainViewController() {
 		return mainViewController;
 	}
@@ -150,6 +166,7 @@ public class PlayPadImpl implements PlayPad {
 			mainViewController = new MainViewController(e -> {
 				currentProject = project;
 				mainViewController.openProject(project);
+				globalListeners.forEach(l -> l.currentProjectDidChanged(project));
 				if (onLoaded != null) {
 					onLoaded.accept(e);
 				}
@@ -160,9 +177,7 @@ public class PlayPadImpl implements PlayPad {
 			currentProject = project;
 			mainViewController.openProject(project);
 
-			if (onLoaded != null) {
-				onLoaded.accept(mainViewController);
-			}
+			globalListeners.forEach(l -> l.currentProjectDidChanged(project));
 		}
 	}
 

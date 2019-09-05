@@ -2,6 +2,7 @@ package de.tobias.playpad;
 
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.versionizer.service.UpdateService;
+import de.tobias.playpad.plugin.GlobalListener;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
@@ -73,6 +74,12 @@ public interface PlayPad {
 	 * @return PadListener
 	 */
 	List<PadListener> getPadListener();
+
+	void addGlobalListener(GlobalListener globalListener);
+
+	void removeGlobalListener(GlobalListener globalListener);
+
+	List<GlobalListener> getGlobalListeners();
 
 	/**
 	 * Gibt eine Refernz auf das Hauptfenster zurück.
