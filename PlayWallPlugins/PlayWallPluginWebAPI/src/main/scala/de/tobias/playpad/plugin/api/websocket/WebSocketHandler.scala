@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import com.google.gson.{Gson, JsonObject}
 import de.thecodelabs.logger.Logger
 import de.tobias.playpad.plugin.api.websocket.message.Message
-import de.tobias.playpad.plugin.api.websocket.methods.{ProjectCurrentMethod, ProjectListMethod, ProjectOpenMethod}
+import de.tobias.playpad.plugin.api.websocket.methods.{PadStatusChangeMethod, ProjectCurrentMethod, ProjectListMethod, ProjectOpenMethod}
 import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations._
 
@@ -17,7 +17,8 @@ class WebSocketHandler {
 	private val methods: Map[String, MethodExecutable] = Map(
 		"project-list" -> new ProjectListMethod,
 		"project-current" -> new ProjectCurrentMethod,
-		"project-open" -> new ProjectOpenMethod
+		"project-open" -> new ProjectOpenMethod,
+		"pad-status-change" -> new PadStatusChangeMethod
 	)
 
 	@OnWebSocketConnect def connected(session: Session): Unit = {
@@ -42,7 +43,7 @@ class WebSocketHandler {
 	}
 
 	@OnWebSocketError def onError(session: Session, error: Throwable): Unit = {
-		Logger.warning(error.getMessage)
+		Logger.error(error)
 	}
 }
 

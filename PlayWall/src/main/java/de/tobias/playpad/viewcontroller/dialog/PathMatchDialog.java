@@ -32,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -252,35 +251,30 @@ public class PathMatchDialog extends NVC {
 		}
 	}
 
-	private Set<Path> searchHistory = new HashSet<>();
-
 	private void find(boolean subdirectories) {
 		// Check Project
 		Worker.runLater(() -> {
 			if (!missingMediaPaths.isEmpty()) {
 				Set<Path> searchFolders = calculateSearchPaths();
 
-				searchFolders.stream()
-						.filter(folder -> !searchHistory.contains(folder))
-						.forEach(folder -> {
-							searchHistory.add(folder);
-							Logger.info("Search in: " + folder);
-							this.missingMediaPaths.parallelStream()
-									.filter(entry -> !entry.isMatched())
-									.forEach(entry -> {
-										try {
-											Path result = MediaPool.find(entry.getMediaPath().getFileName(), folder, subdirectories);
-											if (result != null) {
-												Platform.runLater(() -> {
-													entry.setLocalPath(result);
-													entry.setSelected(true);
-												});
-											}
-										} catch (IOException e) {
-											Logger.error(e);
-										}
-									});
-						});
+				searchFolders.forEach(folder -> {
+					Logger.info("Search in: " + folder);
+					this.missingMediaPaths.parallelStream()
+							.filter(entry -> !entry.isMatched())
+							.forEach(entry -> {
+								try {
+									Path result = MediaPool.find(entry.getMediaPath().getFileName(), folder, subdirectories);
+									if (result != null) {
+										Platform.runLater(() -> {
+											entry.setLocalPath(result);
+											entry.setSelected(true);
+										});
+									}
+								} catch (IOException e) {
+									Logger.error(e);
+								}
+							});
+				});
 				Platform.runLater(() -> table.getItems().setAll(missingMediaPaths));
 			}
 		});

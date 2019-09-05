@@ -159,6 +159,10 @@ public class PlayPadImpl implements PlayPad {
 		} else {
 			currentProject = project;
 			mainViewController.openProject(project);
+
+			if (onLoaded != null) {
+				onLoaded.accept(mainViewController);
+			}
 		}
 	}
 
