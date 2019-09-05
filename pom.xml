@@ -17,7 +17,7 @@
         <core.version>${project.version}</core.version>
         <components.version>${project.version}</components.version>
 
-        <jlibs.version>2.0.5</jlibs.version>
+        <jlibs.version>2.0.6</jlibs.version>
         <libPlugins.version>2.2.0</libPlugins.version>
         <versionizer-api.version>1.1.0</versionizer-api.version>
 
