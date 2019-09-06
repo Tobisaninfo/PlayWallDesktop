@@ -42,10 +42,8 @@ import java.util.UUID;
  * TODOS
  */
 // Idden
-// FEATURE Global Volume Trigger mit x% und 100%
 // FEATURE Option bei Import Media auch Copy Media in Library
 // FEATURE lnk für Windows mit Dateiparameter
-// FEATURE Backups irgendwann löschen
 
 public class PlayPadMain extends Application {
 

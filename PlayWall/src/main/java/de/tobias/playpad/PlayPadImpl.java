@@ -238,7 +238,7 @@ public class PlayPadImpl implements PlayPad {
 		return modernDesign;
 	}
 
-	public void setModernDesign(ModernDesignHandler modernDesign) {
+	void setModernDesign(ModernDesignHandler modernDesign) {
 		this.modernDesign = modernDesign;
 	}
 
