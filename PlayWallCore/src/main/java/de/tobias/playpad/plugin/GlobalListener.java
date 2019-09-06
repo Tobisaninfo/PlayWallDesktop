@@ -4,5 +4,7 @@ import de.tobias.playpad.project.Project;
 
 public interface GlobalListener {
 
-	void currentProjectDidChanged(Project newProject);
+	void projectOpened(Project newProject);
+
+	void projectClosed(Project currentProject);
 }

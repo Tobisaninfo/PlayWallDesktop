@@ -4,7 +4,6 @@ import java.util.UUID
 
 import de.thecodelabs.utils.application
 import de.tobias.playpad.PlayPadImpl
-import de.tobias.playpad.project.loader.ProjectLoader
 import de.tobias.playpad.project.ref.ProjectReferenceManager
 ;
 
@@ -18,10 +17,7 @@ class ProjectParameterOpenTask extends PlayPadInitializeTask {
 		if (!parameter.getRaw.isEmpty) {
 			if (parameter.getNamed.containsKey("project")) {
 				val uuid = UUID.fromString(parameter.getNamed.get("project"))
-				val loader = new ProjectLoader(ProjectReferenceManager.getProject(uuid))
-				val project = loader.load
-				instance.openProject(project, null)
-
+				instance.openProject(ProjectReferenceManager.getProject(uuid), null)
 				throw new PlayPadInitializeAbortException(this)
 			}
 		}

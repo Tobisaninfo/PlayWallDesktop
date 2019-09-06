@@ -24,8 +24,7 @@ import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
-import de.tobias.playpad.project.ProjectReader;
-import de.tobias.playpad.project.loader.ProjectLoader;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -41,7 +40,6 @@ import de.tobias.playpad.viewcontroller.dialog.AboutDialog;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.PrintDialog;
 import de.tobias.playpad.viewcontroller.dialog.ProfileViewController;
-import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectManagerDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
@@ -491,10 +489,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			ProjectNewDialog dialog = new ProjectNewDialog(mainViewController.getStage());
 			dialog.showAndWait().ifPresent(projectReference -> {
 				try {
-					ProjectLoader loader = new ProjectLoader(projectReference);
-					Project project = loader.load();
-					PlayPadMain.getProgramInstance().openProject(project, null);
-				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException | ProjectReader.ProjectReaderDelegate.ProfileAbortException e) {
+					PlayPadMain.getProgramInstance().openProject(projectReference, null);
+				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException | ProfileAbortException e) {
 					Logger.error(e);
 				}
 			});
@@ -513,13 +509,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			if (result.isPresent()) {
 				ProjectReference ref = result.get();
 
-				ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(stage);
 				try {
-					ProjectLoader loader = new ProjectLoader(result.get());
-					loader.setDelegate(delegate);
-					loader.setListener(new ProjectLoadDialog());
-					Project project = loader.load();
-					PlayPadMain.getProgramInstance().openProject(project, null);
+					PlayPadMain.getProgramInstance().openProject(ref, null);
 
 					createRecentDocumentMenuItems();
 				} catch (ProfileNotFoundException e) {
@@ -533,8 +524,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 					// Neues Profile wählen
 					ProfileReference profile = null;
 					try {
-						profile = delegate.getProfileReference();
-					} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+						profile = ProjectReaderDelegateImpl.getInstance(stage).getProfileReference();
+					} catch (ProfileAbortException ignored) {
 					}
 					ref.setProfileReference(profile);
 				} catch (ProjectNotFoundException e) {
@@ -787,14 +778,9 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			MenuItem item = (MenuItem) event.getSource();
 			ProjectReference ref = (ProjectReference) item.getUserData();
 
-			ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getContainingWindow());
 			try {
 				// Speichern das alte Project in mvc.setProject(Project)
-				ProjectLoader loader = new ProjectLoader(ref);
-				loader.setDelegate(delegate);
-				loader.setListener(new ProjectLoadDialog());
-				Project project = loader.load();
-				PlayPadMain.getProgramInstance().openProject(project, null);
+				PlayPadMain.getProgramInstance().openProject(ref, null);
 			} catch (ProfileNotFoundException e) {
 				Logger.error(e);
 				mainViewController.showError(
@@ -803,8 +789,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				// Neues Profile wählen
 				ProfileReference profile = null;
 				try {
-					profile = delegate.getProfileReference();
-				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
+					profile = ProjectReaderDelegateImpl.getInstance(getContainingWindow()).getProfileReference();
+				} catch (ProfileAbortException ignored) {
 				}
 				ref.setProfileReference(profile);
 			} catch (ProjectNotFoundException e) {

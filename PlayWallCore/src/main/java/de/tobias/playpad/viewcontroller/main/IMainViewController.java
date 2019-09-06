@@ -104,6 +104,8 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	 */
 	boolean showPage(Page page);
 
+	void closeProject();
+
 	/**
 	 * Opens a project
 	 *

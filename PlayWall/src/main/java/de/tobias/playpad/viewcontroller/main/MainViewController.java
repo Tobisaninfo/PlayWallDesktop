@@ -226,27 +226,22 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void initKeyboardMapper() {
 		registerKeyboardListener(KeyEvent.ANY, event -> {
 			if (event.getTarget() instanceof AnchorPane) {
-				if(!event.isShortcutDown())
-				{
+				if (!event.isShortcutDown()) {
 					KeyCode code = null;
 					KeyEventType type = null;
 
-					if(event.getEventType() == KeyEvent.KEY_PRESSED)
-					{
+					if (event.getEventType() == KeyEvent.KEY_PRESSED) {
 						code = event.getCode();
 						type = KeyEventType.DOWN;
 
-					}
-					else if(event.getEventType() == KeyEvent.KEY_RELEASED)
-					{
+					} else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
 						code = event.getCode();
 						type = KeyEventType.UP;
 
 					}
 
 					// Only execute this, then the right event is triggered and this var is set
-					if(code != null)
-					{
+					if (code != null) {
 						de.thecodelabs.midi.event.KeyEvent keyEvent = new de.thecodelabs.midi.event.KeyEvent(KeyType.KEYBOARD, type, code.ordinal());
 						KeyEventDispatcher.dispatchEvent(keyEvent);
 					}
@@ -377,7 +372,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	}
 
 	@Override
-	public void openProject(Project project) {
+	public void closeProject() {
 		// Remove old listener
 		if (this.openProject != null) {
 			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
@@ -385,8 +380,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			this.openProject.notFoundMediaProperty().removeListener(notFoundListener);
 			this.openProject.close();
 		}
-
 		removePadContentsFromView();
+		this.openProject = null;
+	}
+
+	@Override
+	public void openProject(Project project) {
+		if (this.openProject != null) {
+			closeProject();
+		}
 
 		openProject = project;
 
@@ -563,7 +565,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 	}
 
-	@Override
 	public void setGridColor(Color color) {
 		this.gridColor = color;
 		try {

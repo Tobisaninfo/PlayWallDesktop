@@ -14,18 +14,15 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.importer.ProjectImporter;
-import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.*;
 import de.tobias.playpad.viewcontroller.cell.ProjectCell;
 import de.tobias.playpad.viewcontroller.dialog.ModernPluginViewController;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectImportDialog;
-import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectNewDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import javafx.application.Platform;
@@ -259,7 +256,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 		Server server = PlayPadPlugin.getServerHandler().getServer();
 		server.connectionStateProperty().removeListener(this);
 
-		// Es fehlen Module
+		// Modules missing
 		if (!ref.getMissedModules().isEmpty()) {
 			showInfoMessage(Localization.getString(Strings.ERROR_PLUGINS_MISSING));
 
@@ -267,14 +264,8 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			pluginViewController.getStageContainer().ifPresent(NVCStage::showAndWait);
 		}
 
-		ProjectReader.ProjectReaderDelegate delegate = ProjectReaderDelegateImpl.getInstance(getContainingWindow());
 		try {
-			ProjectLoader loader = new ProjectLoader(ref);
-			loader.setDelegate(delegate);
-			loader.setListener(new ProjectLoadDialog());
-
-			Project project = loader.load();
-			PlayPadMain.getProgramInstance().openProject(project, e -> getStageContainer().ifPresent(NVCStage::close));
+			PlayPadMain.getProgramInstance().openProject(ref, e -> getStageContainer().ifPresent(NVCStage::close));
 		} catch (ProfileNotFoundException e) {
 			Logger.error(e);
 			showErrorMessage(getString(Strings.ERROR_PROFILE_NOT_FOUND, ref.getProfileReference(), e.getLocalizedMessage()));
@@ -282,7 +273,7 @@ public class LaunchDialog extends NVC implements ChangeListener<ConnectionState>
 			// Choose new profile
 			ProfileReference profile = null;
 			try {
-				profile = delegate.getProfileReference();
+				profile = ProjectReaderDelegateImpl.getInstance(getContainingWindow()).getProfileReference();
 			} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 			}
 			ref.setProfileReference(profile);

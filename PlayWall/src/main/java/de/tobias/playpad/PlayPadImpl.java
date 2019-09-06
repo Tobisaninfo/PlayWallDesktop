@@ -13,17 +13,26 @@ import de.tobias.playpad.design.ModernDesignHandler;
 import de.tobias.playpad.initialize.*;
 import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.plugin.*;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.loader.ProjectLoader;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.ConnectionState;
 import de.tobias.playpad.server.Server;
 import de.tobias.playpad.server.Session;
 import de.tobias.playpad.server.SessionDelegate;
 import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.stage.Window;
+import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -161,12 +170,24 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public void openProject(Project project, Consumer<NVC> onLoaded) {
+	public void openProject(ProjectReference projectReference, Consumer<NVC> onLoaded) throws ProjectNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProfileNotFoundException, DocumentException, IOException {
+		if (mainViewController != null) {
+			mainViewController.closeProject();
+			globalListeners.forEach(l -> l.projectClosed(currentProject));
+		}
+
+		Window owner = mainViewController != null ? mainViewController.getContainingWindow() : null;
+
+		ProjectLoader loader = new ProjectLoader(projectReference);
+		loader.setDelegate(ProjectReaderDelegateImpl.getInstance(owner));
+		loader.setListener(new ProjectLoadDialog());
+
+		currentProject = loader.load();
+
 		if (mainViewController == null) {
 			mainViewController = new MainViewController(e -> {
-				currentProject = project;
-				mainViewController.openProject(project);
-				globalListeners.forEach(l -> l.currentProjectDidChanged(project));
+				mainViewController.openProject(currentProject);
+				globalListeners.forEach(l -> l.projectOpened(currentProject));
 				if (onLoaded != null) {
 					onLoaded.accept(e);
 				}
@@ -174,10 +195,8 @@ public class PlayPadImpl implements PlayPad {
 				Platform.setImplicitExit(true);
 			});
 		} else {
-			currentProject = project;
-			mainViewController.openProject(project);
-
-			globalListeners.forEach(l -> l.currentProjectDidChanged(project));
+			mainViewController.openProject(currentProject);
+			globalListeners.forEach(l -> l.projectOpened(currentProject));
 		}
 	}
 

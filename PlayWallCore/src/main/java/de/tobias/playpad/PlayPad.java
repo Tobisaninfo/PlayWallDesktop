@@ -6,11 +6,17 @@ import de.tobias.playpad.plugin.GlobalListener;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
+import org.dom4j.DocumentException;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -117,10 +123,10 @@ public interface PlayPad {
 	/**
 	 * Open a project
 	 *
-	 * @param project  project
+	 * @param projectReference  project reference
 	 * @param onLoaded on project loaded callback
 	 */
-	void openProject(Project project, Consumer<NVC> onLoaded);
+	void openProject(ProjectReference projectReference, Consumer<NVC> onLoaded) throws ProjectNotFoundException, ProfileAbortException, ProfileNotFoundException, DocumentException, IOException;
 
 	UpdateService getUpdateService();
 
