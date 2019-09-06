@@ -2,8 +2,6 @@ package de.tobias.playpad.pad;
 
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.log.listener.PadMediaPathLogListener;
-import de.tobias.playpad.log.listener.PadPlayLogListener;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
@@ -27,6 +25,7 @@ import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
@@ -68,8 +67,7 @@ public class Pad {
 	private transient PadFadeContentListener padFadeContentListener;
 	private transient PadFadeDurationListener padFadeDurationListener;
 
-	private transient PadPlayLogListener padPlayLogListener;
-	private transient PadMediaPathLogListener padMediaPathLogListener;
+	private transient ListChangeListener<MediaPath> mediaPathUpdateListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -135,14 +133,6 @@ public class Pad {
 			padFadeContentListener.changed(contentProperty, getContent(), null);
 		}
 
-		if (padPlayLogListener != null && statusProperty != null) {
-			statusProperty.removeListener(padPlayLogListener);
-		}
-
-		if (padMediaPathLogListener != null && mediaPaths != null) {
-			mediaPaths.removeListener(padMediaPathLogListener);
-		}
-
 		// init new listener for properties
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
@@ -159,15 +149,7 @@ public class Pad {
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
 
-		// PlayOutLog Listener
-		padPlayLogListener = new PadPlayLogListener(this);
-		statusProperty.addListener(padPlayLogListener);
-
-		padMediaPathLogListener = new PadMediaPathLogListener();
-		mediaPaths.addListener(padMediaPathLogListener);
-
 		// Trigger
-
 		padTriggerStatusListener = new PadTriggerStatusListener(this);
 		statusProperty.addListener(padTriggerStatusListener);
 
@@ -177,6 +159,16 @@ public class Pad {
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
+
+		// Pad Listener
+		if (mediaPathUpdateListener != null) {
+			mediaPaths.removeListener(mediaPathUpdateListener);
+		}
+		mediaPathUpdateListener = value -> PlayPadPlugin
+				.getInstance()
+				.getPadListener()
+				.forEach(listener -> listener.onMediaPathChanged(this, value));
+		mediaPaths.addListener(mediaPathUpdateListener);
 	}
 
 	public void addSyncListener() {

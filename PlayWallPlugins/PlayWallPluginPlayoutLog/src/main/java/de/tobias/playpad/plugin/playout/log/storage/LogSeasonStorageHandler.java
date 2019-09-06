@@ -1,8 +1,8 @@
-package de.tobias.playpad.log.storage;
+package de.tobias.playpad.plugin.playout.log.storage;
 
-import de.tobias.playpad.log.LogItem;
-import de.tobias.playpad.log.LogSeason;
-import de.tobias.playpad.log.PlayOutItem;
+import de.tobias.playpad.plugin.playout.log.LogItem;
+import de.tobias.playpad.plugin.playout.log.LogSeason;
+import de.tobias.playpad.plugin.playout.log.PlayOutItem;
 
 import java.util.List;
 

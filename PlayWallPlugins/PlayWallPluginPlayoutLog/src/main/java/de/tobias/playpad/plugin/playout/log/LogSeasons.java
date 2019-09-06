@@ -1,6 +1,6 @@
-package de.tobias.playpad.log;
+package de.tobias.playpad.plugin.playout.log;
 
-import de.tobias.playpad.log.storage.LogSeasonStorageHandler;
+import de.tobias.playpad.plugin.playout.log.storage.LogSeasonStorageHandler;
 
 import java.util.List;
 

@@ -3,9 +3,9 @@ package de.tobias.playpad.plugin.playout.export;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import de.tobias.playpad.design.modern.ModernColor;
-import de.tobias.playpad.log.LogItem;
-import de.tobias.playpad.log.LogSeason;
 import de.tobias.playpad.plugin.playout.ColorUtils;
+import de.tobias.playpad.plugin.playout.log.LogItem;
+import de.tobias.playpad.plugin.playout.log.LogSeason;
 
 import java.io.IOException;
 import java.nio.file.Files;

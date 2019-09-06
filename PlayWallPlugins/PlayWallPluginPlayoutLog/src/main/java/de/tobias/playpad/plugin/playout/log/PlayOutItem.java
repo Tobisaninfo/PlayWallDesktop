@@ -1,4 +1,4 @@
-package de.tobias.playpad.log;
+package de.tobias.playpad.plugin.playout.log;
 
 import java.util.UUID;
 

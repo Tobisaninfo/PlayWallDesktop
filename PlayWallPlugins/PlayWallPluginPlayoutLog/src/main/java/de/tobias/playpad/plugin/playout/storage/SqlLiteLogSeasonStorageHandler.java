@@ -2,10 +2,10 @@ package de.tobias.playpad.plugin.playout.storage;
 
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
-import de.tobias.playpad.log.LogItem;
-import de.tobias.playpad.log.LogSeason;
-import de.tobias.playpad.log.PlayOutItem;
-import de.tobias.playpad.log.storage.LogSeasonStorageHandler;
+import de.tobias.playpad.plugin.playout.log.LogItem;
+import de.tobias.playpad.plugin.playout.log.LogSeason;
+import de.tobias.playpad.plugin.playout.log.PlayOutItem;
+import de.tobias.playpad.plugin.playout.log.storage.LogSeasonStorageHandler;
 
 import java.nio.file.Path;
 import java.sql.*;

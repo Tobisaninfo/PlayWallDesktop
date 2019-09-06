@@ -1,6 +1,5 @@
 package de.tobias.playpad;
 
-import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
@@ -11,7 +10,6 @@ import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.design.ModernDesignHandler;
 import de.tobias.playpad.initialize.*;
-import de.tobias.playpad.log.LogSeasons;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
@@ -150,12 +148,6 @@ public class PlayPadImpl implements PlayPad {
 		final Server server = PlayPadPlugin.getServerHandler().getServer();
 		if (server.getConnectionState() != ConnectionState.DISCONNECTED) {
 			server.disconnect();
-		}
-
-		try {
-			LogSeasons.getStorageHandler().close();
-		} catch (RuntimeException e) {
-			Logger.log(LogLevel.ERROR, "Cannot close LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
 		}
 
 		try {

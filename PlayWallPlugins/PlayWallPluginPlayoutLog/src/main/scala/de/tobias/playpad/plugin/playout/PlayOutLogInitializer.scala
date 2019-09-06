@@ -5,7 +5,7 @@ import java.sql.SQLException
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
-import de.tobias.playpad.log.LogSeasons
+import de.tobias.playpad.plugin.playout.log.LogSeasons
 import de.tobias.playpad.plugin.playout.storage.SqlLiteLogSeasonStorageHandler
 
 object PlayOutLogInitializer {

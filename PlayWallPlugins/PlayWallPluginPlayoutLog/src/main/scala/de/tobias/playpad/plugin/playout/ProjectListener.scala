@@ -4,8 +4,8 @@ import java.text.SimpleDateFormat
 
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.storage.proxy.SettingsProxy
-import de.tobias.playpad.log.LogSeasons
 import de.tobias.playpad.plugin.GlobalAdapter
+import de.tobias.playpad.plugin.playout.log.LogSeasons
 import de.tobias.playpad.plugin.playout.storage.PlayoutLogSettings
 import de.tobias.playpad.project.Project
 
