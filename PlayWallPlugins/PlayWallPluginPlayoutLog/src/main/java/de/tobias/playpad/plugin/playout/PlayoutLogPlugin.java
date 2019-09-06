@@ -11,6 +11,7 @@ import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.playout.log.LogSeasons;
 import de.tobias.playpad.plugin.playout.log.listener.PadPlayLogListener;
 import de.tobias.playpad.plugin.playout.viewcontroller.MainViewControllerListener;
+import de.tobias.playpad.plugin.playout.viewcontroller.PlayoutLogStatusIconListener;
 
 @SuppressWarnings("unused")
 public class PlayoutLogPlugin implements PlayPadPluginStub, PluginArtifact {
@@ -23,9 +24,15 @@ public class PlayoutLogPlugin implements PlayPadPluginStub, PluginArtifact {
 
 		module = new Module(descriptor.getName(), descriptor.getArtifactId());
 
+		PlayoutLogStatusIconListener playoutLogStatusIconListener = new PlayoutLogStatusIconListener();
+
 		PlayPadPlugin.getInstance().addMainViewListener(new MainViewControllerListener());
+		PlayPadPlugin.getInstance().addMainViewListener(playoutLogStatusIconListener);
+
 		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener());
 		PlayPadPlugin.getInstance().addPadListener(new PadPlayLogListener());
+
+		LogSeasons.addListener(playoutLogStatusIconListener);
 
 		PlayOutLogInitializer.init();
 

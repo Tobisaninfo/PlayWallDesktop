@@ -179,11 +179,13 @@ public class PlayPadImpl implements PlayPad {
 		if (mainViewController == null) {
 			mainViewController = new MainViewController(e -> {
 				mainViewController.openProject(currentProject);
-				globalListeners.forEach(l -> l.projectOpened(currentProject));
+				mainViewListeners.forEach(l -> l.onInit(mainViewController));
+
 				if (onLoaded != null) {
 					onLoaded.accept(e);
 				}
-				mainViewListeners.forEach(l -> l.onInit(mainViewController));
+
+				globalListeners.forEach(l -> l.projectOpened(currentProject));
 				Platform.setImplicitExit(true);
 			});
 		} else {

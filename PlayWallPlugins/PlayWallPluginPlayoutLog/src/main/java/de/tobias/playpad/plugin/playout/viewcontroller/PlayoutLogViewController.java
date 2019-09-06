@@ -5,8 +5,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.proxy.SettingsProxy;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.thecodelabs.utils.ui.icon.FontAwesomeType;
-import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.playout.Strings;
@@ -16,7 +14,6 @@ import de.tobias.playpad.plugin.playout.log.LogSeasons;
 import de.tobias.playpad.plugin.playout.storage.PlayoutLogSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,8 +46,6 @@ public class PlayoutLogViewController extends NVC {
 	@FXML
 	private CheckBox autoStartCheckbox;
 
-	private FontIcon logIcon;
-
 	public PlayoutLogViewController(Window owner) {
 		load("view/dialog", "PlayoutLogDialog", Localization.getBundle());
 
@@ -64,13 +59,10 @@ public class PlayoutLogViewController extends NVC {
 	public void init() {
 		logList.getItems().setAll(LogSeasons.getAllLogSeasonsLazy());
 
-		// LogIcon
-		logIcon = new FontIcon(FontAwesomeType.LIST);
-
-		if (LogSeasons.getInstance() != null) { // Running
+		if (LogSeasons.getCurrentSession() != null) { // Running
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
 			nameTextField.setDisable(true);
-			nameTextField.setText(LogSeasons.getInstance().getName());
+			nameTextField.setText(LogSeasons.getCurrentSession().getName());
 		} else {
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
@@ -96,9 +88,7 @@ public class PlayoutLogViewController extends NVC {
 
 	@FXML
 	private void startButtonHandler(ActionEvent event) {
-		final MenuToolbarViewController controller = PlayPadPlugin.getInstance().getMainViewController().getMenuToolbarController();
-
-		if (LogSeasons.getInstance() == null) { // Start
+		if (LogSeasons.getCurrentSession() == null) { // Start
 			if (nameTextField.getText().isEmpty()) {
 				return;
 			}
@@ -109,12 +99,10 @@ public class PlayoutLogViewController extends NVC {
 			LogSeason logSeason = LogSeasons.createLogSeason(nameTextField.getText(), settings.getColumns(), settings.getRows());
 			logSeason.createProjectSnapshot(currentProject);
 
-			controller.addToolbarItem(logIcon);
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
 			nameTextField.setDisable(false);
 		} else { // Stop
 			LogSeasons.stop();
-			controller.removeToolbarItem(logIcon);
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
 		}

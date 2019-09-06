@@ -2,27 +2,36 @@ package de.tobias.playpad.plugin.playout.log;
 
 import de.tobias.playpad.plugin.playout.log.storage.LogSeasonStorageHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogSeasons {
 
-	private static LogSeason INSTANCE;
+	private static LogSeason currentLogSession;
 	private static LogSeasonStorageHandler storageHandler;
 
-	public static LogSeason getInstance() {
-		return INSTANCE;
+	private static List<LogSessionListener> listeners = new ArrayList<>();
+
+	private LogSeasons() {
+
+	}
+
+	public static LogSeason getCurrentSession() {
+		return currentLogSession;
 	}
 
 	public static LogSeason createLogSeason(String name, int columns, int rows) {
-		INSTANCE = new LogSeason(name, columns, rows);
+		currentLogSession = new LogSeason(name, columns, rows);
 
 		// Save
 		LogSeasonStorageHandler storageHandler = LogSeasons.getStorageHandler();
 		if (storageHandler != null) {
-			storageHandler.addLogSeason(INSTANCE);
+			storageHandler.addLogSeason(currentLogSession);
 		}
 
-		return INSTANCE;
+		listeners.forEach(l -> l.playoutLogStarted(currentLogSession));
+
+		return currentLogSession;
 	}
 
 	public static LogSeasonStorageHandler getStorageHandler() {
@@ -34,7 +43,8 @@ public class LogSeasons {
 	}
 
 	public static void stop() {
-		INSTANCE = null;
+		listeners.forEach(l -> l.playoutLogStopped(currentLogSession));
+		currentLogSession = null;
 	}
 
 	public static List<LogSeason> getAllLogSeasonsLazy() {
@@ -43,9 +53,21 @@ public class LogSeasons {
 
 	public static void deleteSession(int id) {
 		getStorageHandler().deleteSession(id);
-	};
+	}
 
 	public static LogSeason getLogSeason(int id) {
 		return getStorageHandler().getLogSeason(id);
+	}
+
+	/*
+	Listener
+	 */
+
+	public static void addListener(LogSessionListener logSessionListener) {
+		listeners.add(logSessionListener);
+	}
+
+	public static void removeListener(LogSessionListener logSessionListener) {
+		listeners.remove(logSessionListener);
 	}
 }

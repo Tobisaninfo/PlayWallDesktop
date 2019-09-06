@@ -16,7 +16,7 @@ public class PadPlayLogListener implements PadListener {
 	@Override
 	public void onStatusChange(Pad pad, PadStatus newValue) {
 		if (newValue == PadStatus.PLAY) {
-			LogSeason instance = LogSeasons.getInstance();
+			LogSeason instance = LogSeasons.getCurrentSession();
 			if (instance != null) {
 				instance.getLogItems().stream().filter(item -> item.getUuid().equals(pad.getPaths().get(0).getId())).forEach(item -> {
 					PlayOutItem playoutItem = new PlayOutItem(item.getUuid(), instance, System.currentTimeMillis());
@@ -29,7 +29,7 @@ public class PadPlayLogListener implements PadListener {
 
 	@Override
 	public void onMediaPathChanged(Pad pad, ListChangeListener.Change<? extends MediaPath> value) {
-		LogSeason instance = LogSeasons.getInstance();
+		LogSeason instance = LogSeasons.getCurrentSession();
 		if (instance != null) {
 			while (value.next()) {
 				if (value.wasAdded()) {
