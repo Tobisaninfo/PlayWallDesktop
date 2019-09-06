@@ -41,6 +41,10 @@ public class LogSeasons {
 		return getStorageHandler().getAllLogSeasonsLazy();
 	}
 
+	public static void deleteSession(int id) {
+		getStorageHandler().deleteSession(id);
+	};
+
 	public static LogSeason getLogSeason(int id) {
 		return getStorageHandler().getLogSeason(id);
 	}

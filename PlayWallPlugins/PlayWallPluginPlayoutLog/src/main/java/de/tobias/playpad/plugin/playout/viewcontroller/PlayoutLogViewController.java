@@ -140,7 +140,10 @@ public class PlayoutLogViewController extends NVC {
 
 	@FXML
 	private void deleteButtonHandler(ActionEvent event) {
-
+		getSelectedLogSeason().ifPresent(season -> { // Lazy Season
+			LogSeasons.deleteSession(season.getId());
+			logList.getItems().remove(season);
+		});
 	}
 
 	@FXML

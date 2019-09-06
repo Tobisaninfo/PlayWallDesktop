@@ -38,7 +38,7 @@ public class PlayoutLogPlugin implements PlayPadPluginStub, PluginArtifact {
 
 		try {
 			LogSeasons.getStorageHandler().close();
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			Logger.log(LogLevel.ERROR, "Cannot close LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
 		}
 	}

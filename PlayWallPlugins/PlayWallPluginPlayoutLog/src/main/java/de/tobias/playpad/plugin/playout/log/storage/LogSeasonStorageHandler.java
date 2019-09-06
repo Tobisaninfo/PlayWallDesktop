@@ -6,7 +6,8 @@ import de.tobias.playpad.plugin.playout.log.PlayOutItem;
 
 import java.util.List;
 
-public interface LogSeasonStorageHandler {
+public interface LogSeasonStorageHandler extends AutoCloseable {
+
 	void addLogSeason(LogSeason season);
 
 	void addLogItem(LogItem item);
@@ -17,10 +18,5 @@ public interface LogSeasonStorageHandler {
 
 	List<LogSeason> getAllLogSeasonsLazy();
 
-	/**
-	 * Close the storage handler.
-	 *
-	 * @throws RuntimeException fail to close handler (e.g. sql error)
-	 */
-	void close();
+	void deleteSession(int id);
 }

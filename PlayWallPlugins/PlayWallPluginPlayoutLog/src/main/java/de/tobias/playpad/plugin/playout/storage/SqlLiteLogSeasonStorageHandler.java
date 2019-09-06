@@ -1,6 +1,5 @@
 package de.tobias.playpad.plugin.playout.storage;
 
-import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.plugin.playout.log.LogItem;
 import de.tobias.playpad.plugin.playout.log.LogSeason;
@@ -51,7 +50,7 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 				}
 			}
 		} catch (SQLException e) {
-			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
+			Logger.error(e);
 		}
 	}
 
@@ -124,7 +123,7 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 				}
 			}
 		} catch (SQLException e) {
-			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
+			Logger.error(e);
 		}
 		return null;
 	}
@@ -149,7 +148,7 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 				}
 			}
 		} catch (SQLException e) {
-			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
+			Logger.error(e);
 		}
 		return logItems;
 	}
@@ -172,9 +171,29 @@ public class SqlLiteLogSeasonStorageHandler implements LogSeasonStorageHandler {
 				}
 			}
 		} catch (SQLException e) {
-			Logger.log(LogLevel.ERROR, e.getLocalizedMessage());
+			Logger.error(e);
 		}
 		return playOutItems;
+	}
+
+	@Override
+	public void deleteSession(int id) {
+		try (PreparedStatement deletePlayoutItems = connection.prepareStatement("DELETE FROM PlayOutItem WHERE uuid IN (SELECT uuid FROM LogItem l WHERE l.logSeason = ?)")) {
+			deletePlayoutItems.setInt(1, id);
+			deletePlayoutItems.execute();
+
+			try (PreparedStatement deleteLogItems = connection.prepareStatement("DELETE FROM LogItem WHERE logSeason = ?")) {
+				deleteLogItems.setInt(1, id);
+				deleteLogItems.execute();
+			}
+
+			try (PreparedStatement deleteLogSeason = connection.prepareStatement("DELETE FROM LogSeason WHERE id = ?")) {
+				deleteLogSeason.setInt(1, id);
+				deleteLogSeason.execute();
+			}
+		} catch (SQLException e) {
+			Logger.error(e);
+		}
 	}
 
 	@Override
