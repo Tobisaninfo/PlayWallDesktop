@@ -24,6 +24,7 @@
         <jlayer.version>1.0.1</jlayer.version>
 
         <itextpdf.version>5.5.13</itextpdf.version>
+        <jackson-dataformat-csv.version>2.9.9</jackson-dataformat-csv.version>
 
         <spark-core.version>[2.9.0,)</spark-core.version>
 

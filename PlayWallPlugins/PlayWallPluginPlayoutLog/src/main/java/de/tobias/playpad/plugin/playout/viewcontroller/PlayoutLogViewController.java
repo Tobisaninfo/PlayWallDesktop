@@ -1,5 +1,9 @@
 package de.tobias.playpad.plugin.playout.viewcontroller;
 
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.module.scala.DefaultScalaModule;
 import com.itextpdf.text.DocumentException;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.proxy.SettingsProxy;
@@ -8,6 +12,7 @@ import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.playout.Strings;
+import de.tobias.playpad.plugin.playout.export.CsvPlayoutLogExport;
 import de.tobias.playpad.plugin.playout.export.PlayoutLogPdfExport;
 import de.tobias.playpad.plugin.playout.log.LogSeason;
 import de.tobias.playpad.plugin.playout.log.LogSeasons;
@@ -27,6 +32,8 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 public class PlayoutLogViewController extends NVC {
@@ -124,6 +131,41 @@ public class PlayoutLogViewController extends NVC {
 				}
 			}
 		});
+	}
+
+	@FXML
+	private void exportMultipleCsvHandler(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV", "*.csv");
+		fileChooser.getExtensionFilters().add(extensionFilter);
+
+		File file = fileChooser.showSaveDialog(getContainingWindow());
+		if (file == null) {
+			return;
+		}
+		Path path = file.toPath();
+
+		final LogSeason[] logSeasons = LogSeasons.getAllLogSeasonsLazy()
+				.parallelStream()
+				.map(logSeason -> LogSeasons.getLogSeason(logSeason.getId()))
+				.toArray(LogSeason[]::new);
+
+		final CsvPlayoutLogExport.CsvColumn[] export = CsvPlayoutLogExport.export(logSeasons);
+
+		// create mapper and schema
+		CsvMapper mapper = new CsvMapper();
+		mapper.registerModule(new DefaultScalaModule());
+
+		CsvSchema schema = mapper.schemaFor(CsvPlayoutLogExport.CsvColumn.class);
+		schema = schema.withColumnSeparator(';').withHeader();
+
+		// output writer
+		ObjectWriter objectWriter = mapper.writer(schema);
+		try {
+			objectWriter.writeValue(Files.newBufferedWriter(path), export);
+		} catch (IOException e) {
+			Logger.error(e);
+		}
 	}
 
 	@FXML
