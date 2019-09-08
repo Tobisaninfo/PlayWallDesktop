@@ -10,6 +10,8 @@ object ProjectSerializer {
 
 		result.addProperty("id", project.getProjectReference.getUuid.toString)
 		result.addProperty("name", project.getProjectReference.getName)
+		result.addProperty("columns", project.getSettings.getColumns)
+		result.addProperty("rows", project.getSettings.getRows)
 
 		val pageArray = new JsonArray()
 		project.getPages.forEach(page => {
