@@ -3,9 +3,9 @@ package de.tobias.playpad;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.plugin.GlobalListener;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -34,7 +34,9 @@ public interface PlayPad {
 	 * @param listener MainView Listener
 	 * @since 2.0.0
 	 */
-	void addMainViewListener(WindowListener<IMainViewController> listener);
+	void addMainViewListener(MainWindowListener listener);
+
+	List<MainWindowListener> getMainViewListeners();
 
 	/**
 	 * Fügt einen Settings Listener hinzu.

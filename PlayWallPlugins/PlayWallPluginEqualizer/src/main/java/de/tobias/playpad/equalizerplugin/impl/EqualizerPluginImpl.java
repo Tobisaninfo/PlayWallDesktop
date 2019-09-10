@@ -12,10 +12,10 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Equalizeable;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
-import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.ActionEvent;
@@ -28,7 +28,8 @@ import org.dom4j.DocumentException;
 
 import java.io.IOException;
 
-public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, PadListener {
+@SuppressWarnings("unused")
+public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, MainWindowListener, EventHandler<ActionEvent>, PadListener {
 
 	private Module module;
 

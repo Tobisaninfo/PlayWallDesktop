@@ -24,6 +24,7 @@ import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileListener;
 import de.tobias.playpad.profile.ProfileSettings;
@@ -774,6 +775,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.loadKeybinding(keys);
 		}
+
+		// Plugin Hook
+		PlayPadPlugin.getInstance().getMainViewListeners().forEach(MainWindowListener::loadMenuKeyBinding);
 	}
 
 }

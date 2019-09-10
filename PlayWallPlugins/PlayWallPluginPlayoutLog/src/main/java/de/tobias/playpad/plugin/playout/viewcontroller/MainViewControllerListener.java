@@ -2,13 +2,17 @@ package de.tobias.playpad.plugin.playout.viewcontroller;
 
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.plugin.MainWindowListener;
+import de.tobias.playpad.plugin.playout.PlayoutLogPlugin;
 import de.tobias.playpad.plugin.playout.Strings;
+import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import javafx.scene.control.MenuItem;
 
-public class MainViewControllerListener implements WindowListener<IMainViewController> {
+public class MainViewControllerListener implements MainWindowListener {
 	private MenuItem menuItem;
 
 	@Override
@@ -27,6 +31,16 @@ public class MainViewControllerListener implements WindowListener<IMainViewContr
 			}
 
 			newToolbar.addMenuItem(menuItem, MenuType.EXTENSION);
+			loadMenuKeyBinding();
 		});
+	}
+
+	@Override
+	public void loadMenuKeyBinding() {
+		final KeyCollection keyCollection = PlayPadPlugin.getInstance().getGlobalSettings().getKeyCollection();
+		final MenuToolbarViewController menuToolbarController = PlayPadPlugin.getInstance().getMainViewController().getMenuToolbarController();
+		menuToolbarController.setKeyBindingForMenu(menuItem, keyCollection.getKey(PlayoutLogPlugin.KEY_COLLECTION_PLAYOUT));
+
+		menuItem.setDisable(false);
 	}
 }

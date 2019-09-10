@@ -8,10 +8,10 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.Module;
 import de.tobias.playpad.plugin.PlayPadPluginStub;
 import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.WindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -26,7 +26,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 @SuppressWarnings("unused")
-public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, WindowListener<IMainViewController>, EventHandler<ActionEvent>, SettingsListener {
+public class AwakePluginImpl implements PlayPadPluginStub, PluginArtifact, MainWindowListener, EventHandler<ActionEvent>, SettingsListener {
 
 	private Module module;
 

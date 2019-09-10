@@ -130,6 +130,9 @@ public class Key implements Displayable {
 	 */
 	@Override
 	public String toString() {
+		if (key == null) {
+			return "";
+		}
 		if (!getKeyCode().isEmpty())
 			try {
 				return KeyCombination.valueOf(getKeyCode()).getDisplayText();

@@ -42,7 +42,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private Application.Parameters parameters;
 
-	private List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
+	private List<MainWindowListener> mainViewListeners = new ArrayList<>();
 	private List<SettingsListener> settingsListeners = new ArrayList<>();
 	private List<PadListener> padListeners = new ArrayList<>();
 	private List<GlobalListener> globalListeners = new ArrayList<>();
@@ -68,11 +68,11 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public void addMainViewListener(WindowListener<IMainViewController> listener) {
+	public void addMainViewListener(MainWindowListener listener) {
 		mainViewListeners.add(listener);
 	}
 
-	public List<WindowListener<IMainViewController>> getMainViewListeners() {
+	public List<MainWindowListener> getMainViewListeners() {
 		return mainViewListeners;
 	}
 
@@ -199,7 +199,7 @@ public class PlayPadImpl implements PlayPad {
 
 		initializer.submit(new LocalizationLoadingTask());
 		initializer.submit(new GlobalSettingsLoadingTask());
-		initializer.submit(new KeyboardMappingLoadingTask());
+		initializer.submit(new KeyboardDefaultMappingTask());
 
 		initializer.submit(new ServiceInitializationTask());
 
@@ -215,6 +215,7 @@ public class PlayPadImpl implements PlayPad {
 		initializer.submit(new NativeAppInitializerTask());
 		initializer.submit(new PluginLoadingTask());
 		initializer.submit(new ProjectsLoadingTask());
+		initializer.submit(new KeyboardLoadingMappingTask());
 
 		initializer.submit(new CheckUpdateTask());
 

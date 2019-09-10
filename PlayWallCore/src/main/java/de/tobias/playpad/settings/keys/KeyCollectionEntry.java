@@ -6,7 +6,7 @@ package de.tobias.playpad.settings.keys;
  * @author tobias
  * @since 6.0.0
  */
-class KeyCollectionEntry {
+public class KeyCollectionEntry {
 
 	private final String name;
 	private Key key;

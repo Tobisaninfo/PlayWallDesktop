@@ -3,11 +3,13 @@ package de.tobias.playpad.viewcontroller.main;
 import de.thecodelabs.utils.ui.NVC;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
 import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCombination;
 
 import java.util.ResourceBundle;
 
@@ -148,6 +150,13 @@ public abstract class MenuToolbarViewController extends NVC {
 	 * @param keys Einstellungen der Keybinding
 	 */
 	public abstract void loadKeybinding(KeyCollection keys);
+
+	public void setKeyBindingForMenu(MenuItem menuItem, Key key) {
+		if (key != null && !key.getKeyCode().isEmpty()) {
+			KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
+			menuItem.setAccelerator(keyCode);
+		}
+	}
 
 	/**
 	 * Setzt eine Refernce des aktuellen Projectes auf den ViewController.

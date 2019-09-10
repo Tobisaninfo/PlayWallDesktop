@@ -9,15 +9,16 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 
 import java.util.ResourceBundle;
@@ -99,13 +100,6 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (!(project.getActivePlayers() > 0 && globalSettings.isLiveMode())) {
 			run.run();
-		}
-	}
-
-	protected void setKeyBindingForMenu(MenuItem menuItem, Key key) {
-		if (key != null && !key.getKeyCode().isEmpty()) {
-			KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
-			menuItem.setAccelerator(keyCode);
 		}
 	}
 

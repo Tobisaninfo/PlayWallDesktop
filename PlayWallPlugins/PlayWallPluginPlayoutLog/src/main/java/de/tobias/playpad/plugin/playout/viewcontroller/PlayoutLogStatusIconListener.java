@@ -2,12 +2,12 @@ package de.tobias.playpad.plugin.playout.viewcontroller;
 
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.playout.log.LogSeason;
 import de.tobias.playpad.plugin.playout.log.LogSessionListener;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 
-public class PlayoutLogStatusIconListener implements LogSessionListener, WindowListener<IMainViewController> {
+public class PlayoutLogStatusIconListener implements LogSessionListener, MainWindowListener {
 	private FontIcon logIcon;
 
 	@Override
