@@ -19,12 +19,10 @@ import de.tobias.playpad.plugin.playout.log.LogSeasons;
 import de.tobias.playpad.plugin.playout.storage.PlayoutLogSettings;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import javafx.beans.InvalidationListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -75,9 +73,16 @@ public class PlayoutLogViewController extends NVC {
 			nameTextField.setDisable(false);
 		}
 
+		logList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
 		autoStartCheckbox.setSelected(SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging());
 		autoStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 				SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging(newValue));
+
+		exportButton.setDisable(true);
+		logList.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable ->
+				exportButton.setDisable(logList.getSelectionModel().getSelectedItems().size() != 1));
+		deleteButton.disableProperty().bind(logList.getSelectionModel().selectedItemProperty().isNull());
 	}
 
 	@Override
@@ -145,7 +150,7 @@ public class PlayoutLogViewController extends NVC {
 		}
 		Path path = file.toPath();
 
-		final LogSeason[] logSeasons = LogSeasons.getAllLogSeasonsLazy()
+		final LogSeason[] logSeasons = logList.getSelectionModel().getSelectedItems()
 				.parallelStream()
 				.map(logSeason -> LogSeasons.getLogSeason(logSeason.getId()))
 				.toArray(LogSeason[]::new);
@@ -170,7 +175,7 @@ public class PlayoutLogViewController extends NVC {
 
 	@FXML
 	private void deleteButtonHandler(ActionEvent event) {
-		getSelectedLogSeason().ifPresent(season -> { // Lazy Season
+		logList.getSelectionModel().getSelectedItems().forEach(season -> {
 			LogSeasons.deleteSession(season.getId());
 			logList.getItems().remove(season);
 		});
