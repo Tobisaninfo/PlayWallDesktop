@@ -5,6 +5,7 @@ import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.api.websocket.MethodExecutable
 import de.tobias.playpad.plugin.api.websocket.message.Message
 import de.tobias.playpad.plugin.api.websocket.serialize.ProjectSerializer
+import de.tobias.playpad.profile.Profile
 import org.eclipse.jetty.websocket.api.Session
 
 class ProjectCurrentMethod extends MethodExecutable {
@@ -14,7 +15,7 @@ class ProjectCurrentMethod extends MethodExecutable {
 		if (currentProject == null) {
 			new JsonObject
 		} else {
-			ProjectSerializer.serializeProject(currentProject)
+			ProjectSerializer.serializeProject(currentProject, Profile.currentProfile)
 		}
 	}
 }

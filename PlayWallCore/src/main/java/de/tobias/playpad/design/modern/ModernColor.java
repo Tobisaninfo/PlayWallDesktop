@@ -69,7 +69,7 @@ public enum ModernColor implements DisplayableColor {
 		colors = Storage.load(inputStream, StorageTypes.JSON, ModernColorBean[].class);
 	}
 
-	private Optional<ModernColorBean> getCurrentModernColor() {
+	public Optional<ModernColorBean> getCurrentModernColor() {
 		return Stream.of(colors).filter(color -> color.getName().equals(name())).findAny();
 	}
 
