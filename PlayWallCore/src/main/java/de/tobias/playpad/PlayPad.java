@@ -9,6 +9,7 @@ import de.tobias.playpad.plugin.SettingsListener;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
 import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -125,8 +126,13 @@ public interface PlayPad {
 	/**
 	 * Open a project
 	 *
-	 * @param projectReference  project reference
-	 * @param onLoaded on project loaded callback
+	 * @param projectReference project reference
+	 * @param onLoaded         on project loaded callback
+	 * @throws IOException                                               io error
+	 * @throws ProjectNotFoundException                                  Project to solve error not found
+	 * @throws ProfileNotFoundException                                  Profile of project not found
+	 * @throws DocumentException                                         XML Error
+	 * @throws ProjectReader.ProjectReaderDelegate.ProfileAbortException Profile Choose aborted
 	 */
 	void openProject(ProjectReference projectReference, Consumer<NVC> onLoaded) throws ProjectNotFoundException, ProfileAbortException, ProfileNotFoundException, DocumentException, IOException;
 

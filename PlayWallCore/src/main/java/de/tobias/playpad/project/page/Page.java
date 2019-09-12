@@ -229,7 +229,8 @@ public class Page {
 	/**
 	 * Removes a pad from a page and from the cloud.
 	 *
-	 * @param uuid id of the pad
+	 * @param uuid         id of the pad
+	 * @param deleteRemote <code>true</code> delete from remote
 	 */
 	public void removePad(UUID uuid, boolean deleteRemote) {
 		if (projectReference.getProjectReference().isSync() && deleteRemote) {

@@ -11,6 +11,7 @@ public interface Command {
 	 * Execute a command.
 	 *
 	 * @param data optional data parameter
+	 * @return response to communication peer
 	 */
 	JsonObject execute(Object data);
 }

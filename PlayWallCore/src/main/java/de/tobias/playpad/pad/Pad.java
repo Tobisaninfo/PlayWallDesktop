@@ -687,7 +687,7 @@ public class Pad {
 	/**
 	 * Returns true, when pad has content and pad is visible.
 	 *
-	 * @return loaded & visible
+	 * @return loaded &amp; visible
 	 */
 	public boolean hasVisibleContent() {
 		return getContent() != null && getContent().isPadLoaded() && isPadVisible();

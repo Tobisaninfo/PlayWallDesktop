@@ -15,6 +15,7 @@ public interface ActionFeedbackSuggester {
 	/**
 	 * Is automatic feedback suggestion enabled
 	 *
+	 * @param action action
 	 * @return <code>true</code> Active
 	 */
 	boolean isAutoFeedbackColors(Action action);

@@ -59,6 +59,8 @@ public interface Server {
 	 * @param username username
 	 * @param password password
 	 * @return session key
+	 * @throws IOException    server communication error
+	 * @throws LoginException login error
 	 */
 	String getSession(String username, String password) throws IOException, LoginException;
 
@@ -68,7 +70,8 @@ public interface Server {
 	 * Get a list of the synced projects.
 	 *
 	 * @return synced projects
-	 * @throws IOException notwork error
+	 * @throws IOException    notwork error
+	 * @throws LoginException login error
 	 */
 	List<ProjectReference> getSyncedProjects() throws IOException, LoginException;
 
@@ -94,6 +97,7 @@ public interface Server {
 	 *
 	 * @param projectReference project reference
 	 * @return last modification
+	 * @throws IOException server communication error
 	 */
 	Version getLastServerModification(ProjectReference projectReference) throws IOException;
 
@@ -101,6 +105,8 @@ public interface Server {
 	 * Connect to sync server with key.
 	 *
 	 * @param key auth key
+	 * @throws IOException        server communication error
+	 * @throws WebSocketException error creating websocket connection
 	 */
 	void connect(String key) throws IOException, WebSocketException;
 
