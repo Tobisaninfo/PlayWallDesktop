@@ -1,8 +1,8 @@
 package de.tobias.playpad.plugin.playout.export
 
-import java.util.UUID
+import java.util.{Date, UUID}
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.{JsonFormat, JsonIgnore, JsonProperty, JsonPropertyOrder}
 import de.tobias.playpad.plugin.playout.log.LogSeason
 
 import scala.jdk.CollectionConverters._
@@ -12,12 +12,20 @@ object CsvPlayoutLogExport {
 	@JsonPropertyOrder(value = Array("name", "count", "seasonCount", "firstTime", "lastTime"))
 	class CsvColumn
 	(
+		@JsonIgnore
 		var id: UUID,
+		@JsonProperty("Name")
 		var name: String,
+		@JsonProperty("Zähler")
 		var count: Int,
+		@JsonProperty("Sessions")
 		var seasonCount: Int,
-		var firstTime: Long,
-		var lastTime: Long
+		@JsonProperty("Erstes Datem")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+		var firstTime: Date,
+		@JsonProperty("Letztes Datem")
+		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+		var lastTime: Date
 	) {
 	}
 
@@ -26,7 +34,7 @@ object CsvPlayoutLogExport {
 			.map(_.getLogItems.asScala)
 			.flatten
 			.distinctBy(_.getUuid)
-			.map(entry => new CsvColumn(entry.getUuid, entry.getName, 0, 0, 0, 0))
+			.map(entry => new CsvColumn(entry.getUuid, entry.getName, 0, 0, null, null))
 
 		sessions
 			.map(_.getLogItems.asScala)
@@ -55,8 +63,10 @@ object CsvPlayoutLogExport {
 			val min: Long = timeMapping.filter(i => i._1 == item.id).minByOption(_._2).map(_._2).getOrElse(0)
 			val max: Long = timeMapping.filter(i => i._1 == item.id).maxByOption(_._2).map(_._2).getOrElse(0)
 
-			item.firstTime = min
-			item.lastTime = max
+			if (min != 0)
+				item.firstTime = new Date(min)
+			if (max != 0)
+				item.lastTime = new Date(max)
 		})
 
 		items

@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.playout.viewcontroller;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -160,8 +161,15 @@ public class PlayoutLogViewController extends NVC {
 		// create mapper and schema
 		CsvMapper mapper = new CsvMapper();
 		mapper.registerModule(new DefaultScalaModule());
+		mapper.configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true);
 
-		CsvSchema schema = mapper.schemaFor(CsvPlayoutLogExport.CsvColumn.class);
+		CsvSchema schema = CsvSchema.builder()
+    			.addColumn("Name")
+				.addColumn("Zähler")
+				.addColumn("Sessions")
+				.addColumn("Erstes Datem")
+				.addColumn("Letztes Datem")
+				.build();
 		schema = schema.withColumnSeparator(';').withHeader();
 
 		// output writer
