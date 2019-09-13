@@ -24,6 +24,7 @@ public class PlayoutLogStatusIconListener implements LogSessionListener, MainWin
 	public void onInit(IMainViewController mainViewControllerListener) {
 		// LogIcon
 		logIcon = new FontIcon(FontAwesomeType.LIST);
+		logIcon.setVisible(false);
 		mainViewControllerListener.performLayoutDependedAction((oldToolbar, newToolbar) -> {
 			if (oldToolbar != null) {
 				oldToolbar.removeToolbarItem(logIcon);
