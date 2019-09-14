@@ -108,9 +108,12 @@ public class LoginViewController extends NVC implements SessionDelegate {
 				session = new Session(key);
 				session.save();
 				Platform.runLater(() -> getStageContainer().ifPresent(NVCStage::close));
-			} catch (IOException | LoginException e) {
+			} catch (IOException e) {
 				Logger.error(e);
-				showErrorMessage(e.getMessage());
+				showErrorMessage(Localization.getString("Server.Error.IO"));
+			} catch (LoginException e) {
+				Logger.error(e);
+				showErrorMessage(Localization.getString("Server.Error.Login"));
 			}
 			Platform.runLater(hud::removeFromParent);
 		});
