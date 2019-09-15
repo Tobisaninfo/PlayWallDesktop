@@ -165,10 +165,10 @@ public class PlayoutLogViewController extends NVC {
 
 		CsvSchema schema = CsvSchema.builder()
     			.addColumn("Name")
-				.addColumn("Zähler")
+				.addColumn("Zaehler")
 				.addColumn("Sessions")
-				.addColumn("Erstes Datem")
-				.addColumn("Letztes Datem")
+				.addColumn("Erstes Datum")
+				.addColumn("Letztes Datum")
 				.build();
 		schema = schema.withColumnSeparator(';').withHeader();
 

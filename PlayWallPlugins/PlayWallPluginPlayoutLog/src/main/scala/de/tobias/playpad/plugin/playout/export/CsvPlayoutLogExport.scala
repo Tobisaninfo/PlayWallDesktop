@@ -16,14 +16,14 @@ object CsvPlayoutLogExport {
 		var id: UUID,
 		@JsonProperty("Name")
 		var name: String,
-		@JsonProperty("Zähler")
+		@JsonProperty("Zaehler")
 		var count: Int,
 		@JsonProperty("Sessions")
 		var seasonCount: Int,
-		@JsonProperty("Erstes Datem")
+		@JsonProperty("Erstes Datum")
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 		var firstTime: Date,
-		@JsonProperty("Letztes Datem")
+		@JsonProperty("Letztes Datum")
 		@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
 		var lastTime: Date
 	) {
