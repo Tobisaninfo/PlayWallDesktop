@@ -65,7 +65,7 @@ public class PlayoutLogViewController extends NVC {
 
 	@Override
 	public void init() {
-		logList.getItems().setAll(LogSeasons.getAllLogSeasonsLazy());
+		updateListView();
 
 		if (LogSeasons.getCurrentSession() != null) { // Running
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
@@ -82,6 +82,8 @@ public class PlayoutLogViewController extends NVC {
 		autoStartCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 				SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging(newValue));
 
+		startButton.disableProperty().bind(nameTextField.textProperty().isEmpty());
+
 		exportButton.setDisable(true);
 		exportCsvButton.setDisable(true);
 		logList.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable -> {
@@ -89,6 +91,10 @@ public class PlayoutLogViewController extends NVC {
 			exportCsvButton.setDisable(logList.getSelectionModel().getSelectedItems().isEmpty());
 		});
 		deleteButton.disableProperty().bind(logList.getSelectionModel().selectedItemProperty().isNull());
+	}
+
+	private void updateListView() {
+		logList.getItems().setAll(LogSeasons.getAllLogSeasonsLazy());
 	}
 
 	@Override
@@ -111,6 +117,11 @@ public class PlayoutLogViewController extends NVC {
 				return;
 			}
 
+			if (LogSeasons.getAllLogSeasonsLazy().stream().anyMatch(item -> item.getName().equals(nameTextField.getText()))) {
+				showErrorMessage(Localization.getString("PlayoutLogDialog.Error.NameExists"));
+				return;
+			}
+
 			final Project currentProject = PlayPadPlugin.getInstance().getCurrentProject();
 			final ProjectSettings settings = currentProject.getSettings();
 
@@ -119,10 +130,13 @@ public class PlayoutLogViewController extends NVC {
 
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_STOP));
 			nameTextField.setDisable(false);
+
+			updateListView();
 		} else { // Stop
 			LogSeasons.stop();
 			startButton.setText(Localization.getString(Strings.PLAYOUT_LOG_DIALOG_BUTTON_START));
 			nameTextField.setDisable(false);
+			nameTextField.setText("");
 		}
 	}
 
@@ -169,7 +183,7 @@ public class PlayoutLogViewController extends NVC {
 		mapper.configure(JsonGenerator.Feature.IGNORE_UNKNOWN, true);
 
 		CsvSchema schema = CsvSchema.builder()
-    			.addColumn("Name")
+				.addColumn("Name")
 				.addColumn("Zaehler")
 				.addColumn("Sessions")
 				.addColumn("Erstes Datum")
@@ -188,10 +202,8 @@ public class PlayoutLogViewController extends NVC {
 
 	@FXML
 	private void deleteButtonHandler(ActionEvent event) {
-		logList.getSelectionModel().getSelectedItems().forEach(season -> {
-			LogSeasons.deleteSession(season.getId());
-			logList.getItems().remove(season);
-		});
+		logList.getSelectionModel().getSelectedItems().forEach(season -> LogSeasons.deleteSession(season.getId()));
+		updateListView();
 	}
 
 	@FXML
