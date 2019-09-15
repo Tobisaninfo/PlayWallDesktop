@@ -46,6 +46,8 @@ public class PlayoutLogViewController extends NVC {
 	@FXML
 	private Button exportButton;
 	@FXML
+	private Button exportCsvButton;
+	@FXML
 	private Button deleteButton;
 	@FXML
 	private Button finishButton;
@@ -81,8 +83,11 @@ public class PlayoutLogViewController extends NVC {
 				SettingsProxy.getSettings(PlayoutLogSettings.class).autoStartLogging(newValue));
 
 		exportButton.setDisable(true);
-		logList.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable ->
-				exportButton.setDisable(logList.getSelectionModel().getSelectedItems().size() != 1));
+		exportCsvButton.setDisable(true);
+		logList.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable -> {
+			exportButton.setDisable(logList.getSelectionModel().getSelectedItems().size() != 1);
+			exportCsvButton.setDisable(logList.getSelectionModel().getSelectedItems().isEmpty());
+		});
 		deleteButton.disableProperty().bind(logList.getSelectionModel().selectedItemProperty().isNull());
 	}
 

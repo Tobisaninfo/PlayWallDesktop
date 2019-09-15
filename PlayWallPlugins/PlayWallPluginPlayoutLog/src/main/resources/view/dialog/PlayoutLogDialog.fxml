@@ -25,7 +25,7 @@
                         <Button fx:id="exportButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                                 onAction="#exportButtonHandler" prefWidth="100.0" text="%PlayoutLogDialog.Button.Export"
                                 VBox.vgrow="ALWAYS"/>
-                        <Button fx:id="exportAllButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                        <Button fx:id="exportCsvButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
                                 onAction="#exportMultipleCsvHandler" prefWidth="100.0" text="%PlayoutLogDialog.Button.ExportAll"
                                 VBox.vgrow="ALWAYS"/>
                         <Button fx:id="deleteButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
