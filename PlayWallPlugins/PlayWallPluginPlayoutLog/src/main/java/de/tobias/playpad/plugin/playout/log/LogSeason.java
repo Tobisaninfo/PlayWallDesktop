@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.playout.log;
 
+import de.thecodelabs.utils.threading.Worker;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.plugin.playout.log.storage.LogSeasonStorageHandler;
@@ -35,7 +36,7 @@ public class LogSeason {
 	}
 
 	public void createProjectSnapshot(Project project) {
-		project.getPads().forEach(this::addLogItem);
+		Worker.runLater(() -> project.getPads().parallelStream().forEach(this::addLogItem));
 	}
 
 	public void addLogItem(Pad pad) {
