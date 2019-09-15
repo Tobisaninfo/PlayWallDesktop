@@ -239,7 +239,8 @@ public class Strings {
 	// Search
 	public static final String SEARCH_BUTTON = "Search.Button";
 	public static final String SEARCH_PLACEHOLDER = "Search.Placeholder";
-	public static final String SEARCH_ALERT_NO_MATCHES = "Search.Alert.NoMatches";
+	public static final String SEARCH_ALERT_NO_MATCHES_HEADER = "Search.Alert.NoMatches.Header";
+	public static final String SEARCH_ALERT_NO_MATCHES_CONTENT = "Search.Alert.NoMatches.Content";
 
 	// UI - Dialog - Page - Delete
 	public static final String UI_DIALOG_PAGE_DELETE_HEADER = "UI.Dialog.Page.Delete.Header";
