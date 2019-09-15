@@ -60,15 +60,26 @@ object CsvPlayoutLogExport {
 			.map(i => i.getPathUuid -> i.getTime)
 
 		items.foreach(item => {
-			val min: Long = timeMapping.filter(i => i._1 == item.id).minByOption(_._2).map(_._2).getOrElse(0)
-			val max: Long = timeMapping.filter(i => i._1 == item.id).maxByOption(_._2).map(_._2).getOrElse(0)
+			timeMapping.filter(i => i._1 == item.id).minByOption(_._2).map(_._2) match {
+				case Some(value) => item.firstTime = new Date(value)
+				case _ =>
+			}
 
-			if (min != 0)
-				item.firstTime = new Date(min)
-			if (max != 0)
-				item.lastTime = new Date(max)
+			timeMapping.filter(i => i._1 == item.id).maxByOption(_._2).map(_._2) match {
+				case Some(value) => item.lastTime = new Date(value)
+				case _ =>
+			}
 		})
 
-		items
+		items.groupBy(_.name).map((keyValue: (String, Array[CsvColumn])) => {
+			new CsvColumn(
+				null,
+				keyValue._1,
+				keyValue._2.map(i => i.count).sum,
+				keyValue._2.map(i => i.seasonCount).maxOption.getOrElse(0),
+				keyValue._2.map(i => i.firstTime).filter(_ != null).minOption.orNull,
+				keyValue._2.map(i => i.firstTime).filter(_ != null).minOption.orNull
+			)
+		}).toArray
 	}
 }
