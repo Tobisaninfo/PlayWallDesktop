@@ -25,6 +25,7 @@ import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -217,7 +218,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				initPageButtons();
 				highlightPageButton(mainViewController.getPage());
 			} else {
-				showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_PAGE_COUNT));
+				showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_PAGE_COUNT, ProjectSettings.MAX_PAGES));
 			}
 		});
 
