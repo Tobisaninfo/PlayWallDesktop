@@ -170,7 +170,7 @@ public final class ProfileReferenceManager {
 			// Load data from xml
 			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
 			ProfileReferenceManager.profiles.setAll(handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer()));
-			System.out.println("Find Profile: " + ProfileReferenceManager.profiles);
+			Logger.info("Find Profile: " + ProfileReferenceManager.profiles);
 		}
 
 		// Add Default Element if list is empty
