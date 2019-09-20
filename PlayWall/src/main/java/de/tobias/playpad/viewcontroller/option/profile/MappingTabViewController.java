@@ -5,12 +5,7 @@ import de.thecodelabs.midi.Mapping;
 import de.thecodelabs.midi.MappingCollection;
 import de.thecodelabs.midi.action.Action;
 import de.thecodelabs.midi.device.MidiDeviceInfo;
-import de.thecodelabs.midi.feedback.Feedback;
-import de.thecodelabs.midi.feedback.FeedbackColor;
-import de.thecodelabs.midi.feedback.FeedbackType;
-import de.thecodelabs.midi.mapping.MidiKey;
 import de.thecodelabs.midi.midi.Midi;
-import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.thecodelabs.midi.serialize.MappingSerializer;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.Alerts;
@@ -53,7 +48,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MappingTabViewController extends ProfileSettingsTabViewController implements IMappingTabViewController, IProfileReloadTask {
 
@@ -360,11 +354,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 					Mapping preset = MappingSerializer.load(path);
 					final MappingCollection mappingList = Profile.currentProfile().getMappings();
 					mappingList.addMapping(preset);
+
 					Platform.runLater(() ->
 					{
-						mappingComboBox.getItems().add(preset);
-						mappingComboBox.getSelectionModel().select(preset);
-
 						mappingDeleteButton.setDisable(mappingList.count() == 1);
 
 						// Rename preset if name already esists
@@ -376,6 +368,9 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 							dialog.setContentText("Geben Sie einen neuen Namen für das Mapping Profil ein."); // TODO Localize
 							dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(preset::setName);
 						}
+
+						mappingComboBox.getItems().add(preset);
+						mappingComboBox.getSelectionModel().select(preset);
 					});
 
 				} catch (Exception e) {
@@ -407,30 +402,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		// Midi
 		profileSettings.setMidiActive(isMidiActive());
 		profileSettings.setLightMode(lightModeComboBox.getValue());
-
-		// Adjust midi color
-		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
-
-		if (transcript == null) {
-			return;
-		}
-
-		// Change light mode
-		Mapping.getCurrentMapping().getActions().forEach(action ->
-				action.getKeysForType(MidiKey.class).forEach(key ->
-					Stream.of(FeedbackType.values()).forEach(type -> {
-						final Feedback feedbackForType = key.getFeedbackForType(type);
-						if (feedbackForType != null) {
-							transcript.getFeedbackValueOfByte(feedbackForType.getValue())
-									.filter(c -> c instanceof LightMode.ILightMode)
-									.ifPresent(c -> {
-										final FeedbackColor translatedValue = ((LightMode.ILightMode) c).translate(lightModeComboBox.getValue());
-										feedbackForType.setValue(translatedValue.getValue());
-									});
-						}
-					})
-				)
-		);
 	}
 
 	@Override
