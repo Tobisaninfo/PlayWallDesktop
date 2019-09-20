@@ -105,6 +105,11 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		mappingComboBox.getSelectionModel().selectedItemProperty().addListener((a, b, c) ->
 		{
 			Profile.currentProfile().getMappings().setActiveMapping(c);
+			Mapping.setCurrentMapping(c);
+
+			Midi.getInstance().clearFeedback();
+			Midi.getInstance().showFeedback();
+
 			createTreeViewContent();
 		});
 
@@ -359,6 +364,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 					{
 						mappingComboBox.getItems().add(preset);
 						mappingComboBox.getSelectionModel().select(preset);
+
 						mappingDeleteButton.setDisable(mappingList.count() == 1);
 
 						// Rename preset if name already esists
@@ -403,13 +409,13 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		profileSettings.setLightMode(lightModeComboBox.getValue());
 
 		// Adjust midi color
-
 		final MidiFeedbackTranscript transcript = Midi.getInstance().getFeedbackTranscript();
 
 		if (transcript == null) {
 			return;
 		}
 
+		// Change light mode
 		Mapping.getCurrentMapping().getActions().forEach(action ->
 				action.getKeysForType(MidiKey.class).forEach(key ->
 					Stream.of(FeedbackType.values()).forEach(type -> {

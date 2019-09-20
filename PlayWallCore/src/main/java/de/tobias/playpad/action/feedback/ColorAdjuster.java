@@ -73,7 +73,7 @@ public class ColorAdjuster {
 		Color layoutEvColor = null;
 
 		FeedbackDesignColorSuggester design;
-		if (pad.getPadSettings().isCustomDesign()) {
+		if (pad != null && pad.getPadSettings().isCustomDesign()) {
 			design = pad.getPadSettings().getDesign();
 		} else {
 			design = Profile.currentProfile().getProfileSettings().getDesign();
