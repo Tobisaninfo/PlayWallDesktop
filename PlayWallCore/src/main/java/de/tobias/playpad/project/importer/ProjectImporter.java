@@ -26,10 +26,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by tobias on 11.03.17.
@@ -69,10 +66,11 @@ public class ProjectImporter {
 		}
 
 		importedProjectReference = importProjectFile();
-		replaceMediaPathIds(loadMediaPaths());
 
 		if (includeMedia && delegate.shouldImportMedia()) {
-			importMedia();
+			importMedia(loadMediaPaths());
+		} else {
+			replaceMediaPathIds(loadMediaPaths());
 		}
 	}
 
@@ -146,10 +144,20 @@ public class ProjectImporter {
 		Project project = loader.load();
 
 		for (Pad pad : project.getPads()) {
-			pad.getPaths().forEach(oldMediaPath -> find(mediaPaths, oldMediaPath.getId()).ifPresent(result -> {
-				pad.removePath(oldMediaPath);
-				pad.setPath(result.getPath());
-			}));
+			Iterator<MediaPath> iterator = pad.getPaths().iterator();
+			while (iterator.hasNext()) {
+				MediaPath oldMediaPath = iterator.next();
+				find(mediaPaths, oldMediaPath.getId()).ifPresent(result -> {
+					try {
+						pad.removePathListener(oldMediaPath);
+						iterator.remove();
+
+						pad.setPath(result.getPath());
+					} catch (NullPointerException e) {
+						Logger.error("Import Error on Pad: " + pad.getUuid());
+					}
+				});
+			}
 		}
 	}
 
@@ -202,7 +210,7 @@ public class ProjectImporter {
 		profileUUID = localProfileUUID; // Update Profile UUID with new local profile uuid
 	}
 
-	private void importMedia() throws ProjectNotFoundException, ProfileNotFoundException, DocumentException,
+	private void importMedia(List<MediaPath> mediaPaths) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException,
 			IOException, ProfileAbortException {
 		Path folder = delegate.getMediaPath();
 
@@ -212,12 +220,16 @@ public class ProjectImporter {
 
 		for (Pad pad : project.getPads()) {
 			for (MediaPath path : pad.getPaths()) {
-				Path fileName = path.getPath().getFileName();
-				Path zipMediaFile = Paths.get("/media").resolve(fileName);
-				Path newMediaPath = folder.resolve(fileName);
+				Optional<MediaPath> result = find(mediaPaths, path.getId());
 
-				zip.getFile(zipMediaFile, newMediaPath);
-				path.setPath(newMediaPath, false);
+				if (result.isPresent()) {
+					String fileName = result.get().getFileName();
+					Path zipMediaFile = Paths.get("/media").resolve(fileName);
+					Path newMediaPath = folder.resolve(fileName);
+
+					zip.getFile(zipMediaFile, newMediaPath);
+					path.setPath(newMediaPath, false);
+				}
 			}
 		}
 		ProjectReferenceManager.saveSingleProject(project);

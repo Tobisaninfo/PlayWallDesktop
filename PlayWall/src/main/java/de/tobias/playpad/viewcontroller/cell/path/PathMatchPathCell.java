@@ -4,6 +4,8 @@ import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.dialog.PathMatchDialog;
 import javafx.scene.control.TableCell;
 
+import java.nio.file.Path;
+
 public class PathMatchPathCell extends TableCell<PathMatchDialog.TempMediaPath, PathMatchDialog.TempMediaPath> {
 
 	@Override
@@ -14,7 +16,10 @@ public class PathMatchPathCell extends TableCell<PathMatchDialog.TempMediaPath, 
 			if (item.isMatched()) {
 				setText(item.getLocalPath().toString());
 			} else {
-				setText(item.getMediaPath().getPath().toString());
+				Path path = item.getMediaPath().getPath();
+				if (path != null) {
+					setText(path.toString());
+				}
 			}
 		} else {
 			setText(null);

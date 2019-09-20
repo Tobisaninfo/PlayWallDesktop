@@ -365,7 +365,10 @@ public class Pad {
 
 	public void removePath(MediaPath path) {
 		mediaPaths.remove(path);
+	}
 
+
+	public void removePathListener(MediaPath path) {
 		if (project.getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path);
 		}
