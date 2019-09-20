@@ -1,4 +1,4 @@
-url: "https://maven.thecodelabs.de/artifactory"
+url: "https://maven.thecodedev.de/artifactory"
 repository:
   releases: "TheCodeLabs-release"
   snapshots: "TheCodeLabs-snapshots"

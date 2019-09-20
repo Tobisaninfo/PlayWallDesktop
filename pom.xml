@@ -123,12 +123,12 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -146,7 +146,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -156,7 +156,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -187,7 +187,7 @@
 
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/Releases</url>
+            <url>https://maven.thecodedev.de/artifactory/Releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -197,7 +197,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
