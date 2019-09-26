@@ -92,8 +92,6 @@
                                                     shortcut="DOWN"/>
                             </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="logMenuItem" mnemonicParsing="false" onAction="#logMenuItemHandler"
-                                  text="%main.menuitem.log"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="pluginMenu" mnemonicParsing="false" onAction="#pluginMenuItemHandler"
                                   text="%main.menuitem.plugins"/>
@@ -139,7 +137,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#aboutMenuHandler" text="%main.menuitem.about"/>
                         <MenuItem mnemonicParsing="false" onAction="#showChangelogMenuHandler"
                                   text="%main.menuitem.changelog"/>
-                        <MenuItem mnemonicParsing="false" onAction="#visiteWebsiteMenuHandler"
+                        <MenuItem mnemonicParsing="false" onAction="#visitWebsiteMenuHandler"
                                   text="%main.menuitem.website"/>
                     </items>
                 </Menu>

@@ -1,16 +1,16 @@
 package de.tobias.playpad;
 
-public class AppUserInfoStrings {
+import de.thecodelabs.utils.application.ApplicationInfo;
 
-	public static final String WEBSITE = "Website";
-	public static final String REPOSITORY = "Repository";
+public interface AppUserInfoStrings extends ApplicationInfo.CustomUserInfo {
 
-	public static final String PLUGINS_URL_STABLE = "PluginsURL.Stable";
-	public static final String PLUGINS_URL_BETA = "PluginsURL.Beta";
+	String website();
 
-	public static final String CHANGELOG_URL = "ChangelogURL";
-	public static final String UPDATER_PROGRAM = "UpdaterProgram";
+	String repository();
 
-	public static final String SERVER = "Server";
-	public static final String ACCOUNT_REGISTER = "AccountRegister";
+	String changelogURL();
+
+	String server();
+
+	String accountRegister();
 }

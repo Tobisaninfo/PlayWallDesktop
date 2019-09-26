@@ -1,5 +1,6 @@
 package de.tobias.playpad.settings.keys;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.util.OS;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class KeyCollection {
 
-	// Schlüssel: ID, Value: Key
+	// Id -> Key Mapping
 	private HashMap<String, KeyCollectionEntry> keys;
 
 	/**
@@ -141,8 +142,7 @@ public class KeyCollection {
 
 				if (root.element(GlobalSettings.KEYS_ELEMENT) != null) {
 					XMLHandler<Key> handler = new XMLHandler<>(root.element(GlobalSettings.KEYS_ELEMENT));
-					List<Key> keys = handler.loadElements(KEY_ELEMENT, new KeySerializer());
-					for (Key key : keys) {
+					for (Key key : handler.loadElements(KEY_ELEMENT, new KeySerializer())) {
 						updateKey(key);
 					}
 				}
@@ -181,28 +181,24 @@ public class KeyCollection {
 			if (keysElement != null) {
 				KeySerializer keySerializer = new KeySerializer();
 
-				for (Object obj : keysElement.elements(KEY_ELEMENT)) {
-					if (obj instanceof Element) {
-						Element keyElement = (Element) obj;
-
-						try {
-							String name = loadName(keyElement, bundle);
-							Key key = keySerializer.loadElement(keyElement);
-							KeyCollectionEntry entry = new KeyCollectionEntry(name, key);
-
-							try {
-								register(entry);
-							} catch (KeyConflictException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						} catch (MissingResourceException ignored) {
-						}
-					}
+				for (Element keyElement : keysElement.elements(KEY_ELEMENT)) {
+					loadKey(bundle, keySerializer, keyElement);
 				}
 			}
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			Logger.error(e);
+		}
+	}
+
+	private void loadKey(ResourceBundle bundle, KeySerializer keySerializer, Element keyElement) {
+		try {
+			String name = loadName(keyElement, bundle);
+			Key key = keySerializer.loadElement(keyElement);
+			KeyCollectionEntry entry = new KeyCollectionEntry(name, key);
+
+			register(entry);
+		} catch (MissingResourceException | KeyConflictException e) {
+			Logger.error(e);
 		}
 	}
 

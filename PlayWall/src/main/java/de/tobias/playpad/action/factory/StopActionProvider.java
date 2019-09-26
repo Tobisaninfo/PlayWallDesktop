@@ -1,36 +1,65 @@
 package de.tobias.playpad.action.factory;
 
-import de.tobias.playpad.action.*;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.StopAction;
-import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.StopActionTypeSettingsEntry;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
+import static de.tobias.playpad.action.actions.StopAction.TYPE;
+
 public class StopActionProvider extends ActionProvider {
 
 	public StopActionProvider(String type) {
-		super(type);
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		return new TreeItem<>(actions.get(0));
+	public String getType() {
+		return TYPE;
 	}
 
 	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(newInstance());
+	public void createDefaultActions(Mapping mapping) {
+		mapping.addUniqueAction(newInstance());
+	}
+
+	private Action newInstance() {
+		return new Action(getType());
 	}
 
 	@Override
-	public Action newInstance() {
-		return new StopAction(getType());
+	public ActionHandler getActionHandler() {
+		return new StopAction();
 	}
 
 	@Override
-	public ActionType geActionType() {
+	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
+		if (keyType == KeyType.MIDI) {
+			return new FeedbackType[]{FeedbackType.DEFAULT};
+		}
+		return new FeedbackType[0];
+	}
+
+	/*
+
+	 */
+
+	@Override
+	public ActionType getActionType() {
 		return ActionType.CONTROL;
 	}
 
+	@Override
+	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
+		return new TreeItem<>(new StopActionTypeSettingsEntry(actions.stream().findFirst().orElse(null)));
+	}
 }

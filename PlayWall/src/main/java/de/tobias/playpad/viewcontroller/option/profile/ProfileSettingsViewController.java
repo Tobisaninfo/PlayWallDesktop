@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -44,7 +45,7 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	private Runnable onFinish;
 
 	public ProfileSettingsViewController(Window owner, Project project, Runnable onFinish) {
-		load("view/option/profile", "SettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "SettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 
 		boolean activePlayer = project.hasActivePlayers();
@@ -96,11 +97,11 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setMinWidth(715);
-		stage.setMinHeight(700);
-		stage.setTitle(Localization.getString(Strings.UI_Window_Settings_Title, Profile.currentProfile().getRef().getName()));
+		stage.setMinWidth(800);
+		stage.setMinHeight(800);
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_SETTINGS_TITLE, Profile.currentProfile().getRef().getName()));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -127,8 +128,8 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		try {
 			profile.save();
 		} catch (Exception e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
-			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
+			Logger.error(e);
 		}
 	}
 

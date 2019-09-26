@@ -5,10 +5,11 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.versionizer.config.Artifact;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.util.Map;
@@ -27,17 +28,19 @@ public class AutoUpdateDialog extends AdvancedDialog {
 			builder.append("\n");
 		}
 
-		setTitle(Localization.getString(Strings.UI_Dialog_AutoUpdate_Title));
-		setContent(Localization.getString(Strings.UI_Dialog_AutoUpdate_Content, builder.toString()));
-		setHeaderText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Header));
-		setCheckboxText(Localization.getString(Strings.UI_Dialog_AutoUpdate_Checkbox));
+		setTitle(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_TITLE));
+		setContent(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_CONTENT, builder.toString()));
+		setHeaderText(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_HEADER));
+		setCheckboxText(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_CHECKBOX));
 
-		setIcon(PlayPadMain.stageIcon);
+		setIcon(PlayPadPlugin.getInstance().getIcon());
 
-		ButtonType updateButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Update), ButtonData.APPLY);
-		ButtonType cancelButton = new ButtonType(Localization.getString(Strings.UI_Dialog_AutoUpdate_Button_Cancel), ButtonData.CANCEL_CLOSE);
+		ButtonType updateButton = new ButtonType(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_BUTTON_UPDATE), ButtonData.APPLY);
+		ButtonType cancelButton = new ButtonType(Localization.getString(Strings.UI_DIALOG_AUTO_UPDATE_BUTTON_CANCEL), ButtonData.CANCEL_CLOSE);
 
 		addButtonType(updateButton);
 		addButtonType(cancelButton);
+
+		PlayPadPlugin.styleable().applyStyle((Stage) getDialogPane().getScene().getWindow());
 	}
 }

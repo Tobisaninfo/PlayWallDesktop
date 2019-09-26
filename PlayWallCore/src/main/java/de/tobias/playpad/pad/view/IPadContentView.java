@@ -22,5 +22,5 @@ public interface IPadContentView {
 	/**
 	 * Deinitialisiert die View. Hier können mögliche Bindings und Listener entfernt werden.
 	 */
-	void deinit();
+	void deInit();
 }

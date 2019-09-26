@@ -20,8 +20,8 @@ public class ProjectUpdateListener {
 		this.project = project;
 
 		nameListener = (observable, oldValue, newValue) -> {
-			Change change = new Change(PropertyDef.PAGE_POSITION, newValue, project);
-			CommandManager.execute(Commands.PAGE_UPDATE, project.getProjectReference(), change);
+			Change change = new Change(PropertyDef.PROJECT_NAME, newValue, project);
+			CommandManager.execute(Commands.PROJECT_UPDATE, project.getProjectReference(), change);
 		};
 	}
 
@@ -36,6 +36,6 @@ public class ProjectUpdateListener {
 
 	public void removeListener() {
 		added = false;
-		project.getProjectReference().nameProperty().addListener(nameListener);
+		project.getProjectReference().nameProperty().removeListener(nameListener);
 	}
 }

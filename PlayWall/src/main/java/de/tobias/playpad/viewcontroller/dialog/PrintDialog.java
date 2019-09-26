@@ -5,7 +5,6 @@ import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -39,7 +38,7 @@ public class PrintDialog extends NVC {
 	private Project project;
 
 	public PrintDialog(Project project, Window owner) {
-		load("view/dialog/project", "PrintDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "PrintDialog", Localization.getBundle());
 		this.project = project;
 
 		int pages = project.getPages().size();
@@ -65,11 +64,11 @@ public class PrintDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(600);
 		stage.setMinHeight(400);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_Print_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PRINT_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -85,10 +84,10 @@ public class PrintDialog extends NVC {
 		Page page = project.getPage(pageIndex);
 		String pageName = page.getName();
 		if (pageName.isEmpty()) {
-			pageName = Localization.getString(Strings.UI_Window_Main_PageButton, (pageIndex + 1));
+			pageName = Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (pageIndex + 1));
 		}
 
-		String headerString = Localization.getString(Strings.Info_Print_Header, project.getProjectReference().getName(), pageName);
+		String headerString = Localization.getString(Strings.INFO_PRINT_HEADER, project.getProjectReference().getName(), pageName);
 		header.appendText(headerString);
 		header.setStyle("text-align: center;");
 		body.appendChild(header);

@@ -1,0 +1,6 @@
+main: "de.tobias.playpad.plugin.playout.PlayoutLogPlugin"
+name: "PlayoutLogPlugin"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
+build: 8

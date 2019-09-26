@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>6.2.0-SNAPSHOT</version>
+        <version>7.0.0</version>
     </parent>
 
     <artifactId>PlayWallCore</artifactId>
@@ -21,6 +21,10 @@
         <dependency>
             <groupId>de.thecodelabs</groupId>
             <artifactId>libLogger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libLogger-slf4j</artifactId>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs</groupId>
@@ -41,6 +45,12 @@
             <groupId>javazoom</groupId>
             <artifactId>jlayer</artifactId>
             <version>${jlayer.version}</version>
+        </dependency>
+
+        <!--Midi-->
+        <dependency>
+            <groupId>de.thecodelabs</groupId>
+            <artifactId>libMidi</artifactId>
         </dependency>
 
         <!--Network/Json-->
@@ -99,25 +109,50 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Plugin Dependencies -->
+
+        <!-- PDF-->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>${itextpdf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+            <version>${jackson-dataformat-csv.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.13</artifactId>
+            <version>${jackson-dataformat-csv.version}</version>
+        </dependency>
+
+        <!--Spark-->
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>${spark-core.version}</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -127,7 +162,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -136,5 +171,4 @@
             </snapshots>
         </repository>
     </repositories>
-
 </project>

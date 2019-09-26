@@ -1,5 +1,6 @@
 package de.tobias.playpad.server;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 
@@ -22,9 +23,9 @@ public class Session {
 		this.key = key;
 	}
 
-	public String getKey() throws SessionNotExisitsException {
+	public String getKey() throws SessionNotExistsException {
 		if (key == null) {
-			throw new SessionNotExisitsException();
+			throw new SessionNotExistsException();
 		}
 		return key;
 	}
@@ -52,7 +53,7 @@ public class Session {
 			}
 			Files.write(path, key.getBytes());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 

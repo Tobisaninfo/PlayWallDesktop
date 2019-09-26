@@ -2,6 +2,7 @@ package de.tobias.playpad.server.sync.listener.downstream.project;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.PropertyDef;
 import de.tobias.playpad.server.sync.listener.ServerListener;
@@ -24,7 +25,7 @@ public class ProjectAddListener implements ServerListener {
 			try {
 				ProjectReferenceManager.addProject(name, null, true);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}

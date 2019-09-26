@@ -1,63 +1,29 @@
 package de.tobias.playpad.midi;
 
-import de.tobias.playpad.action.feedback.DisplayableFeedbackColor;
-import de.tobias.playpad.action.feedback.Feedback;
-import de.tobias.playpad.action.feedback.FeedbackMessage;
-import de.tobias.playpad.action.mididevice.MidiDeviceImpl;
+import de.thecodelabs.midi.midi.Midi;
+import de.thecodelabs.midi.midi.MidiCommand;
+import de.thecodelabs.midi.midi.MidiCommandType;
+import de.thecodelabs.midi.midi.MidiListener;
 import de.tobias.playpad.profile.Profile;
 import javafx.application.Platform;
 
-import javax.sound.midi.MidiMessage;
-import javax.sound.midi.SysexMessage;
-
-public class PD12 extends MidiDeviceImpl {
-
-	public static final String NAME = "PD 12";
+public class PD12 implements MidiListener {
 
 	@Override
-	public String getName() {
-		return NAME;
-	}
+	public void onMidiMessage(MidiCommand midiCommand) {
+		if (!Midi.getInstance().getDevice().getMidiDeviceInfo().getName().contains("PD 12")) {
+			return;
+		}
 
-	@Override
-	public boolean supportFeedback() {
-		return false;
-	}
-
-	@Override
-	public void onMidiMessage(MidiMessage message) {
-		if (message instanceof SysexMessage) {
-			if (message.getMessage().length == 8) {
-				if (message.getMessage()[0] == -16 && message.getMessage()[1] == 127 && message.getMessage()[2] == 127
-						&& message.getMessage()[3] == 4 && message.getMessage()[4] == 1 && message.getMessage()[5] == 0
-						&& message.getMessage()[7] == -9) {
-					int volume = message.getMessage()[6];
-					double volume_ = volume / 127.0;
-					Platform.runLater(() -> Profile.currentProfile().getProfileSettings().setVolume(volume_));
-				}
+		if (midiCommand.getMidiCommand() == MidiCommandType.SYSTEM_EXCLUSIVE) {
+			final byte[] payload = midiCommand.getPayload();
+			if (payload[0] == 127 && payload[1] == 127
+					&& payload[2] == 4 && payload[3] == 1 && payload[4] == 0
+					&& payload[6] == -9) {
+				int volume = payload[5];
+				double calculatedVolume = volume / 127.0;
+				Platform.runLater(() -> Profile.currentProfile().getProfileSettings().setVolume(calculatedVolume));
 			}
 		}
-	}
-
-	@Override
-	public void handleFeedback(FeedbackMessage type, int key, Feedback feedback) {
-	}
-
-	@Override
-	public void initDevice() {
-	}
-
-	@Override
-	public void clearFeedback() {
-	}
-
-	@Override
-	public DisplayableFeedbackColor getColor(int id) {
-		return null;
-	}
-
-	@Override
-	public DisplayableFeedbackColor[] getColors() {
-		return null;
 	}
 }

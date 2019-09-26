@@ -12,7 +12,7 @@ dateFormatterPattern: "dd.MM.YY HH:mm:ss"
 defaultOutLevel: "DEBUG"
 defaultErrLevel: "ERROR"
 
-showShortPackageName: true
+showShortPackageName: false
 showClassName: true
 showMethodName: true
 showLineNumber: true

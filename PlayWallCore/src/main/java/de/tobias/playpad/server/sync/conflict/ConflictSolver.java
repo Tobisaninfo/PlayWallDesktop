@@ -21,6 +21,11 @@ public interface ConflictSolver {
 	 * @param executor command executor
 	 * @param project  project
 	 * @param type     strategy type
+	 * @throws IOException                                               server communication error
+	 * @throws ProjectNotFoundException                                  Project to solve error not found
+	 * @throws ProfileNotFoundException                                  Profile of project not found
+	 * @throws DocumentException                                         XML Error
+	 * @throws ProjectReader.ProjectReaderDelegate.ProfileAbortException Profile Choose aborted
 	 */
 	void solveConflict(CommandExecutor executor, ProjectReference project, ConflictStrategyType type) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 
@@ -30,6 +35,7 @@ public interface ConflictSolver {
 	 * @param executor  command executor
 	 * @param reference project reference
 	 * @return conflict type
+	 * @throws IOException server communication error
 	 */
 	ConflictType checkConflict(CommandExecutor executor, ProjectReference reference) throws IOException;
 
@@ -38,6 +44,7 @@ public interface ConflictSolver {
 	 *
 	 * @param reference project reference
 	 * @return list of versions
+	 * @throws IOException server communication error
 	 */
 	List<Version> getVersions(ProjectReference reference) throws IOException;
 }

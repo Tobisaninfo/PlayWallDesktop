@@ -1,84 +1,78 @@
 package de.tobias.playpad;
 
-import com.neovisionaries.ws.client.WebSocketException;
-import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.storage.settings.StorageTypes;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
-import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.thecodelabs.versionizer.VersionizerItem;
-import de.thecodelabs.versionizer.config.Artifact;
-import de.thecodelabs.versionizer.config.Repository;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.audio.JavaFXHandlerFactory;
-import de.tobias.playpad.design.ModernDesign;
-import de.tobias.playpad.design.ModernDesignHandlerImpl;
-import de.tobias.playpad.log.LogSeasons;
-import de.tobias.playpad.log.storage.SqlLiteLogSeasonStorageHandler;
-import de.tobias.playpad.midi.PD12;
-import de.tobias.playpad.midi.device.DeviceRegistry;
+import de.tobias.playpad.design.ModernDesignHandler;
+import de.tobias.playpad.initialize.*;
 import de.tobias.playpad.plugin.*;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
-import de.tobias.playpad.server.*;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.loader.ProjectLoader;
+import de.tobias.playpad.project.ref.ProjectReference;
+import de.tobias.playpad.server.ConnectionState;
+import de.tobias.playpad.server.Server;
+import de.tobias.playpad.server.Session;
+import de.tobias.playpad.server.SessionDelegate;
 import de.tobias.playpad.settings.GlobalSettings;
-import de.tobias.playpad.view.MapperListViewControllerImpl;
-import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
+import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
-import de.tobias.playpad.volume.GlobalVolume;
-import de.tobias.playpad.volume.PadVolume;
-import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
+import javafx.stage.Window;
+import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class PlayPadImpl implements PlayPad {
 
 	private Application.Parameters parameters;
 
-	protected List<WindowListener<IMainViewController>> mainViewListeners = new ArrayList<>();
-	protected List<SettingsListener> settingsListeners = new ArrayList<>();
-	protected List<PadListener> padListeners = new ArrayList<>();
+	private List<MainWindowListener> mainViewListeners = new ArrayList<>();
+	private List<SettingsListener> settingsListeners = new ArrayList<>();
+	private List<PadListener> padListeners = new ArrayList<>();
+	private List<GlobalListener> globalListeners = new ArrayList<>();
 
 	private MainViewController mainViewController;
+	private Image stageIcon;
 	private Project currentProject;
-	private static Module module;
+
+	private Module module;
 
 	private UpdateService updateService;
-
 	protected GlobalSettings globalSettings;
-	private ModernDesign modernDesign;
+	private ModernDesignHandler modernDesign;
 
-	protected Session session;
+	private Session session;
 
-	PlayPadImpl(GlobalSettings globalSettings, Application.Parameters parameters) {
+	PlayPadImpl(Application.Parameters parameters) {
 		this.parameters = parameters;
-		this.globalSettings = globalSettings;
 
 		App app = ApplicationUtils.getApplication();
-		module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
+		this.module = new Module(app.getInfo().getName(), app.getInfo().getIdentifier());
 		ModernPluginManager.getInstance().addModule(module);
 	}
 
 	@Override
-	public void addMainViewListener(WindowListener<IMainViewController> listener) {
+	public void addMainViewListener(MainWindowListener listener) {
 		mainViewListeners.add(listener);
 	}
 
-	public List<WindowListener<IMainViewController>> getMainViewListeners() {
+	public List<MainWindowListener> getMainViewListeners() {
 		return mainViewListeners;
 	}
 
@@ -113,13 +107,28 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
+	public void addGlobalListener(GlobalListener globalListener) {
+		globalListeners.add(globalListener);
+	}
+
+	@Override
+	public void removeGlobalListener(GlobalListener globalListener) {
+		globalListeners.remove(globalListener);
+	}
+
+	@Override
+	public List<GlobalListener> getGlobalListeners() {
+		return globalListeners;
+	}
+
+	@Override
 	public IMainViewController getMainViewController() {
 		return mainViewController;
 	}
 
 	@Override
-	public Optional<Image> getIcon() {
-		return PlayPadMain.stageIcon;
+	public GlobalSettings getGlobalSettings() {
+		return globalSettings;
 	}
 
 	@Override
@@ -131,7 +140,7 @@ public class PlayPadImpl implements PlayPad {
 				try {
 					((AutoCloseable) i).close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		});
@@ -142,16 +151,10 @@ public class PlayPadImpl implements PlayPad {
 		}
 
 		try {
-			LogSeasons.getStorageHandler().close();
-		} catch (RuntimeException e) {
-			Logger.log(LogLevel.ERROR, "Cannot close LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
-		}
-
-		try {
 			Path applicationSupportPath = SystemUtils.getApplicationSupportDirectoryPath("de.tobias.playpad.PlayPadMain");
 			FileUtils.deleteDirectory(applicationSupportPath);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		ModernPluginManager.getInstance().showdown();
@@ -159,120 +162,79 @@ public class PlayPadImpl implements PlayPad {
 	}
 
 	@Override
-	public GlobalSettings getGlobalSettings() {
-		return globalSettings;
-	}
+	public void openProject(ProjectReference projectReference, Consumer<NVC> onLoaded) throws ProjectNotFoundException, ProjectReader.ProjectReaderDelegate.ProfileAbortException, ProfileNotFoundException, DocumentException, IOException {
+		if (mainViewController != null) {
+			mainViewController.closeProject();
+			globalListeners.forEach(l -> l.projectClosed(currentProject));
+		}
 
-	public void openProject(Project project, Consumer<NVC> onLoaded) {
+		Window owner = mainViewController != null ? mainViewController.getContainingWindow() : null;
+
+		ProjectLoader loader = new ProjectLoader(projectReference);
+		loader.setDelegate(ProjectReaderDelegateImpl.getInstance(owner));
+		loader.setListener(new ProjectLoadDialog());
+
+		currentProject = loader.load();
+
 		if (mainViewController == null) {
 			mainViewController = new MainViewController(e -> {
-				currentProject = project;
-				mainViewController.openProject(project);
+				mainViewController.openProject(currentProject);
+				mainViewListeners.forEach(l -> l.onInit(mainViewController));
+
 				if (onLoaded != null) {
 					onLoaded.accept(e);
 				}
-				mainViewListeners.forEach(l -> l.onInit(mainViewController));
+
+				globalListeners.forEach(l -> l.projectOpened(currentProject));
+				Platform.setImplicitExit(true);
 			});
 		} else {
-			currentProject = project;
-			mainViewController.openProject(project);
+			mainViewController.openProject(currentProject);
+			globalListeners.forEach(l -> l.projectOpened(currentProject));
 		}
 	}
 
-	@Override
-	public Project getCurrentProject() {
-		return currentProject;
-	}
+	public void startup(SessionDelegate delegate, PlayPadInitializer.Listener listener) {
+		PlayPadInitializer initializer = new PlayPadInitializer(this, listener);
 
-	void startup(ResourceBundle resourceBundle, SessionDelegate delegate) {
-		App app = ApplicationUtils.getApplication();
-		// Setup PlayoutLog
-		try {
-			Path playOutLogPath = app.getPath(PathType.DOCUMENTS, "logging.db");
-			LogSeasons.setStorageHandler(new SqlLiteLogSeasonStorageHandler(playOutLogPath));
-			Logger.info("Setup LogSeasonStorageHandler in path: " + playOutLogPath);
-		} catch (SQLException e) {
-			Logger.error("Cannot setup LogSeasonStorageHandler (" + e.getLocalizedMessage() + ")");
-		}
+		initializer.submit(new LocalizationLoadingTask());
+		initializer.submit(new GlobalSettingsLoadingTask());
+		initializer.submit(new KeyboardDefaultMappingTask());
 
-		modernDesign = new ModernDesignHandlerImpl();
+		initializer.submit(new ServiceInitializationTask());
 
-		// Register Update Service
-		Artifact playpadArtifact = app.getClasspathResource("build-app.json").deserialize(StorageTypes.JSON, Artifact.class);
-		Repository repository = app.getClasspathResource("repository.yml").deserialize(StorageTypes.YAML, Repository.class);
+		initializer.submit(new VersionizerSetupTask());
+		initializer.submit(new ComponentLoadingTask());
+		initializer.submit(new MidiActionsInitializerTask());
+		initializer.submit(new VolumeInitializerTask());
 
-		VersionizerItem versionizerItem = new VersionizerItem(repository, SystemUtils.getRunPath().toString());
-		updateService = UpdateService.startVersionizer(versionizerItem, UpdateService.Strategy.JAR, UpdateService.InteractionType.GUI);
-		updateService.addArtifact(playpadArtifact, SystemUtils.getRunPath());
-		updateService.setRepositoryType(globalSettings.getUpdateChannel());
+		initializer.submit(new ProfileLoadingTask());
 
-		registerComponents(resourceBundle);
-		configureServer(delegate);
-	}
+		initializer.submit(new ServerInitializeTask(delegate));
 
-	private void registerComponents(ResourceBundle resourceBundle) {
-		// Midi
-		DeviceRegistry.getFactoryInstance().registerDevice(PD12.NAME, PD12.class);
+		initializer.submit(new NativeAppInitializerTask());
+		initializer.submit(new PluginLoadingTask());
+		initializer.submit(new ProjectsLoadingTask());
+		initializer.submit(new KeyboardLoadingMappingTask());
 
-		try {
-			// Load Components
-			Registries registryCollection = PlayPadPlugin.getRegistries();
+		initializer.submit(new CheckUpdateTask());
 
-			registryCollection.getActions().loadComponentsFromFile("components/Actions.xml", module, resourceBundle);
-			registryCollection.getAudioHandlers().loadComponentsFromFile("components/AudioHandler.xml", module, resourceBundle);
-			registryCollection.getDragModes().loadComponentsFromFile("components/DragMode.xml", module, resourceBundle);
-			registryCollection.getMappers().loadComponentsFromFile("components/Mapper.xml", module, resourceBundle);
-			registryCollection.getPadContents().loadComponentsFromFile("components/PadContent.xml", module, resourceBundle);
-			registryCollection.getTriggerItems().loadComponentsFromFile("components/Trigger.xml", module, resourceBundle);
-			registryCollection.getMainLayouts().loadComponentsFromFile("components/Layout.xml", module, resourceBundle);
+		initializer.submit(new OpenLastDocumentTask()); // abort if project is opened
+		initializer.submit(new ProjectParameterOpenTask()); // abort if project is opened
 
-			// Set Default
-			// TODO Set Default
-			registryCollection.getAudioHandlers().setDefaultID(JavaFXHandlerFactory.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// Volume Management
-		VolumeManager volumeManager = VolumeManager.getInstance();
-		volumeManager.addFilter(new GlobalVolume());
-		volumeManager.addFilter(new PadVolume());
-
-		// Mapper
-		BaseMapperListViewController.setInstance(new MapperListViewControllerImpl());
+		initializer.start();
 	}
 
 	public Application.Parameters getParameters() {
 		return parameters;
 	}
 
-	private void configureServer(SessionDelegate delegate) {
-		// Load Server session key
-		session = Session.load();
-
-		if (session == null) {
-			session = delegate.getSession();
-		}
-
-		if (session != Session.EMPTY) {
-			// Connect to Server
-			Server server = PlayPadPlugin.getServerHandler().getServer();
-			try {
-				server.connect(session.getKey());
-			} catch (IOException | WebSocketException e) {
-				Logger.error(e);
-			} catch (SessionNotExisitsException ignored) {
-
-			}
-		}
-	}
-
-	public Session getSession() {
-		return session;
-	}
-
-	public ModernDesign getModernDesign() {
+	public ModernDesignHandler getModernDesign() {
 		return modernDesign;
+	}
+
+	void setModernDesign(ModernDesignHandler modernDesign) {
+		this.modernDesign = modernDesign;
 	}
 
 	@Override
@@ -280,8 +242,41 @@ public class PlayPadImpl implements PlayPad {
 		return updateService;
 	}
 
+	/*
+	Getter / Setter
+	 */
+
 	@Override
-	public ResourceBundle getUIResourceBundle() {
-		return PlayPadMain.getUiResourceBundle();
+	public Project getCurrentProject() {
+		return currentProject;
+	}
+
+	@Override
+	public Image getIcon() {
+		return stageIcon;
+	}
+
+	public void setIcon(Image icon) {
+		this.stageIcon = icon;
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public void setGlobalSettings(GlobalSettings globalSettings) {
+		this.globalSettings = globalSettings;
+	}
+
+	public void setUpdateService(UpdateService updateService) {
+		this.updateService = updateService;
+	}
+
+	public Session getSession() {
+		return session;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 }

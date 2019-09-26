@@ -6,7 +6,7 @@
 
     <groupId>de.tobias.playpad</groupId>
     <artifactId>PlayWallDesktop</artifactId>
-    <version>6.2.0-SNAPSHOT</version>
+    <version>7.0.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -17,11 +17,16 @@
         <core.version>${project.version}</core.version>
         <components.version>${project.version}</components.version>
 
-        <jlibs.version>2.0.5</jlibs.version>
-        <libPlugins.version>2.2.0</libPlugins.version>
-        <versionizer-api.version>1.1.0</versionizer-api.version>
+        <jlibs.version>2.0.6</jlibs.version>
+        <libPlugins.version>2.2.1</libPlugins.version>
+        <versionizer-api.version>1.1.1</versionizer-api.version>
 
         <jlayer.version>1.0.1</jlayer.version>
+
+        <itextpdf.version>5.5.13</itextpdf.version>
+        <jackson-dataformat-csv.version>2.9.9</jackson-dataformat-csv.version>
+
+        <spark-core.version>[2.9.0,)</spark-core.version>
 
         <jna.version>5.2.0</jna.version>
 
@@ -44,11 +49,7 @@
         <module>PlayWall</module>
         <module>PlayWallCore</module>
         <module>PlayWallComponents</module>
-        <module>PlayWallPluginAwake</module>
-        <module>PlayWallPluginEqualizer</module>
-        <module>PlayWallPluginLaunchpad</module>
-        <module>PlayWallPluginMedia</module>
-        <module>PlayWallPluginNativeAudio</module>
+        <module>PlayWallPlugins</module>
     </modules>
 
     <dependencyManagement>
@@ -122,12 +123,12 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -145,7 +146,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -155,7 +156,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -167,6 +168,11 @@
 
 
     <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+
         <repository>
             <id>scala</id>
             <name>Scala Tools</name>
@@ -181,7 +187,7 @@
 
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/Releases</url>
+            <url>https://maven.thecodedev.de/artifactory/Releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -191,7 +197,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

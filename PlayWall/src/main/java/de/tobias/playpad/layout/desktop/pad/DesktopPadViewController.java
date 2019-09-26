@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.desktop.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
@@ -110,7 +111,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padDragListener = new DesktopPadDragListener(pad, padView, connect);
 			padDragListener.addListener();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		padView.applyStyleClasses(pad.getPadIndex());
@@ -169,7 +170,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 					onNew(event);
 				} catch (NoSuchComponentException e) {
 					// TODO Error Handling
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			} else if (event.getSource() == padView.getSettingsButton()) {
 				onSettings();
@@ -207,7 +208,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
 		// File Extension
-		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.File_Filter_Media),
+		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA),
 				registry.getSupportedFileTypes());
 		chooser.getExtensionFilters().add(extensionFilter);
 
@@ -215,7 +216,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
 		if (openFolder != null) {
 			File folder = new File(openFolder.toString());
-			chooser.setInitialDirectory(folder);
+			if (folder.exists()) {
+				chooser.setInitialDirectory(folder);
+			}
 		}
 
 		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -293,7 +296,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 					if (pad.getStatus() == PadStatus.READY || position == null) {
 						String time = durationToString(duration);
 						padView.setTime(time);
-						padView.getPlayBar().setProgress(0);
+						padView.setPlayBarProgress(0);
+						padView.setCueInProgress(0);
 					} else {
 						// Play/Gesamtzeit anzeigen
 						TimeMode timeMode = pad.getPadSettings().getTimeMode();
@@ -315,7 +319,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				return;
 			}
 		}
-		padView.getPlayBar().setProgress(0);
+		padView.setPlayBarProgress(0);
+		padView.setCueInProgress(0);
 		padView.setTime(null);
 	}
 

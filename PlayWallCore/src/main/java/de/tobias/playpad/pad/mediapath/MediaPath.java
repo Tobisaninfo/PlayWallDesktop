@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * Created by tobias on 21.02.17.
  */
-public class MediaPath implements Cloneable {
+public class MediaPath {
 
 	private UUID id;
 	private StringProperty fileName;
@@ -105,12 +105,8 @@ public class MediaPath implements Cloneable {
 		return original;
 	}
 
-	public MediaPath clone(Pad pad) throws CloneNotSupportedException {
-		MediaPath clone = (MediaPath) super.clone();
-		clone.id = UUID.randomUUID();
-		clone.fileName = new SimpleStringProperty(fileName.get());
-		clone.pad = pad;
-
+	public MediaPath copy(Pad pad) {
+		MediaPath clone = new MediaPath(UUID.randomUUID(), fileName.get(), pad);
 		MediaPool.getInstance().create(clone, this.getPath());
 
 		if (pad.getProject().getProjectReference().isSync()) {

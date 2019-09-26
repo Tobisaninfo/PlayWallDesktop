@@ -63,41 +63,38 @@ public class DefaultComponentRegistry<F extends Component> extends ComponentRegi
 			Document document = reader.read(url);
 
 			Element rootElement = document.getRootElement();
-			for (Object obj : rootElement.elements("Component")) {
-				if (obj instanceof Element) {
-					Element element = (Element) obj;
-					String type = element.attributeValue("id");
+			for (Element element : rootElement.elements("Component")) {
+				String type = element.attributeValue("id");
 
-					// Find the class of the type
-					@SuppressWarnings("unchecked") Class<F> clazz = (Class<F>) loader.loadClass(element.getStringValue().trim());
-					Constructor<F> constructor = clazz.getConstructor(String.class);
-					F factory = constructor.newInstance(type);
+				// Find the class of the type
+				@SuppressWarnings("unchecked") Class<F> clazz = (Class<F>) loader.loadClass(element.getStringValue().trim());
+				Constructor<F> constructor = clazz.getConstructor(String.class);
+				F factory = constructor.newInstance(type);
 
-					registerComponent(factory, module);
+				registerComponent(factory, module);
 
-					if (element.attributeValue("default") != null) {
-						String defaultValue = element.attributeValue("default");
-						if (defaultValue.equals("true")) {
-							setDefault(factory);
-						}
+				if (element.attributeValue("default") != null) {
+					String defaultType = element.attributeValue("default");
+					if (defaultType.equals("true")) {
+						setDefault(factory);
 					}
+				}
 
-					// setup Displayable
-					if (element.attributeValue("name") != null) {
-						String name = element.attributeValue("name");
-						String localizedName = resourceBundle.getString(name);
-						factory.setName(localizedName);
-					}
+				// setup Displayable
+				if (element.attributeValue("name") != null) {
+					String name = element.attributeValue("name");
+					String localizedName = resourceBundle.getString(name);
+					factory.setName(localizedName);
+				}
 
-					if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
-						String icon = element.attributeValue("icon");
-						Class iconClass = Class.forName(element.attributeValue("class"));
-						int size = Integer.valueOf(element.attributeValue("size"));
-						Object iconObj = Enum.valueOf(iconClass, icon);
-						if (iconObj instanceof FontIconType) {
-							FontIconType iconType = (FontIconType) iconObj;
-							factory.setGraphics(iconType, size);
-						}
+				if (element.attributeValue("icon") != null && element.attributeValue("class") != null && element.attributeValue("size") != null) {
+					String icon = element.attributeValue("icon");
+					Class iconClass = Class.forName(element.attributeValue("class"));
+					int size = Integer.parseInt(element.attributeValue("size"));
+					Object iconObj = Enum.valueOf(iconClass, icon);
+					if (iconObj instanceof FontIconType) {
+						FontIconType iconType = (FontIconType) iconObj;
+						factory.setGraphics(iconType, size);
 					}
 				}
 			}

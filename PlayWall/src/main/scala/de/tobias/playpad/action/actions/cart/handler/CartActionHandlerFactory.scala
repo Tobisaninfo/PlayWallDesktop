@@ -1,6 +1,6 @@
 package de.tobias.playpad.action.actions.cart.handler
 
-import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode
+import de.tobias.playpad.action.actions.CartAction.CartActionMode
 
 object CartActionHandlerFactory {
 

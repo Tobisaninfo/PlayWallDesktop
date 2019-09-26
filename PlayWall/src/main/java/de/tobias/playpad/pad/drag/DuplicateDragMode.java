@@ -15,15 +15,10 @@ public class DuplicateDragMode extends PadDragMode {
 		Pad oldPad = project.getPad(oldIndex);
 		Pad newPad = project.getPad(newIndex);
 
-		try {
-			Pad copyPad = oldPad.clone(oldPad.getPage());
+		Pad copyPad = oldPad.copy(oldPad.getPage());
 
-			project.removePad(newPad.getUuid());
-			project.setPad(newIndex, copyPad);
-			return true;
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return false;
+		project.removePad(newPad.getUuid());
+		project.setPad(newIndex, copyPad);
+		return true;
 	}
 }

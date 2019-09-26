@@ -5,9 +5,14 @@ import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
+import de.tobias.playpad.pad.mediapath.MediaPool;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.project.*;
+import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
+import de.tobias.playpad.project.ProjectSerializer;
+import de.tobias.playpad.project.ProjectWriter;
 import de.tobias.playpad.project.loader.ProjectLoader;
 import de.tobias.playpad.server.LoginException;
 import de.tobias.playpad.server.Server;
@@ -55,7 +60,7 @@ public final class ProjectReferenceManager {
 		return null;
 	}
 
-	public static void saveProject(Project project) throws IOException {
+	public static void saveSingleProject(Project project) throws IOException {
 		ProjectWriter writer = new ProjectSerializer();
 		writer.write(project);
 	}
@@ -74,7 +79,7 @@ public final class ProjectReferenceManager {
 		Project project = new Project(ref);
 
 		// Save To Disk
-		saveProject(project);
+		saveSingleProject(project);
 
 		// Save To Cloud
 		if (ref.isSync()) {
@@ -103,8 +108,12 @@ public final class ProjectReferenceManager {
 	public static void removeProject(ProjectReference projectReference) throws IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, projectReference.getUuid() + Project.FILE_EXTENSION);
 
+		// Remove media db entries
+		MediaPool.getInstance().deleteEntries(projectReference.getUuid());
+
 		Files.deleteIfExists(path); // Drive
 		projects.remove(projectReference); // Model
+
 		if (projectReference.isSync()) {
 			CommandManager.execute(Commands.PROJECT_REMOVE, projectReference, projectReference); // Cloud
 		}
@@ -230,7 +239,7 @@ public final class ProjectReferenceManager {
 		return items;
 	}
 
-	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProjectReader.ProjectReaderDelegate.ProfileAbortException {
+	public static void setSync(ProjectReference reference, boolean newValue) throws ProjectNotFoundException, ProfileNotFoundException, DocumentException, IOException, ProfileAbortException {
 		if (newValue) {
 			ProjectLoader loader = new ProjectLoader(reference);
 			Project project = loader.load();
@@ -247,7 +256,9 @@ public final class ProjectReferenceManager {
 	}
 
 	public static boolean validateProjectName(ProjectReference reference, String newValue) {
-		return getProjects().stream().filter(r -> r != reference).noneMatch(p -> p.getName().equals(newValue));
+		return getProjects().stream()
+				.filter(r -> r != reference)
+				.noneMatch(p -> p.getName().equals(newValue));
 	}
 
 	public static boolean validateProjectName(String newValue) {

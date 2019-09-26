@@ -1,0 +1,6 @@
+main: "de.tobias.playpad.plugin.api.WebApiPlugin"
+name: "WebApiPlugin"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
+build: 1

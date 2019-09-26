@@ -1,9 +1,0 @@
-.text-field {
-	-fx-border-color: #CCCCCC;
-	-fx-border-width: 1px;
-	-fx-border-radius: 2px;
-	-fx-background-color: transparent;
-	-fx-text-fill: white;
-	-fx-font-size: 14;
-	-fx-prompt-text-fill: #777777;
-}

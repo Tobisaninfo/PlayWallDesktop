@@ -1,5 +1,6 @@
 package de.tobias.playpad.project.ref;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.xml.XMLDeserializer;
 import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.storage.xml.XMLSerializer;
@@ -36,8 +37,8 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 		if (element.attributeValue(PROFILE_ATTR) != null) {
 			profile = UUID.fromString(element.attributeValue(PROFILE_ATTR));
 		}
-		boolean sync = Boolean.valueOf(element.attributeValue(SYNC_ATTR));
-		long lastModified = Long.valueOf(element.attributeValue(LAST_MODIFIED_ATTR));
+		boolean sync = Boolean.parseBoolean(element.attributeValue(SYNC_ATTR));
+		long lastModified = Long.parseLong(element.attributeValue(LAST_MODIFIED_ATTR));
 
 		XMLHandler<Module> handler = new XMLHandler<>(element);
 		Set<Module> modules = new HashSet<>(handler.loadElements(MODULE_ELEMENT, new ModuleSerializer()));
@@ -50,7 +51,7 @@ public class ProjectReferenceSerializer implements XMLDeserializer<ProjectRefere
 			try {
 				ref.setLastModified(Files.getLastModifiedTime(projectPath).toMillis());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		return ref;

@@ -1,12 +1,14 @@
 package de.tobias.playpad.layout.touch.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
+import de.thecodelabs.utils.util.ColorUtils;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.win.User32X;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
@@ -16,7 +18,6 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.util.ColorUtils;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.beans.property.Property;
@@ -49,6 +50,9 @@ public class TouchPadView implements IPadView {
 	private VBox root;
 	private BusyView busyView;
 
+	private VBox cueInContainer;
+	private Label cueInLayer;
+
 	private transient TouchPadViewController controller; // Reference to its controller
 
 	public TouchPadView() {
@@ -60,6 +64,10 @@ public class TouchPadView implements IPadView {
 		superRoot = new StackPane();
 		root = new VBox();
 		busyView = new BusyView(superRoot);
+
+		cueInLayer = new Label();
+		cueInLayer.prefHeightProperty().bind(root.heightProperty());
+		cueInContainer = new VBox(cueInLayer);
 
 		indexLabel = new Label();
 
@@ -98,7 +106,7 @@ public class TouchPadView implements IPadView {
 		notFoundLabel.setVisible(false);
 
 		root.getChildren().addAll(infoBox, preview, playBar);
-		superRoot.getChildren().addAll(root, notFoundLabel);
+		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
 
 		if (OS.isWindows() && User32X.isTouchAvailable()) {
 			superRoot.setOnTouchPressed(controller);
@@ -116,7 +124,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void setContentView(Pad pad) {
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 
 		if (pad != null) {
@@ -137,8 +145,7 @@ public class TouchPadView implements IPadView {
 					preview.getChildren().setAll(node);
 					return;
 				} catch (NoSuchComponentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 		}
@@ -182,6 +189,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void pseudoClassState(PseudoClass pseudoClass, boolean active) {
 		superRoot.pseudoClassStateChanged(pseudoClass, active);
+		cueInLayer.pseudoClassStateChanged(pseudoClass, active);
 		indexLabel.pseudoClassStateChanged(pseudoClass, active);
 		timeLabel.pseudoClassStateChanged(pseudoClass, active);
 		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
@@ -240,6 +248,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void applyStyleClasses(PadIndex index) {
 		superRoot.getStyleClass().addAll("pad", "pad" + index);
+		cueInLayer.getStyleClass().addAll("pad-cue-in", "pad" + index + "-cue-in");
 
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
 		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
@@ -257,6 +266,7 @@ public class TouchPadView implements IPadView {
 	@Override
 	public void removeStyleClasses() {
 		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
+		cueInLayer.getStyleClass().removeIf(c -> c.startsWith("pad"));
 
 		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
@@ -272,8 +282,8 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public void highlightView(int milliSecounds) {
-
+	public void highlightView(int milliSeconds) {
+		cueInLayer.setPrefWidth(root.getWidth() * milliSeconds);
 	}
 
 	void clearIndex() {
@@ -286,7 +296,7 @@ public class TouchPadView implements IPadView {
 
 	void clearPreviewContent() {
 		if (previewContent != null) {
-			previewContent.deinit();
+			previewContent.deInit();
 		}
 		setContentView(null);
 	}
@@ -302,9 +312,14 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
+	public void setCueInProgress(double value) {
+		cueInLayer.setPrefWidth(root.getWidth() * value);
+	}
+
+	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
 		if (show) {
-			DesignColorAssociator associator = null;
+			FeedbackDesignColorSuggester associator = null;
 			if (pad.getPadSettings().isCustomDesign()) {
 				associator = pad.getPadSettings().getDesign();
 			} else {
@@ -312,8 +327,8 @@ public class TouchPadView implements IPadView {
 			}
 
 			if (associator != null) {
-				Color color = associator.getAssociatedStandardColor();
-				notFoundLabel.setColor(ColorUtils.getWarningSignColor(color));
+				Color color = associator.getDesignDefaultColor();
+				notFoundLabel.setColor(ColorUtils.getAppropriateTextColor(color));
 			} else {
 				notFoundLabel.setColor(Color.RED);
 			}

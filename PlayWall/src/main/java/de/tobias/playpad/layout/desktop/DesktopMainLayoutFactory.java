@@ -9,7 +9,8 @@ import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Desktop Implmentierung des Main Layouts.
@@ -22,11 +23,11 @@ public class DesktopMainLayoutFactory extends MainLayoutFactory {
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
 	private ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
 
-	private Stack<IPadView> recyclingStack;
+	private Deque<IPadView> recyclingStack;
 
 	public DesktopMainLayoutFactory(String type) {
 		super(type);
-		recyclingStack = new Stack<>();
+		recyclingStack = new ArrayDeque<>();
 	}
 
 	@Override

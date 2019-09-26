@@ -1,5 +1,6 @@
 package de.tobias.playpad.profile.ref;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.xml.XMLHandler;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
@@ -89,7 +90,7 @@ public final class ProfileReferenceManager {
 			try {
 				Files.createDirectories(path);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 	}
@@ -140,7 +141,7 @@ public final class ProfileReferenceManager {
 					if (!Files.isDirectory(path))
 						Files.delete(path);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			});
 			Files.delete(root);
@@ -169,7 +170,7 @@ public final class ProfileReferenceManager {
 			// Load data from xml
 			XMLHandler<ProfileReference> handler = new XMLHandler<>(path);
 			ProfileReferenceManager.profiles.setAll(handler.loadElements(PROFILE_ELEMENT, new ProfileReferenceSerializer()));
-			System.out.println("Find Profile: " + ProfileReferenceManager.profiles);
+			Logger.info("Find Profile: " + ProfileReferenceManager.profiles);
 		}
 
 		// Add Default Element if list is empty

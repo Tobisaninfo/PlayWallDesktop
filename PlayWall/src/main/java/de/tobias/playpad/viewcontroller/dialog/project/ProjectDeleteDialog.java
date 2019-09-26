@@ -1,7 +1,7 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ref.ProjectReference;
 import javafx.scene.control.Alert;
@@ -16,13 +16,13 @@ class ProjectDeleteDialog extends Alert {
 
 	ProjectDeleteDialog(ProjectReference reference, Window owner) {
 		super(AlertType.CONFIRMATION);
-		setHeaderText(Localization.getString(Strings.UI_Dialog_ProjectManager_Delete_Header));
-		setContentText(Localization.getString(Strings.UI_Dialog_ProjectManager_Delete_Content, reference.getName()));
+		setHeaderText(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_HEADER));
+		setContentText(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_DELETE_CONTENT, reference.getName()));
 
 		initOwner(owner);
 		initModality(Modality.WINDOW_MODAL);
 
 		Stage stage = (Stage) getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 	}
 }

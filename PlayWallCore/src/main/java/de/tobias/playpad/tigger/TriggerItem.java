@@ -9,9 +9,9 @@ import org.dom4j.Element;
 
 public abstract class TriggerItem {
 
-	protected Duration durationFromPoint;
+	private Duration durationFromPoint;
 
-	protected transient Duration performedAt;
+	private transient Duration performedAt;
 
 	public TriggerItem() {
 		durationFromPoint = Duration.ZERO;
@@ -43,6 +43,8 @@ public abstract class TriggerItem {
 
 	public abstract void performAction(Pad pad, Project project, IMainViewController controller, Profile profile);
 
+	public abstract TriggerItem copy();
+
 	private static final String DURATION_ATTR = "duration";
 
 	/**
@@ -52,7 +54,7 @@ public abstract class TriggerItem {
 	 */
 	public void load(Element element) {
 		if (element.attributeValue(DURATION_ATTR) != null) {
-			durationFromPoint = Duration.millis(Double.valueOf(element.attributeValue(DURATION_ATTR)));
+			durationFromPoint = Duration.millis(Double.parseDouble(element.attributeValue(DURATION_ATTR)));
 		}
 	}
 

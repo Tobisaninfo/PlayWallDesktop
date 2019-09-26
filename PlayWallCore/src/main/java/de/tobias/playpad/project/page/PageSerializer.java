@@ -31,7 +31,7 @@ public class PageSerializer implements XMLSerializer<Page>, XMLDeserializer<Page
 
 	@Override
 	public Page loadElement(Element element) {
-		int id = Integer.valueOf(element.attributeValue(POSITION_ATTR));
+		int id = Integer.parseInt(element.attributeValue(POSITION_ATTR));
 		String name = element.attributeValue(NAME_ATTR);
 
 		String uuidValue = element.attributeValue(UUID_ATTR);

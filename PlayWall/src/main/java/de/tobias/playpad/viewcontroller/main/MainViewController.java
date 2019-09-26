@@ -1,5 +1,13 @@
 package de.tobias.playpad.viewcontroller.main;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.device.CloseException;
+import de.thecodelabs.midi.device.MidiDeviceInfo;
+import de.thecodelabs.midi.event.KeyEventDispatcher;
+import de.thecodelabs.midi.event.KeyEventType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -11,16 +19,12 @@ import de.thecodelabs.utils.util.OS.OSType;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.Mapping;
-import de.tobias.playpad.action.mapper.listener.KeyboardHandler;
-import de.tobias.playpad.action.mapper.listener.MidiHandler;
+import de.tobias.playpad.action.feedback.ColorAdjuster;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
-import de.tobias.playpad.layout.desktop.pad.DesktopPadDragListener;
-import de.tobias.playpad.midi.Midi;
-import de.tobias.playpad.midi.MidiListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadView;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileListener;
 import de.tobias.playpad.profile.ProfileSettings;
@@ -53,6 +57,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -89,11 +94,6 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private Project openProject;
 	private int currentPageShowing = 0;
 
-	// Mapper
-	private Midi midi;
-	private MidiHandler midiHandler;
-	private KeyboardHandler keyboardHandler;
-
 	// Style
 	private Color gridColor;
 
@@ -112,13 +112,13 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private InvalidationListener pagesListener;
 
 	public MainViewController(Consumer<NVC> onFinish) {
-		load("view/main", "MainView", PlayPadMain.getUiResourceBundle(), e ->
+		load("view/main", "MainView", Localization.getBundle(), e ->
 		{
 			NVCStage stage = e.applyViewControllerToStage();
 			stage.addCloseHook(this::closeRequest);
 
 			// Init with existing stage
-			initMapper(openProject);
+			initKeyboardMapper();
 			reloadSettings(null, Profile.currentProfile());
 			onFinish.accept(e);
 
@@ -206,7 +206,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				});
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -218,17 +218,37 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				stage.setAlwaysOnTop(Profile.currentProfile().getProfileSettings().isWindowAlwaysOnTop());
 		});
 
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		stage.setFullScreenExitKeyCombination(KeyCombination.keyCombination(KeyCombination.SHIFT_DOWN + "+Esc"));
-		stage.setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, "-", "-"));
 		stage.show();
 	}
 
-	private void initMapper(Project project) {
-		this.midi = Midi.getInstance();
-		this.midiHandler = new MidiHandler(midi, this, project);
-		this.midi.setListener(midiHandler);
-		this.keyboardHandler = new KeyboardHandler(project, this);
+	private void initKeyboardMapper() {
+		registerKeyboardListener(KeyEvent.ANY, event -> {
+			if (event.getTarget() instanceof AnchorPane) {
+				if (!event.isShortcutDown()) {
+					KeyCode code = null;
+					KeyEventType type = null;
+
+					if (event.getEventType() == KeyEvent.KEY_PRESSED) {
+						code = event.getCode();
+						type = KeyEventType.DOWN;
+
+					} else if (event.getEventType() == KeyEvent.KEY_RELEASED) {
+						code = event.getCode();
+						type = KeyEventType.UP;
+
+					}
+
+					// Only execute this, then the right event is triggered and this var is set
+					if (code != null) {
+						de.thecodelabs.midi.event.KeyEvent keyEvent = new de.thecodelabs.midi.event.KeyEvent(KeyType.KEYBOARD, type, code.ordinal());
+						KeyEventDispatcher.dispatchEvent(keyEvent);
+					}
+				}
+			}
+		});
 
 		// Request Focus for key listener
 		getParent().requestFocus();
@@ -260,7 +280,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		menuToolbarViewController.getVolumeSlider().valueProperty().addListener(volumeChangeListener);
 
 		// Not Found Icon Update
-		if (menuToolbarViewController != null && openProject != null)
+		if (openProject != null)
 			menuToolbarViewController.setNotFoundNumber(openProject.getNotFoundMedia());
 
 		// Keyboard Shortcuts
@@ -279,24 +299,24 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	private boolean closeRequest() {
 		if (Profile.currentProfile() != null) {
-			ProfileSettings profilSettings = Profile.currentProfile().getProfileSettings();
+			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
 			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
 			// wenn ein Pad noch im Status Play ist
 			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-				alert.setContentText(Localization.getString(Strings.UI_Window_Main_CloseRequest));
+				alert.setContentText(Localization.getString(Strings.UI_WINDOW_MAIN_CLOSE_REQUEST));
 
 				alert.initOwner(getStage());
 				alert.initModality(Modality.WINDOW_MODAL);
 				Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-				PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+				alertStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 				Optional<ButtonType> result = alert.showAndWait();
-				if (result.isPresent())
-					if (result.get() != ButtonType.OK)
-						return false;
+				if (result.isPresent() && result.get() != ButtonType.OK) {
+					return false;
+				}
 			}
 
 			// Save Dialog
@@ -322,17 +342,19 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				if (Profile.currentProfile() != null)
 					Profile.currentProfile().save();
 			} catch (Exception e) {
-				e.printStackTrace();
-				showErrorMessage(Localization.getString(Strings.Error_Profile_Save));
+				Logger.error(e);
+				showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE));
 			}
-
-			// Mapper Clear Feedback
-			Profile.currentProfile().getMappings().getActiveMapping().clearFeedback();
 
 			// MIDI Shutdown
 			// Der schließt MIDI, da er es auch öffnet und verantwortlich ist
-			if (profilSettings.isMidiActive()) {
-				midi.close();
+			if (profileSettings.isMidiActive() && Midi.getInstance().isOpen()) {
+				try {
+					Midi.getInstance().clearFeedback();
+					Midi.getInstance().close();
+				} catch (CloseException e) {
+					Logger.error(e);
+				}
 			}
 		}
 		return true;
@@ -341,17 +363,17 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	private void saveProject() {
 		try {
 			if (openProject.getProjectReference() != null) {
-				ProjectReferenceManager.saveProject(openProject);
-				System.out.println("Saved Project: " + openProject);
+				ProjectReferenceManager.saveSingleProject(openProject);
+				Logger.info("Saved Project: " + openProject);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Project_Save));
+			Logger.error(e);
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 		}
 	}
 
 	@Override
-	public void openProject(Project project) {
+	public void closeProject() {
 		// Remove old listener
 		if (this.openProject != null) {
 			this.openProject.getProjectReference().nameProperty().removeListener(projectTitleListener);
@@ -359,8 +381,15 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			this.openProject.notFoundMediaProperty().removeListener(notFoundListener);
 			this.openProject.close();
 		}
-
 		removePadContentsFromView();
+		this.openProject = null;
+	}
+
+	@Override
+	public void openProject(Project project) {
+		if (this.openProject != null) {
+			closeProject();
+		}
 
 		openProject = project;
 
@@ -370,13 +399,12 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		openProject.notFoundMediaProperty().addListener(notFoundListener);
 
 		volumeChangeListener.setOpenProject(openProject);
-		midiHandler.setProject(project);
-		keyboardHandler.setProject(project);
-		Profile.currentProfile().getMappings().getActiveMapping().showFeedback(openProject);
 
-		midiHandler.setProject(project);
-		keyboardHandler.setProject(project);
-		DesktopPadDragListener.setProject(project);
+		Profile profile = Profile.currentProfile();
+		profile.getMappings().getActiveMapping().ifPresent(mapping -> {
+			Mapping.setCurrentMapping(mapping);
+			Midi.getInstance().showFeedback();
+		});
 
 		menuToolbarViewController.setOpenProject(openProject);
 
@@ -454,6 +482,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	 * PadViews
 	 */
 	@Override
+	@SuppressWarnings("Duplicates")
 	public void createPadViews() {
 		if (openProject == null) {
 			return;
@@ -529,16 +558,14 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
 			PlayPadMain.getProgramInstance().getModernDesign().global().applyStyleSheetToMainViewController(design, this, getStage(), openProject);
 
-			// Mapping feedback
-			Mapping activeMapping = Profile.currentProfile().getMappings().getActiveMapping();
-			activeMapping.clearFeedback();
-			activeMapping.prepareFeedback(openProject);
-			activeMapping.adjustPadColorToMapper();
-			activeMapping.showFeedback(openProject);
+			// Adjust colors
+			if (Mapping.getCurrentMapping() != null) {
+				ColorAdjuster.applyColorsToKeys();
+				Midi.getInstance().showFeedback();
+			}
 		}
 	}
 
-	@Override
 	public void setGridColor(Color color) {
 		this.gridColor = color;
 		try {
@@ -553,7 +580,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
@@ -572,27 +599,25 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	@Override
 	public void reloadSettings(Profile old, Profile currentProfile) {
 
-		final DoubleProperty volumeFaderValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
+		final DoubleProperty volumeFadeValueProperty = menuToolbarViewController.getVolumeSlider().valueProperty();
 
 		if (old != null) {
 			// Unbind Volume Slider
-			volumeFaderValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
-			volumeFaderValueProperty.removeListener(volumeChangeListener);
+			volumeFadeValueProperty.unbindBidirectional(old.getProfileSettings().volumeProperty());
+			volumeFadeValueProperty.removeListener(volumeChangeListener);
 
-			// Clear Feedback on Devie (LaunchPad Light off)
-			old.getMappings().getActiveMapping().getActions().forEach(action -> action.clearFeedback());
+			// Clear Feedback on Device (LaunchPad Light off)
+			Midi.getInstance().clearFeedback();
 
 			// LockedListener
 			old.getProfileSettings().lockedProperty().removeListener(lockedListener);
 		}
 
 		// Volume
-		volumeFaderValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
-		volumeFaderValueProperty.addListener(volumeChangeListener);
+		volumeFadeValueProperty.bindBidirectional(currentProfile.getProfileSettings().volumeProperty());
+		volumeFadeValueProperty.addListener(volumeChangeListener);
 
 		final ProfileSettings profileSettings = currentProfile.getProfileSettings();
-		final Mapping activeMapping = currentProfile.getMappings().getActiveMapping();
-
 		// LockedListener
 		profileSettings.lockedProperty().addListener(lockedListener);
 
@@ -606,12 +631,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				Platform.runLater(() ->
 				{
 					// Handle Mapper
-					if (currentProfile != null) {
-						activeMapping.initFeedbackType();
-						if (openProject != null) {
-							activeMapping.showFeedback(openProject);
-							currentProfile.getMappings().getActiveMapping().adjustPadColorToMapper();
-						}
+					if (openProject != null) {
+						Midi.getInstance().showFeedback();
 					}
 				});
 			});
@@ -622,12 +643,11 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			MainLayoutFactory connect = registry.getFactory(currentProfile.getProfileSettings().getMainLayoutType());
 			setMainLayout(connect);
 		} catch (NoSuchComponentException e) {
-			// TODO Error Handling
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		loadUserCss();
-		if (old != null && currentProfile != null) {
+		if (old != null) {
 			showPage(currentPageShowing);
 		}
 	}
@@ -636,18 +656,20 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	 * Init MIDI Device by using the Midi Class and show some feedback the user.
 	 *
 	 * @param name Device Name
-	 * @see Midi#lookupMidiDevice(String)
 	 */
 	private void loadMidiDevice(String name) {
 		try {
-			midi.lookupMidiDevice(name);
-			notificationPane.showAndHide(Localization.getString(Strings.Info_Midi_Device_Connected, name), PlayPadMain.displayTimeMillis);
+			final MidiDeviceInfo midiDeviceInfo = Midi.getInstance().getMidiDeviceInfo(name);
+			if (midiDeviceInfo != null) {
+				Midi.getInstance().openDevice(midiDeviceInfo, Midi.Mode.INPUT, Midi.Mode.OUTPUT);
+				notificationPane.showAndHide(Localization.getString(Strings.INFO_MIDI_DEVICE_CONNECTED, name), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
+			}
 		} catch (NullPointerException e) {
-			e.printStackTrace();
-			showError(Localization.getString(Strings.Error_Midi_Device_Unavailible, name));
+			Logger.error(e);
+			showError(Localization.getString(Strings.ERROR_MIDI_DEVICE_UNAVAILABLE, name));
 		} catch (IllegalArgumentException | MidiUnavailableException e) {
-			showError(Localization.getString(Strings.Error_Midi_Device_Busy, e.getLocalizedMessage()));
-			e.printStackTrace();
+			showError(Localization.getString(Strings.ERROR_MIDI_DEVICE_BUSY, e.getLocalizedMessage()));
+			Logger.error(e);
 		}
 	}
 
@@ -670,26 +692,17 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	@Override
 	public Screen getScreen() {
-		if (getStageContainer().isPresent())
-			return getStageContainer().get().getScreen();
-		return null;
+		return getStageContainer().map(NVCStage::getScreen).orElse(null);
 	}
 
 	@Override
 	public Stage getStage() {
-		if (getStageContainer().isPresent())
-			return getStageContainer().get().getStage();
-		return null;
+		return getStageContainer().map(NVCStage::getStage).orElse(null);
 	}
 
 	@Override
 	public MenuToolbarViewController getMenuToolbarController() {
 		return menuToolbarViewController;
-	}
-
-	@Override
-	public MidiListener getMidiHandler() {
-		return midiHandler;
 	}
 
 	@Override
@@ -743,10 +756,10 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		getStageContainer().ifPresent(sc ->
 		{
 			if (openProject != null && Profile.currentProfile() != null) {
-				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, openProject.getProjectReference().getName(),
+				getStage().setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, openProject.getProjectReference().getName(),
 						Profile.currentProfile().getRef().getName()));
 			} else {
-				getStage().setTitle(Localization.getString(Strings.UI_Window_Main_Title, "-", "-"));
+				getStage().setTitle(Localization.getString(Strings.UI_WINDOW_MAIN_TITLE, "-", "-"));
 			}
 		});
 	}
@@ -762,6 +775,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		if (menuToolbarViewController != null) {
 			menuToolbarViewController.loadKeybinding(keys);
 		}
+
+		// Plugin Hook
+		PlayPadPlugin.getInstance().getMainViewListeners().forEach(MainWindowListener::loadMenuKeyBinding);
 	}
 
 }

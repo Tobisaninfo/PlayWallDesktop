@@ -2,8 +2,6 @@ package de.tobias.playpad.pad;
 
 import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.log.listener.PadMediaPathLogListener;
-import de.tobias.playpad.log.listener.PadPlayLogListener;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.play.Pauseable;
@@ -17,14 +15,17 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.page.PageCoordinate;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadUpdateListener;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.dom4j.Element;
 
@@ -38,7 +39,7 @@ import java.util.UUID;
  * @author tobias
  * @version 6.2.0
  */
-public class Pad implements Cloneable {
+public class Pad {
 
 	private UUID uuid;
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();
@@ -66,8 +67,7 @@ public class Pad implements Cloneable {
 	private transient PadFadeContentListener padFadeContentListener;
 	private transient PadFadeDurationListener padFadeDurationListener;
 
-	private transient PadPlayLogListener padPlayLogListener;
-	private transient PadMediaPathLogListener padMediaPathLogListener;
+	private transient ListChangeListener<MediaPath> mediaPathUpdateListener;
 
 	// Trigger Listener
 	private transient PadTriggerStatusListener padTriggerStatusListener;
@@ -133,14 +133,6 @@ public class Pad implements Cloneable {
 			padFadeContentListener.changed(contentProperty, getContent(), null);
 		}
 
-		if (padPlayLogListener != null && statusProperty != null) {
-			statusProperty.removeListener(padPlayLogListener);
-		}
-
-		if (padMediaPathLogListener != null && mediaPaths != null) {
-			mediaPaths.removeListener(padMediaPathLogListener);
-		}
-
 		// init new listener for properties
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
@@ -157,15 +149,7 @@ public class Pad implements Cloneable {
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
 
-		// PlayOutLog Listener
-		padPlayLogListener = new PadPlayLogListener(this);
-		statusProperty.addListener(padPlayLogListener);
-
-		padMediaPathLogListener = new PadMediaPathLogListener();
-		mediaPaths.addListener(padMediaPathLogListener);
-
 		// Trigger
-
 		padTriggerStatusListener = new PadTriggerStatusListener(this);
 		statusProperty.addListener(padTriggerStatusListener);
 
@@ -175,6 +159,16 @@ public class Pad implements Cloneable {
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
+
+		// Pad Listener
+		if (mediaPathUpdateListener != null) {
+			mediaPaths.removeListener(mediaPathUpdateListener);
+		}
+		mediaPathUpdateListener = value -> PlayPadPlugin
+				.getInstance()
+				.getPadListener()
+				.forEach(listener -> listener.onMediaPathChanged(this, value));
+		mediaPaths.addListener(mediaPathUpdateListener);
 	}
 
 	public void addSyncListener() {
@@ -266,6 +260,14 @@ public class Pad implements Cloneable {
 	 */
 	public PadIndex getPadIndex() {
 		return new PadIndex(getPosition(), getPage().getPosition());
+	}
+
+	public PageCoordinate getPageCoordinate() {
+		ProjectSettings projectSettings = project.getSettings();
+
+		int x = getPosition() % projectSettings.getColumns();
+		int y = getPosition() / projectSettings.getColumns();
+		return new PageCoordinate(x, y);
 	}
 
 	/**
@@ -363,7 +365,10 @@ public class Pad implements Cloneable {
 
 	public void removePath(MediaPath path) {
 		mediaPaths.remove(path);
+	}
 
+
+	public void removePathListener(MediaPath path) {
 		if (project.getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path);
 		}
@@ -598,16 +603,19 @@ public class Pad implements Cloneable {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
+		if (!(o instanceof Pad)) return false;
 		Pad pad = (Pad) o;
-
 		return Objects.equals(uuid, pad.uuid);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(uuid);
+	}
+
 	// Clone
-	public Pad clone(Page page) throws CloneNotSupportedException {
-		Pad clone = (Pad) super.clone();
+	public Pad copy(Page page) {
+		Pad clone = new Pad(project);
 
 		clone.uuid = UUID.randomUUID();
 		clone.positionProperty = new SimpleIntegerProperty(getPosition());
@@ -619,16 +627,15 @@ public class Pad implements Cloneable {
 
 		clone.mediaPaths = FXCollections.observableArrayList();
 		for (MediaPath path : mediaPaths) {
-			MediaPath clonedPath = path.clone(clone);
+			MediaPath clonedPath = path.copy(clone);
 			clone.mediaPaths.add(clonedPath);
 		}
 
 		clone.contentTypeProperty = new SimpleStringProperty(getContentType());
+		clone.contentProperty = new SimpleObjectProperty<>();
 		if (getContent() != null) {
-			clone.contentProperty = new SimpleObjectProperty<>(getContent().clone());
+			clone.contentProperty.set(getContent().copy(clone));
 			clone.getContent().setPad(clone);
-		} else {
-			clone.contentProperty = new SimpleObjectProperty<>();
 		}
 
 		if (project.getProjectReference().isSync()) {
@@ -637,7 +644,7 @@ public class Pad implements Cloneable {
 			clone.addSyncListener();
 		}
 
-		clone.padSettings = padSettings.clone(clone);
+		clone.padSettings = padSettings.copy(clone);
 
 		clone.controller = null;
 		clone.project = project;
@@ -683,7 +690,7 @@ public class Pad implements Cloneable {
 	/**
 	 * Returns true, when pad has content and pad is visible.
 	 *
-	 * @return loaded & visible
+	 * @return loaded &amp; visible
 	 */
 	public boolean hasVisibleContent() {
 		return getContent() != null && getContent().isPadLoaded() && isPadVisible();

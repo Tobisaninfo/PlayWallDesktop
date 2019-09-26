@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -35,7 +34,7 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	private Pad pad;
 
 	GeneralPadTabViewController(Pad pad) {
-		load("view/option/pad", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "GeneralTab", Localization.getBundle());
 		this.pad = pad;
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
@@ -61,13 +60,13 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 		});
 		timeDisplayComboBox.getItems().addAll(TimeMode.values());
-		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.Pad_TimeMode_BaseName));
-		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.Pad_TimeMode_BaseName));
+		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.PAD_TIME_MODE));
+		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.PAD_TIME_MODE));
 	}
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_General_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_GENERAL_TITLE);
 	}
 
 	@Override

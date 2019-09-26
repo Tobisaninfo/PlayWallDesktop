@@ -1,14 +1,13 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.viewcontroller.dialog.profile.NewProfileDialog;
@@ -49,7 +48,7 @@ public class ProjectNewDialog extends NVC {
 	private ProjectReference project;
 
 	public ProjectNewDialog(Window owner) {
-		load("view/dialog", "NewProjectDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NewProjectDialog", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -61,17 +60,17 @@ public class ProjectNewDialog extends NVC {
 
 	@Override
 	public void init() {
-		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(!Project.validateNameInput(c)));
+		nameTextField.textProperty().addListener((a, b, c) -> finishButton.setDisable(!ProjectReferenceManager.validateProjectName(c)));
 		finishButton.setDisable(true);
 	}
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProject_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_TITLE));
 		stage.setWidth(560);
 		stage.setHeight(380);
 
@@ -98,8 +97,8 @@ public class ProjectNewDialog extends NVC {
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException e) {
-			showErrorMessage(Localization.getString(Strings.Error_Project_Create, e.getLocalizedMessage()));
-			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_CREATE, e.getLocalizedMessage()));
+			Logger.error(e);
 		}
 	}
 

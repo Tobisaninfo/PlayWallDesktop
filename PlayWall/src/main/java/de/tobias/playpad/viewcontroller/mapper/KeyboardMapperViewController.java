@@ -1,10 +1,10 @@
 package de.tobias.playpad.viewcontroller.mapper;
 
+import de.thecodelabs.midi.mapping.Key;
+import de.thecodelabs.midi.mapping.KeyboardKey;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.StringUtils;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.action.mapper.KeyboardMapper;
-import de.tobias.playpad.action.mapper.Mapper;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,14 +19,14 @@ public class KeyboardMapperViewController extends MapperViewController {
 	@FXML
 	private Button mappingButton;
 
-	private KeyboardMapper mapper;
+	private KeyboardKey mapper;
 
 	public KeyboardMapperViewController() {
-		load("view/mapper", "Keyboard", PlayPadMain.getUiResourceBundle());
+		load("view/mapper", "Keyboard", Localization.getBundle());
 	}
 
 	@Override
-	public Mapper getMapper() {
+	public Key getKey() {
 		return mapper;
 	}
 
@@ -38,8 +38,16 @@ public class KeyboardMapperViewController extends MapperViewController {
 	public void showFeedback() {
 	}
 
+	private String getReadableName() {
+		if (mapper.getKey() == null || !StringUtils.isStringNotVisable(mapper.getKey())) {
+			return mapper.getKey();
+		} else {
+			return mapper.getCode().getName();
+		}
+	}
+
 	private void setLabel() {
-		keyLabel.setText(mapper.getReadableName());
+		keyLabel.setText(getReadableName());
 	}
 
 	@FXML
@@ -49,8 +57,8 @@ public class KeyboardMapperViewController extends MapperViewController {
 
 	private boolean inputDialog() {
 		KeyboardMapperInputDialog alert = new KeyboardMapperInputDialog(mapper);
-		alert.setTitle(Localization.getString(Strings.Mapper_Keyboard_Name));
-		alert.setContentText(Localization.getString(Strings.Info_Mapper_PressKey));
+		alert.setTitle(Localization.getString(Strings.MAPPER_KEYBOARD_NAME));
+		alert.setContentText(Localization.getString(Strings.INFO_MAPPER_PRESS_KEY));
 
 		alert.getButtonTypes().add(ButtonType.CANCEL);
 		alert.initOwner(getContainingWindow());
@@ -64,8 +72,9 @@ public class KeyboardMapperViewController extends MapperViewController {
 		return inputDialog();
 	}
 
-	public void setMapper(KeyboardMapper keyboardMapper) {
-		this.mapper = keyboardMapper;
+	@Override
+	public void setKey(Key keyboardMapper) {
+		this.mapper = (KeyboardKey) keyboardMapper;
 		setLabel();
 	}
 }

@@ -1,9 +1,9 @@
 package de.tobias.playpad.viewcontroller.dialog.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -32,7 +32,7 @@ public class NewProfileDialog extends NVC {
 	private Profile profile;
 
 	public NewProfileDialog(Window owner) {
-		load("view/dialog", "NewProfileDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "NewProfileDialog", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -64,11 +64,11 @@ public class NewProfileDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		PlayPadPlugin.styleable().applyStyle(stage);
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_NewProfile_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_NEW_PROFILE_TITLE));
 		stage.setWidth(400);
 		stage.setHeight(200);
 
@@ -86,7 +86,7 @@ public class NewProfileDialog extends NVC {
 			List<ProfileReference> profiles = ProfileReferenceManager.getProfiles();
 
 			if (profiles.contains(name)) {
-				showErrorMessage(Localization.getString(Strings.Error_Standard_NameInUse, name));
+				showErrorMessage(Localization.getString(Strings.ERROR_STANDARD_NAME_IN_USE, name));
 				return;
 			}
 
@@ -94,8 +94,8 @@ public class NewProfileDialog extends NVC {
 			profile.save();
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (Exception e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Create, e.getMessage()));
+			Logger.error(e);
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_CREATE, e.getMessage()));
 		}
 	}
 

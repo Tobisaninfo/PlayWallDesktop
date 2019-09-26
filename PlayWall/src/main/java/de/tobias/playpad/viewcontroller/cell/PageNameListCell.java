@@ -15,7 +15,7 @@ public final class PageNameListCell extends ListCell<Integer> {
 			Page page = PlayPadMain.getProgramInstance().getCurrentProject().getPage(item);
 			String name = page.getName();
 			if (name.isEmpty()) {
-				name = Localization.getString(Strings.UI_Window_Main_PageButton, (item));
+				name = Localization.getString(Strings.UI_WINDOW_MAIN_PAGE_BUTTON, (item));
 			}
 			setText(name);
 		} else {

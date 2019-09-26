@@ -41,7 +41,7 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 	private Runnable onFinish;
 
 	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
-		load("view/option/project", "ProjectSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "ProjectSettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 		this.project = project;
 
@@ -66,11 +66,11 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(500);
-		stage.setTitle(Localization.getString(Strings.UI_Window_ProjectSettings_Title));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_PROJECT_SETTINGS_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}

@@ -1,9 +1,10 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
@@ -28,7 +29,7 @@ public class TriggerPointViewController extends NVC {
 	private TriggerDisplayable triggerWrapper;
 
 	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
-		load("view/option/pad/trigger", "TriggerPoint", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "TriggerPoint", Localization.getBundle());
 		this.triggerWrapper = triggerWrapper;
 
 		for (TriggerItem item : triggerWrapper.getTrigger().getItems())
@@ -55,8 +56,7 @@ public class TriggerPointViewController extends NVC {
 				});
 				buttonBox.getChildren().add(button);
 			} catch (NoSuchComponentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		});
 	}
@@ -81,15 +81,14 @@ public class TriggerPointViewController extends NVC {
 
 				itemView.getChildren().addAll(rootBox);
 
-				deleteButton.setOnAction((e) ->
+				deleteButton.setOnAction(event ->
 				{
 					triggerWrapper.removeItem(item);
 					itemView.getChildren().removeAll(rootBox);
 				});
 			}
 		} catch (NoSuchComponentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 }

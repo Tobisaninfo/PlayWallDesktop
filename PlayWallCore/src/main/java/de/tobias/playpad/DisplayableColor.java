@@ -4,6 +4,6 @@ import javafx.scene.paint.Paint;
 
 public interface DisplayableColor {
 
-	Paint getPaint();
+	Paint getColor();
 
 }

@@ -53,11 +53,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +68,8 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	private static final String OK = "OK";
 	private static final String CACHE_FOLDER = "Cache";
+	private static final String PROTOCOL = "https";
+	private static final String WS_PROTOCOL = "wss";
 
 	private String host;
 	private WebSocket websocket;
@@ -84,7 +83,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 		try {
 			loadStoredFiles();
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO Error Handling
+			Logger.error(e);
 		}
 		registerCommands();
 	}
@@ -121,8 +120,8 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public List<ModernPlugin> getPlugins() throws IOException {
-		URL url = new URL("https://" + host + "/plugins");
-		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+		URL url = new URL(PROTOCOL + "://" + host + "/plugins");
+		Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
 		Type listType = new TypeToken<List<ModernPlugin>>() {
 		}.getType();
 
@@ -131,22 +130,19 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	@Override
-	public ModernPlugin getPlugin(String name) throws IOException {
-		URL url = new URL("https://" + host + "/plugin/" + name);
-		Reader reader = new InputStreamReader(url.openStream(), Charset.forName("UTF-8"));
+	public ModernPlugin getPlugin(String id) throws IOException {
+		URL url = new URL(PROTOCOL + "://" + host + "/plugins/" + id);
+		Reader reader = new InputStreamReader(url.openStream(), StandardCharsets.UTF_8);
 		Gson gson = new Gson();
 		return gson.fromJson(reader, ModernPlugin.class);
 	}
 
 	@Override
 	public void loadPlugin(ModernPlugin plugin, UpdateService.RepositoryType channel) throws IOException {
-		Path path = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
-		loadSource(plugin.getPath(), channel, path);
-	}
+		Path destination = ApplicationUtils.getApplication().getPath(PathType.LIBRARY, plugin.getFileName());
 
-	private void loadSource(String path, UpdateService.RepositoryType channel, Path destination) throws IOException {
-		String url = "https://" + host + "/" + channel + path;
-		Logger.debug("Load server resource: {0}", path);
+		String url = PROTOCOL + "://" + host + "/plugins/raw/" + plugin.getId();
+		Logger.debug("Load server resource: {0}", destination);
 		try {
 			HttpResponse<InputStream> response = Unirest.get(url).asBinary();
 			Files.copy(response.getBody(), destination, StandardCopyOption.REPLACE_EXISTING);
@@ -157,7 +153,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public String getSession(String username, String password) throws IOException, LoginException {
-		String url = "https://" + host + "/sessions";
+		String url = PROTOCOL + "://" + host + "/sessions";
 		try {
 			HttpResponse<JsonNode> response = Unirest.post(url)
 					.queryString("username", username)
@@ -178,7 +174,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public void logout(String username, String password, String key) throws IOException {
-		String url = "https://" + host + "/sessions";
+		String url = PROTOCOL + "://" + host + "/sessions";
 		try {
 			Unirest.post(url)
 					.queryString("username", username)
@@ -192,7 +188,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 	@Override
 	public List<ProjectReference> getSyncedProjects() throws IOException, LoginException {
-		String url = "https://" + host + "/projects";
+		String url = PROTOCOL + "://" + host + "/projects";
 		try {
 			Session session = PlayPadMain.getProgramInstance().getSession();
 			HttpResponse<JsonNode> request = Unirest.get(url)
@@ -218,14 +214,14 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			}
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return new ArrayList<>();
 		}
 	}
 
 	@Override
 	public Project getProject(ProjectReference ref) throws IOException {
-		String url = "https://" + host + "/projects/" + ref.getUuid();
+		String url = PROTOCOL + "://" + host + "/projects/" + ref.getUuid();
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			HttpResponse<JsonNode> response = Unirest.get(url)
@@ -237,20 +233,19 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			return reader.read(ref);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return null;
 		}
 	}
 
 	@Override
 	public void postProject(Project project) throws IOException {
-		String url = "https://" + host + "/projects";
+		String url = PROTOCOL + "://" + host + "/projects";
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			ProjectJsonWriter writer = new ProjectJsonWriter();
 
 			String value = writer.write(project).toString();
-			System.out.println(value);
 
 			Unirest.post(url)
 					.queryString("session", session.getKey())
@@ -258,13 +253,13 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 					.asJson();
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage(), e);
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 		}
 	}
 
 	@Override
 	public Version getLastServerModification(ProjectReference ref) throws IOException {
-		String url = "https://" + host + "/projects/modification/" + ref.getUuid();
+		String url = PROTOCOL + "://" + host + "/projects/modification/" + ref.getUuid();
 		Session session = PlayPadMain.getProgramInstance().getSession();
 		try {
 			HttpResponse<JsonNode> response = Unirest.get(url)
@@ -277,7 +272,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			return new Version(time, remoteSession, false);
 		} catch (UnirestException e) {
 			throw new IOException(e.getMessage());
-		} catch (SessionNotExisitsException ignored) {
+		} catch (SessionNotExistsException ignored) {
 			return null;
 		}
 	}
@@ -289,25 +284,25 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			if (PlayPadMain.sslContext != null) {
 				webSocketFactory.setSSLContext(PlayPadMain.sslContext);
 			}
-			websocket = webSocketFactory.createSocket("wss://" + host + "/project");
+			websocket = webSocketFactory.createSocket(WS_PROTOCOL + "://" + host + "/project");
 			websocket.addHeader("key", key);
 
 			websocket.addListener(syncListener);
 			websocket.connect();
 		} catch (WebSocketException | IOException e) {
-			System.err.println("Failed to connect to server: " + e.getMessage());
+			Logger.error("Failed to connect to server: " + e.getMessage());
 		}
 	}
 
 	@Override
 	public void disconnect() {
-		System.out.println("Disconnect from Server");
+		Logger.info("Disconnect from Server");
 		websocket.disconnect();
 
 		try {
 			saveStoredCommands();
 		} catch (IOException e) {
-			e.printStackTrace(); // TODO Error Handling
+			Logger.error(e);
 		}
 	}
 
@@ -315,7 +310,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	public boolean push(String data) {
 		if (websocket.isOpen()) {
 			if (ApplicationUtils.getApplication().isDebug()) {
-				System.out.println("Send: " + data);
+				Logger.debug("Send: " + data);
 			}
 			// Send to Server
 			websocket.sendText(data);
@@ -350,8 +345,10 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	private void loadStoredFiles() throws IOException {
 		Path path = ApplicationUtils.getApplication().getPath(PathType.DOCUMENTS, CACHE_FOLDER);
 		if (Files.exists(path)) {
-			for (Path file : Files.newDirectoryStream(path)) {
-				loadStoredFile(file);
+			try (final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(path)) {
+				for (Path file : directoryStream) {
+					loadStoredFile(file);
+				}
 			}
 		}
 	}
@@ -375,9 +372,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 
 		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		Map<UUID, List<JsonObject>> storedCommands = executor.getStoredCommands();
-		for (UUID key : storedCommands.keySet()) {
-			Path file = folder.resolve(key.toString());
-			List<String> lines = storedCommands.get(key).stream().map(JsonElement::toString).collect(Collectors.toList());
+		for (Map.Entry<UUID, List<JsonObject>> entry : storedCommands.entrySet()) {
+			Path file = folder.resolve(entry.getKey().toString());
+			List<String> lines = entry.getValue().stream().map(JsonElement::toString).collect(Collectors.toList());
 			Files.write(file, lines, StandardOpenOption.CREATE);
 		}
 	}
@@ -390,9 +387,8 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 			try {
 				websocket = websocket.recreate().connect();
 				connected = true;
-				Thread.sleep(30 * 1000);
+				Thread.sleep(30 * 1000L);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 				break;
 			} catch (WebSocketException | IOException ignored) {
 			}

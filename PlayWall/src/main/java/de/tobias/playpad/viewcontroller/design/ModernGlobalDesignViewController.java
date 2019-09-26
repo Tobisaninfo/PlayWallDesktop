@@ -1,8 +1,7 @@
 package de.tobias.playpad.viewcontroller.design;
 
 import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.view.ColorPickerView;
@@ -17,12 +16,14 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.util.function.Consumer;
 
-public class ModernGlobalDesignViewController extends NVC {
+public class ModernGlobalDesignViewController extends NVC implements IColorButton {
 
 	@FXML
 	private Button backgroundColorButton;
 	@FXML
 	private Button playColorButton;
+	@FXML
+	private Button cueInColorButton;
 
 	@FXML
 	private CheckBox warnAnimationCheckBox;
@@ -43,7 +44,7 @@ public class ModernGlobalDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernGlobalDesignViewController(ModernGlobalDesign design) {
-		load("view/option/layout", "ModernLayoutGlobal", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutGlobal", Localization.getBundle());
 
 		this.design = design;
 		setLayout();
@@ -52,6 +53,7 @@ public class ModernGlobalDesignViewController extends NVC {
 	private void setLayout() {
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
+		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 
 		warnAnimationCheckBox.setSelected(design.isWarnAnimation());
 		flatDesignCheckbox.setSelected(design.isFlatDesign());
@@ -62,32 +64,29 @@ public class ModernGlobalDesignViewController extends NVC {
 
 	@Override
 	public void init() {
-		warnAnimationCheckBox.selectedProperty().addListener((a, b, c) ->
+		warnAnimationCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> design.setWarnAnimation(newValue));
+
+		flatDesignCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 		{
-			design.setWarnAnimation(c);
-		});
-		flatDesignCheckbox.selectedProperty().addListener((a, b, c) ->
-		{
-			design.setFlatDesign(c);
+			design.setFlatDesign(newValue);
 
 			// Update button preview
 			backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 			playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
+			cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 		});
 
 		infoLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
-		infoLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
-		{
-			design.setInfoFontSize(c);
-		});
+		infoLabelFontSizeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> design.setInfoFontSize(newValue));
 		infoLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
 
 		titleLabelFontSizeComboBox.getItems().addAll(9, 10, 12, 13, 14, 16, 18, 20, 24, 28);
-		titleLabelFontSizeComboBox.valueProperty().addListener((a, b, c) ->
-		{
-			design.setTitleFontSize(c);
-		});
+		titleLabelFontSizeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> design.setTitleFontSize(newValue));
 		titleLabelFontSizeComboBox.setConverter(new IntegerStringConverter());
+
+		addIconToButton(backgroundColorButton);
+		addIconToButton(playColorButton);
+		addIconToButton(cueInColorButton);
 	}
 
 	@FXML
@@ -98,21 +97,26 @@ public class ModernGlobalDesignViewController extends NVC {
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, design.getBackgroundColor(), (color) -> design.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), color -> design.setBackgroundColor(color));
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, design.getPlayColor(), (color) -> design.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
+	}
+
+	@FXML
+	private void cueInColorButtonHandler(ActionEvent event) {
+		colorChooser(cueInColorButton, design.getPlayColor(), color -> design.setCueInColor(color));
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
-		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), (DisplayableColor t) ->
+		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), newValue ->
 		{
 			colorChooser.hide();
 
-			if (t instanceof ModernColor) {
-				ModernColor color = (ModernColor) t;
+			if (newValue instanceof ModernColor) {
+				ModernColor color = (ModernColor) newValue;
 				onFinish.accept(color);
 				anchorNode.setStyle(getLinearGradientCss(color));
 			}

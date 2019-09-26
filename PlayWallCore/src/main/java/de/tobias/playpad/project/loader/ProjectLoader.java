@@ -90,7 +90,14 @@ public class ProjectLoader {
 		if (listener != null)
 			listener.startReadProject();
 
-		Project project = loadProjectImpl(projectReference, delegate);
+		Project project;
+		try {
+			project = loadProjectImpl(projectReference, delegate);
+		} catch (IOException | DocumentException | ProjectNotFoundException e) {
+			if (listener != null)
+				listener.abort();
+			throw e;
+		}
 
 		if (listener != null)
 			listener.finishReadProject();

@@ -1,17 +1,25 @@
 package de.tobias.playpad;
 
+import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.versionizer.service.UpdateService;
+import de.tobias.playpad.plugin.GlobalListener;
+import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.PadListener;
 import de.tobias.playpad.plugin.SettingsListener;
-import de.tobias.playpad.plugin.WindowListener;
+import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectNotFoundException;
+import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.scene.image.Image;
+import org.dom4j.DocumentException;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -21,15 +29,15 @@ import java.util.ResourceBundle;
  */
 public interface PlayPad {
 
-	ResourceBundle getUIResourceBundle();
-
 	/**
 	 * Fügt einen Listener für das Hauptfenster hinzu.
 	 *
 	 * @param listener MainView Listener
 	 * @since 2.0.0
 	 */
-	void addMainViewListener(WindowListener<IMainViewController> listener);
+	void addMainViewListener(MainWindowListener listener);
+
+	List<MainWindowListener> getMainViewListeners();
 
 	/**
 	 * Fügt einen Settings Listener hinzu.
@@ -76,6 +84,12 @@ public interface PlayPad {
 	 */
 	List<PadListener> getPadListener();
 
+	void addGlobalListener(GlobalListener globalListener);
+
+	void removeGlobalListener(GlobalListener globalListener);
+
+	List<GlobalListener> getGlobalListeners();
+
 	/**
 	 * Gibt eine Refernz auf das Hauptfenster zurück.
 	 *
@@ -88,7 +102,7 @@ public interface PlayPad {
 	 *
 	 * @return Programmicon
 	 */
-	Optional<Image> getIcon();
+	Image getIcon();
 
 	/**
 	 * Beendet PlayWall.
@@ -109,5 +123,19 @@ public interface PlayPad {
 	 */
 	Project getCurrentProject();
 
+	/**
+	 * Open a project
+	 *
+	 * @param projectReference project reference
+	 * @param onLoaded         on project loaded callback
+	 * @throws IOException                                               io error
+	 * @throws ProjectNotFoundException                                  Project to solve error not found
+	 * @throws ProfileNotFoundException                                  Profile of project not found
+	 * @throws DocumentException                                         XML Error
+	 * @throws ProjectReader.ProjectReaderDelegate.ProfileAbortException Profile Choose aborted
+	 */
+	void openProject(ProjectReference projectReference, Consumer<NVC> onLoaded) throws ProjectNotFoundException, ProfileAbortException, ProfileNotFoundException, DocumentException, IOException;
+
 	UpdateService getUpdateService();
+
 }

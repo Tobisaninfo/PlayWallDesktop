@@ -3,6 +3,7 @@ package de.tobias.playpad.pad;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadSettingsUpdateListener;
@@ -13,10 +14,12 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.util.Duration;
 
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-public class PadSettings implements Cloneable {
+public class PadSettings {
 
 	// Pad Reference
 	private Pad pad;
@@ -30,12 +33,13 @@ public class PadSettings implements Cloneable {
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
+	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
 	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
 
-	private HashMap<TriggerPoint, Trigger> triggers = new HashMap<>();
-	private HashMap<String, Object> customSettings = new HashMap<>();
+	private Map<TriggerPoint, Trigger> triggers = new EnumMap<>(TriggerPoint.class);
+	private Map<String, Object> customSettings = new HashMap<>();
 
 	// Sync Listener
 	private PadSettingsUpdateListener syncListener;
@@ -106,10 +110,8 @@ public class PadSettings implements Cloneable {
 	}
 
 	public TimeMode getTimeMode() {
-		if (timeModeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getPlayerTimeDisplayMode();
-			}
+		if (timeModeProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getPlayerTimeDisplayMode();
 		}
 		return timeModeProperty.get();
 	}
@@ -136,10 +138,8 @@ public class PadSettings implements Cloneable {
 	 * @return Fade
 	 */
 	public Fade getFade() {
-		if (fadeProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getFade();
-			}
+		if (fadeProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getFade();
 		}
 		return fadeProperty.get();
 	}
@@ -161,10 +161,8 @@ public class PadSettings implements Cloneable {
 	}
 
 	public Duration getWarning() {
-		if (warningProperty.isNull().get()) {
-			if (Profile.currentProfile() != null) {
-				return Profile.currentProfile().getProfileSettings().getWarningFeedback();
-			}
+		if (warningProperty.isNull().get() && Profile.currentProfile() != null) {
+			return Profile.currentProfile().getProfileSettings().getWarningFeedback();
 		}
 		return warningProperty.get();
 	}
@@ -175,6 +173,18 @@ public class PadSettings implements Cloneable {
 
 	public ObjectProperty<Duration> warningProperty() {
 		return warningProperty;
+	}
+
+	public Duration getCueIn() {
+		return cueInProperty.get();
+	}
+
+	public void setCueIn(Duration cueIn) {
+		cueInProperty.set(cueIn);
+	}
+
+	public Duration cueInProperty() {
+		return cueInProperty.get();
 	}
 
 	public boolean isCustomDesign() {
@@ -191,24 +201,16 @@ public class PadSettings implements Cloneable {
 
 	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign design = new ModernCartDesign(pad);
+			ModernCartDesign newDesign = new ModernCartDesign(pad);
 
 			if (pad.getProject().getProjectReference().isSync()) {
-				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), design);
+				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), newDesign);
 			}
 
-			setDesign(design);
+			setDesign(newDesign);
 
 		}
 		return design;
-	}
-
-	public ModernColor getBackgroundColor() {
-		if (isCustomDesign()) {
-			return design.getBackgroundColor();
-		} else {
-			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
-		}
 	}
 
 	public void setDesign(ModernCartDesign design) {
@@ -216,14 +218,13 @@ public class PadSettings implements Cloneable {
 		if (pad.getProject().getProjectReference().isSync()) {
 			design.addListener();
 		}
-
 	}
 
-	public HashMap<String, Object> getCustomSettings() {
+	public Map<String, Object> getCustomSettings() {
 		return customSettings;
 	}
 
-	public HashMap<TriggerPoint, Trigger> getTriggers() {
+	public Map<TriggerPoint, Trigger> getTriggers() {
 		return triggers;
 	}
 
@@ -248,8 +249,8 @@ public class PadSettings implements Cloneable {
 		return false;
 	}
 
-	public PadSettings clone(Pad pad) throws CloneNotSupportedException {
-		PadSettings clone = (PadSettings) super.clone();
+	public PadSettings copy(Pad pad) {
+		PadSettings clone = new PadSettings(pad);
 		clone.id = UUID.randomUUID();
 
 		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
@@ -272,16 +273,19 @@ public class PadSettings implements Cloneable {
 
 		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
 		if (design != null) {
-			clone.design = design.clone(pad);
+			clone.design = design.copy(pad);
 		}
 
-		clone.triggers = new HashMap<>(); // TODO Trigger werden nicht Kopiert
+		clone.triggers = new EnumMap<>(TriggerPoint.class);
+		triggers.forEach((key, value) -> clone.triggers.put(key, value.copy()));
+
 		clone.customSettings = new HashMap<>(); // TODO CustomSettings werden nicht Kopiert
 
 		clone.updateTrigger();
 
-		if (pad.getProject().getProjectReference().isSync()) {
-			CommandManager.execute(Commands.PAD_SETTINGS_ADD, pad.getProject().getProjectReference(), clone);
+		final ProjectReference projectReference = pad.getProject().getProjectReference();
+		if (projectReference.isSync()) {
+			CommandManager.execute(Commands.PAD_SETTINGS_ADD, projectReference, clone);
 		}
 
 		return clone;
@@ -300,4 +304,13 @@ public class PadSettings implements Cloneable {
 		syncListener.removeListener();
 	}
 
+	//// Computed
+
+	public ModernColor getBackgroundColor() {
+		if (isCustomDesign()) {
+			return design.getBackgroundColor();
+		} else {
+			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
+		}
+	}
 }

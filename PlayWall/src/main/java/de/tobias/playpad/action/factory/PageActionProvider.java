@@ -1,65 +1,89 @@
 package de.tobias.playpad.action.factory;
 
-import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.action.*;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.PageAction;
-import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.PageActionSettingsEntry;
+import de.tobias.playpad.action.settings.PageActionTypeSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;
 import javafx.scene.control.TreeItem;
 
-import java.util.Collections;
 import java.util.List;
 
-public class PageActionProvider extends ActionProvider implements ActionDisplayable {
+import static de.tobias.playpad.action.actions.PageAction.TYPE;
+
+public class PageActionProvider extends ActionProvider {
 
 	public PageActionProvider(String type) {
-		super(type);
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
+	public String getType() {
+		return TYPE;
+	}
 
-		Collections.sort(actions, (o1, o2) ->
+	@Override
+	public void createDefaultActions(Mapping mapping) {
+		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
+			Action action = newInstance(i);
+			mapping.addUniqueAction(action);
+		}
+	}
+
+	private Action newInstance(int i) {
+		Action action = new Action(getType());
+		action.addPayloadEntry(PageAction.PAYLOAD_PAGE, String.valueOf(i));
+		return action;
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new PageAction();
+	}
+
+	@Override
+	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
+		switch (keyType) {
+			case KEYBOARD:
+				return new FeedbackType[0];
+			case MIDI:
+				return new FeedbackType[]{FeedbackType.DEFAULT, FeedbackType.EVENT};
+		}
+		return new FeedbackType[0];
+	}
+
+	/*
+
+	 */
+
+	@Override
+	public ActionType getActionType() {
+		return ActionType.CONTROL;
+	}
+
+	@Override
+	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
+		TreeItem<ActionSettingsEntry> rootItem = new TreeItem<>(new PageActionTypeSettingsEntry());
+
+		actions.sort((o1, o2) ->
 		{
-			if (o1 instanceof PageAction && o2 instanceof PageAction) {
-				PageAction c1 = (PageAction) o1;
-				PageAction c2 = (PageAction) o2;
-				return Long.compare(c1.getPage(), c2.getPage());
-			} else {
-				return -1;
-			}
+			int page1 = PageAction.getPageForAction(o1);
+			int page2 = PageAction.getPageForAction(o2);
+			return Long.compare(page1, page2);
 		});
 
 		for (Action action : actions) {
-			TreeItem<ActionDisplayable> actionItem = new TreeItem<>(action);
+			TreeItem<ActionSettingsEntry> actionItem = new TreeItem<>(new PageActionSettingsEntry(action));
 			rootItem.getChildren().add(actionItem);
 		}
 
 		return rootItem;
 	}
-
-	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
-		for (int i = 0; i < ProjectSettings.MAX_PAGES; i++) {
-			PageAction action = new PageAction(getType(), i);
-			mapping.addActionIfNotContains(action);
-		}
-	}
-
-	@Override
-	public NVC getSettingsViewController() {
-		return null;
-	}
-
-	@Override
-	public Action newInstance() {
-		return new PageAction(getType());
-	}
-
-	@Override
-	public ActionType geActionType() {
-		return ActionType.CONTROL;
-	}
-
 }

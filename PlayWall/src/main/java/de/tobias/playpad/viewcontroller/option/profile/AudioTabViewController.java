@@ -3,7 +3,6 @@ package de.tobias.playpad.viewcontroller.option.profile;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.audio.AudioCapability;
@@ -44,7 +43,7 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 	private boolean changeAudioSettings;
 
 	public AudioTabViewController(boolean playerActive) {
-		load("view/option/profile", "AudioTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "AudioTab", Localization.getBundle());
 
 		if (playerActive) {
 			audioTypeComboBox.setDisable(true);
@@ -178,6 +177,6 @@ public class AudioTabViewController extends ProfileSettingsTabViewController imp
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Audio_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_AUDIO_TITLE);
 	}
 }

@@ -1,55 +1,33 @@
 package de.tobias.playpad.action;
 
-import de.tobias.playpad.profile.Profile;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.registry.Component;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-/**
- * Verwalter einer Action für die Instance und GUI.
- *
- * @author tobias
- * @see Action Implementierung der eigentlichen Action.
- * @since 5.0.0
- */
 public abstract class ActionProvider extends Component {
 
 	public ActionProvider(String type) {
 		super(type);
 	}
 
-	/**
-	 * Erstellt ein TreeItem für die Grupierung der Actions.
-	 *
-	 * @param actions Liste der alle Actionen dieses Types.
-	 * @param mapping Mapping, indem die Actions sind.
-	 * @return TreeItem
-	 */
-	public abstract TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping);
+	public abstract String getType();
 
-	/**
-	 * Initialisiert ein Mapping mit allen möglichen Action Varianten. Dies ist nötig, damit alle möglichen Actions in den Einstellungen
-	 * aufgelistet werden können.
-	 *
-	 * @param mapping Mapping
-	 * @param profile Profile für Einstellungen
-	 */
-	public abstract void initActionType(Mapping mapping, Profile profile);
+	public abstract ActionHandler getActionHandler();
 
-	/**
-	 * Erstellt eine neue Instance der Aktion.
-	 *
-	 * @return Neue Instance.
-	 */
-	public abstract Action newInstance();
+	public abstract void createDefaultActions(Mapping mapping);
 
-	/**
-	 * Gibt die Art der Action zurück. Gibt Auskunft über die Anordnung in den Einstellungen.
-	 *
-	 * @return Art der Aktion
-	 * @see ActionType
-	 */
-	public abstract ActionType geActionType();
+	public abstract FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType);
 
+	// Settings
+
+	public abstract ActionType getActionType();
+
+	public abstract TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping);
 }

@@ -1,16 +1,22 @@
 package de.tobias.playpad.view;
 
+import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.mapping.Key;
+import de.thecodelabs.midi.mapping.KeyRegistry;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.Action;
-import de.tobias.playpad.action.mapper.Mapper;
-import de.tobias.playpad.action.mapper.MapperFactory;
+import de.tobias.playpad.Strings;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.mapper.MapperViewController;
 import de.tobias.playpad.registry.NoSuchComponentException;
-import de.tobias.playpad.registry.Registry;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
+import de.tobias.playpad.viewcontroller.mapper.KeyboardMapperViewController;
+import de.tobias.playpad.viewcontroller.mapper.MidiMapperViewController;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -22,7 +28,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Stream;
 
 // Diese Klasse zeigt die Mapper zu einer Action an
 public class MapperListViewControllerImpl extends BaseMapperListViewController {
@@ -54,22 +60,23 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 
 		addMappingBox = new HBox(14);
 
-		Label headline = new Label(PlayPadMain.getUiResourceBundle().getString("action.mapper.headline"));
+		Label headline = new Label(Localization.getString("action.mapper.headline"));
 		headline.setUnderline(true);
 		root.getChildren().addAll(headline, mappingView, addMappingBox);
 
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
-		Set<String> types = registry.getTypes();
-		types.stream().sorted().forEach(item ->
+		final KeyType[] keys = KeyType.values();
+		Stream.of(keys).forEach(item ->
 		{
-			String name = item;
-			try {
-				MapperFactory connect = registry.getFactory(item);
-				name = connect.toString();
-			} catch (NoSuchComponentException e) {
-				// TODO Error Handling
-				e.printStackTrace();
+			String name = "";
+			switch (item) {
+				case MIDI:
+					name = Localization.getString(Strings.MAPPER_MIDI_NAME);
+					break;
+				case KEYBOARD:
+					name = Localization.getString(Strings.MAPPER_KEYBOARD_NAME);
+					break;
 			}
+
 			Button button = new Button(name, new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 			button.setContentDisplay(ContentDisplay.TOP);
 			button.setPrefWidth(150);
@@ -78,17 +85,17 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 			{
 				// Adds a mapper to the action
 				try {
-					MapperViewController controller = onAddMapper(item);
+					ActionProvider provider = PlayPadPlugin.getRegistries().getActions().getFactory(action.getActionType());
+					MapperViewController controller = onAddMapper(item, action, provider);
 					boolean result = controller.showInputMapperUI();
 
 					// Delete Mapper wenn Eingabe abgebrochen wurde
 					if (!result) {
 						mappingView.getChildren().removeAll(controller.getParent().getParent());
-						action.removeMapper(controller.getMapper());
+						action.removeKey(controller.getKey());
 					}
 				} catch (NoSuchComponentException ex) {
-					// TODO Error Handling
-					ex.printStackTrace();
+					Logger.error(e);
 				}
 
 			});
@@ -96,32 +103,51 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		});
 	}
 
-	private MapperViewController onAddMapper(String type) throws NoSuchComponentException {
-		Registry<MapperFactory> registry = PlayPadPlugin.getRegistries().getMappers();
-
-		Mapper mapper = registry.getFactory(type).createNewMapper();
-		action.addMapper(mapper);
-		return addMapperView(type, mapper);
+	private MapperViewController onAddMapper(KeyType type, Action action, ActionProvider provider) throws NoSuchComponentException {
+		try {
+			KeyRegistry registry = KeyRegistry.getInstance();
+			Key mapper = registry.createInstance(type, provider.supportedFeedbackOptions(action, type));
+			action.addKey(mapper);
+			return addMapperView(type, mapper);
+		} catch (Exception e) {
+			throw new NoSuchComponentException(e);
+		}
 	}
 
-	private MapperViewController addMapperView(String type, Mapper mapper) {
-		MapperViewController controller = (MapperViewController) mapper.getSettingsViewController();
-		if (controller != null) {
-			Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+	private MapperViewController addMapperView(KeyType type, Key key) {
+		MapperViewController controller = null;
 
-			HBox hbox = new HBox(controller.getParent(), deleteButton);
-			hbox.setSpacing(14);
-
-			mappingView.getChildren().addAll(hbox);
-
-			deleteButton.setOnAction((e) ->
-			{
-				action.removeMapper(mapper);
-				mappingView.getChildren().removeAll(hbox);
-			});
+		switch (type) {
+			case MIDI:
+				controller = new MidiMapperViewController();
+				break;
+			case KEYBOARD:
+				controller = new KeyboardMapperViewController();
+				break;
+			default:
+				return null;
 		}
+
+		controller.setKey(key);
+		Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+
+		HBox hbox = new HBox(controller.getParent(), deleteButton);
+		hbox.setSpacing(14);
+
+		mappingView.getChildren().addAll(hbox);
+
+		deleteButton.setOnAction(e ->
+		{
+			action.removeKey(key);
+			mappingView.getChildren().removeAll(hbox);
+
+			// disable highlight for current button on device
+			Midi.getInstance().clearFeedback();
+		});
+
 		controllers.add(controller);
-		addListeners.forEach(i -> i.onAdd(mapper, controller));
+		MapperViewController finalController = controller;
+		addListeners.forEach(i -> i.onAdd(key, finalController));
 		return controller;
 	}
 
@@ -144,21 +170,22 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		controllers.clear();
 		mappingView.getChildren().clear();
 
-		List<Mapper> mapperSorted = action.getMapperSorted();
+		List<Key> mapperSorted = action.getKeys();
 		for (int i = 0; i < mapperSorted.size(); i++) {
-			Mapper mapper = mapperSorted.get(i);
+			Key mapper = mapperSorted.get(i);
 			addMapperView(mapper.getType(), mapper);
 		}
 	}
 
 	@Override
 	public void showAction(Action action, Pane parent) {
+		this.addListeners.clear();
 		this.action = action;
 
 		createSubViews(action);
 
 		if (this.parent != null) {
-			this.parent.getChildren().remove(getParent()); // Rmeove from old Parent
+			this.parent.getChildren().remove(getParent()); // Remove from old Parent
 		}
 		if (this.scrollPane != null) {
 			this.scrollPane.setContent(null);
@@ -175,7 +202,7 @@ public class MapperListViewControllerImpl extends BaseMapperListViewController {
 		createSubViews(action);
 
 		if (this.parent != null) {
-			this.parent.getChildren().remove(getParent()); // Rmeove from old Parent
+			this.parent.getChildren().remove(getParent()); // Remove from old Parent
 		}
 		if (this.scrollPane != null) {
 			this.scrollPane.setContent(null);

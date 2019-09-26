@@ -10,12 +10,14 @@ import de.tobias.playpad.design.modern.{ModernColor, ModernGlobalDesignHandler}
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.project.Project
+import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
 import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.{DisplayableColor, PlayPadMain}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.Duration
+import org.apache.commons.lang3.StringUtils
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
@@ -25,26 +27,7 @@ import scala.jdk.CollectionConverters._
 
 class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with ColorModeHandler {
 
-	val styleSheets: Array[String] = Array(
-		"style/components/button.css",
-		"style/components/menu-button.css",
-		"style/components/combobox.css",
-		"style/components/checkbox.css",
-		"style/components/scrollbar.css",
-		"style/components/textfield.css",
-		"style/components/radiobutton.css",
-		"style/components/slider.css",
-		"style/components/tabs.css",
-		"style/components/notification-pane.css",
-		"style/components/menu.css",
-		"style/components/toggle-button.css",
-		"style/components/list.css",
-		"style/components/dialog.css"
-	)
-
 	override def applyStyleSheet(stage: Stage): Unit = {
-		styleSheets.foreach(stage.getScene.getStylesheets.add)
-
 		stage.getScene.getStylesheets.add("style/style.css")
 		stage.getScene.getStylesheets.add("style/modern.css")
 
@@ -66,8 +49,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		stringBuilder.append(generateCss(design))
 
 		val cartDesignHandler = PlayPadMain.getProgramInstance.getModernDesign.cart
-
-		project.getPads.forEach(pad => {
+		project.getPage(controller.getPage).getPads.forEach(pad => {
 			val padSettings = pad.getPadSettings
 
 			if (padSettings.isCustomDesign) {
@@ -82,9 +64,11 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	private def generateCss(design: ModernGlobalDesign): String = {
-		generateCss(design, design.getBackgroundColor) +
-			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}") +
+		StringUtils.join(
+			generateCss(design, design.getBackgroundColor),
+			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}"),
 			generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
+		)
 	}
 
 	private def generateCss(design: ModernGlobalDesign, color: ModernColor, styleState: String = ""): String = {
@@ -92,14 +76,15 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val context = new StandardEvaluationContext()
 
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-global.css")
-		val string = resource.getAsString
+		val string = Minifier minify resource.getAsString
 
-		val values = Map[String, Any](
+		val values: Map[String, Any] = Map(
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
 			"playbarBarColor" -> color.getPlaybarTrackColor,
 			"padColor" -> (if (design.isFlatDesign) color.paint() else color.linearGradient()),
+			"padCueInColor" -> (if (design.isFlatDesign) design.getCueInColor.paint() else design.getCueInColor.linearGradient()),
 			"fontColor" -> color.getFontColor,
 			"infoFontSize" -> s"${design.getInfoFontSize}",
 			"titleFontSize" -> s"${design.getTitleFontSize}"
@@ -112,8 +97,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	override def handleWarning(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
 		if (design.isWarnAnimation) {
 			warnAnimation(design, controller, warning)
-		}
-		else {
+		} else {
 			ModernDesignAnimator.warnFlash(controller)
 		}
 	}
@@ -123,17 +107,17 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val playColor = if (design.isFlatDesign) design.getPlayColor.toFlatFadeableColor else design.getPlayColor.toFadeableColor
 
 		val pad = controller.getPad
-		var duration = warning
-		pad.getContent match {
+		val duration = pad.getContent match {
 			case durationable: Durationable =>
 				if (warning.greaterThan(durationable.getDuration)) {
-					duration = durationable.getDuration
+					durationable.getDuration
+				} else {
+					warning
 				}
-			case _ =>
+			case _ => warning
 		}
 		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, duration)
 	}
-
 
 	override def stopWarning(design: ModernGlobalDesign, controller: IPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 

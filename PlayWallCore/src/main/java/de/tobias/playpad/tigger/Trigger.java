@@ -1,5 +1,6 @@
 package de.tobias.playpad.tigger;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -51,6 +52,17 @@ public class Trigger {
 		this.triggerPoint = triggerPoint;
 	}
 
+	public Trigger copy() {
+		Trigger clone = new Trigger(triggerPoint);
+		clone.items = new ArrayList<>();
+
+		for (TriggerItem item : items) {
+			clone.items.add(item.copy());
+		}
+
+		return clone;
+	}
+
 	private static final String TYPE_ATTR = "type";
 	private static final String ITEM_ELEMENT = "Item";
 	private static final String POINT_ATTR = "point";
@@ -59,23 +71,20 @@ public class Trigger {
 		try {
 			triggerPoint = TriggerPoint.valueOf(element.attributeValue(POINT_ATTR));
 		} catch (Exception e) {
+			Logger.error(e);
 		}
 
-		for (Object itemObj : element.elements(ITEM_ELEMENT)) {
-			if (itemObj instanceof Element) {
-				Element itemElement = (Element) itemObj;
-				String type = itemElement.attributeValue(TYPE_ATTR);
+		for (Element itemElement : element.elements(ITEM_ELEMENT)) {
+			String type = itemElement.attributeValue(TYPE_ATTR);
 
-				Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistries().getTriggerItems();
-				try {
-					TriggerItemFactory connect = registry.getFactory(type);
-					TriggerItem item = connect.newInstance(this);
-					item.load(itemElement);
-					items.add(item);
-				} catch (NoSuchComponentException e) {
-					e.printStackTrace();
-					// TODO Error Handling
-				}
+			Registry<TriggerItemFactory> registry = PlayPadPlugin.getRegistries().getTriggerItems();
+			try {
+				TriggerItemFactory connect = registry.getFactory(type);
+				TriggerItem item = connect.newInstance(this);
+				item.load(itemElement);
+				items.add(item);
+			} catch (NoSuchComponentException e) {
+				Logger.error(e);
 			}
 		}
 	}
@@ -98,26 +107,34 @@ public class Trigger {
 	public void handle(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile) {
 		for (TriggerItem item : items) {
 			if (triggerPoint == TriggerPoint.START) {
-				if (pad.getStatus() == PadStatus.PLAY) {
-					// Mitten drin, wenn die Zeit die gepsiel wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
-					// wurde (null)
-					if ((item.getPerformedAt() == null && item.getDurationFromPoint().lessThan(duration))
-							// Wenn der Trigger am Anfang ist
-							|| (duration.equals(Duration.ZERO) && item.getDurationFromPoint().equals(Duration.ZERO))) {
-						item.performAction(pad, project, mainViewController, currentProfile);
-						item.setPerformedAt(duration);
-					} else if (item.getDurationFromPoint().greaterThan(duration)) {
-						item.setPerformedAt(null);
-					}
-				}
+				handleStartPoint(pad, duration, project, mainViewController, currentProfile, item);
 			} else if ((triggerPoint == TriggerPoint.EOF_STOP)) {
-				// Wenn Trigger noch nicht gespiel wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
-				if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
-					item.performAction(pad, project, mainViewController, currentProfile);
-					item.setPerformedAt(duration);
-				} else if (item.getDurationFromPoint().lessThan(duration)) {
-					item.setPerformedAt(null);
-				}
+				handleEndPoint(pad, duration, project, mainViewController, currentProfile, item);
+			}
+		}
+	}
+
+	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
+		// Wenn Trigger noch nicht gespiel wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
+		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
+			item.performAction(pad, project, mainViewController, currentProfile);
+			item.setPerformedAt(duration);
+		} else if (item.getDurationFromPoint().lessThan(duration)) {
+			item.setPerformedAt(null);
+		}
+	}
+
+	private void handleStartPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
+		if (pad.getStatus() == PadStatus.PLAY) {
+			// Mitten drin, wenn die Zeit die gepsiel wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
+			// wurde (null)
+			if ((item.getPerformedAt() == null && item.getDurationFromPoint().lessThan(duration))
+					// Wenn der Trigger am Anfang ist
+					|| (duration.equals(Duration.ZERO) && item.getDurationFromPoint().equals(Duration.ZERO))) {
+				item.performAction(pad, project, mainViewController, currentProfile);
+				item.setPerformedAt(duration);
+			} else if (item.getDurationFromPoint().greaterThan(duration)) {
+				item.setPerformedAt(null);
 			}
 		}
 	}

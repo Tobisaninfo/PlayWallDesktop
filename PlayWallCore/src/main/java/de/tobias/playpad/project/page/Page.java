@@ -16,7 +16,7 @@ import java.util.*;
  * @author tobias
  * @since 6.0.0
  */
-public class Page implements Cloneable {
+public class Page {
 
 	private UUID id;
 	private IntegerProperty positionProperty;
@@ -229,7 +229,8 @@ public class Page implements Cloneable {
 	/**
 	 * Removes a pad from a page and from the cloud.
 	 *
-	 * @param uuid id of the pad
+	 * @param uuid         id of the pad
+	 * @param deleteRemote <code>true</code> delete from remote
 	 */
 	public void removePad(UUID uuid, boolean deleteRemote) {
 		if (projectReference.getProjectReference().isSync() && deleteRemote) {
@@ -248,9 +249,8 @@ public class Page implements Cloneable {
 		return "Page [positionProperty=" + positionProperty + "]";
 	}
 
-	@Override
-	public Page clone() throws CloneNotSupportedException {
-		Page clone = (Page) super.clone();
+	public Page copy() {
+		Page clone = new Page(getPosition(), projectReference);
 		clone.id = UUID.randomUUID();
 		clone.positionProperty = new SimpleIntegerProperty(getPosition());
 		clone.nameProperty = new SimpleStringProperty(getName());
@@ -264,7 +264,7 @@ public class Page implements Cloneable {
 
 		clone.pads = new HashSet<>();
 		for (Pad pad : pads) {
-			Pad padClone = pad.clone(clone);
+			Pad padClone = pad.copy(clone);
 			clone.pads.add(padClone);
 		}
 		return clone;

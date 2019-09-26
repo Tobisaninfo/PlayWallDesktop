@@ -1,6 +1,7 @@
 package de.tobias.playpad.viewcontroller.option.pad.trigger;
 
 import de.thecodelabs.utils.ui.NVC;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -29,7 +30,7 @@ public class CartTriggerViewController extends NVC {
 	private CartTriggerItem item;
 
 	public CartTriggerViewController(CartTriggerItem item) {
-		load("view/option/pad/trigger", "CartTrigger", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad/trigger", "CartTrigger", Localization.getBundle());
 		this.item = item;
 
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();

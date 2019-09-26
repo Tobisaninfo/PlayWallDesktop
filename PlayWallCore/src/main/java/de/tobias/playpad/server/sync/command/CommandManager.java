@@ -14,6 +14,9 @@ public class CommandManager {
 		executor = PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 	}
 
+	private CommandManager() {
+	}
+
 	public static void register(String name, Command command) {
 		executor.register(name, command);
 	}

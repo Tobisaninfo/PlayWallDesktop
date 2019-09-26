@@ -1,0 +1,4 @@
+<Actions>
+    <Component id="video" name="plugin.media.content.Video.Name">de.tobias.playpad.plugin.media.video.VideoPadContentFactory</Component>
+    <Component id="image" name="plugin.media.content.Image.Name">de.tobias.playpad.plugin.media.image.ImagePadContentFactory</Component>
+</Actions>

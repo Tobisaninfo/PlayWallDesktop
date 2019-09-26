@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVC;
@@ -8,7 +9,6 @@ import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.AppUserInfoStrings;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import javafx.fxml.FXML;
@@ -56,7 +56,7 @@ public class AboutDialog extends NVC {
 
 	public AboutDialog(Window owner) {
 		this.owner = owner;
-		load("view/dialog", "About", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "About", Localization.getBundle());
 		NVCStage stage = applyViewControllerToStage().initOwner(owner).initModality(Modality.WINDOW_MODAL);
 		addCloseKeyShortcut(stage::close);
 	}
@@ -73,23 +73,23 @@ public class AboutDialog extends NVC {
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
-		graphicsLabel.setText(Localization.getString(Strings.UI_Dialog_About_Graphics));
-		libsLabel.setText(Localization.getString(Strings.UI_Dialog_About_Libraries));
+		graphicsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_GRAPHICS));
+		libsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_LIBRARIES));
 
-		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Website));
+		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_WEBSITE));
 		websiteLink.setPadding(Insets.EMPTY);
 		websiteLink.setFocusTraversable(false);
 		websiteLink.setOnAction(e -> {
-			String url = info.getUserInfo().get(AppUserInfoStrings.WEBSITE).toString();
+			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).website();
 			openWebsite(url);
 		});
 		websiteContainer.getChildren().add(websiteLink);
 
-		Hyperlink codeLink = new Hyperlink(Localization.getString(Strings.UI_Dialog_About_Code));
+		Hyperlink codeLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_CODE));
 		codeLink.setPadding(Insets.EMPTY);
 		codeLink.setFocusTraversable(false);
 		codeLink.setOnAction(e -> {
-			String url = info.getUserInfo().get(AppUserInfoStrings.REPOSITORY).toString();
+			String url = ApplicationUtils.getApplication().getUserInfo(AppUserInfoStrings.class).repository();
 			openWebsite(url);
 		});
 		codeContainer.getChildren().add(codeLink);
@@ -99,15 +99,15 @@ public class AboutDialog extends NVC {
 		if (Desktop.isDesktopSupported()) {
 			try {
 				Desktop.getDesktop().browse(new URI(url));
-			} catch (IOException | URISyntaxException e1) {
-				e1.printStackTrace();
+			} catch (IOException | URISyntaxException e) {
+				Logger.error(e);
 			}
 		}
 	}
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		stage.setResizable(false);
 		stage.initStyle(StageStyle.TRANSPARENT);
 

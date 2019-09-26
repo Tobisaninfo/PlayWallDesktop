@@ -1,10 +1,10 @@
 package de.tobias.playpad.action.actions.cart.handler
 
-import de.tobias.playpad.action.InputType
-import de.tobias.playpad.action.actions.cart.CartAction
+import de.thecodelabs.midi.event.KeyEventType
+import de.tobias.playpad.action.actions.CartAction
 import de.tobias.playpad.pad.Pad
 
 trait CartActionHandler {
 
-	def performAction(inputType: InputType, cartAction: CartAction, pad: Pad): Unit
+	def performAction(keyEventType: KeyEventType, cartAction: CartAction, pad: Pad): Unit
 }

@@ -7,13 +7,13 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.volume.VolumeManager;
 import javafx.util.Duration;
 import org.dom4j.Element;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class VolumeTriggerItem extends TriggerItem {
 
@@ -21,11 +21,9 @@ public class VolumeTriggerItem extends TriggerItem {
 	private Duration duration = new Duration(2000);
 	private List<UUID> uuids;
 
-	private static HashMap<Integer, Double> volumeCache = new HashMap<>();
-
 	private String type;
 
-	public VolumeTriggerItem(String type) {
+	VolumeTriggerItem(String type) {
 		super();
 		this.type = type;
 		this.uuids = new UniqList<>();
@@ -58,22 +56,26 @@ public class VolumeTriggerItem extends TriggerItem {
 
 	@Override
 	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
-		for (Pad destination : uuids.stream().map(project::getPad).collect(Collectors.toList())) {
-			if (destination.getContent() instanceof Fadeable) {
+		uuids.stream().map(project::getPad)
+				.filter(i -> i.getContent() instanceof Fadeable)
+				.forEach(destination -> {
+			Fadeable fadeable = (Fadeable) destination.getContent();
 
-				final int id = destination.getPadIndex().getId();
-				if (!volumeCache.containsKey(id)) {
-					volumeCache.put(id, destination.getPadSettings().getVolume());
-				}
-				double start = volumeCache.get(id);
+			final double start = VolumeManager.getInstance().computeVolume(destination);
+			fadeable.fade(start, volume, duration, null);
+		});
+	}
 
+	@Override
+	public TriggerItem copy() {
+		VolumeTriggerItem clone = new VolumeTriggerItem(getType());
 
-				Fadeable fadeable = (Fadeable) destination.getContent();
-				fadeable.fade(start, volume, duration, () -> {
-					volumeCache.put(id, volume);
-				});
-			}
-		}
+		clone.uuids = new ArrayList<>();
+		clone.uuids.addAll(uuids);
+		clone.volume = volume;
+		clone.duration = new Duration(duration.toMillis());
+
+		return clone;
 	}
 
 	private static final String CART_ELEMENT = "Cart";
@@ -84,15 +86,12 @@ public class VolumeTriggerItem extends TriggerItem {
 	public void load(Element element) {
 		super.load(element);
 		if (element.attributeValue(VOLUME_ATTR) != null)
-			volume = Double.valueOf(element.attributeValue(VOLUME_ATTR));
+			volume = Double.parseDouble(element.attributeValue(VOLUME_ATTR));
 		if (element.attributeValue(DURATION_ATTR) != null)
-			duration = Duration.millis(Double.valueOf(element.attributeValue(DURATION_ATTR)));
+			duration = Duration.millis(Double.parseDouble(element.attributeValue(DURATION_ATTR)));
 
-		for (Object cartObj : element.elements(CART_ELEMENT)) {
-			if (cartObj instanceof Element) {
-				Element cartElement = (Element) cartObj;
-				uuids.add(UUID.fromString(cartElement.getStringValue()));
-			}
+		for (Element cartElement : element.elements(CART_ELEMENT)) {
+			uuids.add(UUID.fromString(cartElement.getStringValue()));
 		}
 	}
 

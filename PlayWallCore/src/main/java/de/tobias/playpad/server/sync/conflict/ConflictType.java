@@ -7,5 +7,5 @@ public enum ConflictType {
 	LOCAL_CHANGES,
 	SERVER_CHANGES,
 	BOTH_CHANGES,
-	NON;
+	NONE
 }

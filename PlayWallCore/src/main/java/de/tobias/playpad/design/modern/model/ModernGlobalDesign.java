@@ -1,13 +1,14 @@
 package de.tobias.playpad.design.modern.model;
 
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.design.modern.ModernColor;
 import javafx.scene.paint.Color;
 
-public class ModernGlobalDesign implements DesignColorAssociator {
+public class ModernGlobalDesign implements FeedbackDesignColorSuggester {
 
 	private ModernColor backgroundColor = ModernColor.GRAY1;
 	private ModernColor playColor = ModernColor.RED3;
+	private ModernColor cueInColor = ModernColor.RED2;
 
 	private boolean isWarnAnimation = true;
 
@@ -30,6 +31,14 @@ public class ModernGlobalDesign implements DesignColorAssociator {
 
 	public void setPlayColor(ModernColor playColor) {
 		this.playColor = playColor;
+	}
+
+	public ModernColor getCueInColor() {
+		return cueInColor;
+	}
+
+	public void setCueInColor(ModernColor cueInColor) {
+		this.cueInColor = cueInColor;
 	}
 
 	public boolean isWarnAnimation() {
@@ -66,7 +75,8 @@ public class ModernGlobalDesign implements DesignColorAssociator {
 
 	public void reset() {
 		backgroundColor = ModernColor.GRAY1;
-		playColor = ModernColor.RED1;
+		playColor = ModernColor.RED3;
+		cueInColor = ModernColor.RED2;
 
 		isWarnAnimation = true;
 
@@ -77,12 +87,12 @@ public class ModernGlobalDesign implements DesignColorAssociator {
 	}
 
 	@Override
-	public Color getAssociatedEventColor() {
+	public Color getDesignEventColor() {
 		return Color.web(playColor.getColorHi());
 	}
 
 	@Override
-	public Color getAssociatedStandardColor() {
+	public Color getDesignDefaultColor() {
 		return Color.web(backgroundColor.getColorHi());
 	}
 }

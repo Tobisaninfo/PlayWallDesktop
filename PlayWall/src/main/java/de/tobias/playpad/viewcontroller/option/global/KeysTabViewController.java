@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.global;
 
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.OS;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -50,7 +49,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 	private ObservableList<Key> keys = FXCollections.observableArrayList();
 
 	KeysTabViewController() {
-		load("view/option/global", "KeysTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "KeysTab", Localization.getBundle());
 	}
 
 	@Override
@@ -113,7 +112,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 
 	private void showNewKeyBindingDialog() {
 		Alert alert = new Alert(AlertType.NONE);
-		alert.setContentText(Localization.getString(Strings.UI_Settings_Alert_NewKeyShortcut_Text));
+		alert.setContentText(Localization.getString(Strings.UI_SETTINGS_ALERT_NEW_KEY_SHORTCUT_TEXT));
 		Scene scene = alert.getDialogPane().getScene();
 
 		scene.setOnKeyPressed(ev ->
@@ -138,7 +137,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 					keyCollection.editKey(newKey);
 
 					shortcutLabel.setText(currentKey.toString());
-					Platform.runLater(() -> ((Stage) scene.getWindow()).close());
+					Platform.runLater(((Stage) scene.getWindow())::close);
 				} else {
 					KeysConflictDialog dialog = new KeysConflictDialog(keyCollection.getConflicts(newKey), keyCollection);
 					dialog.initOwner(getContainingWindow());
@@ -151,7 +150,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 		alert.initOwner(getContainingWindow());
 		alert.initModality(Modality.WINDOW_MODAL);
 		Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(alertStage.getIcons()::add);
+		alertStage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 		alert.showAndWait();
 	}
 
@@ -163,7 +162,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 
 	@Override
 	public void saveSettings(GlobalSettings settings) {
-		// Passiert beim Drücken von Tasten automatisch
+		// Will be saved on key press automatically
 	}
 
 	@Override
@@ -183,7 +182,7 @@ public class KeysTabViewController extends GlobalSettingsTabViewController imple
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Keys_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_KEYS_TITLE);
 	}
 
 	private void search() {

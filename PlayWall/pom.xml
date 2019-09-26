@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>6.2.0-SNAPSHOT</version>
+        <version>7.0.0</version>
     </parent>
 
     <artifactId>PlayWall</artifactId>
@@ -15,8 +15,6 @@
     <properties>
         <project.main>de.tobias.playpad.PlayPadMain</project.main>
         <project.iconBase>src/main/resources/icon</project.iconBase>
-
-        <itextpdf.version>5.5.13</itextpdf.version>
 
         <launch4j-maven-plugin.version>1.7.25</launch4j-maven-plugin.version>
         <appbundle-maven-plugin.version>1.2.0</appbundle-maven-plugin.version>
@@ -38,13 +36,6 @@
             <groupId>de.tobias.playpad</groupId>
             <artifactId>PlayWallComponents</artifactId>
             <version>${components.version}</version>
-        </dependency>
-
-        <!-- PDF-->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itextpdf</artifactId>
-            <version>${itextpdf.version}</version>
         </dependency>
 
         <!--Template parsing-->
@@ -97,6 +88,24 @@
                             <goal>resource-fill</goal>
                         </goals>
                         <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>nl.geodienstencentrum.maven</groupId>
+                <artifactId>sass-maven-plugin</artifactId>
+                <version>3.7.2</version>
+                <executions>
+                    <execution>
+                        <id>translate-css</id>
+                        <goals>
+                            <goal>update-stylesheets</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <destination>target/classes/style</destination>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -249,19 +258,19 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>release</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -271,7 +280,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

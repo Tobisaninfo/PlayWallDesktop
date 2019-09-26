@@ -1,13 +1,12 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.ProjectNotFoundException;
@@ -70,8 +69,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 	private ProjectImporter importer;
 	private Path mediaPath;
 
-	public ProjectImportDialog(Path path, Window owner) throws IOException, DocumentException {
-		load("view/dialog/project", "ImportDialog", PlayPadMain.getUiResourceBundle());
+	public ProjectImportDialog(Path path, Window owner) throws IOException, ProjectImporter.ProjectImportCorruptedException {
+		load("view/dialog/project", "ImportDialog", Localization.getBundle());
 		applyViewControllerToStage().initOwner(owner);
 
 		addCloseKeyShortcut(() -> cancelHandler(null));
@@ -79,8 +78,8 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		importer = new ProjectImporter(path, this);
 
 		// Set Default Values
-		projectNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProjectName()));
-		profileNameTextField.setText(Localization.getString(Strings.Standard_Copy, importer.getProfileName()));
+		projectNameTextField.setText(Localization.getString(Strings.STANDARD_COPY, importer.getProjectName()));
+		profileNameTextField.setText(Localization.getString(Strings.STANDARD_COPY, importer.getProfileName()));
 
 		profileSection.setDisable(!importer.isIncludeProfile());
 		profileImportCheckbox.setSelected(importer.isIncludeProfile());
@@ -104,21 +103,15 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 	@Override
 	public void init() {
-		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue && mediaPath == null) {
-				importButton.setDisable(true);
-			} else {
-				importButton.setDisable(false);
-			}
-		});
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+				importButton.setDisable(newValue && mediaPath == null));
 
 		profileImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
 			validateInput();
 			profileNameTextField.setDisable(!newValue);
 		});
-		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			mediaPathButton.setDisable(!newValue);
-		});
+		mediaImportCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+				mediaPathButton.setDisable(!newValue));
 
 		projectNameTextField.textProperty().addListener(this);
 		projectNameTextField.textProperty().addListener((observable, oldValue, newValue) ->
@@ -138,19 +131,17 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(380);
 		stage.setMaxWidth(380);
 
 		stage.setMinHeight(480);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectImport_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_IMPORT_TITLE));
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyle(stage);
-		}
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	@Override
@@ -162,11 +153,7 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 		boolean validProjectName = ProjectReferenceManager.validateProjectName(projectNameTextField.getText());
 		boolean validProfileName = ProfileReferenceManager.validateName(profileNameTextField.getText());
 
-		if (!validProjectName || (!validProfileName && shouldImportProfile())) {
-			importButton.setDisable(true);
-		} else {
-			importButton.setDisable(false);
-		}
+		importButton.setDisable(!validProjectName || (!validProfileName && shouldImportProfile()));
 	}
 
 	// ActionHandler
@@ -200,9 +187,9 @@ public class ProjectImportDialog extends NVC implements ProjectImporterDelegate,
 			canceled = false;
 
 			getStageContainer().ifPresent(NVCStage::close);
-		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Project_Export));
+		} catch (IOException | DocumentException | ProjectNotFoundException | ProfileNotFoundException | ProjectImporter.ProjectImportCorruptedException e) {
+			Logger.error(e);
+			showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_IMPORT));
 		} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 		}
 	}

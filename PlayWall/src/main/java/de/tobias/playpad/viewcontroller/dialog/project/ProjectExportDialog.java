@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -48,7 +49,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 	private ProjectReference projectRef;
 
 	ProjectExportDialog(ProjectReference projectRef, Window owner) {
-		load("view/dialog/project", "ExportDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "ExportDialog", Localization.getBundle());
 		this.projectRef = projectRef;
 
 		NVCStage nvcStage = applyViewControllerToStage();
@@ -59,9 +60,9 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectExport_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_EXPORT_TITLE));
 		stage.setWidth(375);
 		stage.setHeight(180);
 		stage.initModality(Modality.WINDOW_MODAL);
@@ -79,8 +80,8 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		FileChooser chooser = new FileChooser();
 
 		// Extension Filter in FileChooser
-		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
-		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
+		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
 		File file = chooser.showSaveDialog(getContainingWindow());
@@ -104,11 +105,11 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 				} catch (IOException e) {
 					busyView.showProgress(false);
 
-					String errorMessage = Localization.getString(Strings.Error_Project_Export, projectRef.getName(), e.getMessage());
+					String errorMessage = Localization.getString(Strings.ERROR_PROJECT_EXPORT, projectRef.getName(), e.getMessage());
 					showErrorMessage(errorMessage);
-					e.printStackTrace();
+					Logger.error(e);
 				} catch (ProjectNotFoundException | DocumentException | ProfileNotFoundException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
 			});

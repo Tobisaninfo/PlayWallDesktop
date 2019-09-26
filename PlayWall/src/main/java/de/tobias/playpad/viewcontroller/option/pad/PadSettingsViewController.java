@@ -1,9 +1,9 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -40,7 +40,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private Button finishButton;
 
 	public PadSettingsViewController(Pad pad, Window owner) {
-		load("view/option/pad", "PadSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "PadSettingsView", Localization.getBundle());
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
@@ -60,7 +60,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 				if (contentTab != null)
 					addTab(contentTab);
 			} catch (NoSuchComponentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
@@ -82,7 +82,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		if (pad.getContent() != null) {
 			final ObservableList<MediaPath> paths = pad.getPaths();
 			if (paths.size() == 1) {
-				Button button = new Button(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
+				Button button = new Button(Localization.getString("padSettings.button.path"));
 
 				MediaPath path = paths.get(0);
 				button.setUserData(path);
@@ -90,7 +90,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 
 				pathLookupButton = button;
 			} else if (paths.size() > 1) {
-				MenuButton button = new MenuButton(PlayPadMain.getUiResourceBundle().getString("padSettings.button.path"));
+				MenuButton button = new MenuButton(Localization.getString("padSettings.button.path"));
 
 				for (MediaPath path : paths) {
 					MenuItem item = new MenuItem(path.getFileName());
@@ -117,9 +117,9 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title, pad.getPositionReadable(), pad.getName());
+			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE, pad.getPositionReadable(), pad.getName());
 		} else {
-			title = Localization.getString(Strings.UI_Window_PadSettings_Title_Empty, pad.getPositionReadable());
+			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
 	}
@@ -131,7 +131,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(650);
 		stage.setMinHeight(550);

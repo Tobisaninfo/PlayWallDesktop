@@ -70,7 +70,7 @@ public class ProjectJsonReader {
 			pad.getPaths().add(path); // TODO Use addPath Method in right scope
 		}
 
-		if (pad.getPaths().size() != 0) {
+		if (!pad.getPaths().isEmpty()) {
 			pad.setStatus(PadStatus.READY);
 		}
 
@@ -101,7 +101,7 @@ public class ProjectJsonReader {
 			ModernColor backgroundColor = ModernColor.valueOf(object.getString("background_color"));
 			ModernColor playColor = ModernColor.valueOf(object.getString("play_color"));
 
-			return new ModernCartDesign(pad, id, backgroundColor, playColor);
+			return new ModernCartDesign(pad, id, backgroundColor, playColor, ModernColor.RED2); // TODO Fix Cue In Color
 		}
 		return null;
 	}

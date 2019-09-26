@@ -1,5 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.global;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
@@ -40,7 +41,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	private Runnable onFinish;
 
 	public GlobalSettingsViewController(Window owner, Runnable onFinish) {
-		load("view/option/global", "GlobalSettingsView", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "GlobalSettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 
 		NVCStage nvcStage = applyViewControllerToStage();
@@ -63,11 +64,11 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(715);
 		stage.setMinHeight(700);
-		stage.setTitle(Localization.getString(Strings.UI_Window_GlobalSettings_Title));
+		stage.setTitle(Localization.getString(Strings.UI_WINDOW_GLOBAL_SETTINGS_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}
@@ -96,8 +97,8 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		try {
 			globalSettings.save();
 		} catch (Exception e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
-			e.printStackTrace();
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
+			Logger.error(e);
 		}
 	}
 

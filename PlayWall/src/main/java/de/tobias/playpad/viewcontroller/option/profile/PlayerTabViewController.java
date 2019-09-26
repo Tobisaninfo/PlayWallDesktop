@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.profile.Profile;
@@ -30,7 +29,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 	private ComboBox<TimeMode> timeDisplayComboBox;
 
 	PlayerTabViewController() {
-		load("view/option/profile", "PlayerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/profile", "PlayerTab", Localization.getBundle());
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();
@@ -45,13 +44,13 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 
 	@Override
 	public void init() {
-		WarningFeedbackViewController controller = new WarningFeedbackViewController();
+		WarningFeedbackViewController controller = WarningFeedbackViewController.newViewControllerForProfile();
 		warningFeedbackContainer.getChildren().add(controller.getParent());
 
 		// Player
 		timeDisplayComboBox.getItems().addAll(TimeMode.values());
-		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.Pad_TimeMode_BaseName));
-		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.Pad_TimeMode_BaseName));
+		timeDisplayComboBox.setButtonCell(new EnumCell<>(Strings.PAD_TIME_MODE));
+		timeDisplayComboBox.setCellFactory(list -> new EnumCell<>(Strings.PAD_TIME_MODE));
 	}
 
 	@Override
@@ -83,6 +82,6 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Player_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_PLAYER_TITLE);
 	}
 }

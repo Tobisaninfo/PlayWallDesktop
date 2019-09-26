@@ -1,61 +1,86 @@
 package de.tobias.playpad.action.factory;
 
-import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.action.*;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.NavigateAction;
 import de.tobias.playpad.action.actions.NavigateAction.NavigationType;
-import de.tobias.playpad.profile.Profile;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.NavigateActionSettingsEntry;
+import de.tobias.playpad.action.settings.NavigateActionTypeSettingsEntry;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class NavigateActionProvider extends ActionProvider implements ActionDisplayable {
+import static de.tobias.playpad.action.actions.NavigateAction.TYPE;
+
+public class NavigateActionProvider extends ActionProvider {
 
 	public NavigateActionProvider(String type) {
-		super(type);
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		TreeItem<ActionDisplayable> rootItem = new TreeItem<>(this);
+	public String getType() {
+		return TYPE;
+	}
+
+	@Override
+	public void createDefaultActions(Mapping mapping) {
+		mapping.addUniqueAction(newInstance(NavigationType.PREVIOUS));
+		mapping.addUniqueAction(newInstance(NavigationType.NEXT));
+	}
+
+	private Action newInstance(NavigationType navigationType) {
+		Action action = new Action(getType());
+		action.addPayloadEntry(NavigateAction.PAYLOAD_TYPE, navigationType.name());
+		return action;
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new NavigateAction();
+	}
+
+	@Override
+	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
+		switch (keyType) {
+			case KEYBOARD:
+				return new FeedbackType[0];
+			case MIDI:
+				return new FeedbackType[]{FeedbackType.DEFAULT};
+		}
+		return new FeedbackType[0];
+	}
+
+	/*
+
+	 */
+
+	@Override
+	public ActionType getActionType() {
+		return ActionType.CONTROL;
+	}
+
+	@Override
+	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
+		TreeItem<ActionSettingsEntry> rootItem = new TreeItem<>(new NavigateActionTypeSettingsEntry());
 
 		actions.sort((o1, o2) ->
 		{
-			if (o1 instanceof NavigateAction && o2 instanceof NavigateAction) {
-				NavigateAction c1 = (NavigateAction) o1;
-				NavigateAction c2 = (NavigateAction) o2;
-				return Long.compare(c1.getAction().ordinal(), c2.getAction().ordinal());
-			} else {
-				return -1;
-			}
+			final NavigationType value1 = NavigationType.valueOf(o1);
+			final NavigationType value2 = NavigationType.valueOf(o2);
+			return Long.compare(value1.ordinal(), value2.ordinal());
 		});
 
 		for (Action action : actions) {
-			TreeItem<ActionDisplayable> actionItem = new TreeItem<>(action);
+			TreeItem<ActionSettingsEntry> actionItem = new TreeItem<>(new NavigateActionSettingsEntry(action));
 			rootItem.getChildren().add(actionItem);
 		}
 		return rootItem;
 	}
-
-	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
-		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.PREVIOUS));
-		mapping.addActionIfNotContains(new NavigateAction(getType(), NavigationType.NEXT));
-	}
-
-	@Override
-	public NVC getSettingsViewController() {
-		return null;
-	}
-
-	@Override
-	public Action newInstance() {
-		return new NavigateAction(getType());
-	}
-
-	@Override
-	public ActionType geActionType() {
-		return ActionType.CONTROL;
-	}
-
 }

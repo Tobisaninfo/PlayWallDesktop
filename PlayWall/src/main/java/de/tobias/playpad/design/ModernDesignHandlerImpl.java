@@ -3,7 +3,7 @@ package de.tobias.playpad.design;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 
-public class ModernDesignHandlerImpl implements ModernDesign {
+public class ModernDesignHandlerImpl implements ModernDesignHandler {
 
 	private ModernCartDesignHandler cartDesignHandler;
 	private ModernGlobalDesignHandler globalDesignHandler;

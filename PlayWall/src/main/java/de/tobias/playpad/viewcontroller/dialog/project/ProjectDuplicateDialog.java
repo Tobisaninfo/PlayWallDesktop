@@ -1,8 +1,9 @@
 package de.tobias.playpad.viewcontroller.dialog.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
+import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -24,7 +25,7 @@ public class ProjectDuplicateDialog extends TextInputDialog {
 		initOwner(parent.getContainingWindow());
 		initModality(Modality.WINDOW_MODAL);
 		Stage dialog = (Stage) getDialogPane().getScene().getWindow();
-		PlayPadMain.stageIcon.ifPresent(dialog.getIcons()::add);
+		dialog.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		Button button = (Button) getDialogPane().lookupButton(ButtonType.OK);
 		button.setDisable(true);
@@ -37,14 +38,14 @@ public class ProjectDuplicateDialog extends TextInputDialog {
 			}
 		});
 
-		setContentText(Localization.getString(Strings.UI_Dialog_NewProject_Content));
+		setContentText(Localization.getString(Strings.UI_DIALOG_NEW_PROJECT_CONTENT));
 		showAndWait().filter(name -> !name.isEmpty()).ifPresent(name ->
 		{
 			try {
 				ref = ProjectReferenceManager.duplicate(cloneableProject, name);
 			} catch (Exception e) {
-				e.printStackTrace();
-				parent.showErrorMessage(Localization.getString(Strings.Error_Project_Save, name, e.getMessage()));
+				parent.showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SAVE, name, e.getMessage()));
+				Logger.error(e);
 			}
 		});
 	}

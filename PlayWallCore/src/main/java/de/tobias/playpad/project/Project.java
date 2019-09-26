@@ -6,7 +6,6 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
-import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.ProjectUpdateListener;
@@ -68,6 +67,10 @@ public class Project {
 
 	public void close() {
 		syncListener.removeListener();
+
+		getPads().parallelStream()
+				.filter(pad -> pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE)
+				.forEach(Pad::stop);
 	}
 
 	public ProjectSettings getSettings() {
@@ -99,13 +102,14 @@ public class Project {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
-		if (pad != null) {
-			// Remove Pad from old location
-			if (pad.getPage().getPosition() != index.getPagePosition()) {
-				Page oldPage = pad.getPage();
-				if (oldPage.getPad(pad.getPosition()).equals(pad)) {
-					oldPage.setPad(index.getId(), null);
-				}
+		if (pad == null) {
+			return;
+		}
+		// Remove Pad from old location
+		if (pad.getPage().getPosition() != index.getPagePosition()) {
+			Page oldPage = pad.getPage();
+			if (oldPage.getPad(pad.getPosition()).equals(pad)) {
+				oldPage.setPad(index.getId(), null);
 			}
 		}
 
@@ -118,9 +122,10 @@ public class Project {
 	}
 
 	public Collection<Pad> getPads(Predicate<Pad> predicate) {
-		List<Pad> pads = new ArrayList<>();
-		pages.stream().map(Page::getPads).forEach(pads::addAll);
-		return pads.parallelStream().filter(predicate).collect(Collectors.toList());
+		return pages.parallelStream()
+				.flatMap(p -> p.getPads().stream())
+				.filter(predicate)
+				.collect(Collectors.toList());
 	}
 
 	public void removePad(UUID id) {
@@ -130,11 +135,11 @@ public class Project {
 	}
 
 	// Pages
-	public Page getPage(int psotion) {
-		if (psotion >= pages.size() && psotion < ProjectSettings.MAX_PAGES) {
-			addPage(new Page(psotion, this));
+	public Page getPage(int position) {
+		if (position >= pages.size() && position < ProjectSettings.MAX_PAGES) {
+			addPage(new Page(position, this));
 		}
-		return pages.get(psotion);
+		return pages.get(position);
 	}
 
 
@@ -156,8 +161,7 @@ public class Project {
 	}
 
 	public void setPage(int index, Page page) {
-		if (pages.contains(page))
-			pages.remove(page);
+		pages.remove(page);
 
 		pages.add(index, page);
 		page.setPosition(index);
@@ -256,10 +260,8 @@ public class Project {
 	public List<Pad> findPads(String name) {
 		List<Pad> result = new ArrayList<>();
 		for (Pad pad : getPads()) {
-			if (pad.getStatus() != PadStatus.EMPTY) {
-				if (pad.getName().toLowerCase().contains(name.toLowerCase())) {
-					result.add(pad);
-				}
+			if (pad.getStatus() != PadStatus.EMPTY && pad.getName().toLowerCase().contains(name.toLowerCase())) {
+				result.add(pad);
 			}
 		}
 		return result;
@@ -274,15 +276,5 @@ public class Project {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Validate the name input for a project name
-	 *
-	 * @param name project name to test
-	 * @return <code>true</code> valid
-	 */
-	public static boolean validateNameInput(String name) {
-		return !name.isEmpty() && !(ProjectReferenceManager.getProjects().contains(name));
 	}
 }

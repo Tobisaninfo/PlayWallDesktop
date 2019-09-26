@@ -1,11 +1,9 @@
 package de.tobias.playpad.viewcontroller.design;
 
 import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.DisplayableColor;
-import de.tobias.playpad.PlayPadMain;
+import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
-import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.view.ColorPickerView;
 import javafx.event.ActionEvent;
@@ -17,12 +15,14 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.util.function.Consumer;
 
-public class ModernCartDesignViewController extends NVC {
+public class ModernCartDesignViewController extends NVC implements IColorButton {
 
 	@FXML
 	private Button backgroundColorButton;
 	@FXML
 	private Button playColorButton;
+	@FXML
+	private Button cueInColorButton;
 	@FXML
 	private CheckBox warnAnimationCheckBox;
 
@@ -34,7 +34,7 @@ public class ModernCartDesignViewController extends NVC {
 	private PopOver colorChooser;
 
 	public ModernCartDesignViewController(ModernCartDesign layout) {
-		load("view/option/layout", "ModernLayoutCart", PlayPadMain.getUiResourceBundle());
+		load("view/option/layout", "ModernLayoutCart", Localization.getBundle());
 
 		this.design = layout;
 		setLayout();
@@ -43,10 +43,14 @@ public class ModernCartDesignViewController extends NVC {
 	private void setLayout() {
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
+		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 	}
 
 	@Override
 	public void init() {
+		addIconToButton(backgroundColorButton);
+		addIconToButton(playColorButton);
+		addIconToButton(cueInColorButton);
 	}
 
 	@FXML
@@ -57,21 +61,26 @@ public class ModernCartDesignViewController extends NVC {
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, design.getBackgroundColor(), (color) -> design.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), color -> design.setBackgroundColor(color));
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, design.getPlayColor(), (color) -> design.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
+	}
+
+	@FXML
+	private void cueInColorButtonHandler(ActionEvent event) {
+		colorChooser(cueInColorButton, design.getPlayColor(), color -> design.setCueInColor(color));
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
-		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), (DisplayableColor t) ->
+		ColorPickerView view = new ColorPickerView(startColor, ModernColor.values(), newValue ->
 		{
 			colorChooser.hide();
 
-			if (t instanceof ModernColor) {
-				ModernColor color = (ModernColor) t;
+			if (newValue instanceof ModernColor) {
+				ModernColor color = (ModernColor) newValue;
 				onFinish.accept(color);
 				anchorNode.setStyle(getLinearGradientCss(color));
 			}
@@ -86,8 +95,7 @@ public class ModernCartDesignViewController extends NVC {
 	}
 
 	private String getLinearGradientCss(ModernColor color) {
-		final ModernGlobalDesign design = Profile.currentProfile().getProfileSettings().getDesign();
-		if (design.isFlatDesign()) {
+		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return "-fx-background-color: " + color.paint() + ";";
 		} else {
 			return "-fx-background-color: " + color.linearGradient() + ";";

@@ -10,7 +10,7 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
  * @version 5.1.0
  * @see Pad
  */
-public abstract class PadContent implements Cloneable {
+public abstract class PadContent {
 
 	// reference
 	private Pad pad;
@@ -69,12 +69,13 @@ public abstract class PadContent implements Cloneable {
 	@Override
 	protected void finalize() throws Throwable {
 		unloadMedia();
-		this.pad = null;
 	}
 
-	@Override
-	public PadContent clone() throws CloneNotSupportedException {
-		return (PadContent) super.clone();
-	}
-
+	/**
+	 * Create a copy of the PadContent instance
+	 *
+	 * @param pad target pad
+	 * @return copied content
+	 */
+	public abstract PadContent copy(Pad pad);
 }

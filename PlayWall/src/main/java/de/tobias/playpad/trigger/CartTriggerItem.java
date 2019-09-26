@@ -9,6 +9,7 @@ import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,7 @@ public class CartTriggerItem extends TriggerItem {
 
 	private String type;
 
-	public CartTriggerItem(String type) {
+	CartTriggerItem(String type) {
 		super();
 		this.type = type;
 		newStatus = PadStatus.PLAY;
@@ -72,6 +73,18 @@ public class CartTriggerItem extends TriggerItem {
 		}
 	}
 
+	@Override
+	public TriggerItem copy() {
+		CartTriggerItem clone = new CartTriggerItem(getType());
+
+		clone.uuids = new ArrayList<>();
+		clone.uuids.addAll(uuids);
+		clone.allCarts = allCarts;
+		clone.newStatus = newStatus;
+
+		return clone;
+	}
+
 	private static final String CART_ELEMENT = "Cart";
 	private static final String STATUS_ATTR = "Status";
 	private static final String ALLCARTS_ATTR = "all";
@@ -83,13 +96,10 @@ public class CartTriggerItem extends TriggerItem {
 		if (element.attributeValue(STATUS_ATTR) != null)
 			setNewStatus(PadStatus.valueOf(element.attributeValue(STATUS_ATTR)));
 		if (element.attributeValue(ALLCARTS_ATTR) != null)
-			setAllCarts(Boolean.valueOf(element.attributeValue(ALLCARTS_ATTR)));
+			setAllCarts(Boolean.parseBoolean(element.attributeValue(ALLCARTS_ATTR)));
 
-		for (Object cartObj : element.elements(CART_ELEMENT)) {
-			if (cartObj instanceof Element) {
-				Element cartElement = (Element) cartObj;
-				uuids.add(UUID.fromString(cartElement.getStringValue()));
-			}
+		for (Element cartElement : element.elements(CART_ELEMENT)) {
+			uuids.add(UUID.fromString(cartElement.getStringValue()));
 		}
 	}
 

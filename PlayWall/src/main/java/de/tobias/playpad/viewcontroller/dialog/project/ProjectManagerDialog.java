@@ -10,9 +10,9 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
-import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader;
+import de.tobias.playpad.project.importer.ProjectImporter;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.view.PseudoClasses;
@@ -64,7 +64,7 @@ public class ProjectManagerDialog extends NVC {
 	private Button openButton;
 
 	public ProjectManagerDialog(Window owner) {
-		load("view/dialog/project", "ProjectManagementDialog.fxml", PlayPadMain.getUiResourceBundle());
+		load("view/dialog/project", "ProjectManagementDialog.fxml", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -74,7 +74,7 @@ public class ProjectManagerDialog extends NVC {
 
 	@Override
 	public void init() {
-		projectList.setPlaceholder(new Label(Localization.getString(Strings.UI_Placeholder_Project)));
+		projectList.setPlaceholder(new Label(Localization.getString(Strings.UI_PLACEHOLDER_PROJECT)));
 		projectList.setCellFactory(list -> new ProjectCell(false));
 
 		// Set Items
@@ -120,7 +120,7 @@ public class ProjectManagerDialog extends NVC {
 
 		// Name Change Listener
 		nameTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (Project.validateNameInput(newValue)) {
+			if (ProjectReferenceManager.validateProjectName(newValue)) {
 				ProjectReference reference = getSelectedItem();
 				if (reference != null && ProjectReferenceManager.validateProjectName(reference, newValue)) {
 					reference.setName(newValue);
@@ -144,7 +144,7 @@ public class ProjectManagerDialog extends NVC {
 				try {
 					ProjectReferenceManager.setSync(reference, newValue);
 				} catch (ProjectNotFoundException | ProfileNotFoundException | DocumentException | IOException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_Sync_Change, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_SYNC_CHANGE, e.getLocalizedMessage()));
 					Logger.error(e);
 				} catch (ProjectReader.ProjectReaderDelegate.ProfileAbortException ignored) {
 				}
@@ -165,13 +165,13 @@ public class ProjectManagerDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(600);
-		stage.setMinHeight(540);
+		stage.setMinHeight(560);
 		stage.setWidth(600);
 		stage.setHeight(540);
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ProjectManager_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_PROJECT_MANAGER_TITLE));
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
@@ -198,8 +198,8 @@ public class ProjectManagerDialog extends NVC {
 	private void projectImportHandler(ActionEvent event) {
 		FileChooser chooser = new FileChooser();
 
-		String extensionName = Localization.getString(Strings.File_Filter_ZIP);
-		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.projectZIPType);
+		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
+		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
 
 		File file = chooser.showOpenDialog(getContainingWindow());
@@ -209,7 +209,7 @@ public class ProjectManagerDialog extends NVC {
 				ProjectImportDialog dialog = new ProjectImportDialog(file.toPath(), getContainingWindow());
 				Optional<ProjectReference> importedProject = dialog.showAndWait();
 				importedProject.ifPresent(projectList.getItems()::add);
-			} catch (IOException | DocumentException e) {
+			} catch (IOException | ProjectImporter.ProjectImportCorruptedException e) {
 				Logger.error(e);
 			}
 		}
@@ -246,7 +246,7 @@ public class ProjectManagerDialog extends NVC {
 					ProjectReferenceManager.removeProject(reference);
 					projectList.getItems().remove(reference);
 				} catch (IOException e) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_Delete, e.getLocalizedMessage()));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_DELETE, e.getLocalizedMessage()));
 					Logger.error(e);
 				}
 			});

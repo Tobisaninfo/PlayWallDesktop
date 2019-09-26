@@ -1,11 +1,16 @@
 package de.tobias.playpad.server.sync;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.server.sync.listener.ServerListener;
 
 /**
  * Created by tobias on 19.02.17.
  */
 public class ServerUtils {
+
+	private ServerUtils() {
+	}
+
 	public static boolean isNewValueComingFromServer() {
 		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 		for (StackTraceElement element : stackTrace) {
@@ -17,7 +22,7 @@ public class ServerUtils {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		return false;

@@ -23,6 +23,7 @@ public class PadSettingsSerializer {
 	private static final String TIME_MODE_ELEMENT = "TimeMode";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
+	private static final String CUE_IN_ELEMENT = "CueIn";
 
 	private static final String DESIGN_ELEMENT = "Design";
 	private static final String CUSTOM_DESIGN_ELEMENT = "custom";
@@ -30,6 +31,8 @@ public class PadSettingsSerializer {
 	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
 	private static final String CUSTOM_SETTINGS_ELEMENT = "CustomSettings";
+	private static final String TRIGGERS_ELEMENT = "Triggers";
+	private static final String TRIGGER_ELEMENT = "Trigger";
 
 	public PadSettings loadElement(Element settingsElement, Pad pad) {
 		PadSettings padSettings;
@@ -41,9 +44,9 @@ public class PadSettingsSerializer {
 		}
 
 		if (settingsElement.element(VOLUME_ELEMENT) != null)
-			padSettings.setVolume(Double.valueOf(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
+			padSettings.setVolume(Double.parseDouble(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
 		if (settingsElement.element(LOOP_ELEMENT) != null)
-			padSettings.setLoop(Boolean.valueOf(settingsElement.element(LOOP_ELEMENT).getStringValue()));
+			padSettings.setLoop(Boolean.parseBoolean(settingsElement.element(LOOP_ELEMENT).getStringValue()));
 		if (settingsElement.element(TIME_MODE_ELEMENT) != null)
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIME_MODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
@@ -56,12 +59,20 @@ public class PadSettingsSerializer {
 				padSettings.setWarning(Duration.seconds(5));
 			}
 		}
+		if (settingsElement.element(CUE_IN_ELEMENT) != null) {
+			try {
+				Duration duration = Duration.valueOf(settingsElement.element(CUE_IN_ELEMENT).getStringValue().replace(" ", ""));
+				padSettings.setCueIn(duration);
+			} catch (Exception e) {
+				padSettings.setCueIn(null);
+			}
+		}
 
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
 			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
-				padSettings.setCustomDesign(Boolean.valueOf(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
+				padSettings.setCustomDesign(Boolean.parseBoolean(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
 			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign design = serializer.load(designElement, pad);
@@ -70,29 +81,23 @@ public class PadSettingsSerializer {
 
 		Element userInfoElement = settingsElement.element(CUSTOM_SETTINGS_ELEMENT);
 		if (userInfoElement != null) {
-			for (Object object : userInfoElement.elements()) {
-				if (object instanceof Element) {
-					Element item = (Element) object;
-					String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
-					Object data = UserDefaults.loadElement(item);
-					padSettings.getCustomSettings().put(key, data);
-				}
+			for (Element item : userInfoElement.elements()) {
+				String key = item.attributeValue(CUSTOM_SETTINGS_TYPE_ATTR);
+				Object data = UserDefaults.loadElement(item);
+				padSettings.getCustomSettings().put(key, data);
 			}
 		}
 
 		// Trigger
-		Element triggersElement = settingsElement.element("Triggers");
+		Element triggersElement = settingsElement.element(TRIGGERS_ELEMENT);
 		if (triggersElement != null) {
-			for (Object triggerObj : triggersElement.elements("Trigger")) {
-				if (triggerObj instanceof Element) {
-					Element triggerElement = (Element) triggerObj;
-					Trigger trigger = new Trigger();
-					trigger.load(triggerElement);
-					padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
-				}
+			for (Element triggerElement : triggersElement.elements(TRIGGER_ELEMENT)) {
+				Trigger trigger = new Trigger();
+				trigger.load(triggerElement);
+				padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
 			}
 		}
-		padSettings.updateTrigger(); // Damit alle Points da sind
+		padSettings.updateTrigger(); // Add missing trigger points
 
 		return padSettings;
 	}
@@ -109,6 +114,9 @@ public class PadSettingsSerializer {
 		if (padSettings.isCustomFade())
 			padSettings.getFade().save(settingsElement.addElement(FADE_ELEMENT));
 
+		if (padSettings.getCueIn() != null)
+			settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
+
 		// Layout
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
 		if (padSettings.isCustomDesign()) {
@@ -124,10 +132,10 @@ public class PadSettingsSerializer {
 		}
 
 		// Trigger
-		Element triggersElement = settingsElement.addElement("Triggers");
+		Element triggersElement = settingsElement.addElement(TRIGGERS_ELEMENT);
 		for (TriggerPoint point : padSettings.getTriggers().keySet()) {
 			Trigger trigger = padSettings.getTriggers().get(point);
-			Element triggerElement = triggersElement.addElement("Trigger");
+			Element triggerElement = triggersElement.addElement(TRIGGER_ELEMENT);
 			trigger.save(triggerElement);
 		}
 	}

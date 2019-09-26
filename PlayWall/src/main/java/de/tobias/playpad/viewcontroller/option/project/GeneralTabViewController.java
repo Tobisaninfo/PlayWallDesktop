@@ -2,7 +2,6 @@ package de.tobias.playpad.viewcontroller.option.project;
 
 import de.thecodelabs.utils.ui.Alertable;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.project.Project;
@@ -48,7 +47,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	private Label rowErrorLabel;
 
 	GeneralTabViewController(Screen currentScreen, Alertable parentController, boolean activePlayer) {
-		load("view/option/project", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "GeneralTab", Localization.getBundle());
 
 		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;
@@ -64,7 +63,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		columnTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.valueOf(c), Dimension.COLUMNS);
+				ValidationState validationState = validate(Integer.parseInt(c), Dimension.COLUMNS);
 				if (validationState == ValidationState.NORMAL) {
 					columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					columnErrorLabel.setText("");
@@ -74,22 +73,22 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.Error_Screen_TooMuch, maxValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.COLUMNS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS));
 					}
 					columnErrorLabel.setText(errorText);
 				}
 			} else {
 				columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				columnErrorLabel.setText(Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.COLUMNS)));
+				columnErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS)));
 			}
 		});
 
 		rowTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.valueOf(c), Dimension.ROWS);
+				ValidationState validationState = validate(Integer.parseInt(c), Dimension.ROWS);
 				if (validationState == ValidationState.NORMAL) {
 					rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					rowErrorLabel.setText("");
@@ -99,15 +98,15 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.Error_Screen_TooMuch, maxValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.ROWS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS));
 					}
 					rowErrorLabel.setText(errorText);
 				}
 			} else {
 				rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				rowErrorLabel.setText(Localization.getString(Strings.Error_Screen_TooLess, minValue(Dimension.ROWS)));
+				rowErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS)));
 			}
 		});
 	}
@@ -147,8 +146,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
 
 		try {
-			Integer column = Integer.valueOf(columnTextField.getText());
-			Integer rows = Integer.valueOf(rowTextField.getText());
+			int column = Integer.parseInt(columnTextField.getText());
+			int rows = Integer.parseInt(rowTextField.getText());
 
 			if (column < 3 || rows < 1) {
 				return false;
@@ -183,8 +182,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 	@Override
 	public void saveSettings(ProjectSettings settings) {
-		int columns = Integer.valueOf(columnTextField.getText());
-		int rows = Integer.valueOf(rowTextField.getText());
+		int columns = Integer.parseInt(columnTextField.getText());
+		int rows = Integer.parseInt(rowTextField.getText());
 
 		changeSettings = settings.getColumns() != columns || settings.getRows() != rows;
 
@@ -201,8 +200,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	@Override
 	public boolean validSettings() {
 		try {
-			return validate(Integer.valueOf(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
-					validate(Integer.valueOf(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
+			return validate(Integer.parseInt(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
+					validate(Integer.parseInt(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
 		} catch (NumberFormatException e) {
 			return false;
 		}
@@ -210,7 +209,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Gen_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_TITLE);
 	}
 
 	@Override

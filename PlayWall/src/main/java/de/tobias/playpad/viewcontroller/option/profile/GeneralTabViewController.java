@@ -1,11 +1,11 @@
 package de.tobias.playpad.viewcontroller.option.profile;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.Alertable;
 import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.utils.util.NumberUtils;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
@@ -52,12 +52,10 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	@FXML
 	private RadioButton settingsDisable;
 
-	private boolean changeSettings;
-
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
-		load("view/option/global", "GeneralTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "GeneralTab", Localization.getBundle());
 		this.alertable = alertable;
 
 		calcCacheSize();
@@ -74,10 +72,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		ToggleGroup settingsGroup = new ToggleGroup();
 		settingsGroup.getToggles().addAll(settingsEnable, settingsDisable);
 
-		liveModeCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			disableLiveSettings(c);
-		});
+		liveModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> disableLiveSettings(newValue));
 	}
 
 	private void disableLiveSettings(Boolean enableLiveSettings) {
@@ -105,49 +100,43 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	private void cacheResetButtonHandler(ActionEvent event) {
-		try {
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(ApplicationUtils.getApplication().getPath(PathType.CACHE))) {
 			int deleteFiles = 0;
-			for (Path path : Files.newDirectoryStream(ApplicationUtils.getApplication().getPath(PathType.CACHE))) {
+			for (Path path : directoryStream) {
 				if (Files.isRegularFile(path)) {
-					try {
-						Files.delete(path);
-						deleteFiles++;
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					Files.delete(path);
+					deleteFiles++;
 				}
 			}
-			alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_CacheDelete, deleteFiles));
+			alertable.showInfoMessage(Localization.getString(Strings.INFO_SETTINGS_CACHE_DELETE, deleteFiles));
 
 			calcCacheSize();
 		} catch (IOException e) {
-			e.printStackTrace();
-			showErrorMessage(Localization.getString(Strings.Error_Settings_CacheClear, e.getLocalizedMessage()));
+			Logger.error(e);
+			showErrorMessage(Localization.getString(Strings.ERROR_SETTINGS_CACHE_CLEAR, e.getLocalizedMessage()));
 		}
 	}
 
 	@FXML
 	private void resetDialogs(ActionEvent event) {
-		alertable.showInfoMessage(Localization.getString(Strings.Info_Settings_ResetWarning));
+		alertable.showInfoMessage(Localization.getString(Strings.INFO_SETTINGS_RESET_WARNING));
 	}
 
 	private void calcCacheSize() {
-		try {
+		GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
+		try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(globalSettings.getCachePath())) {
 			double size = 0;
-			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 			Path path = globalSettings.getCachePath();
 			if (Files.notExists(path))
 				Files.createDirectories(path);
 
-			DirectoryStream<Path> directoryStream = Files.newDirectoryStream(globalSettings.getCachePath());
 			for (Path item : directoryStream) {
 				size += Files.size(item);
 			}
-			directoryStream.close();
-			cacheSizeLabel.setText(Localization.getString(Strings.UI_Window_Settings_Gen_CacheSize, NumberUtils.convertBytesToAppropriateFormat(size)));
+			cacheSizeLabel.setText(Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_CACHE_SIZE, NumberUtils.convertBytesToAppropriateFormat(size)));
 		} catch (IOException e) {
-			e.printStackTrace();
-			alertable.showErrorMessage(Localization.getString(Strings.Error_Settings_CacheSize, e.getMessage()));
+			Logger.error(e);
+			alertable.showErrorMessage(Localization.getString(Strings.ERROR_SETTINGS_CACHE_SIZE, e.getMessage()));
 		}
 	}
 
@@ -196,7 +185,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public boolean needReload() {
-		return changeSettings;
+		return false;
 	}
 
 	@Override
@@ -206,6 +195,6 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Gen_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_GEN_TITLE);
 	}
 }

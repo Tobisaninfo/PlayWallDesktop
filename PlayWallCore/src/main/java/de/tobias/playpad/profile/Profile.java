@@ -1,13 +1,17 @@
 package de.tobias.playpad.profile;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.MappingCollection;
+import de.thecodelabs.midi.serialize.MappingCollectionSerializer;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.MappingList;
+import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.profile.ref.ProfileReference;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
+import de.tobias.playpad.registry.Registry;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -15,11 +19,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Profile {
 
 	private static final String PROFILE_SETTINGS_XML = "ProfileSettings.xml";
-	private static final String MAPPING_XML = "Mapping.xml";
+	private static final String MAPPING_JSON = "Mapping.json";
 
 	private static List<ProfileListener> listeners = new ArrayList<>();
 	private static Profile currentProfile;
@@ -28,7 +33,7 @@ public class Profile {
 	private ProfileReference ref;
 
 	private ProfileSettings profileSettings;
-	private MappingList mappings;
+	private MappingCollection mappings;
 
 	/**
 	 * Use {@link ProfileReferenceManager#addProfile(ProfileReference)} instead
@@ -38,7 +43,17 @@ public class Profile {
 	public Profile(ProfileReference ref) {
 		this.ref = ref;
 		this.profileSettings = new ProfileSettings();
-		this.mappings = new MappingList(this);
+		this.mappings = new MappingCollection();
+	}
+
+	public static Mapping createMappingWithDefaultActions() {
+		Mapping preset = new Mapping();
+		preset.setName("Default");
+
+		// Add default actions
+		final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
+		actions.getComponents().forEach(provider -> provider.createDefaultActions(preset));
+		return preset;
 	}
 
 	public static void registerListener(ProfileListener listener) {
@@ -61,7 +76,7 @@ public class Profile {
 		listeners.forEach(listener -> listener.reloadSettings(old, currentProfile));
 	}
 
-	public MappingList getMappings() {
+	public MappingCollection getMappings() {
 		return mappings;
 	}
 
@@ -71,16 +86,22 @@ public class Profile {
 
 	public static Profile load(ProfileReference ref) throws DocumentException, IOException, ProfileNotFoundException {
 		if (ref == null) {
-			throw new IllegalArgumentException("Profile is null"); // TODO Check if to catch exception somewhere
+			throw new IllegalArgumentException("Profile is null");
 		}
 		// Altes Speichern bevor neues Geladen
-		if (currentProfile != null)
+		if (currentProfile != null) {
 			currentProfile.save();
+		}
+
+		// Dont load profile, that is currently loaded
+		if (currentProfile != null && currentProfile.getRef().equals(ref)) {
+			return currentProfile;
+		}
 
 		App app = ApplicationUtils.getApplication();
 		Profile profile = new Profile(ref);
 
-		System.out.println("+++ Load Profile: " + ref + " (" + ref.getUuid() + ") +++");
+		Logger.info("+++ Load Profile: " + ref + " (" + ref.getUuid() + ") +++");
 
 		if (Files.exists(app.getPath(PathType.CONFIGURATION, ref.getFileName()))) {
 
@@ -92,12 +113,27 @@ public class Profile {
 				try {
 					l.onLoad(profile);
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					Logger.error(ex);
 				}
 			});
 
 			// Mapping erst danach, weil das auf current Profile zugreifen muss
-			profile.mappings = MappingList.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_XML), profile);
+			try {
+				profile.mappings = MappingCollectionSerializer.load(app.getPath(PathType.CONFIGURATION, ref.getFileName(), MAPPING_JSON));
+			} catch (IOException e) {
+				profile.mappings = new MappingCollection();
+			}
+
+			// Set current mapping
+			final Optional<Mapping> activeMapping = profile.getMappings().getActiveMapping();
+			final Optional<Mapping> anyMapping = profile.mappings.getMappings().stream().findAny();
+			final Mapping currentMapping = activeMapping.orElse(anyMapping.orElseGet(() -> {
+				final Mapping mapping = createMappingWithDefaultActions();
+				profile.mappings.addMapping(mapping);
+				return mapping;
+			}));
+			profile.mappings.setActiveMapping(currentMapping);
+			Mapping.setCurrentMapping(currentMapping);
 
 			setCurrentProfile(profile);
 
@@ -128,7 +164,7 @@ public class Profile {
 		ref.addRequestedModule(PlayPadPlugin.getRegistries().getAudioHandlers().getModule(profileSettings.getAudioClass()));
 
 		profileSettings.save(getProfilePath(PROFILE_SETTINGS_XML));
-		mappings.save(getProfilePath(MAPPING_XML));
+		MappingCollectionSerializer.save(mappings, getProfilePath(MAPPING_JSON));
 	}
 
 	private Path getProfilePath(String fileName) {

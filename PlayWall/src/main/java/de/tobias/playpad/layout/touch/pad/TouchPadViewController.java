@@ -1,5 +1,6 @@
 package de.tobias.playpad.layout.touch.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
@@ -82,7 +83,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 
 		padView.applyStyleClasses(pad.getPadIndex());

@@ -1,6 +1,6 @@
 package de.tobias.playpad.design.modern.model;
 
-import de.tobias.playpad.design.DesignColorAssociator;
+import de.tobias.playpad.design.FeedbackDesignColorSuggester;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.server.sync.command.CommandManager;
@@ -12,11 +12,12 @@ import javafx.scene.paint.Color;
 
 import java.util.UUID;
 
-public class ModernCartDesign implements DesignColorAssociator, Cloneable {
+public class ModernCartDesign implements FeedbackDesignColorSuggester {
 
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
 	private ObjectProperty<ModernColor> playColor;
+	private ObjectProperty<ModernColor> cueInColor;
 
 	private Pad pad;
 	private DesignUpdateListener syncListener;
@@ -26,15 +27,16 @@ public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 	}
 
 	public ModernCartDesign(Pad pad, UUID uuid) {
-		this(pad, uuid, ModernColor.GRAY1, ModernColor.RED3);
+		this(pad, uuid, ModernColor.GRAY1, ModernColor.RED3, ModernColor.RED2);
 	}
 
-	public ModernCartDesign(Pad pad, UUID id, ModernColor backgroundColor, ModernColor playColor) {
+	public ModernCartDesign(Pad pad, UUID id, ModernColor backgroundColor, ModernColor playColor, ModernColor cueInColor) {
 		this.uuid = id;
 		this.pad = pad;
 
 		this.backgroundColor = new SimpleObjectProperty<>(backgroundColor);
 		this.playColor = new SimpleObjectProperty<>(playColor);
+		this.cueInColor = new SimpleObjectProperty<>(cueInColor);
 
 		syncListener = new DesignUpdateListener(this);
 	}
@@ -71,6 +73,18 @@ public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 		return playColor;
 	}
 
+	public ModernColor getCueInColor() {
+		return cueInColor.get();
+	}
+
+	public void setCueInColor(ModernColor cueInColor) {
+		this.cueInColor.set(cueInColor);
+	}
+
+	public ObjectProperty<ModernColor> cueInColorProperty() {
+		return cueInColor;
+	}
+
 	public void addListener() {
 		syncListener.addListener();
 	}
@@ -81,25 +95,29 @@ public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 
 	public void reset() {
 		backgroundColor.set(ModernColor.GRAY1);
-		playColor.set(ModernColor.RED1);
+		playColor.set(ModernColor.RED3);
+		cueInColor.set(ModernColor.RED2);
 	}
 
 
 	// Color Associator
 	@Override
-	public Color getAssociatedEventColor() {
+	public Color getDesignEventColor() {
 		return Color.web(playColor.get().getColorHi());
 	}
 
 	@Override
-	public Color getAssociatedStandardColor() {
+	public Color getDesignDefaultColor() {
 		return Color.web(backgroundColor.get().getColorHi());
 	}
 
-	public ModernCartDesign clone(Pad pad) throws CloneNotSupportedException {
-		ModernCartDesign clone = (ModernCartDesign) super.clone();
+	public ModernCartDesign copy(Pad pad) {
+		ModernCartDesign clone = new ModernCartDesign(pad);
+
 		clone.backgroundColor = new SimpleObjectProperty<>(getBackgroundColor());
 		clone.playColor = new SimpleObjectProperty<>(getPlayColor());
+		clone.cueInColor = new SimpleObjectProperty<>(getCueInColor());
+
 		clone.pad = pad;
 		clone.uuid = UUID.randomUUID();
 
@@ -115,5 +133,6 @@ public class ModernCartDesign implements DesignColorAssociator, Cloneable {
 	public void copyGlobalLayout(ModernGlobalDesign globalDesign) {
 		setBackgroundColor(globalDesign.getBackgroundColor());
 		setPlayColor(globalDesign.getPlayColor());
+		setCueInColor(globalDesign.getCueInColor());
 	}
 }

@@ -1,9 +1,10 @@
 package de.tobias.playpad.action.mapper;
 
+import de.thecodelabs.midi.mapping.Key;
 import de.thecodelabs.utils.ui.NVC;
 
 /**
- * Übersicht über die Mapper zu einer Action.s
+ * Übersicht über die Mapper zu einer Actions.
  *
  * @author tobias
  * @since 5.0.0
@@ -14,7 +15,9 @@ public abstract class MapperViewController extends NVC {
 
 	public abstract void hideFeedback();
 
-	public abstract Mapper getMapper();
+	public abstract void setKey(Key midiKey);
+
+	public abstract Key getKey();
 
 	/**
 	 * Zeigt einen Dialog für die Eingabe des Mappers.

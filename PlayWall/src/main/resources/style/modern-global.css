@@ -21,6 +21,10 @@
 	-fx-background-color: ${#padColor};
 }
 
+.pad-cue-in${#class} {
+	-fx-background-color: ${#padCueInColor};
+}
+
 .pad-info${#class} {
 	-fx-text-fill: ${#fontColor};
 	-fx-font-size: ${#infoFontSize};

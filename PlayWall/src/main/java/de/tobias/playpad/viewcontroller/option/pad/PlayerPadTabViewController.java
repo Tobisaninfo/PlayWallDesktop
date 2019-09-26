@@ -1,16 +1,17 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.settings.FadeViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -28,10 +29,13 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	private CheckBox warningEnableCheckBox;
 	private WarningFeedbackViewController warningFeedbackViewController;
 
+	@FXML
+	private TextField cueInTextField;
+
 	private Pad pad;
 
 	PlayerPadTabViewController(Pad pad) {
-		load("view/option/pad", "PlayerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "PlayerTab", Localization.getBundle());
 		this.pad = pad;
 	}
 
@@ -41,7 +45,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 		fadeViewController = new FadeViewController();
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 
-		warningFeedbackViewController = new WarningFeedbackViewController(null);
+		warningFeedbackViewController = WarningFeedbackViewController.newViewControllerForPad();
 		warningFeedbackContainer.getChildren().add(warningFeedbackViewController.getParent());
 
 		customFadeCheckBox.selectedProperty().addListener((a, b, c) ->
@@ -71,11 +75,28 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 			if (c)
 				warningFeedbackViewController.setPadWarning(pad);
 		});
+
+		cueInTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			PadSettings padSettings = pad.getPadSettings();
+			if (newValue.isEmpty()) {
+				padSettings.setCueIn(null);
+				cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
+			} else {
+				try {
+					final double seconds = Double.parseDouble(newValue);
+					padSettings.setCueIn(Duration.seconds(seconds));
+
+					cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
+				} catch (NumberFormatException e) {
+					cueInTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
+				}
+			}
+		});
 	}
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_Player_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_PLAYER_TITLE);
 	}
 
 	@Override
@@ -93,6 +114,11 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 		warningEnableCheckBox.setSelected(padSettings.isCustomWarning());
 		if (!padSettings.isCustomWarning()) {
 			warningFeedbackContainer.setDisable(true);
+		}
+
+		final Duration cueIn = padSettings.getCueIn();
+		if (cueIn != null) {
+			cueInTextField.setText(String.valueOf(cueIn.toSeconds()));
 		}
 	}
 

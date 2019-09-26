@@ -4,7 +4,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.NVCStage;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -38,7 +37,7 @@ public class ProfileChooseDialog extends NVC {
 	private Profile profile;
 
 	public ProfileChooseDialog(Window owner) {
-		load("view/dialog", "ProfileChooseDialog", PlayPadMain.getUiResourceBundle());
+		load("view/dialog", "ProfileChooseDialog", Localization.getBundle());
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -54,18 +53,16 @@ public class ProfileChooseDialog extends NVC {
 
 	@Override
 	public void initStage(Stage stage) {
-		PlayPadMain.stageIcon.ifPresent(stage.getIcons()::add);
+		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
-		stage.setTitle(Localization.getString(Strings.UI_Dialog_ChooseProfile_Title));
+		stage.setTitle(Localization.getString(Strings.UI_DIALOG_CHOOSE_PROFILE_TITLE));
 		stage.setResizable(false);
 		stage.setWidth(560);
 		stage.setHeight(230);
 
 		stage.initModality(Modality.WINDOW_MODAL);
 
-		if (Profile.currentProfile() != null) {
-			PlayPadPlugin.styleable().applyStyle(stage);
-		}
+		PlayPadPlugin.styleable().applyStyle(stage);
 	}
 
 	@FXML
@@ -75,7 +72,7 @@ public class ProfileChooseDialog extends NVC {
 
 			getStageContainer().ifPresent(NVCStage::close);
 		} catch (IOException | DocumentException | ProfileNotFoundException e) {
-			showErrorMessage(Localization.getString(Strings.Error_Profile_Save, e.getLocalizedMessage()));
+			showErrorMessage(Localization.getString(Strings.ERROR_PROFILE_SAVE, e.getLocalizedMessage()));
 			Logger.error(e);
 		}
 	}

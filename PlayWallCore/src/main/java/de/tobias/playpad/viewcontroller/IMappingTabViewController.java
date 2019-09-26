@@ -1,6 +1,6 @@
 package de.tobias.playpad.viewcontroller;
 
-import de.tobias.playpad.action.Action;
+import de.thecodelabs.midi.action.Action;
 
 /**
  * Schnittstelle für den Mapping Tab ViewController. Der Controller hat zwei Bereiche: ActionType (Optional), Action

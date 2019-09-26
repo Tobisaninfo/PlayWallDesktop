@@ -1,9 +1,9 @@
 package de.tobias.playpad.viewcontroller.option.project;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.io.FileUtils;
 import de.thecodelabs.utils.io.PathUtils;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -47,7 +47,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 	private transient Optional<Path> oldMediaPath = Optional.empty();
 
 	PathsTabViewController() {
-		load("view/option/project", "PathTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/project", "PathTab", Localization.getBundle());
 	}
 
 	@FXML
@@ -60,7 +60,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 			if (currentMediaPath.isPresent()) {
 				boolean subDirectory = PathUtils.isSubDirectory(currentMediaPath.get(), path);
 				if (subDirectory) {
-					showErrorMessage(Localization.getString(Strings.Error_Project_MediaPath));
+					showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_MEDIA_PATH));
 					return;
 				}
 			}
@@ -103,7 +103,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Paths_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_PATHS_TITLE);
 	}
 
 	// Reload Data
@@ -152,7 +152,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 						}
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 			}
 
@@ -160,7 +160,7 @@ public class PathsTabViewController extends ProjectSettingsTabViewController imp
 				try {
 					FileUtils.deleteDirectory(oldMediaPath.get());
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.error(e);
 				}
 		};
 	}

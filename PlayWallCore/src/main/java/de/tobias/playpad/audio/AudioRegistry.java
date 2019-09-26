@@ -4,7 +4,6 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.registry.DefaultComponentRegistry;
 import de.tobias.playpad.registry.NoSuchComponentException;
 
-@Deprecated
 public class AudioRegistry extends DefaultComponentRegistry<AudioHandlerFactory> {
 
 	public AudioRegistry() {

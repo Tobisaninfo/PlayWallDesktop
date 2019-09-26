@@ -8,7 +8,7 @@
 }
 
 .button {
-	-fx-font-size: 1.4em;
+	-fx-font-size: 1.5em !important;
 }
 
 .slider .track {
@@ -16,14 +16,17 @@
 }
 
 .slider .thumb {
-	-fx-pref-height: 25px;
-	-fx-pref-width: 25px;
+	-fx-pref-height: 22px;
+	-fx-pref-width: 22px;
 }
 
 .close-button > .graphic {
 	-fx-background-color: white;
 	-fx-scale-shape: false;
 	-fx-padding: 1;
+
+	-fx-min-height: 35px;
+	-fx-min-width: 50px;
 
 	-fx-scale-x: 1.8;
 	-fx-scale-y: 1.8;

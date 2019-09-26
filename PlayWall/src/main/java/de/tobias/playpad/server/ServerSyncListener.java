@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketFrame;
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -78,7 +79,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 
 	@Override
 	public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-		System.out.println("Connected");
+		Logger.info("Connected");
 		connectionStateProperty.set(ConnectionState.CONNECTED);
 
 
@@ -92,7 +93,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 		// Find new conflicts
 		for (ProjectReference reference : ProjectReferenceManager.getProjects()) {
 			ConflictType conflictType = solver.checkConflict(commandExecutor, reference);
-			if (conflictType != ConflictType.NON) {
+			if (conflictType != ConflictType.NONE) {
 				List<Version> versions = solver.getVersions(reference);
 
 				Conflict conflict = new Conflict(reference, conflictType, versions);
@@ -103,7 +104,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 
 	@Override
 	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-		System.out.println("Disconnected: " + clientCloseFrame.getCloseReason());
+		Logger.info("Disconnected: " + clientCloseFrame.getCloseReason());
 		if (clientCloseFrame.getCloseCode() == CONNECTION_CLOSED) {
 			connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
 		} else if (clientCloseFrame.getCloseCode() == DISCONNECTED) {

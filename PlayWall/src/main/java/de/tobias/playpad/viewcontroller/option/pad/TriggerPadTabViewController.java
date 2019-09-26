@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.tigger.Trigger;
@@ -18,7 +17,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class TriggerPadTabViewController extends PadSettingsTabViewController implements ChangeListener<TreeItem<TriggerDisplayable>> {
 
@@ -30,7 +29,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	private Pad pad;
 
 	TriggerPadTabViewController(Pad pad) {
-		load("view/option/pad", "TriggerTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/pad", "TriggerTab", Localization.getBundle());
 		this.pad = pad;
 	}
 
@@ -41,10 +40,10 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	}
 
 	private void createTreeView() {
-		HashMap<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
+		Map<TriggerPoint, Trigger> triggers = pad.getPadSettings().getTriggers();
 		TreeItem<TriggerDisplayable> rootItem = new TreeItem<>();
 
-		// Sort the tpyes for the treeview
+		// Sort the types for the tree view
 		for (TriggerPoint point : TriggerPoint.values()) {
 			Trigger trigger = triggers.get(point);
 
@@ -70,7 +69,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 	@Override
 	public String getName() {
-		return Localization.getString(Strings.UI_Window_PadSettings_Trigger_Title);
+		return Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TRIGGER_TITLE);
 	}
 
 	@Override

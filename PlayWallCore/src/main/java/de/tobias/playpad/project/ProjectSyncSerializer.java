@@ -40,10 +40,8 @@ public class ProjectSyncSerializer implements ProjectReader {
 
 			// Pad Settings
 			PadSettingsSerializer padSettingsSerializer = new PadSettingsSerializer();
-			for (Object pageObj : rootElement.elements(ProjectSerializer.PAGE_ELEMENT)) {
-				Element pageElement = (Element) pageObj;
-				for (Object padObj : pageElement.elements(ProjectSerializer.PAD_ELEMENT)) {
-					Element padElement = (Element) padObj;
+			for (Element pageElement : rootElement.elements(ProjectSerializer.PAGE_ELEMENT)) {
+				for (Element padElement : pageElement.elements(ProjectSerializer.PAD_ELEMENT)) {
 					Element settingsElement = padElement.element(PadSerializer.SETTINGS_ELEMENT);
 
 					UUID uuid = UUID.fromString(padElement.attributeValue(PadSerializer.UUID_ATTR));

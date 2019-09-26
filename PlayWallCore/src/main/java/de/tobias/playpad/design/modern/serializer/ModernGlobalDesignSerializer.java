@@ -1,5 +1,6 @@
 package de.tobias.playpad.design.modern.serializer;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.design.modern.ModernColor;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import org.dom4j.Element;
@@ -13,7 +14,7 @@ public class ModernGlobalDesignSerializer {
 			try {
 				design.setBackgroundColor(ModernColor.valueOf(backgroundElement.getStringValue()));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
@@ -22,7 +23,16 @@ public class ModernGlobalDesignSerializer {
 			try {
 				design.setPlayColor(ModernColor.valueOf(playElement.getStringValue()));
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				Logger.error(e);
+			}
+		}
+
+		Element cueInElement = rootElement.element("CueInColor");
+		if (cueInElement != null) {
+			try {
+				design.setCueInColor(ModernColor.valueOf(cueInElement.getStringValue()));
+			} catch (IllegalArgumentException e) {
+				Logger.error(e);
 			}
 		}
 
@@ -30,30 +40,30 @@ public class ModernGlobalDesignSerializer {
 		if (animationElement != null) {
 			Element warnAnimationElement = animationElement.element("Warn");
 			if (warnAnimationElement != null) {
-				design.setWarnAnimation(Boolean.valueOf(warnAnimationElement.getStringValue()));
+				design.setWarnAnimation(Boolean.parseBoolean(warnAnimationElement.getStringValue()));
 			}
 		}
 
 		Element infoFontSizeElement = rootElement.element("InfoFontSize");
 		if (infoFontSizeElement != null) {
 			try {
-				design.setInfoFontSize(Integer.valueOf(infoFontSizeElement.getStringValue()));
+				design.setInfoFontSize(Integer.parseInt(infoFontSizeElement.getStringValue()));
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 
 		Element titleFontSizeElement = rootElement.element("TitleFontSize");
 		if (titleFontSizeElement != null) {
 			try {
-				design.setTitleFontSize(Integer.valueOf(titleFontSizeElement.getStringValue()));
+				design.setTitleFontSize(Integer.parseInt(titleFontSizeElement.getStringValue()));
 			} catch (NumberFormatException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 		}
 		Element flatDesignElement = rootElement.element("FlatDesign");
 		if (flatDesignElement != null) {
-			design.setFlatDesign(Boolean.valueOf(flatDesignElement.getStringValue()));
+			design.setFlatDesign(Boolean.parseBoolean(flatDesignElement.getStringValue()));
 		}
 
 		return design;
@@ -62,6 +72,8 @@ public class ModernGlobalDesignSerializer {
 	public void save(Element rootElement, ModernGlobalDesign design) {
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
+		rootElement.addElement("CueInColor").addText(design.getCueInColor().name());
+
 		Element animationElement = rootElement.addElement("Animation");
 		animationElement.addElement("Warn").addText(String.valueOf(design.isWarnAnimation()));
 		rootElement.addElement("InfoFontSize").addText(String.valueOf(design.getInfoFontSize()));

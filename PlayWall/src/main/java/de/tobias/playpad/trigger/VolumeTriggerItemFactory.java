@@ -26,6 +26,6 @@ public class VolumeTriggerItemFactory extends TriggerItemFactory {
 
 	@Override
 	public String toString() {
-		return Localization.getString(Strings.Trigger_Volume_Name);
+		return Localization.getString(Strings.TRIGGER_VOLUME_NAME);
 	}
 }

@@ -28,9 +28,9 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 		PadSettings padSettings = pad.getPadSettings();
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
+		PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStatusChange(pad, newValue));
 		if (newValue == PadStatus.PLAY) {
 			if (pad.getContent() != null) {
-				PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onPlay(pad));
 
 				pad.getProject().updateActivePlayerProperty();
 
@@ -45,9 +45,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				}
 
 				if (pad.getContent() instanceof Fadeable) {
-					if (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause()) {
-						((Fadeable) pad.getContent()).fadeIn();
-					} else if (padSettings.getFade().isFadeInStart()) {
+					if (padSettings.getFade().isFadeInStart() || (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause())) {
 						((Fadeable) pad.getContent()).fadeIn();
 					}
 				}
@@ -56,17 +54,13 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 		} else if (newValue == PadStatus.PAUSE) {
 			if (pad.getContent() instanceof Pauseable) {
 				if (pad.getContent() instanceof Fadeable && padSettings.getFade().isFadeOutPause()) {
-					((Fadeable) pad.getContent()).fadeOut(() ->
-					{
-						((Pauseable) pad.getContent()).pause();
-					});
+					((Fadeable) pad.getContent()).fadeOut(() -> ((Pauseable) pad.getContent()).pause());
 				} else {
 					((Pauseable) pad.getContent()).pause();
 				}
 			}
 		} else if (newValue == PadStatus.STOP) {
 			if (pad.getContent() != null) {
-				PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStop(pad));
 				pad.getProject().updateActivePlayerProperty();
 
 				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad

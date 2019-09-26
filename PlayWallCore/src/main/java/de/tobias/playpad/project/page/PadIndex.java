@@ -8,9 +8,8 @@ import java.io.Serializable;
  * @author tobias
  * @since 6.0.0
  */
+// Serializable is for Pad Drag and Drop necessary
 public class PadIndex implements Serializable {
-
-	private static final long serialVersionUID = 2026743397726990321L;
 
 	private final int id;
 	private final int page;
@@ -53,7 +52,7 @@ public class PadIndex implements Serializable {
 
 	@Override
 	public String toString() {
-		return id + "-" + page;
+		return String.valueOf(id);
 	}
 
 }

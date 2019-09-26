@@ -1,7 +1,8 @@
 package de.tobias.playpad.pad.listener;
 
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.design.ModernDesign;
+import de.tobias.playpad.action.actions.CartAction;
+import de.tobias.playpad.design.ModernDesignHandler;
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
@@ -55,6 +56,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 				if (totalDuration != null) {
 					updateDuration(newValue, durationable, totalDuration);
+					CartAction.refreshFeedback(pad);
 				}
 			}
 		}
@@ -63,6 +65,16 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 	private void updateDuration(Duration newValue, Durationable durationable, Duration totalDuration) {
 		double value = newValue.toMillis() / totalDuration.toMillis();
 		controller.getView().setPlayBarProgress(value);
+
+		Duration cueInDuration = pad.getPadSettings().getCueIn();
+		if (cueInDuration != null) {
+			if (cueInDuration.greaterThan(newValue)) {
+				double cueInProgress = newValue.toMillis() / cueInDuration.toMillis();
+				controller.getView().setCueInProgress(cueInProgress);
+			} else {
+				controller.getView().setCueInProgress(0);
+			}
+		}
 
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();
@@ -96,7 +108,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		Duration warning = padSettings.getWarning();
 
 		ModernGlobalDesign globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
-		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
+		final ModernDesignHandler modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		if (padSettings.isCustomDesign()) {
 			ModernCartDesignHandler handler = modernDesign.cart();
@@ -125,7 +137,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		}
 
 		PadSettings padSettings = pad.getPadSettings();
-		final ModernDesign modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
+		final ModernDesignHandler modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		if (padSettings.isCustomDesign()) {
 			ModernCartDesignHandler handler = modernDesign.cart();

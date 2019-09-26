@@ -8,7 +8,6 @@ import de.thecodelabs.utils.util.Localization;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
 import de.tobias.playpad.PlayPad;
-import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.profile.Profile;
@@ -47,7 +46,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	private Label placeholderLabel;
 
 	UpdateTabViewController() {
-		load("view/option/global", "UpdateTab", PlayPadMain.getUiResourceBundle());
+		load("view/option/global", "UpdateTab", Localization.getBundle());
 
 		final PlayPad playPad = PlayPadPlugin.getInstance();
 		GlobalSettings globalSettings = playPad.getGlobalSettings();
@@ -57,7 +56,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
 
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
-		String currentVersionString = Localization.getString(Strings.UI_Window_Settings_Updates_CurrentVersion, info.getVersion(),
+		String currentVersionString = Localization.getString(Strings.UI_WINDOW_SETTINGS_UPDATES_CURRENT_VERSION, info.getVersion(),
 				info.getBuild());
 		currentVersionLabel.setText(currentVersionString);
 	}
@@ -66,8 +65,8 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 	public void init() {
 		openUpdateList.setCellFactory(list -> new UpdateCell());
 		updateChannelComboBox.getItems().setAll(UpdateService.RepositoryType.RELEASE, UpdateService.RepositoryType.SNAPSHOT);
-		updateChannelComboBox.setCellFactory(list -> new EnumCell<>(Strings.Update_Channel_BaseName));
-		updateChannelComboBox.setButtonCell(new EnumCell<>(Strings.Update_Channel_BaseName));
+		updateChannelComboBox.setCellFactory(list -> new EnumCell<>(Strings.UPDATE_CHANNEL));
+		updateChannelComboBox.setButtonCell(new EnumCell<>(Strings.UPDATE_CHANNEL));
 
 		updateChannelComboBox.valueProperty().addListener((a, b, c) ->
 		{
@@ -79,7 +78,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		progressIndicator.setMinSize(75, 75);
 		progressIndicator.setMaxSize(75, 75);
 
-		placeholderLabel = new Label(Localization.getString(Strings.UI_Placeholder_Updates));
+		placeholderLabel = new Label(Localization.getString(Strings.UI_PLACEHOLDER_UPDATES));
 		openUpdateList.setPlaceholder(placeholderLabel);
 
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
@@ -128,7 +127,7 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 			try {
 				updateService.runVersionizerInstance(updateService.getAllLatestVersionEntries());
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.error(e);
 			}
 			System.exit(0);
 		});
@@ -157,6 +156,6 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public String name() {
-		return Localization.getString(Strings.UI_Window_Settings_Updates_Title);
+		return Localization.getString(Strings.UI_WINDOW_SETTINGS_UPDATES_TITLE);
 	}
 }

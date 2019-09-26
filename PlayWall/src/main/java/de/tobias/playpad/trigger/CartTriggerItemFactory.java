@@ -26,6 +26,6 @@ public class CartTriggerItemFactory extends TriggerItemFactory {
 
 	@Override
 	public String toString() {
-		return Localization.getString(Strings.Trigger_Cart_Name);
+		return Localization.getString(Strings.TRIGGER_CART_NAME);
 	}
 }

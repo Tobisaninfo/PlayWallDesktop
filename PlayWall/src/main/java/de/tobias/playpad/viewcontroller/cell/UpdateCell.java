@@ -11,7 +11,7 @@ public class UpdateCell extends ListCell<Version> {
 	protected void updateItem(Version item, boolean empty) {
 		super.updateItem(item, empty);
 		if (!empty) {
-			setText(Localization.getString(Strings.UI_Dialog_Update_Cell,
+			setText(Localization.getString(Strings.UI_DIALOG_UPDATE_CELL,
 					item.getArtifact().getArtifactId(),
 					item.getArtifact().getVersion(),
 					item.toVersionString()));

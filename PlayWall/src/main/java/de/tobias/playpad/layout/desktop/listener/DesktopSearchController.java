@@ -1,5 +1,7 @@
 package de.tobias.playpad.layout.desktop.listener;
 
+import de.thecodelabs.utils.application.ApplicationUtils;
+import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
@@ -7,6 +9,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 import java.util.List;
@@ -47,7 +50,12 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 		}
 
 		if (searchResult.isEmpty()) {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
+			Alerts.getInstance().createAlert(
+					Alert.AlertType.INFORMATION, ApplicationUtils.getApplication().getInfo().getName(),
+					Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES_HEADER),
+					Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES_CONTENT, currentSearchTerm),
+					mainView.getStage()
+			).showAndWait();
 			return;
 		}
 
@@ -58,7 +66,12 @@ public class DesktopSearchController implements EventHandler<ActionEvent> {
 				result.getController().getView().highlightView(HIGHLIGHT_DURATION);
 			}
 		} else {
-			mainView.showInfoMessage(Localization.getString(Strings.Search_Alert_NoMatches));
+			Alerts.getInstance().createAlert(
+					Alert.AlertType.INFORMATION, ApplicationUtils.getApplication().getInfo().getName(),
+					Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES_HEADER),
+					Localization.getString(Strings.SEARCH_ALERT_NO_MATCHES_CONTENT, currentSearchTerm),
+					mainView.getStage()
+			).showAndWait();
 			currentIndex = 0;
 		}
 	}

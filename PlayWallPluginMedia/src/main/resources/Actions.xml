@@ -1,4 +1,0 @@
-<Actions>
-    <Component id="BLIND" name="black_action.name">de.tobias.playpad.plugin.media.action.BlackActionFactory
-    </Component>
-</Actions>

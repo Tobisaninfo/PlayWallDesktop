@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -130,5 +131,18 @@ public class ProfileReference implements Displayable {
 
 	private void updateDisplayProperty() {
 		displayProperty.set(toString());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ProfileReference)) return false;
+		ProfileReference that = (ProfileReference) o;
+		return Objects.equals(uuid, that.uuid);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(uuid);
 	}
 }

@@ -1,51 +1,80 @@
 package de.tobias.playpad.action.factory;
 
-import de.thecodelabs.utils.ui.NVC;
-import de.tobias.playpad.action.*;
-import de.tobias.playpad.action.actions.cart.CartAction;
-import de.tobias.playpad.action.actions.cart.CartAction.CartActionMode;
-import de.tobias.playpad.profile.Profile;
+import de.thecodelabs.midi.Mapping;
+import de.thecodelabs.midi.action.Action;
+import de.thecodelabs.midi.action.ActionHandler;
+import de.thecodelabs.midi.feedback.FeedbackType;
+import de.thecodelabs.midi.mapping.KeyType;
+import de.tobias.playpad.action.ActionProvider;
+import de.tobias.playpad.action.ActionType;
+import de.tobias.playpad.action.actions.CartAction;
+import de.tobias.playpad.action.actions.CartAction.*;
+import de.tobias.playpad.action.settings.ActionSettingsEntry;
+import de.tobias.playpad.action.settings.CartActionSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;
-import de.tobias.playpad.viewcontroller.IMappingTabViewController;
-import de.tobias.playpad.viewcontroller.actions.CartActionTypeViewController;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-public class CartActionProvider extends ActionProvider implements ActionDisplayable {
+import static de.tobias.playpad.action.actions.CartAction.*;
+
+public class CartActionProvider extends ActionProvider {
 
 	public CartActionProvider(String type) {
-		super(type);
+		super(TYPE);
 	}
 
 	@Override
-	public TreeItem<ActionDisplayable> getTreeViewForActions(List<Action> actions, Mapping mapping) {
-		return new TreeItem<>(this);
+	public String getType() {
+		return TYPE;
 	}
 
 	@Override
-	public void initActionType(Mapping mapping, Profile profile) {
+	public void createDefaultActions(Mapping mapping) {
 		for (int x = 0; x < ProjectSettings.MAX_COLUMNS; x++) {
 			for (int y = 0; y < ProjectSettings.MAX_ROWS; y++) {
-				CartAction action = new CartAction(getType(), x, y, CartActionMode.PLAY_STOP);
-				mapping.addActionIfNotContains(action);
+				Action action = newInstance(x, y);
+				mapping.addUniqueAction(action);
 			}
 		}
 	}
 
-	@Override
-	public NVC getActionSettingsViewController(Mapping mapping, IMappingTabViewController controller) {
-		return new CartActionTypeViewController(mapping, controller);
+	private Action newInstance(int x, int y) {
+		Action action = new Action(getType());
+		action.addPayloadEntry(PAYLOAD_X, String.valueOf(x));
+		action.addPayloadEntry(PAYLOAD_Y, String.valueOf(y));
+		action.addPayloadEntry(PAYLOAD_MODE, CartActionMode.PLAY_STOP.name());
+		action.addPayloadEntry(PAYLOAD_AUTO_FEEDBACK, String.valueOf(true));
+		return action;
 	}
 
 	@Override
-	public Action newInstance() {
-		return new CartAction(getType());
+	public ActionHandler getActionHandler() {
+		return new CartAction();
 	}
 
 	@Override
-	public ActionType geActionType() {
+	public FeedbackType[] supportedFeedbackOptions(Action action, KeyType keyType) {
+		switch (keyType) {
+			case KEYBOARD:
+				return new FeedbackType[0];
+			case MIDI:
+				return new FeedbackType[]{FeedbackType.DEFAULT, FeedbackType.EVENT, FeedbackType.WARNING};
+		}
+		return new FeedbackType[0];
+	}
+
+	/*
+
+	 */
+
+	@Override
+	public ActionType getActionType() {
 		return ActionType.CONTROL;
 	}
 
+	@Override
+	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
+		return new TreeItem<>(new CartActionSettingsEntry());
+	}
 }

@@ -14,7 +14,7 @@ import javafx.scene.text.TextAlignment;
 
 public class AudioPadContentFactory extends PadContentFactory {
 
-	public static final String[] FILE_EXTENSION = {"*.mp3", "*.wav"};
+	private static final String[] FILE_EXTENSION = {"*.mp3", "*.wav"};
 
 	public AudioPadContentFactory(String type) {
 		super(type);
@@ -44,7 +44,7 @@ public class AudioPadContentFactory extends PadContentFactory {
 		return new AudioTabViewController(activePlayer);
 	}
 
-	private class AudioContentView implements IPadContentView {
+	private static class AudioContentView implements IPadContentView {
 
 		private Label nameLabel;
 
@@ -67,7 +67,7 @@ public class AudioPadContentFactory extends PadContentFactory {
 		}
 
 		@Override
-		public void deinit() {
+		public void deInit() {
 			nameLabel.textProperty().unbind();
 		}
 	}
