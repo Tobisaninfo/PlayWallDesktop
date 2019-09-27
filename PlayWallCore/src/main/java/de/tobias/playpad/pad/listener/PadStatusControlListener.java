@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.listener;
 
+import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
@@ -28,7 +29,12 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 		PadSettings padSettings = pad.getPadSettings();
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
-		PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStatusChange(pad, newValue));
+		try {
+			PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStatusChange(pad, newValue));
+		} catch (Exception e) {
+			Logger.error(e);
+		}
+
 		if (newValue == PadStatus.PLAY) {
 			if (pad.getContent() != null) {
 
