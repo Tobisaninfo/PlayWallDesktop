@@ -1,14 +1,20 @@
 package de.tobias.playpad.plugin.api
 
 import de.thecodelabs.logger.Logger
-import de.thecodelabs.plugins.{Plugin, PluginDescriptor}
+import de.thecodelabs.plugins.{PluginArtifact, PluginDescriptor}
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
 import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}
+import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import spark.Spark
 
-class WebApiPlugin extends Plugin {
-	override def startup(pluginDescriptor: PluginDescriptor): Unit = {
+class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
+
+	private var module: Module = _
+
+	override def startup(descriptor: PluginDescriptor): Unit = {
+		module = new Module(descriptor.getName, descriptor.getArtifactId)
+
 		PlayPadPlugin.getInstance().addPadListener(new PadStatusListener)
 		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener)
 
@@ -24,4 +30,6 @@ class WebApiPlugin extends Plugin {
 
 		Spark.stop()
 	}
+
+	override def getModule: Module = module
 }
