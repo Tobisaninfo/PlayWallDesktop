@@ -1,8 +1,8 @@
 name: "PlayWall"
-version: "7.0.0"
-build: 40
+version: "${project.version}"
+build: ${project.build.code}
 identifier: "de.tobias.playpad.v7"
-date: "2019-02-04"
+date: "${project.versionDate}"
 
 main: "de.tobias.playpad.PlayPadMain"
 author: "Tobias Ullerich"
