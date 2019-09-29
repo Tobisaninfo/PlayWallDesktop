@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallPlugins</artifactId>
-        <version>7.0.0</version>
+        <version>7.0.1</version>
     </parent>
 
     <artifactId>PlayWallPluginLaunchpad</artifactId>
@@ -31,7 +31,7 @@
             <plugin>
                 <groupId>de.thecodelabs</groupId>
                 <artifactId>versionizer-maven-plugin</artifactId>
-                <version>1.0.1</version>
+                <version>${versionizer-maven-plugin.version}</version>
                 <configuration>
                     <resourceFile>plugin.yml</resourceFile>
                 </configuration>
