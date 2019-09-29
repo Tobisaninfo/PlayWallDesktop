@@ -146,6 +146,7 @@ public class PlayoutLogViewController extends NVC {
 			FileChooser fileChooser = new FileChooser();
 			FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PDF", "*.pdf");
 			fileChooser.getExtensionFilters().add(extensionFilter);
+			fileChooser.setInitialFileName(String.format("%s.pdf", season.getName()));
 
 			File file = fileChooser.showSaveDialog(getContainingWindow());
 			if (file != null) {
@@ -163,6 +164,7 @@ public class PlayoutLogViewController extends NVC {
 		FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV", "*.csv");
 		fileChooser.getExtensionFilters().add(extensionFilter);
+		fileChooser.setInitialFileName("PlayoutLog.csv");
 
 		File file = fileChooser.showSaveDialog(getContainingWindow());
 		if (file == null) {
