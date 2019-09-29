@@ -10,6 +10,10 @@
     <packaging>pom</packaging>
 
     <properties>
+        <project.build.code>41</project.build.code>
+        <project.versionDate>${maven.build.timestamp}</project.versionDate>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -43,6 +47,7 @@
         <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
         <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
         <maven-jar-plugin.version>2.3.1</maven-jar-plugin.version>
+        <versionizer-maven-plugin.version>1.0.3</versionizer-maven-plugin.version>
     </properties>
 
     <modules>
@@ -80,6 +85,14 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
 

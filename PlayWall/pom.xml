@@ -73,11 +73,26 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>config/</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/config</directory>
+                <filtering>true</filtering>
+                <targetPath>${project.build.outputDirectory}/config</targetPath>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>de.thecodelabs</groupId>
                 <artifactId>versionizer-maven-plugin</artifactId>
-                <version>1.0.1</version>
+                <version>${versionizer-maven-plugin.version}</version>
                 <configuration>
                     <resourceFile>build-app.json</resourceFile>
                 </configuration>

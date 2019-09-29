@@ -46,7 +46,7 @@
             <plugin>
                 <groupId>de.thecodelabs</groupId>
                 <artifactId>versionizer-maven-plugin</artifactId>
-                <version>1.0.1</version>
+                <version>${versionizer-maven-plugin.version}</version>
                 <configuration>
                     <resourceFile>plugin.yml</resourceFile>
                 </configuration>
