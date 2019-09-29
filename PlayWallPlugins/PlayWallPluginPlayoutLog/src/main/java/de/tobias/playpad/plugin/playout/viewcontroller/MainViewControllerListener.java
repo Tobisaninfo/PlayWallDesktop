@@ -6,6 +6,7 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.playout.PlayoutLogPlugin;
 import de.tobias.playpad.plugin.playout.Strings;
+import de.tobias.playpad.settings.keys.Key;
 import de.tobias.playpad.settings.keys.KeyCollection;
 import de.tobias.playpad.view.main.MenuType;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -39,7 +40,11 @@ public class MainViewControllerListener implements MainWindowListener {
 	public void loadMenuKeyBinding() {
 		final KeyCollection keyCollection = PlayPadPlugin.getInstance().getGlobalSettings().getKeyCollection();
 		final MenuToolbarViewController menuToolbarController = PlayPadPlugin.getInstance().getMainViewController().getMenuToolbarController();
-		menuToolbarController.setKeyBindingForMenu(menuItem, keyCollection.getKey(PlayoutLogPlugin.KEY_COLLECTION_PLAYOUT));
+
+		final Key key = keyCollection.getKey(PlayoutLogPlugin.KEY_COLLECTION_PLAYOUT);
+		if (key != null) {
+			menuToolbarController.setKeyBindingForMenu(menuItem, key);
+		}
 
 		menuItem.setDisable(false);
 	}
