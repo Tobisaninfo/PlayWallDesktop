@@ -152,7 +152,7 @@ public abstract class MenuToolbarViewController extends NVC {
 	public abstract void loadKeybinding(KeyCollection keys);
 
 	public void setKeyBindingForMenu(MenuItem menuItem, Key key) {
-		if (key != null && !key.getKeyCode().isEmpty()) {
+		if (key != null && key.getKey() != null && !key.getKeyCode().isEmpty()) {
 			KeyCombination keyCode = KeyCombination.valueOf(key.getKeyCode());
 			menuItem.setAccelerator(keyCode);
 		}

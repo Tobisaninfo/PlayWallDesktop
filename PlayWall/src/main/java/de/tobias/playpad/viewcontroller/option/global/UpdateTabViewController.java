@@ -5,8 +5,10 @@ import de.thecodelabs.utils.application.ApplicationInfo;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.util.Localization;
+import de.thecodelabs.versionizer.config.Artifact;
 import de.thecodelabs.versionizer.model.Version;
 import de.thecodelabs.versionizer.service.UpdateService;
+import de.thecodelabs.versionizer.service.VersionTokenizer;
 import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
@@ -22,6 +24,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UpdateTabViewController extends GlobalSettingsTabViewController {
 
@@ -99,10 +103,16 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 				// Search for updates
 				updateService.fetchCurrentVersion();
 
+				// Filter remote versions that are newer then local version
+				final Map<Artifact, Version> remoteVersions = updateService.getRemoteVersions();
+				final Map<Artifact, Version> availableUpdates = remoteVersions.entrySet().stream()
+						.filter(entry -> entry.getValue().isNewerThen(VersionTokenizer.getVersion(entry.getKey())))
+						.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
 				Platform.runLater(() ->
 				{
 					openUpdateList.setPlaceholder(placeholderLabel);
-					openUpdateList.getItems().setAll(updateService.getRemoteVersions().values());
+					openUpdateList.getItems().setAll(availableUpdates.values());
 					updateButton.setDisable(openUpdateList.getItems().isEmpty());
 				});
 			});

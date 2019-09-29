@@ -18,6 +18,7 @@ class VersionizerSetupTask extends PlayPadInitializeTask {
 
 		val versionizerItem = new VersionizerItem(repository, SystemUtils.getRunPath.toString)
 		val updateService = UpdateService.startVersionizer(versionizerItem, UpdateService.Strategy.JAR, UpdateService.InteractionType.GUI)
+
 		updateService.addArtifact(artifact, SystemUtils.getRunPath)
 		updateService.setRepositoryType(globalSettings.getUpdateChannel)
 		instance.setUpdateService(updateService)

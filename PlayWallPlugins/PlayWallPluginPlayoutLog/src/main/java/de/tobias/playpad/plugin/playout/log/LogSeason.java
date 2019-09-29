@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.playout.log;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
@@ -36,7 +37,11 @@ public class LogSeason {
 	}
 
 	public void createProjectSnapshot(Project project) {
-		Worker.runLater(() -> project.getPads().parallelStream().forEach(this::addLogItem));
+		Worker.runLater(() -> {
+			Logger.info("Start creating project snapshot for PlayoutLog session");
+			project.getPads().parallelStream().forEach(this::addLogItem);
+			Logger.info("Finish creating project snapshot for PlayoutLog session");
+		});
 	}
 
 	public void addLogItem(Pad pad) {

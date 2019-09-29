@@ -54,6 +54,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
+		addCloseKeyShortcut(nvcStage::close);
 
 		busyView = new BusyView(this);
 	}
@@ -83,6 +84,7 @@ public class ProjectExportDialog extends NVC implements ProjectExporterDelegate 
 		String extensionName = Localization.getString(Strings.FILE_FILTER_ZIP);
 		ExtensionFilter extensionFilter = new ExtensionFilter(extensionName, PlayPadMain.ZIP_TYPE);
 		chooser.getExtensionFilters().add(extensionFilter);
+		chooser.setInitialFileName(String.format("%s.zip", projectRef.getName()));
 
 		File file = chooser.showSaveDialog(getContainingWindow());
 		if (file != null) {
