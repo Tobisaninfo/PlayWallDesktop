@@ -17,7 +17,6 @@ import de.tobias.playpad.{DisplayableColor, PlayPadMain}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.util.Duration
-import org.apache.commons.lang3.StringUtils
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
@@ -64,7 +63,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 	}
 
 	private def generateCss(design: ModernGlobalDesign): String = {
-		StringUtils.join(
+		String.join(
 			generateCss(design, design.getBackgroundColor),
 			generateCss(design, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}"),
 			generateCss(design, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
@@ -78,7 +77,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-global.css")
 		val string = Minifier minify resource.getAsString
 
-		val values: Map[String, Any] = Map(
+		val values: Map[String, AnyRef] = Map(
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,
 			"playbarTrackColor" -> color.getPlaybarColor,
