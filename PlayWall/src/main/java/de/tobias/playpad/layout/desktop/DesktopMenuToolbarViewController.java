@@ -82,6 +82,8 @@ import java.util.Optional;
 public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewController
 		implements EventHandler<ActionEvent>, ChangeListener<DesktopEditMode> {
 
+	private static final String LAYOUT_MENU_ITEM_IDENTIFIER = "layout-menu-item";
+
 	@FXML
 	private MenuBar menuBar;
 
@@ -230,6 +232,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	// Desktop Edit Mode Change Listener --> Update Button
 	@Override
 	public void changed(ObservableValue<? extends DesktopEditMode> observable, DesktopEditMode oldValue, DesktopEditMode newValue) {
+
 		// handle old mode
 		if (oldValue == DesktopEditMode.DRAG) {
 			for (IPadView view : mainViewController.getPadViews()) {
@@ -291,30 +294,37 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		mainViewController.getPadViews().forEach(i -> i.getViewController().updateButtonDisable());
 	}
 
-	private void initLayoutMenu() {
+	@Override
+	public void initLayoutMenu() {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 		Registry<MainLayoutFactory> mainLayouts = PlayPadPlugin.getRegistries().getMainLayouts();
 
+		layoutMenu.getItems().removeIf(item -> LAYOUT_MENU_ITEM_IDENTIFIER.equals(item.getUserData()));
+
 		int index = 1; // Für Tastenkombination
 		for (MainLayoutFactory connect : mainLayouts.getComponents()) {
-			if (!connect.getType().equals(profileSettings.getMainLayoutType())) {
-				MenuItem item = new MenuItem(connect.toString());
-
-				item.setOnAction(e ->
-				{
-					mainViewController.setMainLayout(connect);
-					Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
-				});
-
-				// Key Combi
-				if (index < 10) {
-					item.setAccelerator(KeyCombination.keyCombination("Shortcut+" + index));
-				}
-
-				layoutMenu.getItems().add(item);
-				index++;
+			if(connect.getType().equals(profileSettings.getMainLayoutType()))
+			{
+				continue;
 			}
-		}
+
+			MenuItem item = new MenuItem(connect.toString());
+			item.setUserData(LAYOUT_MENU_ITEM_IDENTIFIER);
+
+			item.setOnAction(e ->
+			{
+				mainViewController.setMainLayout(connect);
+				Profile.currentProfile().getProfileSettings().setMainLayoutType(connect.getType());
+			});
+
+			// Key combination
+			if (index < 10) {
+				item.setAccelerator(KeyCombination.keyCombination("Shortcut+" + index));
+			}
+
+			layoutMenu.getItems().add(item);
+			index++;
+	}
 	}
 
 	@Override

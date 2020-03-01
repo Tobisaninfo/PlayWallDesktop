@@ -232,10 +232,6 @@ public class Strings {
 	// TriggerPoint - Enum
 	public static final String TRIGGER_POINT = "TriggerPoint.";
 
-	// Main Layout
-	public static final String MAIN_LAYOUT_DESKTOP = "MainLayout.Desktop";
-	public static final String MAIN_LAYOUT_TOUCH = "MainLayout.Touch";
-
 	// Search
 	public static final String SEARCH_BUTTON = "Search.Button";
 	public static final String SEARCH_PLACEHOLDER = "Search.Placeholder";
