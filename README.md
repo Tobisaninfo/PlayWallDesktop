@@ -1,5 +1,7 @@
 # PlayWall
 
+![](https://tobisan.thecodelabs.de/playwall/PlayWall_grave.png)
+
 PlayWall is a multimedia application that helps to managing your jingles. 
 
 ## Features
