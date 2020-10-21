@@ -156,4 +156,8 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 		}
 	}
 
+	@Override
+	public void initLayoutMenu()
+	{
+	}
 }

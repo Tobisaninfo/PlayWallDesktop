@@ -597,6 +597,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		this.mainLayout = mainLayoutConnect;
 		initMainLayout();
+		this.menuToolbarViewController.initLayoutMenu();
 	}
 
 	/*

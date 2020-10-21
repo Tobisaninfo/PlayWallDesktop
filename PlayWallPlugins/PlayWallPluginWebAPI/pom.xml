@@ -5,7 +5,7 @@
     <parent>
         <artifactId>PlayWallPlugins</artifactId>
         <groupId>de.tobias.playpad</groupId>
-        <version>7.0.1</version>
+        <version>7.0.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -102,19 +102,19 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>release</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -124,7 +124,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

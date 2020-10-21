@@ -6,7 +6,7 @@
 
     <groupId>de.tobias.playpad</groupId>
     <artifactId>PlayWallDesktop</artifactId>
-    <version>7.0.1</version>
+    <version>7.0.2</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -28,25 +28,25 @@
         <jlayer.version>1.0.1</jlayer.version>
 
         <itextpdf.version>5.5.13</itextpdf.version>
-        <jackson-dataformat-csv.version>2.9.9</jackson-dataformat-csv.version>
+        <jackson-dataformat-csv.version>2.11.3</jackson-dataformat-csv.version>
 
         <spark-core.version>[2.9.0,)</spark-core.version>
 
-        <jna.version>5.2.0</jna.version>
+        <jna.version>5.6.0</jna.version>
 
-        <scala-library.version>2.13.0</scala-library.version>
-        <junit.version>4.12</junit.version>
+        <scala-library.version>2.13.3</scala-library.version>
+        <junit.version>4.13.1</junit.version>
 
-        <gson.version>2.8.5</gson.version>
-        <json-smart.version>1.2</json-smart.version>
-        <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
+        <gson.version>2.8.6</gson.version>
+        <json-smart.version>1.3.1</json-smart.version>
+        <sqlite-jdbc.version>3.32.3.2</sqlite-jdbc.version>
 
-        <nv-websocket-client.version>2.6</nv-websocket-client.version>
+        <nv-websocket-client.version>2.10</nv-websocket-client.version>
         <unirest-java.version>2.5.03</unirest-java.version>
 
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <scala-maven-plugin.version>3.4.4</scala-maven-plugin.version>
-        <maven-jar-plugin.version>2.3.1</maven-jar-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <scala-maven-plugin.version>3.4.6</scala-maven-plugin.version>
+        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
         <versionizer-maven-plugin.version>1.0.3</versionizer-maven-plugin.version>
     </properties>
 
@@ -136,12 +136,12 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -159,7 +159,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>release</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -169,7 +169,7 @@
         </pluginRepository>
         <pluginRepository>
             <id>snapshots</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-plugins-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-plugins-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -200,7 +200,7 @@
 
         <repository>
             <id>release</id>
-            <url>https://maven.thecodedev.de/artifactory/Releases</url>
+            <url>https://maven.thecodelabs.de/artifactory/Releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -210,7 +210,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

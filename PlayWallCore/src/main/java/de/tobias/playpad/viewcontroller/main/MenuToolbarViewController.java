@@ -164,4 +164,6 @@ public abstract class MenuToolbarViewController extends NVC {
 	 * @param project neues Project
 	 */
 	public abstract void setOpenProject(Project project);
+
+	public abstract void initLayoutMenu();
 }
