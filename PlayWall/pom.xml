@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2</version>
     </parent>
 
     <artifactId>PlayWall</artifactId>
@@ -209,7 +209,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>1.12</version>
                 <executions>
                     <execution>
                         <id>attach-artifacts</id>
@@ -273,19 +273,19 @@
         <repository>
             <id>release</id>
             <name>TheCodeLabs-releases</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
         </repository>
         <snapshotRepository>
             <id>snapshots</id>
             <name>TheCodeLabs-snapshots</name>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>release</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-release</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -295,7 +295,7 @@
         </repository>
         <repository>
             <id>snapshots</id>
-            <url>https://maven.thecodedev.de/artifactory/TheCodeLabs-snapshots</url>
+            <url>https://maven.thecodelabs.de/artifactory/TheCodeLabs-snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>

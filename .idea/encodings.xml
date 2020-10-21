@@ -3,16 +3,35 @@
   <component name="Encoding" native2AsciiForPropertiesFiles="true">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWall" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWall/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWall/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWall/src/main/resources/config" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallComponents" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallComponents/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallComponents/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallCore" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallCore/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginNativeAudio/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginPlayoutLog/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginWebAPI" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginWebAPI/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
