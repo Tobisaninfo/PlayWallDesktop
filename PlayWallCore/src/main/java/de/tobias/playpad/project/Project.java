@@ -48,9 +48,9 @@ public class Project {
 	 */
 	final ProjectReference projectReference;
 
-	private transient IntegerProperty activePlayerProperty;
-	private transient IntegerProperty notFoundMediaProperty;
-	private transient ProjectUpdateListener syncListener;
+	private final transient IntegerProperty activePlayerProperty;
+	private final transient IntegerProperty notFoundMediaProperty;
+	private final transient ProjectUpdateListener syncListener;
 
 	public Project(ProjectReference ref) {
 		this.projectReference = ref;
