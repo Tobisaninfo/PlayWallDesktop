@@ -14,8 +14,7 @@ class ProfileLoadingTask extends PlayPadInitializeTask {
 	override def run(app: application.App, instance: PlayPadImpl): Unit = {
 		try ProfileReferenceManager.loadProfiles()
 		catch {
-			case e@(_: IOException | _: DocumentException) =>
-				Logger.error(e)
+			case e@(_: IOException | _: DocumentException) => Logger.error(e)
 		}
 	}
 }

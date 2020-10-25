@@ -20,6 +20,7 @@ public class PlayPadLocalizationDelegate implements Localization.LocalizationDel
 
 	@Override
 	public Locale getLocale() {
-		return Locale.getDefault();
+		// TODO Locale GERMAN
+		return Locale.GERMAN;
 	}
 }

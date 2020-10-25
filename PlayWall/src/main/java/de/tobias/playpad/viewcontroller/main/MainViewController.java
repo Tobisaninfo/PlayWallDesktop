@@ -252,6 +252,12 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 		// Request Focus for key listener
 		getParent().requestFocus();
+
+		getParent().getScene().focusOwnerProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue == null) {
+				getParent().requestFocus();
+			}
+		});
 	}
 
 	private void initMainLayout() {

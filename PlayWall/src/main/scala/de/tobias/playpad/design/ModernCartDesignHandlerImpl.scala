@@ -8,7 +8,6 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController
 import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.PseudoClasses
 import javafx.util.Duration
-import org.apache.commons.lang3.StringUtils
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
@@ -19,7 +18,7 @@ import scala.jdk.CollectionConverters._
 class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 
 	override def generateCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
-		StringUtils.join(
+		String.join(
 			generateCss(design, flat, classSuffix, design.getBackgroundColor),
 			generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}"),
 			generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
@@ -33,7 +32,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-pad.css")
 		val string = Minifier minify resource.getAsString
 
-		val values: Map[String, Any] = Map(
+		val values: Map[String, AnyRef] = Map(
 			"prefix" -> padIdentifier,
 			"class" -> styleState,
 			"buttonColor" -> color.getButtonColor,

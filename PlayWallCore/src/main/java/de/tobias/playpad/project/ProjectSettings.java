@@ -1,12 +1,22 @@
 package de.tobias.playpad.project;
 
 import de.thecodelabs.storage.settings.annotation.Key;
+import de.thecodelabs.utils.application.ApplicationUtils;
 
 import java.nio.file.Path;
 
 public class ProjectSettings {
 
-	public static final int MAX_PAGES = 10;
+	public static final int MAX_PAGES;
+
+	static {
+		Object maxPages = ApplicationUtils.getApplication().getUserDefaults().getData("MAX_PAGES");
+		if (maxPages != null) {
+			MAX_PAGES = Integer.parseInt(maxPages.toString());
+		} else {
+			MAX_PAGES = 10;
+		}
+	}
 
 	public static final int MAX_COLUMNS = 15;
 	public static final int MAX_ROWS = 15;
