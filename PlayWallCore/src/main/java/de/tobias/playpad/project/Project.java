@@ -136,7 +136,7 @@ public class Project {
 
 	// Pages
 	public Page getPage(int position) {
-		if (position < ProjectSettings.MAX_PAGES) {
+		if (position >= ProjectSettings.MAX_PAGES) {
 			return null;
 		}
 
