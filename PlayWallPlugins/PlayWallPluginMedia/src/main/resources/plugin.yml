@@ -3,4 +3,4 @@ name: "MediaPlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 8
+build: 9
