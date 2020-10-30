@@ -162,6 +162,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
 		onFinish();
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	/**
@@ -173,7 +174,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		for (PadSettingsTabViewController controller : tabs) {
 			controller.saveSettings(pad);
 		}
-		getStageContainer().ifPresent(NVCStage::close);
 		return true;
 	}
 }
