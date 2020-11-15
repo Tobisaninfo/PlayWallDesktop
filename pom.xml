@@ -22,7 +22,7 @@
         <components.version>${project.version}</components.version>
 
         <jlibs.version>2.0.6</jlibs.version>
-        <libPlugins.version>2.2.1</libPlugins.version>
+        <libPlugins.version>3.0.6</libPlugins.version>
         <versionizer-api.version>1.2.0</versionizer-api.version>
 
         <jlayer.version>1.0.1</jlayer.version>
@@ -63,13 +63,6 @@
                 <groupId>de.thecodelabs</groupId>
                 <artifactId>jlibs</artifactId>
                 <version>${jlibs.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>de.thecodelabs</groupId>
-                <artifactId>libPlugins</artifactId>
-                <version>${libPlugins.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

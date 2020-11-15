@@ -1,7 +1,8 @@
 package de.tobias.playpad.plugin.api
 
 import de.thecodelabs.logger.Logger
-import de.thecodelabs.plugins.{PluginArtifact, PluginDescriptor}
+import de.thecodelabs.plugins.PluginDescriptor
+import de.thecodelabs.plugins.versionizer.PluginArtifact
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
 import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}

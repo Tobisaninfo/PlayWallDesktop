@@ -1,8 +1,8 @@
 package de.tobias.playpad.equalizerplugin.impl;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.thecodelabs.utils.ui.NVCStage;

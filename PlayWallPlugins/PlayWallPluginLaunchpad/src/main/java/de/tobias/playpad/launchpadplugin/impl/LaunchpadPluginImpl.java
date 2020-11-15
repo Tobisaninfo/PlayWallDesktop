@@ -2,8 +2,8 @@ package de.tobias.playpad.launchpadplugin.impl;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscriptionRegistry;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.tobias.playpad.launchpadplugin.midi.mk2.LaunchPadMK2;
 import de.tobias.playpad.launchpadplugin.midi.s.LaunchPadS;
 import de.tobias.playpad.plugin.Module;

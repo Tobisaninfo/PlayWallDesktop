@@ -2,8 +2,8 @@ package de.tobias.playpad.plugin.playout;
 
 import de.thecodelabs.logger.LogLevel;
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.plugin.Module;

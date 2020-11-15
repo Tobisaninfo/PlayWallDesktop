@@ -29,10 +29,14 @@
         <dependency>
             <groupId>de.thecodelabs</groupId>
             <artifactId>libPlugins-core</artifactId>
+            <version>${libPlugins.version}</version>
+            <classifier>java8</classifier>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs</groupId>
             <artifactId>libPlugins-versionizer</artifactId>
+            <version>${libPlugins.version}</version>
+            <classifier>java8</classifier>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs.versionizer</groupId>

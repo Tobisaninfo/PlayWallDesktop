@@ -1,4 +1,5 @@
 package de.tobias.playpad.initialize
+
 import java.io.IOException
 import java.nio.file.{Path, Paths}
 
@@ -8,6 +9,8 @@ import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.plugin.ModernPluginManager
+import javafx.application.Platform
+import org.controlsfx.dialog.ExceptionDialog
 
 class PluginLoadingTask extends PlayPadInitializeTask {
 	override def name(): String = "Plugins"
@@ -34,6 +37,11 @@ class PluginLoadingTask extends PlayPadInitializeTask {
 			case e: Exception =>
 				Logger.error("Unable to load plugins")
 				Logger.error(e)
+
+				Platform.runLater(() => {
+					val dialog = new ExceptionDialog(e)
+					dialog.showAndWait()
+				})
 		}
 	}
 

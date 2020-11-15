@@ -2,8 +2,8 @@ package de.tobias.playpad.plugin;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.plugins.Plugin;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginManager;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.application.container.PathType;
 import de.tobias.playpad.PlayPadPlugin;
@@ -25,10 +25,10 @@ public class ModernPluginManager {
 
 	private static final String PLUGIN_INFO_TXT = "pluginInfo.txt";
 
-	private PluginManager pluginManager;
-	private Set<Path> deletedPlugins;
+	private final PluginManager pluginManager;
+	private final Set<Path> deletedPlugins;
 
-	private Set<Module> modules;
+	private final Set<Module> modules;
 
 	private static ModernPluginManager instance;
 
@@ -59,14 +59,14 @@ public class ModernPluginManager {
 
 	public void loadFile(Path path) {
 		if (path.endsWith("classes")) {
-			pluginManager.addFile(path);
+			pluginManager.addPluginFile(path);
 		} else {
-			pluginManager.addFolder(path);
+			pluginManager.addPluginsOfDirectory(path);
 		}
 		pluginManager.loadPlugins();
 
 		// Registriert Funktionen aus Plugin (Module)
-		for (Plugin p : pluginManager.getPlugins()) {
+		for (Plugin p : pluginManager.getLoadedPlugins()) {
 			if (p instanceof PlayPadPluginStub) {
 				modules.add(((PlayPadPluginStub) p).getModule());
 			}
