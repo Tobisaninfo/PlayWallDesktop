@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 public class PadTriggerStatusListener implements ChangeListener<PadStatus> {
 
-	private Pad pad;
+	private final Pad pad;
 
 	public PadTriggerStatusListener(Pad pad) {
 		this.pad = pad;
@@ -28,10 +28,10 @@ public class PadTriggerStatusListener implements ChangeListener<PadStatus> {
 			// Execute Trigger
 			if (newValue == PadStatus.PLAY) { // TRIGGER FÜR START
 				executeTrigger(padSettings.getTriggers().get(TriggerPoint.START));
-			} else if (newValue == PadStatus.STOP || (oldValue == PadStatus.PLAY && newValue == PadStatus.READY)) { // TRIGGER FÜR STOP
-				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF_STOP));
+			} else if (newValue == PadStatus.STOP) { // TRIGGER FÜR STOP
+				executeTrigger(padSettings.getTriggers().get(TriggerPoint.STOP));
 			} else if (oldValue == PadStatus.PLAY && newValue == PadStatus.READY && pad.isEof()) { // TRIGGER FÜR EOF
-				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF_STOP));
+				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF));
 			}
 		} else {
 			pad.setIgnoreTrigger(false);

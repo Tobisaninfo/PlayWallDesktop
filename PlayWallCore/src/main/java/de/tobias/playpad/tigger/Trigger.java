@@ -71,7 +71,7 @@ public class Trigger {
 		try {
 			triggerPoint = TriggerPoint.valueOf(element.attributeValue(POINT_ATTR));
 		} catch (Exception e) {
-			Logger.error(e);
+			throw new IllegalArgumentException("Trigger Point " + element.attributeValue(POINT_ATTR) + " not exists");
 		}
 
 		for (Element itemElement : element.elements(ITEM_ELEMENT)) {
@@ -108,7 +108,9 @@ public class Trigger {
 		for (TriggerItem item : items) {
 			if (triggerPoint == TriggerPoint.START) {
 				handleStartPoint(pad, duration, project, mainViewController, currentProfile, item);
-			} else if ((triggerPoint == TriggerPoint.EOF_STOP)) {
+			} else if (triggerPoint == TriggerPoint.STOP) {
+				handleEndPoint(pad, duration, project, mainViewController, currentProfile, item);
+			} else if (triggerPoint == TriggerPoint.EOF) {
 				handleEndPoint(pad, duration, project, mainViewController, currentProfile, item);
 			}
 		}
@@ -126,7 +128,7 @@ public class Trigger {
 
 	private void handleStartPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
 		if (pad.getStatus() == PadStatus.PLAY) {
-			// Mitten drin, wenn die Zeit die gepsiel wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
+			// Mitten drin, wenn die Zeit die gespiel wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
 			// wurde (null)
 			if ((item.getPerformedAt() == null && item.getDurationFromPoint().lessThan(duration))
 					// Wenn der Trigger am Anfang ist
