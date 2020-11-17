@@ -50,9 +50,9 @@ public class VideoPadContentFactory extends PadContentFactory {
 		return FILE_EXTENSION;
 	}
 
-	private class VideoContentView implements IPadContentView {
+	private static class VideoContentView implements IPadContentView {
 
-		private Label nameLabel;
+		private final Label nameLabel;
 
 		VideoContentView(Pad pad, Pane parentNode) {
 			nameLabel = new Label();
