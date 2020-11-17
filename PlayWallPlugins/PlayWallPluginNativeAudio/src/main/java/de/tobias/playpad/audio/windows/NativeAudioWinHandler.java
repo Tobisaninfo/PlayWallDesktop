@@ -26,11 +26,11 @@ public class NativeAudioWinHandler extends AudioHandler implements Soundcardable
 	static final String SOUND_CARD = "SoundCard";
 
 	private NativeAudio audioHandler;
-	private ObjectProperty<Duration> durationProperty;
-	private ObjectProperty<Duration> positionProperty;
+	private final ObjectProperty<Duration> durationProperty;
+	private final ObjectProperty<Duration> positionProperty;
 
 	private static Thread positionThread;
-	private static List<NativeAudioWinHandler> playedHandlers = new ArrayList<>();
+	private static final List<NativeAudioWinHandler> playedHandlers = new ArrayList<>();
 	private static final int SLEEP_TIME_POSITION = 50;
 
 	static {

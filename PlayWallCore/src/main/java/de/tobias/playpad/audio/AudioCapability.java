@@ -11,10 +11,10 @@ public class AudioCapability {
 	public static final AudioCapability EQUALIZER = new AudioCapability("EQUALIZER", Equalizeable.class);
 	public static final AudioCapability SOUNDCARD = new AudioCapability("SOUNDCARD", Soundcardable.class);
 
-	private String nameKey;
-	private Class<? extends AudioFeature> clazz;
+	private final String nameKey;
+	private final Class<? extends AudioFeature> clazz;
 
-	private static List<AudioCapability> audioCapabilityList;
+	private static final List<AudioCapability> audioCapabilityList;
 
 	static {
 		audioCapabilityList = new ArrayList<>();
