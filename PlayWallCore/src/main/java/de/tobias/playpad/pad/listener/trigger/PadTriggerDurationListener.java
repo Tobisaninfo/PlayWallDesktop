@@ -15,7 +15,7 @@ import javafx.util.Duration;
 
 public class PadTriggerDurationListener implements ChangeListener<Duration> {
 
-	private Pad pad;
+	private final Pad pad;
 
 	public PadTriggerDurationListener(Pad pad) {
 		this.pad = pad;
@@ -37,7 +37,7 @@ public class PadTriggerDurationListener implements ChangeListener<Duration> {
 				Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
 				startTrigger.handle(pad, newValue, pad.getProject(), mainViewController, currentProfile);
 
-				Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF_STOP);
+				Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF);
 				endTrigger.handle(pad, leftTime, pad.getProject(), mainViewController, currentProfile);
 			}
 		}

@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad;
 
+import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.design.modern.serializer.ModernCartDesignSerializer;
@@ -92,9 +93,13 @@ public class PadSettingsSerializer {
 		Element triggersElement = settingsElement.element(TRIGGERS_ELEMENT);
 		if (triggersElement != null) {
 			for (Element triggerElement : triggersElement.elements(TRIGGER_ELEMENT)) {
-				Trigger trigger = new Trigger();
-				trigger.load(triggerElement);
-				padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
+				try {
+					Trigger trigger = new Trigger();
+					trigger.load(triggerElement);
+					padSettings.getTriggers().put(trigger.getTriggerPoint(), trigger);
+				} catch (IllegalArgumentException e) {
+					Logger.error(e);
+				}
 			}
 		}
 		padSettings.updateTrigger(); // Add missing trigger points
