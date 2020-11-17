@@ -39,11 +39,11 @@ class PlayerViewController extends NVC {
 	Logger.debug("Create Player View Controller")
 
 	override def init(): Unit = {
-		val mediaPlayer = new MediaPlayerStack(0, 0, 960, 80)
-		mediaPlayers.addOne(mediaPlayer)
+		mediaPlayers.addOne(new MediaPlayerStack(0, 0, 960, 80))
+		mediaPlayers.addOne(new MediaPlayerStack(0, 80, 960, 80))
 
 		val parent = getParent.asInstanceOf[Pane]
-		parent.getChildren.add(mediaPlayer)
+		mediaPlayers.foreach(player => parent.getChildren.add(player))
 
 		parent.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)))
 	}
@@ -58,7 +58,7 @@ class PlayerViewController extends NVC {
 		stage.setX(0)
 		stage.setY(0)
 		stage.setWidth(960)
-		stage.setHeight(80)
+		stage.setHeight(160)
 	}
 
 	def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {

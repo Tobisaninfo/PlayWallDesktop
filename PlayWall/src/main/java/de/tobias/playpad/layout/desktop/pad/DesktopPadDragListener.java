@@ -31,13 +31,13 @@ import java.util.Set;
 
 public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
-	private static final String PADINDEX_DATATYPE = "de.tobias.playpad.padindex";
-	private static final DataFormat dataFormat = new DataFormat(PADINDEX_DATATYPE);
+	private static final String PAD_INDEX_DATATYPE = "de.tobias.playpad.pad_index";
+	private static final DataFormat dataFormat = new DataFormat(PAD_INDEX_DATATYPE);
 
-	private Pad currentPad;
+	private final Pad currentPad;
 	private final Pane padView; // Node der PadView
 
-	private DesktopMainLayoutFactory connect;
+	private final DesktopMainLayoutFactory connect;
 
 	private PadDragOptionView padHud;
 	private FileDragOptionView fileHud;
@@ -143,7 +143,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 		if (db.hasFiles()) {
 			File file = db.getFiles().get(0);
 
-			PadContentFactory connect = fileHud.getSelectedConnect();
+			final PadContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
 				// stop pad if playing
 				if(currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
@@ -162,7 +162,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				this.currentPad.setPath(file.toPath());
 
 				if (currentPad.getController() != null) {
-					IPadView padView = currentPad.getController().getView();
+					final IPadView padView = currentPad.getController().getView();
 					padView.setContentView(currentPad);
 					padView.addDefaultElements(currentPad);
 				}
