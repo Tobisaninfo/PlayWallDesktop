@@ -6,6 +6,8 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.ModernDesignSizeHelper;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.ProjectSettingsValidator;
+import de.tobias.playpad.project.ProjectSettingsValidator.ValidationState;
 import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProjectReloadTask;
@@ -16,25 +18,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Screen;
 
+import static de.tobias.playpad.project.ProjectSettingsValidator.Dimension;
+
 public class GeneralTabViewController extends ProjectSettingsTabViewController implements IProjectReloadTask {
-
-	public static final int DISPLAY_OFFSET = 100;
-
-	private enum ValidationState {
-		NORMAL,
-		TOO_MUCH,
-		TOO_LESS
-	}
-
-	private enum Dimension {
-		COLUMNS,
-		ROWS
-	}
 
 	private static final String DIGIT_POSITIVE = "^[1-9]\\d*$";
 
-	private Screen mainWindowScreen;
-	private Alertable parentController; // Für Benachrichtungen
+	private final Screen mainWindowScreen;
+	private final Alertable parentController; // Für Benachrichtungen
+
+	private final ProjectSettingsValidator projectSettingsValidator;
 
 	@FXML
 	private TextField columnTextField;
@@ -52,6 +45,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		this.mainWindowScreen = currentScreen;
 		this.parentController = parentController;
 
+		this.projectSettingsValidator = new ProjectSettingsValidator(this.mainWindowScreen);
+
 		if (activePlayer) {
 			rowTextField.setDisable(true);
 			columnTextField.setDisable(true);
@@ -63,7 +58,7 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 		columnTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.parseInt(c), Dimension.COLUMNS);
+				ValidationState validationState = projectSettingsValidator.validate(Integer.parseInt(c), Dimension.COLUMNS);
 				if (validationState == ValidationState.NORMAL) {
 					columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					columnErrorLabel.setText("");
@@ -73,22 +68,22 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, projectSettingsValidator.maxValue(Dimension.COLUMNS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, projectSettingsValidator.minValue(Dimension.COLUMNS));
 					}
 					columnErrorLabel.setText(errorText);
 				}
 			} else {
 				columnTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				columnErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.COLUMNS)));
+				columnErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, projectSettingsValidator.minValue(Dimension.COLUMNS)));
 			}
 		});
 
 		rowTextField.textProperty().addListener((a, b, c) ->
 		{
 			if (c.matches(DIGIT_POSITIVE) && !c.isEmpty()) {
-				ValidationState validationState = validate(Integer.parseInt(c), Dimension.ROWS);
+				ValidationState validationState = projectSettingsValidator.validate(Integer.parseInt(c), Dimension.ROWS);
 				if (validationState == ValidationState.NORMAL) {
 					rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, false);
 					rowErrorLabel.setText("");
@@ -98,47 +93,17 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 					String errorText = "";
 					// Error Message
 					if (validationState == ValidationState.TOO_MUCH) {
-						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, maxValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_MUCH, projectSettingsValidator.maxValue(Dimension.ROWS));
 					} else if (validationState == ValidationState.TOO_LESS) {
-						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS));
+						errorText = Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, projectSettingsValidator.minValue(Dimension.ROWS));
 					}
 					rowErrorLabel.setText(errorText);
 				}
 			} else {
 				rowTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, true);
-				rowErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, minValue(Dimension.ROWS)));
+				rowErrorLabel.setText(Localization.getString(Strings.ERROR_SCREEN_TOO_LESS, projectSettingsValidator.minValue(Dimension.ROWS)));
 			}
 		});
-	}
-
-	private ValidationState validate(int input, Dimension dimension) {
-		if (input < minValue(dimension)) {
-			return ValidationState.TOO_LESS;
-		} else if (input > maxValue(dimension)) {
-			return ValidationState.TOO_MUCH;
-		}
-		return ValidationState.NORMAL;
-	}
-
-	private int minValue(Dimension dimension) {
-		if (dimension == Dimension.COLUMNS) {
-			return ProjectSettings.MIN_COLUMNS;
-		} else if (dimension == Dimension.ROWS) {
-			return ProjectSettings.MIN_ROWS;
-		}
-		return -1;
-	}
-
-	private int maxValue(Dimension dimension) {
-		double width = mainWindowScreen.getVisualBounds().getMaxX() - mainWindowScreen.getVisualBounds().getMinX();
-		double height = mainWindowScreen.getVisualBounds().getMaxY() - mainWindowScreen.getVisualBounds().getMinY();
-
-		if (dimension == Dimension.COLUMNS) {
-			return Math.min((int) (width / ModernDesignSizeHelper.getPadWidth()), ProjectSettings.MAX_COLUMNS);
-		} else if (dimension == Dimension.ROWS) {
-			return Math.min((int) ((height - DISPLAY_OFFSET) / ModernDesignSizeHelper.getPadHeight()), ProjectSettings.MAX_ROWS);
-		}
-		return -1;
 	}
 
 	private boolean screenValid() {
@@ -200,8 +165,8 @@ public class GeneralTabViewController extends ProjectSettingsTabViewController i
 	@Override
 	public boolean validSettings() {
 		try {
-			return validate(Integer.parseInt(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
-					validate(Integer.parseInt(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
+			return projectSettingsValidator.validate(Integer.parseInt(columnTextField.getText()), Dimension.COLUMNS) == ValidationState.NORMAL &&
+					projectSettingsValidator.validate(Integer.parseInt(rowTextField.getText()), Dimension.ROWS) == ValidationState.NORMAL;
 		} catch (NumberFormatException e) {
 			return false;
 		}

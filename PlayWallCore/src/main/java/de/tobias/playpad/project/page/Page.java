@@ -192,10 +192,15 @@ public class Page {
 	public Pad getPad(int x, int y) {
 		ProjectSettings settings = projectReference.getSettings();
 		if (x < settings.getColumns() && y < settings.getRows()) {
-			int id = y * settings.getColumns() + x;
-			return getPad(id);
+			int position = getPadPosition(x, y);
+			return getPad(position);
 		}
 		return null;
+	}
+
+	private int getPadPosition(int x, int y) {
+		ProjectSettings settings = projectReference.getSettings();
+		return y * settings.getColumns() + x;
 	}
 
 	/**
@@ -242,6 +247,32 @@ public class Page {
 			}
 		}
 		pads.removeIf(p -> p.getUuid().equals(uuid));
+	}
+
+	public void addColumn() {
+		final int columns = getProject().getSettings().getColumns() - 1;
+		final int rows = getProject().getSettings().getRows();
+
+		for (int i = 0; i < rows; i++) {
+			insertPadInto(columns, i, rows * columns);
+		}
+	}
+
+	public void addRow() {
+		final int columns = getProject().getSettings().getColumns();
+		final int rows = getProject().getSettings().getRows() - 1;
+
+		for (int i = 0; i < columns; i++) {
+			insertPadInto(i, columns, rows * columns);
+		}
+	}
+
+	private void insertPadInto(int x, int y, int maxPad) {
+		int position = getPadPosition(x, y);
+		for (int i = maxPad - 1; i >= position; i--) {
+			getPad(i).setPosition(i + 1);
+		}
+		getPad(position);
 	}
 
 	@Override

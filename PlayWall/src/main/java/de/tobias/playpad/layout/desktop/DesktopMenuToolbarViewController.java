@@ -26,6 +26,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.ProjectSettingsValidator;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -303,8 +304,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		int index = 1; // Für Tastenkombination
 		for (MainLayoutFactory connect : mainLayouts.getComponents()) {
-			if(connect.getType().equals(profileSettings.getMainLayoutType()))
-			{
+			if (connect.getType().equals(profileSettings.getMainLayoutType())) {
 				continue;
 			}
 
@@ -324,7 +324,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			layoutMenu.getItems().add(item);
 			index++;
-	}
+		}
 	}
 
 	@Override
@@ -697,6 +697,34 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				}
 			});
 		}
+	}
+
+	@FXML
+	void addColumnToProject() {
+		ProjectSettingsValidator projectSettingsValidator = new ProjectSettingsValidator(mainViewController.getScreen());
+		final int maxValue = projectSettingsValidator.maxValue(ProjectSettingsValidator.Dimension.COLUMNS);
+		if (maxValue < openProject.getSettings().getColumns() + 1) {
+			showErrorMessage(Localization.getString("Error.Screen.TooMuch", maxValue));
+			return;
+		}
+
+		openProject.addColumn();
+		mainViewController.createPadViews();
+		mainViewController.showPage(mainViewController.getPage());
+	}
+
+	@FXML
+	void addRowToProject() {
+		ProjectSettingsValidator projectSettingsValidator = new ProjectSettingsValidator(mainViewController.getScreen());
+		final int maxValue = projectSettingsValidator.maxValue(ProjectSettingsValidator.Dimension.ROWS);
+		if (maxValue < openProject.getSettings().getRows() + 1) {
+			showErrorMessage(Localization.getString("Error.Screen.TooMuch", maxValue));
+			return;
+		}
+
+		openProject.addRow();
+		mainViewController.createPadViews();
+		mainViewController.showPage(mainViewController.getPage());
 	}
 
 	@FXML
