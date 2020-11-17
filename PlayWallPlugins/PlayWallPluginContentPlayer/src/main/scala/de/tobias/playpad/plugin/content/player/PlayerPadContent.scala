@@ -6,6 +6,7 @@ import de.tobias.playpad.pad.content.PadContent
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
+import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
 import javafx.beans.property.{ReadOnlyObjectProperty, SimpleObjectProperty}
@@ -22,6 +23,9 @@ class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad)
 			_positionProperty.bind(mediaPlayer.currentTimeProperty())
 
 			mediaPlayer.seek(Duration.ZERO)
+
+			ContentPluginMain.playerViewController.showMediaPlayer(mediaPlayer)
+
 			mediaPlayer.play()
 			currentRunningIndex = mediaPlayers.indexOf(this)
 		}

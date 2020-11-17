@@ -3,7 +3,9 @@ package de.tobias.playpad.plugin.content
 import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
+import de.tobias.playpad.plugin.content.player.PlayerViewController
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
+import javafx.application.Platform
 
 class ContentPluginMain extends PlayPadPluginStub {
 
@@ -16,6 +18,10 @@ class ContentPluginMain extends PlayPadPluginStub {
 		Localization.addResourceBundle(localization)
 
 		PlayPadPlugin.getRegistries.getPadContents.loadComponentsFromFile("PadContent.xml", getClass.getClassLoader, module, localization)
+		Platform.runLater(() => {
+			ContentPluginMain.playerViewController = new PlayerViewController
+			ContentPluginMain.playerViewController.showStage()
+		})
 	}
 
 	override def shutdown(): Unit = {
@@ -23,4 +29,8 @@ class ContentPluginMain extends PlayPadPluginStub {
 	}
 
 	override def getModule: Module = module
+}
+
+object ContentPluginMain {
+	var playerViewController: PlayerViewController = _
 }
