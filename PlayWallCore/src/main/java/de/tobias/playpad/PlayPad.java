@@ -14,12 +14,15 @@ import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbor
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
+import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import javafx.scene.image.Image;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Hauptfunktionen für Listener und zur Programmsteuerung für Plugins.
@@ -138,4 +141,15 @@ public interface PlayPad {
 
 	UpdateService getUpdateService();
 
+	/*
+	Settings Views
+	 */
+
+	void addAdditionalProfileSettingsTab(Supplier<ProfileSettingsTabViewController> tab);
+
+	List<Supplier<ProfileSettingsTabViewController>> getAdditionalProfileSettingsTabs();
+
+	void addGlobalSettingsTab(Supplier<GlobalSettingsTabViewController> tab);
+
+	List<Supplier<GlobalSettingsTabViewController>> getGlobalSettingsTabs();
 }

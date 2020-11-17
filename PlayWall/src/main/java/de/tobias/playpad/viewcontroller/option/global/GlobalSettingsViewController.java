@@ -36,9 +36,8 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	@FXML
 	private Button finishButton;
 
-	private List<GlobalSettingsTabViewController> tabs = new ArrayList<>();
-
-	private Runnable onFinish;
+	private final List<GlobalSettingsTabViewController> tabs = new ArrayList<>();
+	private final Runnable onFinish;
 
 	public GlobalSettingsViewController(Window owner, Runnable onFinish) {
 		load("view/option/global", "GlobalSettingsView", Localization.getBundle());
@@ -52,6 +51,13 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		addTab(new GeneralTabViewController(this));
 		addTab(new KeysTabViewController());
 		addTab(new UpdateTabViewController());
+
+		PlayPadPlugin.getInstance().getGlobalSettingsTabs().forEach(supplier -> {
+			final GlobalSettingsTabViewController globalSettingsTabViewController = supplier.get();
+			if (globalSettingsTabViewController != null) {
+				addTab(globalSettingsTabViewController);
+			}
+		});
 
 		// Show Current Settings
 		loadTabs();
