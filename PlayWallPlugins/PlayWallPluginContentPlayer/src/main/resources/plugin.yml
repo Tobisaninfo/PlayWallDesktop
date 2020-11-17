@@ -1,0 +1,6 @@
+main: "de.tobias.playpad.plugin.content.ContentPluginMain"
+name: "ContentPlugin"
+artifactId: "${pom.artifactId}"
+groupId: "${pom.groupId}"
+version: "${pom.version}"
+build: 1

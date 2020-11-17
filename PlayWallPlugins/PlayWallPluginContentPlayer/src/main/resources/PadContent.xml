@@ -1,0 +1,3 @@
+<Actions>
+    <Component id="video" name="plugin.content.Player.name">de.tobias.playpad.plugin.content.player.PlayerPadContentFactory</Component>
+</Actions>

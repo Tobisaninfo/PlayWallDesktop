@@ -1,0 +1,180 @@
+package de.tobias.playpad.plugin.content.player
+
+import java.nio.file.Files
+
+import de.tobias.playpad.pad.content.PadContent
+import de.tobias.playpad.pad.content.play.Durationable
+import de.tobias.playpad.pad.mediapath.MediaPath
+import de.tobias.playpad.pad.{Pad, PadStatus}
+import de.tobias.playpad.volume.VolumeManager
+import javafx.application.Platform
+import javafx.beans.property.{ReadOnlyObjectProperty, SimpleObjectProperty}
+import javafx.scene.media.{Media, MediaPlayer}
+import javafx.util.Duration
+
+import scala.collection.mutable.ListBuffer
+
+class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Durationable {
+
+	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
+		def play(): Unit = {
+			_durationProperty.bind(mediaPlayer.totalDurationProperty())
+			_positionProperty.bind(mediaPlayer.currentTimeProperty())
+
+			mediaPlayer.seek(Duration.ZERO)
+			mediaPlayer.play()
+			currentRunningIndex = mediaPlayers.indexOf(this)
+		}
+
+		def next(): Unit = {
+			stop()
+
+			currentRunningIndex = mediaPlayers.indexOf(this)
+			if (currentRunningIndex + 1 < mediaPlayers.length) {
+				mediaPlayers(currentRunningIndex + 1).play()
+			} else if (getPad.getPadSettings.isLoop) {
+				mediaPlayers.head.play()
+			}
+		}
+
+		def stop(): Unit = {
+			mediaPlayer.stop()
+			_durationProperty.unbind()
+			_positionProperty.unbind()
+		}
+	}
+
+	private val mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
+	private var currentRunningIndex: Int = 0
+
+	private val _durationProperty = new SimpleObjectProperty[Duration]
+	private val _positionProperty = new SimpleObjectProperty[Duration]
+
+	override def getType: String = `type`
+
+	override def play(): Unit = {
+		getPad.setEof(false)
+		mediaPlayers.head.play()
+	}
+
+	override def stop(): Boolean = {
+		if (getPad.isEof) {
+			mediaPlayers(currentRunningIndex).next()
+			return false
+		}
+		mediaPlayers(currentRunningIndex).stop()
+		true
+	}
+
+	/*
+	Durationable
+	 */
+
+	override def getDuration: Duration = _durationProperty.get()
+
+	override def getPosition: Duration = _positionProperty.get()
+
+	override def durationProperty(): ReadOnlyObjectProperty[Duration] = _durationProperty
+
+	override def positionProperty(): ReadOnlyObjectProperty[Duration] = _positionProperty
+
+	override def isPadLoaded: Boolean = {
+		mediaPlayers.nonEmpty
+	}
+
+	/**
+	 * Load media files.
+	 */
+	override def loadMedia(): Unit = {
+	}
+
+	/**
+	 * Load media file.
+	 *
+	 * @param mediaPath specify media path
+	 */
+	override def loadMedia(mediaPath: MediaPath): Unit = {
+		val path = mediaPath.getPath
+		if (Files.notExists(path)) {
+			Platform.runLater(() => getPad.setStatus(PadStatus.NOT_FOUND))
+			return
+		}
+
+		val media = new Media(path.toUri.toString)
+		val mediaPlayer = new MediaPlayer(media)
+
+		mediaPlayer.setOnReady(() => {
+			getPad.setStatus(PadStatus.READY)
+
+			Platform.runLater(() => {
+				if (getPad.isPadVisible) {
+					getPad.getController.getView.showBusyView(false)
+				}
+			})
+		})
+
+		mediaPlayer.setOnError(() => Platform.runLater(() => {
+			if (getPad.isPadVisible) {
+				getPad.getController.getView.showBusyView(false)
+			}
+		}))
+
+		mediaPlayer.setOnEndOfMedia(() => {
+			if (!getPad.getPadSettings.isLoop) {
+				getPad.setEof(true)
+				getPad.setStatus(PadStatus.STOP)
+			}
+			else { // Loop
+				mediaPlayer.seek(Duration.ZERO)
+			}
+		})
+
+		mediaPlayers.addOne(new MediaPlayerContainer(mediaPath, mediaPlayer))
+	}
+
+	/**
+	 * Unload media files.
+	 */
+	override def unloadMedia(): Unit = {
+		if ((getPad.getStatus eq PadStatus.PLAY) || (getPad.getStatus eq PadStatus.PAUSE)) getPad.setStatus(PadStatus.STOP)
+
+		mediaPlayers.clear()
+
+		Platform.runLater(() => {
+			if (getPad != null) {
+				getPad.setStatus(PadStatus.EMPTY)
+			}
+		})
+	}
+
+	/**
+	 * Unload media file.
+	 *
+	 * @param mediaPath specify media path
+	 */
+	override def unloadMedia(mediaPath: MediaPath): Unit = {
+		val index = mediaPlayers.indexWhere(item => item.path.getId == mediaPath.getId)
+
+		val playerContainer = mediaPlayers(index)
+		playerContainer.stop()
+
+		mediaPlayers.remove(index)
+	}
+
+	override def updateVolume(): Unit = {
+		val volume = VolumeManager.getInstance.computeVolume(getPad)
+		mediaPlayers.foreach(player => player.mediaPlayer.setVolume(volume))
+	}
+
+	/**
+	 * Create a copy of the PadContent instance
+	 *
+	 * @param pad target pad
+	 * @return copied content
+	 */
+	override def copy(pad: Pad): PadContent = {
+		val clone = new PlayerPadContent(pad, getType)
+		clone.loadMedia()
+		clone
+	}
+}
