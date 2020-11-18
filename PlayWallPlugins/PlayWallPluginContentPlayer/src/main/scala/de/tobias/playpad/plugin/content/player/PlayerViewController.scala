@@ -39,12 +39,7 @@ class PlayerViewController extends NVC {
 	Logger.debug("Create Player View Controller")
 
 	override def init(): Unit = {
-		mediaPlayers.addOne(new MediaPlayerStack(0, 0, 960, 80))
-		mediaPlayers.addOne(new MediaPlayerStack(0, 80, 960, 80))
-
 		val parent = getParent.asInstanceOf[Pane]
-		mediaPlayers.foreach(player => parent.getChildren.add(player))
-
 		parent.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)))
 	}
 
@@ -54,14 +49,34 @@ class PlayerViewController extends NVC {
 		stage.setAlwaysOnTop(true)
 
 		stage.getScene.setFill(Color.BLACK)
-
-		stage.setX(0)
-		stage.setY(0)
-		stage.setWidth(960)
-		stage.setHeight(160)
 	}
 
 	def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 		mediaPlayers.foreach(view => view.showMediaPlayer(mediaPlayer))
+	}
+
+	def configurePlayers(configuration: PlayerInstanceConfiguration): Unit = {
+		mediaPlayers.clear()
+		configuration.instances.forEach(player => {
+			mediaPlayers.addOne(new MediaPlayerStack(player.x, player.y, player.width, player.height)=
+		})
+
+		val parent = getParent.asInstanceOf[Pane]
+		parent.getChildren.clear()
+		mediaPlayers.foreach(player => parent.getChildren.add(player))
+
+		getStageContainer.ifPresent(container => {
+			val stage = container.getStage
+
+			import scala.jdk.CollectionConverters._
+			val instances = configuration.instances.asScala
+			val maxWidth = instances.map(player => player.x + player.width).max
+			val maxHeight = instances.map(player => player.y + player.height).max
+
+			stage.setX(0)
+			stage.setY(0)
+			stage.setWidth(maxWidth)
+			stage.setHeight(maxHeight)
+		})
 	}
 }
