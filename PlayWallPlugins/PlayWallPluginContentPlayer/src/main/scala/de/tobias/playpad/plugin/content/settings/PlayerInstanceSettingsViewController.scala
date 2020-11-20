@@ -1,4 +1,4 @@
-package de.tobias.playpad.plugin.content.player
+package de.tobias.playpad.plugin.content.settings
 
 import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.ui.scene.input.NumberTextField

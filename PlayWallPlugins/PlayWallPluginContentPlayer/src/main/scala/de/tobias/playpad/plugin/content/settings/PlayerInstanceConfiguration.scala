@@ -1,4 +1,4 @@
-package de.tobias.playpad.plugin.content.player
+package de.tobias.playpad.plugin.content.settings
 
 import java.util
 import java.util.{List => JavaList}

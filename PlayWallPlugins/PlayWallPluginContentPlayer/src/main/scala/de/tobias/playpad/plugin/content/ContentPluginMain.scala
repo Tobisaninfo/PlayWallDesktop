@@ -4,7 +4,7 @@ import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
-import de.tobias.playpad.plugin.content.player.{PlayerInstanceConfiguration, PlayerInstanceSettingsViewController, PlayerViewController}
+import de.tobias.playpad.plugin.content.settings.{PlayerInstanceConfiguration, PlayerInstanceSettingsViewController}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import javafx.application.Platform
 
@@ -20,7 +20,7 @@ class ContentPluginMain extends PlayPadPluginStub {
 
 		PlayPadPlugin.getRegistries.getPadContents.loadComponentsFromFile("PadContent.xml", getClass.getClassLoader, module, localization)
 		Platform.runLater(() => {
-			ContentPluginMain.playerViewController = new PlayerViewController
+			ContentPluginMain.playerViewController = new ContentPlayerViewController
 			ContentPluginMain.playerViewController.configurePlayers(ContentPluginMain.configuration)
 			ContentPluginMain.playerViewController.showStage()
 		})
@@ -36,6 +36,6 @@ class ContentPluginMain extends PlayPadPluginStub {
 }
 
 object ContentPluginMain {
-	var playerViewController: PlayerViewController = _
+	var playerViewController: ContentPlayerViewController = _
 	lazy val configuration: PlayerInstanceConfiguration = Storage.load(StorageTypes.JSON, classOf[PlayerInstanceConfiguration])
 }

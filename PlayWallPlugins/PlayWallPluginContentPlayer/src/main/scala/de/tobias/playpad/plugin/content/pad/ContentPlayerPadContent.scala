@@ -1,4 +1,4 @@
-package de.tobias.playpad.plugin.content.player
+package de.tobias.playpad.plugin.content.pad
 
 import java.nio.file.Files
 
@@ -15,7 +15,7 @@ import javafx.util.Duration
 
 import scala.collection.mutable.ListBuffer
 
-class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Durationable {
+class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Durationable {
 
 	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
 		def play(): Unit = {
@@ -43,6 +43,8 @@ class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad)
 
 		def stop(): Unit = {
 			mediaPlayer.stop()
+			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer)
+
 			_durationProperty.unbind()
 			_positionProperty.unbind()
 		}
@@ -54,15 +56,26 @@ class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad)
 	private val _durationProperty = new SimpleObjectProperty[Duration]
 	private val _positionProperty = new SimpleObjectProperty[Duration]
 
+	private var showingLastFrame: Boolean = false
+
 	override def getType: String = `type`
 
 	override def play(): Unit = {
 		getPad.setEof(false)
 		mediaPlayers.head.play()
+		showingLastFrame = false
 	}
 
 	override def stop(): Boolean = {
-		if (getPad.isEof) {
+		if (shouldShowLastFrame() && getPad.isEof && !showingLastFrame && !pad.getPadSettings.isLoop) {
+			getPad.setStatus(PadStatus.PAUSE)
+			showingLastFrame = true
+			return false
+		}
+
+		showingLastFrame = false
+
+		if (getPad.isEof && !pad.getPadSettings.isLoop) {
 			mediaPlayers(currentRunningIndex).next()
 			return false
 		}
@@ -124,12 +137,18 @@ class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad)
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
+
 			if (!getPad.getPadSettings.isLoop) {
+				if (shouldShowLastFrame()) {
+					return
+				}
+
 				getPad.setEof(true)
 				getPad.setStatus(PadStatus.STOP)
 			}
 			else { // Loop
 				mediaPlayer.seek(Duration.ZERO)
+				mediaPlayer.play()
 			}
 		})
 
@@ -177,8 +196,12 @@ class PlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad)
 	 * @return copied content
 	 */
 	override def copy(pad: Pad): PadContent = {
-		val clone = new PlayerPadContent(pad, getType)
+		val clone = new ContentPlayerPadContent(pad, getType)
 		clone.loadMedia()
 		clone
+	}
+
+	def shouldShowLastFrame(): Boolean = {
+		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
 	}
 }

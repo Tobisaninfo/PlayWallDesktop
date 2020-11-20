@@ -1,8 +1,9 @@
-package de.tobias.playpad.plugin.content.player
+package de.tobias.playpad.plugin.content
 
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.ui.NVC
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
+import de.tobias.playpad.plugin.content.settings.PlayerInstanceConfiguration
 import javafx.geometry.Insets
 import javafx.scene.layout._
 import javafx.scene.media.{MediaPlayer, MediaView}
@@ -12,7 +13,7 @@ import javafx.stage.{Stage, StageStyle}
 import scala.collection.mutable.ListBuffer
 
 @IgnoreStageSizing
-class PlayerViewController extends NVC {
+class ContentPlayerViewController extends NVC {
 
 	private class MediaPlayerStack(val x: Double, val y: Double, val width: Double, val height: Double) extends StackPane {
 		val mediaPlayer1: MediaView = new MediaView()
@@ -30,6 +31,14 @@ class PlayerViewController extends NVC {
 				mediaPlayer1.setMediaPlayer(mediaPlayer)
 			} else {
 				mediaPlayer2.setMediaPlayer(mediaPlayer)
+			}
+		}
+
+		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
+			if (mediaPlayer1.getMediaPlayer == mediaPlayer) {
+				mediaPlayer1.setMediaPlayer(null)
+			} else {
+				mediaPlayer2.setMediaPlayer(null)
 			}
 		}
 	}
@@ -55,6 +64,12 @@ class PlayerViewController extends NVC {
 
 	def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 		mediaPlayers.foreach(view => view.showMediaPlayer(mediaPlayer))
+	}
+
+	def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
+		for (view <- this.mediaPlayers) {
+			view.disconnectMediaPlayer(mediaPlayer)
+		}
 	}
 
 	def configurePlayers(configuration: PlayerInstanceConfiguration): Unit = {
