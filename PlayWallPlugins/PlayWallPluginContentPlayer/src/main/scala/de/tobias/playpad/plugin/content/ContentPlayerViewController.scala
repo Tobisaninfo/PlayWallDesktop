@@ -10,16 +10,15 @@ import javafx.scene.media.{MediaPlayer, MediaView}
 import javafx.scene.paint.Color
 import javafx.stage.{Stage, StageStyle}
 
+import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
 @IgnoreStageSizing
 class ContentPlayerViewController extends NVC {
 
 	private class MediaPlayerStack(val x: Double, val y: Double, val width: Double, val height: Double) extends StackPane {
-		val mediaPlayer1: MediaView = new MediaView()
-		val mediaPlayer2: MediaView = new MediaView()
 
-		getChildren.addAll(mediaPlayer1, mediaPlayer2)
+		val mediaViews: mutable.Map[MediaPlayer, MediaView] = new mutable.HashMap[MediaPlayer, MediaView]()
 
 		setLayoutX(x)
 		setLayoutY(y)
@@ -27,19 +26,17 @@ class ContentPlayerViewController extends NVC {
 		setHeight(height)
 
 		def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
-			if (mediaPlayer1.getMediaPlayer == null) {
-				mediaPlayer1.setMediaPlayer(mediaPlayer)
-			} else {
-				mediaPlayer2.setMediaPlayer(mediaPlayer)
+			if (!mediaViews.contains(mediaPlayer)) {
+				mediaViews.put(mediaPlayer, new MediaView(mediaPlayer))
 			}
+
+			val mediaView = mediaViews(mediaPlayer)
+
+			getChildren.add(mediaView)
 		}
 
 		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
-			if (mediaPlayer1.getMediaPlayer == mediaPlayer) {
-				mediaPlayer1.setMediaPlayer(null)
-			} else {
-				mediaPlayer2.setMediaPlayer(null)
-			}
+			getChildren.remove(mediaViews(mediaPlayer))
 		}
 	}
 
@@ -63,12 +60,18 @@ class ContentPlayerViewController extends NVC {
 	}
 
 	def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
-		mediaPlayers.foreach(view => view.showMediaPlayer(mediaPlayer))
+		val iterator = this.mediaPlayers.iterator
+		while (iterator.hasNext) {
+			val mediaPlayerStack = iterator.next()
+			mediaPlayerStack.showMediaPlayer(mediaPlayer)
+		}
 	}
 
 	def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
-		for (view <- this.mediaPlayers) {
-			view.disconnectMediaPlayer(mediaPlayer)
+		val iterator = this.mediaPlayers.iterator
+		while (iterator.hasNext) {
+			val mediaPlayerStack = iterator.next()
+			mediaPlayerStack.disconnectMediaPlayer(mediaPlayer)
 		}
 	}
 

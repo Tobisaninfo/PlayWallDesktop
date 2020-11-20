@@ -46,7 +46,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer)
 
 			_durationProperty.unbind()
+			_durationProperty.set(Duration.ZERO)
 			_positionProperty.unbind()
+			_positionProperty.set(Duration.ZERO)
 		}
 	}
 
@@ -137,14 +139,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
-
 			if (!getPad.getPadSettings.isLoop) {
-				if (shouldShowLastFrame()) {
-					return
+				if (!shouldShowLastFrame()) {
+					getPad.setEof(true)
+					getPad.setStatus(PadStatus.STOP)
 				}
-
-				getPad.setEof(true)
-				getPad.setStatus(PadStatus.STOP)
 			}
 			else { // Loop
 				mediaPlayer.seek(Duration.ZERO)
