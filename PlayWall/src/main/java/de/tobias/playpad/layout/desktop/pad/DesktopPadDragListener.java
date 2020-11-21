@@ -7,6 +7,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.PlaylistAppendable;
 import de.tobias.playpad.pad.drag.PadDragMode;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.Profile;
@@ -146,7 +147,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 			final PadContentFactory connect = fileHud.getSelectedConnect();
 			if (connect != null) {
 				// stop pad if playing
-				if(currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
+				if (currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
 					currentPad.getContent().stop();
 					currentPad.stop();
 				}
@@ -159,7 +160,11 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 					currentPad.getController().getView().showBusyView(true);
 				}
 
-				this.currentPad.setPath(file.toPath());
+				if (currentPad.getContent() instanceof PlaylistAppendable) {
+					this.currentPad.addPath(file.toPath());
+				} else {
+					this.currentPad.setPath(file.toPath());
+				}
 
 				if (currentPad.getController() != null) {
 					final IPadView padView = currentPad.getController().getView();

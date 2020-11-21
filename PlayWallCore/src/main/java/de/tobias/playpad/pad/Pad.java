@@ -350,6 +350,10 @@ public class Pad {
 		addPath(mediaPath);
 	}
 
+	public void addPath(Path path) {
+		createMediaPath(path);
+	}
+
 	public void addPath(MediaPath mediaPath) {
 		mediaPaths.add(mediaPath);
 

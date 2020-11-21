@@ -3,8 +3,8 @@ package de.tobias.playpad.plugin.content.pad
 import java.nio.file.Files
 import java.util
 
-import de.tobias.playpad.pad.content.PadContent
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
+import de.tobias.playpad.pad.content.{PadContent, PlaylistAppendable}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
@@ -18,7 +18,7 @@ import javafx.util.Duration
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
-class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable {
+class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with PlaylistAppendable {
 
 	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
 		def play(): Unit = {
@@ -49,6 +49,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 				mediaPlayers(currentRunningIndex + 1).play()
 			} else if (getPad.getPadSettings.isLoop) {
 				mediaPlayers.head.play()
+			} else {
+				getPad.setStatus(PadStatus.STOP)
 			}
 		}
 
@@ -92,20 +94,23 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def stop(): Boolean = {
 		isPause = false
-		if (shouldShowLastFrame() && getPad.isEof && !showingLastFrame && !pad.getPadSettings.isLoop) {
+		mediaPlayers(currentRunningIndex).stop()
+		true
+	}
+
+	def onEof(): Unit = {
+		if (shouldShowLastFrame() && !showingLastFrame && !pad.getPadSettings.isLoop) {
 			getPad.setStatus(PadStatus.PAUSE)
 			showingLastFrame = true
-			return false
+			return
 		}
 
 		showingLastFrame = false
 
-		if (getPad.isEof && !pad.getPadSettings.isLoop) {
+		if (getPad.isEof) {
 			mediaPlayers(currentRunningIndex).next()
-			return false
+			return
 		}
-		mediaPlayers(currentRunningIndex).stop()
-		true
 	}
 
 	/*
@@ -164,15 +169,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
-			if (!getPad.getPadSettings.isLoop) {
-				if (!shouldShowLastFrame()) {
-					getPad.setEof(true)
-					getPad.setStatus(PadStatus.STOP)
-				}
-			}
-			else { // Loop
+			if (getPad.getPadSettings.isLoop) {
 				mediaPlayer.seek(Duration.ZERO)
 				mediaPlayer.play()
+			} else { // Loop
+				getPad.setEof(true)
+				onEof()
 			}
 		})
 
