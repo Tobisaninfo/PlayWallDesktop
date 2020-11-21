@@ -4,7 +4,7 @@ import java.nio.file.Files
 import java.util
 
 import de.tobias.playpad.pad.content.PadContent
-import de.tobias.playpad.pad.content.play.Durationable
+import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
@@ -18,7 +18,7 @@ import javafx.util.Duration
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
-class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Durationable {
+class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable {
 
 	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
 		def play(): Unit = {
@@ -31,6 +31,14 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 			mediaPlayer.play()
 			currentRunningIndex = mediaPlayers.indexOf(this)
+		}
+
+		def resume(): Unit = {
+			mediaPlayer.play()
+		}
+
+		def pause(): Unit = {
+			mediaPlayer.pause()
 		}
 
 		def next(): Unit = {
@@ -62,16 +70,28 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private val _positionProperty = new SimpleObjectProperty[Duration]
 
 	private var showingLastFrame: Boolean = false
+	private var isPause: Boolean = false
 
 	override def getType: String = `type`
 
 	override def play(): Unit = {
-		getPad.setEof(false)
-		mediaPlayers.head.play()
+		if (isPause) {
+			mediaPlayers(currentRunningIndex).resume()
+		} else {
+			getPad.setEof(false)
+			mediaPlayers.head.play()
+		}
 		showingLastFrame = false
+		isPause = false
+	}
+
+	override def pause(): Unit = {
+		isPause = true
+		mediaPlayers(currentRunningIndex).pause()
 	}
 
 	override def stop(): Boolean = {
+		isPause = false
 		if (shouldShowLastFrame() && getPad.isEof && !showingLastFrame && !pad.getPadSettings.isLoop) {
 			getPad.setStatus(PadStatus.PAUSE)
 			showingLastFrame = true

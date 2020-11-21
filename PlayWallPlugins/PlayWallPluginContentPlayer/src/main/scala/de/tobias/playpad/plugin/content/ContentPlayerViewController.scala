@@ -32,7 +32,9 @@ class ContentPlayerViewController extends NVC {
 
 			val mediaView = mediaViews(mediaPlayer)
 
-			getChildren.add(mediaView)
+			if (!getChildren.contains(mediaView)) {
+				getChildren.add(mediaView)
+			}
 		}
 
 		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
