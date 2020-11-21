@@ -108,6 +108,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 * Load media files.
 	 */
 	override def loadMedia(): Unit = {
+		getPad.getPaths.forEach(loadMedia(_))
 	}
 
 	/**
