@@ -18,6 +18,7 @@ import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
 import de.tobias.playpad.update.VersionUpdater;
+import de.tobias.playpad.util.ListSerializer;
 import de.tobias.playpad.util.UUIDSerializer;
 import de.tobias.playpad.viewcontroller.SplashScreenViewController;
 import io.github.openunirest.http.Unirest;
@@ -36,6 +37,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -65,6 +67,7 @@ public class PlayPadMain extends Application {
 
 		// Register UserDefaults Serializer
 		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
+		UserDefaults.registerLoader(new ListSerializer(), List.class);
 
 		ApplicationUtils.addAppListener(PlayPadMain::applicationWillStart);
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
