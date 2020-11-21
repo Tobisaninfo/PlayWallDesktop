@@ -38,6 +38,7 @@ public class DesktopPadView implements IPadView {
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
+	private Label playlistLabel;
 	private Label errorLabel;
 
 	private HBox infoBox;
@@ -86,6 +87,8 @@ public class DesktopPadView implements IPadView {
 
 		triggerLabel = new Label();
 		triggerLabel.setGraphic(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+
+		playlistLabel = new Label();
 
 		errorLabel = new Label();
 		errorLabel.setGraphic(new FontIcon(FontAwesomeType.WARNING));
@@ -219,6 +222,7 @@ public class DesktopPadView implements IPadView {
 		cueInLayer.pseudoClassStateChanged(pseudoClass, active);
 		indexLabel.pseudoClassStateChanged(pseudoClass, active);
 		timeLabel.pseudoClassStateChanged(pseudoClass, active);
+		playlistLabel.pseudoClassStateChanged(pseudoClass, active);
 		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 		triggerLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
 		errorLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
@@ -278,8 +282,19 @@ public class DesktopPadView implements IPadView {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	void
-	setTime(String time) {
+	void clearPlaylistLabel() {
+		playlistLabel.setText("");
+	}
+
+	void setPlaylistIndex(int current, int count) {
+		if (current < 0) {
+			playlistLabel.setText("- / " + count);
+		} else {
+			playlistLabel.setText((current + 1) + " / " + count);
+		}
+	}
+
+	void setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
 		} else {
@@ -304,7 +319,7 @@ public class DesktopPadView implements IPadView {
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 			}
 		}
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		// Buttons unten Full Width
 		buttonBox.prefWidthProperty().bind(superRoot.widthProperty());
@@ -331,6 +346,7 @@ public class DesktopPadView implements IPadView {
 		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
 		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
 		loopLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
+		playlistLabel.getStyleClass().addAll("pad-playlist", "pad" + index + "-playlist", "pad-info", "pad" + index + "-info");
 		triggerLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
 		errorLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
 
@@ -362,6 +378,7 @@ public class DesktopPadView implements IPadView {
 		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		loopLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
+		playlistLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
 		triggerLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 		errorLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
 

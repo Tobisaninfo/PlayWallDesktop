@@ -4,7 +4,7 @@ import java.nio.file.Files
 import java.util
 
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
-import de.tobias.playpad.pad.content.{PadContent, PlaylistAppendable}
+import de.tobias.playpad.pad.content.{PadContent, Playlistable}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
@@ -18,7 +18,7 @@ import javafx.util.Duration
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
-class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with PlaylistAppendable {
+class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable {
 
 	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
 		def play(): Unit = {
@@ -31,6 +31,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 			mediaPlayer.play()
 			currentRunningIndex = mediaPlayers.indexOf(this)
+
+			val controller = getPad.getController
+			if (controller != null) {
+				controller.updatePlaylistLabel()
+			}
 		}
 
 		def resume(): Unit = {
@@ -66,7 +71,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	private val mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
-	private var currentRunningIndex: Int = 0
+	private var currentRunningIndex: Int = -1
 
 	private val _durationProperty = new SimpleObjectProperty[Duration]
 	private val _positionProperty = new SimpleObjectProperty[Duration]
@@ -75,6 +80,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private var isPause: Boolean = false
 
 	override def getType: String = `type`
+
+	override def currentPlayingMediaIndex(): Int = currentRunningIndex
 
 	override def play(): Unit = {
 		if (isPause) {
@@ -95,6 +102,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	override def stop(): Boolean = {
 		isPause = false
 		mediaPlayers(currentRunningIndex).stop()
+		currentRunningIndex = -1
+
+		val controller = getPad.getController
+		if (controller != null) {
+			controller.updatePlaylistLabel()
+		}
+
 		true
 	}
 

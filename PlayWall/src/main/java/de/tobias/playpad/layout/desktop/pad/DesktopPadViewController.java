@@ -13,6 +13,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
@@ -42,14 +43,14 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	public static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
-	private DesktopPadView padView;
+	private final DesktopPadView padView;
 	private Pad pad;
 
-	private PadLockedListener padLockedListener;
-	private PadStatusListener padStatusListener;
-	private PadContentListener padContentListener;
-	private PadDurationListener padDurationListener;
-	private IPadPositionListener padPositionListener;
+	private final PadLockedListener padLockedListener;
+	private final PadStatusListener padStatusListener;
+	private final PadContentListener padContentListener;
+	private final PadDurationListener padDurationListener;
+	private final IPadPositionListener padPositionListener;
 
 	private DesktopPadDragListener padDragListener;
 
@@ -95,6 +96,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
+			updatePlaylistLabel();
+
 			// Update Listener
 			padContentListener.setPad(pad);
 			padPositionListener.setPad(pad);
@@ -126,6 +129,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.clearPreviewContentView();
 			padView.clearTimeLabel();
 			padView.setTriggerLabelActive(false);
+			padView.clearPlaylistLabel();
 			padView.loopLabelVisibleProperty().unbind();
 
 			// Remove Bindings & Listener
@@ -401,6 +405,14 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getStopButton().setDisable(true);
 			padView.getNewButton().setDisable(true);
 			padView.getSettingsButton().setDisable(true);
+		}
+	}
+
+	public void updatePlaylistLabel() {
+		if (pad.getContent() instanceof Playlistable) {
+			padView.setPlaylistIndex(((Playlistable) pad.getContent()).currentPlayingMediaIndex(), pad.getPaths().size());
+		} else {
+			padView.clearPlaylistLabel();
 		}
 	}
 

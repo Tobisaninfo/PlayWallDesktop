@@ -210,6 +210,11 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 	}
 
 	@Override
+	public void updatePlaylistLabel() {
+		// TODO
+	}
+
+	@Override
 	public IPadPositionListener getPadPositionListener() {
 		return padPositionListener;
 	}
