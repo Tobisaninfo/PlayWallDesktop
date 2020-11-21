@@ -183,13 +183,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
-			if (getPad.getPadSettings.isLoop) {
-				mediaPlayer.seek(Duration.ZERO)
-				mediaPlayer.play()
-			} else { // Loop
-				getPad.setEof(true)
-				onEof()
-			}
+			getPad.setEof(true)
+			onEof()
 		})
 
 		mediaPlayers.addOne(new MediaPlayerContainer(mediaPath, mediaPlayer))
