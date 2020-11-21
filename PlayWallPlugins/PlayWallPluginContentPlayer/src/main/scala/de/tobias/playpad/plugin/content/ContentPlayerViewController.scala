@@ -27,7 +27,10 @@ class ContentPlayerViewController extends NVC {
 
 		def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 			if (!mediaViews.contains(mediaPlayer)) {
-				mediaViews.put(mediaPlayer, new MediaView(mediaPlayer))
+				val mediaView = new MediaView(mediaPlayer)
+				mediaView.setFitWidth(playerInstance.width)
+				mediaView.setFitHeight(playerInstance.height)
+				mediaViews.put(mediaPlayer, mediaView)
 			}
 
 			val mediaView = mediaViews(mediaPlayer)
