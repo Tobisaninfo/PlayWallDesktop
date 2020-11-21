@@ -22,4 +22,5 @@ object ContentPlayerPadContentFactory {
 	private val FILE_EXTENSION = Array("*.mp4", "*.mov")
 
 	val lastFrame = "ContentLastFrame"
+	val zones = "zones"
 }

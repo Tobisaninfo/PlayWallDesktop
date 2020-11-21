@@ -37,7 +37,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /*
@@ -67,7 +67,7 @@ public class PlayPadMain extends Application {
 
 		// Register UserDefaults Serializer
 		UserDefaults.registerLoader(new UUIDSerializer(), UUID.class);
-		UserDefaults.registerLoader(new ListSerializer(), List.class);
+		UserDefaults.registerLoader(new ListSerializer(), ArrayList.class);
 
 		ApplicationUtils.addAppListener(PlayPadMain::applicationWillStart);
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);

@@ -1,12 +1,14 @@
 package de.tobias.playpad.plugin.content.pad
 
 import java.nio.file.Files
+import java.util
 
 import de.tobias.playpad.pad.content.PadContent
 import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
+import de.tobias.playpad.plugin.content.settings.PlayerInstance
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
 import javafx.beans.property.{ReadOnlyObjectProperty, SimpleObjectProperty}
@@ -14,6 +16,7 @@ import javafx.scene.media.{Media, MediaPlayer}
 import javafx.util.Duration
 
 import scala.collection.mutable.ListBuffer
+import scala.jdk.CollectionConverters._
 
 class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Durationable {
 
@@ -24,7 +27,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 			mediaPlayer.seek(Duration.ZERO)
 
-			ContentPluginMain.playerViewController.showMediaPlayer(mediaPlayer)
+			ContentPluginMain.playerViewController.showMediaPlayer(mediaPlayer, getSelectedZones)
 
 			mediaPlayer.play()
 			currentRunningIndex = mediaPlayers.indexOf(this)
@@ -43,7 +46,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 		def stop(): Unit = {
 			mediaPlayer.stop()
-			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer)
+			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer, getSelectedZones)
 
 			_durationProperty.unbind()
 			_durationProperty.set(Duration.ZERO)
@@ -202,5 +205,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	def shouldShowLastFrame(): Boolean = {
 		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
+	}
+
+	def getSelectedZones: Seq[PlayerInstance] = {
+		val customSettings = pad.getPadSettings.getCustomSettings
+		val selectedZoneNames = customSettings.getOrDefault(ContentPlayerPadContentFactory.zones, new util.ArrayList[String]()).asInstanceOf[util.List[PlayerInstance]]
+		ContentPluginMain.configuration.instances.asScala.filter(zone => selectedZoneNames.contains(zone.getName)).toSeq
 	}
 }

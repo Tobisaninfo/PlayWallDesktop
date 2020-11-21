@@ -38,4 +38,7 @@ class PlayerInstance extends Displayable {
 		_displayProperty.set(name)
 		_displayProperty
 	}
+
+
+	override def toString: String = name
 }

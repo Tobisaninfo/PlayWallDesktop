@@ -6,13 +6,13 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSerializer implements UserDefaults.Serializer<List> {
+public class ListSerializer implements UserDefaults.Serializer<ArrayList> {
 
 	private static final String LIST_ITEM = "item";
 
 	@Override
-	public List get(Element element) {
-		List<Object> list = new ArrayList<>();
+	public ArrayList get(Element element) {
+		ArrayList<Object> list = new ArrayList<>();
 		for (Element child : element.elements(LIST_ITEM)) {
 			final Object o = UserDefaults.loadElement(child);
 			list.add(o);

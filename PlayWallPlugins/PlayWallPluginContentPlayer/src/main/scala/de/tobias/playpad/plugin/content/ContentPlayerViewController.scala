@@ -3,7 +3,7 @@ package de.tobias.playpad.plugin.content
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.ui.NVC
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
-import de.tobias.playpad.plugin.content.settings.PlayerInstanceConfiguration
+import de.tobias.playpad.plugin.content.settings.{PlayerInstance, PlayerInstanceConfiguration}
 import javafx.geometry.Insets
 import javafx.scene.layout._
 import javafx.scene.media.{MediaPlayer, MediaView}
@@ -16,14 +16,14 @@ import scala.collection.mutable.ListBuffer
 @IgnoreStageSizing
 class ContentPlayerViewController extends NVC {
 
-	private class MediaPlayerStack(val x: Double, val y: Double, val width: Double, val height: Double) extends StackPane {
+	private class MediaPlayerStack(val playerInstance: PlayerInstance) extends StackPane {
 
 		val mediaViews: mutable.Map[MediaPlayer, MediaView] = new mutable.HashMap[MediaPlayer, MediaView]()
 
-		setLayoutX(x)
-		setLayoutY(y)
-		setWidth(width)
-		setHeight(height)
+		setLayoutX(playerInstance.x)
+		setLayoutY(playerInstance.y)
+		setWidth(playerInstance.width)
+		setHeight(playerInstance.height)
 
 		def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 			if (!mediaViews.contains(mediaPlayer)) {
@@ -59,26 +59,30 @@ class ContentPlayerViewController extends NVC {
 		stage.getScene.setFill(Color.BLACK)
 	}
 
-	def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
+	def showMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
 		val iterator = this.mediaPlayers.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
-			mediaPlayerStack.showMediaPlayer(mediaPlayer)
+			if (zones.contains(mediaPlayerStack.playerInstance)) {
+				mediaPlayerStack.showMediaPlayer(mediaPlayer)
+			}
 		}
 	}
 
-	def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
+	def disconnectMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
 		val iterator = this.mediaPlayers.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
-			mediaPlayerStack.disconnectMediaPlayer(mediaPlayer)
+			if (zones.contains(mediaPlayerStack.playerInstance)) {
+				mediaPlayerStack.disconnectMediaPlayer(mediaPlayer)
+			}
 		}
 	}
 
 	def configurePlayers(configuration: PlayerInstanceConfiguration): Unit = {
 		mediaPlayers.clear()
 		configuration.instances.forEach(player => {
-			mediaPlayers.addOne(new MediaPlayerStack(player.x, player.y, player.width, player.height))
+			mediaPlayers.addOne(new MediaPlayerStack(player))
 		})
 
 		val parent = getParent.asInstanceOf[Pane]
