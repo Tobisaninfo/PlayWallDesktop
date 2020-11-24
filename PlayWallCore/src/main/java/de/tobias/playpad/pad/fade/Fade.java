@@ -11,10 +11,10 @@ import javafx.util.Duration;
  */
 public class Fade {
 
-	private FadeDelegate fadeDelegate;
-	private Transition currentFadeTransition;
+	private static final double VELOCITY = 1;
 
-	private double velocity = 1;
+	private final FadeDelegate fadeDelegate;
+	private Transition currentFadeTransition;
 
 	public Fade(FadeDelegate fadeDelegate) {
 		this.fadeDelegate = fadeDelegate;
@@ -60,10 +60,10 @@ public class Fade {
 			protected void interpolate(double frac) {
 				double diff = Math.abs(to - from);
 				if (from < to) { // Fade In
-					double fade = fadeInVolumeMultiplier(frac, velocity);
+					double fade = fadeInVolumeMultiplier(frac);
 					fadeDelegate.onFadeLevelChange(from + fade * diff);
 				} else { // Fade Out
-					double fade = fadeOutVolumeMultiplier(frac, velocity);
+					double fade = fadeOutVolumeMultiplier(frac);
 					double newValue = to + fade * diff;
 					fadeDelegate.onFadeLevelChange(newValue);
 				}
@@ -79,12 +79,12 @@ public class Fade {
 		currentFadeTransition.play();
 	}
 
-	private double fadeInVolumeMultiplier(double time, double velocity) {
-		return Math.pow(Math.E, velocity * (time - 1)) * time;
+	private double fadeInVolumeMultiplier(double time) {
+		return Math.pow(Math.E, VELOCITY * (time - 1)) * time;
 	}
 
-	private double fadeOutVolumeMultiplier(double time, double velocity) {
-		return Math.pow(Math.E, -velocity * time) * (1 - time);
+	private double fadeOutVolumeMultiplier(double time) {
+		return Math.pow(Math.E, -VELOCITY * time) * (1 - time);
 	}
 
 }

@@ -8,7 +8,7 @@ import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.FadeSettings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -66,7 +66,7 @@ public class ProfileSettings {
 	private boolean windowAlwaysOnTop = false;
 
 	@Key
-	private Fade fade = new Fade();
+	private FadeSettings fade = new FadeSettings();
 	@Key
 	private TimeMode playerTimeDisplayMode = TimeMode.REST;
 
@@ -115,7 +115,7 @@ public class ProfileSettings {
 		return windowAlwaysOnTop;
 	}
 
-	public Fade getFade() {
+	public FadeSettings getFade() {
 		return fade;
 	}
 
@@ -168,7 +168,7 @@ public class ProfileSettings {
 		this.windowAlwaysOnTop = windowAlwaysOnTop;
 	}
 
-	public void setFade(Fade fade) {
+	public void setFade(FadeSettings fade) {
 		this.fade = fade;
 	}
 
@@ -247,7 +247,7 @@ public class ProfileSettings {
 			}
 
 			if (root.element(FADE_ELEMENT) != null) {
-				Fade fade = Fade.load(root.element(FADE_ELEMENT));
+				FadeSettings fade = FadeSettings.load(root.element(FADE_ELEMENT));
 				profileSettings.setFade(fade);
 			}
 
