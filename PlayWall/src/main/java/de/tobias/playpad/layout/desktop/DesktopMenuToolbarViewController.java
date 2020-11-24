@@ -66,6 +66,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -756,6 +757,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		NotificationPane pane = mainViewController.getNotificationPane();
 		pane.setOnShown(e -> searchField.requestFocus());
 		pane.show("", box);
+
+		searchField.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.ESCAPE) {
+				pane.hide();
+			}
+		});
 	}
 
 	@FXML
