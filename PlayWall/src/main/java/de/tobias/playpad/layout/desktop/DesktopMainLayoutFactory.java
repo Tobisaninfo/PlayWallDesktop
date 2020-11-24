@@ -21,9 +21,9 @@ import java.util.Deque;
 public class DesktopMainLayoutFactory extends MainLayoutFactory {
 
 	private DesktopMenuToolbarViewController desktopMenuToolbarViewController;
-	private ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
+	private final ObjectProperty<DesktopEditMode> editMode = new SimpleObjectProperty<>(DesktopEditMode.PLAY);
 
-	private Deque<IPadView> recyclingStack;
+	private final Deque<IPadView> recyclingStack;
 
 	public DesktopMainLayoutFactory(String type) {
 		super(type);

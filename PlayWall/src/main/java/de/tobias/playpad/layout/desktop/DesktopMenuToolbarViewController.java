@@ -157,7 +157,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private transient DesktopColorPickerView colorPickerView;
 	private transient PadRemoveMouseListener padRemoveMouseListener;
 
-	private DesktopMainLayoutFactory connect;
+	private final DesktopMainLayoutFactory connect;
 
 	DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
 		super("Header", "view/main/desktop", Localization.getBundle());
