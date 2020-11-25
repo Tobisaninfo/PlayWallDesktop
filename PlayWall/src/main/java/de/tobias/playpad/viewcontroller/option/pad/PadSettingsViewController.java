@@ -10,16 +10,14 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
-import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -28,13 +26,11 @@ import java.util.List;
 
 public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
-	private Pad pad;
+	private final Pad pad;
 
 	@FXML
 	private TabPane tabPane;
-	private List<PadSettingsTabViewController> tabs = new ArrayList<>();
-
-	private Control pathLookupButton;
+	private final List<PadSettingsTabViewController> tabs = new ArrayList<>();
 
 	@FXML
 	private Button finishButton;
@@ -50,21 +46,19 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 
 		if (pad.getContent() != null) {
 			try {
-				// Get Pad Type specific tab
-				String type = pad.getContent().getType();
-				PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
+				final String type = pad.getContent().getType();
+				final PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
-				PadContentFactory padContentFactory = registry.getFactory(type);
-				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
+				final PadContentFactory padContentFactory = registry.getFactory(type);
+				final PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
 
-				if (contentTab != null)
+				if (contentTab != null) {
 					addTab(contentTab);
+				}
 			} catch (NoSuchComponentException e) {
 				Logger.error(e);
 			}
 		}
-
-		setupPathLookupButton();
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
@@ -76,44 +70,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		setTitle(pad);
 	}
 
-	private void setupPathLookupButton() {
-		PathLookupListener pathLookupListener = new PathLookupListener();
-
-		if (pad.getContent() != null) {
-			final ObservableList<MediaPath> paths = pad.getPaths();
-			if (paths.size() == 1) {
-				Button button = new Button(Localization.getString("padSettings.button.path"));
-
-				MediaPath path = paths.get(0);
-				button.setUserData(path);
-				button.setOnAction(pathLookupListener);
-
-				pathLookupButton = button;
-			} else if (paths.size() > 1) {
-				MenuButton button = new MenuButton(Localization.getString("padSettings.button.path"));
-
-				for (MediaPath path : paths) {
-					MenuItem item = new MenuItem(path.getFileName());
-					button.getItems().add(item);
-
-					item.setUserData(path);
-					item.setOnAction(pathLookupListener);
-				}
-
-				pathLookupButton = button;
-			}
-
-			Parent parent = getParent();
-			if (parent instanceof AnchorPane && pathLookupButton != null) {
-				AnchorPane anchorPane = (AnchorPane) parent;
-				anchorPane.getChildren().add(pathLookupButton);
-
-				AnchorPane.setLeftAnchor(pathLookupButton, 14.0);
-				AnchorPane.setBottomAnchor(pathLookupButton, 14.0);
-			}
-		}
-	}
-
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
@@ -122,11 +78,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
-	}
-
-	@Override
-	public void init() {
-
 	}
 
 	@Override
