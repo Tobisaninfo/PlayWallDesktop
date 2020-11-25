@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.Consumer;
 
-// COMMENT PadContentFactory
 public abstract class PadContentFactory extends Component implements Comparable<PadContentFactory> {
 
 	public interface PadContentTypeChooser {
