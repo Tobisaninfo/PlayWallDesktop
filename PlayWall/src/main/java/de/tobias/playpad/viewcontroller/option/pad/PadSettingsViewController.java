@@ -28,11 +28,11 @@ import java.util.List;
 
 public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
-	private Pad pad;
+	private final Pad pad;
 
 	@FXML
 	private TabPane tabPane;
-	private List<PadSettingsTabViewController> tabs = new ArrayList<>();
+	private final List<PadSettingsTabViewController> tabs = new ArrayList<>();
 
 	private Control pathLookupButton;
 
@@ -50,15 +50,15 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 
 		if (pad.getContent() != null) {
 			try {
-				// Get Pad Type specific tab
-				String type = pad.getContent().getType();
-				PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
+				final String type = pad.getContent().getType();
+				final PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 
-				PadContentFactory padContentFactory = registry.getFactory(type);
-				PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
+				final PadContentFactory padContentFactory = registry.getFactory(type);
+				final PadSettingsTabViewController contentTab = padContentFactory.getSettingsViewController(pad);
 
-				if (contentTab != null)
+				if (contentTab != null) {
 					addTab(contentTab);
+				}
 			} catch (NoSuchComponentException e) {
 				Logger.error(e);
 			}
@@ -77,7 +77,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	}
 
 	private void setupPathLookupButton() {
-		PathLookupListener pathLookupListener = new PathLookupListener();
+		final PathLookupListener pathLookupListener = new PathLookupListener();
 
 		if (pad.getContent() != null) {
 			final ObservableList<MediaPath> paths = pad.getPaths();
@@ -122,11 +122,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
 		}
 		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
-	}
-
-	@Override
-	public void init() {
-
 	}
 
 	@Override
