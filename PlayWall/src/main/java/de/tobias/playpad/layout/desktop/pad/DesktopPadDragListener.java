@@ -95,7 +95,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 					if (fileHud == null) {
 						fileHud = new FileDragOptionView(padView);
 					}
-					fileHud.showDropOptions(connects);
+					fileHud.showOptions(connects);
 
 					event.acceptTransferModes(TransferMode.LINK);
 					return;

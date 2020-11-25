@@ -10,16 +10,14 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
-import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -33,8 +31,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	@FXML
 	private TabPane tabPane;
 	private final List<PadSettingsTabViewController> tabs = new ArrayList<>();
-
-	private Control pathLookupButton;
 
 	@FXML
 	private Button finishButton;
@@ -64,8 +60,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 			}
 		}
 
-		setupPathLookupButton();
-
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);
 		nvcStage.addCloseHook(this::onFinish);
@@ -74,44 +68,6 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		// Show Current Settings
 		showCurrentSettings();
 		setTitle(pad);
-	}
-
-	private void setupPathLookupButton() {
-		final PathLookupListener pathLookupListener = new PathLookupListener();
-
-		if (pad.getContent() != null) {
-			final ObservableList<MediaPath> paths = pad.getPaths();
-			if (paths.size() == 1) {
-				Button button = new Button(Localization.getString("padSettings.button.path"));
-
-				MediaPath path = paths.get(0);
-				button.setUserData(path);
-				button.setOnAction(pathLookupListener);
-
-				pathLookupButton = button;
-			} else if (paths.size() > 1) {
-				MenuButton button = new MenuButton(Localization.getString("padSettings.button.path"));
-
-				for (MediaPath path : paths) {
-					MenuItem item = new MenuItem(path.getFileName());
-					button.getItems().add(item);
-
-					item.setUserData(path);
-					item.setOnAction(pathLookupListener);
-				}
-
-				pathLookupButton = button;
-			}
-
-			Parent parent = getParent();
-			if (parent instanceof AnchorPane && pathLookupButton != null) {
-				AnchorPane anchorPane = (AnchorPane) parent;
-				anchorPane.getChildren().add(pathLookupButton);
-
-				AnchorPane.setLeftAnchor(pathLookupButton, 14.0);
-				AnchorPane.setBottomAnchor(pathLookupButton, 14.0);
-			}
-		}
 	}
 
 	private void setTitle(Pad pad) {

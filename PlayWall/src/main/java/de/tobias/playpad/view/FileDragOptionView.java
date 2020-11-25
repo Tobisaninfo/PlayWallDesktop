@@ -17,13 +17,13 @@ import javafx.scene.text.TextAlignment;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class FileDragOptionView {
+public class FileDragOptionView implements PadContentFactory.PadContentTypeChooser {
 
-	private HBox optionPane;
-	private Pane parent;
+	private final HBox optionPane;
+	private final Pane parent;
 
-	private Transition inTransition;
-	private Transition outTransition;
+	private final Transition inTransition;
+	private final Transition outTransition;
 
 	public FileDragOptionView(Pane pane) {
 		parent = pane;
@@ -78,7 +78,7 @@ public class FileDragOptionView {
 
 	private PadContentFactory selectedConnect;
 
-	public void showDropOptions(Set<PadContentFactory> options) {
+	public void showOptions(Set<PadContentFactory> options) {
 		if (!parent.getChildren().contains(optionPane)) {
 			selectedConnect = null;
 
@@ -125,14 +125,16 @@ public class FileDragOptionView {
 
 	}
 
-	public void showDropOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
-		showDropOptions(options);
+	public void showOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
+		showOptions(options);
 
 		for (Node node : optionPane.getChildren()) {
 			if (node instanceof Label) {
 				Label label = (Label) node;
-				label.setOnMouseClicked(ev ->
-						onFinish.accept((PadContentFactory) label.getUserData()));
+				label.setOnMouseClicked(ev -> {
+					onFinish.accept((PadContentFactory) label.getUserData());
+					hide();
+				});
 				label.setOnMouseEntered(e ->
 						label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, true));
 				label.setOnMouseExited(e ->
