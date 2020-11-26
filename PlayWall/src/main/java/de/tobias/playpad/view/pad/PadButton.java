@@ -21,17 +21,8 @@ public class PadButton extends Button implements PadIndexable {
 		setOnAction(value);
 
 		indexProperty = new SimpleObjectProperty<>();
-		indexProperty.addListener((observable, oldValue, newValue) -> {
-			if (oldValue != null) {
-				getStyleClass().removeAll(STYLE_CLASS_PAD_BUTTON, replaceIndex(STYLE_CLASS_PAD_BUTTON_INDEX, oldValue));
-				getGraphic().getStyleClass().removeAll(STYLE_CLASS_PAD_ICON, replaceIndex(STYLE_CLASS_PAD_ICON_INDEX, oldValue));
-			}
-
-			if (newValue != null) {
-				getStyleClass().addAll(STYLE_CLASS_PAD_BUTTON, replaceIndex(STYLE_CLASS_PAD_BUTTON_INDEX, newValue));
-				getGraphic().getStyleClass().addAll(STYLE_CLASS_PAD_ICON, replaceIndex(STYLE_CLASS_PAD_ICON_INDEX, newValue));
-			}
-		});
+		indexProperty.addListener(new StyleIndexListener(this, STYLE_CLASS_PAD_BUTTON, STYLE_CLASS_PAD_BUTTON_INDEX));
+		indexProperty.addListener(new StyleIndexListener(getGraphic(), STYLE_CLASS_PAD_ICON, STYLE_CLASS_PAD_ICON_INDEX));
 	}
 
 	public PadIndex getIndex() {

@@ -6,11 +6,17 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Label;
 
-import static de.tobias.playpad.view.pad.PadStyleClasses.*;
+import static de.tobias.playpad.view.pad.PadStyleClasses.STYLE_CLASS_PAD_ICON;
+import static de.tobias.playpad.view.pad.PadStyleClasses.STYLE_CLASS_PAD_ICON_INDEX;
 
 public class PadLabel extends Label implements PadIndexable {
 
 	private final ObjectProperty<PadIndex> indexProperty;
+	private StyleIndexListener graphicsListener;
+
+	public static PadLabel empty(String... styleClasses) {
+		return new PadLabel("", styleClasses);
+	}
 
 	public PadLabel(FontIcon icon, String... styleClasses) {
 		this("", styleClasses);
@@ -21,25 +27,24 @@ public class PadLabel extends Label implements PadIndexable {
 		super(text);
 
 		indexProperty = new SimpleObjectProperty<>();
-		indexProperty.addListener((observable, oldValue, newValue) -> {
-			if (oldValue != null) {
-				for (String styleClass : styleClasses) {
-					getStyleClass().remove(PadStyleClasses.replaceIndex(styleClass, oldValue));
-				}
-				if (getGraphic() != null) {
-					getGraphic().getStyleClass().removeAll(STYLE_CLASS_PAD_ICON, replaceIndex(STYLE_CLASS_PAD_ICON_INDEX, oldValue));
-				}
-			}
+		indexProperty.addListener(new StyleIndexListener(this, styleClasses));
+		initStyleGraphicsListener();
 
-			if (newValue != null) {
-				for (String styleClass : styleClasses) {
-					getStyleClass().add(PadStyleClasses.replaceIndex(styleClass, newValue));
-				}
-				if (getGraphic() != null) {
-					getGraphic().getStyleClass().addAll(STYLE_CLASS_PAD_ICON, replaceIndex(STYLE_CLASS_PAD_ICON_INDEX, newValue));
-				}
+		graphicProperty().addListener(observable -> {
+			if (graphicsListener != null) {
+				indexProperty.removeListener(graphicsListener);
+				graphicsListener = null;
+
+				initStyleGraphicsListener();
 			}
 		});
+	}
+
+	private void initStyleGraphicsListener() {
+		if (getGraphic() != null) {
+			graphicsListener = new StyleIndexListener(getGraphic(), STYLE_CLASS_PAD_ICON, STYLE_CLASS_PAD_ICON_INDEX);
+			indexProperty.addListener(graphicsListener);
+		}
 	}
 
 	public PadIndex getIndex() {
