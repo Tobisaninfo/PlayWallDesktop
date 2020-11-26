@@ -21,8 +21,10 @@ import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
+import de.tobias.playpad.util.NodeWalker;
 import de.tobias.playpad.view.EmptyPadView;
 import de.tobias.playpad.view.PseudoClasses;
+import de.tobias.playpad.view.pad.*;
 import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
@@ -33,12 +35,13 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import static de.tobias.playpad.view.pad.PadStyleClasses.*;
+
 public class DesktopPadView implements IPadView {
 
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
-	private Label playlistLabel;
 	private Label errorLabel;
 
 	private HBox infoBox;
@@ -61,10 +64,10 @@ public class DesktopPadView implements IPadView {
 	private VBox root;
 	private BusyView busyView;
 
-	private VBox cueInContainer;
 	private Label cueInLayer;
 
-	private transient DesktopPadViewController controller; // Reference to its controller
+	// Reference to its controller
+	private final transient DesktopPadViewController controller;
 
 	public DesktopPadView(DesktopMainLayoutFactory connect) {
 		controller = new DesktopPadViewController(this, connect);
@@ -72,33 +75,24 @@ public class DesktopPadView implements IPadView {
 	}
 
 	private void setupView() {
-		superRoot = new StackPane();
-		root = new VBox();
+		superRoot = new PadStackPane(STYLE_CLASS_PAD, STYLE_CLASS_PAD_INDEX);
+		root = new PadVBox(STYLE_CLASS_PAD_BUTTON_ROOT);
 		busyView = new BusyView(superRoot);
 
-		cueInLayer = new Label();
+		cueInLayer = PadLabel.empty(STYLE_CLASS_PAD_CUE_IN, STYLE_CLASS_PAD_CUE_IN_INDEX);
 		cueInLayer.prefHeightProperty().bind(root.heightProperty());
-		cueInContainer = new VBox(cueInLayer);
+		VBox cueInContainer = new VBox(cueInLayer);
 
-		indexLabel = new Label();
+		indexLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
+		timeLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 
-		loopLabel = new Label(); // Active über Visible
-		loopLabel.setGraphic(new FontIcon(FontAwesomeType.REPEAT));
+		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT));
+		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.WARNING));
 
-		triggerLabel = new Label();
-		triggerLabel.setGraphic(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+		infoBox = new PadHBox(5);
 
-		playlistLabel = new Label();
-
-		errorLabel = new Label();
-		errorLabel.setGraphic(new FontIcon(FontAwesomeType.WARNING));
-
-		timeLabel = new Label();
-
-		infoBox = new HBox(); // childern in addDefaultButton()
-		infoBox.setSpacing(5);
-
-		preview = new HBox();
+		preview = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
 		HBox.setHgrow(preview, Priority.ALWAYS);
 		VBox.setVgrow(preview, Priority.ALWAYS);
 
@@ -106,25 +100,15 @@ public class DesktopPadView implements IPadView {
 		timeLabel.setMaxWidth(Double.MAX_VALUE);
 		timeLabel.setAlignment(Pos.CENTER_RIGHT);
 
-		playBar = new ProgressBar(0);
+		playBar = new PadProgressBar(0, STYLE_CLASS_PAD_PLAYBAR, STYLE_CLASS_PAD_PLAYBAR_INDEX);
 		playBar.prefWidthProperty().bind(root.widthProperty());
 
 		// Buttons
-		playButton = new Button("", new FontIcon(FontAwesomeType.PLAY));
-		playButton.setFocusTraversable(false);
-		playButton.setOnAction(controller);
-		pauseButton = new Button("", new FontIcon(FontAwesomeType.PAUSE));
-		pauseButton.setFocusTraversable(false);
-		pauseButton.setOnAction(controller);
-		stopButton = new Button("", new FontIcon(FontAwesomeType.STOP));
-		stopButton.setFocusTraversable(false);
-		stopButton.setOnAction(controller);
-		newButton = new Button("", new FontIcon(FontAwesomeType.FOLDER_OPEN));
-		newButton.setFocusTraversable(false);
-		newButton.setOnAction(controller);
-		settingsButton = new Button("", new FontIcon(FontAwesomeType.GEAR));
-		settingsButton.setFocusTraversable(false);
-		settingsButton.setOnAction(controller);
+		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), controller);
+		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), controller);
+		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), controller);
+		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), controller);
+		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR), controller);
 
 		// Not Found Label
 		notFoundLabel = new FontIcon(FontAwesomeType.EXCLAMATION_TRIANGLE);
@@ -132,11 +116,10 @@ public class DesktopPadView implements IPadView {
 		notFoundLabel.setOpacity(0.75);
 		notFoundLabel.setSize(80);
 		notFoundLabel.setMouseTransparent(true);
-
 		notFoundLabel.setVisible(false);
 
 		// Button HBOX
-		buttonBox = new HBox(); // childern in addDefaultButton()
+		buttonBox = new PadHBox(STYLE_CLASS_PAD_BUTTON_BOX);
 
 		root.getChildren().addAll(infoBox, preview, playBar, buttonBox);
 		superRoot.getChildren().addAll(cueInContainer, root, notFoundLabel);
@@ -165,8 +148,6 @@ public class DesktopPadView implements IPadView {
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
-					node.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
-
 					// Copy Pseudoclasses
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
 						node.pseudoClassStateChanged(pseudoClass, true);
@@ -180,11 +161,6 @@ public class DesktopPadView implements IPadView {
 			}
 		}
 		EmptyPadView view = new EmptyPadView(preview);
-		if (pad != null) {
-			view.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
-		} else {
-			view.getStyleClass().addAll("pad-title");
-		}
 		preview.getChildren().setAll(view);
 	}
 
@@ -212,32 +188,10 @@ public class DesktopPadView implements IPadView {
 		this.indexLabel.setText(text);
 	}
 
-	ProgressBar getPlayBar() {
-		return playBar;
-	}
-
 	@Override
 	public void pseudoClassState(PseudoClass pseudoClass, boolean active) {
-		superRoot.pseudoClassStateChanged(pseudoClass, active);
-		cueInLayer.pseudoClassStateChanged(pseudoClass, active);
-		indexLabel.pseudoClassStateChanged(pseudoClass, active);
-		timeLabel.pseudoClassStateChanged(pseudoClass, active);
-		playlistLabel.pseudoClassStateChanged(pseudoClass, active);
-		loopLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		triggerLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		errorLabel.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-
-		if (preview != null) {
-			preview.getChildren().forEach(i -> i.pseudoClassStateChanged(pseudoClass, active));
-		}
-
-		playBar.pseudoClassStateChanged(pseudoClass, active);
-
-		playButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		pauseButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		stopButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		newButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
-		settingsButton.getGraphic().pseudoClassStateChanged(pseudoClass, active);
+		NodeWalker.getAllNodes(getRootNode())
+				.forEach(node -> node.pseudoClassStateChanged(pseudoClass, active));
 	}
 
 	@Override
@@ -282,18 +236,6 @@ public class DesktopPadView implements IPadView {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	void clearPlaylistLabel() {
-		playlistLabel.setText("");
-	}
-
-	void setPlaylistIndex(int current, int count) {
-		if (current < 0) {
-			playlistLabel.setText("- / " + count);
-		} else {
-			playlistLabel.setText((current + 1) + " / " + count);
-		}
-	}
-
 	void setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
@@ -308,18 +250,19 @@ public class DesktopPadView implements IPadView {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
 					if (pad.getStatus() == PadStatus.PLAY) {
-						buttonBox.getChildren().setAll(pauseButton, stopButton, newButton, settingsButton);
+						buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
 					} else {
-						buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+						buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 					}
 				} else {
-					buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+					buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				}
 			} else {
 				buttonBox.getChildren().setAll(newButton, settingsButton);
 			}
+			applyStyleClasses(pad.getPadIndex());
 		}
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
 
 		// Buttons unten Full Width
 		buttonBox.prefWidthProperty().bind(superRoot.widthProperty());
@@ -340,66 +283,18 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void applyStyleClasses(PadIndex index) {
-		superRoot.getStyleClass().addAll("pad", "pad" + index);
-		cueInLayer.getStyleClass().addAll("pad-cue-in", "pad" + index + "-cue-in");
-
-		indexLabel.getStyleClass().addAll("pad-index", "pad" + index + "-index", "pad-info", "pad" + index + "-info");
-		timeLabel.getStyleClass().addAll("pad-time", "pad" + index + "-time", "pad-info", "pad" + index + "-info");
-		loopLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		playlistLabel.getStyleClass().addAll("pad-playlist", "pad" + index + "-playlist", "pad-info", "pad" + index + "-info");
-		triggerLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		errorLabel.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-
-		preview.getChildren().forEach(i -> i.getStyleClass().addAll("pad-title", "pad" + index + "-title"));
-
-		playBar.getStyleClass().addAll("pad-playbar", "pad" + index + "-playbar");
-
-		playButton.getStyleClass().addAll("pad-button", "pad" + index + "-button");
-		pauseButton.getStyleClass().addAll("pad-button", "pad" + index + "-button");
-		stopButton.getStyleClass().addAll("pad-button", "pad" + index + "-button");
-		newButton.getStyleClass().addAll("pad-button", "pad" + index + "-button");
-		settingsButton.getStyleClass().addAll("pad-button", "pad" + index + "-button");
-
-		playButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		pauseButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		stopButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		newButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-		settingsButton.getGraphic().getStyleClass().addAll("pad-icon", "pad" + index + "-icon");
-
-		buttonBox.getStyleClass().add("pad-button-box");
-		root.getStyleClass().add("pad-root");
+		NodeWalker.getAllNodes(getRootNode())
+				.stream()
+				.filter(node -> node instanceof PadIndexable)
+				.forEach(node -> ((PadIndexable) node).setIndex(index));
 	}
 
 	@Override
 	public void removeStyleClasses() {
-		superRoot.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		cueInLayer.getStyleClass().removeIf(c -> c.startsWith("pad"));
-
-		indexLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		timeLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		loopLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		playlistLabel.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		triggerLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		errorLabel.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-
-		preview.getChildren().forEach(i -> i.getStyleClass().removeIf(c -> c.startsWith("pad")));
-
-		playBar.getStyleClass().removeIf(c -> c.startsWith("pad"));
-
-		playButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		pauseButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		stopButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		newButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
-		settingsButton.getStyleClass().removeIf(c -> c.startsWith("pad"));
-
-		playButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		pauseButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		stopButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		newButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-		settingsButton.getGraphic().getStyleClass().removeIf(c -> c.startsWith("pad"));
-
-		buttonBox.getStyleClass().remove("pad-button-box");
-		root.getStyleClass().remove("pad-root");
+		NodeWalker.getAllNodes(getRootNode())
+				.stream()
+				.filter(node -> node instanceof PadIndexable)
+				.forEach(node -> ((PadIndexable) node).setIndex(null));
 	}
 
 	@Override

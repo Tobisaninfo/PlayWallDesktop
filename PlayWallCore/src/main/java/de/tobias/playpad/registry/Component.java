@@ -12,8 +12,8 @@ import javafx.scene.Node;
  */
 public class Component implements Displayable {
 
-	private String type;
-	private StringProperty displayProperty;
+	private final String type;
+	private final StringProperty displayProperty;
 	private FontIcon graphics;
 
 	public Component(String type) {

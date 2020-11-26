@@ -1,13 +1,11 @@
 package de.tobias.playpad.layout.desktop.pad;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.ui.NVCStage;
-import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
+import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
@@ -28,15 +26,8 @@ import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Set;
 
 public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
 
@@ -200,66 +191,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
-	private void onNew(ActionEvent event) throws NoSuchComponentException {
-		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
-		if (pad.getProject() != null) {
-			if (settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
-				return;
-			}
-		}
-
-		FileChooser chooser = new FileChooser();
-		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
-
-		// File Extension
-		ExtensionFilter extensionFilter = new ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA),
-				registry.getSupportedFileTypes());
-		chooser.getExtensionFilters().add(extensionFilter);
-
-		// Last Folder
-		Object openFolder = ApplicationUtils.getApplication().getUserDefaults().getData(OPEN_FOLDER);
-		if (openFolder != null) {
-			File folder = new File(openFolder.toString());
-			if (folder.exists()) {
-				chooser.setInitialDirectory(folder);
-			}
-		}
-
-		File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-		if (file != null) {
-			Path path = file.toPath();
-
-			Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
-			if (!connects.isEmpty()) {
-				if (connects.size() > 1) { // Multiple content types possible
-					FileDragOptionView hud = new FileDragOptionView(padView.getRootNode());
-					hud.showDropOptions(connects, connect ->
-					{
-						if (connect != null) {
-							setNewPadContent(path, connect);
-							hud.hide();
-						}
-					});
-				} else {
-					PadContentFactory connect = connects.iterator().next();
-					setNewPadContent(path, connect);
-				}
-			}
-
-			ApplicationUtils.getApplication().getUserDefaults().setData(OPEN_FOLDER, path.getParent().toString());
-		}
-	}
-
-	private void setNewPadContent(Path path, PadContentFactory connect) {
-		if (pad.getContent() == null || !pad.getContent().getType().equals(connect.getType())) {
-			this.pad.setContentType(connect.getType());
-		}
-
-		if (pad.isPadVisible()) {
-			pad.getController().getView().showBusyView(true);
-		}
-
-		pad.setPath(path);
+	public void onNew(ActionEvent event) throws NoSuchComponentException {
+		final PadNewContentListener listener = new PadNewContentListener(pad);
+		listener.onNew(event, new FileDragOptionView(padView.getRootNode()));
 	}
 
 	private void onSettings() {
@@ -398,7 +332,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getSettingsButton().setDisable(true);
 		}
 
-		// Alles Desktivieren, wenn nicht Play Mode
+		// Alles Deaktivieren, wenn nicht Play Mode
 		if (connect.getEditMode() != DesktopEditMode.PLAY) {
 			padView.getPlayButton().setDisable(true);
 			padView.getPauseButton().setDisable(true);

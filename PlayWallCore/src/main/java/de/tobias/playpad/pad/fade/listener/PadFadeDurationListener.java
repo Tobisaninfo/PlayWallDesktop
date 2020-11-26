@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 public class PadFadeDurationListener implements ChangeListener<Duration> {
 
-	private Pad pad;
+	private final Pad pad;
 
 	public PadFadeDurationListener(Pad pad) {
 		this.pad = pad;
@@ -17,15 +17,17 @@ public class PadFadeDurationListener implements ChangeListener<Duration> {
 
 	@Override
 	public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
-		if (pad.getPadSettings().getFade().isFadeOutStop()) {
+		if (pad.getPadSettings().getFade().isFadeOutEof()) {
 			final Duration fadeDuration = pad.getPadSettings().getFade().getFadeOut();
 
 			if (pad.getContent() instanceof Durationable) {
-				Durationable durationable = (Durationable) pad.getContent();
-				if (durationable.getPosition() != null && durationable.getDuration() != null) {
-					if (durationable.getPosition().add(fadeDuration).greaterThan(durationable.getDuration())) {
-						fadeOut();
-					}
+				final Durationable durationable = (Durationable) pad.getContent();
+
+				final Duration position = durationable.getPosition();
+				final Duration duration = durationable.getDuration();
+
+				if (position != null && duration != null && position.add(fadeDuration).greaterThan(duration)) {
+					fadeOut();
 				}
 			}
 		}
@@ -33,11 +35,10 @@ public class PadFadeDurationListener implements ChangeListener<Duration> {
 
 	private void fadeOut() {
 		if (pad.getContent() instanceof Fadeable) {
-			Fadeable fadeable = (Fadeable) pad.getContent();
+			final Fadeable fadeable = (Fadeable) pad.getContent();
 			if (!fadeable.isFadeActive()) {
-				fadeable.fadeOut(null);
+				fadeable.fadeOut();
 			}
-
 		}
 	}
 }

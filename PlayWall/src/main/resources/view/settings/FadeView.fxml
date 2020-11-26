@@ -51,6 +51,8 @@
                                           text="%settings.player.label.pauseOut"/>
                                 <CheckBox fx:id="fadeOutStopCheckBox" mnemonicParsing="false"
                                           text="%settings.player.label.stopOut"/>
+                                <CheckBox fx:id="fadeOutEofCheckBox" mnemonicParsing="false"
+                                          text="%settings.player.label.eofOut"/>
                             </children>
                         </HBox>
                     </children>

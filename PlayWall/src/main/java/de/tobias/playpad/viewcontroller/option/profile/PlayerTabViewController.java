@@ -33,7 +33,7 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 
 		// Player
 		FadeViewController fadeViewController = new FadeViewController();
-		fadeViewController.setFade(Profile.currentProfile().getProfileSettings().getFade());
+		fadeViewController.setFadeSettings(Profile.currentProfile().getProfileSettings().getFade());
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 		setAnchor(fadeViewController.getParent(), 0, 0, 0, 0);
 	}

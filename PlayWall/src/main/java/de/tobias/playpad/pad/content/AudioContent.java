@@ -33,10 +33,10 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	private ObjectProperty<Duration> durationProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> positionProperty = new SimpleObjectProperty<>();
 
-	private ChangeListener<Number> volumeListener;
-	private ChangeListener<Number> rateListener;
+	private final ChangeListener<Number> volumeListener;
+	private final ChangeListener<Number> rateListener;
 
-	private Fade fade;
+	private final Fade fade;
 
 	AudioContent(String type, Pad pad) {
 		super(pad);

@@ -4,7 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.design.modern.serializer.ModernCartDesignSerializer;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.FadeSettings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.util.Duration;
@@ -51,7 +51,7 @@ public class PadSettingsSerializer {
 		if (settingsElement.element(TIME_MODE_ELEMENT) != null)
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIME_MODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
-			padSettings.setFade(Fade.load(settingsElement.element(FADE_ELEMENT)));
+			padSettings.setFade(FadeSettings.load(settingsElement.element(FADE_ELEMENT)));
 		if (settingsElement.element(WARNING_ELEMENT) != null) {
 			try {
 				Duration duration = Duration.valueOf(settingsElement.element(WARNING_ELEMENT).getStringValue().replace(" ", ""));
