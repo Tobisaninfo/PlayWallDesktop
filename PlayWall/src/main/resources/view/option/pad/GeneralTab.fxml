@@ -7,52 +7,64 @@
     <children>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.gen.label.media" />
-                <Label fx:id="pathLabel" text="Label" textOverrun="CENTER_ELLIPSIS" />
-                <VBox HBox.hgrow="ALWAYS" />
-                <Button mnemonicParsing="false" text="%padSettings.button.path.show" onAction="#showPathButtonHandler"/>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.gen.label.media"/>
+                <Label fx:id="pathLabel" text="Label" textOverrun="CENTER_ELLIPSIS"/>
+                <VBox HBox.hgrow="ALWAYS"/>
+                <Button mnemonicParsing="false" onAction="#showPathButtonHandler" text="%padSettings.button.path.show"/>
             </children>
         </HBox>
         <HBox spacing="14.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#chooseButtonHandler" text="%padSettings.button.path.choose" />
-                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler" text="%padSettings.button.delete" />
+                <Button mnemonicParsing="false" onAction="#chooseButtonHandler" text="%padSettings.button.path.choose"/>
+                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler"
+                        text="%padSettings.button.delete"/>
             </children>
             <padding>
-                <Insets left="164.0" />
+                <Insets left="164.0"/>
             </padding>
         </HBox>
-        <Separator prefWidth="200.0" />
+        <Separator prefWidth="200.0"/>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="19.0" prefWidth="150.0" text="%padSettings.gen.label.title" AnchorPane.leftAnchor="14.0" />
-                <TextField fx:id="titleTextField" layoutX="125.0" layoutY="14.0" prefWidth="250.0" AnchorPane.leftAnchor="127.0" />
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="19.0" prefWidth="150.0"
+                       text="%padSettings.gen.label.title" AnchorPane.leftAnchor="14.0"/>
+                <TextField fx:id="titleTextField" layoutX="125.0" layoutY="14.0" prefWidth="250.0"
+                           AnchorPane.leftAnchor="127.0"/>
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="50.0" prefWidth="150.0" text="%padSettings.gen.label.volume" AnchorPane.leftAnchor="14.0" />
-                <Slider fx:id="volumeSlider" layoutX="122.0" layoutY="54.0" prefWidth="250.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="100.0" AnchorPane.leftAnchor="127.0" />
-                <VBox HBox.hgrow="ALWAYS" />
-                <CheckBox fx:id="repeatCheckBox" mnemonicParsing="false" text="%padSettings.checkbox.loop" />
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="89.0" prefWidth="150.0"
+                       text="%padSettings.gen.label.timeDisplay" AnchorPane.leftAnchor="14.0"/>
+                <CheckBox fx:id="customTimeDisplayCheckBox" layoutX="406.0" layoutY="88.0" mnemonicParsing="false"
+                          text="%padSettings.gen.checkbox.customSettings"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <ComboBox fx:id="timeDisplayComboBox" prefWidth="250.0"/>
+            </children>
+            <padding>
+                <Insets left="164.0"/>
+            </padding>
+        </HBox>
+        <Separator prefWidth="200.0"/>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.label.loop"/>
+                <CheckBox fx:id="repeatCheckBox" mnemonicParsing="false" text="%settings.checkbox.activate"/>
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="89.0" prefWidth="150.0" text="%padSettings.gen.label.timeDisplay" AnchorPane.leftAnchor="14.0" />
-                <CheckBox fx:id="customTimeDisplayCheckBox" layoutX="406.0" layoutY="88.0" mnemonicParsing="false" text="%padSettings.gen.checkbox.customSettings" />
+                <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="50.0" prefWidth="150.0"
+                       text="%padSettings.gen.label.volume" AnchorPane.leftAnchor="14.0"/>
+                <Slider fx:id="volumeSlider" layoutX="122.0" layoutY="54.0" prefWidth="250.0" showTickLabels="true"
+                        showTickMarks="true" snapToTicks="true" value="100.0" AnchorPane.leftAnchor="127.0"/>
             </children>
         </HBox>
-      <HBox>
-         <children>
-                <ComboBox fx:id="timeDisplayComboBox" prefWidth="250.0" />
-         </children>
-         <padding>
-            <Insets left="164.0" />
-         </padding>
-      </HBox>
     </children>
     <padding>
-        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
     </padding>
 </VBox>
