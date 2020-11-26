@@ -42,6 +42,7 @@ public class DesktopPadView implements IPadView {
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
+	private Label playlistLabel;
 	private Label errorLabel;
 
 	private HBox infoBox;
@@ -88,6 +89,7 @@ public class DesktopPadView implements IPadView {
 
 		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT));
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.WARNING));
 
 		infoBox = new PadHBox(5);
@@ -262,7 +264,7 @@ public class DesktopPadView implements IPadView {
 			}
 			applyStyleClasses(pad.getPadIndex());
 		}
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		// Buttons unten Full Width
 		buttonBox.prefWidthProperty().bind(superRoot.widthProperty());
@@ -316,6 +318,18 @@ public class DesktopPadView implements IPadView {
 			previewContent.deInit();
 		}
 		setContentView(null);
+	}
+
+	void clearPlaylistLabel() {
+		playlistLabel.setText("");
+	}
+
+	void setPlaylistIndex(int current, int count) {
+		if (current < 0) {
+			playlistLabel.setText("- / " + count);
+		} else {
+			playlistLabel.setText((current + 1) + " / " + count);
+		}
 	}
 
 	@Override

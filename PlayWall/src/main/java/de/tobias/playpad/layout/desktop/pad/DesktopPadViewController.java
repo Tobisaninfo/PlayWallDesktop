@@ -9,8 +9,6 @@ import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.content.PadContentFactory;
-import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
