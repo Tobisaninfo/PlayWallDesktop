@@ -326,7 +326,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getSettingsButton().setDisable(true);
 		}
 
-		// Alles Desktivieren, wenn nicht Play Mode
+		// Alles Deaktivieren, wenn nicht Play Mode
 		if (connect.getEditMode() != DesktopEditMode.PLAY) {
 			padView.getPlayButton().setDisable(true);
 			padView.getPauseButton().setDisable(true);
