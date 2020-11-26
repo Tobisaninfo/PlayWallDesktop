@@ -12,6 +12,7 @@ public class PadVBox extends VBox implements PadIndexable {
 	public PadVBox(String... styleClasses) {
 		this(0, styleClasses);
 	}
+
 	public PadVBox(double spacing, String... styleClasses) {
 		super(spacing);
 		indexProperty = new SimpleObjectProperty<>();

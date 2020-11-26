@@ -92,7 +92,7 @@ public class DesktopPadView implements IPadView {
 
 		infoBox = new PadHBox(5);
 
-		preview = new HBox();
+		preview = PadHBox.deepStyled(STYLE_CLASS_PAD_TITLE, STYLE_CLASS_PAD_TITLE_INDEX);
 		HBox.setHgrow(preview, Priority.ALWAYS);
 		VBox.setVgrow(preview, Priority.ALWAYS);
 
@@ -148,8 +148,6 @@ public class DesktopPadView implements IPadView {
 					previewContent = connect.getPadContentPreview(pad, preview);
 					Node node = previewContent.getNode();
 
-					node.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
-
 					// Copy Pseudoclasses
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
 						node.pseudoClassStateChanged(pseudoClass, true);
@@ -163,11 +161,6 @@ public class DesktopPadView implements IPadView {
 			}
 		}
 		EmptyPadView view = new EmptyPadView(preview);
-		if (pad != null) {
-			view.getStyleClass().addAll("pad-title", "pad" + pad.getPadIndex() + "-title");
-		} else {
-			view.getStyleClass().addAll("pad-title");
-		}
 		preview.getChildren().setAll(view);
 	}
 
@@ -193,10 +186,6 @@ public class DesktopPadView implements IPadView {
 
 	public void setTitle(String text) {
 		this.indexLabel.setText(text);
-	}
-
-	ProgressBar getPlayBar() {
-		return playBar;
 	}
 
 	@Override
@@ -247,8 +236,7 @@ public class DesktopPadView implements IPadView {
 		triggerLabel.setVisible(hasTriggerItems);
 	}
 
-	void
-	setTime(String time) {
+	void setTime(String time) {
 		if (time == null) {
 			timeLabel.setText("");
 		} else {
@@ -295,8 +283,6 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void applyStyleClasses(PadIndex index) {
-		preview.getChildren().forEach(i -> i.getStyleClass().addAll("pad-title", "pad" + index + "-title"));
-
 		NodeWalker.getAllNodes(getRootNode())
 				.stream()
 				.filter(node -> node instanceof PadIndexable)
@@ -305,8 +291,6 @@ public class DesktopPadView implements IPadView {
 
 	@Override
 	public void removeStyleClasses() {
-		preview.getChildren().forEach(i -> i.getStyleClass().removeIf(c -> c.startsWith("pad")));
-
 		NodeWalker.getAllNodes(getRootNode())
 				.stream()
 				.filter(node -> node instanceof PadIndexable)
