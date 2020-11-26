@@ -95,7 +95,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			pad.contentProperty().addListener(padContentListener);
 			pad.statusProperty().addListener(padStatusListener);
 
-			// Inital Listener call with new data
+			// Initial Listener call with new data
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
 			padStatusListener.changed(null, null, pad.getStatus());
 

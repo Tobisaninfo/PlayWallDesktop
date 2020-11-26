@@ -35,8 +35,8 @@ public class PadLabel extends Label implements PadIndexable {
 				indexProperty.removeListener(graphicsListener);
 				graphicsListener = null;
 
-				initStyleGraphicsListener();
 			}
+			initStyleGraphicsListener();
 		});
 	}
 
