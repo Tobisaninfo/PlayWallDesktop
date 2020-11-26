@@ -3,7 +3,7 @@ package de.tobias.playpad.viewcontroller.settings;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.FadeSettings;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -29,8 +29,10 @@ public class FadeViewController extends NVC {
 	private CheckBox fadeOutPauseCheckBox;
 	@FXML
 	private CheckBox fadeOutStopCheckBox;
+	@FXML
+	private CheckBox fadeOutEofCheckBox;
 
-	private Fade fade;
+	private FadeSettings fade;
 
 	public FadeViewController() {
 		load("view/settings", "FadeView", Localization.getBundle());
@@ -54,13 +56,14 @@ public class FadeViewController extends NVC {
 			fade.setFadeOut(seconds);
 		});
 
-		fadeInStartCheckBox.selectedProperty().addListener((a, b, c) -> fade.setFadeInStart(c));
-		fadeInPauseCheckBox.selectedProperty().addListener((a, b, c) -> fade.setFadeInPause(c));
-		fadeOutPauseCheckBox.selectedProperty().addListener((a, b, c) -> fade.setFadeOutPause(c));
-		fadeOutStopCheckBox.selectedProperty().addListener((a, b, c) -> fade.setFadeOutStop(c));
+		fadeInStartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> fade.setFadeInStart(newValue));
+		fadeInPauseCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> fade.setFadeInPause(newValue));
+		fadeOutPauseCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> fade.setFadeOutPause(newValue));
+		fadeOutStopCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> fade.setFadeOutStop(newValue));
+		fadeOutEofCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> fade.setFadeOutEof(newValue));
 	}
 
-	public void setFade(Fade fade) {
+	public void setFadeSettings(FadeSettings fade) {
 		this.fade = fade;
 
 		if (fade != null) {
@@ -76,6 +79,7 @@ public class FadeViewController extends NVC {
 			fadeInPauseCheckBox.setSelected(fade.isFadeInPause());
 			fadeOutPauseCheckBox.setSelected(fade.isFadeOutPause());
 			fadeOutStopCheckBox.setSelected(fade.isFadeOutStop());
+			fadeOutEofCheckBox.setSelected(fade.isFadeOutEof());
 		}
 	}
 }

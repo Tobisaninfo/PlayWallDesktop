@@ -9,9 +9,14 @@ import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import javafx.scene.layout.Pane;
 
 import java.nio.file.Path;
+import java.util.Set;
+import java.util.function.Consumer;
 
-// COMMENT PadContentFactory
 public abstract class PadContentFactory extends Component implements Comparable<PadContentFactory> {
+
+	public interface PadContentTypeChooser {
+		void showOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onSelected);
+	}
 
 	public PadContentFactory(String type) {
 		super(type);

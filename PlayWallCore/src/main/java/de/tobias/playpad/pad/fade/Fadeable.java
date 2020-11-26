@@ -7,6 +7,10 @@ public interface Fadeable {
 
 	void fadeIn();
 
+	default void fadeOut() {
+		fadeOut(null);
+	}
+
 	void fadeOut(Runnable runnable);
 
 	boolean isFadeActive();

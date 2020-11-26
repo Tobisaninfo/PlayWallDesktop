@@ -267,12 +267,12 @@ public class DesktopPadView implements IPadView {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
 					if (pad.getStatus() == PadStatus.PLAY) {
-						buttonBox.getChildren().setAll(pauseButton, stopButton, newButton, settingsButton);
+						buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
 					} else {
-						buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+						buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 					}
 				} else {
-					buttonBox.getChildren().setAll(playButton, stopButton, newButton, settingsButton);
+					buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 				}
 			} else {
 				buttonBox.getChildren().setAll(newButton, settingsButton);
