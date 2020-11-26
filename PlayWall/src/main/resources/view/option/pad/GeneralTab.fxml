@@ -5,25 +5,31 @@
 <?import javafx.scene.layout.*?>
 <VBox spacing="14.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <HBox alignment="CENTER_LEFT" spacing="14.0">
+        <VBox fx:id="mediaRootBox" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.gen.label.media"/>
-                <Label fx:id="pathLabel" text="Label" textOverrun="CENTER_ELLIPSIS"/>
-                <VBox HBox.hgrow="ALWAYS"/>
-                <Button mnemonicParsing="false" onAction="#showPathButtonHandler" text="%padSettings.button.path.show"/>
+                <HBox alignment="CENTER_LEFT" spacing="14.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.gen.label.media"/>
+                        <Label fx:id="pathLabel" text="Label" textOverrun="CENTER_ELLIPSIS"/>
+                        <VBox HBox.hgrow="ALWAYS"/>
+                        <Button mnemonicParsing="false" onAction="#showPathButtonHandler"
+                                text="%padSettings.button.path.show"/>
+                    </children>
+                </HBox>
+                <HBox spacing="14.0">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#chooseButtonHandler"
+                                text="%padSettings.button.path.choose"/>
+                        <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler"
+                                text="%padSettings.button.delete"/>
+                    </children>
+                    <padding>
+                        <Insets left="164.0"/>
+                    </padding>
+                </HBox>
+                <Separator prefWidth="200.0"/>
             </children>
-        </HBox>
-        <HBox spacing="14.0">
-            <children>
-                <Button mnemonicParsing="false" onAction="#chooseButtonHandler" text="%padSettings.button.path.choose"/>
-                <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteButtonHandler"
-                        text="%padSettings.button.delete"/>
-            </children>
-            <padding>
-                <Insets left="164.0"/>
-            </padding>
-        </HBox>
-        <Separator prefWidth="200.0"/>
+        </VBox>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
                 <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="19.0" prefWidth="150.0"

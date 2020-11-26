@@ -9,18 +9,22 @@ import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.Optional;
 
 public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
+	@FXML
+	private VBox mediaRootBox;
 	@FXML
 	private Label pathLabel;
 
@@ -45,6 +49,9 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 		load("view/option/pad", "GeneralTab", Localization.getBundle());
 		this.pad = pad;
 
+		if (pad.getContent() instanceof Playlistable) {
+			mediaRootBox.setDisable(true);
+		}
 		pathLabel.setText(pad.getPath().toString());
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
