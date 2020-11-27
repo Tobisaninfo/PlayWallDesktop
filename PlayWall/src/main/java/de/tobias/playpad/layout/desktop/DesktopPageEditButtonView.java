@@ -8,6 +8,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -104,7 +105,12 @@ public class DesktopPageEditButtonView extends HBox {
 		}
 
 		Project project = page.getProject();
-		project.addPage(clone);
+		boolean added = project.addPage(clone);
+
+		if (!added) {
+			mainViewController.showErrorMessage(Localization.getString(Strings.ERROR_PROJECT_PAGE_COUNT, ProjectSettings.MAX_PAGES));
+			return;
+		}
 
 		controller.initPageButtons();
 		mainViewController.showPage(clone);
