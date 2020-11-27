@@ -61,6 +61,13 @@ public abstract class PadContentFactory extends Component implements ContentDrag
 			currentPad.getController().getView().showBusyView(true);
 		}
 
-		currentPad.setPath(files.get(0).toPath());
+		if (currentPad.getContent() instanceof Playlistable) {
+			currentPad.clearPaths();
+			for (File file : files) {
+				currentPad.addPath(file.toPath());
+			}
+		} else {
+			currentPad.setPath(files.get(0).toPath());
+		}
 	}
 }

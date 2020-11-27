@@ -372,6 +372,7 @@ public class Pad {
 	}
 
 	public void removePath(MediaPath path) {
+		getContent().unloadMedia(path);
 		mediaPaths.remove(path);
 	}
 
@@ -379,6 +380,12 @@ public class Pad {
 	public void removePathListener(MediaPath path) {
 		if (project.getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path);
+		}
+	}
+
+	public void clearPaths() {
+		while (!mediaPaths.isEmpty()) {
+			removePath(mediaPaths.get(0));
 		}
 	}
 
