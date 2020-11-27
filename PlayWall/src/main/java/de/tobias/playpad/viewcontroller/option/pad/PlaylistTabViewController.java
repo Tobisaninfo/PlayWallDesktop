@@ -149,5 +149,9 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 		MediaPath mediaPath = mediaPathListView.getSelectionModel().getSelectedItem();
 		pad.getContent().unloadMedia(mediaPath);
 		pad.removePath(mediaPath);
+
+		if (pad.getPaths().isEmpty()) {
+			pad.clear();
+		}
 	}
 }
