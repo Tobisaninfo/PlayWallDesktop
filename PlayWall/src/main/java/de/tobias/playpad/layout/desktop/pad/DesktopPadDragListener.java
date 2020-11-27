@@ -5,10 +5,11 @@ import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.Playlistable;
+import de.tobias.playpad.pad.drag.ContentDragOption;
 import de.tobias.playpad.pad.drag.PadDragMode;
+import de.tobias.playpad.pad.drag.PlaylistDragOption;
 import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
@@ -27,8 +28,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
@@ -36,7 +38,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 	private static final DataFormat dataFormat = new DataFormat(PAD_INDEX_DATATYPE);
 
 	private final Pad currentPad;
-	private final Pane padView; // Node der PadView
+	private final Pane padViewNode; // Node der PadView
 
 	private final DesktopMainLayoutFactory connect;
 
@@ -47,21 +49,21 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 		this.currentPad = currentPad;
 		this.connect = connect;
 
-		this.padView = view.getRootNode();
+		this.padViewNode = view.getRootNode();
 	}
 
 	public void addListener() {
-		this.padView.setOnDragOver(this::dragOver);
-		this.padView.setOnDragExited(event -> dragExited());
-		this.padView.setOnDragDropped(this::dragDropped);
-		this.padView.setOnDragDetected(this::dragDetected);
+		this.padViewNode.setOnDragOver(this::dragOver);
+		this.padViewNode.setOnDragExited(event -> dragExited());
+		this.padViewNode.setOnDragDropped(this::dragDropped);
+		this.padViewNode.setOnDragDetected(this::dragDetected);
 	}
 
 	void removeListener() {
-		this.padView.setOnDragOver(null);
-		this.padView.setOnDragExited(null);
-		this.padView.setOnDragDropped(null);
-		this.padView.setOnDragDetected(null);
+		this.padViewNode.setOnDragOver(null);
+		this.padViewNode.setOnDragExited(null);
+		this.padViewNode.setOnDragDropped(null);
+		this.padViewNode.setOnDragDetected(null);
 	}
 
 	@Override
@@ -94,11 +96,15 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 			// built-in file support
 			PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
-			Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+			List<ContentDragOption> connects = new ArrayList<>(registry.getPadContentConnectsForFile(file.toPath()));
+
+			if (currentPad.getContent() instanceof Playlistable) {
+				connects.add(new PlaylistDragOption());
+			}
 
 			if (!connects.isEmpty()) {
 				if (fileHud == null) {
-					fileHud = new FileDragOptionView(padView);
+					fileHud = new FileDragOptionView(padViewNode);
 				}
 				fileHud.showOptions(connects);
 
@@ -115,7 +121,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 			if (!connects.isEmpty()) {
 				if (padHud == null) {
-					padHud = new PadDragOptionView(padView);
+					padHud = new PadDragOptionView(padViewNode);
 				}
 				padHud.showDropOptions(connects);
 
@@ -142,52 +148,43 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
 		// File Handling
 		if (dragboard.hasFiles()) {
-			handleFileDragDropped(dragboard);
+			success = handleFileDragDropped(dragboard);
 		}
 
 		// Pad DnD
 		if (dragboard.hasContent(dataFormat)) {
-			success = handlePadDragDropped(project, dragboard, success);
+			success = handlePadDragDropped(project, dragboard);
 		}
 		// Event Completion
 		event.setDropCompleted(success);
 		event.consume();
 	}
 
-	private void handleFileDragDropped(Dragboard dragboard) {
-		File file = dragboard.getFiles().get(0);
-
-		final PadContentFactory connect = fileHud.getSelectedConnect();
-		if (connect != null) {
+	private boolean handleFileDragDropped(Dragboard dragboard) {
+		final ContentDragOption dragOption = fileHud.getSelectedConnect();
+		if (dragOption != null) {
 			// stop pad if playing
 			if (currentPad.getContent() != null && currentPad.getStatus().equals(PadStatus.PLAY)) {
 				currentPad.getContent().stop();
 				currentPad.stop();
 			}
 
-			if (currentPad.getContent() == null || !currentPad.getContent().getType().equals(connect.getType())) {
-				currentPad.setContentType(connect.getType());
-			}
-
-			if (currentPad.isPadVisible()) {
-				currentPad.getController().getView().showBusyView(true);
-			}
-
-			if (currentPad.getContent() instanceof Playlistable) {
-				this.currentPad.addPath(file.toPath());
-			} else {
-				this.currentPad.setPath(file.toPath());
-			}
+			dragOption.handleDrop(currentPad, dragboard.getFiles());
 
 			if (currentPad.getController() != null) {
 				final IPadView padView = currentPad.getController().getView();
 				padView.setContentView(currentPad);
 				padView.addDefaultElements(currentPad);
 			}
+
+			return true;
 		}
+		return false;
 	}
 
-	private boolean handlePadDragDropped(Project project, Dragboard dragboard, boolean success) {
+	private boolean handlePadDragDropped(Project project, Dragboard dragboard) {
+		boolean success = false;
+
 		Object data = dragboard.getContent(dataFormat);
 		if (data instanceof PadIndex) {
 			PadIndex srcIndex = (PadIndex) data;
@@ -215,12 +212,12 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 				return;
 			}
 
-			Dragboard dragboard = padView.startDragAndDrop(TransferMode.MOVE);
+			Dragboard dragboard = padViewNode.startDragAndDrop(TransferMode.MOVE);
 
 			// Create Snapshot
 			SnapshotParameters parameters = new SnapshotParameters();
 			parameters.setFill(Color.TRANSPARENT);
-			WritableImage snapshot = padView.snapshot(parameters, null);
+			WritableImage snapshot = padViewNode.snapshot(parameters, null);
 			for (int x = 0; x < snapshot.getWidth(); x++) {
 				for (int y = 0; y < snapshot.getHeight(); y++) {
 					Color oldColor = snapshot.getPixelReader().getColor(x, y).darker().darker();

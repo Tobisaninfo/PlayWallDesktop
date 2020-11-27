@@ -323,6 +323,10 @@ public class Pad {
 			createMediaPath(path);
 		} else {
 			setPath(path, 0);
+
+			while (mediaPaths.size() > 1) {
+				mediaPaths.remove(mediaPaths.size() - 1);
+			}
 		}
 	}
 

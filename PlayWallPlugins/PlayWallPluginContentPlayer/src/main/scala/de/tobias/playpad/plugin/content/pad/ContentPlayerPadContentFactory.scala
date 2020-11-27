@@ -1,10 +1,12 @@
 package de.tobias.playpad.plugin.content.pad
 
+import de.thecodelabs.utils.ui.icon.{FontIcon, MaterialDesignIcon}
 import de.tobias.playpad.pad.Pad
 import de.tobias.playpad.pad.content.{PadContent, PadContentFactory}
 import de.tobias.playpad.pad.preview.PadTextPreview
 import de.tobias.playpad.pad.view.IPadContentView
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController
+import javafx.scene.Node
 import javafx.scene.layout.Pane
 
 class ContentPlayerPadContentFactory(val `type`: String) extends PadContentFactory(`type`) {
@@ -16,6 +18,8 @@ class ContentPlayerPadContentFactory(val `type`: String) extends PadContentFacto
 	override def getSettingsViewController(pad: Pad): PadSettingsTabViewController = new ContentPlayerPadContentSettingsViewController(pad)
 
 	override def getSupportedTypes: Array[String] = ContentPlayerPadContentFactory.FILE_EXTENSION
+
+	override def getGraphics: Node = new FontIcon(MaterialDesignIcon.FONT_FILE, MaterialDesignIcon.MONITOR_MULTIPLE)
 }
 
 object ContentPlayerPadContentFactory {
