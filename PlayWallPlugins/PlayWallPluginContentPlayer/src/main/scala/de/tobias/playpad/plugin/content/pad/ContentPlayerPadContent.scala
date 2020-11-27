@@ -68,9 +68,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			_positionProperty.unbind()
 			_positionProperty.set(Duration.ZERO)
 		}
+
+		override def toString: String = f"MediaPlayerContainer: $path"
 	}
 
-	private val mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
+	private var mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
 	private var currentRunningIndex: Int = -1
 
 	private val _durationProperty = new SimpleObjectProperty[Duration]
@@ -218,6 +220,15 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 		mediaPlayers.remove(index)
 	}
+
+	override def reorderMedia(): Unit = {
+		val paths = pad.getPaths
+		mediaPlayers = mediaPlayers.sortWith((o1, o2) => paths.indexOf(o1.path) < paths.indexOf(o2.path))
+	}
+
+	/*
+	 Volume
+	 */
 
 	override def updateVolume(): Unit = {
 		val volume = VolumeManager.getInstance.computeVolume(getPad)

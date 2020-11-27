@@ -127,6 +127,7 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 		final int selectedIndex = mediaPathListView.getSelectionModel().getSelectedIndex();
 		Collections.swap(pad.getPaths(), selectedIndex, selectedIndex - 1);
 		mediaPathListView.getSelectionModel().select(selectedIndex - 1);
+		pad.getContent().reorderMedia();
 	}
 
 	@FXML
@@ -134,6 +135,7 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 		final int selectedIndex = mediaPathListView.getSelectionModel().getSelectedIndex();
 		Collections.swap(pad.getPaths(), selectedIndex, selectedIndex + 1);
 		mediaPathListView.getSelectionModel().select(selectedIndex + 1);
+		pad.getContent().reorderMedia();
 	}
 
 	@FXML

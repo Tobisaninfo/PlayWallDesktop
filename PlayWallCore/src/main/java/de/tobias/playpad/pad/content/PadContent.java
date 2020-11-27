@@ -64,6 +64,9 @@ public abstract class PadContent {
 	 */
 	public abstract void unloadMedia(MediaPath mediaPath);
 
+	public void reorderMedia() {
+	}
+
 	public abstract void updateVolume();
 
 	@Override
