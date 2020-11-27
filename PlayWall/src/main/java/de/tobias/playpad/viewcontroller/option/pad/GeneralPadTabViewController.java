@@ -63,7 +63,6 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 		if (pad.getContent() instanceof Playlistable) {
 			mediaRootBox.setDisable(true);
 		}
-		pathLabel.setText(pad.getPath().toString());
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
 			deleteButton.setDisable(true);
