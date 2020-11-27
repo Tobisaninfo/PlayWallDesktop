@@ -71,11 +71,12 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 			}
 		});
 
+		pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
 		mediaPathListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				pathLabel.setText(newValue.getPath().toString());
 			} else {
-				pathLabel.setText("");
+				pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
 			}
 		});
 	}
