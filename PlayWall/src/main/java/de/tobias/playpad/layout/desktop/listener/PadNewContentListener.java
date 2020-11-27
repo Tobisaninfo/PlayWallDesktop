@@ -13,9 +13,12 @@ import de.tobias.playpad.settings.GlobalSettings;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class PadNewContentListener {
@@ -26,17 +29,14 @@ public class PadNewContentListener {
 		this.pad = pad;
 	}
 
-	public void onNew(ActionEvent event, PadContentFactory.PadContentTypeChooser padContentTypeChooser) throws NoSuchComponentException {
+	public List<File> showMediaOpenFileChooser(ActionEvent event, String[] supportedFileTypes, boolean multiSelect) {
 		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (pad.getProject() != null && settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
-			return;
+			return null;
 		}
 
 		final FileChooser chooser = new FileChooser();
-		PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
-
-		// File Extension
-		final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA), registry.getSupportedFileTypes());
+		final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(Localization.getString(Strings.FILE_FILTER_MEDIA), supportedFileTypes);
 		chooser.getExtensionFilters().add(extensionFilter);
 
 		// Last Folder
@@ -48,11 +48,22 @@ public class PadNewContentListener {
 			}
 		}
 
-		final File file = chooser.showOpenDialog(((Node) event.getTarget()).getScene().getWindow());
-		if (file != null) {
-			Path path = file.toPath();
+		final Window window = ((Node) event.getTarget()).getScene().getWindow();
+		if (multiSelect) {
+			return chooser.showOpenMultipleDialog(window);
+		} else {
+			return Collections.singletonList(chooser.showOpenDialog(window));
+		}
+	}
 
-			final Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(file.toPath());
+	public void onNew(ActionEvent event, PadContentFactory.PadContentTypeChooser padContentTypeChooser) throws NoSuchComponentException {
+		final PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
+		final List<File> files = showMediaOpenFileChooser(event, registry.getSupportedFileTypes(), false);
+
+		if (files != null) {
+			final Path path = files.get(0).toPath();
+
+			final Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(path);
 			if (!connects.isEmpty()) {
 				if (connects.size() > 1) { // Multiple content types possible
 					padContentTypeChooser.showOptions(connects, padContent ->

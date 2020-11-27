@@ -10,6 +10,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
@@ -40,6 +41,9 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
+		if (pad.getContent() instanceof Playlistable) {
+			addTab(new PlaylistTabViewController(pad));
+		}
 		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));
 		addTab(new TriggerPadTabViewController(pad));
@@ -85,7 +89,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(650);
-		stage.setMinHeight(550);
+		stage.setMinHeight(600);
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}

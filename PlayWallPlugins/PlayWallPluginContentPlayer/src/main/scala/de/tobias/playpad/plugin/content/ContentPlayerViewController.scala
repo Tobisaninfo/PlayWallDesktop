@@ -41,7 +41,9 @@ class ContentPlayerViewController extends NVC {
 		}
 
 		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
-			getChildren.remove(mediaViews(mediaPlayer))
+			if (mediaViews.contains(mediaPlayer)) {
+				getChildren.remove(mediaViews(mediaPlayer))
+			}
 		}
 	}
 

@@ -19,8 +19,8 @@ import java.util.UUID;
  */
 public class MediaPath {
 
-	private UUID id;
-	private StringProperty fileName;
+	private final UUID id;
+	private final StringProperty fileName;
 	private Pad pad;
 
 	public MediaPath(UUID id, Path path, Pad pad) {

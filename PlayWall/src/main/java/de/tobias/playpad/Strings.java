@@ -173,6 +173,7 @@ public class Strings {
 
 	// UI - Window - PadSettings
 	public static final String UI_WINDOW_PAD_SETTINGS_GENERAL_TITLE = "UI.Window.PadSettings.General.Title";
+	public static final String UI_WINDOW_PAD_SETTINGS_PLAYLIST_TITLE = "UI.Window.PadSettings.Playlist.Title";
 	public static final String UI_WINDOW_PAD_SETTINGS_PLAYER_TITLE = "UI.Window.PadSettings.Player.Title";
 	public static final String UI_WINDOW_PAD_SETTINGS_LAYOUT_TITLE = "UI.Window.PadSettings.Layout.Title";
 	public static final String UI_WINDOW_PAD_SETTINGS_TRIGGER_TITLE = "UI.Window.PadSettings.Trigger.Title";
