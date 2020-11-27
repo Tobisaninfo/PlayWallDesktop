@@ -12,7 +12,7 @@
                         <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.gen.label.media"/>
                         <Label fx:id="pathLabel" text="Label" textOverrun="CENTER_ELLIPSIS"/>
                         <VBox HBox.hgrow="ALWAYS"/>
-                        <Button mnemonicParsing="false" onAction="#showPathButtonHandler"
+                        <Button fx:id="showPathButton" mnemonicParsing="false" onAction="#showPathButtonHandler"
                                 text="%padSettings.button.path.show"/>
                     </children>
                 </HBox>

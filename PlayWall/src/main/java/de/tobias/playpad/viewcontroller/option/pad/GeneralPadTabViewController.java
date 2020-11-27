@@ -12,6 +12,7 @@ import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +28,8 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	private VBox mediaRootBox;
 	@FXML
 	private Label pathLabel;
+	@FXML
+	private Button showPathButton;
 
 	@FXML
 	private TextField titleTextField;
@@ -49,6 +52,14 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 		load("view/option/pad", "GeneralTab", Localization.getBundle());
 		this.pad = pad;
 
+		if (pad.getPath() != null) {
+			pathLabel.setText(pad.getPath().toString());
+		} else {
+			pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
+		}
+		showPathButton.disableProperty().bind(Bindings.isEmpty(pad.getPaths()));
+
+		// Disable media section for playlists
 		if (pad.getContent() instanceof Playlistable) {
 			mediaRootBox.setDisable(true);
 		}
