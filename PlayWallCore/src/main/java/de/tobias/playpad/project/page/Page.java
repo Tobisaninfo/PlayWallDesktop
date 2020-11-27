@@ -263,7 +263,7 @@ public class Page {
 		final int rows = getProject().getSettings().getRows() - 1;
 
 		for (int i = 0; i < columns; i++) {
-			insertPadInto(i, columns, rows * columns);
+			insertPadInto(columns, i, rows * columns);
 		}
 	}
 
