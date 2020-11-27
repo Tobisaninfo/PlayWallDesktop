@@ -100,7 +100,7 @@ public class PadDragOptionView {
 			parent.getChildren().add(optionPane);
 			optionPane.getChildren().clear();
 
-			for (PadDragMode connect : options.stream().sorted().toArray(value -> new PadDragMode[value])) {
+			for (PadDragMode connect : options.stream().sorted().toArray(PadDragMode[]::new)) {
 				Label label = new Label();
 				label.getStyleClass().add("dnd-file-option");
 
