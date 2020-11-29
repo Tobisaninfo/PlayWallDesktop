@@ -103,6 +103,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayers(currentRunningIndex).pause()
 	}
 
+	override def next(): Unit = {
+		mediaPlayers(currentRunningIndex).next()
+	}
+
 	override def stop(): Boolean = {
 		isPause = false
 		mediaPlayers(currentRunningIndex).stop()

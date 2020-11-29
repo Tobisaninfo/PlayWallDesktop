@@ -156,6 +156,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				onPlay();
 			} else if (event.getSource() == padView.getPauseButton()) {
 				onPause();
+			} else if (event.getSource() == padView.getNextButton()) {
+				onNext();
 			} else if (event.getSource() == padView.getStopButton()) {
 				onStop();
 			} else if (event.getSource() == padView.getNewButton()) {
@@ -180,6 +182,12 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 	private void onPause() {
 		if (pad.getContent() != null) {
 			pad.setStatus(PadStatus.PAUSE);
+		}
+	}
+
+	private void onNext() {
+		if (pad.getContent() instanceof Playlistable) {
+			((Playlistable) pad.getContent()).next();
 		}
 	}
 

@@ -14,6 +14,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
@@ -56,6 +57,7 @@ public class DesktopPadView implements IPadView {
 	private ProgressBar playBar;
 	private Button playButton;
 	private Button pauseButton;
+	private Button nextButton;
 	private Button stopButton;
 	private Button newButton;
 	private Button settingsButton;
@@ -108,6 +110,7 @@ public class DesktopPadView implements IPadView {
 		// Buttons
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), controller);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), controller);
+		nextButton = new PadButton(new FontIcon(FontAwesomeType.FORWARD), controller);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), controller);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), controller);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR), controller);
@@ -214,6 +217,10 @@ public class DesktopPadView implements IPadView {
 		return pauseButton;
 	}
 
+	Button getNextButton() {
+		return nextButton;
+	}
+
 	Button getStopButton() {
 		return stopButton;
 	}
@@ -252,7 +259,11 @@ public class DesktopPadView implements IPadView {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
 					if (pad.getStatus() == PadStatus.PLAY) {
-						buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
+						if (pad.getContent() instanceof Playlistable) {
+							buttonBox.getChildren().setAll(pauseButton, nextButton, stopButton, settingsButton);
+						} else {
+							buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
+						}
 					} else {
 						buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 					}
