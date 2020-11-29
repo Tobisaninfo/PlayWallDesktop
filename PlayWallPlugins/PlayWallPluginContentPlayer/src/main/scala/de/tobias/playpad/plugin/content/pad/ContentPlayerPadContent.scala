@@ -9,13 +9,14 @@ import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.settings.PlayerInstance
+import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
 import javafx.beans.property._
+import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.media.{Media, MediaPlayer}
 import javafx.util.Duration
 
-import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
 class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable {
@@ -73,7 +74,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		override def toString: String = f"MediaPlayerContainer: $path"
 	}
 
-	private var mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
+	private val mediaPlayers: ObservableList[MediaPlayerContainer] = FXCollections.observableArrayList()
 	private val currentRunningIndexProperty: IntegerProperty = new SimpleIntegerProperty(-1)
 
 	private val _durationProperty = new SimpleObjectProperty[Duration]
@@ -155,7 +156,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	override def positionProperty(): ReadOnlyObjectProperty[Duration] = _positionProperty
 
 	override def isPadLoaded: Boolean = {
-		mediaPlayers.nonEmpty
+		mediaPlayers.isNotEmpty
 	}
 
 	/**
@@ -184,6 +185,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayer.setOnReady(() => {
 			getPad.setStatus(PadStatus.READY)
 
+			_durationProperty.set(Duration.ZERO)
+			_positionProperty.set(Duration.ZERO)
+
 			Platform.runLater(() => {
 				if (getPad.isPadVisible) {
 					getPad.getController.getView.showBusyView(false)
@@ -202,7 +206,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			onEof()
 		})
 
-		mediaPlayers.addOne(new MediaPlayerContainer(mediaPath, mediaPlayer))
+		mediaPlayers.add(new MediaPlayerContainer(mediaPath, mediaPlayer))
 	}
 
 	/**
@@ -236,7 +240,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def reorderMedia(): Unit = {
 		val paths = pad.getPaths
-		mediaPlayers = mediaPlayers.sortWith((o1, o2) => paths.indexOf(o1.path) < paths.indexOf(o2.path))
+		mediaPlayers.sort((o1, o2) => Integer.compare(paths.indexOf(o1.path), paths.indexOf(o2.path)))
 	}
 
 	/*
@@ -245,7 +249,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def updateVolume(): Unit = {
 		val volume = VolumeManager.getInstance.computeVolume(getPad)
-		mediaPlayers.foreach(player => player.mediaPlayer.setVolume(volume))
+		mediaPlayers.forEach(player => player.mediaPlayer.setVolume(volume))
 	}
 
 	/**
