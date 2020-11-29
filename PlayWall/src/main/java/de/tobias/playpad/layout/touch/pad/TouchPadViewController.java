@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
@@ -97,6 +98,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.clearIndex();
 			padView.clearPreviewContent();
 			padView.clearTime();
+			padView.clearPlaylistLabel();
 
 			padView.setTriggerLabelActive(false);
 
@@ -211,7 +213,11 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 
 	@Override
 	public void updatePlaylistLabel() {
-		// TODO
+		if (pad.getContent() instanceof Playlistable) {
+			padView.setPlaylistIndex(((Playlistable) pad.getContent()).currentPlayingMediaIndex(), pad.getPaths().size());
+		} else {
+			padView.clearPlaylistLabel();
+		}
 	}
 
 	@Override
