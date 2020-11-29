@@ -148,7 +148,6 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 	@FXML
 	public void onDeleteHandler(ActionEvent event) {
 		MediaPath mediaPath = mediaPathListView.getSelectionModel().getSelectedItem();
-		pad.getContent().unloadMedia(mediaPath);
 		pad.removePath(mediaPath);
 
 		if (pad.getPaths().isEmpty()) {

@@ -3,6 +3,7 @@ package de.tobias.playpad.plugin.content
 import javafx.collections.ObservableList
 
 package object util {
+
 	implicit class ObservableListExtension[E >: Null](list: ObservableList[E]) {
 		def head: E = {
 			if (list.isEmpty) {
@@ -19,7 +20,7 @@ package object util {
 		def isNotEmpty: Boolean = !list.isEmpty
 
 		def indexWhere(predicate: E => Boolean): Int = {
-			for (i <- 0 to list.size()) {
+			for (i <- 0 until list.size()) {
 				if (predicate(list.get(i))) {
 					return i
 				}

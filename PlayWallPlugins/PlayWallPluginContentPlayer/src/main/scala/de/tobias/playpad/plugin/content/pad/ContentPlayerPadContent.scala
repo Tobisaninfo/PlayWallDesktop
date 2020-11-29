@@ -252,10 +252,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	override def unloadMedia(mediaPath: MediaPath): Unit = {
 		val index = mediaPlayers.indexWhere(item => item.path.getId == mediaPath.getId)
 
-		val playerContainer = mediaPlayers(index)
-		playerContainer.stop()
-
-		mediaPlayers.remove(index)
+		if (index >= 0) {
+			val playerContainer = mediaPlayers(index)
+			playerContainer.stop()
+			mediaPlayers.remove(index)
+		}
 	}
 
 	override def reorderMedia(): Unit = {
