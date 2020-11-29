@@ -12,6 +12,7 @@ import de.tobias.playpad.plugin.content.settings.PlayerInstance
 import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
+import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property._
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.media.{Media, MediaPlayer}
@@ -65,8 +66,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			mediaPlayer.stop()
 			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer, getSelectedZones)
 
-			_durationProperty.unbind()
-			_durationProperty.set(Duration.ZERO)
+			_durationProperty.bind(totalDurationBinding())
 			_positionProperty.unbind()
 			_positionProperty.set(Duration.ZERO)
 		}
@@ -155,6 +155,26 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def positionProperty(): ReadOnlyObjectProperty[Duration] = _positionProperty
 
+	def totalDurationBinding(): ObjectBinding[Duration] = {
+		Bindings.createObjectBinding(() => mediaPlayers.stream()
+			.map(player => player.mediaPlayer.getTotalDuration)
+			.filter(duration => duration != null)
+			.reduce(Duration.ZERO, (o1: Duration, o2: Duration) => o1.add(o2)),
+			mediaPlayers.stream().map(player => {
+				if (player.mediaPlayer != null) {
+					player.mediaPlayer.totalDurationProperty()
+				} else {
+					null
+				}
+			})
+				.filter(o => o != null)
+				.toArray(size => new Array[ReadOnlyObjectProperty[Duration]](size)): _*)
+	}
+
+	/*
+	Loading
+	 */
+
 	override def isPadLoaded: Boolean = {
 		mediaPlayers.isNotEmpty
 	}
@@ -185,7 +205,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayer.setOnReady(() => {
 			getPad.setStatus(PadStatus.READY)
 
-			_durationProperty.set(Duration.ZERO)
+			_durationProperty.bind(totalDurationBinding())
 			_positionProperty.set(Duration.ZERO)
 
 			Platform.runLater(() => {
