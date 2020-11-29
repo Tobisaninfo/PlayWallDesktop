@@ -110,7 +110,7 @@ public class DesktopPadView implements IPadView {
 		// Buttons
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), controller);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), controller);
-		nextButton = new PadButton(new FontIcon(FontAwesomeType.FORWARD), controller);
+		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), controller);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), controller);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), controller);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR), controller);
