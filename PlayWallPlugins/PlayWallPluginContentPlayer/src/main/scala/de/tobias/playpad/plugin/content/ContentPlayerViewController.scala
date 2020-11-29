@@ -87,14 +87,15 @@ class ContentPlayerViewController extends NVC {
 	}
 
 	def configurePlayers(configuration: PlayerInstanceConfiguration): Unit = {
-		mediaPlayers.clear()
-		configuration.instances.forEach(player => {
-			mediaPlayers.addOne(new MediaPlayerStack(player))
-		})
-
 		val parent = getParent.asInstanceOf[Pane]
 		parent.getChildren.clear()
-		mediaPlayers.foreach(player => parent.getChildren.add(player))
+
+		mediaPlayers.clear()
+		configuration.instances.forEach(player => {
+			val mediaPlayerStack = new MediaPlayerStack(player)
+			mediaPlayers.addOne(mediaPlayerStack)
+			parent.getChildren.add(mediaPlayerStack)
+		})
 
 		getStageContainer.ifPresent(container => {
 			val stage = container.getStage
