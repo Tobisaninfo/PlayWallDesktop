@@ -1,9 +1,12 @@
 package de.tobias.playpad.plugin.content
 
+import java.util.stream.Collectors
+
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.ui.NVC
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
 import de.tobias.playpad.plugin.content.settings.{PlayerInstance, PlayerInstanceConfiguration}
+import de.tobias.playpad.project.page.PadIndex
 import javafx.geometry.Insets
 import javafx.scene.layout._
 import javafx.scene.media.{MediaPlayer, MediaView}
@@ -25,7 +28,7 @@ class ContentPlayerViewController extends NVC {
 		setWidth(playerInstance.width)
 		setHeight(playerInstance.height)
 
-		def showMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
+		def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer): Unit = {
 			if (!mediaViews.contains(mediaPlayer)) {
 				val mediaView = new MediaView(mediaPlayer)
 				mediaView.setFitWidth(playerInstance.width)
@@ -34,9 +37,11 @@ class ContentPlayerViewController extends NVC {
 			}
 
 			val mediaView = mediaViews(mediaPlayer)
+			mediaView.setUserData(padIndex)
 
 			if (!getChildren.contains(mediaView)) {
-				getChildren.add(mediaView)
+				val index = activePlayers.indexOf(padIndex)
+				getChildren.add(index, mediaView)
 			}
 		}
 
@@ -45,8 +50,11 @@ class ContentPlayerViewController extends NVC {
 				getChildren.remove(mediaViews(mediaPlayer))
 			}
 		}
+
+		override def toString: String = f"MediaPlayerStack: ${getChildren.stream().map(view => f"MediaView: ${view.getUserData}").collect(Collectors.joining(", "))}"
 	}
 
+	private var activePlayers: ListBuffer[PadIndex] = ListBuffer.empty
 	private val mediaPlayers: ListBuffer[MediaPlayerStack] = ListBuffer.empty
 
 	load("view", "PlayerView")
@@ -66,12 +74,12 @@ class ContentPlayerViewController extends NVC {
 		stage.getScene.setFill(Color.BLACK)
 	}
 
-	def showMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
+	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
 		val iterator = this.mediaPlayers.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
 			if (zones.contains(mediaPlayerStack.playerInstance)) {
-				mediaPlayerStack.showMediaPlayer(mediaPlayer)
+				mediaPlayerStack.showMediaPlayer(padIndex, mediaPlayer)
 			}
 		}
 	}
@@ -111,4 +119,8 @@ class ContentPlayerViewController extends NVC {
 			stage.setHeight(maxHeight)
 		})
 	}
+
+	def addActivePadToList(padIndex: PadIndex): Unit = activePlayers.addOne(padIndex)
+
+	def removeActivePadFromList(padIndex: PadIndex): Unit = activePlayers = activePlayers.filter(element => element != padIndex)
 }
