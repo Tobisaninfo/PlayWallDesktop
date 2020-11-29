@@ -11,7 +11,7 @@ import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.settings.PlayerInstance
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
-import javafx.beans.property.{ReadOnlyObjectProperty, SimpleObjectProperty}
+import javafx.beans.property._
 import javafx.scene.media.{Media, MediaPlayer}
 import javafx.util.Duration
 
@@ -24,13 +24,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		def play(): Unit = {
 			_durationProperty.bind(mediaPlayer.totalDurationProperty())
 			_positionProperty.bind(mediaPlayer.currentTimeProperty())
-
-			mediaPlayer.seek(Duration.ZERO)
-
 			ContentPluginMain.playerViewController.showMediaPlayer(getPad.getPadIndex, mediaPlayer, getSelectedZones)
 
+			mediaPlayer.seek(Duration.ZERO)
 			mediaPlayer.play()
-			currentRunningIndex = mediaPlayers.indexOf(this)
+
+			currentRunningIndexProperty.set(mediaPlayers.indexOf(this))
 
 			val controller = getPad.getController
 			if (controller != null) {
@@ -49,9 +48,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		def next(): Unit = {
 			stop()
 
-			currentRunningIndex = mediaPlayers.indexOf(this)
-			if (currentRunningIndex + 1 < mediaPlayers.length) {
-				mediaPlayers(currentRunningIndex + 1).play()
+			val index = mediaPlayers.indexOf(this)
+			currentRunningIndexProperty.set(index)
+
+			if (index + 1 < mediaPlayers.length) {
+				mediaPlayers(index + 1).play()
 			} else if (getPad.getPadSettings.isLoop) {
 				mediaPlayers.head.play()
 			} else {
@@ -73,7 +74,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	private var mediaPlayers: ListBuffer[MediaPlayerContainer] = ListBuffer.empty
-	private var currentRunningIndex: Int = -1
+	private val currentRunningIndexProperty: IntegerProperty = new SimpleIntegerProperty(-1)
 
 	private val _durationProperty = new SimpleObjectProperty[Duration]
 	private val _positionProperty = new SimpleObjectProperty[Duration]
@@ -83,11 +84,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def getType: String = `type`
 
-	override def currentPlayingMediaIndex(): Int = currentRunningIndex
+	override def currentPlayingMediaIndex: Int = currentRunningIndexProperty.get()
+
+	def currentPlayingMediaIndexProperty(): ReadOnlyIntegerProperty = currentRunningIndexProperty
 
 	override def play(): Unit = {
 		if (isPause) {
-			mediaPlayers(currentRunningIndex).resume()
+			mediaPlayers(currentPlayingMediaIndex).resume()
 		} else {
 			ContentPluginMain.playerViewController.addActivePadToList(getPad.getPadIndex)
 
@@ -100,17 +103,17 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def pause(): Unit = {
 		isPause = true
-		mediaPlayers(currentRunningIndex).pause()
+		mediaPlayers(currentPlayingMediaIndex).pause()
 	}
 
 	override def next(): Unit = {
-		mediaPlayers(currentRunningIndex).next()
+		mediaPlayers(currentPlayingMediaIndex).next()
 	}
 
 	override def stop(): Boolean = {
 		isPause = false
-		mediaPlayers(currentRunningIndex).stop()
-		currentRunningIndex = -1
+		mediaPlayers(currentPlayingMediaIndex).stop()
+		currentRunningIndexProperty.set(-1)
 
 		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex)
 
@@ -132,7 +135,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		showingLastFrame = false
 
 		if (getPad.isEof) {
-			mediaPlayers(currentRunningIndex).next()
+			mediaPlayers(currentPlayingMediaIndex).next()
 			return
 		}
 
