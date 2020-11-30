@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.settings.FadeSettings;
 import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.settings.FadeViewController;
+import de.tobias.playpad.viewcontroller.settings.FadeSettingsViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -21,7 +21,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	private CheckBox customFadeCheckBox;
 	@FXML
 	private VBox fadeContainer;
-	private FadeViewController fadeViewController;
+	private FadeSettingsViewController fadeViewController;
 
 	@FXML
 	private VBox warningFeedbackContainer;
@@ -42,7 +42,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void init() {
 		// Embed ViewController
-		fadeViewController = new FadeViewController();
+		fadeViewController = new FadeSettingsViewController();
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 
 		warningFeedbackViewController = WarningFeedbackViewController.newViewControllerForPad();

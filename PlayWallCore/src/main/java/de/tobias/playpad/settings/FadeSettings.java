@@ -148,9 +148,9 @@ public class FadeSettings {
 			FadeSettings fade = new FadeSettings();
 
 			Element fadeInElement = container.element(FADE_IN);
-			if (fadeInElement.attributeValue(ON_PAUSE_ATTR) != null)
+			if (fadeInElement.attributeValue(ON_START_ATTR) != null)
 				fade.setFadeInStart(Boolean.parseBoolean(fadeInElement.attributeValue(ON_START_ATTR)));
-			if (fadeInElement.attributeValue(ON_STOP_ATTR) != null)
+			if (fadeInElement.attributeValue(ON_PAUSE_ATTR) != null)
 				fade.setFadeInPause(Boolean.parseBoolean(fadeInElement.attributeValue(ON_PAUSE_ATTR)));
 			fade.setFadeIn(Duration.valueOf(fadeInElement.getStringValue().replace(" ", "")));
 
