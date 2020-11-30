@@ -87,8 +87,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
 
-	private val fadeController = new LinearFadeController(value => ContentPluginMain.playerViewController
-			.setFadeValue(mediaPlayers(currentPlayingMediaIndex).mediaPlayer, getSelectedZones, value))
+	private val fadeController = new LinearFadeController(value => {
+		if (currentPlayingMediaIndex >= 0) {
+			ContentPluginMain.playerViewController
+				.setFadeValue(mediaPlayers(currentPlayingMediaIndex).mediaPlayer, getSelectedZones, value)
+		}
+	})
 
 	override def getType: String = `type`
 
@@ -134,9 +138,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	def onEof(): Unit = {
+		if (isFadeActive) {
+			ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
+			return
+		}
+
 		if (shouldShowLastFrame() && !showingLastFrame // Only is settings is enabled and not already in last frame state
 			&& !pad.getPadSettings.isLoop // Only go to last frame state, is looping is disabled
-			&& !isFadeActive // Only go to last frame state, if no fade is active (if eof is reached while fade out, the last frame should not be hold)
 		) {
 			getPad.setStatus(PadStatus.PAUSE)
 			showingLastFrame = true
@@ -149,8 +157,6 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			mediaPlayers(currentPlayingMediaIndex).next()
 			return
 		}
-
-		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
 	}
 
 	/*

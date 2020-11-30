@@ -59,7 +59,7 @@ class ContentPlayerViewController extends NVC {
 			}
 		}
 
-		def setFadeValue(mediaPlayer: MediaPlayer, value: Double): Unit ={
+		def setFadeValue(mediaPlayer: MediaPlayer, value: Double): Unit = {
 			if (mediaViews.contains(mediaPlayer)) {
 				val mediaView = mediaViews(mediaPlayer)
 				mediaView.setOpacity(value)
