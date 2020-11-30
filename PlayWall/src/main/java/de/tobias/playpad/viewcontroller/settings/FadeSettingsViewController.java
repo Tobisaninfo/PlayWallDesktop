@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
 
-public class FadeViewController extends NVC {
+public class FadeSettingsViewController extends NVC {
 
 	@FXML
 	private Slider fadeInSlider;
@@ -34,7 +34,7 @@ public class FadeViewController extends NVC {
 
 	private FadeSettings fade;
 
-	public FadeViewController() {
+	public FadeSettingsViewController() {
 		load("view/settings", "FadeView", Localization.getBundle());
 	}
 

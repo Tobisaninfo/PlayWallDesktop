@@ -51,7 +51,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				}
 
 				if (pad.getContent() instanceof Fadeable) {
-					if (padSettings.getFade().isFadeInStart() || (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause())) {
+					if ((oldValue != PadStatus.PAUSE && padSettings.getFade().isFadeInStart()) || (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause())) {
 						((Fadeable) pad.getContent()).fadeIn();
 					}
 				}
