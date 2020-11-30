@@ -49,7 +49,13 @@ class ContentPlayerViewController extends NVC {
 
 			if (!getChildren.contains(mediaView)) {
 				val index = activePlayers.indexOf(padIndex)
-				getChildren.add(index, mediaView)
+				try {
+					getChildren.add(index, mediaView)
+				} catch {
+					case e: Exception =>
+						Logger.error(e)
+						getChildren.add(mediaView)
+				}
 			}
 		}
 
