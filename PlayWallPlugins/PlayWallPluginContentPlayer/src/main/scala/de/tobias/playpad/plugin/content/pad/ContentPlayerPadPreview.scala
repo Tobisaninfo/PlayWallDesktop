@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.content.pad
 
+import de.thecodelabs.utils.io.PathUtils
 import de.tobias.playpad.pad.Pad
 import de.tobias.playpad.pad.view.IPadContentView
 import javafx.beans.binding.Bindings
@@ -45,7 +46,7 @@ class ContentPlayerPadPreview(pad: Pad, parent: Pane) extends VBox with IPadCont
 				if (content.currentPlayingMediaIndex < 0) {
 					""
 				} else {
-					pad.getPaths.get(content.currentPlayingMediaIndex).getFileName
+					PathUtils.getFilenameWithoutExtension(pad.getPaths.get(content.currentPlayingMediaIndex).getPath.getFileName)
 				}
 			}, content.currentPlayingMediaIndexProperty()))
 		case _ =>
