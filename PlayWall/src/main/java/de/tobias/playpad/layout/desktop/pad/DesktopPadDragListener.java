@@ -5,6 +5,7 @@ import de.tobias.playpad.layout.desktop.DesktopEditMode;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.drag.ContentDragOption;
@@ -28,9 +29,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DesktopPadDragListener implements EventHandler<DragEvent> {
 
@@ -90,23 +93,30 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 		event.consume();
 	}
 
+	@SuppressWarnings("java:S1066")
 	private void handleFileDropOver(DragEvent event) {
 		final File file = event.getDragboard().getFiles().get(0);
 		if (file.isFile()) {
 
+			final List<Path> paths = event.getDragboard().getFiles().stream().map(File::toPath).collect(Collectors.toList());
+
 			// built-in file support
-			PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
-			List<ContentDragOption> connects = new ArrayList<>(registry.getPadContentConnectsForFile(file.toPath()));
+			final PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
+			final List<PadContentFactory> supportedContentTypes = registry.getPadContentConnectsForFiles(paths);
+
+			final List<ContentDragOption> contentDragOptions = new ArrayList<>(supportedContentTypes);
 
 			if (currentPad.getContent() instanceof Playlistable) {
-				connects.add(new PlaylistDragOption());
+				if (supportedContentTypes.stream().anyMatch(factory -> factory.getType().equals(currentPad.getContent().getType()))) {
+					contentDragOptions.add(new PlaylistDragOption());
+				}
 			}
 
-			if (!connects.isEmpty()) {
+			if (!contentDragOptions.isEmpty()) {
 				if (fileHud == null) {
 					fileHud = new FileDragOptionView(padViewNode);
 				}
-				fileHud.showOptions(connects);
+				fileHud.showOptions(contentDragOptions);
 
 				event.acceptTransferModes(TransferMode.LINK);
 			}

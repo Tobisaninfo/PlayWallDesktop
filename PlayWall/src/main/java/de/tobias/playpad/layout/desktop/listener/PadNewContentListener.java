@@ -19,7 +19,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class PadNewContentListener {
 
@@ -63,7 +62,7 @@ public class PadNewContentListener {
 		if (files != null) {
 			final Path path = files.get(0).toPath();
 
-			final Set<PadContentFactory> connects = registry.getPadContentConnectsForFile(path);
+			final List<PadContentFactory> connects = registry.getPadContentConnectsForFile(path);
 			if (!connects.isEmpty()) {
 				if (connects.size() > 1) { // Multiple content types possible
 					padContentTypeChooser.showOptions(connects, padContent ->
