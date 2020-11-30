@@ -6,7 +6,7 @@ package de.tobias.playpad.pad.fade;
  * @author tobias
  * @since 6.0.0
  */
-public interface FadeDelegate {
+public interface FadeControllerDelegate {
 
 	/**
 	 * If the fade level is changed, the delegate performs this method. The faded object should update.

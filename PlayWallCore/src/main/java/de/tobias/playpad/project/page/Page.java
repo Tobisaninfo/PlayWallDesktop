@@ -254,7 +254,7 @@ public class Page {
 		final int rows = getProject().getSettings().getRows();
 
 		for (int i = 0; i < rows; i++) {
-			insertPadInto(columns, i, rows * columns);
+			insertPadAndShiftSuccessor(columns, i, rows * columns);
 		}
 	}
 
@@ -263,13 +263,21 @@ public class Page {
 		final int rows = getProject().getSettings().getRows() - 1;
 
 		for (int i = 0; i < columns; i++) {
-			insertPadInto(columns, i, rows * columns);
+			insertPadAndShiftSuccessor(columns, i, rows * columns);
 		}
 	}
 
-	private void insertPadInto(int x, int y, int maxPad) {
+	/**
+	 * Insert a pad into given (x, y). Moves all other pads one position ahead.
+	 *
+	 * @param x            x
+	 * @param y            y
+	 * @param lastPadIndex index of the last pad on the page
+	 */
+	private void insertPadAndShiftSuccessor(int x, int y, int lastPadIndex) {
 		int position = getPadPosition(x, y);
-		for (int i = maxPad - 1; i >= position; i--) {
+		// Going backwards to avoid overwriting the next pad when updating the position of the current one.
+		for (int i = lastPadIndex - 1; i >= position; i--) {
 			getPad(i).setPosition(i + 1);
 		}
 		getPad(position);

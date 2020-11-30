@@ -32,7 +32,7 @@ public class FileDragOptionView implements PadContentFactory.PadContentTypeChoos
 		optionPane = new HBox();
 		optionPane.prefWidthProperty().bind(parent.widthProperty());
 		optionPane.prefHeightProperty().bind(parent.heightProperty());
-		optionPane.setBackground(new Background(new BackgroundFill(new Color(0.2, 0.2, 0.2, 0.8), new CornerRadii(5), new Insets(0))));
+		optionPane.setBackground(new Background(new BackgroundFill(new Color(0.2, 0.2, 0.2, 0.8), new CornerRadii(10), new Insets(0))));
 		optionPane.setAlignment(Pos.CENTER);
 		optionPane.setPadding(new Insets(5));
 		optionPane.setSpacing(5);
