@@ -7,9 +7,9 @@ import de.tobias.playpad.audio.AudioRegistry;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.play.*;
-import de.tobias.playpad.pad.fade.Fade;
-import de.tobias.playpad.pad.fade.FadeDelegate;
+import de.tobias.playpad.pad.fade.FadeControllerDelegate;
 import de.tobias.playpad.pad.fade.Fadeable;
+import de.tobias.playpad.pad.fade.LogarithmicFadeController;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.volume.VolumeManager;
 import javafx.application.Platform;
@@ -24,7 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class AudioContent extends PadContent implements Pauseable, Durationable, Fadeable,
-		Equalizeable, FadeDelegate, Seekable, SpeedAdjustable {
+		Equalizeable, FadeControllerDelegate, Seekable, SpeedAdjustable {
 
 	private final String type;
 
@@ -36,12 +36,12 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	private final ChangeListener<Number> volumeListener;
 	private final ChangeListener<Number> rateListener;
 
-	private final Fade fade;
+	private final LogarithmicFadeController fade;
 
 	AudioContent(String type, Pad pad) {
 		super(pad);
 		this.type = type;
-		fade = new Fade(this);
+		fade = new LogarithmicFadeController(this);
 
 		// Pad Volume Listener
 		volumeListener = (a, oldValue, newValue) -> updateVolume();
