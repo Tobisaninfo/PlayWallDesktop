@@ -47,11 +47,15 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 			}
 		})
 		listView.getSelectionModel.selectedItemProperty().addListener((_, oldValue, newValue) => {
+			val playerViewController = ContentPluginMain.playerViewController
+
 			if (oldValue != null) {
 				saveSettingsToPlayerInstance(oldValue)
+				playerViewController.highlight(oldValue, on = false)
 			}
 			if (newValue != null) {
 				showSettingsOfPlayerInstance(newValue)
+				playerViewController.highlight(newValue, on = true)
 			} else {
 				clearTextFields()
 			}

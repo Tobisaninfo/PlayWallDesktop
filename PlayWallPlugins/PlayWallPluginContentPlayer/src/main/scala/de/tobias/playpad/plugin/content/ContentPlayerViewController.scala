@@ -26,8 +26,10 @@ class ContentPlayerViewController extends NVC {
 
 		setLayoutX(playerInstance.x)
 		setLayoutY(playerInstance.y)
-		setWidth(playerInstance.width)
-		setHeight(playerInstance.height)
+		setMinWidth(playerInstance.width)
+		setMaxWidth(playerInstance.width)
+		setMinHeight(playerInstance.height)
+		setMaxHeight(playerInstance.height)
 
 		def addActivePad(padIndex: PadIndex): Unit = activePlayers.addOne(padIndex)
 
@@ -53,6 +55,14 @@ class ContentPlayerViewController extends NVC {
 		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 			if (mediaViews.contains(mediaPlayer)) {
 				getChildren.remove(mediaViews(mediaPlayer))
+			}
+		}
+
+		def highlight(on: Boolean): Unit = {
+			if (on) {
+				setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)))
+			} else {
+				setBackground(null)
 			}
 		}
 
@@ -131,4 +141,8 @@ class ContentPlayerViewController extends NVC {
 	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = mediaPlayers
 		.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
 		.foreach(mediaPlayer => mediaPlayer.removeActivePad(padIndex))
+
+	def highlight(zone: PlayerInstance, on: Boolean): Unit = {
+		mediaPlayers.filter(mediaPlayer => zone == mediaPlayer.playerInstance).head.highlight(on)
+	}
 }
