@@ -355,6 +355,9 @@ public class Pad {
 	}
 
 	public void addPath(Path path) {
+		if (mediaPaths.isEmpty()) {
+			setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
+		}
 		createMediaPath(path);
 	}
 
