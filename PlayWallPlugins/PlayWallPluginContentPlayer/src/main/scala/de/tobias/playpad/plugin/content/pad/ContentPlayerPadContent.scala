@@ -2,6 +2,7 @@ package de.tobias.playpad.plugin.content.pad
 
 import java.nio.file.Files
 import java.util
+import java.util.stream.Collectors
 
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.content.{PadContent, Playlistable}
@@ -291,7 +292,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	def getSelectedZones: Seq[PlayerInstance] = {
 		val customSettings = pad.getPadSettings.getCustomSettings
-		val selectedZoneNames = customSettings.getOrDefault(ContentPlayerPadContentFactory.zones, new util.ArrayList[String]()).asInstanceOf[util.List[PlayerInstance]]
+		val selectedZoneNames = customSettings.getOrDefault(
+			ContentPlayerPadContentFactory.zones,
+			ContentPluginMain.configuration.instances.stream().map(zone => zone.getName).collect(Collectors.toList())
+		).asInstanceOf[util.List[String]]
 		ContentPluginMain.configuration.instances.asScala.filter(zone => selectedZoneNames.contains(zone.getName)).toSeq
 	}
 }
