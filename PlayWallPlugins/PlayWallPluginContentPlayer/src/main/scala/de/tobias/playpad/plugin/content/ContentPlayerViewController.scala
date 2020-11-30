@@ -21,12 +21,17 @@ class ContentPlayerViewController extends NVC {
 
 	private class MediaPlayerStack(val playerInstance: PlayerInstance) extends StackPane {
 
+		private var activePlayers: ListBuffer[PadIndex] = ListBuffer.empty
 		val mediaViews: mutable.Map[MediaPlayer, MediaView] = new mutable.HashMap[MediaPlayer, MediaView]()
 
 		setLayoutX(playerInstance.x)
 		setLayoutY(playerInstance.y)
 		setWidth(playerInstance.width)
 		setHeight(playerInstance.height)
+
+		def addActivePad(padIndex: PadIndex): Unit = activePlayers.addOne(padIndex)
+
+		def removeActivePad(padIndex: PadIndex): Unit = activePlayers = activePlayers.filter(element => element != padIndex)
 
 		def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer): Unit = {
 			if (!mediaViews.contains(mediaPlayer)) {
@@ -54,7 +59,6 @@ class ContentPlayerViewController extends NVC {
 		override def toString: String = f"MediaPlayerStack: ${getChildren.stream().map(view => f"MediaView: ${view.getUserData}").collect(Collectors.joining(", "))}"
 	}
 
-	private var activePlayers: ListBuffer[PadIndex] = ListBuffer.empty
 	private val mediaPlayers: ListBuffer[MediaPlayerStack] = ListBuffer.empty
 
 	load("view", "PlayerView")
@@ -120,7 +124,11 @@ class ContentPlayerViewController extends NVC {
 		})
 	}
 
-	def addActivePadToList(padIndex: PadIndex): Unit = activePlayers.addOne(padIndex)
+	def addActivePadToList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = mediaPlayers
+		.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
+		.foreach(mediaPlayer => mediaPlayer.addActivePad(padIndex))
 
-	def removeActivePadFromList(padIndex: PadIndex): Unit = activePlayers = activePlayers.filter(element => element != padIndex)
+	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = mediaPlayers
+		.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
+		.foreach(mediaPlayer => mediaPlayer.removeActivePad(padIndex))
 }

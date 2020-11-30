@@ -93,7 +93,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (isPause) {
 			mediaPlayers(currentPlayingMediaIndex).resume()
 		} else {
-			ContentPluginMain.playerViewController.addActivePadToList(getPad.getPadIndex)
+			ContentPluginMain.playerViewController.addActivePadToList(getPad.getPadIndex, getSelectedZones)
 
 			getPad.setEof(false)
 			mediaPlayers.head.play()
@@ -116,7 +116,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayers(currentPlayingMediaIndex).stop()
 		currentRunningIndexProperty.set(-1)
 
-		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex)
+		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
 
 		val controller = getPad.getController
 		if (controller != null) {
@@ -140,7 +140,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			return
 		}
 
-		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex)
+		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
 	}
 
 	/*
