@@ -6,6 +6,7 @@ import java.util.stream.Collectors
 
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.content.{PadContent, Playlistable}
+import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
@@ -21,7 +22,7 @@ import javafx.util.Duration
 
 import scala.jdk.CollectionConverters._
 
-class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable {
+class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable with Fadeable {
 
 	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
 		def play(): Unit = {
@@ -31,6 +32,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 			mediaPlayer.seek(Duration.ZERO)
 			mediaPlayer.play()
+
+			getPad.setEof(false)
 
 			currentRunningIndexProperty.set(mediaPlayers.indexOf(this))
 
@@ -84,6 +87,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
 
+	private val fadeController = new LinearFadeController(value => ContentPluginMain.playerViewController
+			.setFadeValue(mediaPlayers(currentPlayingMediaIndex).mediaPlayer, getSelectedZones, value))
+
 	override def getType: String = `type`
 
 	override def currentPlayingMediaIndex: Int = currentRunningIndexProperty.get()
@@ -128,7 +134,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	def onEof(): Unit = {
-		if (shouldShowLastFrame() && !showingLastFrame && !pad.getPadSettings.isLoop) {
+		if (shouldShowLastFrame() && !showingLastFrame // Only is settings is enabled and not already in last frame state
+			&& !pad.getPadSettings.isLoop // Only go to last frame state, is looping is disabled
+			&& !isFadeActive // Only go to last frame state, if no fade is active (if eof is reached while fade out, the last frame should not be hold)
+		) {
 			getPad.setStatus(PadStatus.PAUSE)
 			showingLastFrame = true
 			return
@@ -170,6 +179,36 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			})
 				.filter(o => o != null)
 				.toArray(size => new Array[ReadOnlyObjectProperty[Duration]](size)): _*)
+	}
+
+	/*
+	Fadeable
+	 */
+
+	override def fadeIn(): Unit = {
+		val fadeIn = getPad.getPadSettings.getFade.getFadeIn
+		if (fadeIn.toMillis > 0) {
+			fadeController.fadeIn(fadeIn)
+		}
+	}
+
+	override def fadeOut(onFinish: Runnable): Unit = {
+		val fadeOut = getPad.getPadSettings.getFade.getFadeOut
+		if (fadeOut.toMillis > 0) {
+			fadeController.fadeOut(fadeOut, () => {
+				if (onFinish != null) onFinish.run()
+				updateVolume()
+			})
+		}
+		else {
+			onFinish.run()
+		}
+	}
+
+	override def isFadeActive: Boolean = fadeController.isFading
+
+	override def fade(from: Double, to: Double, duration: Duration, onFinish: Runnable): Unit = {
+		fadeController.fade(from, to, duration, onFinish)
 	}
 
 	/*

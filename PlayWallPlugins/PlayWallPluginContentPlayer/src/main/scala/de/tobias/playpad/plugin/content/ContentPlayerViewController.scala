@@ -45,6 +45,7 @@ class ContentPlayerViewController extends NVC {
 
 			val mediaView = mediaViews(mediaPlayer)
 			mediaView.setUserData(padIndex)
+			mediaView.setOpacity(1.0)
 
 			if (!getChildren.contains(mediaView)) {
 				val index = activePlayers.indexOf(padIndex)
@@ -55,6 +56,13 @@ class ContentPlayerViewController extends NVC {
 		def disconnectMediaPlayer(mediaPlayer: MediaPlayer): Unit = {
 			if (mediaViews.contains(mediaPlayer)) {
 				getChildren.remove(mediaViews(mediaPlayer))
+			}
+		}
+
+		def setFadeValue(mediaPlayer: MediaPlayer, value: Double): Unit ={
+			if (mediaViews.contains(mediaPlayer)) {
+				val mediaView = mediaViews(mediaPlayer)
+				mediaView.setOpacity(value)
 			}
 		}
 
@@ -69,7 +77,7 @@ class ContentPlayerViewController extends NVC {
 		override def toString: String = f"MediaPlayerStack: ${getChildren.stream().map(view => f"MediaView: ${view.getUserData}").collect(Collectors.joining(", "))}"
 	}
 
-	private val mediaPlayers: ListBuffer[MediaPlayerStack] = ListBuffer.empty
+	private val mediaStacks: ListBuffer[MediaPlayerStack] = ListBuffer.empty
 
 	load("view", "PlayerView")
 	applyViewControllerToStage
@@ -89,7 +97,7 @@ class ContentPlayerViewController extends NVC {
 	}
 
 	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
-		val iterator = this.mediaPlayers.iterator
+		val iterator = this.mediaStacks.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
 			if (zones.contains(mediaPlayerStack.playerInstance)) {
@@ -99,7 +107,7 @@ class ContentPlayerViewController extends NVC {
 	}
 
 	def disconnectMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
-		val iterator = this.mediaPlayers.iterator
+		val iterator = this.mediaStacks.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
 			if (zones.contains(mediaPlayerStack.playerInstance)) {
@@ -112,10 +120,10 @@ class ContentPlayerViewController extends NVC {
 		val parent = getParent.asInstanceOf[Pane]
 		parent.getChildren.clear()
 
-		mediaPlayers.clear()
+		mediaStacks.clear()
 		configuration.instances.forEach(player => {
 			val mediaPlayerStack = new MediaPlayerStack(player)
-			mediaPlayers.addOne(mediaPlayerStack)
+			mediaStacks.addOne(mediaPlayerStack)
 			parent.getChildren.add(mediaPlayerStack)
 		})
 
@@ -134,15 +142,24 @@ class ContentPlayerViewController extends NVC {
 		})
 	}
 
-	def addActivePadToList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = mediaPlayers
-		.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
-		.foreach(mediaPlayer => mediaPlayer.addActivePad(padIndex))
+	def addActivePadToList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = getMediaStacks(zones)
+		.foreach(mediaStack => mediaStack.addActivePad(padIndex))
 
-	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = mediaPlayers
-		.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
-		.foreach(mediaPlayer => mediaPlayer.removeActivePad(padIndex))
+	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = getMediaStacks(zones)
+		.foreach(mediaStack => mediaStack.removeActivePad(padIndex))
 
 	def highlight(zone: PlayerInstance, on: Boolean): Unit = {
-		mediaPlayers.filter(mediaPlayer => zone == mediaPlayer.playerInstance).head.highlight(on)
+		getMediaStack(zone).head.highlight(on)
+	}
+
+	def setFadeValue(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance], value: Double): Unit = getMediaStacks(zones)
+		.foreach(mediaStack => mediaStack.setFadeValue(mediaPlayer, value))
+
+	private def getMediaStack(zone: PlayerInstance): ListBuffer[MediaPlayerStack] = {
+		getMediaStacks(List(zone))
+	}
+
+	private def getMediaStacks(zones: Seq[PlayerInstance]): ListBuffer[MediaPlayerStack] = {
+		mediaStacks.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
 	}
 }
