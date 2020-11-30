@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import org.controlsfx.control.CheckListView?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox layoutX="237.0" layoutY="-18.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -18,7 +17,13 @@
             <HBox spacing="14.0">
                <children>
                   <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.pad.settings.zone" />
-                  <CheckListView prefHeight="150.0" fx:id="zoneListView" />
+                  <CheckListView fx:id="zoneListView" prefHeight="150.0" />
+                  <VBox spacing="14.0">
+                     <children>
+                        <Button fx:id="addAllZonesButton" onAction="#onAddAllZonesHandler" mnemonicParsing="false" text="%plugin.content.pad.settings.zone.addAll" />
+                        <Button fx:id="removeAllZonesButton" onAction="#onRemoveAllZonesHandler" mnemonicParsing="false" text="%plugin.content.pad.settings.zone.removeAll" />
+                     </children>
+                  </VBox>
                </children>
             </HBox>
             </children>

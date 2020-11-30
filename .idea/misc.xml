@@ -33,7 +33,6 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/PlayWall/PlayWallComponents/pom.xml" />
-        <option value="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginContentPlayer/pom.xml" />
       </set>
     </option>
   </component>

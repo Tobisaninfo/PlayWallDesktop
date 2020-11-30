@@ -7,8 +7,9 @@ import de.tobias.playpad.pad.Pad
 import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.settings.PlayerInstance
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController
+import javafx.beans.binding.Bindings
 import javafx.fxml.FXML
-import javafx.scene.control.CheckBox
+import javafx.scene.control.{Button, CheckBox}
 import org.controlsfx.control.CheckListView
 
 import scala.jdk.CollectionConverters._
@@ -20,11 +21,19 @@ class ContentPlayerPadContentSettingsViewController(val pad: Pad) extends PadSet
 	@FXML
 	var zoneListView: CheckListView[PlayerInstance] = _
 
+	@FXML
+	var addAllZonesButton: Button = _
+	@FXML
+	var removeAllZonesButton: Button = _
+
 	load("view", "ContentPadSettings", Localization.getBundle)
 
 
 	override def init(): Unit = {
 		zoneListView.getItems.addAll(ContentPluginMain.configuration.instances)
+
+		addAllZonesButton.disableProperty().bind(Bindings.equal(Bindings.size(zoneListView.getCheckModel.getCheckedIndices), zoneListView.getItems.size()))
+		removeAllZonesButton.disableProperty().bind(Bindings.isEmpty(zoneListView.getCheckModel.getCheckedIndices))
 	}
 
 	override def getName: String = Localization.getString("plugin.content.player.settings")
@@ -49,5 +58,15 @@ class ContentPlayerPadContentSettingsViewController(val pad: Pad) extends PadSet
 
 		val selectedZoneNames = zoneListView.getCheckModel.getCheckedItems.asScala.map(zone => zone.getName)
 		customSettings.put(ContentPlayerPadContentFactory.zones, new util.ArrayList(selectedZoneNames.asJavaCollection))
+	}
+
+	@FXML
+	def onAddAllZonesHandler(): Unit = {
+		zoneListView.getCheckModel.checkAll()
+	}
+
+	@FXML
+	def onRemoveAllZonesHandler(): Unit = {
+		zoneListView.getCheckModel.clearChecks()
 	}
 }
