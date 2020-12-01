@@ -35,17 +35,17 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private var isPause: Boolean = false
 
 	private val fadeController = new LinearFadeController(value => {
-		if (currentPlayingMediaIndex >= 0) {
+		if (getCurrentPlayingMediaIndex >= 0) {
 			ContentPluginMain.playerViewController
-				.setFadeValue(mediaPlayers(currentPlayingMediaIndex).mediaPlayer, getSelectedZones, value)
+				.setFadeValue(mediaPlayers(getCurrentPlayingMediaIndex).mediaPlayer, getSelectedZones, value)
 		}
 	})
 
 	override def getType: String = `type`
 
-	override def currentPlayingMediaIndex: Int = currentRunningIndexProperty.get()
+	override def getCurrentPlayingMediaIndex: Int = currentRunningIndexProperty.get()
 
-	def currentPlayingMediaIndexProperty(): IntegerProperty = currentRunningIndexProperty
+	override def currentPlayingMediaIndexProperty(): IntegerProperty = currentRunningIndexProperty
 
 	def getMediaPlayers: ObservableList[ContentPlayerMediaContainer] = mediaPlayers
 
@@ -55,7 +55,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def play(): Unit = {
 		if (isPause) {
-			mediaPlayers(currentPlayingMediaIndex).resume()
+			mediaPlayers(getCurrentPlayingMediaIndex).resume()
 		} else {
 			ContentPluginMain.playerViewController.addActivePadToList(getPad.getPadIndex, getSelectedZones)
 
@@ -68,25 +68,19 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def pause(): Unit = {
 		isPause = true
-		mediaPlayers(currentPlayingMediaIndex).pause()
+		mediaPlayers(getCurrentPlayingMediaIndex).pause()
 	}
 
 	override def next(): Unit = {
-		mediaPlayers(currentPlayingMediaIndex).next()
+		mediaPlayers(getCurrentPlayingMediaIndex).next()
 	}
 
 	override def stop(): Boolean = {
 		isPause = false
-		mediaPlayers(currentPlayingMediaIndex).stop()
+		mediaPlayers(getCurrentPlayingMediaIndex).stop()
 		currentRunningIndexProperty.set(-1)
 
 		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
-
-		val controller = getPad.getController
-		if (controller != null) {
-			controller.updatePlaylistLabel()
-		}
-
 		true
 	}
 
@@ -107,7 +101,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		showingLastFrame = false
 
 		if (getPad.isEof) {
-			mediaPlayers(currentPlayingMediaIndex).next()
+			mediaPlayers(getCurrentPlayingMediaIndex).next()
 			return
 		}
 	}

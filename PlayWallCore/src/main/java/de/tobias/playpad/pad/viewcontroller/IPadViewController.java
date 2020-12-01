@@ -44,8 +44,6 @@ public interface IPadViewController {
 
 	void updateButtonDisable();
 
-	void updatePlaylistLabel();
-
 	IPadPositionListener getPadPositionListener();
 
 	ChangeListener<Duration> getPadDurationListener();

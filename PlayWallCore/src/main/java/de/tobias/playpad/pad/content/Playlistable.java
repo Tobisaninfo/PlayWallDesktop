@@ -1,7 +1,11 @@
 package de.tobias.playpad.pad.content;
 
+import javafx.beans.property.IntegerProperty;
+
 public interface Playlistable {
-	int currentPlayingMediaIndex();
+	int getCurrentPlayingMediaIndex();
+
+	IntegerProperty currentPlayingMediaIndexProperty();
 
 	void next();
 }

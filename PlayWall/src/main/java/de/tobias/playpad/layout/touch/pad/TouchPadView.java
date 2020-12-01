@@ -260,16 +260,8 @@ public class TouchPadView implements IPadView {
 		setContentView(null);
 	}
 
-	void clearPlaylistLabel() {
-		playlistLabel.setText("");
-	}
-
-	void setPlaylistIndex(int current, int count) {
-		if (current < 0) {
-			playlistLabel.setText("- / " + count);
-		} else {
-			playlistLabel.setText((current + 1) + " / " + count);
-		}
+	Label getPlaylistLabel() {
+		return playlistLabel;
 	}
 
 	@Override

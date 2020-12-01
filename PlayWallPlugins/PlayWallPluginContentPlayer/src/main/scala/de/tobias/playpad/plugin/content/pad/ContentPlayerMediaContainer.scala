@@ -17,13 +17,7 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val path
 		mediaPlayer.play()
 
 		content.getPad.setEof(false)
-
 		content.currentPlayingMediaIndexProperty().set(content.getMediaPlayers.indexOf(this))
-
-		val controller = content.getPad.getController
-		if (controller != null) {
-			controller.updatePlaylistLabel()
-		}
 	}
 
 	def resume(): Unit = {

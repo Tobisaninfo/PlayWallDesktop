@@ -21,6 +21,7 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -85,7 +86,19 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
-			updatePlaylistLabel();
+			if (pad.getContent() instanceof Playlistable) {
+				final Playlistable content = (Playlistable) pad.getContent();
+				padView.getPlaylistLabel().textProperty().bind(Bindings.createStringBinding(() -> {
+					final int currentPlayingMediaIndex = content.getCurrentPlayingMediaIndex();
+					final int totalCount = pad.getPaths().size();
+
+					if (currentPlayingMediaIndex < 0) {
+						return "- / " + totalCount;
+					} else {
+						return (currentPlayingMediaIndex + 1) + " / " + totalCount;
+					}
+				}, content.currentPlayingMediaIndexProperty(), pad.getPaths()));
+			}
 
 			// Update Listener
 			padContentListener.setPad(pad);
@@ -118,8 +131,10 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.clearPreviewContentView();
 			padView.clearTimeLabel();
 			padView.setTriggerLabelActive(false);
-			padView.clearPlaylistLabel();
 			padView.loopLabelVisibleProperty().unbind();
+
+			padView.getPlaylistLabel().textProperty().unbind();
+			padView.getPlaylistLabel().setText("");
 
 			// Remove Bindings & Listener
 			pad.contentProperty().removeListener(padContentListener);
@@ -345,14 +360,6 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.getStopButton().setDisable(true);
 			padView.getNewButton().setDisable(true);
 			padView.getSettingsButton().setDisable(true);
-		}
-	}
-
-	public void updatePlaylistLabel() {
-		if (pad.getContent() instanceof Playlistable) {
-			padView.setPlaylistIndex(((Playlistable) pad.getContent()).currentPlayingMediaIndex(), pad.getPaths().size());
-		} else {
-			padView.clearPlaylistLabel();
 		}
 	}
 

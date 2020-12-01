@@ -11,6 +11,7 @@ import de.tobias.playpad.pad.view.IPadView;
 import de.tobias.playpad.pad.viewcontroller.IPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -71,11 +72,26 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
+			if (pad.getContent() instanceof Playlistable) {
+				final Playlistable content = (Playlistable) pad.getContent();
+				padView.getPlaylistLabel().textProperty().bind(Bindings.createStringBinding(() -> {
+					final int currentPlayingMediaIndex = content.getCurrentPlayingMediaIndex();
+					final int totalCount = pad.getPaths().size();
+
+					if (currentPlayingMediaIndex < 0) {
+						return "- / " + totalCount;
+					} else {
+						return (currentPlayingMediaIndex + 1) + " / " + totalCount;
+					}
+				}, content.currentPlayingMediaIndexProperty(), pad.getPaths()));
+			}
+
+
 			// Update Listener
 			padContentListener.setPad(pad);
 			padPositionListener.setPad(pad);
 
-			// Pad Content Chnage
+			// Pad Content Change
 			pad.contentProperty().addListener(padContentListener);
 			// Pad Status Change
 			pad.statusProperty().addListener(padStatusListener);
@@ -98,7 +114,9 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.clearIndex();
 			padView.clearPreviewContent();
 			padView.clearTime();
-			padView.clearPlaylistLabel();
+
+			padView.getPlaylistLabel().textProperty().unbind();
+			padView.getPlaylistLabel().setText("");
 
 			padView.setTriggerLabelActive(false);
 
@@ -209,15 +227,6 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 	@Override
 	public void updateButtonDisable() {
 		// Not needed in touch mode
-	}
-
-	@Override
-	public void updatePlaylistLabel() {
-		if (pad.getContent() instanceof Playlistable) {
-			padView.setPlaylistIndex(((Playlistable) pad.getContent()).currentPlayingMediaIndex(), pad.getPaths().size());
-		} else {
-			padView.clearPlaylistLabel();
-		}
 	}
 
 	@Override
