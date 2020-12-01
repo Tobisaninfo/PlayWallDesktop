@@ -4,6 +4,7 @@ import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
+import de.tobias.playpad.plugin.content.player.ContentPlayerViewController
 import de.tobias.playpad.plugin.content.settings.{PlayerInstanceConfiguration, PlayerInstanceSettingsViewController}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import javafx.application.Platform
