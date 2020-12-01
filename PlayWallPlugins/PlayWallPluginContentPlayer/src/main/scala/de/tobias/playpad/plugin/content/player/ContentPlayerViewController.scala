@@ -3,7 +3,7 @@ package de.tobias.playpad.plugin.content.player
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.ui.NVC
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
-import de.tobias.playpad.plugin.content.settings.{PlayerInstance, PlayerInstanceConfiguration}
+import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import de.tobias.playpad.project.page.PadIndex
 import javafx.geometry.Insets
 import javafx.scene.layout._
@@ -35,32 +35,32 @@ class ContentPlayerViewController extends NVC {
 		stage.getScene.setFill(Color.BLACK)
 	}
 
-	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
+	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer, zones: Seq[Zone]): Unit = {
 		val iterator = this.mediaStacks.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
-			if (zones.contains(mediaPlayerStack.playerInstance)) {
+			if (zones.contains(mediaPlayerStack.zone)) {
 				mediaPlayerStack.showMediaPlayer(padIndex, mediaPlayer)
 			}
 		}
 	}
 
-	def disconnectMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance]): Unit = {
+	def disconnectMediaPlayer(mediaPlayer: MediaPlayer, zones: Seq[Zone]): Unit = {
 		val iterator = this.mediaStacks.iterator
 		while (iterator.hasNext) {
 			val mediaPlayerStack = iterator.next()
-			if (zones.contains(mediaPlayerStack.playerInstance)) {
+			if (zones.contains(mediaPlayerStack.zone)) {
 				mediaPlayerStack.disconnectMediaPlayer(mediaPlayer)
 			}
 		}
 	}
 
-	def configurePlayers(configuration: PlayerInstanceConfiguration): Unit = {
+	def configurePlayers(configuration: ZoneConfiguration): Unit = {
 		val parent = getParent.asInstanceOf[Pane]
 		parent.getChildren.clear()
 
 		mediaStacks.clear()
-		configuration.instances.forEach(player => {
+		configuration.zones.forEach(player => {
 			val mediaPlayerStack = new MediaPlayerStack(player)
 			mediaStacks.addOne(mediaPlayerStack)
 			parent.getChildren.add(mediaPlayerStack)
@@ -70,9 +70,9 @@ class ContentPlayerViewController extends NVC {
 			val stage = container.getStage
 
 			import scala.jdk.CollectionConverters._
-			val instances = configuration.instances.asScala
-			val maxWidth = instances.map(player => player.x + player.width).max
-			val maxHeight = instances.map(player => player.y + player.height).max
+			val zones = configuration.zones.asScala
+			val maxWidth = zones.map(player => player.x + player.width).max
+			val maxHeight = zones.map(player => player.y + player.height).max
 
 			stage.setX(0)
 			stage.setY(0)
@@ -81,24 +81,24 @@ class ContentPlayerViewController extends NVC {
 		})
 	}
 
-	def addActivePadToList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = getMediaStacks(zones)
+	def addActivePadToList(padIndex: PadIndex, zones: Seq[Zone]): Unit = getMediaStacks(zones)
 		.foreach(mediaStack => mediaStack.addActivePad(padIndex))
 
-	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[PlayerInstance]): Unit = getMediaStacks(zones)
+	def removeActivePadFromList(padIndex: PadIndex, zones: Seq[Zone]): Unit = getMediaStacks(zones)
 		.foreach(mediaStack => mediaStack.removeActivePad(padIndex))
 
-	def highlight(zone: PlayerInstance, on: Boolean): Unit = {
+	def highlight(zone: Zone, on: Boolean): Unit = {
 		getMediaStack(zone).head.highlight(on)
 	}
 
-	def setFadeValue(mediaPlayer: MediaPlayer, zones: Seq[PlayerInstance], value: Double): Unit = getMediaStacks(zones)
+	def setFadeValue(mediaPlayer: MediaPlayer, zones: Seq[Zone], value: Double): Unit = getMediaStacks(zones)
 		.foreach(mediaStack => mediaStack.setFadeValue(mediaPlayer, value))
 
-	private def getMediaStack(zone: PlayerInstance): ListBuffer[MediaPlayerStack] = {
+	private def getMediaStack(zone: Zone): ListBuffer[MediaPlayerStack] = {
 		getMediaStacks(List(zone))
 	}
 
-	private def getMediaStacks(zones: Seq[PlayerInstance]): ListBuffer[MediaPlayerStack] = {
-		mediaStacks.filter(mediaPlayer => zones.contains(mediaPlayer.playerInstance))
+	private def getMediaStacks(zones: Seq[Zone]): ListBuffer[MediaPlayerStack] = {
+		mediaStacks.filter(mediaPlayer => zones.contains(mediaPlayer.zone))
 	}
 }

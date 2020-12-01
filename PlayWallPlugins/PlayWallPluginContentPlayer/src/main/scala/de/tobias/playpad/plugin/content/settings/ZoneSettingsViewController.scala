@@ -11,10 +11,10 @@ import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, ListCell, ListView, TextField}
 
-class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewController with IGlobalReloadTask {
+class ZoneSettingsViewController extends GlobalSettingsTabViewController with IGlobalReloadTask {
 
 	@FXML
-	var listView: ListView[PlayerInstance] = _
+	var listView: ListView[Zone] = _
 
 	@FXML
 	var nameTextField: TextField = _
@@ -32,11 +32,11 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 	@FXML
 	var removeButton: Button = _
 
-	load("view", "PlayerSettings", Localization.getBundle)
+	load("view", "ZoneSettings", Localization.getBundle)
 
 	override def init(): Unit = {
-		listView.setCellFactory((_: ListView[PlayerInstance]) => new ListCell[PlayerInstance] {
-			override def updateItem(item: PlayerInstance, empty: Boolean): Unit = {
+		listView.setCellFactory((_: ListView[Zone]) => new ListCell[Zone] {
+			override def updateItem(item: Zone, empty: Boolean): Unit = {
 				super.updateItem(item, empty)
 				if (!empty) {
 					textProperty().bind(item.displayProperty())
@@ -50,11 +50,11 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 			val playerViewController = ContentPluginMain.playerViewController
 
 			if (oldValue != null) {
-				saveSettingsToPlayerInstance(oldValue)
+				saveSettingsToZone(oldValue)
 				playerViewController.highlight(oldValue, on = false)
 			}
 			if (newValue != null) {
-				showSettingsOfPlayerInstance(newValue)
+				showSettingsOfZone(newValue)
 				playerViewController.highlight(newValue, on = true)
 			} else {
 				clearTextFields()
@@ -62,20 +62,20 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 		})
 	}
 
-	private def saveSettingsToPlayerInstance(playerInstance: PlayerInstance): Unit = {
-		playerInstance.setName(nameTextField.getText)
-		playerInstance.x = xTextField.getText.toDouble
-		playerInstance.y = yTextField.getText.toDouble
-		playerInstance.width = widthTextField.getText.toDouble
-		playerInstance.height = heightTextField.getText.toDouble
+	private def saveSettingsToZone(zone: Zone): Unit = {
+		zone.setName(nameTextField.getText)
+		zone.x = xTextField.getText.toDouble
+		zone.y = yTextField.getText.toDouble
+		zone.width = widthTextField.getText.toDouble
+		zone.height = heightTextField.getText.toDouble
 	}
 
-	private def showSettingsOfPlayerInstance(playerInstance: PlayerInstance): Unit = {
-		nameTextField.setText(playerInstance.getName)
-		xTextField.setText(playerInstance.x.toInt.toString)
-		yTextField.setText(playerInstance.y.toInt.toString)
-		widthTextField.setText(playerInstance.width.toInt.toString)
-		heightTextField.setText(playerInstance.height.toInt.toString)
+	private def showSettingsOfZone(zone: Zone): Unit = {
+		nameTextField.setText(zone.getName)
+		xTextField.setText(zone.x.toInt.toString)
+		yTextField.setText(zone.y.toInt.toString)
+		widthTextField.setText(zone.width.toInt.toString)
+		heightTextField.setText(zone.height.toInt.toString)
 	}
 
 	private def clearTextFields(): Unit = {
@@ -89,10 +89,10 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 	// Actions
 	@FXML
 	def onAddHandle(): Unit = {
-		val newConfiguration = new PlayerInstance
+		val newConfiguration = new Zone
 		newConfiguration.setName(Localization.getString("plugin.content.player.settings.default_name"))
 
-		ContentPluginMain.configuration.instances.add(newConfiguration)
+		ContentPluginMain.configuration.zones.add(newConfiguration)
 		listView.getItems.add(newConfiguration)
 	}
 
@@ -101,18 +101,18 @@ class PlayerInstanceSettingsViewController extends GlobalSettingsTabViewControll
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			listView.getItems.remove(selectedItem)
-			ContentPluginMain.configuration.instances.remove(selectedItem)
+			ContentPluginMain.configuration.zones.remove(selectedItem)
 		}
 	}
 
 	override def loadSettings(settings: GlobalSettings): Unit = {
-		listView.getItems.setAll(ContentPluginMain.configuration.instances)
+		listView.getItems.setAll(ContentPluginMain.configuration.zones)
 	}
 
 	override def saveSettings(settings: GlobalSettings): Unit = {
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
-			saveSettingsToPlayerInstance(selectedItem)
+			saveSettingsToZone(selectedItem)
 		}
 
 		Storage.save(StorageTypes.JSON, ContentPluginMain.configuration)

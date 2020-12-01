@@ -8,12 +8,12 @@ import de.tobias.playpad.Displayable
 import javafx.beans.property.{SimpleStringProperty, StringProperty}
 
 @FilePath("players.json")
-class PlayerInstanceConfiguration {
+class ZoneConfiguration {
 	@Key
-	var instances: JavaList[PlayerInstance] = new util.ArrayList[PlayerInstance]()
+	var zones: JavaList[Zone] = new util.ArrayList[Zone]()
 }
 
-class PlayerInstance extends Displayable {
+class Zone extends Displayable {
 	@Key
 	private var name: String = _
 	@Key
@@ -38,7 +38,6 @@ class PlayerInstance extends Displayable {
 		_displayProperty.set(name)
 		_displayProperty
 	}
-
 
 	override def toString: String = name
 }

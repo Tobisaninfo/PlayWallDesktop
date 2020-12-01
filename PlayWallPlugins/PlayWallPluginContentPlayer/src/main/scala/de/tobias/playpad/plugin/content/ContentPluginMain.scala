@@ -5,7 +5,7 @@ import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.player.ContentPlayerViewController
-import de.tobias.playpad.plugin.content.settings.{PlayerInstanceConfiguration, PlayerInstanceSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{ZoneConfiguration, ZoneSettingsViewController}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import javafx.application.Platform
 
@@ -26,7 +26,7 @@ class ContentPluginMain extends PlayPadPluginStub {
 			ContentPluginMain.playerViewController.showStage()
 		})
 
-		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new PlayerInstanceSettingsViewController)
+		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new ZoneSettingsViewController)
 	}
 
 	override def shutdown(): Unit = {
@@ -38,5 +38,5 @@ class ContentPluginMain extends PlayPadPluginStub {
 
 object ContentPluginMain {
 	var playerViewController: ContentPlayerViewController = _
-	lazy val configuration: PlayerInstanceConfiguration = Storage.load(StorageTypes.JSON, classOf[PlayerInstanceConfiguration])
+	lazy val configuration: ZoneConfiguration = Storage.load(StorageTypes.JSON, classOf[ZoneConfiguration])
 }

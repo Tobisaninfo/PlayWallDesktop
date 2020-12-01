@@ -3,7 +3,7 @@ package de.tobias.playpad.plugin.content.player
 import java.util.stream.Collectors
 
 import de.thecodelabs.logger.Logger
-import de.tobias.playpad.plugin.content.settings.PlayerInstance
+import de.tobias.playpad.plugin.content.settings.Zone
 import de.tobias.playpad.project.page.PadIndex
 import javafx.geometry.Insets
 import javafx.scene.layout.{Background, BackgroundFill, CornerRadii, StackPane}
@@ -13,17 +13,17 @@ import javafx.scene.paint.Color
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 
-class MediaPlayerStack(val playerInstance: PlayerInstance) extends StackPane {
+class MediaPlayerStack(val zone: Zone) extends StackPane {
 
 	private var activePlayers: ListBuffer[PadIndex] = ListBuffer.empty
 	val mediaViews: mutable.Map[MediaPlayer, MediaView] = new mutable.HashMap[MediaPlayer, MediaView]()
 
-	setLayoutX(playerInstance.x)
-	setLayoutY(playerInstance.y)
-	setMinWidth(playerInstance.width)
-	setMaxWidth(playerInstance.width)
-	setMinHeight(playerInstance.height)
-	setMaxHeight(playerInstance.height)
+	setLayoutX(zone.x)
+	setLayoutY(zone.y)
+	setMinWidth(zone.width)
+	setMaxWidth(zone.width)
+	setMinHeight(zone.height)
+	setMaxHeight(zone.height)
 
 	def addActivePad(padIndex: PadIndex): Unit = activePlayers.addOne(padIndex)
 
@@ -32,8 +32,8 @@ class MediaPlayerStack(val playerInstance: PlayerInstance) extends StackPane {
 	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer): Unit = {
 		if (!mediaViews.contains(mediaPlayer)) {
 			val mediaView = new MediaView(mediaPlayer)
-			mediaView.setFitWidth(playerInstance.width)
-			mediaView.setFitHeight(playerInstance.height)
+			mediaView.setFitWidth(zone.width)
+			mediaView.setFitHeight(zone.height)
 			mediaViews.put(mediaPlayer, mediaView)
 		}
 
