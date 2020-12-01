@@ -24,65 +24,11 @@ import scala.jdk.CollectionConverters._
 
 class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable with Fadeable {
 
-	private class MediaPlayerContainer(val path: MediaPath, val mediaPlayer: MediaPlayer) {
-		def play(): Unit = {
-			_durationProperty.bind(mediaPlayer.totalDurationProperty())
-			_positionProperty.bind(mediaPlayer.currentTimeProperty())
-			ContentPluginMain.playerViewController.showMediaPlayer(getPad.getPadIndex, mediaPlayer, getSelectedZones)
-
-			mediaPlayer.seek(Duration.ZERO)
-			mediaPlayer.play()
-
-			getPad.setEof(false)
-
-			currentRunningIndexProperty.set(mediaPlayers.indexOf(this))
-
-			val controller = getPad.getController
-			if (controller != null) {
-				controller.updatePlaylistLabel()
-			}
-		}
-
-		def resume(): Unit = {
-			mediaPlayer.play()
-		}
-
-		def pause(): Unit = {
-			mediaPlayer.pause()
-		}
-
-		def next(): Unit = {
-			stop()
-
-			val index = mediaPlayers.indexOf(this)
-			currentRunningIndexProperty.set(index)
-
-			if (index + 1 < mediaPlayers.length) {
-				mediaPlayers(index + 1).play()
-			} else if (getPad.getPadSettings.isLoop) {
-				mediaPlayers.head.play()
-			} else {
-				getPad.setStatus(PadStatus.STOP)
-			}
-		}
-
-		def stop(): Unit = {
-			mediaPlayer.stop()
-			ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer, getSelectedZones)
-
-			_durationProperty.bind(totalDurationBinding())
-			_positionProperty.unbind()
-			_positionProperty.set(Duration.ZERO)
-		}
-
-		override def toString: String = f"MediaPlayerContainer: $path"
-	}
-
-	private val mediaPlayers: ObservableList[MediaPlayerContainer] = FXCollections.observableArrayList()
+	private val mediaPlayers: ObservableList[ContentPlayerMediaContainer] = FXCollections.observableArrayList()
 	private val currentRunningIndexProperty: IntegerProperty = new SimpleIntegerProperty(-1)
 
-	private val _durationProperty = new SimpleObjectProperty[Duration]
-	private val _positionProperty = new SimpleObjectProperty[Duration]
+	private[pad] val _durationProperty = new SimpleObjectProperty[Duration]
+	private[pad] val _positionProperty = new SimpleObjectProperty[Duration]
 
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
@@ -98,7 +44,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def currentPlayingMediaIndex: Int = currentRunningIndexProperty.get()
 
-	def currentPlayingMediaIndexProperty(): ReadOnlyIntegerProperty = currentRunningIndexProperty
+	def currentPlayingMediaIndexProperty(): IntegerProperty = currentRunningIndexProperty
+
+	def getMediaPlayers: ObservableList[ContentPlayerMediaContainer] = mediaPlayers
+
+	/*
+	Control Methods
+	 */
 
 	override def play(): Unit = {
 		if (isPause) {
@@ -272,7 +224,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			onEof()
 		})
 
-		mediaPlayers.add(new MediaPlayerContainer(mediaPath, mediaPlayer))
+		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath, mediaPlayer))
 	}
 
 	/**
@@ -330,6 +282,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		clone.loadMedia()
 		clone
 	}
+
+	/*
+	Custom Settings
+	 */
 
 	def shouldShowLastFrame(): Boolean = {
 		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
