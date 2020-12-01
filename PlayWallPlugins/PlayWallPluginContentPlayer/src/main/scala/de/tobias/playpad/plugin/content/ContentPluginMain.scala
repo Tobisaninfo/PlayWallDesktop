@@ -49,9 +49,7 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 
 	override def reloadSettings(oldProfile: Profile, currentProfile: Profile): Unit = {
 		val zoneConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
-		Platform.runLater(() => {
-			ContentPluginMain.playerViewController.configurePlayers(zoneConfiguration)
-		})
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(zoneConfiguration))
 	}
 }
 
