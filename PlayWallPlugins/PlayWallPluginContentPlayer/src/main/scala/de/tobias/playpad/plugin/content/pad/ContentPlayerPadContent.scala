@@ -1,9 +1,6 @@
 package de.tobias.playpad.plugin.content.pad
 
-import java.nio.file.Files
-import java.util
-import java.util.stream.Collectors
-
+import de.thecodelabs.logger.Logger
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.content.{PadContent, Playlistable}
 import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
@@ -21,6 +18,9 @@ import javafx.collections.{FXCollections, ObservableList}
 import javafx.scene.media.{Media, MediaPlayer}
 import javafx.util.Duration
 
+import java.nio.file.Files
+import java.util
+import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
 class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable with Fadeable {
@@ -212,6 +212,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			if (getPad.isPadVisible) {
 				getPad.getController.getView.showBusyView(false)
 			}
+			Logger.error(mediaPlayer.getError)
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
