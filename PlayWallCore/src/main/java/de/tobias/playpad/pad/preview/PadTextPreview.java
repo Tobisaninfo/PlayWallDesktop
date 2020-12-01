@@ -3,7 +3,7 @@ package de.tobias.playpad.pad.preview;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.view.IPadContentView;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -29,7 +29,7 @@ public class PadTextPreview implements IPadContentView {
 	}
 
 	@Override
-	public Node getNode() {
+	public Parent getNode() {
 		return nameLabel;
 	}
 

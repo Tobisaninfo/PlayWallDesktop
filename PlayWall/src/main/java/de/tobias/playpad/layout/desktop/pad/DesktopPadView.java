@@ -30,6 +30,7 @@ import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -151,11 +152,11 @@ public class DesktopPadView implements IPadView {
 					PadContentFactory connect = registry.getFactory(content.getType());
 
 					previewContent = connect.getPadContentPreview(pad, preview);
-					Node node = previewContent.getNode();
+					Parent node = previewContent.getNode();
 
-					// Copy Pseudoclasses
+					// Copy Pseudo classes
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
-						node.pseudoClassStateChanged(pseudoClass, true);
+						NodeWalker.getAllNodes(node).forEach(element -> element.pseudoClassStateChanged(pseudoClass, true));
 					}
 
 					preview.getChildren().setAll(node);

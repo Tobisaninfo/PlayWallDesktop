@@ -6,7 +6,7 @@ import de.tobias.playpad.pad.view.IPadContentView
 import javafx.beans.binding.Bindings
 import javafx.collections.ListChangeListener
 import javafx.geometry.{Insets, Pos}
-import javafx.scene.Node
+import javafx.scene.Parent
 import javafx.scene.control.Label
 import javafx.scene.layout.{Pane, Priority, VBox}
 import javafx.scene.text.TextAlignment
@@ -59,7 +59,7 @@ class ContentPlayerPadPreview(pad: Pad, parent: Pane) extends VBox with IPadCont
 		VBox.setVgrow(label, Priority.ALWAYS)
 	}
 
-	override def getNode: Node = this
+	override def getNode: Parent = this
 
 	override def deInit(): Unit = {
 		nameLabel.textProperty().unbind()

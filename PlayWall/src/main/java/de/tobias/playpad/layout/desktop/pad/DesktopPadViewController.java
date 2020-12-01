@@ -110,7 +110,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 			// Initial Listener call with new data
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
-			padStatusListener.changed(null, null, pad.getStatus());
+			padStatusListener.changed(null, null, pad.getStatus()); // Show correct pseudo classes ...
 
 			// Add Drag and Drop Listener
 			padDragListener = new DesktopPadDragListener(pad, padView, connect);
