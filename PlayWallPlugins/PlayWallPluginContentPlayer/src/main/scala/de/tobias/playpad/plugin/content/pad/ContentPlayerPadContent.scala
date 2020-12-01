@@ -10,8 +10,9 @@ import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.plugin.content.settings.Zone
+import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import de.tobias.playpad.plugin.content.util._
+import de.tobias.playpad.profile.Profile
 import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
 import javafx.beans.binding.{Bindings, ObjectBinding}
@@ -292,11 +293,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	def getSelectedZones: Seq[Zone] = {
+		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+
 		val customSettings = pad.getPadSettings.getCustomSettings
 		val selectedZoneNames = customSettings.getOrDefault(
 			ContentPlayerPadContentFactory.zones,
-			ContentPluginMain.configuration.zones.stream().map(zone => zone.getName).collect(Collectors.toList())
+			zoneConfiguration.zones.stream().map(zone => zone.getName).collect(Collectors.toList())
 		).asInstanceOf[util.List[String]]
-		ContentPluginMain.configuration.zones.asScala.filter(zone => selectedZoneNames.contains(zone.getName)).toSeq
+		zoneConfiguration.zones.asScala.filter(zone => selectedZoneNames.contains(zone.getName)).toSeq
 	}
 }

@@ -6,10 +6,11 @@ import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.player.ContentPlayerViewController
 import de.tobias.playpad.plugin.content.settings.{ZoneConfiguration, ZoneSettingsViewController}
-import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
+import de.tobias.playpad.plugin.{Module, PlayPadPluginStub, SettingsListener}
+import de.tobias.playpad.profile.{Profile, ProfileListener}
 import javafx.application.Platform
 
-class ContentPluginMain extends PlayPadPluginStub {
+class ContentPluginMain extends PlayPadPluginStub with SettingsListener with ProfileListener {
 
 	private var module: Module = _
 
@@ -20,13 +21,10 @@ class ContentPluginMain extends PlayPadPluginStub {
 		Localization.addResourceBundle(localization)
 
 		PlayPadPlugin.getRegistries.getPadContents.loadComponentsFromFile("PadContent.xml", getClass.getClassLoader, module, localization)
-		Platform.runLater(() => {
-			ContentPluginMain.playerViewController = new ContentPlayerViewController
-			ContentPluginMain.playerViewController.configurePlayers(ContentPluginMain.configuration)
-			ContentPluginMain.playerViewController.showStage()
-		})
+		PlayPadPlugin.getInstance().addAdditionalProfileSettingsTab(() => new ZoneSettingsViewController)
 
-		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new ZoneSettingsViewController)
+		PlayPadPlugin.getInstance().addSettingsListener(this)
+		Profile.registerListener(this)
 	}
 
 	override def shutdown(): Unit = {
@@ -34,9 +32,31 @@ class ContentPluginMain extends PlayPadPluginStub {
 	}
 
 	override def getModule: Module = module
+
+	override def onLoad(profile: Profile): Unit = {
+		val path = profile.getRef.getCustomFilePath("Zones.json")
+		val zoneConfiguration = Storage.load(path, StorageTypes.JSON, classOf[ZoneConfiguration])
+		profile.addCustomSettings(ContentPluginMain.zoneConfigurationKey, zoneConfiguration)
+	}
+
+	override def onSave(profile: Profile): Unit = {
+		val path = profile.getRef.getCustomFilePath("Zones.json")
+		val zoneConfigurationObject = profile.getCustomSettings(ContentPluginMain.zoneConfigurationKey)
+		if (zoneConfigurationObject != null) {
+			Storage.save(path, StorageTypes.JSON, zoneConfigurationObject)
+		}
+	}
+
+	override def reloadSettings(oldProfile: Profile, currentProfile: Profile): Unit = {
+		val zoneConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+		Platform.runLater(() => {
+			ContentPluginMain.playerViewController.configurePlayers(zoneConfiguration)
+		})
+	}
 }
 
 object ContentPluginMain {
-	var playerViewController: ContentPlayerViewController = _
-	lazy val configuration: ZoneConfiguration = Storage.load(StorageTypes.JSON, classOf[ZoneConfiguration])
+	lazy val playerViewController: ContentPlayerViewController = new ContentPlayerViewController
+
+	val zoneConfigurationKey = "ZoneConfiguration"
 }

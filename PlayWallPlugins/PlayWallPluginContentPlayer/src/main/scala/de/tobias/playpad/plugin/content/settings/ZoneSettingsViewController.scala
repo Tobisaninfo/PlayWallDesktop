@@ -1,17 +1,17 @@
 package de.tobias.playpad.plugin.content.settings
 
-import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.ui.scene.input.NumberTextField
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.settings.GlobalSettings
+import de.tobias.playpad.profile.{Profile, ProfileSettings}
+import de.tobias.playpad.project.Project
 import de.tobias.playpad.viewcontroller.main.IMainViewController
-import de.tobias.playpad.viewcontroller.option.{GlobalSettingsTabViewController, IGlobalReloadTask}
+import de.tobias.playpad.viewcontroller.option.{IProfileReloadTask, ProfileSettingsTabViewController}
 import javafx.application.Platform
 import javafx.fxml.FXML
 import javafx.scene.control.{Button, ListCell, ListView, TextField}
 
-class ZoneSettingsViewController extends GlobalSettingsTabViewController with IGlobalReloadTask {
+class ZoneSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
 
 	@FXML
 	var listView: ListView[Zone] = _
@@ -92,7 +92,7 @@ class ZoneSettingsViewController extends GlobalSettingsTabViewController with IG
 		val newConfiguration = new Zone
 		newConfiguration.setName(Localization.getString("plugin.content.player.settings.default_name"))
 
-		ContentPluginMain.configuration.zones.add(newConfiguration)
+		getZoneConfiguration.zones.add(newConfiguration)
 		listView.getItems.add(newConfiguration)
 	}
 
@@ -101,21 +101,19 @@ class ZoneSettingsViewController extends GlobalSettingsTabViewController with IG
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			listView.getItems.remove(selectedItem)
-			ContentPluginMain.configuration.zones.remove(selectedItem)
+			getZoneConfiguration.zones.remove(selectedItem)
 		}
 	}
 
-	override def loadSettings(settings: GlobalSettings): Unit = {
-		listView.getItems.setAll(ContentPluginMain.configuration.zones)
+	override def loadSettings(settings: Profile): Unit = {
+		listView.getItems.setAll(getZoneConfiguration.zones)
 	}
 
-	override def saveSettings(settings: GlobalSettings): Unit = {
+	override def saveSettings(settings: Profile): Unit = {
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			saveSettingsToZone(selectedItem)
 		}
-
-		Storage.save(StorageTypes.JSON, ContentPluginMain.configuration)
 	}
 
 	override def needReload(): Boolean = {
@@ -128,6 +126,9 @@ class ZoneSettingsViewController extends GlobalSettingsTabViewController with IG
 
 	override def name(): String = Localization.getString("plugin.content.player.settings")
 
-	override def getTask(settings: GlobalSettings, controller: IMainViewController): Runnable = () =>
-		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(ContentPluginMain.configuration))
+
+	override def getTask(settings: ProfileSettings, project: Project, controller: IMainViewController): Runnable = () =>
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(getZoneConfiguration))
+
+	private def getZoneConfiguration: ZoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
 }

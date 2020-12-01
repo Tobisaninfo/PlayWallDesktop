@@ -56,6 +56,11 @@ class ContentPlayerViewController extends NVC {
 	}
 
 	def configurePlayers(configuration: ZoneConfiguration): Unit = {
+		if (configuration.zones.isEmpty) {
+			closeStage()
+			return
+		}
+
 		val parent = getParent.asInstanceOf[Pane]
 		parent.getChildren.clear()
 
@@ -65,6 +70,8 @@ class ContentPlayerViewController extends NVC {
 			mediaStacks.addOne(mediaPlayerStack)
 			parent.getChildren.add(mediaPlayerStack)
 		})
+
+		showStage()
 
 		getStageContainer.ifPresent(container => {
 			val stage = container.getStage
@@ -88,6 +95,9 @@ class ContentPlayerViewController extends NVC {
 		.foreach(mediaStack => mediaStack.removeActivePad(padIndex))
 
 	def highlight(zone: Zone, on: Boolean): Unit = {
+		if (getMediaStack(zone).isEmpty) {
+			return
+		}
 		getMediaStack(zone).head.highlight(on)
 	}
 
