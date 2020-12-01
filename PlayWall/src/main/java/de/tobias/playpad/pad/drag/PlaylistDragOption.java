@@ -33,6 +33,8 @@ public class PlaylistDragOption implements ContentDragOption {
 
 	@Override
 	public Node getGraphics() {
-		return new FontIcon(FontAwesomeType.PLUS_CIRCLE);
+		final FontIcon fontIcon = new FontIcon(FontAwesomeType.PLUS_CIRCLE);
+		fontIcon.setSize(30);
+		return fontIcon;
 	}
 }

@@ -1,3 +1,6 @@
 <Actions>
-    <Component id="video" name="plugin.content.Player.name">de.tobias.playpad.plugin.content.pad.ContentPlayerPadContentFactory</Component>
+    <Component id="content_player" name="plugin.content.Player.name" icon="MONITOR_MULTIPLE"
+               class="de.thecodelabs.utils.ui.icon.MaterialDesignIcon"
+               size="30">de.tobias.playpad.plugin.content.pad.ContentPlayerPadContentFactory
+    </Component>
 </Actions>
