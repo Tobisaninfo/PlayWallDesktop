@@ -28,7 +28,7 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 	}
 
 	override def shutdown(): Unit = {
-
+		ContentPluginMain.playerViewController.getStageContainer.ifPresent(container => container.forceClose())
 	}
 
 	override def getModule: Module = module

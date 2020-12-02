@@ -1,8 +1,8 @@
 package de.tobias.playpad.plugin.content.player
 
 import de.thecodelabs.logger.Logger
-import de.thecodelabs.utils.ui.NVC
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
+import de.thecodelabs.utils.ui.{NVC, NVCStage}
 import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import de.tobias.playpad.project.page.PadIndex
 import javafx.geometry.Insets
@@ -19,7 +19,9 @@ class ContentPlayerViewController extends NVC {
 	private val mediaStacks: ListBuffer[MediaPlayerStack] = ListBuffer.empty
 
 	load("view", "PlayerView")
-	applyViewControllerToStage
+	private val stageContainer: NVCStage = applyViewControllerToStage
+	stageContainer.addCloseHook(() => false)
+
 	Logger.debug("Create Player View Controller")
 
 	override def init(): Unit = {
