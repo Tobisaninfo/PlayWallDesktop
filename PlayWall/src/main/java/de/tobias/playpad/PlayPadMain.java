@@ -92,6 +92,7 @@ public class PlayPadMain extends Application {
 	@Override
 	public void init() {
 		App app = ApplicationUtils.getApplication();
+		Logger.info("Running on Java: " + System.getProperty("java.version") + " (" + System.getProperty("java.vendor") + ")");
 		Logger.info("Run Path: {0}", SystemUtils.getRunPath());
 
 		// Init SSLContext
