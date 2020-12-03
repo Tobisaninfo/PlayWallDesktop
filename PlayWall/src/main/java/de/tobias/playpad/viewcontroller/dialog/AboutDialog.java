@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-// TODO Extract into lang file
 public class AboutDialog extends NVC {
 
 	@FXML
@@ -39,6 +38,9 @@ public class AboutDialog extends NVC {
 
 	@FXML
 	private Label versionLabel;
+
+	@FXML
+	private Label platformLabel;
 
 	@FXML
 	private Label authorLabel;
@@ -52,7 +54,7 @@ public class AboutDialog extends NVC {
 	@FXML
 	private Label graphicsLabel;
 
-	private Window owner;
+	private final Window owner;
 
 	public AboutDialog(Window owner) {
 		this.owner = owner;
@@ -68,13 +70,17 @@ public class AboutDialog extends NVC {
 		AnchorPane.setLeftAnchor(icon, 14.0);
 		AnchorPane.setTopAnchor(icon, 14.0);
 
-		icon.setOnMouseClicked((e) -> getStageContainer().ifPresent(NVCStage::close));
+		icon.setOnMouseClicked(e -> getStageContainer().ifPresent(NVCStage::close));
 
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();
 		versionLabel.setText(info.getVersion());
 		authorLabel.setText(info.getAuthor());
 		graphicsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_GRAPHICS));
 		libsLabel.setText(Localization.getString(Strings.UI_DIALOG_ABOUT_LIBRARIES));
+
+		platformLabel.setText(String.format("%s (%s) + %s (%s)", System.getProperty("java.version"),
+				System.getProperty("java.vendor"), System.getProperty("javafx.version"),
+				System.getProperty("javafx.runtime.version")));
 
 		Hyperlink websiteLink = new Hyperlink(Localization.getString(Strings.UI_DIALOG_ABOUT_WEBSITE));
 		websiteLink.setPadding(Insets.EMPTY);
