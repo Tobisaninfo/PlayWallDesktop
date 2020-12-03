@@ -169,7 +169,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 */
 
 	override def isPadLoaded: Boolean = {
-		mediaPlayers.isNotEmpty && mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
+		mediaPlayers.isNotEmpty && !mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
 	}
 
 	/**
