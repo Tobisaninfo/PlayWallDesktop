@@ -202,7 +202,6 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		val mediaPlayer = new MediaPlayer(media)
 
 		mediaPlayer.setOnReady(() => {
-			Logger.info(path)
 			getPad.setStatus(PadStatus.READY)
 
 			_durationProperty.bind(totalDurationBinding())
