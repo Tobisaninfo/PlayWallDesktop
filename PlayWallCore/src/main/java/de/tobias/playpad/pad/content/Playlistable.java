@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.content;
 
+import de.tobias.playpad.pad.mediapath.MediaPath;
 import javafx.beans.property.IntegerProperty;
 
 public interface Playlistable {
@@ -8,4 +9,6 @@ public interface Playlistable {
 	IntegerProperty currentPlayingMediaIndexProperty();
 
 	void next();
+
+	boolean isLoaded(MediaPath mediaPath);
 }

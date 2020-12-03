@@ -10,6 +10,7 @@ import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import javafx.beans.binding.Bindings;
@@ -65,8 +66,15 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 				super.updateItem(item, empty);
 				if (!empty) {
 					setText(item.getFileName());
+					final Playlistable playlist = (Playlistable) pad.getContent();
+					if (!playlist.isLoaded(item)) {
+						setGraphic(new FontIcon(FontAwesomeType.WARNING));
+					} else {
+						setGraphic(null);
+					}
 				} else {
 					setText("");
+					setGraphic(null);
 				}
 			}
 		});

@@ -172,6 +172,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayers.isNotEmpty && !mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
 	}
 
+	override def isLoaded(mediaPath: MediaPath): Boolean = mediaPlayers.stream()
+		.filter(item => item.path == mediaPath)
+		.findFirst()
+		.map(container => container.mediaPlayer.getStatus != MediaPlayer.Status.UNKNOWN)
+		.get()
+
 	/**
 	 * Load media files.
 	 */
