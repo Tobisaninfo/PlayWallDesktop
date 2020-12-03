@@ -196,6 +196,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		val mediaPlayer = new MediaPlayer(media)
 
 		mediaPlayer.setOnReady(() => {
+			Logger.info(path)
 			getPad.setStatus(PadStatus.READY)
 
 			_durationProperty.bind(totalDurationBinding())
@@ -208,11 +209,16 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			})
 		})
 
+		mediaPlayer.errorProperty().addListener((_, _, newValue) => Platform.runLater(() => {
+			Logger.error(newValue)
+			pad.setStatus(PadStatus.ERROR)
+		}))
 		mediaPlayer.setOnError(() => Platform.runLater(() => {
 			if (getPad.isPadVisible) {
 				getPad.getController.getView.showBusyView(false)
 			}
 			Logger.error(mediaPlayer.getError)
+			pad.setStatus(PadStatus.ERROR)
 		}))
 
 		mediaPlayer.setOnEndOfMedia(() => {
