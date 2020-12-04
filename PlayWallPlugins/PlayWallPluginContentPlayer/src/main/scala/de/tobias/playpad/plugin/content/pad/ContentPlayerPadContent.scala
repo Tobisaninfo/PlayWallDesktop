@@ -151,7 +151,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (fadeOut.toMillis > 0) {
 			fadeController.fadeOut(fadeOut, () => {
 				if (onFinish != null) onFinish.run()
-				updateVolume()
+
+				if (getPad.getStatus == PadStatus.PLAY) {
+					getPad.setStatus(PadStatus.STOP)
+				}
 			})
 		}
 		else {
