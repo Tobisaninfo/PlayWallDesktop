@@ -3,6 +3,7 @@ package de.tobias.playpad.plugin.content.player
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.ui.size.IgnoreStageSizing
 import de.thecodelabs.utils.ui.{NVC, NVCStage}
+import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import de.tobias.playpad.project.page.PadIndex
 import javafx.geometry.Insets
@@ -35,6 +36,7 @@ class ContentPlayerViewController extends NVC {
 		stage.setAlwaysOnTop(true)
 
 		stage.getScene.setFill(Color.BLACK)
+		stage.getIcons.add(PlayPadPlugin.getInstance().getIcon)
 	}
 
 	def showMediaPlayer(padIndex: PadIndex, mediaPlayer: MediaPlayer, zones: Seq[Zone]): Unit = {
