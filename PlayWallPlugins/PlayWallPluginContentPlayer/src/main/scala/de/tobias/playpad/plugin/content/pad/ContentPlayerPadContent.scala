@@ -20,6 +20,7 @@ import javafx.util.Duration
 
 import java.nio.file.Files
 import java.util
+import java.util.Optional
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
@@ -172,11 +173,13 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		mediaPlayers.isNotEmpty && !mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
 	}
 
-	override def isLoaded(mediaPath: MediaPath): Boolean = mediaPlayers.stream()
-		.filter(item => item.path == mediaPath)
-		.findFirst()
-		.map(container => container.mediaPlayer.getStatus != MediaPlayer.Status.UNKNOWN)
-		.get()
+	override def isLoaded(mediaPath: MediaPath): Boolean = {
+		val loadedOptional: Optional[Boolean] = mediaPlayers.stream()
+			.filter(item => item.path == mediaPath)
+			.findFirst()
+			.map(container => container.mediaPlayer.getStatus != MediaPlayer.Status.UNKNOWN)
+		loadedOptional.orElse(false)
+	}
 
 	/**
 	 * Load media files.
