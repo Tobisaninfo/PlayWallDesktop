@@ -15,7 +15,7 @@
 			-fx-border-width: 0px 0px 1px 0px;
 		}
 
-		&:odd {
+		&:odd:filled {
 			-fx-background-color: derive(-fx-hover-base, -10%);
 		}
 	}

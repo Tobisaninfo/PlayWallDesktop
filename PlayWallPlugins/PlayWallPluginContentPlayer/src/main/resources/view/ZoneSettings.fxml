@@ -4,58 +4,58 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ListView prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0"
-                  AnchorPane.topAnchor="0.0" fx:id="listView"/>
-        <VBox layoutX="200.0" prefHeight="400.0" prefWidth="401.0" spacing="14.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutY="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+              <ListView fx:id="listView" prefWidth="250.0" VBox.vgrow="ALWAYS" />
+              <HBox prefHeight="30.0" prefWidth="200.0" spacing="14.0">
+                  <children>
+                      <Button fx:id="addButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAddHandle" text="%plugin.content.player.settings.add" HBox.hgrow="ALWAYS" />
+                      <Button fx:id="removeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRemoveHandle" text="%plugin.content.player.settings.remove" HBox.hgrow="ALWAYS" />
+                  </children>
+               <padding>
+                  <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
+               </padding>
+              </HBox>
+         </children>
+      </VBox>
+        <VBox layoutX="200.0" prefHeight="400.0" prefWidth="401.0" spacing="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="CENTER_LEFT" spacing="14.0">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.name"/>
-                        <TextField fx:id="nameTextField"/>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.name" />
+                        <TextField fx:id="nameTextField" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14.0">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.x"/>
-                        <NumberTextField fx:id="xTextField"/>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.x" />
+                        <NumberTextField fx:id="xTextField" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14.0">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.y"/>
-                        <NumberTextField fx:id="yTextField"/>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.y" />
+                        <NumberTextField fx:id="yTextField" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14.0">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.width"/>
-                        <NumberTextField fx:id="widthTextField"/>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.width" />
+                        <NumberTextField fx:id="widthTextField" />
                     </children>
                 </HBox>
                 <HBox alignment="CENTER_LEFT" spacing="14.0">
                     <children>
-                        <Label alignment="CENTER_RIGHT" prefWidth="150.0"
-                               text="%plugin.content.player.settings.height"/>
-                        <NumberTextField fx:id="heightTextField"/>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%plugin.content.player.settings.height" />
+                        <NumberTextField fx:id="heightTextField" />
                     </children>
                 </HBox>
             </children>
             <padding>
-                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+                <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
             </padding>
         </VBox>
-        <HBox layoutY="336.0" prefHeight="30.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0">
-            <children>
-                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                        text="%plugin.content.player.settings.add" HBox.hgrow="ALWAYS" fx:id="addButton" onAction="#onAddHandle"/>
-                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                        text="%plugin.content.player.settings.remove" HBox.hgrow="ALWAYS" fx:id="removeButton" onAction="#onRemoveHandle"/>
-            </children>
-        </HBox>
     </children>
 </AnchorPane>
