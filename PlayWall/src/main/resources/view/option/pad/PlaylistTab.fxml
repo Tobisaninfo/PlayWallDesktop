@@ -8,7 +8,7 @@
     <children>
         <VBox spacing="14.0">
             <children>
-                <ListView fx:id="mediaPathListView" prefWidth="250.0" VBox.vgrow="ALWAYS" styleClass="dark-list"/>
+                <ListView fx:id="mediaPathListView" prefWidth="250.0" VBox.vgrow="ALWAYS"/>
                 <HBox spacing="14.0">
                     <children>
                         <Button fx:id="addButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
