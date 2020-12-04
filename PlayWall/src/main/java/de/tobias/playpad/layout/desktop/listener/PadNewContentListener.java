@@ -31,7 +31,7 @@ public class PadNewContentListener {
 	public List<File> showMediaOpenFileChooser(ActionEvent event, String[] supportedFileTypes, boolean multiSelect) {
 		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
 		if (pad.getProject() != null && settings.isLiveMode() && settings.isLiveModeFile() && pad.getProject().getActivePlayers() > 0) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		final FileChooser chooser = new FileChooser();
@@ -47,12 +47,18 @@ public class PadNewContentListener {
 			}
 		}
 
+		final List<File> selectedFiles;
 		final Window window = ((Node) event.getTarget()).getScene().getWindow();
 		if (multiSelect) {
-			return chooser.showOpenMultipleDialog(window);
+			selectedFiles = chooser.showOpenMultipleDialog(window);
 		} else {
-			return Collections.singletonList(chooser.showOpenDialog(window));
+			selectedFiles = Collections.singletonList(chooser.showOpenDialog(window));
 		}
+
+		if (selectedFiles != null && !selectedFiles.isEmpty()) {
+			ApplicationUtils.getApplication().getUserDefaults().setData(DesktopPadViewController.OPEN_FOLDER, selectedFiles.get(0).getParent());
+		}
+		return selectedFiles;
 	}
 
 	public void onNew(ActionEvent event, PadContentFactory.PadContentTypeChooser padContentTypeChooser) throws NoSuchComponentException {
@@ -76,8 +82,6 @@ public class PadNewContentListener {
 					setNewPadContent(path, padContent);
 				}
 			}
-
-			ApplicationUtils.getApplication().getUserDefaults().setData(DesktopPadViewController.OPEN_FOLDER, path.getParent().toString());
 		}
 	}
 
