@@ -13,7 +13,7 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -78,7 +78,7 @@ public class Pad {
 	// Utils
 	private transient boolean eof;
 
-	private transient IPadViewController controller;
+	private transient AbstractPadViewController controller;
 	private transient Project project;
 	private transient PadUpdateListener padListener;
 
@@ -574,11 +574,11 @@ public class Pad {
 		return controller != null;
 	}
 
-	public IPadViewController getController() {
+	public AbstractPadViewController getController() {
 		return controller;
 	}
 
-	public void setController(IPadViewController controller) {
+	public void setController(AbstractPadViewController controller) {
 		this.controller = controller;
 	}
 

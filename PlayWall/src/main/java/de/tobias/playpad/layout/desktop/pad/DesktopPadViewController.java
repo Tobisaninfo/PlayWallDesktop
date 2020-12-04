@@ -13,7 +13,7 @@ import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -21,14 +21,13 @@ import de.tobias.playpad.settings.GlobalSettings;
 import de.tobias.playpad.view.FileDragOptionView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
+public class DesktopPadViewController extends AbstractPadViewController implements EventHandler<ActionEvent> {
 
 	public static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
@@ -86,19 +85,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
-			if (pad.getContent() instanceof Playlistable) {
-				final Playlistable content = (Playlistable) pad.getContent();
-				padView.getPlaylistLabel().textProperty().bind(Bindings.createStringBinding(() -> {
-					final int currentPlayingMediaIndex = content.getCurrentPlayingMediaIndex();
-					final int totalCount = pad.getPaths().size();
-
-					if (currentPlayingMediaIndex < 0) {
-						return "- / " + totalCount;
-					} else {
-						return (currentPlayingMediaIndex + 1) + " / " + totalCount;
-					}
-				}, content.currentPlayingMediaIndexProperty(), pad.getPaths()));
-			}
+			updatePlaylistLabelBinding(pad);
 
 			// Update Listener
 			padContentListener.setPad(pad);

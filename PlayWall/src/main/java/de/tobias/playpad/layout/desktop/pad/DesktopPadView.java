@@ -18,7 +18,7 @@ import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -171,7 +171,7 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public IPadViewController getViewController() {
+	public AbstractPadViewController getViewController() {
 		return controller;
 	}
 
@@ -332,7 +332,7 @@ public class DesktopPadView implements IPadView {
 		setContentView(null);
 	}
 
-	Label getPlaylistLabel() {
+	public Label getPlaylistLabel() {
 		return playlistLabel;
 	}
 

@@ -4,14 +4,12 @@ import de.thecodelabs.logger.Logger;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
-import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -20,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.util.Duration;
 
-public class TouchPadViewController implements IPadViewController, EventHandler<Event> {
+public class TouchPadViewController extends AbstractPadViewController implements EventHandler<Event> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String DURATION_FORMAT = "%d:%02d";
@@ -72,20 +70,7 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
-			if (pad.getContent() instanceof Playlistable) {
-				final Playlistable content = (Playlistable) pad.getContent();
-				padView.getPlaylistLabel().textProperty().bind(Bindings.createStringBinding(() -> {
-					final int currentPlayingMediaIndex = content.getCurrentPlayingMediaIndex();
-					final int totalCount = pad.getPaths().size();
-
-					if (currentPlayingMediaIndex < 0) {
-						return "- / " + totalCount;
-					} else {
-						return (currentPlayingMediaIndex + 1) + " / " + totalCount;
-					}
-				}, content.currentPlayingMediaIndexProperty(), pad.getPaths()));
-			}
-
+			updatePlaylistLabelBinding(pad);
 
 			// Update Listener
 			padContentListener.setPad(pad);
