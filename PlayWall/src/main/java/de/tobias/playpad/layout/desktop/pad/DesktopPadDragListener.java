@@ -104,7 +104,7 @@ public class DesktopPadDragListener implements EventHandler<DragEvent> {
 			final PadContentRegistry registry = PlayPadPlugin.getRegistries().getPadContents();
 			final List<PadContentFactory> supportedContentTypes = registry.getPadContentConnectsForFiles(paths);
 
-			if (currentPad.getContent() != null && currentPad.getContent().isPadLoaded()) {
+			if (currentPad.getContent() != null && currentPad.getContent().isPadLoading()) {
 				return;
 			}
 

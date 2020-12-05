@@ -184,6 +184,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		loadedOptional.orElse(false)
 	}
 
+
+	override def isPadLoading: Boolean = mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
+
 	/**
 	 * Load media files.
 	 */

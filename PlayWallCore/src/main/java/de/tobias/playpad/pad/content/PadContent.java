@@ -40,6 +40,10 @@ public abstract class PadContent {
 
 	public abstract boolean isPadLoaded();
 
+	public boolean isPadLoading() {
+		return false;
+	}
+
 	/**
 	 * Load media files.
 	 */
