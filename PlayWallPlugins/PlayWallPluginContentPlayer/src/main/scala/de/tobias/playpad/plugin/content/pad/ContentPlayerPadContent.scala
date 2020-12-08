@@ -50,6 +50,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	def getMediaPlayers: ObservableList[ContentPlayerMediaContainer] = mediaPlayers
 
+	override def hasNext: Boolean = getCurrentPlayingMediaIndex + 1 < mediaPlayers.length
+
 	/*
 	Control Methods
 	 */

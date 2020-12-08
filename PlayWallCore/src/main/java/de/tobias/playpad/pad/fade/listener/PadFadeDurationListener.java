@@ -1,6 +1,7 @@
 package de.tobias.playpad.pad.fade.listener;
 
 import de.tobias.playpad.pad.Pad;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import javafx.beans.value.ChangeListener;
@@ -20,6 +21,16 @@ public class PadFadeDurationListener implements ChangeListener<Duration> {
 		if (pad.getPadSettings().getFade().isFadeOutEof()) {
 			final Duration fadeDuration = pad.getPadSettings().getFade().getFadeOut();
 
+			// Do not fade out if looping is enabled
+			if (pad.getPadSettings().isLoop()) {
+				return;
+			}
+
+			// Do not fade out if the playlist has a next entry
+			if (pad.getContent() instanceof Playlistable && ((Playlistable) pad.getContent()).hasNext()) {
+				return;
+			}
+			
 			if (pad.getContent() instanceof Durationable) {
 				final Durationable durationable = (Durationable) pad.getContent();
 

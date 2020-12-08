@@ -8,6 +8,8 @@ public interface Playlistable {
 
 	IntegerProperty currentPlayingMediaIndexProperty();
 
+	boolean hasNext();
+
 	void next();
 
 	boolean isLoaded(MediaPath mediaPath);
