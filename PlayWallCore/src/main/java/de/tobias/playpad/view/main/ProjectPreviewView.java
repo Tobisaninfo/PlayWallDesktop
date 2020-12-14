@@ -6,6 +6,9 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.page.Page;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -24,22 +27,27 @@ public class ProjectPreviewView extends Pagination {
 		this.selected = FXCollections.observableArrayList(preSelect);
 
 		setCurrentPageIndex(initialPage);
-		setPageFactory(index -> {
-			GridPane gridPane = new GridPane();
-			gridPane.setHgap(7);
-			gridPane.setVgap(7);
+		setPageFactory(this::getPageNode);
+	}
 
-			final Page page = project.getPage(index);
-			for (int x = 0; x < project.getSettings().getColumns(); x++) {
-				for (int y = 0; y < project.getSettings().getRows(); y++) {
-					final Pad pad = page.getPad(x, y);
-					ToggleButton toggleButton = getToggleButton(preSelect, pad);
+	private Node getPageNode(int index) {
+		GridPane gridPane = new GridPane();
+		gridPane.setHgap(7);
+		gridPane.setVgap(7);
+		gridPane.setAlignment(Pos.CENTER);
 
-					gridPane.add(toggleButton, x, y);
-				}
+		gridPane.setPadding(new Insets(0, 0, 7, 0));
+
+		final Page page = project.getPage(index);
+		for (int x = 0; x < project.getSettings().getColumns(); x++) {
+			for (int y = 0; y < project.getSettings().getRows(); y++) {
+				final Pad pad = page.getPad(x, y);
+				ToggleButton toggleButton = getToggleButton(selected, pad);
+
+				gridPane.add(toggleButton, x, y);
 			}
-			return gridPane;
-		});
+		}
+		return gridPane;
 	}
 
 	private ToggleButton getToggleButton(List<Pad> preSelect, Pad pad) {
