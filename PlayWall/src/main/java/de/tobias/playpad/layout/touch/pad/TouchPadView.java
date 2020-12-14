@@ -14,7 +14,7 @@ import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -38,6 +38,7 @@ public class TouchPadView implements IPadView {
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
+	private Label playlistLabel;
 	private Label errorLabel;
 
 	private HBox infoBox;
@@ -77,6 +78,7 @@ public class TouchPadView implements IPadView {
 
 		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT));
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.WARNING));
 
 		infoBox = new PadHBox(5);
@@ -147,7 +149,7 @@ public class TouchPadView implements IPadView {
 	}
 
 	@Override
-	public IPadViewController getViewController() {
+	public AbstractPadViewController getViewController() {
 		return controller;
 	}
 
@@ -212,7 +214,7 @@ public class TouchPadView implements IPadView {
 
 	@Override
 	public void addDefaultElements(Pad pad) {
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		// alle Labels in der InfoBox sollen die gleiche Höhe haben, damit die Icons auf gleicher höhe sind
 		for (Node child : infoBox.getChildren()) {
@@ -256,6 +258,10 @@ public class TouchPadView implements IPadView {
 			previewContent.deInit();
 		}
 		setContentView(null);
+	}
+
+	public Label getPlaylistLabel() {
+		return playlistLabel;
 	}
 
 	@Override

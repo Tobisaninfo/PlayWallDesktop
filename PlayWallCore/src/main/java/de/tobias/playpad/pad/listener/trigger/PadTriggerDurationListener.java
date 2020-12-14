@@ -22,22 +22,22 @@ public class PadTriggerDurationListener implements ChangeListener<Duration> {
 	}
 
 	@Override
-	public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+	public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration currentTime) {
 		PadContent content = pad.getContent();
 		if (content instanceof Durationable) {
 			Duration totalDuration = ((Durationable) content).getDuration();
 			if (totalDuration != null) {
-				Duration leftTime = totalDuration.subtract(newValue);
-
 				IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
 				Profile currentProfile = Profile.currentProfile();
 				PadSettings padSettings = pad.getPadSettings();
 
-				// Execute Triggers
-				Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
-				startTrigger.handle(pad, newValue, pad.getProject(), mainViewController, currentProfile);
+				// Execute Start Triggers
+				final Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
+				startTrigger.handle(pad, currentTime, pad.getProject(), mainViewController, currentProfile);
 
-				Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF);
+				// Execute End Trigger
+				final Duration leftTime = totalDuration.subtract(currentTime);
+				final Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF);
 				endTrigger.handle(pad, leftTime, pad.getProject(), mainViewController, currentProfile);
 			}
 		}

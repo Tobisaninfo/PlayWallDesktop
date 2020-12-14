@@ -1,9 +1,10 @@
 package de.tobias.playpad.pad.view;
 
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.page.PadIndex;
 import javafx.css.PseudoClass;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
 /**
@@ -33,7 +34,7 @@ public interface IPadView {
 	 *
 	 * @return ViewController des Pad
 	 */
-	IPadViewController getViewController();
+	AbstractPadViewController getViewController();
 
 	/**
 	 * Gibt das oberste GUI Element des Pads zurück, welche im MainView verwendet wird.
@@ -105,6 +106,8 @@ public interface IPadView {
 	 * @param visible <code>true</code> Sichtbar, <code>false</code> nicht sichtbar
 	 */
 	void setPlaybarVisible(boolean visible);
+
+	Label getPlaylistLabel();
 
 	/**
 	 * Fügt die Standart Elemente der PadView hinzu. Die GUI Element sind Abhängig vom Pad, und welchen Content es hat.

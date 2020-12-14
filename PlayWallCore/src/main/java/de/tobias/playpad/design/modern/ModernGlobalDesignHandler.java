@@ -1,7 +1,7 @@
 package de.tobias.playpad.design.modern;
 
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.stage.Stage;
@@ -16,8 +16,8 @@ public interface ModernGlobalDesignHandler {
 	/*
 	 * Wird in einem neuen Thread aufgerufen
 	 */
-	void handleWarning(ModernGlobalDesign design, IPadViewController controller, Duration warning);
+	void handleWarning(ModernGlobalDesign design, AbstractPadViewController controller, Duration warning);
 
-	default void stopWarning(ModernGlobalDesign design, IPadViewController controller) {
+	default void stopWarning(ModernGlobalDesign design, AbstractPadViewController controller) {
 	}
 }

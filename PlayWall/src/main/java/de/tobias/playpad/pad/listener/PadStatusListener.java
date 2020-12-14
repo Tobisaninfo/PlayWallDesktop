@@ -3,16 +3,16 @@ package de.tobias.playpad.pad.listener;
 import de.thecodelabs.midi.Mapping;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadStatusListener implements ChangeListener<PadStatus> {
 
-	private IPadViewController controller;
+	private AbstractPadViewController controller;
 
-	public PadStatusListener(IPadViewController controller) {
+	public PadStatusListener(AbstractPadViewController controller) {
 		this.controller = controller;
 	}
 

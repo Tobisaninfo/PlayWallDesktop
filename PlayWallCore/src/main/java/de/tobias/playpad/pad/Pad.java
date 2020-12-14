@@ -13,7 +13,7 @@ import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -78,7 +78,7 @@ public class Pad {
 	// Utils
 	private transient boolean eof;
 
-	private transient IPadViewController controller;
+	private transient AbstractPadViewController controller;
 	private transient Project project;
 	private transient PadUpdateListener padListener;
 
@@ -323,6 +323,10 @@ public class Pad {
 			createMediaPath(path);
 		} else {
 			setPath(path, 0);
+
+			while (mediaPaths.size() > 1) {
+				mediaPaths.remove(mediaPaths.size() - 1);
+			}
 		}
 	}
 
@@ -350,6 +354,13 @@ public class Pad {
 		addPath(mediaPath);
 	}
 
+	public void addPath(Path path) {
+		if (mediaPaths.isEmpty()) {
+			setName(PathUtils.getFilenameWithoutExtension(path.getFileName()));
+		}
+		createMediaPath(path);
+	}
+
 	public void addPath(MediaPath mediaPath) {
 		mediaPaths.add(mediaPath);
 
@@ -364,6 +375,7 @@ public class Pad {
 	}
 
 	public void removePath(MediaPath path) {
+		getContent().unloadMedia(path);
 		mediaPaths.remove(path);
 	}
 
@@ -371,6 +383,12 @@ public class Pad {
 	public void removePathListener(MediaPath path) {
 		if (project.getProjectReference().isSync()) {
 			CommandManager.execute(Commands.PATH_REMOVE, project.getProjectReference(), path);
+		}
+	}
+
+	public void clearPaths() {
+		while (!mediaPaths.isEmpty()) {
+			removePath(mediaPaths.get(0));
 		}
 	}
 
@@ -556,11 +574,11 @@ public class Pad {
 		return controller != null;
 	}
 
-	public IPadViewController getController() {
+	public AbstractPadViewController getController() {
 		return controller;
 	}
 
-	public void setController(IPadViewController controller) {
+	public void setController(AbstractPadViewController controller) {
 		this.controller = controller;
 	}
 

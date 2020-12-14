@@ -9,10 +9,11 @@ import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -23,22 +24,21 @@ import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class DesktopPadViewController implements IPadViewController, EventHandler<ActionEvent> {
+public class DesktopPadViewController extends AbstractPadViewController implements EventHandler<ActionEvent> {
 
 	public static final String OPEN_FOLDER = "openFolder";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
-	private DesktopPadView padView;
+	private final DesktopPadView padView;
 	private Pad pad;
 
-	private PadLockedListener padLockedListener;
-	private PadStatusListener padStatusListener;
-	private PadContentListener padContentListener;
-	private PadDurationListener padDurationListener;
-	private IPadPositionListener padPositionListener;
+	private final PadLockedListener padLockedListener;
+	private final PadStatusListener padStatusListener;
+	private final PadContentListener padContentListener;
+	private final PadDurationListener padDurationListener;
+	private final IPadPositionListener padPositionListener;
 
 	private DesktopPadDragListener padDragListener;
 
@@ -84,6 +84,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
+			updatePlaylistLabelBinding(pad);
+
 			// Update Listener
 			padContentListener.setPad(pad);
 			padPositionListener.setPad(pad);
@@ -94,7 +96,7 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 
 			// Initial Listener call with new data
 			padContentListener.changed(null, null, pad.getContent()); // Add Duration listener
-			padStatusListener.changed(null, null, pad.getStatus());
+			padStatusListener.changed(null, null, pad.getStatus()); // Show correct pseudo classes ...
 
 			// Add Drag and Drop Listener
 			padDragListener = new DesktopPadDragListener(pad, padView, connect);
@@ -116,6 +118,9 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 			padView.clearTimeLabel();
 			padView.setTriggerLabelActive(false);
 			padView.loopLabelVisibleProperty().unbind();
+
+			padView.getPlaylistLabel().textProperty().unbind();
+			padView.getPlaylistLabel().setText("");
 
 			// Remove Bindings & Listener
 			pad.contentProperty().removeListener(padContentListener);
@@ -152,6 +157,8 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 				onPlay();
 			} else if (event.getSource() == padView.getPauseButton()) {
 				onPause();
+			} else if (event.getSource() == padView.getNextButton()) {
+				onNext();
 			} else if (event.getSource() == padView.getStopButton()) {
 				onStop();
 			} else if (event.getSource() == padView.getNewButton()) {
@@ -179,6 +186,12 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		}
 	}
 
+	private void onNext() {
+		if (pad.getContent() instanceof Playlistable) {
+			((Playlistable) pad.getContent()).next();
+		}
+	}
+
 	private void onStop() {
 		if (pad.getContent() != null) {
 			pad.setStatus(PadStatus.STOP);
@@ -195,15 +208,11 @@ public class DesktopPadViewController implements IPadViewController, EventHandle
 		IMainViewController mvc = PlayPadPlugin.getInstance().getMainViewController();
 
 		if (mvc != null) {
-			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
-					return;
-				}
+			if (pad.getProject() != null && settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
+				return;
 			}
 
-			Stage owner = mvc.getStage();
-
-			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
+			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, mvc);
 			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
 				if (padView != null && pad != null)
 					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());

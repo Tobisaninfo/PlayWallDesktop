@@ -1,15 +1,15 @@
 package de.tobias.playpad.pad.listener;
 
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Duration;
 
 public class PadDurationListener implements ChangeListener<Duration> {
 
-	private IPadViewController controller;
+	private AbstractPadViewController controller;
 
-	public PadDurationListener(IPadViewController controller) {
+	public PadDurationListener(AbstractPadViewController controller) {
 		this.controller = controller;
 	}
 

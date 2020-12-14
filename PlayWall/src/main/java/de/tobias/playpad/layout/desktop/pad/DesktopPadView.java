@@ -14,10 +14,11 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.registry.NoSuchComponentException;
@@ -29,6 +30,7 @@ import javafx.beans.property.Property;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -42,6 +44,7 @@ public class DesktopPadView implements IPadView {
 	private Label indexLabel;
 	private Label loopLabel;
 	private Label triggerLabel;
+	private Label playlistLabel;
 	private Label errorLabel;
 
 	private HBox infoBox;
@@ -55,6 +58,7 @@ public class DesktopPadView implements IPadView {
 	private ProgressBar playBar;
 	private Button playButton;
 	private Button pauseButton;
+	private Button nextButton;
 	private Button stopButton;
 	private Button newButton;
 	private Button settingsButton;
@@ -88,6 +92,7 @@ public class DesktopPadView implements IPadView {
 
 		loopLabel = new PadLabel(new FontIcon(FontAwesomeType.REPEAT));
 		triggerLabel = new PadLabel(new FontIcon(FontAwesomeType.EXTERNAL_LINK));
+		playlistLabel = PadLabel.empty(STYLE_CLASS_PAD_INFO, STYLE_CLASS_PAD_INFO_INDEX);
 		errorLabel = new PadLabel(new FontIcon(FontAwesomeType.WARNING));
 
 		infoBox = new PadHBox(5);
@@ -106,6 +111,7 @@ public class DesktopPadView implements IPadView {
 		// Buttons
 		playButton = new PadButton(new FontIcon(FontAwesomeType.PLAY), controller);
 		pauseButton = new PadButton(new FontIcon(FontAwesomeType.PAUSE), controller);
+		nextButton = new PadButton(new FontIcon(FontAwesomeType.STEP_FORWARD), controller);
 		stopButton = new PadButton(new FontIcon(FontAwesomeType.STOP), controller);
 		newButton = new PadButton(new FontIcon(FontAwesomeType.FOLDER_OPEN), controller);
 		settingsButton = new PadButton(new FontIcon(FontAwesomeType.GEAR), controller);
@@ -146,11 +152,11 @@ public class DesktopPadView implements IPadView {
 					PadContentFactory connect = registry.getFactory(content.getType());
 
 					previewContent = connect.getPadContentPreview(pad, preview);
-					Node node = previewContent.getNode();
+					Parent node = previewContent.getNode();
 
-					// Copy Pseudoclasses
+					// Copy Pseudo classes
 					for (PseudoClass pseudoClass : superRoot.getPseudoClassStates()) {
-						node.pseudoClassStateChanged(pseudoClass, true);
+						NodeWalker.getAllNodes(node).forEach(element -> element.pseudoClassStateChanged(pseudoClass, true));
 					}
 
 					preview.getChildren().setAll(node);
@@ -165,7 +171,7 @@ public class DesktopPadView implements IPadView {
 	}
 
 	@Override
-	public IPadViewController getViewController() {
+	public AbstractPadViewController getViewController() {
 		return controller;
 	}
 
@@ -212,6 +218,10 @@ public class DesktopPadView implements IPadView {
 		return pauseButton;
 	}
 
+	Button getNextButton() {
+		return nextButton;
+	}
+
 	Button getStopButton() {
 		return stopButton;
 	}
@@ -250,7 +260,11 @@ public class DesktopPadView implements IPadView {
 			if (pad.getContent() != null) {
 				if (pad.getContent() instanceof Pauseable) {
 					if (pad.getStatus() == PadStatus.PLAY) {
-						buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
+						if (pad.getContent() instanceof Playlistable) {
+							buttonBox.getChildren().setAll(pauseButton, nextButton, stopButton, settingsButton);
+						} else {
+							buttonBox.getChildren().setAll(pauseButton, stopButton, settingsButton);
+						}
 					} else {
 						buttonBox.getChildren().setAll(playButton, stopButton, settingsButton);
 					}
@@ -262,7 +276,7 @@ public class DesktopPadView implements IPadView {
 			}
 			applyStyleClasses(pad.getPadIndex());
 		}
-		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, errorLabel, timeLabel);
+		infoBox.getChildren().setAll(indexLabel, loopLabel, triggerLabel, playlistLabel, errorLabel, timeLabel);
 
 		// Buttons unten Full Width
 		buttonBox.prefWidthProperty().bind(superRoot.widthProperty());
@@ -316,6 +330,10 @@ public class DesktopPadView implements IPadView {
 			previewContent.deInit();
 		}
 		setContentView(null);
+	}
+
+	public Label getPlaylistLabel() {
+		return playlistLabel;
 	}
 
 	@Override

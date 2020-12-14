@@ -7,9 +7,12 @@ import de.tobias.playpad.pad.fade.Fadeable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
+/**
+ * Remove end of file fade listener on old pad content and register on new pad content
+ */
 public class PadFadeContentListener implements ChangeListener<PadContent> {
 
-	private Pad pad;
+	private final Pad pad;
 
 	public PadFadeContentListener(Pad pad) {
 		this.pad = pad;

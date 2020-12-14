@@ -40,6 +40,10 @@ public abstract class PadContent {
 
 	public abstract boolean isPadLoaded();
 
+	public boolean isPadLoading() {
+		return false;
+	}
+
 	/**
 	 * Load media files.
 	 */
@@ -63,6 +67,9 @@ public abstract class PadContent {
 	 * @param mediaPath specify media path
 	 */
 	public abstract void unloadMedia(MediaPath mediaPath);
+
+	public void reorderMedia() {
+	}
 
 	public abstract void updateVolume();
 

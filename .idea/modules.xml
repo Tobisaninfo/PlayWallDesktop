@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" filepath="$PROJECT_DIR$/PlayWallCore/PlayWallCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallDesktop.iml" filepath="$PROJECT_DIR$/PlayWallDesktop.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/PlayWallPluginAwake.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginAwake/PlayWallPluginAwake.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginContentPlayer/PlayWallPluginContentPlayer.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginContentPlayer/PlayWallPluginContentPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginEqualizer/PlayWallPluginEqualizer.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginLaunchpad/PlayWallPluginLaunchpad.iml" />
       <module fileurl="file://$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" filepath="$PROJECT_DIR$/PlayWallPlugins/PlayWallPluginMedia/PlayWallPluginMedia.iml" />

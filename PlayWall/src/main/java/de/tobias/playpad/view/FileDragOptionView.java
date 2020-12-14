@@ -1,6 +1,7 @@
 package de.tobias.playpad.view;
 
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.drag.ContentDragOption;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -14,7 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class FileDragOptionView implements PadContentFactory.PadContentTypeChooser {
@@ -76,9 +77,9 @@ public class FileDragOptionView implements PadContentFactory.PadContentTypeChoos
 		return parallelTransition;
 	}
 
-	private PadContentFactory selectedConnect;
+	private ContentDragOption selectedConnect;
 
-	public void showOptions(Set<PadContentFactory> options) {
+	public void showOptions(Collection<? extends ContentDragOption> options) {
 		if (!parent.getChildren().contains(optionPane)) {
 			selectedConnect = null;
 
@@ -125,7 +126,7 @@ public class FileDragOptionView implements PadContentFactory.PadContentTypeChoos
 
 	}
 
-	public void showOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
+	public void showOptions(Collection<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
 		showOptions(options);
 
 		for (Node node : optionPane.getChildren()) {
@@ -143,7 +144,7 @@ public class FileDragOptionView implements PadContentFactory.PadContentTypeChoos
 		}
 	}
 
-	public PadContentFactory getSelectedConnect() {
+	public ContentDragOption getSelectedConnect() {
 		return selectedConnect;
 	}
 

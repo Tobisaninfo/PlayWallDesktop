@@ -6,6 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.CartTriggerViewController;
 
 public class CartTriggerItemFactory extends TriggerItemFactory {
@@ -20,8 +21,8 @@ public class CartTriggerItemFactory extends TriggerItemFactory {
 	}
 
 	@Override
-	public NVC getSettingsController(TriggerItem item) {
-		return new CartTriggerViewController((CartTriggerItem) item);
+	public NVC getSettingsController(TriggerItem item, IMainViewController mainViewController) {
+		return new CartTriggerViewController((CartTriggerItem) item, mainViewController);
 	}
 
 	@Override

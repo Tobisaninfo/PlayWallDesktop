@@ -17,9 +17,7 @@ import org.dom4j.DocumentException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Profile {
 
@@ -30,10 +28,12 @@ public class Profile {
 	private static Profile currentProfile;
 
 	// Settings
-	private ProfileReference ref;
+	private final ProfileReference ref;
 
 	private ProfileSettings profileSettings;
 	private MappingCollection mappings;
+
+	private Map<String, Object> customSettings;
 
 	/**
 	 * Use {@link ProfileReferenceManager#addProfile(ProfileReference)} instead
@@ -44,6 +44,7 @@ public class Profile {
 		this.ref = ref;
 		this.profileSettings = new ProfileSettings();
 		this.mappings = new MappingCollection();
+		this.customSettings = new HashMap<>();
 	}
 
 	public static Mapping createMappingWithDefaultActions() {
@@ -82,6 +83,14 @@ public class Profile {
 
 	public ProfileSettings getProfileSettings() {
 		return profileSettings;
+	}
+
+	public Object getCustomSettings(String name) {
+		return customSettings.get(name);
+	}
+
+	public void addCustomSettings(String name, Object settings) {
+		customSettings.put(name, settings);
 	}
 
 	public static Profile load(ProfileReference ref) throws DocumentException, IOException, ProfileNotFoundException {

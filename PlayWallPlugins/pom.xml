@@ -20,6 +20,7 @@
         <module>PlayWallPluginNativeAudio</module>
         <module>PlayWallPluginPlayoutLog</module>
         <module>PlayWallPluginWebAPI</module>
+        <module>PlayWallPluginContentPlayer</module>
     </modules>
 
 </project>

@@ -10,16 +10,17 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.content.PadContentFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.viewcontroller.IPadSettingsViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +36,17 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	@FXML
 	private Button finishButton;
 
-	public PadSettingsViewController(Pad pad, Window owner) {
+	public PadSettingsViewController(Pad pad, IMainViewController mainViewController) {
 		load("view/option/pad", "PadSettingsView", Localization.getBundle());
 		this.pad = pad;
 
 		addTab(new GeneralPadTabViewController(pad));
+		if (pad.getContent() instanceof Playlistable) {
+			addTab(new PlaylistTabViewController(pad));
+		}
 		addTab(new DesignPadTabViewController(pad));
 		addTab(new PlayerPadTabViewController(pad));
-		addTab(new TriggerPadTabViewController(pad));
+		addTab(new TriggerPadTabViewController(pad, mainViewController));
 
 		if (pad.getContent() != null) {
 			try {
@@ -61,7 +65,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		}
 
 		NVCStage nvcStage = applyViewControllerToStage();
-		nvcStage.initOwner(owner);
+		nvcStage.initOwner(mainViewController.getStage());
 		nvcStage.addCloseHook(this::onFinish);
 		addCloseKeyShortcut(() -> finishButton.fire());
 
@@ -85,7 +89,7 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(650);
-		stage.setMinHeight(550);
+		stage.setMinHeight(600);
 
 		PlayPadPlugin.styleable().applyStyle(stage);
 	}

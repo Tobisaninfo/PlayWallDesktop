@@ -10,6 +10,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.trigger.TriggerDisplayable;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -26,14 +27,17 @@ public class TriggerPointViewController extends NVC {
 	@FXML
 	private HBox buttonBox;
 
-	private TriggerDisplayable triggerWrapper;
+	private final IMainViewController mainViewController;
+	private final TriggerDisplayable triggerWrapper;
 
-	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
+	public TriggerPointViewController(IMainViewController mainViewController, TriggerDisplayable triggerWrapper) {
+		this.mainViewController = mainViewController;
 		load("view/option/pad/trigger", "TriggerPoint", Localization.getBundle());
 		this.triggerWrapper = triggerWrapper;
 
-		for (TriggerItem item : triggerWrapper.getTrigger().getItems())
-			showTriggerItem(item);
+		for (TriggerItem item : triggerWrapper.getTrigger().getItems()) {
+			showTriggerItem(item, mainViewController);
+		}
 	}
 
 	@Override
@@ -42,17 +46,17 @@ public class TriggerPointViewController extends NVC {
 		types.stream().sorted().forEach(item ->
 		{
 			try {
-				TriggerItemFactory conntect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item);
-				Button button = new Button(conntect.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
+				TriggerItemFactory factory = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item);
+				Button button = new Button(factory.toString(), new FontIcon(FontAwesomeType.PLUS_CIRCLE));
 				button.setContentDisplay(ContentDisplay.TOP);
 				button.setPrefWidth(150);
 
 				button.setOnAction(e ->
 				{
-					TriggerItem triggerItem = conntect.newInstance(triggerWrapper.getTrigger());
+					TriggerItem triggerItem = factory.newInstance(triggerWrapper.getTrigger());
 
 					triggerWrapper.addItem(triggerItem);
-					showTriggerItem(triggerItem);
+					showTriggerItem(triggerItem, mainViewController);
 				});
 				buttonBox.getChildren().add(button);
 			} catch (NoSuchComponentException e) {
@@ -61,17 +65,19 @@ public class TriggerPointViewController extends NVC {
 		});
 	}
 
-	private void showTriggerItem(TriggerItem item) {
+	private void showTriggerItem(TriggerItem item, IMainViewController mainViewController) {
 		try {
 			TriggerItemFactory connect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item.getType());
 
 			VBox itemBox = new VBox(14);
-			NVC controller = connect.getSettingsController(item);
+			NVC controller = connect.getSettingsController(item, mainViewController);
 			if (controller != null) {
 				itemBox.getChildren().add(controller.getParent());
 
-				NVC timeViewController = new TriggerTimeViewController(item);
-				itemBox.getChildren().add(timeViewController.getParent());
+				if (triggerWrapper.getTrigger().getTriggerPoint().isTimeAppendable()) {
+					final NVC timeViewController = new TriggerTimeViewController(item);
+					itemBox.getChildren().add(timeViewController.getParent());
+				}
 
 				Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
 				HBox hbox = new HBox(itemBox, deleteButton);

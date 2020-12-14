@@ -4,7 +4,7 @@ import de.thecodelabs.utils.application.ApplicationUtils
 import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
 import de.tobias.playpad.design.modern.{ModernCartDesignHandler, ModernColor}
 import de.tobias.playpad.pad.content.play.Durationable
-import de.tobias.playpad.pad.viewcontroller.IPadViewController
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController
 import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.PseudoClasses
 import javafx.util.Duration
@@ -47,7 +47,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
 
-	override def handleWarning(design: ModernCartDesign, controller: IPadViewController, warning: Duration, globalDesign: ModernGlobalDesign): Unit = {
+	override def handleWarning(design: ModernCartDesign, controller: AbstractPadViewController, warning: Duration, globalDesign: ModernGlobalDesign): Unit = {
 		if (globalDesign.isWarnAnimation) {
 			val playColor = design.getPlayColor
 			val backgroundColor = design.getBackgroundColor
@@ -71,5 +71,5 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		}
 	}
 
-	override def stopWarning(design: ModernCartDesign, controller: IPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
+	override def stopWarning(design: ModernCartDesign, controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 }

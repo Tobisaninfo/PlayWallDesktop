@@ -8,6 +8,7 @@ import de.tobias.playpad.tigger.TriggerPoint;
 import de.tobias.playpad.trigger.TriggerDisplayable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.TriggerPointViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,9 +27,11 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 	@FXML
 	private VBox contentView;
 
-	private Pad pad;
+	private final Pad pad;
+	private final IMainViewController mainViewController;
 
-	TriggerPadTabViewController(Pad pad) {
+	TriggerPadTabViewController(Pad pad, IMainViewController mainViewController) {
+		this.mainViewController = mainViewController;
 		load("view/option/pad", "TriggerTab", Localization.getBundle());
 		this.pad = pad;
 	}
@@ -61,7 +64,7 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 		if (newValue != null) {
 			TriggerDisplayable triggerWrapper = newValue.getValue();
-			TriggerPointViewController controller = new TriggerPointViewController(triggerWrapper);
+			TriggerPointViewController controller = new TriggerPointViewController(mainViewController, triggerWrapper);
 			contentView.getChildren().setAll(controller.getParent());
 			VBox.setVgrow(controller.getParent(), Priority.ALWAYS);
 		}

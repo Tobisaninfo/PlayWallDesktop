@@ -1,7 +1,7 @@
 package de.tobias.playpad.design;
 
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.util.FadeableColor;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.animation.KeyFrame;
@@ -23,7 +23,7 @@ public class ModernDesignAnimator {
 
 	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
 
-	public static void animateFade(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateFade(AbstractPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
@@ -32,7 +32,7 @@ public class ModernDesignAnimator {
 		animate(padViewController, timeline, backgroundColor);
 	}
 
-	public static void animateWarn(IPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateWarn(AbstractPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
@@ -45,7 +45,7 @@ public class ModernDesignAnimator {
 		animate(padViewController, timeline, backgroundColor);
 	}
 
-	private static void animate(IPadViewController padViewController, Timeline timeline, ObjectProperty<FadeableColor> objectProperty) {
+	private static void animate(AbstractPadViewController padViewController, Timeline timeline, ObjectProperty<FadeableColor> objectProperty) {
 		int index = padViewController.getPad().getPosition();
 
 		if (timelines.containsKey(index)) {
@@ -68,7 +68,7 @@ public class ModernDesignAnimator {
 		timelines.put(index, timeline);
 	}
 
-	public static void stopAnimation(IPadViewController controller) {
+	public static void stopAnimation(AbstractPadViewController controller) {
 		int index = controller.getPad().getPosition();
 
 		if (timelines.containsKey(index)) {
@@ -76,7 +76,7 @@ public class ModernDesignAnimator {
 		}
 	}
 
-	public static void warnFlash(IPadViewController controller) {
+	public static void warnFlash(AbstractPadViewController controller) {
 		final IPadView view = controller.getView();
 		try {
 			while (!Thread.interrupted()) {
