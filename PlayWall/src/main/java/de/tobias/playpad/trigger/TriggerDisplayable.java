@@ -10,7 +10,7 @@ import javafx.beans.property.StringProperty;
 
 public class TriggerDisplayable implements Displayable {
 
-	private Trigger trigger;
+	private final Trigger trigger;
 
 	public TriggerDisplayable(Trigger trigger) {
 		this.trigger = trigger;
@@ -21,7 +21,7 @@ public class TriggerDisplayable implements Displayable {
 		return trigger;
 	}
 
-	private StringProperty displayable = new SimpleStringProperty();
+	private final StringProperty displayable = new SimpleStringProperty();
 
 	@Override
 	public StringProperty displayProperty() {

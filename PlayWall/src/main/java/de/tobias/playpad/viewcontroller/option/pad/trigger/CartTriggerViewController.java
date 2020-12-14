@@ -25,9 +25,9 @@ public class CartTriggerViewController extends NVC {
 	@FXML
 	private CheckBox allCartsCheckbox;
 
-	private ProjectPreviewView projectPreviewView;
+	private final ProjectPreviewView projectPreviewView;
 
-	private CartTriggerItem item;
+	private final CartTriggerItem item;
 
 	public CartTriggerViewController(CartTriggerItem item) {
 		load("view/option/pad/trigger", "CartTrigger", Localization.getBundle());
