@@ -6,6 +6,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.pad.trigger.VolumeTriggerViewController;
 
 public class VolumeTriggerItemFactory extends TriggerItemFactory {
@@ -20,8 +21,8 @@ public class VolumeTriggerItemFactory extends TriggerItemFactory {
 	}
 
 	@Override
-	public NVC getSettingsController(TriggerItem item) {
-		return new VolumeTriggerViewController((VolumeTriggerItem) item);
+	public NVC getSettingsController(TriggerItem item, IMainViewController mainViewController) {
+		return new VolumeTriggerViewController((VolumeTriggerItem) item, mainViewController);
 	}
 
 	@Override

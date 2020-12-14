@@ -24,7 +24,6 @@ import de.tobias.playpad.viewcontroller.option.pad.PadSettingsViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class DesktopPadViewController extends AbstractPadViewController implements EventHandler<ActionEvent> {
@@ -209,15 +208,11 @@ public class DesktopPadViewController extends AbstractPadViewController implemen
 		IMainViewController mvc = PlayPadPlugin.getInstance().getMainViewController();
 
 		if (mvc != null) {
-			if (pad.getProject() != null) {
-				if (settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
-					return;
-				}
+			if (pad.getProject() != null && settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
+				return;
 			}
 
-			Stage owner = mvc.getStage();
-
-			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, owner);
+			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, mvc);
 			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
 				if (padView != null && pad != null)
 					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());

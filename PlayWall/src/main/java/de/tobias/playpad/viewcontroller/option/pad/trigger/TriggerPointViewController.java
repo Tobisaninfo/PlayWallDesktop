@@ -10,6 +10,7 @@ import de.tobias.playpad.registry.NoSuchComponentException;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.tigger.TriggerItemFactory;
 import de.tobias.playpad.trigger.TriggerDisplayable;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
@@ -26,14 +27,16 @@ public class TriggerPointViewController extends NVC {
 	@FXML
 	private HBox buttonBox;
 
+	private final IMainViewController mainViewController;
 	private final TriggerDisplayable triggerWrapper;
 
-	public TriggerPointViewController(TriggerDisplayable triggerWrapper) {
+	public TriggerPointViewController(IMainViewController mainViewController, TriggerDisplayable triggerWrapper) {
+		this.mainViewController = mainViewController;
 		load("view/option/pad/trigger", "TriggerPoint", Localization.getBundle());
 		this.triggerWrapper = triggerWrapper;
 
 		for (TriggerItem item : triggerWrapper.getTrigger().getItems()) {
-			showTriggerItem(item);
+			showTriggerItem(item, mainViewController);
 		}
 	}
 
@@ -53,7 +56,7 @@ public class TriggerPointViewController extends NVC {
 					TriggerItem triggerItem = factory.newInstance(triggerWrapper.getTrigger());
 
 					triggerWrapper.addItem(triggerItem);
-					showTriggerItem(triggerItem);
+					showTriggerItem(triggerItem, mainViewController);
 				});
 				buttonBox.getChildren().add(button);
 			} catch (NoSuchComponentException e) {
@@ -62,12 +65,12 @@ public class TriggerPointViewController extends NVC {
 		});
 	}
 
-	private void showTriggerItem(TriggerItem item) {
+	private void showTriggerItem(TriggerItem item, IMainViewController mainViewController) {
 		try {
 			TriggerItemFactory connect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item.getType());
 
 			VBox itemBox = new VBox(14);
-			NVC controller = connect.getSettingsController(item);
+			NVC controller = connect.getSettingsController(item, mainViewController);
 			if (controller != null) {
 				itemBox.getChildren().add(controller.getParent());
 

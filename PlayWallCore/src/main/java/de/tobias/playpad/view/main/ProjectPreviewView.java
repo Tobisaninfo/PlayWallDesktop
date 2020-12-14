@@ -15,21 +15,21 @@ import java.util.List;
 
 public class ProjectPreviewView extends Pagination {
 
-	private Project project;
+	private final Project project;
+	private final ObservableList<Pad> selected;
 
-	private ObservableList<Pad> selected;
-
-	public ProjectPreviewView(Project project, List<Pad> preSelect) {
+	public ProjectPreviewView(Project project, List<Pad> preSelect, int initialPage) {
 		super(project.getPages().size());
 		this.project = project;
 		this.selected = FXCollections.observableArrayList(preSelect);
 
+		setCurrentPageIndex(initialPage);
 		setPageFactory(index -> {
 			GridPane gridPane = new GridPane();
 			gridPane.setHgap(7);
 			gridPane.setVgap(7);
 
-			Page page = project.getPage(index);
+			final Page page = project.getPage(index);
 			for (int x = 0; x < project.getSettings().getColumns(); x++) {
 				for (int y = 0; y < project.getSettings().getRows(); y++) {
 					final Pad pad = page.getPad(x, y);
