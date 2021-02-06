@@ -24,6 +24,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class PadSettingsViewController extends NVC implements IPadSettingsViewController {
 
@@ -77,11 +78,20 @@ public class PadSettingsViewController extends NVC implements IPadSettingsViewCo
 	private void setTitle(Pad pad) {
 		String title;
 		if (pad.getStatus() != PadStatus.EMPTY) {
-			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE, pad.getPositionReadable(), pad.getName());
+			try {
+				title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE, pad.getPositionReadable(), pad.getName());
+			} catch (IllegalStateException e) {
+				Logger.error(e);
+				title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
+			}
 		} else {
 			title = Localization.getString(Strings.UI_WINDOW_PAD_SETTINGS_TITLE_EMPTY, pad.getPositionReadable());
 		}
-		getStageContainer().ifPresent(nvcStage -> nvcStage.getStage().setTitle(title));
+
+		final Optional<NVCStage> stageContainer = getStageContainer();
+		if (stageContainer.isPresent()) {
+			stageContainer.get().getStage().setTitle(title);
+		}
 	}
 
 	@Override
