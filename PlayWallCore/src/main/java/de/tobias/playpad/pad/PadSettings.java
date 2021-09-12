@@ -7,7 +7,7 @@ import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PadSettingsUpdateListener;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.FadeSettings;
 import de.tobias.playpad.tigger.Trigger;
 import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.beans.binding.BooleanBinding;
@@ -31,7 +31,7 @@ public class PadSettings {
 	private DoubleProperty speedProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
-	private ObjectProperty<Fade> fadeProperty = new SimpleObjectProperty<>();
+	private ObjectProperty<FadeSettings> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
@@ -137,18 +137,18 @@ public class PadSettings {
 	 *
 	 * @return Fade
 	 */
-	public Fade getFade() {
+	public FadeSettings getFade() {
 		if (fadeProperty.isNull().get() && Profile.currentProfile() != null) {
 			return Profile.currentProfile().getProfileSettings().getFade();
 		}
 		return fadeProperty.get();
 	}
 
-	public void setFade(Fade fade) {
+	public void setFade(FadeSettings fade) {
 		this.fadeProperty.set(fade);
 	}
 
-	public ObjectProperty<Fade> fadeProperty() {
+	public ObjectProperty<FadeSettings> fadeProperty() {
 		return fadeProperty;
 	}
 

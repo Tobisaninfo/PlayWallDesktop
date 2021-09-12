@@ -3,18 +3,13 @@ package de.tobias.playpad.plugin.media.video;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.preview.PadTextPreview;
 import de.tobias.playpad.pad.view.IPadContentView;
 import de.tobias.playpad.plugin.media.main.impl.MediaPluginImpl;
 import de.tobias.playpad.plugin.media.main.impl.MediaSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 
 public class VideoPadContentFactory extends PadContentFactory {
 
@@ -31,7 +26,7 @@ public class VideoPadContentFactory extends PadContentFactory {
 
 	@Override
 	public IPadContentView getPadContentPreview(Pad pad, Pane parentNode) {
-		return new VideoContentView(pad, parentNode);
+		return new PadTextPreview(pad, parentNode);
 	}
 
 	@Override
@@ -50,31 +45,4 @@ public class VideoPadContentFactory extends PadContentFactory {
 		return FILE_EXTENSION;
 	}
 
-	private class VideoContentView implements IPadContentView {
-
-		private Label nameLabel;
-
-		VideoContentView(Pad pad, Pane parentNode) {
-			nameLabel = new Label();
-			nameLabel.textProperty().bind(pad.nameProperty());
-
-			nameLabel.setWrapText(true);
-			nameLabel.setAlignment(Pos.CENTER);
-			nameLabel.setTextAlignment(TextAlignment.CENTER);
-
-			nameLabel.prefWidthProperty().bind(parentNode.widthProperty());
-			nameLabel.setMaxHeight(Double.MAX_VALUE);
-			VBox.setVgrow(nameLabel, Priority.ALWAYS);
-		}
-
-		@Override
-		public Node getNode() {
-			return nameLabel;
-		}
-
-		@Override
-		public void deInit() {
-			nameLabel.textProperty().unbind();
-		}
-	}
 }

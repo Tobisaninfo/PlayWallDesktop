@@ -199,7 +199,6 @@ public class Project {
 		notFoundMediaProperty.set(getPads(p -> p.getStatus() == PadStatus.NOT_FOUND).size());
 	}
 
-
 	@Override
 	public String toString() {
 		return projectReference.getName() + " (" + projectReference.getUuid() + ")";
@@ -280,5 +279,15 @@ public class Project {
 			}
 		}
 		return null;
+	}
+
+	public void addColumn() {
+		settings.setColumns(settings.getColumns() + 1);
+		pages.forEach(Page::addColumn);
+	}
+
+	public void addRow() {
+		settings.setRows(settings.getRows() + 1);
+		pages.forEach(Page::addRow);
 	}
 }

@@ -363,6 +363,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				}
 			}
 		}
+		Platform.exit();
 		return true;
 	}
 

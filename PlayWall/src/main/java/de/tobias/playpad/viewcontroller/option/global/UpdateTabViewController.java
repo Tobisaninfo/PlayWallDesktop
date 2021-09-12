@@ -24,7 +24,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UpdateTabViewController extends GlobalSettingsTabViewController {
@@ -56,7 +58,11 @@ public class UpdateTabViewController extends GlobalSettingsTabViewController {
 		GlobalSettings globalSettings = playPad.getGlobalSettings();
 
 		updateChannelComboBox.setValue(globalSettings.getUpdateChannel());
-		openUpdateList.getItems().setAll(playPad.getUpdateService().getRemoteVersions().values());
+		final List<Version> updates = playPad.getUpdateService().getRemoteVersions().values()
+				.stream()
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
+		openUpdateList.getItems().setAll(updates);
 		updateButton.setDisable(openUpdateList.getItems().isEmpty());
 
 		ApplicationInfo info = ApplicationUtils.getApplication().getInfo();

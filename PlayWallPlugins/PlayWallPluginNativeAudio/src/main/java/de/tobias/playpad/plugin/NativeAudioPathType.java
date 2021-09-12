@@ -7,7 +7,7 @@ public enum NativeAudioPathType implements ContainerPathType {
 
 	AUDIO(PathType.LIBRARY.getFolder() + "/Audio");
 
-	private String folder;
+	private final String folder;
 
 	NativeAudioPathType(String folder) {
 		this.folder = folder;

@@ -26,6 +26,8 @@ import de.tobias.playpad.viewcontroller.dialog.project.ProjectLoadDialog;
 import de.tobias.playpad.viewcontroller.dialog.project.ProjectReaderDelegateImpl;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MainViewController;
+import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
+import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -37,21 +39,24 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class PlayPadImpl implements PlayPad {
 
-	private Application.Parameters parameters;
+	private final Application.Parameters parameters;
 
-	private List<MainWindowListener> mainViewListeners = new ArrayList<>();
-	private List<SettingsListener> settingsListeners = new ArrayList<>();
-	private List<PadListener> padListeners = new ArrayList<>();
-	private List<GlobalListener> globalListeners = new ArrayList<>();
+	private final List<MainWindowListener> mainViewListeners = new ArrayList<>();
+	private final List<SettingsListener> settingsListeners = new ArrayList<>();
+	private final List<PadListener> padListeners = new ArrayList<>();
+	private final List<GlobalListener> globalListeners = new ArrayList<>();
+	private final List<Supplier<ProfileSettingsTabViewController>> additionalProfileSettingsTabs = new ArrayList<>();
+	private final List<Supplier<GlobalSettingsTabViewController>> additionalGlobalSettingsTabs = new ArrayList<>();
 
 	private MainViewController mainViewController;
 	private Image stageIcon;
 	private Project currentProject;
 
-	private Module module;
+	private final Module module;
 
 	private UpdateService updateService;
 	protected GlobalSettings globalSettings;
@@ -240,6 +245,26 @@ public class PlayPadImpl implements PlayPad {
 	@Override
 	public UpdateService getUpdateService() {
 		return updateService;
+	}
+
+	@Override
+	public void addAdditionalProfileSettingsTab(Supplier<ProfileSettingsTabViewController> tab) {
+		additionalProfileSettingsTabs.add(tab);
+	}
+
+	@Override
+	public List<Supplier<ProfileSettingsTabViewController>> getAdditionalProfileSettingsTabs() {
+		return additionalProfileSettingsTabs;
+	}
+
+	@Override
+	public void addGlobalSettingsTab(Supplier<GlobalSettingsTabViewController> tab) {
+		additionalGlobalSettingsTabs.add(tab);
+	}
+
+	@Override
+	public List<Supplier<GlobalSettingsTabViewController>> getGlobalSettingsTabs() {
+		return additionalGlobalSettingsTabs;
 	}
 
 	/*

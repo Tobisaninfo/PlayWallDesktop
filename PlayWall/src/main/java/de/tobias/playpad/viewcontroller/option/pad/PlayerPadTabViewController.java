@@ -4,10 +4,10 @@ import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
-import de.tobias.playpad.settings.Fade;
+import de.tobias.playpad.settings.FadeSettings;
 import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.settings.FadeViewController;
+import de.tobias.playpad.viewcontroller.settings.FadeSettingsViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -21,7 +21,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	private CheckBox customFadeCheckBox;
 	@FXML
 	private VBox fadeContainer;
-	private FadeViewController fadeViewController;
+	private FadeSettingsViewController fadeViewController;
 
 	@FXML
 	private VBox warningFeedbackContainer;
@@ -42,7 +42,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void init() {
 		// Embed ViewController
-		fadeViewController = new FadeViewController();
+		fadeViewController = new FadeSettingsViewController();
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 
 		warningFeedbackViewController = WarningFeedbackViewController.newViewControllerForPad();
@@ -54,12 +54,12 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 			PadSettings padSettings = pad.getPadSettings();
 
 			if (c && !padSettings.isCustomFade())
-				padSettings.setFade(new Fade());
+				padSettings.setFade(new FadeSettings());
 			else if (!c && padSettings.isCustomFade())
 				padSettings.setFade(null);
 
 			if (c)
-				fadeViewController.setFade(padSettings.getFade());
+				fadeViewController.setFadeSettings(padSettings.getFade());
 		});
 
 		warningEnableCheckBox.selectedProperty().addListener((a, b, c) ->
@@ -104,7 +104,7 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 		PadSettings padSettings = pad.getPadSettings();
 
 		if (padSettings.isCustomFade())
-			fadeViewController.setFade(padSettings.getFade());
+			fadeViewController.setFadeSettings(padSettings.getFade());
 
 		customFadeCheckBox.setSelected(padSettings.isCustomFade());
 		if (!padSettings.isCustomFade()) {

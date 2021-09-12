@@ -71,7 +71,7 @@ public class Trigger {
 		try {
 			triggerPoint = TriggerPoint.valueOf(element.attributeValue(POINT_ATTR));
 		} catch (Exception e) {
-			Logger.error(e);
+			throw new IllegalArgumentException("Trigger Point " + element.attributeValue(POINT_ATTR) + " not exists");
 		}
 
 		for (Element itemElement : element.elements(ITEM_ELEMENT)) {
@@ -104,18 +104,22 @@ public class Trigger {
 		return triggerPoint.name() + " (" + items.size() + ")";
 	}
 
-	public void handle(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile) {
+	public void handle(Pad pad, Duration currentDuration, Project project, IMainViewController mainViewController, Profile currentProfile) {
 		for (TriggerItem item : items) {
 			if (triggerPoint == TriggerPoint.START) {
-				handleStartPoint(pad, duration, project, mainViewController, currentProfile, item);
-			} else if ((triggerPoint == TriggerPoint.EOF_STOP)) {
-				handleEndPoint(pad, duration, project, mainViewController, currentProfile, item);
+				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+			} else if (triggerPoint == TriggerPoint.STOP) {
+				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+			} else if (triggerPoint == TriggerPoint.EOF) {
+				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+			} else if (triggerPoint == TriggerPoint.EOF_STATE) {
+				item.performAction(pad, project, mainViewController, currentProfile);
 			}
 		}
 	}
 
 	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
-		// Wenn Trigger noch nicht gespiel wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
+		// Wenn Trigger noch nicht gespielt wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
 		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
 			item.performAction(pad, project, mainViewController, currentProfile);
 			item.setPerformedAt(duration);
@@ -126,7 +130,7 @@ public class Trigger {
 
 	private void handleStartPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
 		if (pad.getStatus() == PadStatus.PLAY) {
-			// Mitten drin, wenn die Zeit die gepsiel wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
+			// Mitten drin, wenn die Zeit die gespielt wurde größer ist als die gesetzte und noch der Trigger noch nicht ausgeführt
 			// wurde (null)
 			if ((item.getPerformedAt() == null && item.getDurationFromPoint().lessThan(duration))
 					// Wenn der Trigger am Anfang ist

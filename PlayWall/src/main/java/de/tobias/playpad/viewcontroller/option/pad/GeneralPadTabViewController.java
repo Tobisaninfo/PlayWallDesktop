@@ -1,20 +1,35 @@
 package de.tobias.playpad.viewcontroller.option.pad;
 
+import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
+import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadSettings;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.TimeMode;
+import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public class GeneralPadTabViewController extends PadSettingsTabViewController {
+
+	@FXML
+	private VBox mediaRootBox;
+	@FXML
+	private Label pathLabel;
+	@FXML
+	private Button showPathButton;
 
 	@FXML
 	private TextField titleTextField;
@@ -31,11 +46,23 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 	@FXML
 	private Button deleteButton;
 
-	private Pad pad;
+	private final Pad pad;
 
 	GeneralPadTabViewController(Pad pad) {
 		load("view/option/pad", "GeneralTab", Localization.getBundle());
 		this.pad = pad;
+
+		if (pad.getPath() != null) {
+			pathLabel.setText(pad.getPath().toString());
+		} else {
+			pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
+		}
+		showPathButton.disableProperty().bind(Bindings.isEmpty(pad.getPaths()));
+
+		// Disable media section for playlists
+		if (pad.getContent() instanceof Playlistable) {
+			mediaRootBox.setDisable(true);
+		}
 
 		if (pad.getStatus() == PadStatus.PLAY || pad.getStatus() == PadStatus.PAUSE) {
 			deleteButton.setDisable(true);
@@ -44,7 +71,6 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void init() {
-		// Init Listener
 		ChangeListener<Number> volumeListener = (a, b, c) -> pad.getPadSettings().setVolume(c.doubleValue() / 100.0);
 		volumeSlider.valueProperty().addListener(volumeListener);
 
@@ -71,16 +97,14 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
-		PadSettings padSettings = pad.getPadSettings();
+		final PadSettings padSettings = pad.getPadSettings();
 
-		// Bindings
 		titleTextField.textProperty().bindBidirectional(pad.nameProperty());
 		repeatCheckBox.selectedProperty().bindBidirectional(padSettings.loopProperty());
 		timeDisplayComboBox.valueProperty().bindBidirectional(padSettings.timeModeProperty());
 
 		volumeSlider.setValue(padSettings.getVolume() * 100);
 
-		// is Custom TimeMode Actvie
 		customTimeDisplayCheckBox.setSelected(padSettings.isCustomTimeMode());
 		if (!padSettings.isCustomTimeMode()) {
 			timeDisplayComboBox.setDisable(true);
@@ -96,7 +120,21 @@ public class GeneralPadTabViewController extends PadSettingsTabViewController {
 		timeDisplayComboBox.valueProperty().unbindBidirectional(padSettings.timeModeProperty());
 	}
 
-	// Listener
+	@FXML
+	private void showPathButtonHandler() {
+		NativeApplication.sharedInstance().showFileInFileViewer(pad.getPath());
+	}
+
+	@FXML
+	private void chooseButtonHandler(ActionEvent event) {
+		final PadNewContentListener listener = new PadNewContentListener(pad);
+		listener.onNew(event, (options, onSelected) -> {
+			ChoiceDialog<PadContentFactory> dialog = new ChoiceDialog<>(null, options);
+			final Optional<PadContentFactory> padContentFactory = dialog.showAndWait();
+			padContentFactory.ifPresent(onSelected);
+		});
+	}
+
 	@FXML
 	private void deleteButtonHandler(ActionEvent event) {
 		pad.clear();

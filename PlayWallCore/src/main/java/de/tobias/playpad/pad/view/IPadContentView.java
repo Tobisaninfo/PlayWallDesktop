@@ -1,6 +1,6 @@
 package de.tobias.playpad.pad.view;
 
-import javafx.scene.Node;
+import javafx.scene.Parent;
 
 // TODO Rename to ContentView
 
@@ -17,7 +17,7 @@ public interface IPadContentView {
 	 *
 	 * @return GUI Element
 	 */
-	Node getNode();
+	Parent getNode();
 
 	/**
 	 * Deinitialisiert die View. Hier können mögliche Bindings und Listener entfernt werden.

@@ -35,10 +35,10 @@ public class ProjectSettingsViewController extends NVC implements IProjectSettin
 	@FXML
 	private Button finishButton;
 
-	private List<ProjectSettingsTabViewController> tabs = new ArrayList<>();
-	private Project project;
+	private final List<ProjectSettingsTabViewController> tabs = new ArrayList<>();
+	private final Project project;
 
-	private Runnable onFinish;
+	private final Runnable onFinish;
 
 	public ProjectSettingsViewController(Screen currentScreen, Window owner, Project project, Runnable onFinish) {
 		load("view/option/project", "ProjectSettingsView", Localization.getBundle());

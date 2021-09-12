@@ -7,7 +7,7 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.viewcontroller.cell.EnumCell;
 import de.tobias.playpad.viewcontroller.option.ProfileSettingsTabViewController;
-import de.tobias.playpad.viewcontroller.settings.FadeViewController;
+import de.tobias.playpad.viewcontroller.settings.FadeSettingsViewController;
 import de.tobias.playpad.viewcontroller.settings.WarningFeedbackViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -32,8 +32,8 @@ public class PlayerTabViewController extends ProfileSettingsTabViewController {
 		load("view/option/profile", "PlayerTab", Localization.getBundle());
 
 		// Player
-		FadeViewController fadeViewController = new FadeViewController();
-		fadeViewController.setFade(Profile.currentProfile().getProfileSettings().getFade());
+		FadeSettingsViewController fadeViewController = new FadeSettingsViewController();
+		fadeViewController.setFadeSettings(Profile.currentProfile().getProfileSettings().getFade());
 		fadeContainer.getChildren().add(fadeViewController.getParent());
 		setAnchor(fadeViewController.getParent(), 0, 0, 0, 0);
 	}

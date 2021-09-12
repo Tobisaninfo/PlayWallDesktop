@@ -2,7 +2,7 @@ package de.tobias.playpad.design;
 
 public class ModernDesignSizeHelper {
 
-	private static final double MIN_WIDTH = 165;
+	private static final double MIN_WIDTH = 140;
 	private static final double MIN_HEIGHT = 115;
 
 	private ModernDesignSizeHelper() {

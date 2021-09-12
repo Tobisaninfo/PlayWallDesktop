@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>7.0.2</version>
+        <version>7.1.0</version>
     </parent>
 
     <artifactId>PlayWallCore</artifactId>
@@ -29,10 +29,38 @@
         <dependency>
             <groupId>de.thecodelabs</groupId>
             <artifactId>libPlugins-core</artifactId>
+            <version>${libPlugins.version}</version>
+            <classifier>java8</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.thecodelabs</groupId>
+                    <artifactId>libUtils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.thecodelabs</groupId>
+                    <artifactId>libStorage</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs</groupId>
             <artifactId>libPlugins-versionizer</artifactId>
+            <version>${libPlugins.version}</version>
+            <classifier>java8</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.thecodelabs</groupId>
+                    <artifactId>libUtils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.thecodelabs</groupId>
+                    <artifactId>libStorage</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.thecodelabs.versionizer</groupId>
+                    <artifactId>api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.thecodelabs.versionizer</groupId>

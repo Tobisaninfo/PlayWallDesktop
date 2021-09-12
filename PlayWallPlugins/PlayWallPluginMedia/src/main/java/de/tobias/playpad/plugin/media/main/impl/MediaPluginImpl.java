@@ -2,8 +2,8 @@ package de.tobias.playpad.plugin.media.main.impl;
 
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.midi.action.ActionRegistry;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.HUD;

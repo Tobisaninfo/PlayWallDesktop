@@ -3,16 +3,16 @@ package de.tobias.playpad.pad.listener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.play.Durationable;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 public class PadContentListener implements ChangeListener<PadContent> {
 
 	private Pad pad;
-	private IPadViewController controller;
+	private final AbstractPadViewController controller;
 
-	public PadContentListener(IPadViewController controller) {
+	public PadContentListener(AbstractPadViewController controller) {
 		this.controller = controller;
 	}
 
@@ -49,5 +49,7 @@ public class PadContentListener implements ChangeListener<PadContent> {
 		} else {
 			controller.getView().setPlaybarVisible(false);
 		}
+
+		controller.updatePlaylistLabelBinding(pad);
 	}
 }

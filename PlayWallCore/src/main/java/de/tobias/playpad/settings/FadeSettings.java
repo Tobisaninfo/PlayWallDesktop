@@ -14,7 +14,7 @@ import org.dom4j.Element;
  * @see PadSettings#getFade()
  * @since 6.0.0
  */
-public class Fade {
+public class FadeSettings {
 
 	private Duration fadeIn;
 	private Duration fadeOut;
@@ -23,11 +23,12 @@ public class Fade {
 	private boolean fadeInPause;
 	private boolean fadeOutPause;
 	private boolean fadeOutStop;
+	private boolean fadeOutEof;
 
 	/**
 	 * Erstellt ein neues Fade mit den Default Werten. (Fade Dauer: 0 sec)
 	 */
-	public Fade() {
+	public FadeSettings() {
 		this(Duration.ONE, Duration.ONE);
 	}
 
@@ -37,8 +38,8 @@ public class Fade {
 	 * @param fadeIn  Fade In Dauer
 	 * @param fadeOut Fade Out Dauer
 	 */
-	public Fade(Duration fadeIn, Duration fadeOut) {
-		this(fadeIn, fadeOut, false, true, true, true);
+	public FadeSettings(Duration fadeIn, Duration fadeOut) {
+		this(fadeIn, fadeOut, false, true, true, true, false);
 	}
 
 	/**
@@ -51,13 +52,14 @@ public class Fade {
 	 * @param fadeOutPause Fade vor Pause
 	 * @param fadeOutStop  Fade vor Stop
 	 */
-	public Fade(Duration fadeIn, Duration fadeOut, boolean fadeInStart, boolean fadeInPause, boolean fadeOutPause, boolean fadeOutStop) {
+	public FadeSettings(Duration fadeIn, Duration fadeOut, boolean fadeInStart, boolean fadeInPause, boolean fadeOutPause, boolean fadeOutStop, boolean fadeOutEof) {
 		this.fadeIn = fadeIn;
 		this.fadeOut = fadeOut;
 		this.fadeInStart = fadeInStart;
 		this.fadeInPause = fadeInPause;
 		this.fadeOutPause = fadeOutPause;
 		this.fadeOutStop = fadeOutStop;
+		this.fadeOutEof = fadeOutEof;
 	}
 
 	public Duration getFadeIn() {
@@ -108,6 +110,14 @@ public class Fade {
 		this.fadeOutStop = fadeOutStop;
 	}
 
+	public boolean isFadeOutEof() {
+		return fadeOutEof;
+	}
+
+	public void setFadeOutEof(boolean fadeOutEof) {
+		this.fadeOutEof = fadeOutEof;
+	}
+
 	/*
 	 * Serialize
 	 */
@@ -116,6 +126,7 @@ public class Fade {
 	private static final String FADE_IN = "FadeIn";
 
 	private static final String ON_STOP_ATTR = "onStop";
+	private static final String ON_EOF_ATTR = "onEof";
 	private static final String ON_PAUSE_ATTR = "onPause";
 	private static final String ON_START_ATTR = "onStart";
 
@@ -129,16 +140,17 @@ public class Fade {
 		fadeOutElement.addText(fadeOut.toString());
 		fadeOutElement.addAttribute(ON_PAUSE_ATTR, String.valueOf(fadeOutPause));
 		fadeOutElement.addAttribute(ON_STOP_ATTR, String.valueOf(fadeOutStop));
+		fadeOutElement.addAttribute(ON_EOF_ATTR, String.valueOf(fadeOutEof));
 	}
 
-	public static Fade load(Element container) {
+	public static FadeSettings load(Element container) {
 		try {
-			Fade fade = new Fade();
+			FadeSettings fade = new FadeSettings();
 
 			Element fadeInElement = container.element(FADE_IN);
-			if (fadeInElement.attributeValue(ON_PAUSE_ATTR) != null)
+			if (fadeInElement.attributeValue(ON_START_ATTR) != null)
 				fade.setFadeInStart(Boolean.parseBoolean(fadeInElement.attributeValue(ON_START_ATTR)));
-			if (fadeInElement.attributeValue(ON_STOP_ATTR) != null)
+			if (fadeInElement.attributeValue(ON_PAUSE_ATTR) != null)
 				fade.setFadeInPause(Boolean.parseBoolean(fadeInElement.attributeValue(ON_PAUSE_ATTR)));
 			fade.setFadeIn(Duration.valueOf(fadeInElement.getStringValue().replace(" ", "")));
 
@@ -147,6 +159,8 @@ public class Fade {
 				fade.setFadeOutPause(Boolean.parseBoolean(fadeOutElement.attributeValue(ON_PAUSE_ATTR)));
 			if (fadeOutElement.attributeValue(ON_STOP_ATTR) != null)
 				fade.setFadeOutStop(Boolean.parseBoolean(fadeOutElement.attributeValue(ON_STOP_ATTR)));
+			if (fadeOutElement.attributeValue(ON_EOF_ATTR) != null)
+				fade.setFadeOutEof(Boolean.parseBoolean(fadeOutElement.attributeValue(ON_EOF_ATTR)));
 			fade.setFadeOut(Duration.valueOf(fadeOutElement.getStringValue().replace(" ", "")));
 			return fade;
 		} catch (Exception e) {

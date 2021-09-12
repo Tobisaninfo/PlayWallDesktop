@@ -12,17 +12,30 @@ public class PadContentRegistry extends ComponentRegistry<PadContentFactory> {
 		super(name);
 	}
 
-	public Set<PadContentFactory> getPadContentConnectsForFile(Path path) throws NoSuchComponentException {
-		Set<PadContentFactory> connects = new HashSet<>();
+	public List<PadContentFactory> getPadContentConnectsForFile(Path paths) throws NoSuchComponentException {
+		return getPadContentConnectsForFiles(Collections.singletonList(paths));
+	}
+
+	public List<PadContentFactory> getPadContentConnectsForFiles(List<Path> paths) throws NoSuchComponentException {
+		final Set<PadContentFactory> connects = new HashSet<>();
 		for (String type : getTypes()) {
 			PadContentFactory connect = getFactory(type);
 			for (String extension : connect.getSupportedTypes()) {
-				if (path.getFileName().toString().toLowerCase().matches("." + extension)) {
+				if (isExtensionMatchingAllFiles(extension, paths)) {
 					connects.add(connect);
 				}
 			}
 		}
-		return connects;
+		return new ArrayList<>(connects);
+	}
+
+	private boolean isExtensionMatchingAllFiles(String extension, List<Path> paths) {
+		for (Path path : paths) {
+			if (!path.getFileName().toString().toLowerCase().matches("." + extension)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public String[] getSupportedFileTypes() throws NoSuchComponentException {

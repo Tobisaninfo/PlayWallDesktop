@@ -1,6 +1,7 @@
 package de.tobias.playpad.view;
 
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.drag.ContentDragOption;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -14,16 +15,16 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Consumer;
 
-public class FileDragOptionView {
+public class FileDragOptionView implements PadContentFactory.PadContentTypeChooser {
 
-	private HBox optionPane;
-	private Pane parent;
+	private final HBox optionPane;
+	private final Pane parent;
 
-	private Transition inTransition;
-	private Transition outTransition;
+	private final Transition inTransition;
+	private final Transition outTransition;
 
 	public FileDragOptionView(Pane pane) {
 		parent = pane;
@@ -76,9 +77,9 @@ public class FileDragOptionView {
 		return parallelTransition;
 	}
 
-	private PadContentFactory selectedConnect;
+	private ContentDragOption selectedConnect;
 
-	public void showDropOptions(Set<PadContentFactory> options) {
+	public void showOptions(Collection<? extends ContentDragOption> options) {
 		if (!parent.getChildren().contains(optionPane)) {
 			selectedConnect = null;
 
@@ -125,14 +126,16 @@ public class FileDragOptionView {
 
 	}
 
-	public void showDropOptions(Set<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
-		showDropOptions(options);
+	public void showOptions(Collection<PadContentFactory> options, Consumer<PadContentFactory> onFinish) {
+		showOptions(options);
 
 		for (Node node : optionPane.getChildren()) {
 			if (node instanceof Label) {
 				Label label = (Label) node;
-				label.setOnMouseClicked(ev ->
-						onFinish.accept((PadContentFactory) label.getUserData()));
+				label.setOnMouseClicked(ev -> {
+					onFinish.accept((PadContentFactory) label.getUserData());
+					hide();
+				});
 				label.setOnMouseEntered(e ->
 						label.pseudoClassStateChanged(PseudoClasses.HOVER_CLASS, true));
 				label.setOnMouseExited(e ->
@@ -141,7 +144,7 @@ public class FileDragOptionView {
 		}
 	}
 
-	public PadContentFactory getSelectedConnect() {
+	public ContentDragOption getSelectedConnect() {
 		return selectedConnect;
 	}
 

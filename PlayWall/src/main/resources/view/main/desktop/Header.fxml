@@ -126,6 +126,10 @@
                             </accelerator>
                         </CheckMenuItem>
                         <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#addColumnToProject"
+                                  text="%main.menuitem.addColumn"/>
+                        <MenuItem mnemonicParsing="false" onAction="#addRowToProject" text="%main.menuitem.addRow"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem fx:id="searchPadMenuItem" mnemonicParsing="false" onAction="#searchPadHandler"
                                   text="%main.menuitem.searchPad"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>

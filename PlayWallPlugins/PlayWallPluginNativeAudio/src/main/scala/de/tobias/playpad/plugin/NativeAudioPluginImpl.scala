@@ -1,6 +1,7 @@
 package de.tobias.playpad.plugin
 
-import de.thecodelabs.plugins.{PluginArtifact, PluginDescriptor}
+import de.thecodelabs.plugins.PluginDescriptor
+import de.thecodelabs.plugins.versionizer.PluginArtifact
 import de.thecodelabs.utils.util.OS
 import de.thecodelabs.utils.util.OS.OSType
 import de.tobias.playpad.plugin.loader.{MacAudioImplLoader, WindowsAudioImplLoader}

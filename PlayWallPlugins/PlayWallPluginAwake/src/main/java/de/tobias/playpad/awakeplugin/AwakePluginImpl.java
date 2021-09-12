@@ -1,8 +1,8 @@
 package de.tobias.playpad.awakeplugin;
 
 import de.thecodelabs.logger.Logger;
-import de.thecodelabs.plugins.PluginArtifact;
 import de.thecodelabs.plugins.PluginDescriptor;
+import de.thecodelabs.plugins.versionizer.PluginArtifact;
 import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;

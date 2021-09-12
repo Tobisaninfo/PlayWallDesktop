@@ -1,14 +1,11 @@
 package de.tobias.playpad.design
 
-import java.nio.file.Files
-import java.util.function.Consumer
-
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
 import de.tobias.playpad.design.modern.{ModernColor, ModernGlobalDesignHandler}
 import de.tobias.playpad.pad.content.play.Durationable
-import de.tobias.playpad.pad.viewcontroller.IPadViewController
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
@@ -22,6 +19,8 @@ import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
 import org.springframework.expression.spel.support.StandardEvaluationContext
 
+import java.nio.file.Files
+import java.util.function.Consumer
 import scala.jdk.CollectionConverters._
 
 class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with ColorModeHandler {
@@ -93,7 +92,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
 
-	override def handleWarning(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
+	override def handleWarning(design: ModernGlobalDesign, controller: AbstractPadViewController, warning: Duration): Unit = {
 		if (design.isWarnAnimation) {
 			warnAnimation(design, controller, warning)
 		} else {
@@ -101,7 +100,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		}
 	}
 
-	private def warnAnimation(design: ModernGlobalDesign, controller: IPadViewController, warning: Duration): Unit = {
+	private def warnAnimation(design: ModernGlobalDesign, controller: AbstractPadViewController, warning: Duration): Unit = {
 		val stopColor = if (design.isFlatDesign) design.getBackgroundColor.toFlatFadeableColor else design.getBackgroundColor.toFadeableColor
 		val playColor = if (design.isFlatDesign) design.getPlayColor.toFlatFadeableColor else design.getPlayColor.toFadeableColor
 
@@ -118,7 +117,7 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, duration)
 	}
 
-	override def stopWarning(design: ModernGlobalDesign, controller: IPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
+	override def stopWarning(design: ModernGlobalDesign, controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 
 	override def getColorInterface(onSelection: Consumer[DisplayableColor]) = new ColorPickerView(null, ModernColor.values.asInstanceOf[Array[DisplayableColor]], onSelection)
 

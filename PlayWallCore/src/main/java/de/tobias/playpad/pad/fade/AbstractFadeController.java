@@ -4,19 +4,14 @@ import javafx.animation.Transition;
 import javafx.util.Duration;
 
 /**
- * Fade utils.
- *
- * @author tobias
- * @since 6.0.0
+ * @since 7.1.0
  */
-public class Fade {
+public abstract class AbstractFadeController {
 
-	private FadeDelegate fadeDelegate;
 	private Transition currentFadeTransition;
+	protected final FadeControllerDelegate fadeDelegate;
 
-	private double velocity = 1;
-
-	public Fade(FadeDelegate fadeDelegate) {
+	public AbstractFadeController(FadeControllerDelegate fadeDelegate) {
 		this.fadeDelegate = fadeDelegate;
 	}
 
@@ -58,15 +53,7 @@ public class Fade {
 
 			@Override
 			protected void interpolate(double frac) {
-				double diff = Math.abs(to - from);
-				if (from < to) { // Fade In
-					double fade = fadeInVolumeMultiplier(frac, velocity);
-					fadeDelegate.onFadeLevelChange(from + fade * diff);
-				} else { // Fade Out
-					double fade = fadeOutVolumeMultiplier(frac, velocity);
-					double newValue = to + fade * diff;
-					fadeDelegate.onFadeLevelChange(newValue);
-				}
+				AbstractFadeController.this.interpolate(this, frac, from, to);
 			}
 		};
 		currentFadeTransition.setOnFinished(e ->
@@ -79,12 +66,5 @@ public class Fade {
 		currentFadeTransition.play();
 	}
 
-	private double fadeInVolumeMultiplier(double time, double velocity) {
-		return Math.pow(Math.E, velocity * (time - 1)) * time;
-	}
-
-	private double fadeOutVolumeMultiplier(double time, double velocity) {
-		return Math.pow(Math.E, -velocity * time) * (1 - time);
-	}
-
+	protected abstract void interpolate(Transition transition, double frac, double from, double to);
 }

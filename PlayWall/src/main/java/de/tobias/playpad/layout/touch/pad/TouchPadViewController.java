@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.TimeMode;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.listener.*;
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
 import javafx.beans.value.ChangeListener;
@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TouchEvent;
 import javafx.util.Duration;
 
-public class TouchPadViewController implements IPadViewController, EventHandler<Event> {
+public class TouchPadViewController extends AbstractPadViewController implements EventHandler<Event> {
 
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String DURATION_FORMAT = "%d:%02d";
@@ -70,11 +70,13 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.loopLabelVisibleProperty().bind(pad.getPadSettings().loopProperty());
 			padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
 
+			updatePlaylistLabelBinding(pad);
+
 			// Update Listener
 			padContentListener.setPad(pad);
 			padPositionListener.setPad(pad);
 
-			// Pad Content Chnage
+			// Pad Content Change
 			pad.contentProperty().addListener(padContentListener);
 			// Pad Status Change
 			pad.statusProperty().addListener(padStatusListener);
@@ -97,6 +99,9 @@ public class TouchPadViewController implements IPadViewController, EventHandler<
 			padView.clearIndex();
 			padView.clearPreviewContent();
 			padView.clearTime();
+
+			padView.getPlaylistLabel().textProperty().unbind();
+			padView.getPlaylistLabel().setText("");
 
 			padView.setTriggerLabelActive(false);
 

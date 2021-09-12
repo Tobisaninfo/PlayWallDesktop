@@ -40,15 +40,15 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 	@FXML
 	private Button finishButton;
 
-	private List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
+	private final List<ProfileSettingsTabViewController> tabs = new ArrayList<>();
 
-	private Runnable onFinish;
+	private final Runnable onFinish;
 
 	public ProfileSettingsViewController(Window owner, Project project, Runnable onFinish) {
 		load("view/option/profile", "SettingsView", Localization.getBundle());
 		this.onFinish = onFinish;
 
-		boolean activePlayer = project.hasActivePlayers();
+		boolean hasActivePlayers = project.hasActivePlayers();
 
 		addTab(new MappingTabViewController());
 		addTab(new DesignTabViewController());
@@ -58,11 +58,18 @@ public class ProfileSettingsViewController extends NVC implements IProfileSettin
 		PadContentRegistry padContents = PlayPadPlugin.getRegistries().getPadContents();
 		for (String type : padContents.getTypes()) {
 			PadContentFactory component = padContents.getFactory(type);
-			ProfileSettingsTabViewController controller = component.getSettingsTabViewController(activePlayer);
+			ProfileSettingsTabViewController controller = component.getSettingsTabViewController(hasActivePlayers);
 			if (controller != null) {
 				addTab(controller);
 			}
 		}
+
+		PlayPadPlugin.getInstance().getAdditionalProfileSettingsTabs().forEach(supplier -> {
+			ProfileSettingsTabViewController controller = supplier.get();
+			if (controller != null) {
+				addTab(controller);
+			}
+		});
 
 		NVCStage nvcStage = applyViewControllerToStage();
 		nvcStage.initOwner(owner);

@@ -9,7 +9,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.SetChangeListener;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -91,7 +91,7 @@ public class ImagePadContentFactory extends PadContentFactory {
 		}
 
 		@Override
-		public Node getNode() {
+		public Parent getNode() {
 			return stackPane;
 		}
 

@@ -8,6 +8,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.VolumeTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -30,20 +31,20 @@ public class VolumeTriggerViewController extends NVC {
 	private Slider durationSlider;
 	@FXML
 	private Label durationLabel;
-	private ProjectPreviewView projectPreviewView;
+	private final ProjectPreviewView projectPreviewView;
 
-	private VolumeTriggerItem item;
+	private final VolumeTriggerItem item;
 
-	public VolumeTriggerViewController(VolumeTriggerItem item) {
+	public VolumeTriggerViewController(VolumeTriggerItem item, IMainViewController mainViewController) {
 		load("view/option/pad/trigger", "VolumeTrigger", Localization.getBundle());
 		this.item = item;
 
 		volumeSlider.setValue(item.getVolume() * 100.0);
 		durationSlider.setValue(item.getDuration().toSeconds());
 
-		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
+		final Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
-		projectPreviewView = new ProjectPreviewView(project, pads);
+		projectPreviewView = new ProjectPreviewView(project, pads, mainViewController.getPage());
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
 		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
 			item.getCarts().clear();

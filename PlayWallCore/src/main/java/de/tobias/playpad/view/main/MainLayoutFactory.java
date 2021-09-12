@@ -1,7 +1,7 @@
 package de.tobias.playpad.view.main;
 
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.IPadViewController;
+import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.main.MenuToolbarViewController;
@@ -31,7 +31,7 @@ public abstract class MainLayoutFactory extends Component {
 	 *
 	 * @return Pad
 	 * @see IPadView notwendige Methoden für ein Pad
-	 * @see IPadViewController ViewController zum Pad
+	 * @see AbstractPadViewController ViewController zum Pad
 	 */
 	public abstract IPadView createPadView();
 

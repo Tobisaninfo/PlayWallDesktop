@@ -8,6 +8,7 @@ import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
+import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -25,17 +26,17 @@ public class CartTriggerViewController extends NVC {
 	@FXML
 	private CheckBox allCartsCheckbox;
 
-	private ProjectPreviewView projectPreviewView;
+	private final ProjectPreviewView projectPreviewView;
 
-	private CartTriggerItem item;
+	private final CartTriggerItem item;
 
-	public CartTriggerViewController(CartTriggerItem item) {
+	public CartTriggerViewController(CartTriggerItem item, IMainViewController mainViewController) {
 		load("view/option/pad/trigger", "CartTrigger", Localization.getBundle());
 		this.item = item;
 
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
 		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
-		projectPreviewView = new ProjectPreviewView(project, pads);
+		projectPreviewView = new ProjectPreviewView(project, pads, mainViewController.getPage());
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
 		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
 			item.getCarts().clear();

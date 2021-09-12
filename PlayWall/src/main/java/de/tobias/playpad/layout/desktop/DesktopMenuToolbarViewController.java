@@ -26,6 +26,7 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.ProjectSettingsValidator;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.project.ref.ProjectReferenceManager;
@@ -65,6 +66,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -155,7 +157,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private transient DesktopColorPickerView colorPickerView;
 	private transient PadRemoveMouseListener padRemoveMouseListener;
 
-	private DesktopMainLayoutFactory connect;
+	private final DesktopMainLayoutFactory connect;
 
 	DesktopMenuToolbarViewController(IMainViewController controller, DesktopMainLayoutFactory connect) {
 		super("Header", "view/main/desktop", Localization.getBundle());
@@ -303,8 +305,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 		int index = 1; // Für Tastenkombination
 		for (MainLayoutFactory connect : mainLayouts.getComponents()) {
-			if(connect.getType().equals(profileSettings.getMainLayoutType()))
-			{
+			if (connect.getType().equals(profileSettings.getMainLayoutType())) {
 				continue;
 			}
 
@@ -324,7 +325,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			layoutMenu.getItems().add(item);
 			index++;
-	}
+		}
 	}
 
 	@Override
@@ -700,6 +701,34 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	}
 
 	@FXML
+	void addColumnToProject() {
+		ProjectSettingsValidator projectSettingsValidator = new ProjectSettingsValidator(mainViewController.getScreen());
+		final int maxValue = projectSettingsValidator.maxValue(ProjectSettingsValidator.Dimension.COLUMNS);
+		if (maxValue < openProject.getSettings().getColumns() + 1) {
+			showErrorMessage(Localization.getString("Error.Screen.TooMuch", maxValue));
+			return;
+		}
+
+		openProject.addColumn();
+		mainViewController.createPadViews();
+		mainViewController.showPage(mainViewController.getPage());
+	}
+
+	@FXML
+	void addRowToProject() {
+		ProjectSettingsValidator projectSettingsValidator = new ProjectSettingsValidator(mainViewController.getScreen());
+		final int maxValue = projectSettingsValidator.maxValue(ProjectSettingsValidator.Dimension.ROWS);
+		if (maxValue < openProject.getSettings().getRows() + 1) {
+			showErrorMessage(Localization.getString("Error.Screen.TooMuch", maxValue));
+			return;
+		}
+
+		openProject.addRow();
+		mainViewController.createPadViews();
+		mainViewController.showPage(mainViewController.getPage());
+	}
+
+	@FXML
 	void alwaysOnTopItemHandler(ActionEvent event) {
 		boolean selected = alwaysOnTopItem.isSelected();
 
@@ -728,6 +757,12 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 		NotificationPane pane = mainViewController.getNotificationPane();
 		pane.setOnShown(e -> searchField.requestFocus());
 		pane.show("", box);
+
+		searchField.setOnKeyPressed(e -> {
+			if (e.getCode() == KeyCode.ESCAPE) {
+				pane.hide();
+			}
+		});
 	}
 
 	@FXML
