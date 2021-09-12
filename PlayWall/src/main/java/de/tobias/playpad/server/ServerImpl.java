@@ -71,9 +71,9 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	private static final String PROTOCOL = "https";
 	private static final String WS_PROTOCOL = "wss";
 
-	private String host;
+	private final String host;
 	private WebSocket websocket;
-	private ServerSyncListener syncListener;
+	private final ServerSyncListener syncListener;
 
 	ServerImpl(String host) {
 		this.host = host;
@@ -281,6 +281,7 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	public void connect(String key) {
 		try {
 			WebSocketFactory webSocketFactory = new WebSocketFactory();
+			webSocketFactory.setConnectionTimeout(5000);
 			if (PlayPadMain.sslContext != null) {
 				webSocketFactory.setSSLContext(PlayPadMain.sslContext);
 			}
