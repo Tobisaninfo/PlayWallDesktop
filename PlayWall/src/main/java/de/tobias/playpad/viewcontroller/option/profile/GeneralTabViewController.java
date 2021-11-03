@@ -9,6 +9,7 @@ import de.thecodelabs.utils.util.NumberUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.settings.GlobalSettings;
+import de.tobias.playpad.view.PseudoClasses;
 import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +55,10 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@FXML
 	private CheckBox enableAutosaveCheckbox;
+	@FXML
+	private TextField autosaveIntervalTextField;
 
+	private static final String DIGIT_POSITIVE = "^[1-9]\\d*$";
 
 	private Alertable alertable;
 
@@ -77,9 +81,11 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		settingsGroup.getToggles().addAll(settingsEnable, settingsDisable);
 
 		liveModeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> disableLiveSettings(newValue));
+		enableAutosaveCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> autosaveIntervalTextField.setDisable(!newValue));
 	}
 
-	private void disableLiveSettings(Boolean enableLiveSettings) {
+	private void disableLiveSettings(Boolean enableLiveSettings)
+	{
 		pageEnable.setDisable(!enableLiveSettings);
 		pageDisable.setDisable(!enableLiveSettings);
 		dragEnable.setDisable(!enableLiveSettings);
@@ -174,6 +180,9 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		disableLiveSettings(settings.isLiveMode());
 
 		enableAutosaveCheckbox.setSelected(settings.isEnableAutosave());
+		autosaveIntervalTextField.setText(String.valueOf(settings.getAutosaveIntervalInMinutes()));
+		autosaveIntervalTextField.setDisable(!settings.isEnableAutosave());
+		autosaveIntervalTextField.textProperty().addListener((a, b, c) -> autosaveIntervalTextField.pseudoClassStateChanged(PseudoClasses.ERROR_CLASS, !c.matches(DIGIT_POSITIVE) || c.isEmpty()));
 	}
 
 	@Override
@@ -189,6 +198,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		settings.setLiveModeSettings(settingsEnable.isSelected());
 
 		settings.setEnableAutosave(enableAutosaveCheckbox.isSelected());
+		settings.setAutosaveIntervalInMinutes(Integer.parseInt(autosaveIntervalTextField.getText()));
 	}
 
 	@Override
@@ -198,7 +208,13 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 
 	@Override
 	public boolean validSettings() {
-		return true;
+		try {
+			final int autosaveInterval = Integer.parseInt(autosaveIntervalTextField.getText());
+			return autosaveInterval > 0;
+		}
+		catch(NumberFormatException e) {
+			return false;
+		}
 	}
 
 	@Override

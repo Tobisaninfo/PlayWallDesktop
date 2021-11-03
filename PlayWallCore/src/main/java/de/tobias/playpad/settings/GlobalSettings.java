@@ -59,6 +59,7 @@ public class GlobalSettings {
 
 	// Autosave
 	private boolean enableAutosave = false;
+	private int autosaveIntervalInMinutes = 5;
 
 
 	public GlobalSettings() {
@@ -118,6 +119,11 @@ public class GlobalSettings {
 		return enableAutosave;
 	}
 
+	public int getAutosaveIntervalInMinutes()
+	{
+		return autosaveIntervalInMinutes;
+	}
+
 	// Setter
 	public void setAutoUpdate(boolean autoUpdate) {
 		this.autoUpdate = autoUpdate;
@@ -168,6 +174,11 @@ public class GlobalSettings {
 		this.enableAutosave = enableAutosave;
 	}
 
+	public void setAutosaveIntervalInMinutes(int autosaveIntervalInMinutes)
+	{
+		this.autosaveIntervalInMinutes = autosaveIntervalInMinutes;
+	}
+
 	// Save & Load Data
 
 	public static final String KEYS_ELEMENT = "Keys";
@@ -183,6 +194,7 @@ public class GlobalSettings {
 	private static final String IGNORE_SAVE_DIALOG_ELEMENT = "IgnoreSaveDialog";
 	private static final String OPEN_LAST_DOCUMENT_ELEMENT = "OpenLastDocument";
 	private static final String ENABLE_AUTOSAVE = "EnableAutosave";
+	private static final String AUTOSAVE_INTERVAL = "AutosaveInterval";
 
 	/**
 	 * Lädt eine neue Instanz der Globalen Einstellungen.
@@ -252,6 +264,10 @@ public class GlobalSettings {
 				if (root.element(ENABLE_AUTOSAVE) != null) {
 					settings.setEnableAutosave(Boolean.parseBoolean(root.element(ENABLE_AUTOSAVE).getStringValue()));
 				}
+
+				if (root.element(AUTOSAVE_INTERVAL) != null) {
+					settings.setAutosaveIntervalInMinutes(Integer.parseInt(root.element(AUTOSAVE_INTERVAL).getStringValue()));
+				}
 			}
 			return settings;
 		} catch (DocumentException | IOException e) {
@@ -295,6 +311,7 @@ public class GlobalSettings {
 
 			// Autosave
 			root.addElement(ENABLE_AUTOSAVE).addText(String.valueOf(enableAutosave));
+			root.addElement(AUTOSAVE_INTERVAL).addText(String.valueOf(autosaveIntervalInMinutes));
 
 			XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());
 			writer.write(document);
