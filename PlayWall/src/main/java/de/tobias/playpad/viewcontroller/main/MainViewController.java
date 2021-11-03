@@ -815,25 +815,26 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	@SuppressWarnings("java:S2189")
 	private void autosave() {
-		long autosaveDurationInMilliseconds = PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
-		long nextSaveTime = System.currentTimeMillis() + autosaveDurationInMilliseconds;
+		long lastSaveTime = System.currentTimeMillis();
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		//noinspection InfiniteLoopStatement
 		while(true)
 		{
 			final long currentMillis = System.currentTimeMillis();
-			if(currentMillis > nextSaveTime)
+
+			// autosave interval may be changed by user in global settings, therefore the current setting needs to be fetched every time
+			if(currentMillis > lastSaveTime + getAutosaveIntervalInMillis())
 			{
-				// autosave interval may be changed by user in global settings, therefore get the current setting again
-				autosaveDurationInMilliseconds = PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
-				nextSaveTime = currentMillis + autosaveDurationInMilliseconds;
+				lastSaveTime = currentMillis;
 
 				if(PlayPadPlugin.getInstance().getGlobalSettings().isEnableAutosave())
 				{
 					Logger.debug("Performing autosave...");
 					save();
-					Logger.debug("Autosave done. Next autosave: " + dateFormat.format(new Date(nextSaveTime)));
+
+					long nextSaveTime = currentMillis + getAutosaveIntervalInMillis();
+					Logger.debug("Autosave done. Next predicted autosave: " + dateFormat.format(new Date(nextSaveTime)));
 				}
 			}
 
@@ -848,5 +849,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				Thread.currentThread().interrupt();
 			}
 		}
+	}
+
+	private long getAutosaveIntervalInMillis() {
+		return PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
 	}
 }
