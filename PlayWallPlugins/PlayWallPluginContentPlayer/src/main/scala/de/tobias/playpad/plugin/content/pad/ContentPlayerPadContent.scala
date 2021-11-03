@@ -1,6 +1,5 @@
 package de.tobias.playpad.plugin.content.pad
 
-import de.thecodelabs.logger.Logger
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.content.{PadContent, Playlistable}
 import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
@@ -10,17 +9,14 @@ import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.profile.Profile
-import de.tobias.playpad.volume.VolumeManager
 import javafx.application.Platform
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property._
 import javafx.collections.{FXCollections, ObservableList}
-import javafx.scene.media.{Media, MediaPlayer}
 import javafx.util.Duration
 
 import java.nio.file.Files
 import java.util
-import java.util.Optional
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
@@ -37,8 +33,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	private val fadeController = new LinearFadeController(value => {
 		if (getCurrentPlayingMediaIndex >= 0) {
-			ContentPluginMain.playerViewController
-				.setFadeValue(mediaPlayers(getCurrentPlayingMediaIndex).mediaPlayer, getSelectedZones, value)
+			ContentPluginMain.playerViewController.setFadeValue(getSelectedZones, value)
 		}
 	})
 
@@ -60,8 +55,6 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (isPause) {
 			mediaPlayers(getCurrentPlayingMediaIndex).resume()
 		} else {
-			ContentPluginMain.playerViewController.addActivePadToList(getPad.getPadIndex, getSelectedZones)
-
 			getPad.setEof(false)
 			mediaPlayers.head.play()
 		}
@@ -82,19 +75,16 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		isPause = false
 		mediaPlayers(getCurrentPlayingMediaIndex).stop()
 		currentRunningIndexProperty.set(-1)
-
-		ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
 		true
 	}
 
 	def onEof(): Unit = {
 		if (isFadeActive) {
-			ContentPluginMain.playerViewController.removeActivePadFromList(getPad.getPadIndex, getSelectedZones)
 			return
 		}
 
 		if (shouldShowLastFrame() && !showingLastFrame // Only is settings is enabled and not already in last frame state
-			&& !pad.getPadSettings.isLoop // Only go to last frame state, is looping is disabled
+		  && !pad.getPadSettings.isLoop // Only go to last frame state, is looping is disabled
 		) {
 			getPad.setStatus(PadStatus.PAUSE)
 			showingLastFrame = true
@@ -122,19 +112,16 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	override def positionProperty(): ReadOnlyObjectProperty[Duration] = _positionProperty
 
 	def totalDurationBinding(): ObjectBinding[Duration] = {
-		Bindings.createObjectBinding(() => mediaPlayers.stream()
-			.map(player => player.mediaPlayer.getTotalDuration)
-			.filter(duration => duration != null)
-			.reduce(Duration.ZERO, (o1: Duration, o2: Duration) => o1.add(o2)),
-			mediaPlayers.stream().map(player => {
-				if (player.mediaPlayer != null) {
-					player.mediaPlayer.totalDurationProperty()
-				} else {
-					null
-				}
-			})
-				.filter(o => o != null)
-				.toArray(size => new Array[ReadOnlyObjectProperty[Duration]](size)): _*)
+		Bindings.createObjectBinding(() => {
+			val durations: util.List[Duration] = mediaPlayers.stream()
+			  .map(player => player.getTotalDuration)
+			  .filter(duration => duration != null)
+			  .collect(Collectors.toList())
+			val totalDuration: Duration = durations
+			  .stream()
+			  .reduce(Duration.ZERO, (o1: Duration, o2: Duration) => o1.add(o2))
+			totalDuration
+		}, mediaPlayers.stream().map(player => player.totalDurationProperty).toArray(size => new Array[ReadOnlyObjectProperty[Duration]](size)): _*)
 	}
 
 	/*
@@ -175,19 +162,15 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 */
 
 	override def isPadLoaded: Boolean = {
-		mediaPlayers.isNotEmpty && !mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
+		mediaPlayers.isNotEmpty
 	}
 
 	override def isLoaded(mediaPath: MediaPath): Boolean = {
-		val loadedOptional: Optional[Boolean] = mediaPlayers.stream()
-			.filter(item => item.path == mediaPath)
-			.findFirst()
-			.map(container => container.mediaPlayer.getStatus != MediaPlayer.Status.UNKNOWN)
-		loadedOptional.orElse(false)
+		true
 	}
 
 
-	override def isPadLoading: Boolean = mediaPlayers.stream().anyMatch(player => player.mediaPlayer.getStatus == MediaPlayer.Status.UNKNOWN)
+	override def isPadLoading: Boolean = false
 
 	/**
 	 * Load media files.
@@ -209,40 +192,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			return
 		}
 
-		val media = new Media(path.toUri.toString)
-		val mediaPlayer = new MediaPlayer(media)
-
-		mediaPlayer.setOnReady(() => {
-			getPad.setStatus(PadStatus.READY)
-
-			_durationProperty.bind(totalDurationBinding())
-			_positionProperty.set(Duration.ZERO)
-
-			Platform.runLater(() => {
-				if (getPad.isPadVisible) {
-					getPad.getController.getView.showBusyView(false)
-				}
-			})
-		})
-
-		mediaPlayer.errorProperty().addListener((_, _, newValue) => Platform.runLater(() => {
-			Logger.error(newValue)
-			pad.setStatus(PadStatus.ERROR)
-		}))
-		mediaPlayer.setOnError(() => Platform.runLater(() => {
-			if (getPad.isPadVisible) {
-				getPad.getController.getView.showBusyView(false)
-			}
-			Logger.error(mediaPlayer.getError)
-			pad.setStatus(PadStatus.ERROR)
-		}))
-
-		mediaPlayer.setOnEndOfMedia(() => {
-			getPad.setEof(true)
-			onEof()
-		})
-
-		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath, mediaPlayer))
+		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath))
 	}
 
 	/**
@@ -266,18 +216,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 * @param mediaPath specify media path
 	 */
 	override def unloadMedia(mediaPath: MediaPath): Unit = {
-		val index = mediaPlayers.indexWhere(item => item.path.getId == mediaPath.getId)
-
-		if (index >= 0) {
-			val playerContainer = mediaPlayers(index)
-			playerContainer.stop()
-			mediaPlayers.remove(index)
-		}
+		// not needed
 	}
 
 	override def reorderMedia(): Unit = {
 		val paths = pad.getPaths
-		mediaPlayers.sort((o1, o2) => Integer.compare(paths.indexOf(o1.path), paths.indexOf(o2.path)))
+		mediaPlayers.sort((o1, o2) => Integer.compare(paths.indexOf(o1.mediaPath), paths.indexOf(o2.mediaPath)))
 	}
 
 	/*
@@ -285,8 +229,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 */
 
 	override def updateVolume(): Unit = {
-		val volume = VolumeManager.getInstance.computeVolume(getPad)
-		mediaPlayers.forEach(player => player.mediaPlayer.setVolume(volume))
+		// not needed
 	}
 
 	/**

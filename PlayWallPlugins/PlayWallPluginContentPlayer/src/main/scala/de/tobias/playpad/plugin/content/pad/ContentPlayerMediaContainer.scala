@@ -4,28 +4,32 @@ import de.tobias.playpad.pad.PadStatus
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.util._
-import javafx.scene.media.MediaPlayer
+import javafx.beans.property.{ReadOnlyObjectProperty, SimpleObjectProperty}
 import javafx.util.Duration
 
-class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val path: MediaPath, val mediaPlayer: MediaPlayer) {
-	def play(): Unit = {
-		content._durationProperty.bind(mediaPlayer.totalDurationProperty())
-		content._positionProperty.bind(mediaPlayer.currentTimeProperty())
-		ContentPluginMain.playerViewController.showMediaPlayer(content.getPad.getPadIndex, mediaPlayer, content.getSelectedZones)
+class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val mediaPath: MediaPath) {
 
-		mediaPlayer.seek(Duration.ZERO)
-		mediaPlayer.play()
+	val totalDurationProperty: ReadOnlyObjectProperty[Duration] = new SimpleObjectProperty[Duration]()
+
+	def getTotalDuration: Duration = totalDurationProperty.get()
+
+	def play(): Unit = {
+		// TODO
+		//		content._durationProperty.bind(mediaPlayer.totalDurationProperty())
+		//		content._positionProperty.bind(mediaPlayer.currentTimeProperty())
+
+		ContentPluginMain.playerViewController.play(this)
 
 		content.getPad.setEof(false)
 		content.currentPlayingMediaIndexProperty().set(content.getMediaPlayers.indexOf(this))
 	}
 
 	def resume(): Unit = {
-		mediaPlayer.play()
+		ContentPluginMain.playerViewController.resume(this)
 	}
 
 	def pause(): Unit = {
-		mediaPlayer.pause()
+		ContentPluginMain.playerViewController.pause(this)
 	}
 
 	def next(): Unit = {
@@ -45,13 +49,12 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val path
 	}
 
 	def stop(): Unit = {
-		mediaPlayer.stop()
-		ContentPluginMain.playerViewController.disconnectMediaPlayer(mediaPlayer, content.getSelectedZones)
+		ContentPluginMain.playerViewController.stop(this)
 
 		content._durationProperty.bind(content.totalDurationBinding())
 		content._positionProperty.unbind()
 		content._positionProperty.set(Duration.ZERO)
 	}
 
-	override def toString: String = f"MediaPlayerContainer: $path"
+	override def toString: String = f"MediaPlayerContainer: $mediaPath"
 }

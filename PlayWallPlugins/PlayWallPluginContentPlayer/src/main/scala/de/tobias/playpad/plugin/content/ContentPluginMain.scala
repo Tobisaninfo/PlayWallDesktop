@@ -4,11 +4,12 @@ import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
-import de.tobias.playpad.plugin.content.player.ContentPlayerViewController
+import de.tobias.playpad.plugin.content.player.ContentPlayerWindowController
 import de.tobias.playpad.plugin.content.settings.{ZoneConfiguration, ZoneSettingsViewController}
-import de.tobias.playpad.plugin.{Module, PlayPadPluginStub, SettingsListener}
+import de.tobias.playpad.plugin.{Jni4NetBridgeInitializer, Module, PlayPadPluginStub, SettingsListener}
 import de.tobias.playpad.profile.{Profile, ProfileListener}
 import javafx.application.Platform
+import nativecontentplayerwindows.ContentPlayerWindow
 
 class ContentPluginMain extends PlayPadPluginStub with SettingsListener with ProfileListener {
 
@@ -16,6 +17,13 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 
 	override def startup(descriptor: PluginDescriptor): Unit = {
 		module = new Module(descriptor.getName, descriptor.getArtifactId)
+
+		Jni4NetBridgeInitializer.initialize()
+		Jni4NetBridgeInitializer.loadDll(getClass.getClassLoader, "dlls/", "j4n", "NativeContentPlayerWindows.j4n.dll",
+			"NativeContentPlayerWindows.j4n.dll", "NativeContentPlayerWindows.dll", "PVS.MediaPlayer.dll")
+
+		ContentPluginMain.window = new ContentPlayerWindow()
+		ContentPluginMain.window.SetSize(1440, 80)
 
 		val localization = Localization.loadBundle("lang/base", getClass.getClassLoader)
 		Localization.addResourceBundle(localization)
@@ -28,7 +36,7 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 	}
 
 	override def shutdown(): Unit = {
-		ContentPluginMain.playerViewController.getStageContainer.ifPresent(container => container.forceClose())
+		ContentPluginMain.playerViewController.window.Close()
 	}
 
 	override def getModule: Module = module
@@ -54,7 +62,8 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 }
 
 object ContentPluginMain {
-	lazy val playerViewController: ContentPlayerViewController = new ContentPlayerViewController
+	lazy val playerViewController: ContentPlayerWindowController = new ContentPlayerWindowController
+	private var window: ContentPlayerWindow = _
 
 	val zoneConfigurationKey = "ZoneConfiguration"
 }

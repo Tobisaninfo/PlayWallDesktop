@@ -32,6 +32,8 @@ class Zone extends Displayable {
 		_displayProperty.set(name)
 	}
 
+	def toNative: nativecontentplayerwindows.Zone = new nativecontentplayerwindows.Zone(x.toInt, y.toInt, width.toInt, height.toInt)
+
 	private val _displayProperty: StringProperty = new SimpleStringProperty(name)
 
 	override def displayProperty(): StringProperty = {
