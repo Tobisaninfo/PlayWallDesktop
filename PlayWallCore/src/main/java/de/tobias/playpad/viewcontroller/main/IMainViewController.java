@@ -157,4 +157,9 @@ public interface IMainViewController extends NotificationHandler, Alertable {
 	<T extends Event> void addListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
 
 	<T extends Event> void removeListenerForPads(EventHandler<? super T> handler, EventType<T> eventType);
+
+	/**
+	 * Führt einen Speichervorgang aus.
+	 */
+	void save();
 }

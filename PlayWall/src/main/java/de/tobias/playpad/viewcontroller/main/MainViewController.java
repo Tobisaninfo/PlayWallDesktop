@@ -788,4 +788,22 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		PlayPadPlugin.getInstance().getMainViewListeners().forEach(MainWindowListener::loadMenuKeyBinding);
 	}
 
+	@Override
+	public void save() {
+		try
+		{
+			ProjectReferenceManager.saveProjects();
+			ProjectReferenceManager.saveSingleProject(openProject);
+			ProfileReferenceManager.saveProfiles();
+			Profile.currentProfile().save();
+			PlayPadPlugin.getInstance().getGlobalSettings().save();
+
+			notify(Localization.getString(Strings.STANDARD_FILE_SAVE), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
+		}
+		catch(IOException e)
+		{
+			showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
+			Logger.error(e);
+		}
+	}
 }
