@@ -28,6 +28,7 @@ import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileListener;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -68,8 +69,11 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -208,6 +212,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		} catch (Exception e) {
 			Logger.error(e);
 		}
+
+		Worker.runLater(this::autosave);
 	}
 
 	@Override
@@ -804,6 +810,43 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		{
 			showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 			Logger.error(e);
+		}
+	}
+
+	@SuppressWarnings("java:S2189")
+	private void autosave() {
+		long autosaveDurationInMilliseconds = PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
+		long nextSaveTime = System.currentTimeMillis() + autosaveDurationInMilliseconds;
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		//noinspection InfiniteLoopStatement
+		while(true)
+		{
+			final long currentMillis = System.currentTimeMillis();
+			if(currentMillis > nextSaveTime)
+			{
+				// autosave interval may be changed by user in global settings, therefore get the current setting again
+				autosaveDurationInMilliseconds = PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
+				nextSaveTime = currentMillis + autosaveDurationInMilliseconds;
+
+				if(PlayPadPlugin.getInstance().getGlobalSettings().isEnableAutosave())
+				{
+					Logger.debug("Performing autosave...");
+					save();
+					Logger.debug("Autosave done. Next autosave: " + dateFormat.format(new Date(nextSaveTime)));
+				}
+			}
+
+			try
+			{
+				//noinspection BusyWait
+				Thread.sleep(10 * 1000L);
+			}
+			catch(InterruptedException e)
+			{
+				Logger.error(e);
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 }
