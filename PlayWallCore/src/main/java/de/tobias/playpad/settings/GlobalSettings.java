@@ -57,6 +57,10 @@ public class GlobalSettings {
 	// Behaviour
 	private boolean openLastDocument = false;
 
+	// Autosave
+	private boolean enableAutosave = false;
+
+
 	public GlobalSettings() {
 	}
 
@@ -109,6 +113,11 @@ public class GlobalSettings {
 		return openLastDocument;
 	}
 
+	public boolean isEnableAutosave()
+	{
+		return enableAutosave;
+	}
+
 	// Setter
 	public void setAutoUpdate(boolean autoUpdate) {
 		this.autoUpdate = autoUpdate;
@@ -154,6 +163,11 @@ public class GlobalSettings {
 		this.openLastDocument = openLastDocument;
 	}
 
+	public void setEnableAutosave(boolean enableAutosave)
+	{
+		this.enableAutosave = enableAutosave;
+	}
+
 	// Save & Load Data
 
 	public static final String KEYS_ELEMENT = "Keys";
@@ -168,6 +182,7 @@ public class GlobalSettings {
 	private static final String CACHE_PATH_ELEMENT = "Cache-Path";
 	private static final String IGNORE_SAVE_DIALOG_ELEMENT = "IgnoreSaveDialog";
 	private static final String OPEN_LAST_DOCUMENT_ELEMENT = "OpenLastDocument";
+	private static final String ENABLE_AUTOSAVE = "EnableAutosave";
 
 	/**
 	 * Lädt eine neue Instanz der Globalen Einstellungen.
@@ -232,6 +247,11 @@ public class GlobalSettings {
 				if (root.element(OPEN_LAST_DOCUMENT_ELEMENT) != null) {
 					settings.setOpenLastDocument(Boolean.parseBoolean(root.element(OPEN_LAST_DOCUMENT_ELEMENT).getStringValue()));
 				}
+
+				// Autosave
+				if (root.element(ENABLE_AUTOSAVE) != null) {
+					settings.setEnableAutosave(Boolean.parseBoolean(root.element(ENABLE_AUTOSAVE).getStringValue()));
+				}
 			}
 			return settings;
 		} catch (DocumentException | IOException e) {
@@ -272,6 +292,9 @@ public class GlobalSettings {
 
 			// Behaviour
 			root.addElement(OPEN_LAST_DOCUMENT_ELEMENT).addText(String.valueOf(openLastDocument));
+
+			// Autosave
+			root.addElement(ENABLE_AUTOSAVE).addText(String.valueOf(enableAutosave));
 
 			XMLWriter writer = new XMLWriter(Files.newOutputStream(savePath), OutputFormat.createPrettyPrint());
 			writer.write(document);

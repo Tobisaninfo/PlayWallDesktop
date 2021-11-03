@@ -52,6 +52,10 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 	@FXML
 	private RadioButton settingsDisable;
 
+	@FXML
+	private CheckBox enableAutosaveCheckbox;
+
+
 	private Alertable alertable;
 
 	public GeneralTabViewController(Alertable alertable) {
@@ -168,6 +172,8 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 			settingsDisable.setSelected(true);
 
 		disableLiveSettings(settings.isLiveMode());
+
+		enableAutosaveCheckbox.setSelected(settings.isEnableAutosave());
 	}
 
 	@Override
@@ -181,6 +187,8 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		settings.setLiveModeDrag(dragEnable.isSelected());
 		settings.setLiveModeFile(fileEnable.isSelected());
 		settings.setLiveModeSettings(settingsEnable.isSelected());
+
+		settings.setEnableAutosave(enableAutosaveCheckbox.isSelected());
 	}
 
 	@Override
