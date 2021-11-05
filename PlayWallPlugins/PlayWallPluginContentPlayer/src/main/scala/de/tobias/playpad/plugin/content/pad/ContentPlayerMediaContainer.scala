@@ -14,10 +14,6 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val medi
 	def getTotalDuration: Duration = totalDurationProperty.get()
 
 	def play(): Unit = {
-		// TODO
-		//		content._durationProperty.bind(mediaPlayer.totalDurationProperty())
-		//		content._positionProperty.bind(mediaPlayer.currentTimeProperty())
-
 		ContentPluginMain.playerViewController.play(this)
 
 		content.getPad.setEof(false)

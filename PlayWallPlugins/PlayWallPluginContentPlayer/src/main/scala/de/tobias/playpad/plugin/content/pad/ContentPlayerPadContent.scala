@@ -25,8 +25,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private val mediaPlayers: ObservableList[ContentPlayerMediaContainer] = FXCollections.observableArrayList()
 	private val currentRunningIndexProperty: IntegerProperty = new SimpleIntegerProperty(-1)
 
-	private[pad] val _durationProperty = new SimpleObjectProperty[Duration]
-	private[pad] val _positionProperty = new SimpleObjectProperty[Duration]
+	private[content] val _durationProperty = new SimpleObjectProperty[Duration]
+	private[content] val _positionProperty = new SimpleObjectProperty[Duration]
 
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
