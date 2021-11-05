@@ -9,8 +9,8 @@ import nativecontentplayerwindows.ContentPlayer
 
 class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 
-	private val positionProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration]()
-	private val durationProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration]()
+	private val positionProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration](Duration.ZERO)
+	private val durationProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration](Duration.ZERO)
 	private val currentMedia: ObjectProperty[ContentPlayerMediaContainer] = new SimpleObjectProperty[ContentPlayerMediaContainer]()
 
 	player.setContentPlayerStopListener(endOfFile => {
@@ -24,7 +24,6 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 			val totalDuration = Duration.seconds(total)
 			if (totalDuration != durationProperty.get()) {
 				durationProperty.setValue(totalDuration)
-				println("Set")
 			}
 			positionProperty.setValue(Duration.seconds(position))
 		})

@@ -14,6 +14,7 @@ import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property._
 import javafx.collections.{FXCollections, ObservableList}
 import javafx.util.Duration
+import nativecontentplayerwindows.ContentPlayer
 
 import java.nio.file.Files
 import java.util
@@ -192,7 +193,19 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			return
 		}
 
-		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath))
+		val duration = Duration.seconds(ContentPlayer.getTotalDuration(path.toAbsolutePath.toString))
+		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath, duration))
+
+		Platform.runLater(() => {
+			getPad.setStatus(PadStatus.READY)
+
+			_durationProperty.bind(totalDurationBinding())
+			_positionProperty.set(Duration.ZERO)
+
+			if (getPad.isPadVisible) {
+				getPad.getController.getView.showBusyView(false)
+			}
+		})
 	}
 
 	/**
