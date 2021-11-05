@@ -58,6 +58,6 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 	}
 
 	def highlight(on: Boolean): Unit = {
-		// TODO: Implements
+		player.HighlightPlayer(on)
 	}
 }

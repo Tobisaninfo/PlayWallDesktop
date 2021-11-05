@@ -39,7 +39,8 @@ class ContentPlayerWindowController {
 	}
 
 	private def getContentPlayerBinding(zone: Zone): ContentPlayerBinding = {
-		getContentPlayerBindings(List(zone)).head
+		val zones = getContentPlayerBindings(List(zone))
+		if (zones.nonEmpty) zones.head else null
 	}
 
 	private def getContentPlayerBindings(zones: Seq[Zone]): ListBuffer[ContentPlayerBinding] = {
@@ -67,7 +68,7 @@ class ContentPlayerWindowController {
 	}
 
 	def highlight(zone: Zone, on: Boolean): Unit = {
-		if (getContentPlayerBinding(zone) != null) {
+		if (getContentPlayerBinding(zone) == null) {
 			return
 		}
 		getContentPlayerBinding(zone).highlight(on)
