@@ -52,12 +52,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	Control Methods
 	 */
 
-	override def play(): Unit = {
+	override def play(withFadeIn: Boolean): Unit = {
 		if (isPause) {
-			mediaPlayers(getCurrentPlayingMediaIndex).resume()
+			mediaPlayers(getCurrentPlayingMediaIndex).resume(withFadeIn)
 		} else {
 			getPad.setEof(false)
-			mediaPlayers.head.play()
+			mediaPlayers.head.play(withFadeIn)
 		}
 		showingLastFrame = false
 		isPause = false

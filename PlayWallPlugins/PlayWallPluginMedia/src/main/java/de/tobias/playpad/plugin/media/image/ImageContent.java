@@ -30,7 +30,7 @@ public class ImageContent extends PadContent {
 	}
 
 	@Override
-	public void play() {
+	public void play(boolean withFadeIn) {
 		Path mediaPath = getPad().getPath();
 		MediaPluginImpl.getInstance().getVideoViewController().setImage(mediaPath.toUri().toString(), getPad());
 	}

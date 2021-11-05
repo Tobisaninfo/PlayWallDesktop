@@ -47,12 +47,12 @@ class ContentPlayerWindowController {
 		players.filter(mediaPlayer => zones.contains(mediaPlayer.zone))
 	}
 
-	def play(media: ContentPlayerMediaContainer): Unit = {
-		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.play(media))
+	def play(media: ContentPlayerMediaContainer, withFadeIn: Boolean): Unit = {
+		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.play(media, withFadeIn))
 	}
 
-	def resume(media: ContentPlayerMediaContainer): Unit = {
-		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.resume(media))
+	def resume(media: ContentPlayerMediaContainer, withFadeIn: Boolean): Unit = {
+		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.resume(media, withFadeIn))
 	}
 
 	def pause(media: ContentPlayerMediaContainer): Unit = {

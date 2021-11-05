@@ -57,7 +57,7 @@ public class VideoContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void play() {
+	public void play(boolean withFadeIn) {
 		getPad().setEof(false);
 		MediaPluginImpl.getInstance().getVideoViewController().setMediaPlayer(player, getPad());
 		if (holdLastFrame) {

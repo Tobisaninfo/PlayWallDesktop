@@ -60,7 +60,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void play() {
+	public void play(boolean withFadeIn) {
 		getPad().setEof(false);
 		audioHandler.play();
 	}

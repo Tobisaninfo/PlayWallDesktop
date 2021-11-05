@@ -17,15 +17,15 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val medi
 
 	def totalDurationProperty: ReadOnlyObjectProperty[Duration] = _totalDurationProperty;
 
-	def play(): Unit = {
-		ContentPluginMain.playerViewController.play(this)
+	def play(withFadeIn: Boolean): Unit = {
+		ContentPluginMain.playerViewController.play(this, withFadeIn)
 
 		content.getPad.setEof(false)
 		content.currentPlayingMediaIndexProperty().set(content.getMediaPlayers.indexOf(this))
 	}
 
-	def resume(): Unit = {
-		ContentPluginMain.playerViewController.resume(this)
+	def resume(withFadeIn: Boolean): Unit = {
+		ContentPluginMain.playerViewController.resume(this, withFadeIn)
 	}
 
 	def pause(): Unit = {
@@ -40,9 +40,9 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val medi
 		content.currentPlayingMediaIndexProperty().set(index)
 
 		if (index + 1 < players.length) {
-			players(index + 1).play()
+			players(index + 1).play(false)
 		} else if (content.getPad.getPadSettings.isLoop) {
-			players.head.play()
+			players.head.play(false)
 		} else {
 			content.getPad.setStatus(PadStatus.STOP)
 		}
