@@ -64,7 +64,7 @@ class ContentPlayerWindowController {
 	}
 
 	def setFadeValue(zones: Seq[Zone], value: Double): Unit = {
-		// TODO: Implement
+		getContentPlayerBindings(zones).foreach(player => player.setFadeValue(value))
 	}
 
 	def highlight(zone: Zone, on: Boolean): Unit = {
