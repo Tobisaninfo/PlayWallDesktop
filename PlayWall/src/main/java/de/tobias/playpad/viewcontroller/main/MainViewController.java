@@ -71,9 +71,7 @@ import javafx.stage.Stage;
 import javax.sound.midi.MidiUnavailableException;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -114,6 +112,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	// Sync Listener
 	private InvalidationListener projectTitleListener;
 	private InvalidationListener pagesListener;
+
+	private Thread autosaveThread;
 
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("view/main", "MainView", Localization.getBundle(), e ->
@@ -213,7 +213,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			Logger.error(e);
 		}
 
-		Worker.runLater(this::autosave);
+		autosaveThread = new Thread(new AutosaveRunner(this));
+		autosaveThread.start();
 	}
 
 	@Override
@@ -314,8 +315,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
-			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
-			// wenn ein Pad noch im Status Play ist
+			// Frag den Nutzer ob das Programm wirdklich geschlossen werden soll,
+			// falls noch ein Pad im Status Play ist
 			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_WINDOW_MAIN_CLOSE_REQUEST));
@@ -349,7 +350,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				}
 			}
 
-			// Save Config - Its unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
+			// Save Config - Ist unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
 			try {
 				if (Profile.currentProfile() != null)
 					Profile.currentProfile().save();
@@ -367,6 +368,12 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				} catch (CloseException e) {
 					Logger.error(e);
 				}
+			}
+
+			if(autosaveThread != null && autosaveThread.isAlive())
+			{
+				Logger.debug("Stopping autosave thread");
+				autosaveThread.interrupt();
 			}
 		}
 		Platform.exit();
@@ -811,47 +818,5 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 			Logger.error(e);
 		}
-	}
-
-	@SuppressWarnings("java:S2189")
-	private void autosave() {
-		long lastSaveTime = System.currentTimeMillis();
-		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-		//noinspection InfiniteLoopStatement
-		while(true)
-		{
-			final long currentMillis = System.currentTimeMillis();
-
-			// autosave interval may be changed by user in global settings, therefore the current setting needs to be fetched every time
-			if(currentMillis > lastSaveTime + getAutosaveIntervalInMillis())
-			{
-				lastSaveTime = currentMillis;
-
-				if(PlayPadPlugin.getInstance().getGlobalSettings().isEnableAutosave())
-				{
-					Logger.debug("Performing autosave...");
-					save();
-
-					long nextSaveTime = currentMillis + getAutosaveIntervalInMillis();
-					Logger.debug("Autosave done. Next predicted autosave: " + dateFormat.format(new Date(nextSaveTime)));
-				}
-			}
-
-			try
-			{
-				//noinspection BusyWait
-				Thread.sleep(10 * 1000L);
-			}
-			catch(InterruptedException e)
-			{
-				Logger.error(e);
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
-
-	private long getAutosaveIntervalInMillis() {
-		return PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
 	}
 }
