@@ -127,11 +127,6 @@
             <artifactId>jni4net.j</artifactId>
             <version>${jni4net.j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>de.tobias.playpad</groupId>
-            <artifactId>NativeContentPlayerWindows.j4n</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
 
         <!--Tools-->
         <dependency>
