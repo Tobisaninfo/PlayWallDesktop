@@ -64,6 +64,10 @@ class ContentPlayerWindowController {
 		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.stop(media))
 	}
 
+	def clearHold(media: ContentPlayerMediaContainer): Unit = {
+		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.clearHold())
+	}
+
 	def setFadeValue(zones: Seq[Zone], value: Double): Unit = {
 		getContentPlayerBindings(zones).foreach(player => player.setFadeValue(value))
 	}

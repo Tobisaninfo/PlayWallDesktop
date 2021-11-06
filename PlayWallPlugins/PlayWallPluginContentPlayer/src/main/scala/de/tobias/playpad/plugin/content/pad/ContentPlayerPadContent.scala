@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.content.pad
 
+import de.thecodelabs.logger.Logger
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
 import de.tobias.playpad.pad.content.{PadContent, Playlistable}
 import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
@@ -75,21 +76,28 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	override def stop(): Boolean = {
 		isPause = false
 		mediaPlayers(getCurrentPlayingMediaIndex).stop()
+
+		if (showingLastFrame) {
+			ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
+		}
+
 		currentRunningIndexProperty.set(-1)
 		true
 	}
 
 	def onEof(): Unit = {
-		if (isFadeActive) {
-			return
-		}
-
-		if (shouldShowLastFrame() && !showingLastFrame // Only is settings is enabled and not already in last frame state
-		  && !pad.getPadSettings.isLoop // Only go to last frame state, is looping is disabled
-		) {
-			getPad.setStatus(PadStatus.PAUSE)
-			showingLastFrame = true
-			return
+		// By default the last frame will be displayed. Only under certain conditions the last frame will be cleared
+		// 1. User settings set to "Clear last frame"
+		// 2. There is no loop
+		// 3. There is no playlist
+		if (!pad.getPadSettings.isLoop && getCurrentPlayingMediaIndex + 1 == mediaPlayers.length) {
+			if (!shouldShowLastFrame()) {
+				Logger.debug(s"Clear last frame for pad ${pad.getPadIndex}")
+				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
+			} else {
+				showingLastFrame = true
+				return
+			}
 		}
 
 		showingLastFrame = false
@@ -193,7 +201,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			return
 		}
 
-		val duration = Duration.seconds(ContentPlayer.getTotalDuration(path.toAbsolutePath.toString))
+		val duration = Duration.seconds(ContentPlayer.GetTotalDuration(path.toAbsolutePath.toString))
 		mediaPlayers.add(new ContentPlayerMediaContainer(this, mediaPath, duration))
 
 		Platform.runLater(() => {

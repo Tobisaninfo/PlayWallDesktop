@@ -53,6 +53,8 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 
 	def stop(media: ContentPlayerMediaContainer): Unit = player.Stop()
 
+	def clearHold(): Unit = player.ClearHold()
+
 	def highlight(on: Boolean): Unit = player.HighlightPlayer(on)
 
 	def setFadeValue(value: Double): Unit = player.Fade(value)
