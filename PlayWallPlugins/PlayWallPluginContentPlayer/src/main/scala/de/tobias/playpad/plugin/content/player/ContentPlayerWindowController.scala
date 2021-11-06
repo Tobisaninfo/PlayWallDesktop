@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.content.player
 
+import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.pad.ContentPlayerMediaContainer
 import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
 import nativecontentplayerwindows.{ContentPlayer, ContentPlayerWindow}
@@ -10,6 +11,8 @@ class ContentPlayerWindowController {
 
 	val window: ContentPlayerWindow = new ContentPlayerWindow()
 	val players: ListBuffer[ContentPlayerBinding] = ListBuffer.empty
+
+	window.SetIcon(PlayPadPlugin.getInstance.getIconData)
 
 	def configurePlayers(configuration: ZoneConfiguration): Unit = {
 		if (configuration.zones.isEmpty) {

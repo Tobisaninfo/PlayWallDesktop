@@ -105,7 +105,7 @@ public class PlayPadMain extends Application {
 
 		Image stageIcon = new Image(ICON_PATH);
 		Alerts.getInstance().setDefaultIcon(stageIcon);
-		impl.setIcon(stageIcon);
+		impl.setIcon(stageIcon, getClass().getClassLoader().getResourceAsStream(ICON_PATH));
 
 		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
 		impl.setModernDesign(new ModernDesignHandlerImpl());

@@ -4,6 +4,7 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.application.App;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.thecodelabs.utils.io.FileUtils;
+import de.thecodelabs.utils.io.IOUtils;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
@@ -35,6 +36,8 @@ import javafx.stage.Window;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,8 @@ public class PlayPadImpl implements PlayPad {
 
 	private MainViewController mainViewController;
 	private Image stageIcon;
+	private byte[] stageIconData;
+
 	private Project currentProject;
 
 	private final Module module;
@@ -281,8 +286,18 @@ public class PlayPadImpl implements PlayPad {
 		return stageIcon;
 	}
 
-	public void setIcon(Image icon) {
+	@Override
+	public byte[] getIconData() {
+		return stageIconData;
+	}
+
+	public void setIcon(Image icon, InputStream iconResource) {
 		this.stageIcon = icon;
+		try {
+			stageIconData = IOUtils.inputStreamToByteArray(iconResource);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 
 	public Module getModule() {
