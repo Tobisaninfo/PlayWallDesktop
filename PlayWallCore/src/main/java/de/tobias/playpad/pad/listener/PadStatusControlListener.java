@@ -10,8 +10,10 @@ import de.tobias.playpad.pad.content.play.Seekable;
 import de.tobias.playpad.pad.fade.Fadeable;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.settings.FadeSettings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.util.Duration;
 
 public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
@@ -52,10 +54,13 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
 				boolean withFadeIn = false;
 				if (pad.getContent() instanceof Fadeable) {
-					if ((oldValue != PadStatus.PAUSE && padSettings.getFade().isFadeInStart()) || (oldValue == PadStatus.PAUSE && padSettings.getFade().isFadeInPause())) {
-						final Fadeable fadeable = (Fadeable) pad.getContent();
-						fadeable.fadeIn();
-						withFadeIn = true;
+					final FadeSettings fadeSettings = padSettings.getFade();
+					if ((oldValue != PadStatus.PAUSE && fadeSettings.isFadeInStart()) || (oldValue == PadStatus.PAUSE && fadeSettings.isFadeInPause())) {
+						if (fadeSettings.getFadeIn().greaterThan(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
+							final Fadeable fadeable = (Fadeable) pad.getContent();
+							fadeable.fadeIn();
+							withFadeIn = true;
+						}
 					}
 				}
 				pad.getContent().play(withFadeIn);
