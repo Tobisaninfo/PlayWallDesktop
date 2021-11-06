@@ -28,6 +28,7 @@ import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileListener;
 import de.tobias.playpad.profile.ProfileSettings;
+import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
 import de.tobias.playpad.project.page.PadIndex;
@@ -68,6 +69,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +112,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 	// Sync Listener
 	private InvalidationListener projectTitleListener;
 	private InvalidationListener pagesListener;
+
+	private Thread autosaveThread;
 
 	public MainViewController(Consumer<NVC> onFinish) {
 		load("view/main", "MainView", Localization.getBundle(), e ->
@@ -208,6 +212,9 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		} catch (Exception e) {
 			Logger.error(e);
 		}
+
+		autosaveThread = new Thread(new AutosaveRunner(this));
+		autosaveThread.start();
 	}
 
 	@Override
@@ -308,8 +315,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 			GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
 
-			// Frag den Nutzer ob das Programm wirdklich geschlossen werden sol
-			// wenn ein Pad noch im Status Play ist
+			// Frag den Nutzer ob das Programm wirdklich geschlossen werden soll,
+			// falls noch ein Pad im Status Play ist
 			if (openProject.getActivePlayers() > 0 && globalSettings.isLiveMode()) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setContentText(Localization.getString(Strings.UI_WINDOW_MAIN_CLOSE_REQUEST));
@@ -343,7 +350,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				}
 			}
 
-			// Save Config - Its unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
+			// Save Config - Ist unabhängig vom Dialog, da es auch an anderen Stellen schon gespeichert wird
 			try {
 				if (Profile.currentProfile() != null)
 					Profile.currentProfile().save();
@@ -361,6 +368,12 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				} catch (CloseException e) {
 					Logger.error(e);
 				}
+			}
+
+			if(autosaveThread != null && autosaveThread.isAlive())
+			{
+				Logger.debug("Stopping autosave thread");
+				autosaveThread.interrupt();
 			}
 		}
 		Platform.exit();
@@ -788,4 +801,22 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		PlayPadPlugin.getInstance().getMainViewListeners().forEach(MainWindowListener::loadMenuKeyBinding);
 	}
 
+	@Override
+	public void save() {
+		try
+		{
+			ProjectReferenceManager.saveProjects();
+			ProjectReferenceManager.saveSingleProject(openProject);
+			ProfileReferenceManager.saveProfiles();
+			Profile.currentProfile().save();
+			PlayPadPlugin.getInstance().getGlobalSettings().save();
+
+			notify(Localization.getString(Strings.STANDARD_FILE_SAVE), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
+		}
+		catch(IOException e)
+		{
+			showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
+			Logger.error(e);
+		}
+	}
 }

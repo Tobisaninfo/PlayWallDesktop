@@ -52,7 +52,8 @@ public class PadNewContentListener {
 		if (multiSelect) {
 			selectedFiles = chooser.showOpenMultipleDialog(window);
 		} else {
-			selectedFiles = Collections.singletonList(chooser.showOpenDialog(window));
+			final File selectedFile = chooser.showOpenDialog(window);
+			selectedFiles = selectedFile == null ? Collections.emptyList() : Collections.singletonList(selectedFile);
 		}
 
 		if (selectedFiles != null && !selectedFiles.isEmpty()) {

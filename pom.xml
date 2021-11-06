@@ -6,11 +6,11 @@
 
     <groupId>de.tobias.playpad</groupId>
     <artifactId>PlayWallDesktop</artifactId>
-    <version>7.1.0</version>
+    <version>7.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <project.build.code>42</project.build.code>
+        <project.build.code>43</project.build.code>
         <project.versionDate>${maven.build.timestamp}</project.versionDate>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
