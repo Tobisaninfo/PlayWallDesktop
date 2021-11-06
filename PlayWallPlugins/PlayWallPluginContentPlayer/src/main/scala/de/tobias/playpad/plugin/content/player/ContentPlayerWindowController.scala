@@ -9,19 +9,19 @@ import scala.collection.mutable.ListBuffer
 
 class ContentPlayerWindowController {
 
-	val window: ContentPlayerWindow = new ContentPlayerWindow()
+	var window: ContentPlayerWindow = _
 	val players: ListBuffer[ContentPlayerBinding] = ListBuffer.empty
 
-	window.SetIcon(PlayPadPlugin.getInstance.getIconData)
-
 	def configurePlayers(configuration: ZoneConfiguration): Unit = {
-		if (configuration.zones.isEmpty) {
+		players.foreach(_.clear())
+		players.clear()
+		if (window != null) {
 			window.Close()
-			return
 		}
 
-		players.clear()
-		window.ClearContentPlayers()
+		window = new ContentPlayerWindow();
+		window.SetIcon(PlayPadPlugin.getInstance.getIconData)
+		window.Show()
 
 		configuration.zones.forEach(zone => {
 			val contentPlayer = new ContentPlayer(zone.toNative)
@@ -29,8 +29,6 @@ class ContentPlayerWindowController {
 
 			players.addOne(new ContentPlayerBinding(contentPlayer, zone))
 		})
-
-		window.Show()
 
 		import scala.jdk.CollectionConverters._
 		val zones = configuration.zones.asScala

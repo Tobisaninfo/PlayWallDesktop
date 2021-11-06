@@ -57,4 +57,7 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 
 	def setFadeValue(value: Double): Unit = player.Fade(value)
 
+	def clear(): Unit = {
+		currentMedia.set(null)
+	}
 }
