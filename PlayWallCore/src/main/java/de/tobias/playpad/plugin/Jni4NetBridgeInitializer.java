@@ -38,7 +38,7 @@ public class Jni4NetBridgeInitializer {
 
     public static void loadDll(ClassLoader classLoader, String classpathDirectory, String target, String proxyDll, String... resources) throws IOException {
         Path resourceFolder = copyResources(classpathDirectory, resources, target, classLoader);
-        Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve(proxyDll).toFile());
+        Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve(proxyDll).toFile(), classLoader);
     }
 
     private static Path copyResources(String classpathDirectory, String[] resources, String destination, ClassLoader classLoader) throws IOException {
