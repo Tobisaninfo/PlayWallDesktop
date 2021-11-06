@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <project.build.code>42</project.build.code>
+        <project.build.code>43</project.build.code>
         <project.versionDate>${maven.build.timestamp}</project.versionDate>
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 
