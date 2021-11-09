@@ -67,18 +67,21 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 			}
 		} else if (newValue == PadStatus.PAUSE) {
 			if (pad.getContent() instanceof Pauseable) {
-				if (pad.getContent() instanceof Fadeable && padSettings.getFade().isFadeOutPause()) {
-					((Fadeable) pad.getContent()).fadeOut(() -> ((Pauseable) pad.getContent()).pause());
-				} else {
-					((Pauseable) pad.getContent()).pause();
+				final FadeSettings fadeSettings = padSettings.getFade();
+				if (pad.getContent() instanceof Fadeable && fadeSettings.isFadeOutPause()) {
+					if (fadeSettings.getFadeOut().greaterThan(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
+						((Fadeable) pad.getContent()).fadeOut(() -> ((Pauseable) pad.getContent()).pause());
+						return;
+					}
 				}
+				((Pauseable) pad.getContent()).pause();
 			}
 		} else if (newValue == PadStatus.STOP) {
 			if (pad.getContent() != null) {
 				pad.getProject().updateActivePlayerProperty();
 
-				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) { // Fade nur wenn Pad
-					// nicht am ende ist
+				// Fade nur wenn Pad nicht am Ende ist
+				if (pad.getContent() instanceof Fadeable && !pad.isEof() && padSettings.getFade().isFadeOutStop()) {
 					((Fadeable) pad.getContent()).fadeOut(() ->
 					{
 						pad.getContent().stop();
