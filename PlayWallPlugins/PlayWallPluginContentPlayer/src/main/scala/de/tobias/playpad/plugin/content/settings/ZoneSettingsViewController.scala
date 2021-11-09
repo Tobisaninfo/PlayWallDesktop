@@ -3,16 +3,20 @@ package de.tobias.playpad.plugin.content.settings
 import de.thecodelabs.utils.ui.scene.input.NumberTextField
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.plugin.content.ContentPluginMain
+import de.tobias.playpad.plugin.content.settings.ZoneSettingsViewController.SelectableContentScreen
 import de.tobias.playpad.profile.{Profile, ProfileSettings}
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.viewcontroller.option.{IProfileReloadTask, ProfileSettingsTabViewController}
 import javafx.application.Platform
 import javafx.fxml.FXML
-import javafx.scene.control.{Button, ListCell, ListView, TextField}
+import javafx.scene.control._
+import nativecontentplayerwindows.{ContentPlayerWindow, ContentScreen}
 
 class ZoneSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
 
+	@FXML
+	var screenComboBox: ComboBox[SelectableContentScreen] = _
 	@FXML
 	var listView: ListView[Zone] = _
 
@@ -60,6 +64,11 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 				clearTextFields()
 			}
 		})
+
+		val screens = ContentPlayerWindow.GetScreens
+		screenComboBox.getItems.setAll(screens.map(screen => new SelectableContentScreen(screen)): _*)
+		screenComboBox.setCellFactory((_: ListView[SelectableContentScreen]) => new ContentScreenCell())
+		screenComboBox.setButtonCell(new ContentScreenCell())
 	}
 
 	private def saveSettingsToZone(zone: Zone): Unit = {
@@ -92,7 +101,7 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 		val newConfiguration = new Zone
 		newConfiguration.setName(Localization.getString("plugin.content.player.settings.default_name"))
 
-		getZoneConfiguration.zones.add(newConfiguration)
+		ZoneSettingsViewController.getZoneConfiguration.zones.add(newConfiguration)
 		listView.getItems.add(newConfiguration)
 	}
 
@@ -101,18 +110,28 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			listView.getItems.remove(selectedItem)
-			getZoneConfiguration.zones.remove(selectedItem)
+			ZoneSettingsViewController.getZoneConfiguration.zones.remove(selectedItem)
 		}
 	}
 
 	override def loadSettings(settings: Profile): Unit = {
-		listView.getItems.setAll(getZoneConfiguration.zones)
+		listView.getItems.setAll(ZoneSettingsViewController.getZoneConfiguration.zones)
+
+		val screens = ContentPlayerWindow.GetScreens
+		val selectedScreen = ZoneSettingsViewController.getZoneConfiguration.screen
+		screenComboBox.getSelectionModel.select(new SelectableContentScreen(screens
+		  .find(screen => screen.getName == selectedScreen)
+		  .getOrElse(screens.head)))
 	}
 
 	override def saveSettings(settings: Profile): Unit = {
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			saveSettingsToZone(selectedItem)
+		}
+		val selectedScreen = screenComboBox.getSelectionModel.getSelectedItem
+		if (selectedScreen != null) {
+			ZoneSettingsViewController.getZoneConfiguration.screen = selectedScreen.getName
 		}
 	}
 
@@ -128,7 +147,21 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 
 
 	override def getTask(settings: ProfileSettings, project: Project, controller: IMainViewController): Runnable = () =>
-		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(getZoneConfiguration))
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(ZoneSettingsViewController.getZoneConfiguration))
 
-	private def getZoneConfiguration: ZoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+}
+
+object ZoneSettingsViewController {
+	private[settings] class SelectableContentScreen(val contentScreen: ContentScreen) {
+		override def equals(obj: Any): Boolean = {
+			if (!obj.isInstanceOf[SelectableContentScreen]) {
+				return false
+			}
+			contentScreen.getName == obj.asInstanceOf[SelectableContentScreen].getName
+		}
+
+		def getName: String = contentScreen.getName
+	}
+
+	def getZoneConfiguration: ZoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
 }

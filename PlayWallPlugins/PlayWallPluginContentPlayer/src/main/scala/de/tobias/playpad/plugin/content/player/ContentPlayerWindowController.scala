@@ -2,7 +2,7 @@ package de.tobias.playpad.plugin.content.player
 
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.pad.ContentPlayerMediaContainer
-import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
+import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration, ZoneSettingsViewController}
 import nativecontentplayerwindows.{ContentPlayer, ContentPlayerWindow}
 
 import scala.collection.mutable.ListBuffer
@@ -19,7 +19,7 @@ class ContentPlayerWindowController {
 			window.Close()
 		}
 
-		window = new ContentPlayerWindow();
+		window = new ContentPlayerWindow()
 		window.SetIcon(PlayPadPlugin.getInstance.getIconData)
 		window.Show()
 
@@ -35,7 +35,12 @@ class ContentPlayerWindowController {
 		val maxWidth = zones.map(player => player.x + player.width).max.toInt
 		val maxHeight = zones.map(player => player.y + player.height).max.toInt
 
-		window.SetLocation(0, 0)
+		val screens = ContentPlayerWindow.GetScreens
+		val selectedScreen = ZoneSettingsViewController.getZoneConfiguration.screen
+		val screen = screens.find(screen => screen.getName == selectedScreen)
+		  .getOrElse(screens.head)
+
+		window.SetScreen(screen)
 		window.SetSize(maxWidth, maxHeight)
 	}
 

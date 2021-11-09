@@ -10,6 +10,8 @@ import javafx.beans.property.{SimpleStringProperty, StringProperty}
 @FilePath("players.json")
 class ZoneConfiguration {
 	@Key
+	var screen: String = _
+	@Key
 	var zones: JavaList[Zone] = new util.ArrayList[Zone]()
 }
 
