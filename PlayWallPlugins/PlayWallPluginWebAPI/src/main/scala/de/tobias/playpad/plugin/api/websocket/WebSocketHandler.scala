@@ -1,13 +1,13 @@
 package de.tobias.playpad.plugin.api.websocket
 
-import java.util.concurrent.ConcurrentLinkedQueue
-
 import com.google.gson.{Gson, JsonObject}
 import de.thecodelabs.logger.Logger
 import de.tobias.playpad.plugin.api.websocket.message.Message
 import de.tobias.playpad.plugin.api.websocket.methods.{PadStatusChangeMethod, ProjectCurrentMethod, ProjectListMethod, ProjectOpenMethod}
-import org.eclipse.jetty.websocket.api.Session
 import org.eclipse.jetty.websocket.api.annotations._
+import org.eclipse.jetty.websocket.api.{CloseException, Session}
+
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @WebSocket
 class WebSocketHandler {
@@ -43,7 +43,9 @@ class WebSocketHandler {
 	}
 
 	@OnWebSocketError def onError(session: Session, error: Throwable): Unit = {
-		Logger.error(error)
+		if (!error.isInstanceOf[CloseException]) {
+			Logger.error(error)
+		}
 	}
 
 	def sendUpdate(message: String, jsonObject: JsonObject): Unit = {
@@ -62,7 +64,7 @@ object WebSocketHandler {
 
 	private val gson = new Gson()
 
-	def sendResponse(session: Session, message: Message, response: JsonObject) = {
+	def sendResponse(session: Session, message: Message, response: JsonObject): Unit = {
 		response.addProperty("messageId", message.messageId)
 		response.addProperty("type", message.`type`)
 		session.getRemote.sendString(gson.toJson(response))
