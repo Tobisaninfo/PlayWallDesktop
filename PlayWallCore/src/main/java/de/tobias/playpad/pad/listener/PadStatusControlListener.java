@@ -56,7 +56,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				if (pad.getContent() instanceof Fadeable) {
 					final FadeSettings fadeSettings = padSettings.getFade();
 					if ((oldValue != PadStatus.PAUSE && fadeSettings.isFadeInStart()) || (oldValue == PadStatus.PAUSE && fadeSettings.isFadeInPause())) {
-						if (fadeSettings.getFadeIn().greaterThan(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
+						if (fadeSettings.getFadeIn().greaterThanOrEqualTo(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
 							final Fadeable fadeable = (Fadeable) pad.getContent();
 							fadeable.fadeIn();
 							withFadeIn = true;
@@ -69,7 +69,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 			if (pad.getContent() instanceof Pauseable) {
 				final FadeSettings fadeSettings = padSettings.getFade();
 				if (pad.getContent() instanceof Fadeable && fadeSettings.isFadeOutPause()) {
-					if (fadeSettings.getFadeOut().greaterThan(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
+					if (fadeSettings.getFadeOut().greaterThanOrEqualTo(Duration.seconds(0.1))) { // A fade in less than 0.1s is not recognizable
 						((Fadeable) pad.getContent()).fadeOut(() -> ((Pauseable) pad.getContent()).pause());
 						return;
 					}
