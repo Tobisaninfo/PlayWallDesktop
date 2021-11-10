@@ -174,20 +174,20 @@ public class TouchPadViewController extends AbstractPadViewController implements
 						String time = durationToString(duration);
 						padView.setTime(time);
 						padView.getPlayBar().setProgress(0);
+						padView.setCueInProgress(0);
 					} else {
+						// TODO: Duplicated code
 						// Play/Gesamtzeit anzeigen
 						TimeMode timeMode = pad.getPadSettings().getTimeMode();
 
 						if (timeMode == TimeMode.REST) {
 							Duration leftTime = duration.subtract(position);
-
 							padView.setTime("- " + durationToString(leftTime));
 						} else if (timeMode == TimeMode.PLAYED) {
 							padView.setTime(durationToString(position));
 						} else if (timeMode == TimeMode.BOTH) {
 							String time = durationToString(position);
 							String totalTime = durationToString(duration);
-
 							padView.setTime(time + "/" + totalTime);
 						}
 					}
