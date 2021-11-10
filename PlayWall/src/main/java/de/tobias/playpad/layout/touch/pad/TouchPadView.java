@@ -1,6 +1,7 @@
 package de.tobias.playpad.layout.touch.pad;
 
 import de.thecodelabs.logger.Logger;
+import de.thecodelabs.utils.ui.animation.PulseTranslation;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.ui.scene.BusyView;
@@ -242,7 +243,8 @@ public class TouchPadView implements IPadView {
 
 	@Override
 	public void highlightView(int milliSeconds) {
-		cueInLayer.setPrefWidth(root.getWidth() * milliSeconds);
+		PulseTranslation pulseTranslation = new PulseTranslation(superRoot, null, 0.1);
+		pulseTranslation.play();
 	}
 
 	void clearIndex() {
