@@ -23,14 +23,14 @@ public class TouchPadViewController extends AbstractPadViewController implements
 	protected static final String CURRENT_PAGE_BUTTON = "current-page-button";
 	private static final String DURATION_FORMAT = "%d:%02d";
 
-	private TouchPadView padView;
+	private final TouchPadView padView;
 	private Pad pad;
 
-	private PadLockedListener padLockedListener;
-	private PadStatusListener padStatusListener;
-	private PadContentListener padContentListener;
-	private PadDurationListener padDurationListener;
-	private IPadPositionListener padPositionListener;
+	private final PadLockedListener padLockedListener;
+	private final PadStatusListener padStatusListener;
+	private final PadContentListener padContentListener;
+	private final PadDurationListener padDurationListener;
+	private final IPadPositionListener padPositionListener;
 
 	TouchPadViewController(TouchPadView padView) {
 		this.padView = padView;
