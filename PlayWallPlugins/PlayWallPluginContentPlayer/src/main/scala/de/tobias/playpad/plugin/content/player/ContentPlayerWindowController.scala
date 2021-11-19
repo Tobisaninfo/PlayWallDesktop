@@ -23,25 +23,30 @@ class ContentPlayerWindowController {
 		window.SetIcon(PlayPadPlugin.getInstance.getIconData)
 		window.Show()
 
-		configuration.zones.forEach(zone => {
-			val contentPlayer = new ContentPlayer(zone.toNative)
+		import scala.jdk.CollectionConverters._
+		val zones = configuration.zones.asScala
+
+		val minX = zones.map(player => player.x).min.toInt
+		val minY = zones.map(player => player.y).min.toInt
+
+		zones.foreach(zone => {
+			val contentPlayer = new ContentPlayer(zone.move(-minX, -minY).toNative)
 			window.AddContentPlayer(contentPlayer)
 
 			players.addOne(new ContentPlayerBinding(contentPlayer, zone))
 		})
 
-		import scala.jdk.CollectionConverters._
-		val zones = configuration.zones.asScala
-		val maxWidth = zones.map(player => player.x + player.width).max.toInt
-		val maxHeight = zones.map(player => player.y + player.height).max.toInt
+		val maxWidth = zones.map(player => player.x + player.width - minX).max.toInt
+		val maxHeight = zones.map(player => player.y + player.height - minY).max.toInt
 
 		val screens = ContentPlayerWindow.GetScreens
 		val selectedScreen = ZoneSettingsViewController.getZoneConfiguration.screen
 		val screen = screens.find(screen => screen.getName == selectedScreen)
 		  .getOrElse(screens.head)
 
-		window.SetScreen(screen)
 		window.SetSize(maxWidth, maxHeight)
+		window.SetScreen(screen)
+		window.SetLocation(minX, minY)
 	}
 
 	private def getContentPlayerBinding(zone: Zone): ContentPlayerBinding = {

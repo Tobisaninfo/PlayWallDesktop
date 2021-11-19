@@ -34,6 +34,16 @@ class Zone extends Displayable {
 		_displayProperty.set(name)
 	}
 
+	def move(x: Int, y: Int): Zone = {
+		val zone = new Zone()
+		zone.name = this.name
+		zone.x = this.x + x
+		zone.y = this.y + y
+		zone.width = this.width
+		zone.height = this.height
+		zone
+	}
+
 	def toNative: nativecontentplayerwindows.Zone = new nativecontentplayerwindows.Zone(x.toInt, y.toInt, width.toInt, height.toInt)
 
 	private val _displayProperty: StringProperty = new SimpleStringProperty(name)
@@ -44,4 +54,18 @@ class Zone extends Displayable {
 	}
 
 	override def toString: String = name
+
+	def canEqual(other: Any): Boolean = other.isInstanceOf[Zone]
+
+	override def equals(other: Any): Boolean = other match {
+		case that: Zone =>
+			(that canEqual this) &&
+			  name == that.name
+		case _ => false
+	}
+
+	override def hashCode(): Int = {
+		val state = Seq(name)
+		state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
+	}
 }
