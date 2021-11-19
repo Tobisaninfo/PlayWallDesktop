@@ -18,7 +18,7 @@ class ContentPlayerPadContentFactory(val `type`: String) extends PadContentFacto
 }
 
 object ContentPlayerPadContentFactory {
-	private val FILE_EXTENSION = Array("*.mp4")
+	private val FILE_EXTENSION = Array("*.mp4", "*.mkv", "*.mov")
 
 	val lastFrame = "ContentLastFrame"
 	val zones = "zones"
