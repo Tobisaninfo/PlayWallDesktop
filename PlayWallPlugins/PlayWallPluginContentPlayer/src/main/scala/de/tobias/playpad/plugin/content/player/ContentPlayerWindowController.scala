@@ -2,7 +2,7 @@ package de.tobias.playpad.plugin.content.player
 
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.pad.ContentPlayerMediaContainer
-import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration, ZoneSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration, ZoneSettingsViewController}
 import nativecontentplayerwindows.{ContentPlayer, ContentPlayerWindow}
 
 import scala.collection.mutable.ListBuffer
@@ -12,7 +12,7 @@ class ContentPlayerWindowController {
 	var window: ContentPlayerWindow = _
 	val players: ListBuffer[ContentPlayerBinding] = ListBuffer.empty
 
-	def configurePlayers(configuration: ZoneConfiguration): Unit = {
+	def configurePlayers(configuration: ContentPlayerPluginConfiguration): Unit = {
 		players.foreach(_.clear())
 		players.clear()
 		if (window != null) {

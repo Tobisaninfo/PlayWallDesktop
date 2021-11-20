@@ -8,7 +8,7 @@ import de.tobias.playpad.Displayable
 import javafx.beans.property.{SimpleStringProperty, StringProperty}
 
 @FilePath("players.json")
-class ZoneConfiguration {
+class ContentPlayerPluginConfiguration {
 	@Key
 	var screen: String = _
 	@Key

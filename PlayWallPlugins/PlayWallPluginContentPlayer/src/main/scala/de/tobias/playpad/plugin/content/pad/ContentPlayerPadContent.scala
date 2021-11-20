@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
+import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration}
 import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.profile.Profile
 import javafx.application.Platform
@@ -274,7 +274,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	def getSelectedZones: Seq[Zone] = {
-		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
 
 		val customSettings = pad.getPadSettings.getCustomSettings
 		val selectedZoneNames = customSettings.getOrDefault(

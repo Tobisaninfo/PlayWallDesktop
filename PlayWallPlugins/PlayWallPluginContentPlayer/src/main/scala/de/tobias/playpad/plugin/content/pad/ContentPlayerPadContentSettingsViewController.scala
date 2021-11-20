@@ -5,7 +5,7 @@ import java.util
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.pad.Pad
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.plugin.content.settings.{Zone, ZoneConfiguration}
+import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration}
 import de.tobias.playpad.profile.Profile
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController
 import javafx.beans.binding.Bindings
@@ -30,7 +30,7 @@ class ContentPlayerPadContentSettingsViewController(val pad: Pad) extends PadSet
 	load("view", "ContentPadSettings", Localization.getBundle)
 
 	override def init(): Unit = {
-		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
 		zoneListView.getItems.addAll(zoneConfiguration.zones)
 
 		addAllZonesButton.disableProperty().bind(Bindings.equal(Bindings.size(zoneListView.getCheckModel.getCheckedIndices), zoneListView.getItems.size()))

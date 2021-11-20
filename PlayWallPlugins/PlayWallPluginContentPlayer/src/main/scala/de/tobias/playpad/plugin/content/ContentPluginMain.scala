@@ -5,7 +5,7 @@ import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.player.ContentPlayerWindowController
-import de.tobias.playpad.plugin.content.settings.{ZoneConfiguration, ZoneSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, ZoneSettingsViewController}
 import de.tobias.playpad.plugin.{Jni4NetBridgeInitializer, Module, PlayPadPluginStub, SettingsListener}
 import de.tobias.playpad.profile.{Profile, ProfileListener}
 import javafx.application.Platform
@@ -43,7 +43,7 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 
 	override def onLoad(profile: Profile): Unit = {
 		val path = profile.getRef.getCustomFilePath("Zones.json")
-		val zoneConfiguration = Storage.load(path, StorageTypes.JSON, classOf[ZoneConfiguration])
+		val zoneConfiguration = Storage.load(path, StorageTypes.JSON, classOf[ContentPlayerPluginConfiguration])
 		profile.addCustomSettings(ContentPluginMain.zoneConfigurationKey, zoneConfiguration)
 	}
 
@@ -56,8 +56,8 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 	}
 
 	override def reloadSettings(oldProfile: Profile, currentProfile: Profile): Unit = {
-		val zoneConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
-		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(zoneConfiguration))
+		val pluginConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(pluginConfiguration))
 	}
 }
 

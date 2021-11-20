@@ -163,5 +163,5 @@ object ZoneSettingsViewController {
 		def getName: String = contentScreen.getName
 	}
 
-	def getZoneConfiguration: ZoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
+	def getZoneConfiguration: ContentPlayerPluginConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
 }
