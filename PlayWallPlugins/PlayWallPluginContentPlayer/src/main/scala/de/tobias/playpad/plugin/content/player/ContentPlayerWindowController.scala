@@ -2,7 +2,7 @@ package de.tobias.playpad.plugin.content.player
 
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.pad.ContentPlayerMediaContainer
-import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration, ZoneSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration, ContentPlayerSettingsViewController}
 import nativecontentplayerwindows.{ContentPlayer, ContentPlayerWindow}
 
 import scala.collection.mutable.ListBuffer
@@ -40,7 +40,7 @@ class ContentPlayerWindowController {
 		val maxHeight = zones.map(player => player.y + player.height - minY).max.toInt
 
 		val screens = ContentPlayerWindow.GetScreens
-		val selectedScreen = ZoneSettingsViewController.getZoneConfiguration.screen
+		val selectedScreen = ContentPlayerSettingsViewController.getZoneConfiguration.screen
 		val screen = screens.find(screen => screen.getName == selectedScreen)
 		  .getOrElse(screens.head)
 

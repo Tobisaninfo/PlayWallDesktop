@@ -5,7 +5,7 @@ import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.player.ContentPlayerWindowController
-import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, ZoneSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, ContentPlayerSettingsViewController}
 import de.tobias.playpad.plugin.{Jni4NetBridgeInitializer, Module, PlayPadPluginStub, SettingsListener}
 import de.tobias.playpad.profile.{Profile, ProfileListener}
 import javafx.application.Platform
@@ -29,7 +29,7 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 		Localization.addResourceBundle(localization)
 
 		PlayPadPlugin.getRegistries.getPadContents.loadComponentsFromFile("PadContent.xml", getClass.getClassLoader, module, localization)
-		PlayPadPlugin.getInstance().addAdditionalProfileSettingsTab(() => new ZoneSettingsViewController)
+		PlayPadPlugin.getInstance().addAdditionalProfileSettingsTab(() => new ContentPlayerSettingsViewController)
 
 		PlayPadPlugin.getInstance().addSettingsListener(this)
 		Profile.registerListener(this)

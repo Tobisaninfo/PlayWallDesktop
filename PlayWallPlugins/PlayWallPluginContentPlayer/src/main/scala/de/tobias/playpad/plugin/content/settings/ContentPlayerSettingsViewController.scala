@@ -1,19 +1,28 @@
 package de.tobias.playpad.plugin.content.settings
 
+import de.thecodelabs.utils.ui.icon.{FontAwesomeType, FontIcon}
 import de.thecodelabs.utils.ui.scene.input.NumberTextField
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.plugin.content.settings.ZoneSettingsViewController.SelectableContentScreen
+import de.tobias.playpad.plugin.content.settings.ContentPlayerSettingsViewController.SelectableContentScreen
 import de.tobias.playpad.profile.{Profile, ProfileSettings}
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.viewcontroller.option.{IProfileReloadTask, ProfileSettingsTabViewController}
 import javafx.application.Platform
-import javafx.fxml.FXML
+import javafx.event.ActionEvent
 import javafx.scene.control._
+import javafx.stage.FileChooser
 import nativecontentplayerwindows.{ContentPlayerWindow, ContentScreen}
 
-class ZoneSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
+class ContentPlayerSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
+
+	import javafx.fxml.FXML
+
+	@FXML var ffmpegButton: Button = _
+	@FXML var ffmpegTextField: TextField = _
+	@FXML var ffprobeButton: Button = _
+	@FXML var ffprobeTextField: TextField = _
 
 	@FXML
 	var screenComboBox: ComboBox[SelectableContentScreen] = _
@@ -36,7 +45,7 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 	@FXML
 	var removeButton: Button = _
 
-	load("view", "ZoneSettings", Localization.getBundle)
+	load("view", "ContentPlayerSettingsTab", Localization.getBundle)
 
 	override def init(): Unit = {
 		listView.setCellFactory((_: ListView[Zone]) => new ListCell[Zone] {
@@ -69,6 +78,9 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 		screenComboBox.getItems.setAll(screens.map(screen => new SelectableContentScreen(screen)): _*)
 		screenComboBox.setCellFactory((_: ListView[SelectableContentScreen]) => new ContentScreenCell())
 		screenComboBox.setButtonCell(new ContentScreenCell())
+
+		ffmpegButton.setGraphic(new FontIcon(FontAwesomeType.FOLDER))
+		ffprobeButton.setGraphic(new FontIcon(FontAwesomeType.FOLDER))
 	}
 
 	private def saveSettingsToZone(zone: Zone): Unit = {
@@ -96,12 +108,28 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 	}
 
 	// Actions
+	@FXML def onFfmpegHandle(event: ActionEvent): Unit = {
+		val chooser = new FileChooser()
+		val selected = chooser.showOpenDialog(getContainingWindow)
+		if (selected != null) {
+			ffmpegTextField.setText(selected.toPath.toAbsolutePath.toString)
+		}
+	}
+
+	@FXML def onFfprobeHandle(event: ActionEvent): Unit = {
+		val chooser = new FileChooser()
+		val selected = chooser.showOpenDialog(getContainingWindow)
+		if (selected != null) {
+			ffprobeTextField.setText(selected.toPath.toAbsolutePath.toString)
+		}
+	}
+
 	@FXML
 	def onAddHandle(): Unit = {
 		val newConfiguration = new Zone
 		newConfiguration.setName(Localization.getString("plugin.content.player.settings.default_name"))
 
-		ZoneSettingsViewController.getZoneConfiguration.zones.add(newConfiguration)
+		ContentPlayerSettingsViewController.getZoneConfiguration.zones.add(newConfiguration)
 		listView.getItems.add(newConfiguration)
 	}
 
@@ -110,29 +138,39 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			listView.getItems.remove(selectedItem)
-			ZoneSettingsViewController.getZoneConfiguration.zones.remove(selectedItem)
+			ContentPlayerSettingsViewController.getZoneConfiguration.zones.remove(selectedItem)
 		}
 	}
 
 	override def loadSettings(settings: Profile): Unit = {
-		listView.getItems.setAll(ZoneSettingsViewController.getZoneConfiguration.zones)
+		val configuration = ContentPlayerSettingsViewController.getZoneConfiguration
+
+		listView.getItems.setAll(configuration.zones)
 
 		val screens = ContentPlayerWindow.GetScreens
-		val selectedScreen = ZoneSettingsViewController.getZoneConfiguration.screen
+		val selectedScreen = configuration.screen
 		screenComboBox.getSelectionModel.select(new SelectableContentScreen(screens
 		  .find(screen => screen.getName == selectedScreen)
 		  .getOrElse(screens.head)))
+
+		ffmpegTextField.setText(configuration.ffmpegExecutable)
+		ffprobeTextField.setText(configuration.ffprobeExecutable)
 	}
 
 	override def saveSettings(settings: Profile): Unit = {
+		val configuration = ContentPlayerSettingsViewController.getZoneConfiguration
+
 		val selectedItem = listView.getSelectionModel.getSelectedItem
 		if (selectedItem != null) {
 			saveSettingsToZone(selectedItem)
 		}
 		val selectedScreen = screenComboBox.getSelectionModel.getSelectedItem
 		if (selectedScreen != null) {
-			ZoneSettingsViewController.getZoneConfiguration.screen = selectedScreen.getName
+			configuration.screen = selectedScreen.getName
 		}
+
+		configuration.ffmpegExecutable = ffmpegTextField.getText
+		configuration.ffprobeExecutable = ffprobeTextField.getText
 	}
 
 	override def needReload(): Boolean = {
@@ -147,11 +185,11 @@ class ZoneSettingsViewController extends ProfileSettingsTabViewController with I
 
 
 	override def getTask(settings: ProfileSettings, project: Project, controller: IMainViewController): Runnable = () =>
-		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(ZoneSettingsViewController.getZoneConfiguration))
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(ContentPlayerSettingsViewController.getZoneConfiguration))
 
 }
 
-object ZoneSettingsViewController {
+object ContentPlayerSettingsViewController {
 	private[settings] class SelectableContentScreen(val contentScreen: ContentScreen) {
 		override def equals(obj: Any): Boolean = {
 			if (!obj.isInstanceOf[SelectableContentScreen]) {

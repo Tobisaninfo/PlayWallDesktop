@@ -13,6 +13,10 @@ class ContentPlayerPluginConfiguration {
 	var screen: String = _
 	@Key
 	var zones: JavaList[Zone] = new util.ArrayList[Zone]()
+	@Key
+	var ffmpegExecutable: String = _
+	@Key
+	var ffprobeExecutable: String = _
 }
 
 class Zone extends Displayable {

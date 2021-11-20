@@ -1,6 +1,6 @@
 package de.tobias.playpad.plugin.content.settings
 
-import de.tobias.playpad.plugin.content.settings.ZoneSettingsViewController.SelectableContentScreen
+import de.tobias.playpad.plugin.content.settings.ContentPlayerSettingsViewController.SelectableContentScreen
 import javafx.scene.control.ListCell
 
 class ContentScreenCell extends ListCell[SelectableContentScreen] {
