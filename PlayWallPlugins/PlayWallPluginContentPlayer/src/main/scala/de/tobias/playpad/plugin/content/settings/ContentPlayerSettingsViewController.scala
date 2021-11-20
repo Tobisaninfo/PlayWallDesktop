@@ -15,6 +15,9 @@ import javafx.scene.control._
 import javafx.stage.FileChooser
 import nativecontentplayerwindows.{ContentPlayerWindow, ContentScreen}
 
+import java.awt.Desktop
+import java.net.URI
+
 class ContentPlayerSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
 
 	import javafx.fxml.FXML
@@ -23,6 +26,7 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 	@FXML var ffmpegTextField: TextField = _
 	@FXML var ffprobeButton: Button = _
 	@FXML var ffprobeTextField: TextField = _
+	@FXML var ffmpegDownloadLink: Hyperlink = _
 
 	@FXML
 	var screenComboBox: ComboBox[SelectableContentScreen] = _
@@ -81,6 +85,8 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 
 		ffmpegButton.setGraphic(new FontIcon(FontAwesomeType.FOLDER))
 		ffprobeButton.setGraphic(new FontIcon(FontAwesomeType.FOLDER))
+
+		ffmpegDownloadLink.setText(Localization.getString("plugin.content.player.settings.ffmpeg_link"))
 	}
 
 	private def saveSettingsToZone(zone: Zone): Unit = {
@@ -122,6 +128,10 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 		if (selected != null) {
 			ffprobeTextField.setText(selected.toPath.toAbsolutePath.toString)
 		}
+	}
+
+	@FXML def  onFfmpegDownloadLink(event: ActionEvent): Unit = {
+		Desktop.getDesktop.browse(URI.create(ffmpegDownloadLink.getText))
 	}
 
 	@FXML
