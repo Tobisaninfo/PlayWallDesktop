@@ -1,5 +1,6 @@
 package de.tobias.playpad.plugin.content.pad
 
+import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.pad.PadStatus
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.plugin.content.ContentPluginMain
@@ -7,15 +8,30 @@ import de.tobias.playpad.plugin.content.util._
 import javafx.beans.property.{ObjectProperty, ReadOnlyObjectProperty, SimpleObjectProperty}
 import javafx.util.Duration
 
-class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, val mediaPath: MediaPath, val totalDuration: Duration) {
+import java.nio.file.Files
+
+class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[pad] val mediaPath: MediaPath, val totalDuration: Duration) {
 
 	private val _totalDurationProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration]()
 
 	_totalDurationProperty.set(totalDuration)
 
+	def getPath: String = {
+		val sourcePath = mediaPath.getPath.toAbsolutePath
+
+		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
+		val convertPath = globalSettings.getCachePath.resolve(sourcePath.getFileName + ".mkv")
+
+		if (Files.exists(convertPath)) {
+			return convertPath.toString
+		}
+
+		sourcePath.toString
+	}
+
 	def getTotalDuration: Duration = _totalDurationProperty.get()
 
-	def totalDurationProperty: ReadOnlyObjectProperty[Duration] = _totalDurationProperty;
+	def totalDurationProperty: ReadOnlyObjectProperty[Duration] = _totalDurationProperty
 
 	def play(withFadeIn: Boolean): Unit = {
 		ContentPluginMain.playerViewController.play(this, withFadeIn)

@@ -40,7 +40,7 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 	})
 
 	def play(media: ContentPlayerMediaContainer, withFadeIn: Boolean): Unit = {
-		player.Play(media.mediaPath.getPath.toAbsolutePath.toString, withFadeIn)
+		player.Play(media.getPath, withFadeIn)
 		currentMedia.set(media)
 	}
 

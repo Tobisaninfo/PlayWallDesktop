@@ -4,11 +4,13 @@ import de.thecodelabs.utils.application.system.NativeApplication;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
+import de.tobias.playpad.PlayPad;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.PadContentPlaylistFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
@@ -16,10 +18,12 @@ import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.util.Collections;
@@ -43,6 +47,9 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 	private Button deleteButton;
 	@FXML
 	private Button showFileButton;
+
+	@FXML
+	private VBox customItemView;
 
 	private final Pad pad;
 
@@ -85,6 +92,14 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 				pathLabel.setText(newValue.getPath().toString());
 			} else {
 				pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
+			}
+
+			customItemView.getChildren().clear();
+
+			final PadContentFactory factory = PlayPadPlugin.getRegistries().getPadContents().getFactory(pad.getContentType());
+			if (factory instanceof PadContentPlaylistFactory) {
+				final Node customPlaylistItemView = ((PadContentPlaylistFactory) factory).getCustomPlaylistItemView(pad, newValue);
+				customItemView.getChildren().add(customPlaylistItemView);
 			}
 		});
 	}
