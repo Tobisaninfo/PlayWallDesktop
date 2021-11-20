@@ -34,7 +34,7 @@ public class GlobalSettings {
 	private Path savePath;
 
 	// Key Binding
-	private KeyCollection keyCollection = new KeyCollection();
+	private final KeyCollection keyCollection = new KeyCollection();
 
 	// Update
 	private boolean autoUpdate = true;
@@ -114,13 +114,11 @@ public class GlobalSettings {
 		return openLastDocument;
 	}
 
-	public boolean isEnableAutosave()
-	{
+	public boolean isEnableAutosave() {
 		return enableAutosave;
 	}
 
-	public int getAutosaveIntervalInMinutes()
-	{
+	public int getAutosaveIntervalInMinutes() {
 		return autosaveIntervalInMinutes;
 	}
 
@@ -169,13 +167,11 @@ public class GlobalSettings {
 		this.openLastDocument = openLastDocument;
 	}
 
-	public void setEnableAutosave(boolean enableAutosave)
-	{
+	public void setEnableAutosave(boolean enableAutosave) {
 		this.enableAutosave = enableAutosave;
 	}
 
-	public void setAutosaveIntervalInMinutes(int autosaveIntervalInMinutes)
-	{
+	public void setAutosaveIntervalInMinutes(int autosaveIntervalInMinutes) {
 		this.autosaveIntervalInMinutes = autosaveIntervalInMinutes;
 	}
 

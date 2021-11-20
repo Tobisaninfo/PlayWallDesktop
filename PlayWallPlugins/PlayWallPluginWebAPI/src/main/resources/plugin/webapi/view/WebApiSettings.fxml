@@ -2,32 +2,69 @@
 
 <?import de.thecodelabs.utils.ui.scene.input.NumberTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="14.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
+        <Label text="%webapi-settings.server" underline="true" />
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%webapi.settings.enable"/>
-                <CheckBox fx:id="activeCheckbox" mnemonicParsing="false" text="%webapi.settings.enabled"/>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%webapi.settings.server.enable" />
+                <CheckBox fx:id="activeCheckbox" mnemonicParsing="false" text="%webapi.settings.server.enabled" />
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" spacing="14.0">
             <children>
-                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%webapi.settings.port"/>
-                <NumberTextField fx:id="portTextField"/>
+                <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%webapi.settings.server.port" />
+                <NumberTextField fx:id="portTextField" />
             </children>
         </HBox>
-        <Label text="%webapi.settings.restart">
+        <Label text="%webapi.settings.server.restart">
             <padding>
-                <Insets left="164.0"/>
+                <Insets left="164.0" />
             </padding>
         </Label>
+      <Separator prefWidth="200.0" />
+      <Label text="%webapi-settings.remote" underline="true" />
+      <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox spacing="14.0">
+               <children>
+                  <ListView fx:id="remoteListView" VBox.vgrow="ALWAYS" />
+                  <HBox spacing="14.0">
+                     <children>
+                        <Button fx:id="remoteAddButton" onAction="#onRemoteAddButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%webapi-settings.remote.add" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="remoteDeleteButton" onAction="#onRemoteDeleteButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="%webapi-settings.remote.remove" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="14.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="14.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%webapi-settings.remote.name" />
+                        <TextField fx:id="remoteNameTextField" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="14.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%webapi-settings.remote.address" />
+                        <TextField fx:id="remoteAddressTextField" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="14.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="100.0" text="%webapi-settings.remote.port" />
+                        <NumberTextField fx:id="remotePortTextField" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
     </children>
     <padding>
-        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0"/>
+        <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
     </padding>
 </VBox>

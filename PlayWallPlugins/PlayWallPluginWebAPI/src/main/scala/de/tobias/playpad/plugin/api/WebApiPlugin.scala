@@ -1,7 +1,5 @@
 package de.tobias.playpad.plugin.api
 
-import java.nio.file.{Files, Path}
-
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.plugins.versionizer.PluginArtifact
@@ -10,11 +8,13 @@ import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
+import de.tobias.playpad.plugin.api.settings.{WebApiSettings, WebApiSettingsViewController}
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
 import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}
-import de.tobias.playpad.plugin.api.websocket.settings.{WebApiSettings, WebApiSettingsViewController}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import spark.{Request, Response, Spark}
+
+import java.nio.file.{Files, Path}
 
 class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 
