@@ -20,7 +20,7 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 		val sourcePath = mediaPath.getPath.toAbsolutePath
 
 		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
-		val convertPath = globalSettings.getCachePath.resolve(sourcePath.getFileName + ".mkv")
+		val convertPath = globalSettings.getCachePath.resolve(sourcePath.getFileName + ".mp4")
 
 		if (Files.exists(convertPath)) {
 			return convertPath.toString

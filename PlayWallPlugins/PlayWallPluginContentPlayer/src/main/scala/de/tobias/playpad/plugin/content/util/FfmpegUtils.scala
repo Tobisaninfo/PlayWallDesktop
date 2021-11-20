@@ -37,7 +37,7 @@ object FfmpegUtils {
 
 	def convertMediaVStack(path: Path): Unit = {
 		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
-		val convertPath = globalSettings.getCachePath.resolve(path.getFileName + ".mkv")
+		val convertPath = globalSettings.getCachePath.resolve(path.getFileName + ".mp4")
 
 		if (Files.notExists(convertPath.getParent)) {
 			Files.createDirectories(convertPath.getParent)
@@ -49,7 +49,7 @@ object FfmpegUtils {
 		  .overrideOutputFiles(true)
 		  .addOutput(convertPath.toAbsolutePath.toString)
 		  .setVideoBitRate(5_000_000)
-		  .setVideoCodec("libx265")
+		  .setVideoCodec("libx264")
 		  .addExtraArgs("-filter_complex", "vstack")
 		  .done()
 
