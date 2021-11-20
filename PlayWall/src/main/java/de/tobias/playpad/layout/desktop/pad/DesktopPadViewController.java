@@ -261,7 +261,6 @@ public class DesktopPadViewController extends AbstractPadViewController implemen
 			}
 		}
 		padView.setPlayBarProgress(0);
-		padView.setCueInProgress(0);
 		padView.setTime(null);
 	}
 

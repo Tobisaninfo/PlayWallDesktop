@@ -355,10 +355,10 @@ public class ServerImpl implements Server, ChangeListener<ConnectionState> {
 	}
 
 	private void loadStoredFile(Path path) throws IOException {
-		List<String> lines = Files.readAllLines(path);
-
-		JsonParser parser = new JsonParser();
-		List<JsonObject> commands = lines.stream().map(line -> (JsonObject) parser.parse(line)).collect(Collectors.toList());
+		final List<String> lines = Files.readAllLines(path);
+		final List<JsonObject> commands = lines.stream()
+				.map(line -> (JsonObject) JsonParser.parseString(line))
+				.collect(Collectors.toList());
 
 		CommandStore executor = (CommandStore) PlayPadPlugin.getCommandExecutorHandler().getCommandExecutor();
 		executor.setStoredCommands(path.getFileName().toString(), commands);
