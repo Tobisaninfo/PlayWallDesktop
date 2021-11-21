@@ -2,10 +2,11 @@ package de.tobias.playpad.project;
 
 import de.thecodelabs.storage.settings.annotation.Key;
 import de.thecodelabs.utils.application.ApplicationUtils;
+import de.tobias.playpad.project.api.IProjectSettings;
 
 import java.nio.file.Path;
 
-public class ProjectSettings {
+public class ProjectSettings implements IProjectSettings {
 
 	public static final int MAX_PAGES;
 

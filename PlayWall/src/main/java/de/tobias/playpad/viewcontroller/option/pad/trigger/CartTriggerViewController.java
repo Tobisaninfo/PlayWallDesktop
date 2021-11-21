@@ -3,9 +3,9 @@ package de.tobias.playpad.viewcontroller.option.pad.trigger;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.PlayPadMain;
-import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.trigger.CartTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -35,12 +35,12 @@ public class CartTriggerViewController extends NVC {
 		this.item = item;
 
 		Project project = PlayPadMain.getProgramInstance().getCurrentProject();
-		final List<Pad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
+		final List<? extends IPad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
 		projectPreviewView = new ProjectPreviewView(project, pads, mainViewController.getPage());
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
 		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
 			item.getCarts().clear();
-			for (Pad pad : projectPreviewView.getSelected()) {
+			for (IPad pad : projectPreviewView.getSelected()) {
 				item.getCarts().add(pad.getUuid());
 			}
 		});

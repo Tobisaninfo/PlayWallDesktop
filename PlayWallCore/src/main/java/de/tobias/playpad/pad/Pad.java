@@ -16,6 +16,7 @@ import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.page.PageCoordinate;
@@ -39,7 +40,7 @@ import java.util.UUID;
  * @author tobias
  * @version 6.2.0
  */
-public class Pad {
+public class Pad implements IPad {
 
 	private UUID uuid;
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();

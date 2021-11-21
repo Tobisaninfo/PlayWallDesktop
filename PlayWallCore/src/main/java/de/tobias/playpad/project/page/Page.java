@@ -3,6 +3,7 @@ package de.tobias.playpad.project.page;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.api.IPage;
 import de.tobias.playpad.server.sync.command.CommandManager;
 import de.tobias.playpad.server.sync.command.Commands;
 import de.tobias.playpad.server.sync.listener.upstream.PageUpdateListener;
@@ -16,7 +17,7 @@ import java.util.*;
  * @author tobias
  * @since 6.0.0
  */
-public class Page {
+public class Page implements IPage {
 
 	private UUID id;
 	private IntegerProperty positionProperty;

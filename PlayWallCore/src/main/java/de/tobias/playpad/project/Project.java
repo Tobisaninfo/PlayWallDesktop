@@ -3,6 +3,7 @@ package de.tobias.playpad.project;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.project.api.IProject;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * @author tobias
  * @since 6.0.0
  */
-public class Project {
+public class Project implements IProject {
 
 	/**
 	 * Project file extension.

@@ -19,14 +19,13 @@ public class CartTriggerItem extends TriggerItem {
 	private boolean allCarts;
 	private PadStatus newStatus; // Only Play, Pause, Stop
 
-	private String type;
+	private final String type;
 
 	CartTriggerItem(String type) {
-		super();
 		this.type = type;
-		newStatus = PadStatus.PLAY;
-		allCarts = false;
-		uuids = new UniqList<>();
+		this.newStatus = PadStatus.PLAY;
+		this.allCarts = false;
+		this.uuids = new UniqList<>();
 	}
 
 	public List<UUID> getCarts() {

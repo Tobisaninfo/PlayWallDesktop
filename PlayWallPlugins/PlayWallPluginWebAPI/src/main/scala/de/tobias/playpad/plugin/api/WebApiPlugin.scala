@@ -27,11 +27,14 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 
 	override def startup(descriptor: PluginDescriptor): Unit = {
 		module = new Module(descriptor.getName, descriptor.getArtifactId)
+		Localization.addResourceBundle("plugin/webapi/lang/base", getClass.getClassLoader)
 
 		PlayPadPlugin.getInstance().addPadListener(new PadStatusListener)
 		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener)
 
 		Logger.debug("Enable Web API Plugin")
+
+		PlayPadPlugin.getRegistries.getTriggerItems.loadComponentsFromFile("plugin/webapi/Trigger.xml", getClass.getClassLoader, module, Localization.getBundle)
 
 		val settingsPath = WebApiPlugin.getWebApiSettingsPath
 		if (Files.exists(settingsPath)) {
@@ -62,7 +65,6 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 		})
 
 		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new WebApiSettingsViewController(webApiSettings))
-		Localization.addResourceBundle("plugin/webapi/lang/base", getClass.getClassLoader)
 	}
 
 	override def shutdown(): Unit = {
