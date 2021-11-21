@@ -63,10 +63,11 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 	}
 
 	private void createConnectionStateBinding() {
+		final List<PlayPadClient> clients = new ArrayList<>(WebApiPlugin$.MODULE$.connections().values());
 		connectedProperty.bind(Bindings.createIntegerBinding(() -> (int) WebApiPlugin$.MODULE$.connections().values().stream()
 						.filter(client -> client.getPlayPadConnectionState() != WebSocketState.OPEN)
 						.count(),
-				WebApiPlugin$.MODULE$.connections().values().stream()
+				clients.stream()
 						.map(PlayPadClient::playPadConnectionState)
 						.toArray(ObjectProperty[]::new))
 		);
