@@ -3,6 +3,7 @@ package de.tobias.playpad.plugin.api.trigger;
 import de.thecodelabs.utils.list.UniqList;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
+import de.tobias.playpad.plugin.api.WebApiPlugin$;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.tigger.TriggerItem;
@@ -47,7 +48,11 @@ public class RemoteTriggerItem extends TriggerItem {
 
 	@Override
 	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
-
+		WebApiPlugin$.MODULE$.getConnection(serverId).ifPresent(client -> {
+			for (UUID uuid : uuids) {
+				client.setPadStatus(uuid, newStatus);
+			}
+		});
 	}
 
 	@Override
