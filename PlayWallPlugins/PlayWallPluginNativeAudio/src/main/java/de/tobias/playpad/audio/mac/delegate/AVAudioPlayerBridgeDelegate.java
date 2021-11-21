@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAudioDelegate {
 
-	private NativeAudioMacHandlerFactory factory;
+	private final NativeAudioMacHandlerFactory factory;
 
 	public AVAudioPlayerBridgeDelegate(NativeAudioMacHandlerFactory factory) {
 		this.factory = factory;

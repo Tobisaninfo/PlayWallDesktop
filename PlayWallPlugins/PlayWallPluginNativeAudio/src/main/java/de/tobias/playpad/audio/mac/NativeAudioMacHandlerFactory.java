@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class NativeAudioMacHandlerFactory extends AudioHandlerFactory {
 
-	private List<NativeAudioMacHandler> handlers = new ArrayList<>();
-	private AVAudioPlayerBridgeDelegate bridgeDelegate = new AVAudioPlayerBridgeDelegate(this);
+	private final List<NativeAudioMacHandler> handlers = new ArrayList<>();
+	private final AVAudioPlayerBridgeDelegate bridgeDelegate = new AVAudioPlayerBridgeDelegate(this);
 
 	public Optional<NativeAudioMacHandler> getHandlerByBridge(AVAudioPlayerBridge bridge) {
 		return handlers.stream().filter(handler -> handler.getBridge().equals(bridge)).findFirst();
