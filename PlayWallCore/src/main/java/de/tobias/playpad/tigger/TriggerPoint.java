@@ -4,8 +4,7 @@ public enum TriggerPoint {
 
 	START(true),
 	STOP(false),
-	EOF(true),
-	EOF_STATE(false);
+	EOF(true);
 
 	/**
 	 * Defines if a trigger can be run after, before a certain event.

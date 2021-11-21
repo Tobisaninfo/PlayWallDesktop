@@ -109,22 +109,14 @@ public class Trigger {
 			if (triggerPoint == TriggerPoint.START) {
 				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
 			} else if (triggerPoint == TriggerPoint.STOP) {
-				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.EOF) {
-				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.EOF_STATE) {
 				item.performAction(pad, project, mainViewController, currentProfile);
+			} else if (triggerPoint == TriggerPoint.EOF) {
+				if (item.getDurationFromPoint() == Duration.ZERO && pad.isEof()) {
+					item.performAction(pad, project, mainViewController, currentProfile);
+				} else {
+					handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+				}
 			}
-		}
-	}
-
-	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
-		// Wenn Trigger noch nicht gespielt wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
-		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
-			item.performAction(pad, project, mainViewController, currentProfile);
-			item.setPerformedAt(duration);
-		} else if (item.getDurationFromPoint().lessThan(duration)) {
-			item.setPerformedAt(null);
 		}
 	}
 
@@ -140,6 +132,16 @@ public class Trigger {
 			} else if (item.getDurationFromPoint().greaterThan(duration)) {
 				item.setPerformedAt(null);
 			}
+		}
+	}
+
+	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
+		// Wenn Trigger noch nicht gespielt wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
+		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
+			item.performAction(pad, project, mainViewController, currentProfile);
+			item.setPerformedAt(duration);
+		} else if (item.getDurationFromPoint().lessThan(duration)) {
+			item.setPerformedAt(null);
 		}
 	}
 }
