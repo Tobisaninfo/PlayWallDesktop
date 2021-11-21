@@ -52,6 +52,10 @@ class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends G
 				clearTextFields()
 			}
 		})
+
+		remoteNameTextField.disableProperty().bind(remoteListView.getSelectionModel.selectedItemProperty().isNull)
+		remoteAddressTextField.disableProperty().bind(remoteListView.getSelectionModel.selectedItemProperty().isNull)
+		remotePortTextField.disableProperty().bind(remoteListView.getSelectionModel.selectedItemProperty().isNull)
 	}
 
 	private def saveSettingsToRemoteList(remote: WebApiRemoteSettings): Unit = {
