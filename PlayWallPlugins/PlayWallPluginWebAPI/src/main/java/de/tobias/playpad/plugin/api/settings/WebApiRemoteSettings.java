@@ -5,6 +5,7 @@ import de.tobias.playpad.Displayable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class WebApiRemoteSettings implements Displayable {
@@ -52,5 +53,23 @@ public class WebApiRemoteSettings implements Displayable {
 	public StringProperty displayProperty() {
 		displayProperty.set(name);
 		return displayProperty;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof WebApiRemoteSettings)) {
+			return false;
+		}
+		WebApiRemoteSettings that = (WebApiRemoteSettings) o;
+		return port == that.port && Objects.equals(id, that.id) && Objects.equals(name, that.name) &&
+				Objects.equals(serverAddress, that.serverAddress);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, serverAddress, port);
 	}
 }

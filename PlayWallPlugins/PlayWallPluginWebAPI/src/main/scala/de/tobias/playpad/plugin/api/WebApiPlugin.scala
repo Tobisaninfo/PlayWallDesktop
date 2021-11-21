@@ -54,24 +54,13 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 			Logger.info(f"Start WebAPI on port ${webApiSettings.getPort}")
 		}
 
-		webApiSettings.getRemoteSettings.forEach(remote => {
-			Worker.runLater(() => {
-				try {
-					val client = new PlayPadClientImpl(f"ws://${remote.getServerAddress}:${remote.getPort}/api")
-					WebApiPlugin.connections.put(remote, client)
-					client.connect(5)
-					Logger.info(s"Connected to remote PlayWall: ${remote.getName}")
-				} catch {
-					case e: Exception => Logger.error(e)
-				}
-			})
-		})
 
 		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new WebApiSettingsViewController(webApiSettings))
 		PlayPadPlugin.getInstance().addMainViewListener(new WebApiRemoteConnectionStateListener)
 	}
 
 	override def shutdown(): Unit = {
+		WebApiPlugin.disconnectAllInstances()
 		Spark.stop()
 		Logger.debug("Disable Web API Plugin")
 	}
@@ -88,5 +77,25 @@ object WebApiPlugin {
 
 	def getConnection(id: UUID): Optional[PlayPadClient] = {
 		connections.entrySet().stream().filter(entry => entry.getKey.getId == id).findFirst().map(_.getValue)
+	}
+
+	def disconnectAllInstances(): Unit = {
+		connections.values().forEach(_.disconnect())
+		connections.clear()
+	}
+
+	def connectToRemoteInstances(webApiSettings: WebApiSettings): Unit = {
+		webApiSettings.getRemoteSettings.forEach(remote => {
+			Worker.runLater(() => {
+				try {
+					val client = new PlayPadClientImpl(f"ws://${remote.getServerAddress}:${remote.getPort}/api")
+					WebApiPlugin.connections.put(remote, client)
+					client.connect(5)
+					Logger.info(s"Connected to remote PlayWall: ${remote.getName}")
+				} catch {
+					case e: Exception => Logger.error(e)
+				}
+			})
+		})
 	}
 }

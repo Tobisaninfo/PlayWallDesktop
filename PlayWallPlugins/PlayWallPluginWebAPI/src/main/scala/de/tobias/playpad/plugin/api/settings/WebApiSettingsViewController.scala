@@ -6,16 +6,19 @@ import de.thecodelabs.utils.ui.scene.input.NumberTextField
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.plugin.api.WebApiPlugin
 import de.tobias.playpad.settings.GlobalSettings
-import de.tobias.playpad.viewcontroller.option.GlobalSettingsTabViewController
+import de.tobias.playpad.viewcontroller.main.IMainViewController
+import de.tobias.playpad.viewcontroller.option.{GlobalSettingsTabViewController, IGlobalReloadTask}
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control._
 
 import java.nio.file.Files
 
-class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends GlobalSettingsTabViewController {
+class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends GlobalSettingsTabViewController with IGlobalReloadTask {
 
 	load("plugin/webapi/view", "WebApiSettings", Localization.getBundle)
+
+	private var startHash: Int = _
 
 	@FXML var activeCheckbox: CheckBox = _
 	@FXML var portTextField: NumberTextField = _
@@ -94,6 +97,8 @@ class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends G
 	}
 
 	override def loadSettings(settings: GlobalSettings): Unit = {
+		startHash = webApiSettings.getRemoteSettings.hashCode()
+
 		activeCheckbox.setSelected(webApiSettings.isEnabled)
 		portTextField.setText(webApiSettings.getPort.toString)
 	}
@@ -110,8 +115,14 @@ class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends G
 		saveToFile()
 	}
 
-	override def needReload(): Boolean = {
-		false
+	override def needReload(): Boolean = startHash != webApiSettings.getRemoteSettings.hashCode()
+
+	override def getTask(settings: GlobalSettings, controller: IMainViewController): Runnable = () => {
+		Logger.info("Disconnect all remote instances")
+		WebApiPlugin.disconnectAllInstances()
+
+		Logger.info("Connect to new remote instances")
+		WebApiPlugin.connectToRemoteInstances(webApiSettings)
 	}
 
 	override def validSettings(): Boolean = {
