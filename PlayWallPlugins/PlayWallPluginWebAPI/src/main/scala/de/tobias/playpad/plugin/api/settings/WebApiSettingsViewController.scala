@@ -17,11 +17,8 @@ class WebApiSettingsViewController(val webApiSettings: WebApiSettings) extends G
 
 	load("plugin/webapi/view", "WebApiSettings", Localization.getBundle)
 
-	@FXML
-	var activeCheckbox: CheckBox = _
-
-	@FXML
-	var portTextField: NumberTextField = _
+	@FXML var activeCheckbox: CheckBox = _
+	@FXML var portTextField: NumberTextField = _
 
 	@FXML var remoteListView: ListView[WebApiRemoteSettings] = _
 	@FXML var remoteAddButton: Button = _

@@ -10,9 +10,8 @@ import javafx.scene.control.Label;
 
 public class LockedListener implements ChangeListener<Boolean> {
 
-	private IMainViewController mainViewController;
-
-	private Label lockedLabel;
+	private final IMainViewController mainViewController;
+	private final Label lockedLabel;
 
 	public LockedListener(IMainViewController mainViewController) {
 		this.mainViewController = mainViewController;

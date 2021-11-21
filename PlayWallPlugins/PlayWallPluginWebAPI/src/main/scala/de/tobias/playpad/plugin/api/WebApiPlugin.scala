@@ -10,10 +10,12 @@ import de.thecodelabs.utils.threading.Worker
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.api.{PlayPadClient, PlayPadClientImpl}
+import de.tobias.playpad.plugin.api.client.WebApiRemoteConnectionStateListener
 import de.tobias.playpad.plugin.api.settings.{WebApiRemoteSettings, WebApiSettings, WebApiSettingsViewController}
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
 import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
+import javafx.collections.{FXCollections, ObservableMap}
 import spark.{Request, Response, Spark}
 
 import java.nio.file.{Files, Path}
@@ -66,6 +68,7 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 		})
 
 		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new WebApiSettingsViewController(webApiSettings))
+		PlayPadPlugin.getInstance().addMainViewListener(new WebApiRemoteConnectionStateListener)
 	}
 
 	override def shutdown(): Unit = {
@@ -80,7 +83,8 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 object WebApiPlugin {
 	def getWebApiSettingsPath: Path = ApplicationUtils.getApplication.getPath(PathType.CONFIGURATION, "webapi.json")
 
-	var connections: util.Map[WebApiRemoteSettings, PlayPadClient] = new util.HashMap()
+	var connections: ObservableMap[WebApiRemoteSettings, PlayPadClient] = FXCollections.observableMap(
+		new util.HashMap[WebApiRemoteSettings, PlayPadClient]())
 
 	def getConnection(id: UUID): Optional[PlayPadClient] = {
 		connections.entrySet().stream().filter(entry => entry.getKey.getId == id).findFirst().map(_.getValue)
