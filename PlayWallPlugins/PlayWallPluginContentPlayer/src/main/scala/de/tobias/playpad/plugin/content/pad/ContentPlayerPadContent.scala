@@ -33,6 +33,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
 
+	var stopMediaByOtherPlayer = false
+
 	private val fadeController = new LinearFadeController(value => {
 		if (getCurrentPlayingMediaIndex >= 0) {
 			ContentPluginMain.playerViewController.setFadeValue(getSelectedZones, value)
@@ -75,10 +77,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def stop(): Boolean = {
 		isPause = false
-		mediaPlayers(getCurrentPlayingMediaIndex).stop()
+		if (getCurrentPlayingMediaIndex != -1) {
+			mediaPlayers(getCurrentPlayingMediaIndex).stop()
 
-		if (showingLastFrame) {
-			ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
+			if (showingLastFrame) {
+				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
+			}
 		}
 
 		currentRunningIndexProperty.set(-1)

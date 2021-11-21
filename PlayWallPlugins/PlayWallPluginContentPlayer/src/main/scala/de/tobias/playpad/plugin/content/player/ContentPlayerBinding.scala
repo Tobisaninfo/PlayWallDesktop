@@ -40,6 +40,17 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 	})
 
 	def play(media: ContentPlayerMediaContainer, withFadeIn: Boolean): Unit = {
+		if (currentMedia.get() != null && currentMedia.get().content.getPad != media.content.getPad) {
+			if (currentMedia.get().content.getPad.isPlay) {
+				// Stop the current playing media on this player and hold the last frame
+				currentMedia.get().content.stopMediaByOtherPlayer = true
+				currentMedia.get().content.getPad.stop()
+			} else if (currentMedia.get().content.getPad.isPaused) {
+				// The player mist be resumed before playing the next media
+				player.Resume(withFadeIn)
+				currentMedia.get().content.getPad.stop()
+			}
+		}
 		player.Play(media.getPath, withFadeIn)
 		currentMedia.set(media)
 	}
@@ -51,7 +62,15 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 
 	def pause(media: ContentPlayerMediaContainer): Unit = player.Pause()
 
-	def stop(media: ContentPlayerMediaContainer): Unit = player.Stop()
+	def stop(media: ContentPlayerMediaContainer): Unit = {
+		// If media is stopped by a different pad, the current media should keep playing to have a smooth transition
+		// to the new media. Otherwise the media will be stopped normally.
+		if (media.content.stopMediaByOtherPlayer) {
+			media.content.stopMediaByOtherPlayer = false
+		} else {
+			player.Stop()
+		}
+	}
 
 	def clearHold(): Unit = player.ClearHold()
 
