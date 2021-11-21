@@ -11,5 +11,7 @@ public interface IPad {
 
 	PadStatus getStatus();
 
+	int getPosition();
+
 	int getPositionReadable();
 }

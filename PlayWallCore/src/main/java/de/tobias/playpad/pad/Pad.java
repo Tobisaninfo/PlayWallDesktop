@@ -94,10 +94,10 @@ public class Pad implements IPad {
 		padListener = new PadUpdateListener(this);
 	}
 
-	public Pad(Project project, int index, Page page) {
+	public Pad(Project project, int position, Page page) {
 		this(project);
 
-		setPosition(index);
+		setPosition(position);
 		setPage(page);
 		setStatus(PadStatus.EMPTY);
 
@@ -187,6 +187,7 @@ public class Pad implements IPad {
 	 *
 	 * @return uuid
 	 */
+	@Override
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -223,6 +224,7 @@ public class Pad implements IPad {
 	 *
 	 * @return position
 	 */
+	@Override
 	public int getPositionReadable() {
 		return positionProperty.get() + 1;
 	}
@@ -232,6 +234,7 @@ public class Pad implements IPad {
 	 *
 	 * @return position
 	 */
+	@Override
 	public int getPosition() {
 		return positionProperty.get();
 	}
@@ -276,6 +279,7 @@ public class Pad implements IPad {
 	 *
 	 * @return name
 	 */
+	@Override
 	public String getName() {
 		return nameProperty.get();
 	}
@@ -398,6 +402,7 @@ public class Pad implements IPad {
 	 *
 	 * @return status
 	 */
+	@Override
 	public PadStatus getStatus() {
 		return statusProperty.get();
 	}

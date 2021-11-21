@@ -74,6 +74,7 @@ public class Project implements IProject {
 				.forEach(Pad::stop);
 	}
 
+	@Override
 	public ProjectSettings getSettings() {
 		return settings;
 	}
@@ -82,15 +83,18 @@ public class Project implements IProject {
 		return projectReference;
 	}
 
+	@Override
 	public Pad getPad(int x, int y, int page) {
 		return getPage(page).getPad(x, y);
 	}
 
+	@Override
 	public Pad getPad(PadIndex index) {
 		Page page = pages.get(index.getPagePosition());
 		return page.getPad(index.getId());
 	}
 
+	@Override
 	public Pad getPad(UUID uuid) {
 		for (Page page : pages) {
 			for (Pad pad : page.getPads()) {
@@ -118,6 +122,7 @@ public class Project implements IProject {
 		page.setPad(index.getId(), pad);
 	}
 
+	@Override
 	public Collection<Pad> getPads() {
 		return getPads(p -> true);
 	}
@@ -136,6 +141,7 @@ public class Project implements IProject {
 	}
 
 	// Pages
+	@Override
 	public Page getPage(int position) {
 		if (position >= ProjectSettings.MAX_PAGES) {
 			return null;
@@ -147,7 +153,7 @@ public class Project implements IProject {
 		return pages.get(position);
 	}
 
-
+	@Override
 	public Page getPage(UUID uuid) {
 		for (Page page : pages) {
 			if (page.getId().equals(uuid)) {
@@ -157,6 +163,7 @@ public class Project implements IProject {
 		return null;
 	}
 
+	@Override
 	public ObservableList<Page> getPages() {
 		// Create new page if all is empty (automatic)
 		if (pages.isEmpty()) {

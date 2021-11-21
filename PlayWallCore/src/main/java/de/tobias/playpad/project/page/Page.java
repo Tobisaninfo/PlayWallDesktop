@@ -85,6 +85,7 @@ public class Page implements IPage {
 	 *
 	 * @return id
 	 */
+	@Override
 	public UUID getId() {
 		return id;
 	}
@@ -94,6 +95,7 @@ public class Page implements IPage {
 	 *
 	 * @return page position.
 	 */
+	@Override
 	public int getPosition() {
 		return positionProperty.get();
 	}
@@ -124,6 +126,7 @@ public class Page implements IPage {
 	 *
 	 * @return name
 	 */
+	@Override
 	public String getName() {
 		return nameProperty.get();
 	}
@@ -158,28 +161,28 @@ public class Page implements IPage {
 	/**
 	 * Get the pad at this index. It will create a new pad at this index if this index is empty. In case of a wrong index the method will throw an exception.
 	 *
-	 * @param id index
+	 * @param position index
 	 * @return pad
 	 * @throws IllegalArgumentException bad index
 	 */
-	public Pad getPad(int id) throws IllegalArgumentException {
+	public Pad getPad(int position) throws IllegalArgumentException {
 		ProjectSettings settings = projectReference.getSettings();
 		int maxId = settings.getRows() * settings.getColumns();
-		if (id < 0 || id > maxId) {
-			throw new IllegalArgumentException("Illegal index: index is " + id + " but it must in a range of 0 to " + maxId);
+		if (position < 0 || position > maxId) {
+			throw new IllegalArgumentException("Illegal index: index is " + position + " but it must in a range of 0 to " + maxId);
 		}
 
-		if (pads.stream().noneMatch(p -> p.getPosition() == id)) {
+		if (pads.stream().noneMatch(p -> p.getPosition() == position)) {
 			// Create new pad for positionProperty
-			Pad pad = new Pad(projectReference, id, this);
-			setPad(id, pad);
+			Pad pad = new Pad(projectReference, position, this);
+			setPad(position, pad);
 
 			if (projectReference.getProjectReference().isSync()) {
 				CommandManager.execute(Commands.PAD_ADD, projectReference.getProjectReference(), pad);
 				CommandManager.execute(Commands.PAD_SETTINGS_ADD, projectReference.getProjectReference(), pad.getPadSettings());
 			}
 		}
-		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == id).findFirst();
+		Optional<Pad> padOptional = pads.stream().filter(p -> p.getPosition() == position).findFirst();
 		return padOptional.orElse(null);
 	}
 
@@ -190,18 +193,14 @@ public class Page implements IPage {
 	 * @param y y position
 	 * @return pad
 	 */
+	@Override
 	public Pad getPad(int x, int y) {
 		ProjectSettings settings = projectReference.getSettings();
 		if (x < settings.getColumns() && y < settings.getRows()) {
-			int position = getPadPosition(x, y);
+			int position = getPadPosition(x, y, settings);
 			return getPad(position);
 		}
 		return null;
-	}
-
-	private int getPadPosition(int x, int y) {
-		ProjectSettings settings = projectReference.getSettings();
-		return y * settings.getColumns() + x;
 	}
 
 	/**
@@ -228,6 +227,7 @@ public class Page implements IPage {
 	 *
 	 * @return pads
 	 */
+	@Override
 	public Collection<Pad> getPads() {
 		return Collections.unmodifiableCollection(pads);
 	}
@@ -276,7 +276,7 @@ public class Page implements IPage {
 	 * @param lastPadIndex index of the last pad on the page
 	 */
 	private void insertPadAndShiftSuccessor(int x, int y, int lastPadIndex) {
-		int position = getPadPosition(x, y);
+		int position = getPadPosition(x, y, getProject().getSettings());
 		// Going backwards to avoid overwriting the next pad when updating the position of the current one.
 		for (int i = lastPadIndex - 1; i >= position; i--) {
 			getPad(i).setPosition(i + 1);
