@@ -8,6 +8,7 @@ import de.tobias.playpad.profile.Profile
 import javafx.util.Pair
 import net.bramp.ffmpeg.builder.FFmpegBuilder
 import net.bramp.ffmpeg.{FFmpeg, FFmpegExecutor, FFprobe}
+import org.apache.commons.lang3.StringUtils
 
 import java.nio.file.{Files, Path}
 
@@ -21,11 +22,26 @@ object FfmpegUtils {
 		val profile = Profile.currentProfile()
 		val contentPluginConfiguration = profile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
 
-		ffmpeg = new FFmpeg(contentPluginConfiguration.ffmpegExecutable)
-		ffprobe = new FFprobe(contentPluginConfiguration.ffprobeExecutable)
+		if (StringUtils.isNotEmpty(contentPluginConfiguration.ffmpegExecutable) && StringUtils.isNotEmpty(contentPluginConfiguration.ffprobeExecutable)) {
+			ffmpeg = new FFmpeg(contentPluginConfiguration.ffmpegExecutable)
+			ffprobe = new FFprobe(contentPluginConfiguration.ffprobeExecutable)
+		}
+	}
+
+	def checkInitialization(): Boolean = {
+		if (ffprobe == null || ffmpeg == null) {
+			initialize()
+
+			return ffprobe != null && ffmpeg != null
+		}
+		true
 	}
 
 	def getResolution(path: Path): Pair[Int, Int] = {
+		if (!checkInitialization()) {
+			return null
+		}
+
 		val probeResult = ffprobe.probe(path.toAbsolutePath.toString)
 
 		val stream = probeResult.streams.head
@@ -36,6 +52,10 @@ object FfmpegUtils {
 	}
 
 	def convertMediaVStack(path: Path): Unit = {
+		if (!checkInitialization()) {
+			return
+		}
+
 		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
 		val convertPath = globalSettings.getCachePath.resolve(path.getFileName + ".mp4")
 
