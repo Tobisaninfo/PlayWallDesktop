@@ -7,15 +7,19 @@ import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.thecodelabs.utils.threading.Worker
+import de.thecodelabs.utils.ui.Alerts
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.api.{PlayPadClient, PlayPadClientImpl}
+import de.tobias.playpad.plugin.api.WebApiPlugin.connectToRemoteInstances
 import de.tobias.playpad.plugin.api.client.WebApiRemoteConnectionStateListener
 import de.tobias.playpad.plugin.api.settings.{WebApiRemoteSettings, WebApiSettings, WebApiSettingsViewController}
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
 import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
+import javafx.application.Platform
 import javafx.collections.{FXCollections, ObservableMap}
+import javafx.scene.control.Alert.AlertType
 import spark.{Request, Response, Spark}
 
 import java.nio.file.{Files, Path}
@@ -54,6 +58,7 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 			Logger.info(f"Start WebAPI on port ${webApiSettings.getPort}")
 		}
 
+		connectToRemoteInstances(webApiSettings)
 
 		PlayPadPlugin.getInstance().addGlobalSettingsTab(() => new WebApiSettingsViewController(webApiSettings))
 		PlayPadPlugin.getInstance().addMainViewListener(new WebApiRemoteConnectionStateListener)
@@ -93,7 +98,13 @@ object WebApiPlugin {
 					client.connect(5)
 					Logger.info(s"Connected to remote PlayWall: ${remote.getName}")
 				} catch {
-					case e: Exception => Logger.error(e)
+					case e: Exception =>
+						Logger.error(e)
+						Platform.runLater(() => {
+							Alerts.getInstance().createAlert(AlertType.ERROR, null,
+								Localization.getString("webapi-settings.remote.error.connection", remote.getName, e.toString))
+								.show()
+						})
 				}
 			})
 		})
