@@ -9,7 +9,6 @@ import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.Element;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -76,7 +75,7 @@ public class CartTriggerItem extends TriggerItem {
 	public TriggerItem copy() {
 		CartTriggerItem clone = new CartTriggerItem(getType());
 
-		clone.uuids = new ArrayList<>();
+		clone.uuids = new UniqList<>();
 		clone.uuids.addAll(uuids);
 		clone.allCarts = allCarts;
 		clone.newStatus = newStatus;

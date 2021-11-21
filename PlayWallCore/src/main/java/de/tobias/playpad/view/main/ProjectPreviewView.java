@@ -30,7 +30,7 @@ public class ProjectPreviewView extends Pagination {
 		setPageFactory(this::getPageNode);
 	}
 
-	private Node getPageNode(int index) {
+	private Node getPageNode(int pageIndex) {
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(7);
 		gridPane.setVgap(7);
@@ -38,7 +38,7 @@ public class ProjectPreviewView extends Pagination {
 
 		gridPane.setPadding(new Insets(0, 0, 7, 0));
 
-		final IPage page = project.getPage(index);
+		final IPage page = project.getPage(pageIndex);
 		for (int x = 0; x < project.getSettings().getColumns(); x++) {
 			for (int y = 0; y < project.getSettings().getRows(); y++) {
 				final IPad pad = page.getPad(x, y);
