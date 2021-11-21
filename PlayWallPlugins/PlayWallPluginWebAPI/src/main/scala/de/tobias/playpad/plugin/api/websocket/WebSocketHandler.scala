@@ -54,7 +54,7 @@ class WebSocketHandler {
 
 		sessions.stream()
 			.filter(session => session.isOpen)
-			.forEach(session => session.getRemote.sendString(payload))
+			.forEach(session => session.getRemote.sendStringByFuture(payload))
 	}
 }
 
