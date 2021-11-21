@@ -34,6 +34,8 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 		connectionStateIcon = new FontIcon(FontAwesomeType.CLOUD);
 		connectionStateIcon.setSize(20);
 
+		connectionStateIcon.setOnMouseClicked(this::onIconClicked);
+
 		connectedProperty = new SimpleIntegerProperty(0);
 		connectedProperty.addListener((observable, oldValue, newValue) -> {
 			Platform.runLater(() -> {
@@ -68,6 +70,19 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 						.map(PlayPadClient::playPadConnectionState)
 						.toArray(ObjectProperty[]::new))
 		);
+	}
+
+	private void onIconClicked(MouseEvent event) {
+		WebApiPlugin$.MODULE$.connections().values().stream()
+				.filter(client -> client.getPlayPadConnectionState() != WebSocketState.OPEN)
+				.forEach(client -> Worker.runLater(() -> {
+					try {
+						client.disconnect();
+						client.connect(1);
+					} catch (IOException | WebSocketException e) {
+						Logger.error(e);
+					}
+				}));
 	}
 
 	@Override
