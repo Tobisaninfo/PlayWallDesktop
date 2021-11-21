@@ -24,6 +24,7 @@ public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAu
 		nativeAudioMacHandler.ifPresent(handler -> {
 			PadContent content = handler.getContent();
 			if (content != null) {
+				content.getPad().setEof(true);
 				content.getPad().setStatus(PadStatus.STOP);
 			}
 		});
