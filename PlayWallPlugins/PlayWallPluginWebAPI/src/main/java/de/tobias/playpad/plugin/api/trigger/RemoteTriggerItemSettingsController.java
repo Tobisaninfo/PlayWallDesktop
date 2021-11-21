@@ -16,6 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RemoteTriggerItemSettingsController extends NVC {
@@ -52,8 +53,12 @@ public class RemoteTriggerItemSettingsController extends NVC {
 						projectPreviewView = null;
 					}
 
-					final List<? extends IPad> pads = item.getCarts().stream().map(project::getPad).collect(Collectors.toList());
-					projectPreviewView = new ProjectPreviewView(project, pads, 0);
+					final List<? extends IPad> preSelect = item.getCarts().stream()
+							.map(project::getPad)
+							.filter(Objects::nonNull)
+							.collect(Collectors.toList());
+
+					projectPreviewView = new ProjectPreviewView(project, preSelect, 0);
 					projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
 					projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
 						item.getCarts().clear();
