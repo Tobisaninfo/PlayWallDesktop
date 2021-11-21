@@ -19,6 +19,6 @@ public class RemoteTriggerItemFactory extends TriggerItemFactory {
 
 	@Override
 	public NVC getSettingsController(TriggerItem item, IMainViewController mainViewController) {
-		return null;
+		return new RemoteTriggerItemSettingsController((RemoteTriggerItem) item);
 	}
 }

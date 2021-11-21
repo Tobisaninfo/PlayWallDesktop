@@ -18,6 +18,7 @@ import spark.{Request, Response, Spark}
 
 import java.nio.file.{Files, Path}
 import java.util
+import java.util.{Optional, UUID}
 
 class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 
@@ -80,4 +81,8 @@ object WebApiPlugin {
 	def getWebApiSettingsPath: Path = ApplicationUtils.getApplication.getPath(PathType.CONFIGURATION, "webapi.json")
 
 	var connections: util.Map[WebApiRemoteSettings, PlayPadClient] = new util.HashMap()
+
+	def getConnection(id: UUID): Optional[PlayPadClient] = {
+		connections.entrySet().stream().filter(entry => entry.getKey.getId == id).findFirst().map(_.getValue)
+	}
 }
