@@ -111,8 +111,10 @@ public class Trigger {
 			} else if (triggerPoint == TriggerPoint.STOP) {
 				item.performAction(pad, project, mainViewController, currentProfile);
 			} else if (triggerPoint == TriggerPoint.EOF) {
-				if (item.getDurationFromPoint() == Duration.ZERO && pad.isEof()) {
-					item.performAction(pad, project, mainViewController, currentProfile);
+				if (item.getDurationFromPoint() == Duration.ZERO) {
+					if (pad.isEof()) {
+						item.performAction(pad, project, mainViewController, currentProfile);
+					}
 				} else {
 					handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
 				}
