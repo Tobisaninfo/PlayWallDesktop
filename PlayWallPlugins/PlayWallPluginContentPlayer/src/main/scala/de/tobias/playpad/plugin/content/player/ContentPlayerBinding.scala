@@ -65,9 +65,7 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 	def stop(media: ContentPlayerMediaContainer): Unit = {
 		// If media is stopped by a different pad, the current media should keep playing to have a smooth transition
 		// to the new media. Otherwise the media will be stopped normally.
-		if (media.content.stopMediaByOtherPlayer) {
-			media.content.stopMediaByOtherPlayer = false
-		} else {
+		if (!media.content.stopMediaByOtherPlayer) {
 			player.Stop()
 		}
 	}

@@ -64,6 +64,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}
 		showingLastFrame = false
 		isPause = false
+		stopMediaByOtherPlayer = false
 	}
 
 	override def pause(): Unit = {
@@ -80,7 +81,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (getCurrentPlayingMediaIndex != -1) {
 			mediaPlayers(getCurrentPlayingMediaIndex).stop()
 
-			if (showingLastFrame) {
+			if (showingLastFrame && !stopMediaByOtherPlayer) {
 				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
 			}
 		}
@@ -96,7 +97,6 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		// 3. There is no playlist
 		if (!pad.getPadSettings.isLoop && getCurrentPlayingMediaIndex + 1 == mediaPlayers.length) {
 			if (!shouldShowLastFrame()) {
-				Logger.debug(s"Clear last frame for pad ${pad.getPadIndex}")
 				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
 			} else {
 				showingLastFrame = true

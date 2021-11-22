@@ -1,8 +1,9 @@
 package de.tobias.playpad.plugin.content.player
 
+import de.thecodelabs.logger.Logger
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.content.pad.ContentPlayerMediaContainer
-import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration, ContentPlayerSettingsViewController}
+import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, ContentPlayerSettingsViewController, Zone}
 import nativecontentplayerwindows.{ContentPlayer, ContentPlayerWindow}
 
 import scala.collection.mutable.ListBuffer
@@ -75,6 +76,7 @@ class ContentPlayerWindowController {
 	}
 
 	def clearHold(media: ContentPlayerMediaContainer): Unit = {
+		Logger.debug(s"Clear last frame for pad ${media.content.pad.getPadIndex}")
 		getContentPlayerBindings(media.content.getSelectedZones).foreach(player => player.clearHold())
 	}
 
