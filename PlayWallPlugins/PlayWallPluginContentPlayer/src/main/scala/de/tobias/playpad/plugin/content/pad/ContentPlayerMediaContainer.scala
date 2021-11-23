@@ -67,9 +67,11 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 	def stop(): Unit = {
 		ContentPluginMain.playerViewController.stop(this)
 
-		content._durationProperty.bind(content.totalDurationBinding())
-		content._positionProperty.unbind()
-		content._positionProperty.set(Duration.ZERO)
+		if (!content.getPad.getPadSettings.isLoop) {
+			content._durationProperty.bind(content.totalDurationBinding())
+			content._positionProperty.unbind()
+			content._positionProperty.set(Duration.ZERO)
+		}
 	}
 
 	override def toString: String = f"MediaPlayerContainer: $mediaPath"
