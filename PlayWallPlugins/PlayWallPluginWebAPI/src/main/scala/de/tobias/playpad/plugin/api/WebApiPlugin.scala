@@ -95,6 +95,7 @@ object WebApiPlugin {
 				try {
 					val client = new PlayPadClientImpl(f"ws://${remote.getServerAddress}:${remote.getPort}/api")
 					WebApiPlugin.connections.put(remote, client)
+					client.playPadConnectionState.addListener((_, _, newValue) => println(f"State: ${remote.getName} \t $newValue"))
 					client.connect(5)
 					Logger.info(s"Connected to remote PlayWall: ${remote.getName}")
 				} catch {

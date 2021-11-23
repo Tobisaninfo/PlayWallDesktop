@@ -1,13 +1,13 @@
 package de.tobias.playpad.plugin.api.client;
 
 import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketState;
 import de.thecodelabs.logger.Logger;
 import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.icon.FontAwesomeType;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.api.PlayPadClient;
+import de.tobias.playpad.api.PlayPadConnectionState;
 import de.tobias.playpad.plugin.MainWindowListener;
 import de.tobias.playpad.plugin.api.WebApiPlugin$;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -43,7 +43,7 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 				connectionStateIcon.setIcons(allConnected ? FontAwesomeType.CLOUD : FontAwesomeType.EXCLAMATION_CIRCLE);
 				if (!allConnected) {
 					final String disconnectedServers = WebApiPlugin$.MODULE$.connections().entrySet().stream()
-							.filter(entry -> entry.getValue().getPlayPadConnectionState() != WebSocketState.OPEN)
+							.filter(entry -> entry.getValue().getPlayPadConnectionState() != PlayPadConnectionState.CONNECTED)
 							.map(entry -> entry.getKey().getName()).collect(Collectors.joining(", "));
 					connectionStateIcon.setTooltip(new Tooltip(Localization.getString("webapi-settings.remote.state.tooltip", disconnectedServers)));
 					connectionStateIcon.setStyle("-fx-text-fill: red;");
@@ -65,7 +65,7 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 	private void createConnectionStateBinding() {
 		final List<PlayPadClient> clients = new ArrayList<>(WebApiPlugin$.MODULE$.connections().values());
 		connectedProperty.bind(Bindings.createIntegerBinding(() -> (int) WebApiPlugin$.MODULE$.connections().values().stream()
-						.filter(client -> client.getPlayPadConnectionState() != WebSocketState.OPEN)
+						.filter(client -> client.getPlayPadConnectionState() != PlayPadConnectionState.CONNECTED)
 						.count(),
 				clients.stream()
 						.map(PlayPadClient::playPadConnectionState)
@@ -75,7 +75,7 @@ public class WebApiRemoteConnectionStateListener implements MainWindowListener {
 
 	private void onIconClicked(MouseEvent event) {
 		WebApiPlugin$.MODULE$.connections().values().stream()
-				.filter(client -> client.getPlayPadConnectionState() != WebSocketState.OPEN)
+				.filter(client -> client.getPlayPadConnectionState() != PlayPadConnectionState.CONNECTED)
 				.forEach(client -> Worker.runLater(() -> {
 					try {
 						client.disconnect();
