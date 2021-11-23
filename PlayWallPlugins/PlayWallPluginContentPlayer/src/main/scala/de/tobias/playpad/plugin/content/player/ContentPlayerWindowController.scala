@@ -20,12 +20,16 @@ class ContentPlayerWindowController {
 			window.Close()
 		}
 
+		import scala.jdk.CollectionConverters._
+		val zones = configuration.zones.asScala
+
+		if (zones.isEmpty) {
+			return
+		}
+
 		window = new ContentPlayerWindow()
 		window.SetIcon(PlayPadPlugin.getInstance.getIconData)
 		window.Show()
-
-		import scala.jdk.CollectionConverters._
-		val zones = configuration.zones.asScala
 
 		val minX = zones.map(player => player.x).min.toInt
 		val minY = zones.map(player => player.y).min.toInt
