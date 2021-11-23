@@ -69,7 +69,7 @@ class Zone extends Displayable {
 	}
 
 	override def hashCode(): Int = {
-		val state = Seq(name)
+		val state = Seq(name, x, y, width, height)
 		state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
 	}
 }

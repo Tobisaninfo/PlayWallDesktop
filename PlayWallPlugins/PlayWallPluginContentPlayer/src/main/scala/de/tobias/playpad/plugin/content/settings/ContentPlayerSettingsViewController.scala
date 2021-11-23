@@ -11,6 +11,7 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.viewcontroller.option.{IProfileReloadTask, ProfileSettingsTabViewController}
 import javafx.application.Platform
 import javafx.event.ActionEvent
+import javafx.fxml.FXML
 import javafx.scene.control._
 import javafx.stage.FileChooser
 import nativecontentplayerwindows.{ContentPlayerWindow, ContentScreen}
@@ -20,7 +21,7 @@ import java.net.URI
 
 class ContentPlayerSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
 
-	import javafx.fxml.FXML
+	private var startZoneHash: Int = _
 
 	@FXML var ffmpegButton: Button = _
 	@FXML var ffmpegTextField: TextField = _
@@ -130,7 +131,7 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 		}
 	}
 
-	@FXML def  onFfmpegDownloadLink(event: ActionEvent): Unit = {
+	@FXML def onFfmpegDownloadLink(event: ActionEvent): Unit = {
 		Desktop.getDesktop.browse(URI.create(ffmpegDownloadLink.getText))
 	}
 
@@ -154,6 +155,7 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 
 	override def loadSettings(settings: Profile): Unit = {
 		val configuration = ContentPlayerSettingsViewController.getZoneConfiguration
+		startZoneHash = configuration.zones.hashCode()
 
 		listView.getItems.setAll(configuration.zones)
 
@@ -183,9 +185,8 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 		configuration.ffprobeExecutable = ffprobeTextField.getText
 	}
 
-	override def needReload(): Boolean = {
-		true
-	}
+	override def needReload(): Boolean = startZoneHash != ContentPlayerSettingsViewController.getZoneConfiguration.zones.hashCode() ||
+	  !listView.getSelectionModel.isEmpty
 
 	override def validSettings(): Boolean = {
 		true
