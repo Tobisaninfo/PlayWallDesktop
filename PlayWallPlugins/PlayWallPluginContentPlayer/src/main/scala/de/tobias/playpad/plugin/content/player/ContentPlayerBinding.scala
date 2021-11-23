@@ -67,6 +67,7 @@ class ContentPlayerBinding(val nativePlayer: ContentPlayer, val zone: Zone) {
 		// to the new media. Otherwise the media will be stopped normally.
 		if (!media.content.stopMediaByOtherPlayer) {
 			nativePlayer.Stop()
+			currentMedia.set(null)
 		}
 	}
 
