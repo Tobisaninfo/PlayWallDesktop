@@ -1,8 +1,7 @@
 package de.tobias.playpad.plugin.content.settings
 
 import java.util
-import java.util.{List => JavaList}
-
+import java.util.{UUID, List => JavaList}
 import de.thecodelabs.storage.settings.annotation.{FilePath, Key}
 import de.tobias.playpad.Displayable
 import javafx.beans.property.{SimpleStringProperty, StringProperty}
@@ -20,6 +19,8 @@ class ContentPlayerPluginConfiguration {
 }
 
 class Zone extends Displayable {
+	@Key
+	var id: UUID = UUID.randomUUID()
 	@Key
 	private var name: String = _
 	@Key

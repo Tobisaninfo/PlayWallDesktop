@@ -7,7 +7,7 @@ import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
 import de.tobias.playpad.plugin.content.ContentPluginMain
-import de.tobias.playpad.plugin.content.settings.{Zone, ContentPlayerPluginConfiguration}
+import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, Zone}
 import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.profile.Profile
 import javafx.application.Platform
@@ -19,6 +19,7 @@ import nativecontentplayerwindows.ContentPlayer
 
 import java.nio.file.Files
 import java.util
+import java.util.UUID
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
@@ -281,10 +282,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
 
 		val customSettings = pad.getPadSettings.getCustomSettings
-		val selectedZoneNames = customSettings.getOrDefault(
+		val selectedZoneIds = customSettings.getOrDefault(
 			ContentPlayerPadContentFactory.zones,
-			zoneConfiguration.zones.stream().map(zone => zone.getName).collect(Collectors.toList())
-		).asInstanceOf[util.List[String]]
-		zoneConfiguration.zones.asScala.filter(zone => selectedZoneNames.contains(zone.getName)).toSeq
+			zoneConfiguration.zones.stream().map(zone => zone.id).collect(Collectors.toList())
+		).asInstanceOf[util.List[UUID]]
+		zoneConfiguration.zones.asScala.filter(zone => selectedZoneIds.contains(zone.id)).toSeq
 	}
 }

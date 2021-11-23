@@ -57,7 +57,7 @@ class ContentPlayerPadContentSettingsViewController(val pad: Pad) extends PadSet
 		val customSettings = pad.getPadSettings.getCustomSettings
 		customSettings.put(ContentPlayerPadContentFactory.lastFrame, lastFrameCheckbox.isSelected)
 
-		val selectedZoneNames = zoneListView.getCheckModel.getCheckedItems.asScala.map(zone => zone.getName)
+		val selectedZoneNames = zoneListView.getCheckModel.getCheckedItems.asScala.map(zone => zone.id)
 		customSettings.put(ContentPlayerPadContentFactory.zones, new util.ArrayList(selectedZoneNames.asJavaCollection))
 	}
 
