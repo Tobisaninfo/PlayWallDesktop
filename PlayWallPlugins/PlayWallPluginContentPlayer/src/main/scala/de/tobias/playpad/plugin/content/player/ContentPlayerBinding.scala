@@ -7,19 +7,19 @@ import javafx.beans.property.{ObjectProperty, SimpleObjectProperty}
 import javafx.util.Duration
 import nativecontentplayerwindows.ContentPlayer
 
-class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
+class ContentPlayerBinding(val nativePlayer: ContentPlayer, val zone: Zone) {
 
 	private val positionProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration](Duration.ZERO)
 	private val durationProperty: ObjectProperty[Duration] = new SimpleObjectProperty[Duration](Duration.ZERO)
 	private val currentMedia: ObjectProperty[ContentPlayerMediaContainer] = new SimpleObjectProperty[ContentPlayerMediaContainer]()
 
-	player.setContentPlayerStopListener(endOfFile => {
+	nativePlayer.setContentPlayerStopListener(endOfFile => {
 		if (endOfFile && currentMedia.get() != null) {
 			currentMedia.get().content.pad.setEof(true)
 			currentMedia.get().content.onEof()
 		}
 	})
-	player.setContentPlayerPositionListener((position, total) => {
+	nativePlayer.setContentPlayerPositionListener((position, total) => {
 		Platform.runLater(() => {
 			val totalDuration = Duration.seconds(total)
 			if (totalDuration != durationProperty.get()) {
@@ -47,34 +47,34 @@ class ContentPlayerBinding(val player: ContentPlayer, val zone: Zone) {
 				currentMedia.get().content.getPad.stop()
 			} else if (currentMedia.get().content.getPad.isPaused) {
 				// The player mist be resumed before playing the next media
-				player.Resume(withFadeIn)
+				nativePlayer.Resume(withFadeIn)
 				currentMedia.get().content.getPad.stop()
 			}
 		}
-		player.Play(media.getPath, withFadeIn)
+		nativePlayer.Play(media.getPath, withFadeIn)
 		currentMedia.set(media)
 	}
 
 	def resume(media: ContentPlayerMediaContainer, withFadeIn: Boolean): Unit = {
-		player.Resume(withFadeIn)
+		nativePlayer.Resume(withFadeIn)
 		currentMedia.set(media)
 	}
 
-	def pause(media: ContentPlayerMediaContainer): Unit = player.Pause()
+	def pause(media: ContentPlayerMediaContainer): Unit = nativePlayer.Pause()
 
 	def stop(media: ContentPlayerMediaContainer): Unit = {
 		// If media is stopped by a different pad, the current media should keep playing to have a smooth transition
 		// to the new media. Otherwise the media will be stopped normally.
 		if (!media.content.stopMediaByOtherPlayer) {
-			player.Stop()
+			nativePlayer.Stop()
 		}
 	}
 
-	def clearHold(): Unit = player.ClearHold()
+	def clearHold(): Unit = nativePlayer.ClearHold()
 
-	def highlight(on: Boolean): Unit = player.HighlightPlayer(on)
+	def highlight(on: Boolean): Unit = nativePlayer.HighlightPlayer(on)
 
-	def setFadeValue(value: Double): Unit = player.Fade(value)
+	def setFadeValue(value: Double): Unit = nativePlayer.Fade(value)
 
 	def clear(): Unit = {
 		currentMedia.set(null)
