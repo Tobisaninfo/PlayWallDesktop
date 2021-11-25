@@ -260,7 +260,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	 * @param mediaPath specify media path
 	 */
 	override def unloadMedia(mediaPath: MediaPath): Unit = {
-		// not needed
+		mediaPlayers.removeIf(player => player.mediaPath == mediaPath)
 	}
 
 	override def reorderMedia(): Unit = {
