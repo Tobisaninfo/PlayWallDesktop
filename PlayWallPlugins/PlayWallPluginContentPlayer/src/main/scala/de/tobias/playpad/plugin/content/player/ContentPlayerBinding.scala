@@ -46,7 +46,7 @@ class ContentPlayerBinding(val nativePlayer: ContentPlayer, val zone: Zone) {
 				currentMedia.get().content.stopMediaByOtherPlayer = true
 				currentMedia.get().content.getPad.stop()
 			} else if (currentMedia.get().content.getPad.isPaused) {
-				// The player mist be resumed before playing the next media
+				// The player must be resumed before playing the next media
 				nativePlayer.Resume(withFadeIn)
 				currentMedia.get().content.getPad.stop()
 			}
