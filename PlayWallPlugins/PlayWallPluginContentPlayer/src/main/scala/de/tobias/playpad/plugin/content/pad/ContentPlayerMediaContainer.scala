@@ -37,7 +37,7 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 		ContentPluginMain.playerViewController.play(this, withFadeIn)
 
 		content.getPad.setEof(false)
-		content.currentPlayingMediaIndexProperty().set(content.getMediaPlayers.indexOf(this))
+		content.currentPlayingMediaIndexProperty().set(content.getMediaContainers.indexOf(this))
 	}
 
 	def resume(withFadeIn: Boolean): Unit = {
@@ -51,12 +51,12 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 	def next(): Unit = {
 		stop()
 
-		val players = content.getMediaPlayers
-		val index = players.indexOf(this)
-		content.currentPlayingMediaIndexProperty().set(index)
+		val players = content.getMediaContainers
+		val currentIndex = players.indexOf(this)
+		content.currentPlayingMediaIndexProperty().set(currentIndex)
 
-		if (index + 1 < players.length) {
-			players(index + 1).play(false)
+		if (currentIndex + 1 < players.length) {
+			players(currentIndex + 1).play(false)
 		} else if (content.getPad.getPadSettings.isLoop) {
 			players.head.play(false)
 		} else {

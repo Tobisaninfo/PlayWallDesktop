@@ -5,6 +5,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.tigger.LocalPadTrigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.Element;
@@ -12,7 +13,7 @@ import org.dom4j.Element;
 import java.util.List;
 import java.util.UUID;
 
-public class CartTriggerItem extends TriggerItem {
+public class CartTriggerItem extends TriggerItem implements LocalPadTrigger {
 
 	private List<UUID> uuids;
 	private boolean allCarts;
@@ -27,6 +28,7 @@ public class CartTriggerItem extends TriggerItem {
 		this.uuids = new UniqList<>();
 	}
 
+	@Override
 	public List<UUID> getCarts() {
 		return uuids;
 	}

@@ -10,6 +10,7 @@ import de.tobias.playpad.plugin.content.ContentPluginMain
 import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, Zone}
 import de.tobias.playpad.plugin.content.util._
 import de.tobias.playpad.profile.Profile
+import de.tobias.playpad.tigger.{LocalPadTrigger, TriggerPoint}
 import javafx.application.Platform
 import javafx.beans.binding.{Bindings, ObjectBinding}
 import javafx.beans.property._
@@ -48,7 +49,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	override def currentPlayingMediaIndexProperty(): IntegerProperty = currentRunningIndexProperty
 
-	def getMediaPlayers: ObservableList[ContentPlayerMediaContainer] = mediaPlayers
+	def getMediaContainers: ObservableList[ContentPlayerMediaContainer] = mediaPlayers
 
 	override def hasNext: Boolean = getCurrentPlayingMediaIndex + 1 < mediaPlayers.length
 
@@ -92,25 +93,42 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	def onEof(): Unit = {
+		val hasLocalPadTrigger = getPad.getPadSettings.getTrigger(TriggerPoint.EOF)
+		  .getItems
+		  .stream()
+		  .filter(item => item.isInstanceOf[LocalPadTrigger])
+		  .map(item => item.asInstanceOf[LocalPadTrigger])
+		  .filter(item => hasPadTriggerInterferingZones(item))
+		  .count() > 0
+
+		val noFurtherItemsInPlaylist = getCurrentPlayingMediaIndex + 1 == mediaPlayers.length
+
 		// By default the last frame will be displayed. Only under certain conditions the last frame will be cleared
 		// 1. User settings set to "Clear last frame"
 		// 2. There is no loop
 		// 3. There is no playlist
-		if (!pad.getPadSettings.isLoop && getCurrentPlayingMediaIndex + 1 == mediaPlayers.length) {
-			if (!shouldShowLastFrame()) {
-				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
-			} else {
+		if (!pad.getPadSettings.isLoop && noFurtherItemsInPlaylist) {
+			if (shouldShowLastFrame() || hasLocalPadTrigger) {
 				showingLastFrame = true
 				return
+			} else {
+				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
 			}
 		}
 
 		showingLastFrame = false
+		mediaPlayers(getCurrentPlayingMediaIndex).next()
+	}
 
-		if (getPad.isEof) {
-			mediaPlayers(getCurrentPlayingMediaIndex).next()
-			return
-		}
+	private def hasPadTriggerInterferingZones(item: LocalPadTrigger): Boolean = {
+		item.getCarts.stream().anyMatch(id => {
+			val content = pad.getProject.getPad(id).getContent
+			if (!content.isInstanceOf[ContentPlayerPadContent]) {
+				return false
+			}
+			val targetZones = content.asInstanceOf[ContentPlayerPadContent].getSelectedZones
+			return targetZones.exists(zone => getSelectedZones.contains(zone))
+		})
 	}
 
 	/*
