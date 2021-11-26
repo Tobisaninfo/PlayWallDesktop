@@ -30,7 +30,7 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 
 	static {
 		try {
-			URL resource = LaunchPadMK2.class.getClassLoader().getResource("launchpad_mk2.map");
+			URL resource = LaunchPadMK2.class.getClassLoader().getResource("launchpad_mk2_colorful.map");
 			mapProperties = MapParser.load(resource);
 		} catch (Exception e) {
 			Logger.error(e);

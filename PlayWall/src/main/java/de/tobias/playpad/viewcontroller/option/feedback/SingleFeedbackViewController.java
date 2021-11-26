@@ -43,9 +43,9 @@ public class SingleFeedbackViewController extends NVC implements IColorButton {
 
 	private PopOver colorChooser;
 
-	private FeedbackColor[] colors;
-	private Feedback feedback;
-	private Action action;
+	private final FeedbackColor[] colors;
+	private final Feedback feedback;
+	private final Action action;
 
 	public SingleFeedbackViewController(Feedback feedback, FeedbackType type, FeedbackValue[] values, Action action) {
 		load("view/option/feedback", "SingleFeedback", Localization.getBundle());
