@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 public enum LightMode {
 	LOW,
-	MIDDLE,
 	NORMAL,
 	HIGH;
 
