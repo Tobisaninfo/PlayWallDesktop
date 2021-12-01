@@ -18,6 +18,13 @@ import java.util.function.Consumer;
 public class ModernCartDesignViewController extends NVC implements IColorButton {
 
 	@FXML
+	private CheckBox backgroundColorCheckbox;
+	@FXML
+	private CheckBox playColorCheckbox;
+	@FXML
+	private CheckBox cueInColorCheckbox;
+
+	@FXML
 	private Button backgroundColorButton;
 	@FXML
 	private Button playColorButton;
@@ -29,7 +36,7 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	@FXML
 	private Button resetButton;
 
-	private ModernCartDesign design;
+	private final ModernCartDesign design;
 
 	private PopOver colorChooser;
 
@@ -44,10 +51,22 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
+
+		backgroundColorCheckbox.setSelected(!design.getBackgroundColor().equals(ModernCartDesign.DEFAULT_COLOR_BACKGROUND));
+		playColorCheckbox.setSelected(!design.getPlayColor().equals(ModernCartDesign.DEFAULT_COLOR_PLAY));
+		cueInColorCheckbox.setSelected(!design.getCueInColor().equals(ModernCartDesign.DEFAULT_COLOR_CUE_IN));
 	}
 
 	@Override
 	public void init() {
+		backgroundColorCheckbox.selectedProperty().addListener((a, b, c) -> backgroundColorButton.setDisable(!c));
+		playColorCheckbox.selectedProperty().addListener((a, b, c) -> playColorButton.setDisable(!c));
+		cueInColorCheckbox.selectedProperty().addListener((a, b, c) -> cueInColorButton.setDisable(!c));
+
+		backgroundColorButton.setDisable(true);
+		playColorButton.setDisable(true);
+		cueInColorButton.setDisable(true);
+
 		addIconToButton(backgroundColorButton);
 		addIconToButton(playColorButton);
 		addIconToButton(cueInColorButton);
@@ -101,5 +120,4 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 			return "-fx-background-color: " + color.linearGradient() + ";";
 		}
 	}
-
 }

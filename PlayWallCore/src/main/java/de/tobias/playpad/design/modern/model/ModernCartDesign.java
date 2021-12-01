@@ -14,6 +14,10 @@ import java.util.UUID;
 
 public class ModernCartDesign implements FeedbackDesignColorSuggester {
 
+	public static final ModernColor DEFAULT_COLOR_BACKGROUND = ModernColor.GRAY1;
+	public static final ModernColor DEFAULT_COLOR_PLAY = ModernColor.RED3;
+	public static final ModernColor DEFAULT_COLOR_CUE_IN = ModernColor.RED2;
+
 	private UUID uuid;
 	private ObjectProperty<ModernColor> backgroundColor;
 	private ObjectProperty<ModernColor> playColor;
@@ -94,11 +98,10 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 	}
 
 	public void reset() {
-		backgroundColor.set(ModernColor.GRAY1);
-		playColor.set(ModernColor.RED3);
-		cueInColor.set(ModernColor.RED2);
+		backgroundColor.set(DEFAULT_COLOR_BACKGROUND);
+		playColor.set(DEFAULT_COLOR_PLAY);
+		cueInColor.set(DEFAULT_COLOR_CUE_IN);
 	}
-
 
 	// Color Associator
 	@Override
