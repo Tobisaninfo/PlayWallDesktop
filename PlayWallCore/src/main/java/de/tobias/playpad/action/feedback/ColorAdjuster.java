@@ -12,6 +12,7 @@ import de.thecodelabs.midi.mapping.MidiKey;
 import de.thecodelabs.midi.midi.Midi;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.tobias.playpad.design.FeedbackDesignColorSuggester;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
@@ -69,19 +70,23 @@ public class ColorAdjuster {
 
 		Pad pad = suggester.getPad(action);
 
-		Color layoutStdColor = null;
-		Color layoutEvColor = null;
+		FeedbackDesignColorSuggester globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+		Color layoutStdColor = globalDesign.getDesignDefaultColor();
+		Color layoutEvColor = globalDesign.getDesignEventColor();
 
-		FeedbackDesignColorSuggester design;
-		if (pad != null && pad.getPadSettings().isCustomDesign()) {
-			design = pad.getPadSettings().getDesign();
-		} else {
-			design = Profile.currentProfile().getProfileSettings().getDesign();
-		}
+		if(pad != null)
+		{
+			final ModernCartDesign padDesign = pad.getPadSettings().getDesign();
 
-		if (design != null) {
-			layoutStdColor = design.getDesignDefaultColor();
-			layoutEvColor = design.getDesignEventColor();
+			if(padDesign.isEnableCustomBackgroundColor())
+			{
+				layoutStdColor = padDesign.getDesignDefaultColor();
+			}
+
+			if(padDesign.isEnableCustomPlayColor())
+			{
+				layoutEvColor = padDesign.getDesignEventColor();
+			}
 		}
 
 		if (layoutStdColor != null) {
@@ -96,9 +101,7 @@ public class ColorAdjuster {
 				final byte channel = suggester.suggestFeedbackChannel(FeedbackType.EVENT);
 				key.setEventFeedback(new Feedback(channel, matchedColor.getValue()));
 			});
-		}
 
-		if (layoutEvColor != null) {
 			searchColor(transcript, layoutEvColor).ifPresent(matchedColor -> {
 				final byte channel = suggester.suggestFeedbackChannel(FeedbackType.WARNING);
 				key.setWarningFeedback(new Feedback(channel, matchedColor.getValue()));

@@ -271,10 +271,7 @@ public class PadSettings {
 		else
 			clone.warningProperty = new SimpleObjectProperty<>();
 
-		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		if (design != null) {
-			clone.design = design.copy(pad);
-		}
+		clone.design = design.copy(pad);
 
 		clone.triggers = new EnumMap<>(TriggerPoint.class);
 		triggers.forEach((key, value) -> clone.triggers.put(key, value.copy()));
@@ -307,10 +304,11 @@ public class PadSettings {
 	//// Computed
 
 	public ModernColor getBackgroundColor() {
-		if (isCustomDesign()) {
+		if(design.isEnableCustomBackgroundColor())
+		{
 			return design.getBackgroundColor();
-		} else {
-			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 		}
+
+		return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 	}
 }

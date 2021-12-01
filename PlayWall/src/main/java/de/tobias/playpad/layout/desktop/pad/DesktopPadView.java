@@ -8,6 +8,7 @@ import de.thecodelabs.utils.ui.scene.BusyView;
 import de.thecodelabs.utils.util.ColorUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.design.FeedbackDesignColorSuggester;
+import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.layout.desktop.DesktopMainLayoutFactory;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
@@ -354,19 +355,20 @@ public class DesktopPadView implements IPadView {
 	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
 		if (show) {
-			FeedbackDesignColorSuggester associator;
-			if (pad.getPadSettings().isCustomDesign()) {
-				associator = pad.getPadSettings().getDesign();
-			} else {
-				associator = Profile.currentProfile().getProfileSettings().getDesign();
+			FeedbackDesignColorSuggester globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
+			Color layoutStdColor = globalDesign.getDesignDefaultColor();
+
+			if(pad != null)
+			{
+				final ModernCartDesign padDesign = pad.getPadSettings().getDesign();
+
+				if(padDesign.isEnableCustomBackgroundColor())
+				{
+					layoutStdColor = padDesign.getDesignDefaultColor();
+				}
 			}
 
-			if (associator != null) {
-				Color color = associator.getDesignDefaultColor();
-				notFoundLabel.setColor(ColorUtils.getAppropriateTextColor(color));
-			} else {
-				notFoundLabel.setColor(Color.RED);
-			}
+			notFoundLabel.setColor(ColorUtils.getAppropriateTextColor(layoutStdColor));
 		}
 		notFoundLabel.setVisible(show);
 		root.setOpacity(show ? 0.5 : 1.0);
