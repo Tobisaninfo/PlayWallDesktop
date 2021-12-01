@@ -40,14 +40,14 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 
 	private PopOver colorChooser;
 
-	public ModernCartDesignViewController(ModernCartDesign layout) {
+	public ModernCartDesignViewController(ModernCartDesign design) {
 		load("view/option/layout", "ModernLayoutCart", Localization.getBundle());
 
-		this.design = layout;
-		setLayout();
+		this.design = design;
+		setDesign();
 	}
 
-	private void setLayout() {
+	private void setDesign() {
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
@@ -75,22 +75,22 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	@FXML
 	private void resetButtonHandler(ActionEvent event) {
 		design.reset();
-		setLayout();
+		setDesign();
 	}
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, design.getBackgroundColor(), color -> design.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), design::setBackgroundColor);
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), design::setPlayColor);
 	}
 
 	@FXML
 	private void cueInColorButtonHandler(ActionEvent event) {
-		colorChooser(cueInColorButton, design.getPlayColor(), color -> design.setCueInColor(color));
+		colorChooser(cueInColorButton, design.getPlayColor(), design::setCueInColor);
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
@@ -114,7 +114,7 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	}
 
 	private String getLinearGradientCss(ModernColor color) {
-		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
+		if(Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return "-fx-background-color: " + color.paint() + ";";
 		} else {
 			return "-fx-background-color: " + color.linearGradient() + ";";
