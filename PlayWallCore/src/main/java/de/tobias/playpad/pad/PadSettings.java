@@ -201,7 +201,7 @@ public class PadSettings {
 
 	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign newDesign = new ModernCartDesign(pad);
+			ModernCartDesign newDesign = new ModernCartDesign.ModernCartDesignBuilder(pad).build();
 
 			if (pad.getProject().getProjectReference().isSync()) {
 				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), newDesign);
