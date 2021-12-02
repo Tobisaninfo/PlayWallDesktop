@@ -6,23 +6,18 @@ import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.pad.Pad;
-import de.tobias.playpad.pad.PadSettings;
-import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import de.tobias.playpad.viewcontroller.design.ModernCartDesignViewController;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 
 public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML
 	private VBox layoutContainer;
-	@FXML
-	private CheckBox enableLayoutCheckBox;
 
-	private Pad pad;
+	private final Pad pad;
 
 	DesignPadTabViewController(Pad pad) {
 		load("view/option/pad", "LayoutTab", Localization.getBundle());
@@ -31,26 +26,6 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void init() {
-		enableLayoutCheckBox.selectedProperty().addListener((a, b, c) ->
-		{
-			PadSettings padSettings = pad.getPadSettings();
-			if (c && !padSettings.isCustomDesign()) {
-				try {
-					padSettings.setCustomDesign(true);
-
-					ModernCartDesign layout = padSettings.getDesign();
-					layout.copyGlobalLayout(Profile.currentProfile().getProfileSettings().getDesign());
-
-					setLayoutViewController(pad);
-				} catch (Exception e) {
-					showErrorMessage(Localization.getString(Strings.ERROR_STANDARD_GEN, e.getLocalizedMessage()));
-					Logger.error(e);
-				}
-			} else if (!c && padSettings.isCustomDesign()) {
-				padSettings.setCustomDesign(false);
-				setLayoutViewController(null);
-			}
-		});
 	}
 
 	@Override
@@ -60,12 +35,7 @@ public class DesignPadTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
-		PadSettings padSettings = pad.getPadSettings();
-
-		enableLayoutCheckBox.setSelected(padSettings.isCustomDesign());
-		if (padSettings.isCustomDesign()) {
-			setLayoutViewController(pad);
-		}
+		setLayoutViewController(pad);
 	}
 
 	private void setLayoutViewController(Pad pad) {
