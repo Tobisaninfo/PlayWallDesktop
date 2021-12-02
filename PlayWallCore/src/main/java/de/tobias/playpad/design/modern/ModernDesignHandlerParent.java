@@ -34,7 +34,7 @@ public interface ModernDesignHandlerParent
 	{
 		if(pad.getContent() instanceof Durationable)
 		{
-			final Durationable durationable = (Durationable) pad;
+			final Durationable durationable = (Durationable) pad.getContent();
 			if(warningDuration.greaterThan(durationable.getDuration()))
 			{
 				return durationable.getDuration();
