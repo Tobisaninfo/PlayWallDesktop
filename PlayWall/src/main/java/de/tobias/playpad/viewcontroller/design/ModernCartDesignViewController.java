@@ -59,9 +59,21 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 
 	@Override
 	public void init() {
-		backgroundColorCheckbox.selectedProperty().addListener((a, b, c) -> backgroundColorButton.setDisable(!c));
-		playColorCheckbox.selectedProperty().addListener((a, b, c) -> playColorButton.setDisable(!c));
-		cueInColorCheckbox.selectedProperty().addListener((a, b, c) -> cueInColorButton.setDisable(!c));
+		backgroundColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			design.setEnableCustomBackgroundColor(c);
+			backgroundColorButton.setDisable(!c);
+		});
+		playColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			design.setEnableCustomPlayColor(c);
+			playColorButton.setDisable(!c);
+		});
+		cueInColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		{
+			design.setEnableCustomCueInColor(c);
+			cueInColorButton.setDisable(!c);
+		});
 
 		backgroundColorButton.setDisable(true);
 		playColorButton.setDisable(true);
