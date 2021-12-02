@@ -187,10 +187,6 @@ public class PadSettings {
 		return cueInProperty.get();
 	}
 
-	public boolean isCustomDesign() {
-		return customDesignProperty.get();
-	}
-
 	public void setCustomDesign(boolean customLayout) {
 		this.customDesignProperty.set(customLayout);
 	}

@@ -3,9 +3,8 @@ package de.tobias.playpad.design
 import de.thecodelabs.utils.application.ApplicationUtils
 import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
 import de.tobias.playpad.design.modern.{ModernCartDesignHandler, ModernColor}
-import de.tobias.playpad.pad.content.play.Durationable
 import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController
-import de.tobias.playpad.util.Minifier
+import de.tobias.playpad.util.{FadeableColor, Minifier}
 import de.tobias.playpad.view.PseudoClasses
 import javafx.util.Duration
 import org.springframework.expression.ExpressionParser
@@ -18,11 +17,20 @@ import scala.jdk.CollectionConverters._
 class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 
 	override def generateCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
-		String.join(
-			generateCss(design, flat, classSuffix, design.getBackgroundColor),
-			generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}"),
+		var result = ""
+
+		if(design.isEnableCustomBackgroundColor)
+		{
+			result +=	generateCss(design, flat, classSuffix, design.getBackgroundColor)
 			generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
-		)
+		}
+
+		if(design.isEnableCustomPlayColor)
+		{
+			result += generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
+		}
+
+		result
 	}
 
 	private def generateCss(design: ModernCartDesign, flat: Boolean, padIdentifier: String, color: ModernColor, styleState: String = ""): String = {
@@ -47,29 +55,13 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
 
-	override def handleWarning(design: ModernCartDesign, controller: AbstractPadViewController, warning: Duration, globalDesign: ModernGlobalDesign): Unit = {
-		if (globalDesign.isWarnAnimation) {
-			val playColor = design.getPlayColor
-			val backgroundColor = design.getBackgroundColor
-
-			val fadeStopColor = if (globalDesign.isFlatDesign) backgroundColor.toFlatFadeableColor else backgroundColor.toFadeableColor
-			val fadePlayColor = if (globalDesign.isFlatDesign) playColor.toFlatFadeableColor else playColor.toFadeableColor
-
-			val pad = controller.getPad
-			val animationDuration = pad.getContent match {
-				case durationable: Durationable =>
-					if (warning greaterThan durationable.getDuration) {
-						durationable.getDuration
-					} else {
-						warning
-					}
-				case _ => warning
-			}
-			ModernDesignAnimator.animateWarn(controller, fadePlayColor, fadeStopColor, animationDuration)
+	override def performWarning(design: ModernGlobalDesign, fadeStartColor: FadeableColor, fadeStopColor: FadeableColor, controller: AbstractPadViewController, warningDuration: Duration): Unit = {
+		if(design.isWarnAnimation) {
+			ModernDesignAnimator.animateWarn(controller, fadeStartColor, fadeStopColor, warningDuration)
 		} else {
 			ModernDesignAnimator.warnFlash(controller)
 		}
 	}
 
-	override def stopWarning(design: ModernCartDesign, controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
+	override def stopWarning(controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 }
