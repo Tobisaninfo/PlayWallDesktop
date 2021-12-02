@@ -35,7 +35,6 @@ public class PadSettings {
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
-	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
 
 	private Map<TriggerPoint, Trigger> triggers = new EnumMap<>(TriggerPoint.class);
@@ -185,14 +184,6 @@ public class PadSettings {
 
 	public Duration cueInProperty() {
 		return cueInProperty.get();
-	}
-
-	public void setCustomDesign(boolean customLayout) {
-		this.customDesignProperty.set(customLayout);
-	}
-
-	public BooleanProperty customDesignProperty() {
-		return customDesignProperty;
 	}
 
 	public ModernCartDesign getDesign() {

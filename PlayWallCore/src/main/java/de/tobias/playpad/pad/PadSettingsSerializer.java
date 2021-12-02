@@ -72,9 +72,6 @@ public class PadSettingsSerializer {
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
-			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
-				padSettings.setCustomDesign(Boolean.parseBoolean(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
-			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign design = serializer.load(designElement, pad);
 			padSettings.setDesign(design);

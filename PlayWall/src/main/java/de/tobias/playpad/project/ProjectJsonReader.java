@@ -78,7 +78,6 @@ public class ProjectJsonReader {
 			ModernCartDesign design = readModernCartDesign(pad, object.getJSONObject("design"));
 			if (design != null) {
 				pad.getPadSettings().setDesign(design);
-				pad.getPadSettings().setCustomDesign(true); // TODO Sync
 			}
 		}
 
