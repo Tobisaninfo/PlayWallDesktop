@@ -8,7 +8,7 @@ import de.tobias.playpad.plugin.content.util._
 import javafx.beans.property.{ObjectProperty, ReadOnlyObjectProperty, SimpleObjectProperty}
 import javafx.util.Duration
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 
 class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[pad] val mediaPath: MediaPath, val totalDuration: Duration) {
 
@@ -16,17 +16,17 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 
 	_totalDurationProperty.set(totalDuration)
 
-	def getPath: String = {
+	def getPath: Path = {
 		val sourcePath = mediaPath.getPath.toAbsolutePath
 
 		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
 		val convertPath = globalSettings.getCachePath.resolve(sourcePath.getFileName + ".mp4")
 
 		if (Files.exists(convertPath)) {
-			return convertPath.toString
+			return convertPath
 		}
 
-		sourcePath.toString
+		sourcePath
 	}
 
 	def getTotalDuration: Duration = _totalDurationProperty.get()

@@ -20,7 +20,7 @@ import nativecontentplayerwindows.ContentPlayer
 
 import java.nio.file.Files
 import java.util
-import java.util.UUID
+import java.util.{Collections, UUID}
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters._
 
@@ -61,6 +61,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (isPause) {
 			mediaPlayers(getCurrentPlayingMediaIndex).resume(withFadeIn)
 		} else {
+			if (isShuffle) {
+				Collections.shuffle(mediaPlayers)
+			}
 			getPad.setEof(false)
 			mediaPlayers.head.play(withFadeIn)
 		}
@@ -294,6 +297,10 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	def shouldShowLastFrame(): Boolean = {
 		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
+	}
+
+	def isShuffle: Boolean = {
+		pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false).asInstanceOf[Boolean]
 	}
 
 	def getSelectedZones: Seq[Zone] = {

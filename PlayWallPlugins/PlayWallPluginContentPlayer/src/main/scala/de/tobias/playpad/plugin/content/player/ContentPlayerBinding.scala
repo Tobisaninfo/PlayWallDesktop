@@ -51,7 +51,7 @@ class ContentPlayerBinding(val nativePlayer: ContentPlayer, val zone: Zone) {
 				currentMedia.get().content.getPad.stop()
 			}
 		}
-		nativePlayer.Play(media.getPath, withFadeIn)
+		nativePlayer.Play(media.getPath.toString, withFadeIn)
 		currentMedia.set(media)
 	}
 
