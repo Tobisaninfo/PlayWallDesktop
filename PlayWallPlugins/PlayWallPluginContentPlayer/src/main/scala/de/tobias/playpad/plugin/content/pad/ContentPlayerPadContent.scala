@@ -120,7 +120,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}
 
 		showingLastFrame = false
-		mediaPlayers(getCurrentPlayingMediaIndex).next()
+		// Only automatically go to the next playlist item, if auto next is active or
+		// the item is the last one (next() go into stop state if no item is left)
+		if (isAutoNext || noFurtherItemsInPlaylist) {
+			mediaPlayers(getCurrentPlayingMediaIndex).next()
+		}
 	}
 
 	private def hasPadTriggerInterferingZones(item: LocalPadTrigger): Boolean = {
@@ -295,13 +299,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	Custom Settings
 	 */
 
-	def shouldShowLastFrame(): Boolean = {
-		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
-	}
+	def shouldShowLastFrame(): Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
 
-	def isShuffle: Boolean = {
-		pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false).asInstanceOf[Boolean]
-	}
+	def isShuffle: Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false).asInstanceOf[Boolean]
+
+	def isAutoNext: Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.AUTO_NEXT_SETTINGS_KEY, false).asInstanceOf[Boolean]
 
 	def getSelectedZones: Seq[Zone] = {
 		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]

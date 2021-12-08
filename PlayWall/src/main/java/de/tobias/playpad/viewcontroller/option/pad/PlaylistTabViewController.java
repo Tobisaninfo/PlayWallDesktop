@@ -29,12 +29,14 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 
 	@FXML
 	private CheckBox shuffleCheckbox;
-
 	@FXML
-	private ListView<MediaPath> mediaPathListView;
+	private CheckBox autoNextCheckbox;
 
 	@FXML
 	private Button addButton;
+
+	@FXML
+	private ListView<MediaPath> mediaPathListView;
 	@FXML
 	private Button upButton;
 	@FXML
@@ -123,11 +125,13 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void loadSettings(Pad pad) {
 		shuffleCheckbox.setSelected((Boolean) pad.getPadSettings().getCustomSettings().getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false));
+		autoNextCheckbox.setSelected((Boolean) pad.getPadSettings().getCustomSettings().getOrDefault(Playlistable.AUTO_NEXT_SETTINGS_KEY, true));
 	}
 
 	@Override
 	public void saveSettings(Pad pad) {
 		pad.getPadSettings().getCustomSettings().put(Playlistable.SHUFFLE_SETTINGS_KEY, shuffleCheckbox.isSelected());
+		pad.getPadSettings().getCustomSettings().put(Playlistable.AUTO_NEXT_SETTINGS_KEY, autoNextCheckbox.isSelected());
 	}
 
 	@FXML

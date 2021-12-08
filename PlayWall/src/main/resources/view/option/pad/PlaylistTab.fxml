@@ -14,6 +14,7 @@
          <children>
             <Label styleClass="headline" text="%padSettings.playlist.settings.title" />
             <CheckBox fx:id="shuffleCheckbox" mnemonicParsing="false" text="%padSettings.playlist.settings.shuffle" />
+            <CheckBox fx:id="autoNextCheckbox" mnemonicParsing="false" text="%padSettings.playlist.settings.autoNext" />
          </children>
          <VBox.margin>
             <Insets />

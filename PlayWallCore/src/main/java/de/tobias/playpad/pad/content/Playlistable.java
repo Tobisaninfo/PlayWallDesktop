@@ -6,6 +6,7 @@ import javafx.beans.property.IntegerProperty;
 public interface Playlistable {
 
 	String SHUFFLE_SETTINGS_KEY = "shuffle";
+	String AUTO_NEXT_SETTINGS_KEY = "autoNext";
 
 	int getCurrentPlayingMediaIndex();
 
