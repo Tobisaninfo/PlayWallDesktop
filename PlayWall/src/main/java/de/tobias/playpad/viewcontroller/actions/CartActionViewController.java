@@ -13,7 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class CartActionViewController extends NVC {
+public class CartActionViewController extends AbstractActionViewController {
 
 	@FXML
 	private ComboBox<CartActionMode> controlMode;
@@ -41,6 +41,7 @@ public class CartActionViewController extends NVC {
 		VBox.setVgrow(rootContainer, Priority.ALWAYS);
 	}
 
+	@Override
 	public void setCartAction(Action action) {
 		this.action = action;
 

@@ -36,17 +36,24 @@ public class CartActionTypeViewController extends NVC {
 	@FXML
 	private VBox cartActionContainer;
 
-	private CartActionViewController cartActionViewController;
+	private final AbstractActionViewController actionViewController;
+	private final String actionType;
 
-	private Mapping mapping;
-	private IMappingTabViewController parentController;
+	private final Mapping mapping;
+	private final IMappingTabViewController parentController;
 
-	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController) {
+
+	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController, String actionType) {
+		this(mapping, parentController, actionType,null);
+	}
+
+	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController, String actionType, AbstractActionViewController actionViewController) {
 		load("view/actions", "CartActions", Localization.getBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
 
-		cartActionViewController = new CartActionViewController();
+		this.actionType = actionType;
+		this.actionViewController = actionViewController;
 
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		ProjectSettings settings = currentProject.getSettings();
@@ -106,12 +113,14 @@ public class CartActionTypeViewController extends NVC {
 			int currentY = data[1];
 
 			try {
-				List<Action> cartActions = mapping.getActionsForType(CartAction.TYPE);
+				List<Action> cartActions = mapping.getActionsForType(actionType);
 				for (Action action : cartActions) {
 					if (CartAction.getX(action) == currentX && CartAction.getY(action) == currentY) {
-						cartActionContainer.getChildren().setAll(cartActionViewController.getParent());
-						cartActionContainer.setVisible(true);
-						cartActionViewController.setCartAction(action);
+						if (actionViewController != null) {
+							cartActionContainer.getChildren().setAll(actionViewController.getParent());
+							cartActionContainer.setVisible(true);
+							actionViewController.setCartAction(action);
+						}
 						parentController.showMapperFor(action);
 					}
 				}

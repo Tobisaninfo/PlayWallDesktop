@@ -7,25 +7,30 @@ import de.thecodelabs.midi.feedback.FeedbackType;
 import de.thecodelabs.midi.mapping.KeyType;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
-import de.tobias.playpad.action.actions.CartAction;
+import de.tobias.playpad.action.actions.PlaylistNextAction;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
-import de.tobias.playpad.action.settings.CartActionSettingsEntry;
+import de.tobias.playpad.action.settings.PlaylistNextActionSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;
 import javafx.scene.control.TreeItem;
 
 import java.util.List;
 
-import static de.tobias.playpad.action.actions.CartAction.*;
+import static de.tobias.playpad.action.actions.PlaylistNextAction.*;
 
-public class CartActionProvider extends ActionProvider {
+public class PlaylistNextActionProvider extends ActionProvider {
 
-	public CartActionProvider(String type) {
+	public PlaylistNextActionProvider(String type) {
 		super(TYPE);
 	}
 
 	@Override
 	public String getType() {
 		return TYPE;
+	}
+
+	@Override
+	public ActionHandler getActionHandler() {
+		return new PlaylistNextAction();
 	}
 
 	@Override
@@ -42,14 +47,7 @@ public class CartActionProvider extends ActionProvider {
 		Action action = new Action(getType());
 		action.addPayloadEntry(PAYLOAD_X, String.valueOf(x));
 		action.addPayloadEntry(PAYLOAD_Y, String.valueOf(y));
-		action.addPayloadEntry(PAYLOAD_MODE, CartActionMode.PLAY_STOP.name());
-		action.addPayloadEntry(PAYLOAD_AUTO_FEEDBACK, String.valueOf(true));
 		return action;
-	}
-
-	@Override
-	public ActionHandler getActionHandler() {
-		return new CartAction();
 	}
 
 	@Override
@@ -58,14 +56,10 @@ public class CartActionProvider extends ActionProvider {
 			case KEYBOARD:
 				return new FeedbackType[0];
 			case MIDI:
-				return new FeedbackType[]{FeedbackType.DEFAULT, FeedbackType.EVENT, FeedbackType.WARNING};
+				return new FeedbackType[]{FeedbackType.DEFAULT};
 		}
 		return new FeedbackType[0];
 	}
-
-	/*
-
-	 */
 
 	@Override
 	public ActionType getActionType() {
@@ -74,6 +68,6 @@ public class CartActionProvider extends ActionProvider {
 
 	@Override
 	public TreeItem<ActionSettingsEntry> getTreeItemForActions(List<Action> actions, Mapping mapping) {
-		return new TreeItem<>(new CartActionSettingsEntry());
+		return new TreeItem<>(new PlaylistNextActionSettingsEntry());
 	}
 }
