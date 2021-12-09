@@ -49,15 +49,16 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 	}
 
 	def next(): Unit = {
-		stop()
-
 		val players = content.getMediaContainers
 		val currentIndex = players.indexOf(this)
 		content.currentPlayingMediaIndexProperty().set(currentIndex)
 
+
 		if (currentIndex + 1 < players.length) {
+			content.listeners.forEach(listener => listener.onNextItem(content.pad, currentIndex + 1, players.length))
 			players(currentIndex + 1).play(false)
 		} else if (content.getPad.getPadSettings.isLoop) {
+			content.listeners.forEach(listener => listener.onNextItem(content.pad, 0, players.length))
 			players.head.play(false)
 		} else {
 			content.getPad.setStatus(PadStatus.STOP)

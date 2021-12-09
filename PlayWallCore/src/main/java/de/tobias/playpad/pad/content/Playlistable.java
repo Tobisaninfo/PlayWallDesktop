@@ -17,4 +17,8 @@ public interface Playlistable {
 	void next();
 
 	boolean isLoaded(MediaPath mediaPath);
+
+	void addPlaylistListener(PlaylistListener listener);
+
+	void removePlaylistListener(PlaylistListener listener);
 }

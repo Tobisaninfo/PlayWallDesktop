@@ -118,6 +118,8 @@ public class Trigger {
 				} else {
 					handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
 				}
+			} else if (triggerPoint == TriggerPoint.PLAYLIST_NEXT) {
+				item.performAction(pad, project, mainViewController, currentProfile);
 			}
 		}
 	}

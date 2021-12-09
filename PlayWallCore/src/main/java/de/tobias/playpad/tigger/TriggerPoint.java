@@ -4,7 +4,8 @@ public enum TriggerPoint {
 
 	START(true),
 	STOP(false),
-	EOF(true);
+	EOF(true),
+	PLAYLIST_NEXT(false);
 
 	/**
 	 * Defines if a trigger can be run after, before a certain event.
