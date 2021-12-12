@@ -19,25 +19,24 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 
 		if(design.isEnableCustomBackgroundColor)
 		{
-			result +=	generateCss(design, flat, classSuffix, design.getBackgroundColor)
-			generateCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
+			result +=	generatePadCss(design, flat, classSuffix, design.getBackgroundColor)
+			result += generatePadCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
 		}
 
 		if(design.isEnableCustomPlayColor)
 		{
-			result += generateCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
+			result += generatePadCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
+		}
+
+		if(design.isEnableCustomCueInColor)
+		{
+			result += generateCueInCss(design, flat, classSuffix)
 		}
 
 		result
 	}
 
-	private def generateCss(design: ModernCartDesign, flat: Boolean, padIdentifier: String, color: ModernColor, styleState: String = ""): String = {
-		val expressionParser: ExpressionParser = new SpelExpressionParser()
-		val context = new StandardEvaluationContext()
-
-		val resource = ApplicationUtils.getApplication.getClasspathResource("style/modern-pad.css")
-		val string = Minifier minify resource.getAsString
-
+	private def generatePadCss(design: ModernCartDesign, flat: Boolean, padIdentifier: String, color: ModernColor, styleState: String = ""): String = {
 		val values: Map[String, AnyRef] = Map(
 			"prefix" -> padIdentifier,
 			"class" -> styleState,
@@ -49,7 +48,27 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 			"fontColor" -> color.getFontColor
 		)
 
+		generateCss("style/modern-pad.css", values)
+	}
+
+	private def generateCueInCss(design: ModernCartDesign, flat: Boolean, padIdentifier: String): String = {
+		val values: Map[String, AnyRef] = Map(
+			"prefix" -> padIdentifier,
+			"padCueInColor" -> (if (flat) design.getCueInColor.paint() else design.getCueInColor.linearGradient())
+		)
+
+		generateCss("style/modern-pad-cue-in.css", values)
+	}
+
+	private def generateCss(templatePath: String, values: Map[String, AnyRef]): String =
+	{
+		val expressionParser: ExpressionParser = new SpelExpressionParser()
+		val context = new StandardEvaluationContext()
+
+		val resource = ApplicationUtils.getApplication.getClasspathResource(templatePath)
+		val content = Minifier minify resource.getAsString
+
 		context.setVariables(values.asJava)
-		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
+		expressionParser.parseExpression(content, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
 }
