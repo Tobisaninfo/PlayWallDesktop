@@ -5,7 +5,8 @@ import de.tobias.playpad.project.Project;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import javafx.stage.Stage;
 
-public interface ModernGlobalDesignHandler extends ModernDesignHandlerParent {
+public interface ModernGlobalDesignHandler
+{
 
 	void applyStyleSheet(Stage stage);
 

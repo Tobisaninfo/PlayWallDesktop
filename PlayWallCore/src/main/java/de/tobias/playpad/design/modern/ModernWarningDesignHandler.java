@@ -8,18 +8,20 @@ import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.util.FadeableColor;
 import javafx.util.Duration;
 
-public interface ModernDesignHandlerParent
+public interface ModernWarningDesignHandler
 {
 	default void handleWarning(ModernGlobalDesign globalDesign, ModernCartDesign cartDesign, AbstractPadViewController controller, Duration warningDuration)
 	{
 		ModernColor backgroundColor = globalDesign.getBackgroundColor();
 		ModernColor playColor = globalDesign.getPlayColor();
 
-		if(cartDesign.isEnableCustomBackgroundColor()) {
+		if(cartDesign.isEnableCustomBackgroundColor())
+		{
 			backgroundColor = cartDesign.getBackgroundColor();
 		}
 
-		if(cartDesign.isEnableCustomPlayColor()) {
+		if(cartDesign.isEnableCustomPlayColor())
+		{
 			playColor = cartDesign.getPlayColor();
 		}
 
@@ -49,6 +51,7 @@ public interface ModernDesignHandlerParent
 	 */
 	void performWarning(ModernGlobalDesign design, FadeableColor fadeStartColor, FadeableColor fadeStopColor, AbstractPadViewController controller, Duration duration);
 
-	default void stopWarning(AbstractPadViewController controller) {
+	default void stopWarning(AbstractPadViewController controller)
+	{
 	}
 }

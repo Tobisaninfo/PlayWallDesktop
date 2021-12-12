@@ -4,6 +4,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.design.ModernDesignProvider;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
+import de.tobias.playpad.design.modern.ModernWarningDesignHandler;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
@@ -111,8 +112,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 		final ModernDesignProvider modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
-		final ModernGlobalDesignHandler handler = modernDesign.global();
-
+		final ModernWarningDesignHandler handler = modernDesign.warning();
 		handler.handleWarning(globalDesign, cartDesign, controller, warningDuration);
 	}
 
@@ -133,7 +133,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 
 		final ModernDesignProvider modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
-		final ModernGlobalDesignHandler handler = modernDesign.global();
+		final ModernWarningDesignHandler handler = modernDesign.warning();
 		handler.stopWarning(controller);
 		controller.getView().setStyle("");
 	}
