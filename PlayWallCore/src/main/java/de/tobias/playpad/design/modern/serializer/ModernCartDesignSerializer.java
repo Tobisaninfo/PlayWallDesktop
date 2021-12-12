@@ -81,10 +81,10 @@ public class ModernCartDesignSerializer {
 		rootElement.addElement("EnableCustomBackgroundColor").addText(String.valueOf(design.isEnableCustomBackgroundColor()));
 		rootElement.addElement("BackgroundColor").addText(design.getBackgroundColor().name());
 
-		rootElement.addElement("EnableCustomPlayColor").addText(String.valueOf(design.isEnableCustomBackgroundColor()));
+		rootElement.addElement("EnableCustomPlayColor").addText(String.valueOf(design.isEnableCustomPlayColor()));
 		rootElement.addElement("PlayColor").addText(design.getPlayColor().name());
 
-		rootElement.addElement("EnableCustomCueInColor").addText(String.valueOf(design.isEnableCustomBackgroundColor()));
+		rootElement.addElement("EnableCustomCueInColor").addText(String.valueOf(design.isEnableCustomCueInColor()));
 		rootElement.addElement("CueInColor").addText(design.getCueInColor().name());
 	}
 }
