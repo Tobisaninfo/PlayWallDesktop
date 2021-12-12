@@ -9,7 +9,7 @@ import de.thecodelabs.utils.threading.Worker;
 import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.SystemUtils;
 import de.thecodelabs.versionizer.service.UpdateService;
-import de.tobias.playpad.design.ModernDesignHandler;
+import de.tobias.playpad.design.ModernDesignProvider;
 import de.tobias.playpad.initialize.*;
 import de.tobias.playpad.plugin.*;
 import de.tobias.playpad.profile.ProfileNotFoundException;
@@ -65,7 +65,7 @@ public class PlayPadImpl implements PlayPad {
 
 	private UpdateService updateService;
 	protected GlobalSettings globalSettings;
-	private ModernDesignHandler modernDesign;
+	private ModernDesignProvider modernDesign;
 
 	private Session session;
 
@@ -239,11 +239,11 @@ public class PlayPadImpl implements PlayPad {
 		return parameters;
 	}
 
-	public ModernDesignHandler getModernDesign() {
+	public ModernDesignProvider getModernDesign() {
 		return modernDesign;
 	}
 
-	void setModernDesign(ModernDesignHandler modernDesign) {
+	void setModernDesign(ModernDesignProvider modernDesign) {
 		this.modernDesign = modernDesign;
 	}
 
