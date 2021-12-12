@@ -18,6 +18,13 @@ import java.util.function.Consumer;
 public class ModernCartDesignViewController extends NVC implements IColorButton {
 
 	@FXML
+	private CheckBox backgroundColorCheckbox;
+	@FXML
+	private CheckBox playColorCheckbox;
+	@FXML
+	private CheckBox cueInColorCheckbox;
+
+	@FXML
 	private Button backgroundColorButton;
 	@FXML
 	private Button playColorButton;
@@ -29,25 +36,49 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	@FXML
 	private Button resetButton;
 
-	private ModernCartDesign design;
+	private final ModernCartDesign design;
 
 	private PopOver colorChooser;
 
-	public ModernCartDesignViewController(ModernCartDesign layout) {
+	public ModernCartDesignViewController(ModernCartDesign design) {
 		load("view/option/layout", "ModernLayoutCart", Localization.getBundle());
 
-		this.design = layout;
-		setLayout();
+		this.design = design;
+		setDesign();
 	}
 
-	private void setLayout() {
+	private void setDesign() {
 		backgroundColorButton.setStyle(getLinearGradientCss(design.getBackgroundColor()));
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
+
+		backgroundColorCheckbox.setSelected(design.isEnableCustomBackgroundColor());
+		playColorCheckbox.setSelected(design.isEnableCustomPlayColor());
+		cueInColorCheckbox.setSelected(design.isEnableCustomCueInColor());
 	}
 
 	@Override
 	public void init() {
+		backgroundColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			design.setEnableCustomBackgroundColor(newValue);
+			backgroundColorButton.setDisable(!newValue);
+		});
+		playColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			design.setEnableCustomPlayColor(newValue);
+			playColorButton.setDisable(!newValue);
+		});
+		cueInColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
+		{
+			design.setEnableCustomCueInColor(newValue);
+			cueInColorButton.setDisable(!newValue);
+		});
+
+		backgroundColorButton.setDisable(true);
+		playColorButton.setDisable(true);
+		cueInColorButton.setDisable(true);
+
 		addIconToButton(backgroundColorButton);
 		addIconToButton(playColorButton);
 		addIconToButton(cueInColorButton);
@@ -56,22 +87,22 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	@FXML
 	private void resetButtonHandler(ActionEvent event) {
 		design.reset();
-		setLayout();
+		setDesign();
 	}
 
 	@FXML
 	private void backgroundColorButtonHandler(ActionEvent event) {
-		colorChooser(backgroundColorButton, design.getBackgroundColor(), color -> design.setBackgroundColor(color));
+		colorChooser(backgroundColorButton, design.getBackgroundColor(), design::setBackgroundColor);
 	}
 
 	@FXML
 	private void playColorButtonHandler(ActionEvent event) {
-		colorChooser(playColorButton, design.getPlayColor(), color -> design.setPlayColor(color));
+		colorChooser(playColorButton, design.getPlayColor(), design::setPlayColor);
 	}
 
 	@FXML
 	private void cueInColorButtonHandler(ActionEvent event) {
-		colorChooser(cueInColorButton, design.getPlayColor(), color -> design.setCueInColor(color));
+		colorChooser(cueInColorButton, design.getPlayColor(), design::setCueInColor);
 	}
 
 	private void colorChooser(Button anchorNode, ModernColor startColor, Consumer<ModernColor> onFinish) {
@@ -95,11 +126,10 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	}
 
 	private String getLinearGradientCss(ModernColor color) {
-		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
+		if(Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return "-fx-background-color: " + color.paint() + ";";
 		} else {
 			return "-fx-background-color: " + color.linearGradient() + ";";
 		}
 	}
-
 }

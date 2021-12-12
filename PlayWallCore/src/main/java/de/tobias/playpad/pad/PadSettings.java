@@ -35,7 +35,6 @@ public class PadSettings {
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
-	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
 
 	private Map<TriggerPoint, Trigger> triggers = new EnumMap<>(TriggerPoint.class);
@@ -187,21 +186,9 @@ public class PadSettings {
 		return cueInProperty.get();
 	}
 
-	public boolean isCustomDesign() {
-		return customDesignProperty.get();
-	}
-
-	public void setCustomDesign(boolean customLayout) {
-		this.customDesignProperty.set(customLayout);
-	}
-
-	public BooleanProperty customDesignProperty() {
-		return customDesignProperty;
-	}
-
 	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign newDesign = new ModernCartDesign(pad);
+			ModernCartDesign newDesign = new ModernCartDesign.ModernCartDesignBuilder(pad).build();
 
 			if (pad.getProject().getProjectReference().isSync()) {
 				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), newDesign);
@@ -271,10 +258,7 @@ public class PadSettings {
 		else
 			clone.warningProperty = new SimpleObjectProperty<>();
 
-		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		if (design != null) {
-			clone.design = design.copy(pad);
-		}
+		clone.design = design.copy(pad);
 
 		clone.triggers = new EnumMap<>(TriggerPoint.class);
 		triggers.forEach((key, value) -> clone.triggers.put(key, value.copy()));
@@ -307,10 +291,11 @@ public class PadSettings {
 	//// Computed
 
 	public ModernColor getBackgroundColor() {
-		if (isCustomDesign()) {
+		if(design.isEnableCustomBackgroundColor())
+		{
 			return design.getBackgroundColor();
-		} else {
-			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 		}
+
+		return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 	}
 }

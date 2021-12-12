@@ -21,11 +21,6 @@
 	-fx-background-color: ${#padColor};
 }
 
-.pad${#prefix}-cue-in${#class} {
-	-fx-background-color: ${#padCueInColor};
-}
-
-
 .pad${#prefix}-info${#class} {
 	-fx-text-fill: ${#fontColor};
 }

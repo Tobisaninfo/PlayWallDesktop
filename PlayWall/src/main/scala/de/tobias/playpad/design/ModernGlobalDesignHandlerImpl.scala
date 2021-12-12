@@ -4,8 +4,6 @@ import de.thecodelabs.utils.application.ApplicationUtils
 import de.thecodelabs.utils.application.container.PathType
 import de.tobias.playpad.design.modern.model.{ModernCartDesign, ModernGlobalDesign}
 import de.tobias.playpad.design.modern.{ModernColor, ModernGlobalDesignHandler}
-import de.tobias.playpad.pad.content.play.Durationable
-import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController
 import de.tobias.playpad.project.Project
 import de.tobias.playpad.util.Minifier
 import de.tobias.playpad.view.{ColorPickerView, PseudoClasses}
@@ -13,7 +11,6 @@ import de.tobias.playpad.viewcontroller.main.IMainViewController
 import de.tobias.playpad.{DisplayableColor, PlayPadMain}
 import javafx.scene.paint.Color
 import javafx.stage.Stage
-import javafx.util.Duration
 import org.springframework.expression.ExpressionParser
 import org.springframework.expression.common.TemplateParserContext
 import org.springframework.expression.spel.standard.SpelExpressionParser
@@ -50,10 +47,8 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		project.getPage(controller.getPage).getPads.forEach(pad => {
 			val padSettings = pad.getPadSettings
 
-			if (padSettings.isCustomDesign) {
-				val cartDesign = padSettings.getDesign
-				stringBuilder.append(cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
-			}
+			val cartDesign = padSettings.getDesign
+			stringBuilder.append(cartDesignHandler.generateCss(cartDesign, s"${pad.getPadIndex}", design.isFlatDesign))
 		})
 		Files.write(customCss, stringBuilder.toString().getBytes())
 
@@ -91,33 +86,6 @@ class ModernGlobalDesignHandlerImpl extends ModernGlobalDesignHandler with Color
 		context.setVariables(values.asJava)
 		expressionParser.parseExpression(string, new TemplateParserContext("${", "}")).getValue(context, classOf[String])
 	}
-
-	override def handleWarning(design: ModernGlobalDesign, controller: AbstractPadViewController, warning: Duration): Unit = {
-		if (design.isWarnAnimation) {
-			warnAnimation(design, controller, warning)
-		} else {
-			ModernDesignAnimator.warnFlash(controller)
-		}
-	}
-
-	private def warnAnimation(design: ModernGlobalDesign, controller: AbstractPadViewController, warning: Duration): Unit = {
-		val stopColor = if (design.isFlatDesign) design.getBackgroundColor.toFlatFadeableColor else design.getBackgroundColor.toFadeableColor
-		val playColor = if (design.isFlatDesign) design.getPlayColor.toFlatFadeableColor else design.getPlayColor.toFadeableColor
-
-		val pad = controller.getPad
-		val duration = pad.getContent match {
-			case durationable: Durationable =>
-				if (warning.greaterThan(durationable.getDuration)) {
-					durationable.getDuration
-				} else {
-					warning
-				}
-			case _ => warning
-		}
-		ModernDesignAnimator.animateWarn(controller, playColor, stopColor, duration)
-	}
-
-	override def stopWarning(design: ModernGlobalDesign, controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 
 	override def getColorInterface(onSelection: Consumer[DisplayableColor]) = new ColorPickerView(null, ModernColor.values.asInstanceOf[Array[DisplayableColor]], onSelection)
 

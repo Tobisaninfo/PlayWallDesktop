@@ -2,11 +2,21 @@ package de.tobias.playpad.design;
 
 import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
+import de.tobias.playpad.design.modern.ModernWarningDesignHandler;
 
-public class ModernDesignHandlerImpl implements ModernDesignHandler {
-
+public class ModernDesignProviderImpl implements ModernDesignProvider
+{
+	private ModernWarningDesignHandler warningHandler;
 	private ModernCartDesignHandler cartDesignHandler;
 	private ModernGlobalDesignHandler globalDesignHandler;
+
+	@Override
+	public ModernWarningDesignHandler warning() {
+		if (warningHandler == null) {
+			warningHandler = new ModernWarningDesignHandlerImpl();
+		}
+		return warningHandler;
+	}
 
 	@Override
 	public ModernGlobalDesignHandler global() {
