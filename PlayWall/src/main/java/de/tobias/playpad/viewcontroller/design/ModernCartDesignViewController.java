@@ -52,27 +52,27 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 		playColorButton.setStyle(getLinearGradientCss(design.getPlayColor()));
 		cueInColorButton.setStyle(getLinearGradientCss(design.getCueInColor()));
 
-		backgroundColorCheckbox.setSelected(!design.getBackgroundColor().equals(ModernCartDesign.DEFAULT_COLOR_BACKGROUND));
-		playColorCheckbox.setSelected(!design.getPlayColor().equals(ModernCartDesign.DEFAULT_COLOR_PLAY));
-		cueInColorCheckbox.setSelected(!design.getCueInColor().equals(ModernCartDesign.DEFAULT_COLOR_CUE_IN));
+		backgroundColorCheckbox.setSelected(design.isEnableCustomBackgroundColor());
+		playColorCheckbox.setSelected(design.isEnableCustomPlayColor());
+		cueInColorCheckbox.setSelected(design.isEnableCustomCueInColor());
 	}
 
 	@Override
 	public void init() {
-		backgroundColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		backgroundColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 		{
-			design.setEnableCustomBackgroundColor(c);
-			backgroundColorButton.setDisable(!c);
+			design.setEnableCustomBackgroundColor(newValue);
+			backgroundColorButton.setDisable(!newValue);
 		});
-		playColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		playColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 		{
-			design.setEnableCustomPlayColor(c);
-			playColorButton.setDisable(!c);
+			design.setEnableCustomPlayColor(newValue);
+			playColorButton.setDisable(!newValue);
 		});
-		cueInColorCheckbox.selectedProperty().addListener((a, b, c) ->
+		cueInColorCheckbox.selectedProperty().addListener((observable, oldValue, newValue) ->
 		{
-			design.setEnableCustomCueInColor(c);
-			cueInColorButton.setDisable(!c);
+			design.setEnableCustomCueInColor(newValue);
+			cueInColorButton.setDisable(!newValue);
 		});
 
 		backgroundColorButton.setDisable(true);
