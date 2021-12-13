@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Design id="33977b97-60d6-49f1-897a-2f6f80de74e4">
+    <EnableCustomBackgroundColor>true</EnableCustomBackgroundColor>
+    <BackgroundColor>BLUE1</BackgroundColor>
+    <EnableCustomPlayColor>true</EnableCustomPlayColor>
+    <PlayColor>GRAY5</PlayColor>
+    <EnableCustomCueInColor>false</EnableCustomCueInColor>
+    <CueInColor>PURPLE1</CueInColor>
+</Design>
