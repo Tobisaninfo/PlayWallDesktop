@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ModernCartDesignSerializerTest
 {
-	final ModernColor BACKGROUND_COLOR = ModernColor.BLUE1;
-	final ModernColor PLAY_COLOR = ModernColor.GRAY5;
-	final ModernColor CUE_IN_COLOR = ModernColor.PURPLE1;
+	private final ModernColor BACKGROUND_COLOR = ModernColor.BLUE1;
+	private final ModernColor PLAY_COLOR = ModernColor.GRAY5;
+	private final ModernColor CUE_IN_COLOR = ModernColor.PURPLE1;
 
-	final UUID DESIGN_UUID = UUID.fromString("33977b97-60d6-49f1-897a-2f6f80de74e4");
+	private final UUID DESIGN_UUID = UUID.fromString("33977b97-60d6-49f1-897a-2f6f80de74e4");
 
 
 	@Test
