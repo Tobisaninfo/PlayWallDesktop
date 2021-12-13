@@ -1,20 +1,14 @@
 package de.tobias.playpad.pad;
 
-import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ref.ProjectReference;
 import de.tobias.playpad.settings.FadeSettings;
-import de.tobias.playpad.tigger.Trigger;
-import de.tobias.playpad.tigger.TriggerPoint;
 import javafx.util.Duration;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.junit.Test;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 import static de.tobias.playpad.pad.PadSerializer.SETTINGS_ELEMENT;
