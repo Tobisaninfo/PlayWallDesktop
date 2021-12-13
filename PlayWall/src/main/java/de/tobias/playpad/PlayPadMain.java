@@ -71,7 +71,7 @@ public class PlayPadMain extends Application {
 
 		ApplicationUtils.addAppListener(PlayPadMain::applicationWillStart);
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
-		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+		ApplicationUtils.registerUpdateService(new VersionUpdater());
 
 		app.start(args);
 	}
