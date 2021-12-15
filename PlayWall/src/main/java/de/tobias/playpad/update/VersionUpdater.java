@@ -27,7 +27,7 @@ public class VersionUpdater implements UpdateService {
 				updateTo44(app);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.error(e);
 		}
 	}
 
