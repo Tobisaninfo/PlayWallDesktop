@@ -15,48 +15,48 @@ import java.util.Objects;
 
 public class Jni4NetBridgeInitializer {
 
-    private static final String[] RESOURCE_DLLS = {
-            "jni4net.n-0.8.8.0.dll",
-            "jni4net.n.w32.v40-0.8.8.0.dll",
-            "jni4net.n.w64.v40-0.8.8.0.dll",
-    };
+	private static final String[] RESOURCE_DLLS = {
+			"jni4net.n-0.8.8.0.dll",
+			"jni4net.n.w32.v40-0.8.8.0.dll",
+			"jni4net.n.w64.v40-0.8.8.0.dll",
+	};
 
-    private static boolean loaded;
+	private static boolean loaded;
 
-    public static void initialize() throws IOException {
-        if (loaded) {
-            return;
-        }
+	public static void initialize() throws IOException {
+		if (loaded) {
+			return;
+		}
 
-        final App app = ApplicationUtils.getApplication();
-        Path resourceFolder = copyResources("j4n/",RESOURCE_DLLS, "j4n", Jni4NetBridgeInitializer.class.getClassLoader());
+		final App app = ApplicationUtils.getApplication();
+		Path resourceFolder = copyResources("j4n/", RESOURCE_DLLS, "j4n", Jni4NetBridgeInitializer.class.getClassLoader());
 
-        Bridge.setVerbose(app.isDebug());
-        Bridge.init(resourceFolder.toFile());
-        loaded = true;
-    }
+		Bridge.setVerbose(app.isDebug());
+		Bridge.init(resourceFolder.toFile());
+		loaded = true;
+	}
 
-    public static void loadDll(ClassLoader classLoader, String classpathDirectory, String target, String proxyDll, String... resources) throws IOException {
-        Path resourceFolder = copyResources(classpathDirectory, resources, target, classLoader);
-        Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve(proxyDll).toFile(), classLoader);
-    }
+	public static void loadDll(ClassLoader classLoader, String classpathDirectory, String target, String proxyDll, String... resources) throws IOException {
+		Path resourceFolder = copyResources(classpathDirectory, resources, target, classLoader);
+		Bridge.LoadAndRegisterAssemblyFrom(resourceFolder.resolve(proxyDll).toFile(), classLoader);
+	}
 
-    private static Path copyResources(String classpathDirectory, String[] resources, String destination, ClassLoader classLoader) throws IOException {
-        final App app = ApplicationUtils.getApplication();
-        final Path resourceFolder = app.getPath(PathType.LIBRARY, destination);
+	private static Path copyResources(String classpathDirectory, String[] resources, String destination, ClassLoader classLoader) throws IOException {
+		final App app = ApplicationUtils.getApplication();
+		final Path resourceFolder = app.getPath(PathType.LIBRARY, destination);
 
-        if (Files.notExists(resourceFolder)) {
-            Files.createDirectories(resourceFolder);
-        }
+		if (Files.notExists(resourceFolder)) {
+			Files.createDirectories(resourceFolder);
+		}
 
-        Arrays.stream(resources).forEach(resource -> {
-            final Path dest = resourceFolder.resolve(resource);
-            try {
-                Files.copy(Objects.requireNonNull(classLoader.getResourceAsStream(classpathDirectory + resource)), dest, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        });
-        return resourceFolder;
-    }
+		Arrays.stream(resources).forEach(resource -> {
+			final Path dest = resourceFolder.resolve(resource);
+			try {
+				Files.copy(Objects.requireNonNull(classLoader.getResourceAsStream(classpathDirectory + resource)), dest, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+		});
+		return resourceFolder;
+	}
 }

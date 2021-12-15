@@ -8,20 +8,17 @@ import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.util.FadeableColor;
 import javafx.util.Duration;
 
-public interface ModernWarningDesignHandler
-{
-	default void handleWarning(ModernGlobalDesign globalDesign, ModernCartDesign cartDesign, AbstractPadViewController controller, Duration warningDuration)
-	{
+public interface ModernWarningDesignHandler {
+
+	default void handleWarning(ModernGlobalDesign globalDesign, ModernCartDesign cartDesign, AbstractPadViewController controller, Duration warningDuration) {
 		ModernColor backgroundColor = globalDesign.getBackgroundColor();
 		ModernColor playColor = globalDesign.getPlayColor();
 
-		if(cartDesign.isEnableCustomBackgroundColor())
-		{
+		if (cartDesign.isEnableCustomBackgroundColor()) {
 			backgroundColor = cartDesign.getBackgroundColor();
 		}
 
-		if(cartDesign.isEnableCustomPlayColor())
-		{
+		if (cartDesign.isEnableCustomPlayColor()) {
 			playColor = cartDesign.getPlayColor();
 		}
 
@@ -32,13 +29,10 @@ public interface ModernWarningDesignHandler
 		performWarning(globalDesign, fadeStartColor, fadeStopColor, controller, duration);
 	}
 
-	default Duration determineDuration(Pad pad, Duration warningDuration)
-	{
-		if(pad.getContent() instanceof Durationable)
-		{
+	default Duration determineDuration(Pad pad, Duration warningDuration) {
+		if (pad.getContent() instanceof Durationable) {
 			final Durationable durationable = (Durationable) pad.getContent();
-			if(warningDuration.greaterThan(durationable.getDuration()))
-			{
+			if (warningDuration.greaterThan(durationable.getDuration())) {
 				return durationable.getDuration();
 			}
 		}
@@ -51,7 +45,6 @@ public interface ModernWarningDesignHandler
 	 */
 	void performWarning(ModernGlobalDesign design, FadeableColor fadeStartColor, FadeableColor fadeStopColor, AbstractPadViewController controller, Duration duration);
 
-	default void stopWarning(AbstractPadViewController controller)
-	{
+	default void stopWarning(AbstractPadViewController controller) {
 	}
 }

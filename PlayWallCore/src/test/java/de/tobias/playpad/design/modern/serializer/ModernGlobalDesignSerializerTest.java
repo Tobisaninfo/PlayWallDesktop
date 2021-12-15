@@ -13,8 +13,7 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModernGlobalDesignSerializerTest
-{
+public class ModernGlobalDesignSerializerTest {
 	private final ModernColor BACKGROUND_COLOR = ModernColor.BLUE1;
 	private final ModernColor PLAY_COLOR = ModernColor.GRAY5;
 	private final ModernColor CUE_IN_COLOR = ModernColor.PURPLE1;
@@ -22,8 +21,7 @@ public class ModernGlobalDesignSerializerTest
 	private final int TITLE_FONT_SIZE = 18;
 
 	@Test
-	public void testSave()
-	{
+	public void testSave() {
 		// arrange
 		final ModernGlobalDesign design = new ModernGlobalDesign();
 		design.setFlatDesign(true);
@@ -52,8 +50,7 @@ public class ModernGlobalDesignSerializerTest
 	}
 
 	@Test
-	public void testLoad() throws DocumentException
-	{
+	public void testLoad() throws DocumentException {
 		// arrange
 		final String filePath = "de/tobias/playpad/design/modern/serializer/modern_global_design.xml";
 		final InputStream inputStream = ModernGlobalDesignSerializerTest.class.getClassLoader().getResourceAsStream(filePath);

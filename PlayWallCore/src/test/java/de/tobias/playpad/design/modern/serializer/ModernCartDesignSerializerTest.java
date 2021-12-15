@@ -14,8 +14,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ModernCartDesignSerializerTest
-{
+public class ModernCartDesignSerializerTest {
 	private final ModernColor BACKGROUND_COLOR = ModernColor.BLUE1;
 	private final ModernColor PLAY_COLOR = ModernColor.GRAY5;
 	private final ModernColor CUE_IN_COLOR = ModernColor.PURPLE1;
@@ -24,8 +23,7 @@ public class ModernCartDesignSerializerTest
 
 
 	@Test
-	public void testSave()
-	{
+	public void testSave() {
 		// arrange
 		final ModernCartDesign design = new ModernCartDesign.ModernCartDesignBuilder(null, DESIGN_UUID)
 				.withBackgroundColor(BACKGROUND_COLOR, true)
@@ -54,8 +52,7 @@ public class ModernCartDesignSerializerTest
 	}
 
 	@Test
-	public void testLoad() throws DocumentException
-	{
+	public void testLoad() throws DocumentException {
 		// arrange
 		final String filePath = "de/tobias/playpad/design/modern/serializer/modern_cart_design.xml";
 		final InputStream inputStream = ModernCartDesignSerializerTest.class.getClassLoader().getResourceAsStream(filePath);

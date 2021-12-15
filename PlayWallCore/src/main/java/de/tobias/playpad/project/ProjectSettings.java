@@ -13,11 +13,9 @@ public class ProjectSettings implements IProjectSettings {
 
 	static {
 		final UserDefaults userDefaults = ApplicationUtils.getApplication().getUserDefaults();
-		if(userDefaults != null)
-		{
+		if (userDefaults != null) {
 			Object maxPages = userDefaults.getData("MAX_PAGES");
-			if(maxPages != null)
-			{
+			if (maxPages != null) {
 				MAX_PAGES = Integer.parseInt(maxPages.toString());
 			}
 		}

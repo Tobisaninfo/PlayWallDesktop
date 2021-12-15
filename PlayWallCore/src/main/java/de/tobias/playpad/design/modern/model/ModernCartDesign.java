@@ -15,9 +15,10 @@ import javafx.scene.paint.Color;
 import java.util.UUID;
 
 public class ModernCartDesign implements FeedbackDesignColorSuggester {
+
 	public static class ModernCartDesignBuilder {
 		private final Pad pad;
-		private	final UUID id;
+		private final UUID id;
 
 		private ModernColor backgroundColor = DEFAULT_COLOR_BACKGROUND;
 		private Boolean enableCustomBackgroundColor = false;
@@ -30,7 +31,7 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 
 		public ModernCartDesignBuilder(Pad pad) {
 			this.pad = pad;
-			this.id =UUID.randomUUID();
+			this.id = UUID.randomUUID();
 		}
 
 		public ModernCartDesignBuilder(Pad pad, UUID id) {
@@ -68,7 +69,8 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 	public static final ModernColor DEFAULT_COLOR_PLAY = ModernColor.RED3;
 	public static final ModernColor DEFAULT_COLOR_CUE_IN = ModernColor.RED2;
 
-	private UUID uuid;
+	private final Pad pad;
+	private final UUID uuid;
 
 	private BooleanProperty enableCustomBackgroundColor;
 	private ObjectProperty<ModernColor> backgroundColor;
@@ -79,13 +81,12 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 	private BooleanProperty enableCustomCueInColor;
 	private ObjectProperty<ModernColor> cueInColor;
 
-	private Pad pad;
 	private DesignUpdateListener syncListener;
 
 	private ModernCartDesign(Pad pad, UUID id,
-							ModernColor backgroundColor, Boolean enableCustomBackgroundColor,
-							ModernColor playColor, Boolean enableCustomPlayColor,
-							ModernColor cueInColor, Boolean enableCustomCueInColor) {
+							 ModernColor backgroundColor, Boolean enableCustomBackgroundColor,
+							 ModernColor playColor, Boolean enableCustomPlayColor,
+							 ModernColor cueInColor, Boolean enableCustomCueInColor) {
 		this.uuid = id;
 		this.pad = pad;
 
@@ -109,18 +110,15 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 		return pad;
 	}
 
-	public boolean isEnableCustomBackgroundColor()
-	{
+	public boolean isEnableCustomBackgroundColor() {
 		return enableCustomBackgroundColor.get();
 	}
 
-	public void setEnableCustomBackgroundColor(Boolean enableCustomBackgroundColor)
-	{
+	public void setEnableCustomBackgroundColor(Boolean enableCustomBackgroundColor) {
 		this.enableCustomBackgroundColor.set(enableCustomBackgroundColor);
 	}
 
-	public BooleanProperty enableCustomBackgroundColorProperty()
-	{
+	public BooleanProperty enableCustomBackgroundColorProperty() {
 		return enableCustomBackgroundColor;
 	}
 
@@ -136,18 +134,15 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 		return backgroundColor;
 	}
 
-	public boolean isEnableCustomPlayColor()
-	{
+	public boolean isEnableCustomPlayColor() {
 		return enableCustomPlayColor.get();
 	}
 
-	public void setEnableCustomPlayColor(boolean enableCustomPlayColor)
-	{
+	public void setEnableCustomPlayColor(boolean enableCustomPlayColor) {
 		this.enableCustomPlayColor.set(enableCustomPlayColor);
 	}
 
-	public BooleanProperty enableCustomPlayColorProperty()
-	{
+	public BooleanProperty enableCustomPlayColorProperty() {
 		return enableCustomPlayColor;
 	}
 
@@ -163,18 +158,15 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 		return playColor;
 	}
 
-	public boolean isEnableCustomCueInColor()
-	{
+	public boolean isEnableCustomCueInColor() {
 		return enableCustomCueInColor.get();
 	}
 
-	public void setEnableCustomCueInColor(boolean enableCustomCueInColor)
-	{
+	public void setEnableCustomCueInColor(boolean enableCustomCueInColor) {
 		this.enableCustomCueInColor.set(enableCustomCueInColor);
 	}
 
-	public BooleanProperty enableCustomCueInColorProperty()
-	{
+	public BooleanProperty enableCustomCueInColorProperty() {
 		return enableCustomCueInColor;
 	}
 
@@ -204,7 +196,7 @@ public class ModernCartDesign implements FeedbackDesignColorSuggester {
 		cueInColor.set(DEFAULT_COLOR_CUE_IN);
 	}
 
-	// Color Associator
+	// Color Associate
 	@Override
 	public Color getDesignEventColor() {
 		return Color.web(playColor.get().getColorHi());

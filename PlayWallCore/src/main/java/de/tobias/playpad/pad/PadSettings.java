@@ -291,8 +291,7 @@ public class PadSettings {
 	//// Computed
 
 	public ModernColor getBackgroundColor() {
-		if(design.isEnableCustomBackgroundColor())
-		{
+		if (design.isEnableCustomBackgroundColor()) {
 			return design.getBackgroundColor();
 		}
 

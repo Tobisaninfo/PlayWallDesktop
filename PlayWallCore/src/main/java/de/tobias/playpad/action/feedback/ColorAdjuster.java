@@ -74,17 +74,14 @@ public class ColorAdjuster {
 		Color layoutStdColor = globalDesign.getDesignDefaultColor();
 		Color layoutEvColor = globalDesign.getDesignEventColor();
 
-		if(pad != null)
-		{
+		if (pad != null) {
 			final ModernCartDesign padDesign = pad.getPadSettings().getDesign();
 
-			if(padDesign.isEnableCustomBackgroundColor())
-			{
+			if (padDesign.isEnableCustomBackgroundColor()) {
 				layoutStdColor = padDesign.getDesignDefaultColor();
 			}
 
-			if(padDesign.isEnableCustomPlayColor())
-			{
+			if (padDesign.isEnableCustomPlayColor()) {
 				layoutEvColor = padDesign.getDesignEventColor();
 			}
 		}

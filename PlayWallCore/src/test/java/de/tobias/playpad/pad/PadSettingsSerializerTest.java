@@ -14,11 +14,9 @@ import java.util.UUID;
 import static de.tobias.playpad.pad.PadSerializer.SETTINGS_ELEMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PadSettingsSerializerTest
-{
+public class PadSettingsSerializerTest {
 	@Test
-	public void testSave_General()
-	{
+	public void testSave_General() {
 		// arrange
 		final Document document = DocumentHelper.createDocument();
 		final Element rootElement = document.addElement(SETTINGS_ELEMENT);

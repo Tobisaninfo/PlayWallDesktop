@@ -30,7 +30,7 @@ public class PadTriggerStatusListener implements ChangeListener<PadStatus> {
 				executeTrigger(padSettings.getTriggers().get(TriggerPoint.START));
 			} else if (newValue == PadStatus.STOP && !pad.isEof()) {
 				executeTrigger(padSettings.getTriggers().get(TriggerPoint.STOP));
-			} else if (oldState == PadStatus.STOP && newValue == PadStatus.READY && pad.isEof()){
+			} else if (oldState == PadStatus.STOP && newValue == PadStatus.READY && pad.isEof()) {
 				executeTrigger(padSettings.getTriggers().get(TriggerPoint.EOF));
 			}
 		} else {
