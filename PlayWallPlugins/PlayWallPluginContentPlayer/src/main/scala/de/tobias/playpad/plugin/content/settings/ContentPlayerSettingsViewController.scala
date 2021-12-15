@@ -22,6 +22,7 @@ import java.net.URI
 class ContentPlayerSettingsViewController extends ProfileSettingsTabViewController with IProfileReloadTask {
 
 	private var startZoneHash: Int = _
+	private var startScreenHash: Int = _
 
 	@FXML var ffmpegButton: Button = _
 	@FXML var ffmpegTextField: TextField = _
@@ -155,7 +156,8 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 
 	override def loadSettings(settings: Profile): Unit = {
 		val configuration = ContentPlayerSettingsViewController.getZoneConfiguration
-		startZoneHash = configuration.zones.hashCode()
+		startZoneHash = configuration.zones.hashCode
+		startScreenHash = configuration.screen.hashCode
 
 		listView.getItems.setAll(configuration.zones)
 
@@ -185,7 +187,8 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 		configuration.ffprobeExecutable = ffprobeTextField.getText
 	}
 
-	override def needReload(): Boolean = startZoneHash != ContentPlayerSettingsViewController.getZoneConfiguration.zones.hashCode() ||
+	override def needReload(): Boolean = startZoneHash != ContentPlayerSettingsViewController.getZoneConfiguration.zones.hashCode ||
+	  startScreenHash != ContentPlayerSettingsViewController.getZoneConfiguration.screen.hashCode ||
 	  !listView.getSelectionModel.isEmpty
 
 	override def validSettings(): Boolean = {
