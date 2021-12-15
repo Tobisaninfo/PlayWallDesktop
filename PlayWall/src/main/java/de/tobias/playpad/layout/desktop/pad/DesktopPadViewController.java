@@ -34,6 +34,8 @@ public class DesktopPadViewController extends AbstractPadViewController implemen
 	private final DesktopPadView padView;
 	private Pad pad;
 
+	private PadSettingsViewController padSettingsViewController;
+
 	private final PadLockedListener padLockedListener;
 	private final PadStatusListener padStatusListener;
 	private final PadContentListener padContentListener;
@@ -204,21 +206,26 @@ public class DesktopPadViewController extends AbstractPadViewController implemen
 	}
 
 	private void onSettings() {
-		GlobalSettings settings = PlayPadPlugin.getInstance().getGlobalSettings();
-		IMainViewController mvc = PlayPadPlugin.getInstance().getMainViewController();
+		final GlobalSettings globalSettings = PlayPadPlugin.getInstance().getGlobalSettings();
+		final IMainViewController mvc = PlayPadPlugin.getInstance().getMainViewController();
 
 		if (mvc != null) {
-			if (pad.getProject() != null && settings.isLiveMode() && settings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
+			if (pad.getProject() != null && globalSettings.isLiveMode() && globalSettings.isLiveModeSettings() && pad.getProject().getActivePlayers() > 0) {
 				return;
 			}
 
-			PadSettingsViewController padSettingsViewController = new PadSettingsViewController(pad, mvc);
-			padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
-				if (padView != null && pad != null)
-					padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
-				return true;
-			}));
-			padSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
+			if (padSettingsViewController == null) {
+				padSettingsViewController = new PadSettingsViewController(pad, mvc);
+				padSettingsViewController.getStageContainer().ifPresent(nvcStage -> nvcStage.addCloseHook(() -> {
+					if (padView != null && pad != null)
+						padView.setTriggerLabelActive(pad.getPadSettings().hasTriggerItems());
+					padSettingsViewController = null;
+					return true;
+				}));
+				padSettingsViewController.getStageContainer().ifPresent(NVCStage::show);
+			} else {
+				padSettingsViewController.getStageContainer().ifPresent(stage -> stage.getStage().toFront());
+			}
 		}
 	}
 
