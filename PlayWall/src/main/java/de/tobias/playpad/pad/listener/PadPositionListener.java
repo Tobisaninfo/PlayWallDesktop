@@ -20,7 +20,7 @@ import javafx.util.Duration;
 public class PadPositionListener implements Runnable, IPadPositionListener {
 
 	private Pad pad;
-	private AbstractPadViewController controller;
+	private final AbstractPadViewController controller;
 
 	public PadPositionListener(AbstractPadViewController controller) {
 		this.controller = controller;
