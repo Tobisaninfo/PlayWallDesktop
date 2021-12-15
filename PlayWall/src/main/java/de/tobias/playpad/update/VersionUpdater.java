@@ -19,33 +19,25 @@ import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.UUID;
 
-public class VersionUpdater implements UpdateService
-{
+public class VersionUpdater implements UpdateService {
 	@Override
-	public void update(App app, long oldVersion, long newVersion)
-	{
-		try
-		{
-			if(oldVersion < 44)
-			{
+	public void update(App app, long oldVersion, long newVersion) {
+		try {
+			if (oldVersion < 44) {
 				updateTo44(app);
 			}
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void updateTo44(App app) throws DocumentException, IOException
-	{
+	private void updateTo44(App app) throws DocumentException, IOException {
 		Logger.debug("Updating to app version 44...");
 
 		SAXReader reader = new SAXReader();
 
 		Document projectsDocument = reader.read(Files.newInputStream(app.getPath(PathType.CONFIGURATION, "Projects.xml")));
-		for(Element element : projectsDocument.getRootElement().elements("Project"))
-		{
+		for (Element element : projectsDocument.getRootElement().elements("Project")) {
 			final String projectName = element.attributeValue("name");
 			final UUID projectUUID = UUID.fromString(element.attributeValue("uuid"));
 
@@ -59,39 +51,32 @@ public class VersionUpdater implements UpdateService
 		}
 	}
 
-	public static Document updateProject(InputStream projectInputStream) throws DocumentException
-	{
+	public static Document updateProject(InputStream projectInputStream) throws DocumentException {
 		SAXReader reader = new SAXReader();
 
 		Document projectDocument = reader.read(projectInputStream);
 		Element rootProjectElement = projectDocument.getRootElement();
 
-		for(Element page : rootProjectElement.elements())
-		{
-			for(Element pad : page.elements())
-			{
+		for (Element page : rootProjectElement.elements()) {
+			for (Element pad : page.elements()) {
 				final Element settings = pad.element("Settings");
-				if(settings == null)
-				{
+				if (settings == null) {
 					continue;
 				}
 
 				final Element designElement = settings.element("Design");
-				if(designElement == null)
-				{
+				if (designElement == null) {
 					continue;
 				}
 
 				final Attribute customFlag = designElement.attribute("custom");
-				if(customFlag == null)
-				{
+				if (customFlag == null) {
 					continue;
 				}
 
 				designElement.remove(customFlag);
 
-				if(customFlag.getValue().equals("false"))
-				{
+				if (customFlag.getValue().equals("false")) {
 					continue;
 				}
 

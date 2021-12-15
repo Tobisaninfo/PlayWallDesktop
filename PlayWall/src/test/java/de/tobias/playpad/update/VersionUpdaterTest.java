@@ -9,11 +9,9 @@ import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VersionUpdaterTest
-{
+public class VersionUpdaterTest {
 	@Test
-	public void testMigrateProject_UpdatePadDesignSettings() throws DocumentException
-	{
+	public void testMigrateProject_UpdatePadDesignSettings() throws DocumentException {
 		final InputStream projectInputStream = VersionUpdaterTest.class.getClassLoader().getResourceAsStream("de/tobias/playpad/update/ProjectToMigrateToVersion44.xml");
 		final Document migratedProject = VersionUpdater.updateProject(projectInputStream);
 

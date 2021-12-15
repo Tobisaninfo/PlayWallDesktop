@@ -34,7 +34,7 @@ public class WarningFeedbackViewController extends NVC {
 		return controller;
 	}
 
-	public static  WarningFeedbackViewController newViewControllerForPad() {
+	public static WarningFeedbackViewController newViewControllerForPad() {
 		return new WarningFeedbackViewController();
 	}
 

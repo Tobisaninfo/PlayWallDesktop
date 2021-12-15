@@ -284,16 +284,14 @@ public class TouchPadView implements IPadView {
 
 	@Override
 	public void showNotFoundIcon(Pad pad, boolean show) {
-		if(show) {
+		if (show) {
 			FeedbackDesignColorSuggester globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 			Color layoutStdColor = globalDesign.getDesignDefaultColor();
 
-			if(pad != null)
-			{
+			if (pad != null) {
 				final ModernCartDesign padDesign = pad.getPadSettings().getDesign();
 
-				if(padDesign.isEnableCustomBackgroundColor())
-				{
+				if (padDesign.isEnableCustomBackgroundColor()) {
 					layoutStdColor = padDesign.getDesignDefaultColor();
 				}
 			}

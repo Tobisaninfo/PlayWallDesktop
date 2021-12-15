@@ -126,7 +126,7 @@ public class ModernCartDesignViewController extends NVC implements IColorButton 
 	}
 
 	private String getLinearGradientCss(ModernColor color) {
-		if(Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
+		if (Profile.currentProfile().getProfileSettings().getDesign().isFlatDesign()) {
 			return "-fx-background-color: " + color.paint() + ";";
 		} else {
 			return "-fx-background-color: " + color.linearGradient() + ";";

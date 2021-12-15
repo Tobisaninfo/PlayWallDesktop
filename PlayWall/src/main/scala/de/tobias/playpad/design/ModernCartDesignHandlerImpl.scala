@@ -17,19 +17,16 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 	override def generateCss(design: ModernCartDesign, classSuffix: String, flat: Boolean): String = {
 		var result = ""
 
-		if(design.isEnableCustomBackgroundColor)
-		{
-			result +=	generatePadCss(design, flat, classSuffix, design.getBackgroundColor)
+		if (design.isEnableCustomBackgroundColor) {
+			result += generatePadCss(design, flat, classSuffix, design.getBackgroundColor)
 			result += generatePadCss(design, flat, classSuffix, design.getBackgroundColor, s":${PseudoClasses.WARN_CLASS.getPseudoClassName}")
 		}
 
-		if(design.isEnableCustomPlayColor)
-		{
+		if (design.isEnableCustomPlayColor) {
 			result += generatePadCss(design, flat, classSuffix, design.getPlayColor, s":${PseudoClasses.PLAY_CLASS.getPseudoClassName}")
 		}
 
-		if(design.isEnableCustomCueInColor)
-		{
+		if (design.isEnableCustomCueInColor) {
 			result += generateCueInCss(design, flat, classSuffix)
 		}
 
@@ -60,8 +57,7 @@ class ModernCartDesignHandlerImpl extends ModernCartDesignHandler {
 		generateCss("style/modern-pad-cue-in.css", values)
 	}
 
-	private def generateCss(templatePath: String, values: Map[String, AnyRef]): String =
-	{
+	private def generateCss(templatePath: String, values: Map[String, AnyRef]): String = {
 		val expressionParser: ExpressionParser = new SpelExpressionParser()
 		val context = new StandardEvaluationContext()
 

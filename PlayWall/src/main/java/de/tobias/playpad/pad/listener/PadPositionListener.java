@@ -3,7 +3,6 @@ package de.tobias.playpad.pad.listener;
 import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.action.actions.CartAction;
 import de.tobias.playpad.design.ModernDesignProvider;
-import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.design.modern.ModernWarningDesignHandler;
 import de.tobias.playpad.design.modern.model.ModernCartDesign;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;

@@ -8,13 +8,13 @@ import javafx.util.Duration
 
 class ModernWarningDesignHandlerImpl extends ModernWarningDesignHandler {
 
-  override def performWarning(design: ModernGlobalDesign, fadeStartColor: FadeableColor, fadeStopColor: FadeableColor, controller: AbstractPadViewController, warningDuration: Duration): Unit = {
-    if (design.isWarnAnimation) {
-      ModernDesignAnimator.animateWarn(controller, fadeStartColor, fadeStopColor, warningDuration)
-    } else {
-      ModernDesignAnimator.warnFlash(controller)
-    }
-  }
+	override def performWarning(design: ModernGlobalDesign, fadeStartColor: FadeableColor, fadeStopColor: FadeableColor, controller: AbstractPadViewController, warningDuration: Duration): Unit = {
+		if (design.isWarnAnimation) {
+			ModernDesignAnimator.animateWarn(controller, fadeStartColor, fadeStopColor, warningDuration)
+		} else {
+			ModernDesignAnimator.warnFlash(controller)
+		}
+	}
 
-  override def stopWarning(controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
+	override def stopWarning(controller: AbstractPadViewController): Unit = ModernDesignAnimator.stopAnimation(controller)
 }

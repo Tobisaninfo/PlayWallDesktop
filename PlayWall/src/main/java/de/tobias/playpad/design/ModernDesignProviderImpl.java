@@ -4,8 +4,8 @@ import de.tobias.playpad.design.modern.ModernCartDesignHandler;
 import de.tobias.playpad.design.modern.ModernGlobalDesignHandler;
 import de.tobias.playpad.design.modern.ModernWarningDesignHandler;
 
-public class ModernDesignProviderImpl implements ModernDesignProvider
-{
+public class ModernDesignProviderImpl implements ModernDesignProvider {
+
 	private ModernWarningDesignHandler warningHandler;
 	private ModernCartDesignHandler cartDesignHandler;
 	private ModernGlobalDesignHandler globalDesignHandler;

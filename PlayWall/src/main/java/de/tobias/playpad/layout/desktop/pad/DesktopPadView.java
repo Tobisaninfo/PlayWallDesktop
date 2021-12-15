@@ -358,12 +358,10 @@ public class DesktopPadView implements IPadView {
 			FeedbackDesignColorSuggester globalDesign = Profile.currentProfile().getProfileSettings().getDesign();
 			Color layoutStdColor = globalDesign.getDesignDefaultColor();
 
-			if(pad != null)
-			{
+			if (pad != null) {
 				final ModernCartDesign padDesign = pad.getPadSettings().getDesign();
 
-				if(padDesign.isEnableCustomBackgroundColor())
-				{
+				if (padDesign.isEnableCustomBackgroundColor()) {
 					layoutStdColor = padDesign.getDesignDefaultColor();
 				}
 			}

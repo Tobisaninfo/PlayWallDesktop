@@ -6,32 +6,26 @@ import de.tobias.playpad.PlayPadPlugin;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AutosaveRunner implements Runnable
-{
+public class AutosaveRunner implements Runnable {
 	private final MainViewController mainViewController;
 
-	public AutosaveRunner(MainViewController mainViewController)
-	{
+	public AutosaveRunner(MainViewController mainViewController) {
 		this.mainViewController = mainViewController;
 	}
 
 	@Override
-	public void run()
-	{
+	public void run() {
 		long lastSaveTime = System.currentTimeMillis();
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-		while(!Thread.interrupted())
-		{
+		while (!Thread.interrupted()) {
 			final long currentMillis = System.currentTimeMillis();
 
 			// autosave interval may be changed by user in global settings, therefore the current setting needs to be fetched every time
-			if(currentMillis > lastSaveTime + getAutosaveIntervalInMillis())
-			{
+			if (currentMillis > lastSaveTime + getAutosaveIntervalInMillis()) {
 				lastSaveTime = currentMillis;
 
-				if(PlayPadPlugin.getInstance().getGlobalSettings().isEnableAutosave())
-				{
+				if (PlayPadPlugin.getInstance().getGlobalSettings().isEnableAutosave()) {
 					Logger.debug("Performing autosave...");
 					mainViewController.save();
 
@@ -40,20 +34,16 @@ public class AutosaveRunner implements Runnable
 				}
 			}
 
-			try
-			{
+			try {
 				//noinspection BusyWait
 				Thread.sleep(10 * 1000L);
-			}
-			catch(InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
 		}
 	}
 
-	private long getAutosaveIntervalInMillis()
-	{
+	private long getAutosaveIntervalInMillis() {
 		return PlayPadPlugin.getInstance().getGlobalSettings().getAutosaveIntervalInMinutes() * 60 * 1000L;
 	}
 }
