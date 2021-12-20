@@ -17,7 +17,7 @@ package object util {
 
 		def apply(index: Int): E = list.get(index)
 
-		def length: Long = list.size()
+		def length: Int = list.size()
 
 		def isNotEmpty: Boolean = !list.isEmpty
 

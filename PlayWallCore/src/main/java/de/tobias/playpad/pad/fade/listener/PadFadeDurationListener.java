@@ -30,7 +30,7 @@ public class PadFadeDurationListener implements ChangeListener<Duration> {
 			if (pad.getContent() instanceof Playlistable && ((Playlistable) pad.getContent()).hasNext()) {
 				return;
 			}
-			
+
 			if (pad.getContent() instanceof Durationable) {
 				final Durationable durationable = (Durationable) pad.getContent();
 

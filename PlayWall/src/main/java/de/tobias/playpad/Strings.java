@@ -183,6 +183,7 @@ public class Strings {
 	public static final String ACTION_PAGE_TO_STRING = "Action.Page.toString";
 	public static final String ACTION_NAVIGATE_TO_STRING = "Action.Navigate.toString";
 	public static final String ACTION_CART_NAME = "Action.Cart.Name";
+	public static final String ACTION_PLAYLIST_NEXT_NAME = "Action.PlaylistNext.Name";
 	public static final String ACTION_STOP_NAME = "Action.Stop.Name";
 	public static final String ACTION_PAGE_NAME = "Action.Page.Name";
 	public static final String ACTION_NAVIGATE_NAME = "Action.Navigate.Name";

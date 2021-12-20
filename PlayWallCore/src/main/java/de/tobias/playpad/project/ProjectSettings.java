@@ -1,5 +1,6 @@
 package de.tobias.playpad.project;
 
+import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.storage.settings.annotation.Key;
 import de.thecodelabs.utils.application.ApplicationUtils;
 import de.tobias.playpad.project.api.IProjectSettings;
@@ -8,14 +9,15 @@ import java.nio.file.Path;
 
 public class ProjectSettings implements IProjectSettings {
 
-	public static final int MAX_PAGES;
+	public static int MAX_PAGES = 10;
 
 	static {
-		Object maxPages = ApplicationUtils.getApplication().getUserDefaults().getData("MAX_PAGES");
-		if (maxPages != null) {
-			MAX_PAGES = Integer.parseInt(maxPages.toString());
-		} else {
-			MAX_PAGES = 10;
+		final UserDefaults userDefaults = ApplicationUtils.getApplication().getUserDefaults();
+		if (userDefaults != null) {
+			Object maxPages = userDefaults.getData("MAX_PAGES");
+			if (maxPages != null) {
+				MAX_PAGES = Integer.parseInt(maxPages.toString());
+			}
 		}
 	}
 

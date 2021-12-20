@@ -146,6 +146,10 @@ public class Profile {
 
 			setCurrentProfile(profile);
 
+			// Update mapping with new actions
+			final Registry<ActionProvider> actions = PlayPadPlugin.getRegistries().getActions();
+			actions.getComponents().forEach(provider -> provider.createDefaultActions(currentMapping));
+
 			return profile;
 		}
 		throw new ProfileNotFoundException(ref);

@@ -4,6 +4,7 @@ import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.fade.listener.PadFadeContentListener;
 import de.tobias.playpad.pad.fade.listener.PadFadeDurationListener;
@@ -11,6 +12,7 @@ import de.tobias.playpad.pad.listener.PadStatusControlListener;
 import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
+import de.tobias.playpad.pad.listener.trigger.PadTriggerPlaylistListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
@@ -74,6 +76,7 @@ public class Pad implements IPad {
 	private transient PadTriggerStatusListener padTriggerStatusListener;
 	private transient PadTriggerDurationListener padTriggerDurationListener;
 	private transient PadTriggerContentListener padTriggerContentListener;
+	private transient PadTriggerPlaylistListener padTriggerPlaylistListener;
 	private transient boolean ignoreTrigger = false;
 
 	// Utils
@@ -128,6 +131,11 @@ public class Pad implements IPad {
 			contentProperty.removeListener(padTriggerContentListener);
 			padTriggerContentListener.changed(contentProperty, getContent(), null);
 		}
+		if (padTriggerPlaylistListener != null && contentProperty != null) {
+			if (getContent() instanceof Playlistable) {
+				((Playlistable) getContent()).removePlaylistListener(padTriggerPlaylistListener);
+			}
+		}
 
 		if (padFadeDurationListener != null && contentProperty != null) {
 			contentProperty.removeListener(padFadeContentListener);
@@ -160,6 +168,8 @@ public class Pad implements IPad {
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
+
+		padTriggerPlaylistListener = new PadTriggerPlaylistListener();
 
 		// Pad Listener
 		if (mediaPathUpdateListener != null) {
@@ -608,6 +618,10 @@ public class Pad implements IPad {
 
 	public PadTriggerDurationListener getPadTriggerDurationListener() {
 		return padTriggerDurationListener;
+	}
+
+	public PadTriggerPlaylistListener getPadTriggerPlaylistListener() {
+		return padTriggerPlaylistListener;
 	}
 
 	public PadFadeDurationListener getPadFadeDurationListener() {

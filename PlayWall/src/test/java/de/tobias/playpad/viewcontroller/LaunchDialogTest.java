@@ -21,7 +21,7 @@ public class LaunchDialogTest extends ApplicationTest {
 	@Before
 	public void init() {
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
-		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+		ApplicationUtils.registerUpdateService(new VersionUpdater());
 
 		Logger.init(app.getPath(PathType.LOG));
 		Logger.setLevelFilter(LogLevelFilter.DEBUG);

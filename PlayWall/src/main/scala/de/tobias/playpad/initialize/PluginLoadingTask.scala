@@ -1,8 +1,5 @@
 package de.tobias.playpad.initialize
 
-import java.io.IOException
-import java.nio.file.{Path, Paths}
-
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application
 import de.thecodelabs.utils.application.ApplicationUtils
@@ -11,6 +8,9 @@ import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.plugin.ModernPluginManager
 import javafx.application.Platform
 import org.controlsfx.dialog.ExceptionDialog
+
+import java.io.IOException
+import java.nio.file.{Path, Paths}
 
 class PluginLoadingTask extends PlayPadInitializeTask {
 	override def name(): String = "Plugins"

@@ -17,7 +17,7 @@ import javafx.util.Duration;
 
 public class PadStatusControlListener implements ChangeListener<PadStatus> {
 
-	private Pad pad;
+	private final Pad pad;
 
 	// Utils für Single Pad Playing
 	private static Pad currentPlayingPad; // Nur wenn ProfileSettings.isMultiplePlayer == false

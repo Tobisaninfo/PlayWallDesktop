@@ -43,7 +43,8 @@ class ContentPlayerPadPreview(pad: Pad, parent: Pane) extends VBox with IPadCont
 	pad.getContent match {
 		case content: ContentPlayerPadContent =>
 			subTitleLabel.textProperty().bind(Bindings.createStringBinding(() => {
-				if (content.getCurrentPlayingMediaIndex < 0) "" else PathUtils.getFilenameWithoutExtension(pad.getPaths.get(content.getCurrentPlayingMediaIndex).getPath.getFileName)
+				if (content.getCurrentPlayingMediaIndex < 0) ""
+				else PathUtils.getFilenameWithoutExtension(content.getMediaContainers.get(content.getCurrentPlayingMediaIndex).getPath.getFileName)
 			}, content.currentPlayingMediaIndexProperty()))
 		case _ =>
 	}

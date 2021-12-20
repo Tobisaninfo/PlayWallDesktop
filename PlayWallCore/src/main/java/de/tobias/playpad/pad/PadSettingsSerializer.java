@@ -27,7 +27,6 @@ public class PadSettingsSerializer {
 	private static final String CUE_IN_ELEMENT = "CueIn";
 
 	private static final String DESIGN_ELEMENT = "Design";
-	private static final String CUSTOM_DESIGN_ELEMENT = "custom";
 
 	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
@@ -72,9 +71,6 @@ public class PadSettingsSerializer {
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
-			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
-				padSettings.setCustomDesign(Boolean.parseBoolean(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
-			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign design = serializer.load(designElement, pad);
 			padSettings.setDesign(design);
@@ -122,13 +118,10 @@ public class PadSettingsSerializer {
 		if (padSettings.getCueIn() != null)
 			settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
 
-		// Layout
+		// Design
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
-		if (padSettings.isCustomDesign()) {
-			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
-			serializer.save(designElement, padSettings.getDesign());
-		}
-		designElement.addAttribute(CUSTOM_DESIGN_ELEMENT, String.valueOf(padSettings.isCustomDesign()));
+		ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
+		serializer.save(designElement, padSettings.getDesign());
 
 		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
 		for (String key : padSettings.getCustomSettings().keySet()) {

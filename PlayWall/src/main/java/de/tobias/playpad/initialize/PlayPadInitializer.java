@@ -43,7 +43,7 @@ public class PlayPadInitializer implements Runnable {
 		Thread thread = new Thread(this);
 		thread.setName("PlayPad Initializer Thread");
 		thread.setUncaughtExceptionHandler((t, e) -> {
-			e.printStackTrace();
+			Logger.error(e);
 		});
 		thread.start();
 	}

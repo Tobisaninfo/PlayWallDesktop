@@ -8,7 +8,6 @@ import de.thecodelabs.midi.mapping.KeyType;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.actions.CartAction;
-import de.tobias.playpad.action.actions.CartAction.*;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.CartActionSettingsEntry;
 import de.tobias.playpad.project.ProjectSettings;

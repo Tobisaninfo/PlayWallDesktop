@@ -31,9 +31,11 @@ public class DesignAddListener implements ServerListener {
 			if (project != null) {
 				Pad pad = project.getPad(padId);
 				if (pad != null) {
-					ModernCartDesign modernCartDesign = new ModernCartDesign(pad, uuid);
-					modernCartDesign.setBackgroundColor(backgroundColor);
-					modernCartDesign.setPlayColor(playColor);
+					ModernCartDesign modernCartDesign = new ModernCartDesign.ModernCartDesignBuilder(pad, uuid)
+							.withBackgroundColor(backgroundColor, true)
+							.withPlayColor(playColor, true)
+							.build();
+
 					pad.getPadSettings().setDesign(modernCartDesign);
 				}
 			}

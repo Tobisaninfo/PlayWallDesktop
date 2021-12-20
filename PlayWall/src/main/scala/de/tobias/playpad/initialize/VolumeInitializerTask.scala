@@ -1,4 +1,5 @@
 package de.tobias.playpad.initialize
+
 import de.thecodelabs.utils.application
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.volume.{GlobalVolume, PadVolume, VolumeManager}

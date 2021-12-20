@@ -370,8 +370,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 				}
 			}
 
-			if(autosaveThread != null && autosaveThread.isAlive())
-			{
+			if (autosaveThread != null && autosaveThread.isAlive()) {
 				Logger.debug("Stopping autosave thread");
 				autosaveThread.interrupt();
 			}
@@ -803,8 +802,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 
 	@Override
 	public void save() {
-		try
-		{
+		try {
 			ProjectReferenceManager.saveProjects();
 			ProjectReferenceManager.saveSingleProject(openProject);
 			ProfileReferenceManager.saveProfiles();
@@ -812,9 +810,7 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 			PlayPadPlugin.getInstance().getGlobalSettings().save();
 
 			notify(Localization.getString(Strings.STANDARD_FILE_SAVE), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
-		}
-		catch(IOException e)
-		{
+		} catch (IOException e) {
 			showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
 			Logger.error(e);
 		}

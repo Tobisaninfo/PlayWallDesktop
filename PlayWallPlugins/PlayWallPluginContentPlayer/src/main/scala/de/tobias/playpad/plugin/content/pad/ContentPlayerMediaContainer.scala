@@ -8,7 +8,7 @@ import de.tobias.playpad.plugin.content.util._
 import javafx.beans.property.{ObjectProperty, ReadOnlyObjectProperty, SimpleObjectProperty}
 import javafx.util.Duration
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 
 class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[pad] val mediaPath: MediaPath, val totalDuration: Duration) {
 
@@ -16,17 +16,17 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 
 	_totalDurationProperty.set(totalDuration)
 
-	def getPath: String = {
+	def getPath: Path = {
 		val sourcePath = mediaPath.getPath.toAbsolutePath
 
 		val globalSettings = PlayPadPlugin.getInstance.getGlobalSettings
 		val convertPath = globalSettings.getCachePath.resolve(sourcePath.getFileName + ".mp4")
 
 		if (Files.exists(convertPath)) {
-			return convertPath.toString
+			return convertPath
 		}
 
-		sourcePath.toString
+		sourcePath
 	}
 
 	def getTotalDuration: Duration = _totalDurationProperty.get()
@@ -49,16 +49,21 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 	}
 
 	def next(): Unit = {
-		stop()
-
 		val players = content.getMediaContainers
 		val currentIndex = players.indexOf(this)
 		content.currentPlayingMediaIndexProperty().set(currentIndex)
 
+
 		if (currentIndex + 1 < players.length) {
-			players(currentIndex + 1).play(false)
+			content.listeners.forEach(listener => listener.onNextItem(content.pad, currentIndex + 1, players.length))
+			if (content.getPad.getStatus == PadStatus.PLAY) {
+				players(currentIndex + 1).play(false)
+			}
 		} else if (content.getPad.getPadSettings.isLoop) {
-			players.head.play(false)
+			content.listeners.forEach(listener => listener.onNextItem(content.pad, 0, players.length))
+			if (content.getPad.getStatus == PadStatus.PLAY) {
+				players.head.play(false)
+			}
 		} else {
 			content.getPad.setStatus(PadStatus.STOP)
 		}

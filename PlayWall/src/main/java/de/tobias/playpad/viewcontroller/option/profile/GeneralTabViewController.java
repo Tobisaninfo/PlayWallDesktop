@@ -84,8 +84,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		enableAutosaveCheckbox.selectedProperty().addListener((observable, oldValue, newValue) -> autosaveIntervalTextField.setDisable(!newValue));
 	}
 
-	private void disableLiveSettings(Boolean enableLiveSettings)
-	{
+	private void disableLiveSettings(Boolean enableLiveSettings) {
 		pageEnable.setDisable(!enableLiveSettings);
 		pageDisable.setDisable(!enableLiveSettings);
 		dragEnable.setDisable(!enableLiveSettings);
@@ -211,8 +210,7 @@ public class GeneralTabViewController extends GlobalSettingsTabViewController {
 		try {
 			final int autosaveInterval = Integer.parseInt(autosaveIntervalTextField.getText());
 			return autosaveInterval > 0;
-		}
-		catch(NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			return false;
 		}
 	}

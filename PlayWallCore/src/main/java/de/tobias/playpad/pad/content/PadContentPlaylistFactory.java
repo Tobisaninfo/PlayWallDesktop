@@ -4,7 +4,7 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import javafx.scene.Node;
 
-public interface PadContentPlaylistFactory
-{
+public interface PadContentPlaylistFactory {
+
 	Node getCustomPlaylistItemView(Pad pad, MediaPath mediaPath);
 }

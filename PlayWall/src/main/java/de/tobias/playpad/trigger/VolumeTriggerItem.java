@@ -59,11 +59,11 @@ public class VolumeTriggerItem extends TriggerItem {
 		uuids.stream().map(project::getPad)
 				.filter(i -> i.getContent() instanceof Fadeable)
 				.forEach(destination -> {
-			Fadeable fadeable = (Fadeable) destination.getContent();
+					Fadeable fadeable = (Fadeable) destination.getContent();
 
-			final double start = VolumeManager.getInstance().computeVolume(destination);
-			fadeable.fade(start, volume, duration, null);
-		});
+					final double start = VolumeManager.getInstance().computeVolume(destination);
+					fadeable.fade(start, volume, duration, null);
+				});
 	}
 
 	@Override

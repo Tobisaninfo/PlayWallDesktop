@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Project>
+    <Page uuid="a40033c7-4a85-49c9-bdfe-00e0e8a35fa2" id="0" name="">
+        <Pad uuid="1028ee71-aebb-4975-8bfd-40d6872bc1b0" index="0" name="" status="EMPTY">
+            <Settings id="cc73d33f-e3dc-4b58-b199-2a77577b1d89">
+                <Volume>1.0</Volume>
+                <Loop>false</Loop>
+                <Design id="5603c0a3-f3e6-4191-857b-978ba3846e28" custom="true">
+                    <BackgroundColor>RED2</BackgroundColor>
+                    <PlayColor>YELLOW2</PlayColor>
+                    <CueInColor>LIGHT_GREEN2</CueInColor>
+                </Design>
+                <CustomSettings/>
+                <Triggers>
+                    <Trigger point="START"/>
+                    <Trigger point="EOF_STOP"/>
+                </Triggers>
+            </Settings>
+        </Pad>
+        <Pad uuid="bde56734-a606-4c19-a19b-7ef20aa7b827" index="1" name="" status="EMPTY">
+            <Settings id="0be18dbe-f914-4a11-a470-b4279fe98e0f">
+                <Volume>1.0</Volume>
+                <Loop>false</Loop>
+                <Design custom="false"/>
+                <CustomSettings/>
+                <Triggers>
+                    <Trigger point="START"/>
+                    <Trigger point="EOF_STOP"/>
+                </Triggers>
+            </Settings>
+        </Pad>
+    </Page>
+    <Settings>
+        <Columns>2</Columns>
+        <Rows>1</Rows>
+        <MediaPath active="false"/>
+    </Settings>
+</Project>

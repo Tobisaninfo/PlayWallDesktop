@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Design>
+    <BackgroundColor>BLUE1</BackgroundColor>
+    <PlayColor>GRAY5</PlayColor>
+    <CueInColor>PURPLE1</CueInColor>
+    <Animation>
+        <Warn>true</Warn>
+    </Animation>
+    <InfoFontSize>12</InfoFontSize>
+    <TitleFontSize>18</TitleFontSize>
+    <FlatDesign>true</FlatDesign>
+</Design>

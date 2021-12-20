@@ -1,12 +1,12 @@
 package de.tobias.playpad.initialize
 
-import java.io.IOException
-
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.profile.ref.ProfileReferenceManager
 import org.dom4j.DocumentException
+
+import java.io.IOException
 
 class ProfileLoadingTask extends PlayPadInitializeTask {
 	override def name(): String = "Profile loading"

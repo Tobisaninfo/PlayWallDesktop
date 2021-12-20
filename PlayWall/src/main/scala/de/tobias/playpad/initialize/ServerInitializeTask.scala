@@ -1,12 +1,12 @@
 package de.tobias.playpad.initialize
 
-import java.io.IOException
-
 import com.neovisionaries.ws.client.WebSocketException
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application
 import de.tobias.playpad.server.{Session, SessionDelegate, SessionNotExistsException}
 import de.tobias.playpad.{PlayPadImpl, PlayPadPlugin}
+
+import java.io.IOException
 
 class ServerInitializeTask(delegate: SessionDelegate) extends PlayPadInitializeTask {
 	override def name(): String = "Server"

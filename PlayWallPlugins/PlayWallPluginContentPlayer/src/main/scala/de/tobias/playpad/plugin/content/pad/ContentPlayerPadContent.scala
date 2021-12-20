@@ -1,8 +1,7 @@
 package de.tobias.playpad.plugin.content.pad
 
-import de.thecodelabs.logger.Logger
 import de.tobias.playpad.pad.content.play.{Durationable, Pauseable}
-import de.tobias.playpad.pad.content.{PadContent, Playlistable}
+import de.tobias.playpad.pad.content.{PadContent, PlaylistListener, Playlistable}
 import de.tobias.playpad.pad.fade.{Fadeable, LinearFadeController}
 import de.tobias.playpad.pad.mediapath.MediaPath
 import de.tobias.playpad.pad.{Pad, PadStatus}
@@ -20,8 +19,8 @@ import nativecontentplayerwindows.ContentPlayer
 
 import java.nio.file.Files
 import java.util
-import java.util.UUID
 import java.util.stream.Collectors
+import java.util.{Collections, UUID}
 import scala.jdk.CollectionConverters._
 
 class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadContent(pad) with Pauseable with Durationable with Playlistable with Fadeable {
@@ -31,6 +30,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 
 	private[content] val _durationProperty = new SimpleObjectProperty[Duration]
 	private[content] val _positionProperty = new SimpleObjectProperty[Duration]
+
+	private[content] val listeners: util.Set[PlaylistListener] = new util.HashSet[PlaylistListener]()
 
 	private var showingLastFrame: Boolean = false
 	private var isPause: Boolean = false
@@ -61,6 +62,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		if (isPause) {
 			mediaPlayers(getCurrentPlayingMediaIndex).resume(withFadeIn)
 		} else {
+			if (isShuffle) {
+				Collections.shuffle(mediaPlayers)
+			}
 			getPad.setEof(false)
 			mediaPlayers.head.play(withFadeIn)
 		}
@@ -117,7 +121,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}
 
 		showingLastFrame = false
-		mediaPlayers(getCurrentPlayingMediaIndex).next()
+		// Only automatically go to the next playlist item, if auto next is active or
+		// the item is the last one (next() go into stop state if no item is left)
+		if (isAutoNext || noFurtherItemsInPlaylist) {
+			mediaPlayers(getCurrentPlayingMediaIndex).next()
+		}
 	}
 
 	private def hasPadTriggerInterferingZones(item: LocalPadTrigger): Boolean = {
@@ -292,9 +300,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	Custom Settings
 	 */
 
-	def shouldShowLastFrame(): Boolean = {
-		pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
-	}
+	def shouldShowLastFrame(): Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(ContentPlayerPadContentFactory.lastFrame, false).asInstanceOf[Boolean]
+
+	def isShuffle: Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false).asInstanceOf[Boolean]
+
+	def isAutoNext: Boolean = pad.getPadSettings.getCustomSettings.getOrDefault(Playlistable.AUTO_NEXT_SETTINGS_KEY, false).asInstanceOf[Boolean]
 
 	def getSelectedZones: Seq[Zone] = {
 		val zoneConfiguration = Profile.currentProfile().getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
@@ -306,4 +316,12 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		).asInstanceOf[util.List[UUID]]
 		zoneConfiguration.zones.asScala.filter(zone => selectedZoneIds.contains(zone.id)).toSeq
 	}
+
+	/*
+	Listener
+	 */
+
+	override def addPlaylistListener(listener: PlaylistListener): Unit = listeners.add(listener)
+
+	override def removePlaylistListener(listener: PlaylistListener): Unit = listeners.remove(listener)
 }
