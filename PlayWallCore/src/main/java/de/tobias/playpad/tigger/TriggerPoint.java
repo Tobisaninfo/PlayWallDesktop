@@ -10,7 +10,10 @@ public enum TriggerPoint {
 	START(true, pad -> !(pad.getContent() instanceof Playlistable)),
 	STOP(false, pad -> !(pad.getContent() instanceof Playlistable)),
 	EOF(true,  pad -> !(pad.getContent() instanceof Playlistable)),
-	PLAYLIST_NEXT(false,  pad -> pad.getContent() instanceof Playlistable);
+	PLAYLIST_START(false,  pad -> pad.getContent() instanceof Playlistable),
+	PLAYLIST_ITEM_START(true,  pad -> pad.getContent() instanceof Playlistable),
+	PLAYLIST_ITEM_END(false,  pad -> pad.getContent() instanceof Playlistable),
+	PLAYLIST_END(false,  pad -> pad.getContent() instanceof Playlistable);
 
 	/**
 	 * Defines if a trigger can be run after, before a certain event.

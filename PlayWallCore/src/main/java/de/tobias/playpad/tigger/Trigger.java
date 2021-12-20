@@ -118,7 +118,9 @@ public class Trigger {
 				} else {
 					handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
 				}
-			} else if (triggerPoint == TriggerPoint.PLAYLIST_NEXT) {
+			} else if (triggerPoint == TriggerPoint.PLAYLIST_ITEM_START) {
+				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+			} else if (triggerPoint == TriggerPoint.PLAYLIST_ITEM_END) {
 				item.performAction(pad, project, mainViewController, currentProfile);
 			}
 		}

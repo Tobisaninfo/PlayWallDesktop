@@ -12,13 +12,35 @@ import javafx.util.Duration;
 
 public class PadTriggerPlaylistListener implements PlaylistListener {
 	@Override
-	public void onNextItem(Pad pad, int next, int total) {
+	public void onPlaylistStart(Pad pad) {
+
+	}
+
+	@Override
+	public void onPlaylistItemStart(Pad pad) {
 		if (!pad.isIgnoreTrigger()) {
-			PadSettings padSettings = pad.getPadSettings();
-			executeTrigger(pad, padSettings.getTriggers().get(TriggerPoint.PLAYLIST_NEXT));
+			final PadSettings padSettings = pad.getPadSettings();
+			final Trigger trigger = padSettings.getTriggers().get(TriggerPoint.PLAYLIST_ITEM_START);
+			executeTrigger(pad, trigger);
 		} else {
 			pad.setIgnoreTrigger(false);
 		}
+	}
+
+	@Override
+	public void onPlaylistItemEnd(Pad pad) {
+		if (!pad.isIgnoreTrigger()) {
+			final PadSettings padSettings = pad.getPadSettings();
+			final Trigger trigger = padSettings.getTriggers().get(TriggerPoint.PLAYLIST_ITEM_END);
+			executeTrigger(pad, trigger);
+		} else {
+			pad.setIgnoreTrigger(false);
+		}
+	}
+
+	@Override
+	public void onPlaylistEnd(Pad pad) {
+
 	}
 
 	private void executeTrigger(Pad pad, Trigger trigger) {

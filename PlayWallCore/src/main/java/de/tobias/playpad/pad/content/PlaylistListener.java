@@ -4,5 +4,11 @@ import de.tobias.playpad.pad.Pad;
 
 public interface PlaylistListener {
 
-	void onNextItem(Pad pad, int next, int total);
+	void onPlaylistStart(Pad pad);
+
+	void onPlaylistItemStart(Pad pad);
+
+	void onPlaylistItemEnd(Pad pad);
+
+	void onPlaylistEnd(Pad pad);
 }

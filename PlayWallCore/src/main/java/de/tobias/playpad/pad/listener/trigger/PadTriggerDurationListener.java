@@ -31,14 +31,24 @@ public class PadTriggerDurationListener implements ChangeListener<Duration> {
 				Profile currentProfile = Profile.currentProfile();
 				PadSettings padSettings = pad.getPadSettings();
 
-				// Execute Start Triggers
-				final Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
-				startTrigger.handle(pad, currentTime, pad.getProject(), mainViewController, currentProfile);
+				if (TriggerPoint.START.isAvailable(pad)) {
+					// Execute Start Triggers
+					final Trigger startTrigger = padSettings.getTrigger(TriggerPoint.START);
+					startTrigger.handle(pad, currentTime, pad.getProject(), mainViewController, currentProfile);
+				}
 
-				// Execute End Trigger
-				final Duration leftTime = totalDuration.subtract(currentTime);
-				final Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF);
-				endTrigger.handle(pad, leftTime, pad.getProject(), mainViewController, currentProfile);
+				if (TriggerPoint.PLAYLIST_ITEM_START.isAvailable(pad)) {
+					// Execute Start Triggers
+					final Trigger startTrigger = padSettings.getTrigger(TriggerPoint.PLAYLIST_ITEM_START);
+					startTrigger.handle(pad, currentTime, pad.getProject(), mainViewController, currentProfile);
+				}
+
+				if (TriggerPoint.EOF.isAvailable(pad)) {
+					// Execute End Trigger
+					final Duration leftTime = totalDuration.subtract(currentTime);
+					final Trigger endTrigger = padSettings.getTrigger(TriggerPoint.EOF);
+					endTrigger.handle(pad, leftTime, pad.getProject(), mainViewController, currentProfile);
+				}
 			}
 		}
 	}
