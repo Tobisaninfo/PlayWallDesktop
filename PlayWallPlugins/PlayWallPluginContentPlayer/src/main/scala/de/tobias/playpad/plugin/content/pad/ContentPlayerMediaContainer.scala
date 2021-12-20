@@ -38,9 +38,6 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 
 		content.getPad.setEof(false)
 		content.currentPlayingMediaIndexProperty().set(content.getMediaContainers.indexOf(this))
-
-		content.listeners.forEach(listener => listener.onPlaylistStart(content.pad))
-		content.listeners.forEach(listener => listener.onPlaylistItemStart(content.pad))
 	}
 
 	def resume(withFadeIn: Boolean): Unit = {
@@ -56,18 +53,13 @@ class ContentPlayerMediaContainer(val content: ContentPlayerPadContent, private[
 		val currentIndex = players.indexOf(this)
 		content.currentPlayingMediaIndexProperty().set(currentIndex)
 
-
 		if (currentIndex + 1 < players.length) {
-			content.listeners.forEach(listener => listener.onPlaylistItemEnd(content.pad))
 			if (content.getPad.getStatus == PadStatus.PLAY) {
 				players(currentIndex + 1).play(false)
-				content.listeners.forEach(listener => listener.onPlaylistItemStart(content.pad))
 			}
 		} else if (content.getPad.getPadSettings.isLoop) {
-			content.listeners.forEach(listener => listener.onPlaylistItemEnd(content.pad))
 			if (content.getPad.getStatus == PadStatus.PLAY) {
 				players.head.play(false)
-				content.listeners.forEach(listener => listener.onPlaylistItemStart(content.pad))
 			}
 		} else {
 			content.getPad.setStatus(PadStatus.STOP)

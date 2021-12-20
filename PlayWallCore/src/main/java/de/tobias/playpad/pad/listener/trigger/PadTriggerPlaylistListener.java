@@ -13,40 +13,35 @@ import javafx.util.Duration;
 public class PadTriggerPlaylistListener implements PlaylistListener {
 	@Override
 	public void onPlaylistStart(Pad pad) {
-
+		handleTrigger(pad, TriggerPoint.PLAYLIST_START);
 	}
 
 	@Override
 	public void onPlaylistItemStart(Pad pad) {
-		if (!pad.isIgnoreTrigger()) {
-			final PadSettings padSettings = pad.getPadSettings();
-			final Trigger trigger = padSettings.getTriggers().get(TriggerPoint.PLAYLIST_ITEM_START);
-			executeTrigger(pad, trigger);
-		} else {
-			pad.setIgnoreTrigger(false);
-		}
+		handleTrigger(pad, TriggerPoint.PLAYLIST_ITEM_START);
 	}
 
 	@Override
 	public void onPlaylistItemEnd(Pad pad) {
-		if (!pad.isIgnoreTrigger()) {
-			final PadSettings padSettings = pad.getPadSettings();
-			final Trigger trigger = padSettings.getTriggers().get(TriggerPoint.PLAYLIST_ITEM_END);
-			executeTrigger(pad, trigger);
-		} else {
-			pad.setIgnoreTrigger(false);
-		}
+		handleTrigger(pad, TriggerPoint.PLAYLIST_ITEM_END);
 	}
 
 	@Override
 	public void onPlaylistEnd(Pad pad) {
-
+		handleTrigger(pad, TriggerPoint.PLAYLIST_END);
 	}
 
-	private void executeTrigger(Pad pad, Trigger trigger) {
-		IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
-		Profile currentProfile = Profile.currentProfile();
+	private void handleTrigger(Pad pad, TriggerPoint point) {
+		if (!pad.isIgnoreTrigger()) {
+			final PadSettings padSettings = pad.getPadSettings();
+			final Trigger trigger = padSettings.getTriggers().get(point);
 
-		trigger.handle(pad, Duration.ZERO, pad.getProject(), mainViewController, currentProfile);
+			final IMainViewController mainViewController = PlayPadPlugin.getInstance().getMainViewController();
+			final Profile currentProfile = Profile.currentProfile();
+
+			trigger.handle(pad, Duration.ZERO, pad.getProject(), mainViewController, currentProfile);
+		} else {
+			pad.setIgnoreTrigger(false);
+		}
 	}
 }

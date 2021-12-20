@@ -69,6 +69,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 			}
 			getPad.setEof(false)
 			mediaPlayers.head.play(withFadeIn)
+
+			listeners.forEach(listener => listener.onPlaylistStart(pad))
+			listeners.forEach(listener => listener.onPlaylistItemStart(pad))
 		}
 		showingLastFrame = false
 		isPause = false
@@ -81,7 +84,11 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	override def next(): Unit = {
-		mediaPlayers(getCurrentPlayingMediaIndex).next()
+		listeners.forEach(listener => listener.onPlaylistItemEnd(pad))
+		if (pad.getStatus == PadStatus.PLAY) {
+			mediaPlayers(getCurrentPlayingMediaIndex).next()
+			listeners.forEach(listener => listener.onPlaylistItemStart(pad))
+		}
 	}
 
 	override def stop(): Boolean = {
@@ -90,6 +97,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		}
 		if (getCurrentPlayingMediaIndex != -1) {
 			mediaPlayers(getCurrentPlayingMediaIndex).stop()
+
+			listeners.forEach(listener => listener.onPlaylistEnd(pad))
 
 			if (showingLastFrame && !stopMediaByOtherPlayer) {
 				ContentPluginMain.playerViewController.clearHold(mediaPlayers(getCurrentPlayingMediaIndex))
@@ -128,7 +137,7 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		// Only automatically go to the next playlist item, if auto next is active or
 		// the item is the last one (next() go into stop state if no item is left)
 		if (isAutoNext || noFurtherItemsInPlaylist) {
-			mediaPlayers(getCurrentPlayingMediaIndex).next()
+			next()
 		}
 	}
 

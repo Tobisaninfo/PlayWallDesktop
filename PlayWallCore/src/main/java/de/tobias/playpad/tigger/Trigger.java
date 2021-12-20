@@ -106,22 +106,30 @@ public class Trigger {
 
 	public void handle(Pad pad, Duration currentDuration, Project project, IMainViewController mainViewController, Profile currentProfile) {
 		for (TriggerItem item : items) {
-			if (triggerPoint == TriggerPoint.START) {
-				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.STOP) {
-				item.performAction(pad, project, mainViewController, currentProfile);
-			} else if (triggerPoint == TriggerPoint.EOF) {
-				if (item.getDurationFromPoint() == Duration.ZERO) {
-					if (pad.isEof()) {
-						item.performAction(pad, project, mainViewController, currentProfile);
+			switch (triggerPoint) {
+				case START:
+					handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+					break;
+				case STOP:
+					item.performAction(pad, project, mainViewController, currentProfile);
+					break;
+				case EOF:
+					if (item.getDurationFromPoint() == Duration.ZERO) {
+						if (pad.isEof()) {
+							item.performAction(pad, project, mainViewController, currentProfile);
+						}
+					} else {
+						handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
 					}
-				} else {
-					handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-				}
-			} else if (triggerPoint == TriggerPoint.PLAYLIST_ITEM_START) {
-				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.PLAYLIST_ITEM_END) {
-				item.performAction(pad, project, mainViewController, currentProfile);
+					break;
+				case PLAYLIST_START:
+				case PLAYLIST_ITEM_START:
+					handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+					break;
+				case PLAYLIST_ITEM_END:
+				case PLAYLIST_END:
+					item.performAction(pad, project, mainViewController, currentProfile);
+					break;
 			}
 		}
 	}
