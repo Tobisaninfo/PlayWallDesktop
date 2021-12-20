@@ -64,6 +64,8 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 		} else {
 			if (isShuffle) {
 				Collections.shuffle(mediaPlayers)
+			} else {
+				reorderMedia()
 			}
 			getPad.setEof(false)
 			mediaPlayers.head.play(withFadeIn)
