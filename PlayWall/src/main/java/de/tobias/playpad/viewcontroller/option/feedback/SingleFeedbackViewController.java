@@ -10,9 +10,6 @@ import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.ui.icon.FontIcon;
 import de.thecodelabs.utils.util.ColorUtils;
 import de.thecodelabs.utils.util.Localization;
-import de.tobias.playpad.action.feedback.LightMode;
-import de.tobias.playpad.profile.Profile;
-import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.view.FeedbackColorPickerView;
 import de.tobias.playpad.viewcontroller.design.IColorButton;
 import javafx.event.ActionEvent;
@@ -98,11 +95,6 @@ public class SingleFeedbackViewController extends NVC implements IColorButton {
 			final FeedbackColor feedbackColor = getFeedbackColor(feedback);
 
 			List<? extends FeedbackColor> selectableColors = Arrays.asList(colors);
-			if (colors instanceof LightMode.ILightMode[]) {
-				ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
-				selectableColors = LightMode.filter((LightMode.ILightMode[]) colors, profileSettings.getLightMode());
-			}
-
 			FeedbackColorPickerView colorView = new FeedbackColorPickerView(feedbackColor, selectableColors, item ->
 			{
 				colorChooser.hide();

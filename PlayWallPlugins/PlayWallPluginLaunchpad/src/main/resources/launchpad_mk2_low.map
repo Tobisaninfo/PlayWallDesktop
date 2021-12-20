@@ -1,52 +1,52 @@
 % RED
 0xef9a9aff=C1_3
-0xef5350ff=C1_2
-0xe53935ff=C1_1
+0xef5350ff=C1_3
+0xe53935ff=C1_3
 
 % DARK_RED
 0xd92349ff=C1_3
-0xc92349ff=C1_2
-0xa90329ff=C1_1
+0xc92349ff=C1_3
+0xa90329ff=C1_3
 
 % PINK
 0xf48fb1ff=C14_3
-0xec407aff=C14_2
-0xd81b60ff=C14_1
+0xec407aff=C14_3
+0xd81b60ff=C14_3
 
 % PURPLE
 0xce93d8ff=C12_3
-0xab47bcff=C12_2
-0x8e24aaff=C12_1
+0xab47bcff=C12_3
+0x8e24aaff=C12_3
 
 % LIGHT_BLUE
 0x80deeaff=C10_3
-0x26c6daff=C10_2
-0x00acc1ff=C10_1
+0x26c6daff=C10_3
+0x00acc1ff=C10_3
 
 % BLUE
 0x90caf9ff=C11_3
-0x42a5f5ff=C11_2
-0x1e88e5ff=C11_1
+0x42a5f5ff=C11_3
+0x1e88e5ff=C11_3
 
 % LIGHT_GREEN
 0xc5e1a5ff=C5_3
-0x9ccc65ff=C5_2
-0x7cb342ff=C5_1
+0x9ccc65ff=C5_3
+0x7cb342ff=C5_3
 
 % LIME
 0xe6ee9cff=C4_3
-0xd4e157ff=C4_2
-0xc0ca33ff=C4_1
+0xd4e157ff=C4_3
+0xc0ca33ff=C4_3
 
 % YELLOW
 0xfff59dff=C3_3
-0xffee58ff=C3_2
-0xfdd835ff=C3_1
+0xffee58ff=C3_3
+0xfdd835ff=C3_3
 
 % ORANGE
 0xffcc80ff=C2_3
-0xffa726ff=C2_2
-0xfb8c00ff=C2_1
+0xffa726ff=C2_3
+0xfb8c00ff=C2_3
 
 % GRAY
 0xeeeeeeff=C0_3
@@ -54,4 +54,4 @@
 0xaaaaaaff=C0_3
 0x888888ff=C0_2
 0x666666ff=C0_2
-0x444444ff=C0_2
+0x444444ff=C0_1

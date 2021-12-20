@@ -11,14 +11,12 @@ import de.thecodelabs.midi.midi.MidiCommand;
 import de.thecodelabs.midi.midi.MidiCommandType;
 import de.thecodelabs.midi.midi.feedback.MidiFeedbackTranscript;
 import de.tobias.playpad.action.feedback.FeedbackColorSuggester;
-import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.launchpadplugin.impl.MapParser;
 import de.tobias.playpad.profile.Profile;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSuggester {
 
@@ -26,12 +24,22 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 	public static final String NATIVE_NAME = "CoreMIDI4J - Launchpad MK2";
 
 	// Modern Colors mapped to the colors of the launchpad
-	private static Map<String, String> mapProperties;
+	private static final String[] COLOR_MAPPING_FILES = {
+			"launchpad_mk2_colorful.map",
+			"launchpad_mk2_high.map",
+			"launchpad_mk2_normal.map",
+			"launchpad_mk2_low.map"
+	};
+	private static final String DEFAULT_COLOR_MAPPING = COLOR_MAPPING_FILES[0];
+	private static final Map<String, Map<String, FeedbackColor>> midiColorMappings;
 
 	static {
+		midiColorMappings = new HashMap<>();
 		try {
-			URL resource = LaunchPadMK2.class.getClassLoader().getResource("launchpad_mk2_colorful.map");
-			mapProperties = MapParser.load(resource);
+			for (String mappingFile : COLOR_MAPPING_FILES) {
+				URL resource = LaunchPadMK2.class.getClassLoader().getResource(mappingFile);
+				midiColorMappings.put(mappingFile, MapParser.load(resource, LaunchPadMK2Color.class));
+			}
 		} catch (Exception e) {
 			Logger.error(e);
 		}
@@ -86,7 +94,12 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 
 	@Override
 	public FeedbackValue[] getFeedbackValues() {
-		return LaunchPadMK2Color.values();
+		String midiColorMapping = Profile.currentProfile().getProfileSettings().getMidiColorMapping();
+		if (midiColorMapping == null || midiColorMapping.isEmpty()) {
+			midiColorMapping = DEFAULT_COLOR_MAPPING;
+		}
+		final Map<String, FeedbackColor> colorMap = midiColorMappings.get(midiColorMapping);
+		return colorMap.values().stream().sorted().distinct().toArray(FeedbackColor[]::new);
 	}
 
 	@Override
@@ -94,14 +107,23 @@ public class LaunchPadMK2 implements MidiFeedbackTranscript, FeedbackColorSugges
 		return Optional.ofNullable(LaunchPadMK2Color.valueOf(b));
 	}
 
+	/*
+	FeedbackColorSuggester
+	 */
+
+	@Override
+	public List<String> getMidiColorMappings() {
+		return Arrays.asList(COLOR_MAPPING_FILES);
+	}
+
 	@Override
 	public FeedbackColor suggest(Color color) {
-		if (mapProperties.containsKey(color.toString())) {
-			String nameOfConst = mapProperties.get(color.toString());
-			final LaunchPadMK2Color mk2Color = LaunchPadMK2Color.valueOf(nameOfConst);
+		final String midiColorMapping = Optional.ofNullable(Profile.currentProfile().getProfileSettings().getMidiColorMapping())
+				.orElse(DEFAULT_COLOR_MAPPING);
+		final Map<String, FeedbackColor> colorMap = midiColorMappings.get(midiColorMapping);
 
-			LightMode lightMode = Profile.currentProfile().getProfileSettings().getLightMode();
-			return mk2Color.translate(lightMode);
+		if (colorMap.containsKey(color.toString())) {
+			return colorMap.get(color.toString());
 		}
 		return null;
 	}
