@@ -64,11 +64,9 @@ public class CartTriggerItem extends TriggerItem implements LocalPadTrigger {
 			}
 		} else {
 			for (UUID uuid : uuids) {
-				if (!uuid.equals(source.getUuid())) {
-					Pad pad = project.getPad(uuid);
-					if (pad != null)
-						pad.setStatus(newStatus);
-				}
+				Pad pad = project.getPad(uuid);
+				if (pad != null)
+					pad.setStatus(newStatus);
 			}
 		}
 	}
