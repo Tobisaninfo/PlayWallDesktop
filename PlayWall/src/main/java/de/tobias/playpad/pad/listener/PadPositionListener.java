@@ -78,8 +78,8 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		// Label (Restlaufzeit)
 		controller.updateTimeLabel();
 
-		// Warning nur wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig Reseted
-		// wird
+		// Warning nur, wenn kein Loop und nur wenn Play, da sonst schon anderer Zustand und Warning nicht mehr richtig
+		// zurückgesetzt wird
 		if (!pad.getPadSettings().isLoop() && pad.getStatus() == PadStatus.PLAY) {
 			// Warning
 			Duration warning = pad.getPadSettings().getWarning();
@@ -89,6 +89,11 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 			if (warning.toSeconds() > seconds && !send) {
 				startWarningThread();
 				send = true;
+			}
+
+			if (warning.toSeconds() < seconds && send) {
+				stopWaning();
+				send = false;
 			}
 		}
 	}
