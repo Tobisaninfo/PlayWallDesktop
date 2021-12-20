@@ -45,15 +45,15 @@
         </HBox>
       <HBox spacing="14.0">
          <children>
-            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.label.lightmode">
+            <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%settings.label.midiColorMapping">
                <HBox.margin>
                   <Insets top="4.0" />
                </HBox.margin>
             </Label>
             <HBox maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ComboBox fx:id="lightModeComboBox" onAction="#deviceHandler" prefWidth="150.0" />
-                  <Label text="%settings.label.lightmode.info" />
+                  <ComboBox fx:id="midiColorMappingComboBox" onAction="#deviceHandler" prefWidth="150.0" />
+                  <Label text="%settings.label.midiColorMapping.info" />
                </children>
             </HBox>
          </children>

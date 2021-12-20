@@ -17,7 +17,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.ActionProvider;
 import de.tobias.playpad.action.ActionType;
 import de.tobias.playpad.action.feedback.ColorAdjuster;
-import de.tobias.playpad.action.feedback.LightMode;
+import de.tobias.playpad.action.feedback.FeedbackColorSuggester;
 import de.tobias.playpad.action.settings.ActionSettingsEntry;
 import de.tobias.playpad.action.settings.ActionSettingsMappable;
 import de.tobias.playpad.profile.Profile;
@@ -27,7 +27,7 @@ import de.tobias.playpad.registry.Component;
 import de.tobias.playpad.viewcontroller.BaseMapperListViewController;
 import de.tobias.playpad.viewcontroller.IMappingTabViewController;
 import de.tobias.playpad.viewcontroller.cell.DisplayableTreeCell;
-import de.tobias.playpad.viewcontroller.cell.EnumCell;
+import de.tobias.playpad.viewcontroller.cell.LocalizeCell;
 import de.tobias.playpad.viewcontroller.cell.MappingListCell;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import de.tobias.playpad.viewcontroller.option.IProfileReloadTask;
@@ -77,7 +77,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 	private ComboBox<String> deviceComboBox;
 
 	@FXML
-	private ComboBox<LightMode> lightModeComboBox;
+	private ComboBox<String> midiColorMappingComboBox;
 
 	// Main View
 	@FXML
@@ -141,9 +141,20 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		});
 		treeView.setCellFactory(list -> new DisplayableTreeCell<>());
 
-		lightModeComboBox.getItems().setAll(LightMode.values());
-		lightModeComboBox.setCellFactory(list -> new EnumCell<>("LightMode."));
-		lightModeComboBox.setButtonCell(new EnumCell<>("LightMode."));
+		initMidiColorMappingComboBox();
+		midiColorMappingComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			final ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
+			profileSettings.setMidiColorMapping(midiColorMappingComboBox.getValue());
+		});
+	}
+
+	private void initMidiColorMappingComboBox() {
+		if (Midi.getInstance().getFeedbackTranscript() instanceof FeedbackColorSuggester) {
+			final FeedbackColorSuggester feedbackColorSuggester = (FeedbackColorSuggester) Midi.getInstance().getFeedbackTranscript();
+			midiColorMappingComboBox.getItems().setAll(feedbackColorSuggester.getMidiColorMappings());
+			midiColorMappingComboBox.setCellFactory(list -> new LocalizeCell("MidiColorMapping."));
+			midiColorMappingComboBox.setButtonCell(new LocalizeCell("MidiColorMapping."));
+		}
 	}
 
 	private TreeItem<ActionSettingsEntry> createTreeView(Mapping mapping) {
@@ -230,6 +241,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 				}
 			}
 		}
+		initMidiColorMappingComboBox();
 	}
 
 	@SuppressWarnings("Duplicates")
@@ -392,7 +404,7 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		midiActiveCheckBox.setSelected(profileSettings.isMidiActive());
 		deviceComboBox.setDisable(!profileSettings.isMidiActive());
 		deviceComboBox.setValue(profileSettings.getMidiDevice());
-		lightModeComboBox.setValue(profileSettings.getLightMode());
+		midiColorMappingComboBox.setValue(profileSettings.getMidiColorMapping());
 	}
 
 	@Override
@@ -401,7 +413,6 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 
 		// Midi
 		profileSettings.setMidiActive(isMidiActive());
-		profileSettings.setLightMode(lightModeComboBox.getValue());
 	}
 
 	@Override

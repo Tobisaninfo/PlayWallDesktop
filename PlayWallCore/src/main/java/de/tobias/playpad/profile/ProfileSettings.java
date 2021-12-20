@@ -4,7 +4,6 @@ import de.thecodelabs.logger.Logger;
 import de.thecodelabs.storage.settings.UserDefaults;
 import de.thecodelabs.storage.settings.annotation.Key;
 import de.tobias.playpad.PlayPadPlugin;
-import de.tobias.playpad.action.feedback.LightMode;
 import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.design.modern.serializer.ModernGlobalDesignSerializer;
 import de.tobias.playpad.pad.TimeMode;
@@ -39,7 +38,7 @@ public class ProfileSettings {
 	@Key
 	private boolean midiActive = false;
 	@Key
-	private LightMode lightMode = LightMode.NORMAL;
+	private String midiColorMapping = "";
 
 	// Audio Output
 	@Key
@@ -87,8 +86,8 @@ public class ProfileSettings {
 		return midiDevice;
 	}
 
-	public LightMode getLightMode() {
-		return lightMode;
+	public String getMidiColorMapping() {
+		return midiColorMapping;
 	}
 
 	public String getMainLayoutType() {
@@ -140,8 +139,8 @@ public class ProfileSettings {
 		this.midiDevice = midiDevice;
 	}
 
-	public void setLightMode(LightMode lightMode) {
-		this.lightMode = lightMode;
+	public void setMidiColorMapping(String midiColorMapping) {
+		this.midiColorMapping = midiColorMapping;
 	}
 
 	public void setMainLayoutType(String mainLayoutType) {
@@ -204,7 +203,7 @@ public class ProfileSettings {
 	private static final String DESIGN_ELEMENT = "Design";
 	private static final String MIDI_ACTIVE_ELEMENT = "MidiActive";
 	private static final String MIDI_DEVICE_ELEMENT = "MidiDevice";
-	private static final String LIGHT_MODE = "LightMode";
+	private static final String MIDI_COLOR_MAPPING = "MidiColorMapping";
 
 	// File Handler
 	public static ProfileSettings load(Path path) throws DocumentException, IOException {
@@ -221,8 +220,8 @@ public class ProfileSettings {
 				profileSettings.setMidiDeviceName(root.element(MIDI_DEVICE_ELEMENT).getStringValue());
 			if (root.element(MIDI_ACTIVE_ELEMENT) != null)
 				profileSettings.setMidiActive(Boolean.parseBoolean(root.element(MIDI_ACTIVE_ELEMENT).getStringValue()));
-			if (root.element(LIGHT_MODE) != null)
-				profileSettings.setLightMode(LightMode.valueOf(root.element(LIGHT_MODE).getStringValue()));
+			if (root.element(MIDI_COLOR_MAPPING) != null)
+				profileSettings.setMidiColorMapping(root.elementText(MIDI_COLOR_MAPPING));
 
 			if (root.element(DESIGN_ELEMENT) != null) {
 				Element element = root.element(DESIGN_ELEMENT);
@@ -292,7 +291,7 @@ public class ProfileSettings {
 		if (midiDevice != null)
 			root.addElement(MIDI_DEVICE_ELEMENT).addText(midiDevice);
 		root.addElement(MIDI_ACTIVE_ELEMENT).addText(String.valueOf(midiActive));
-		root.addElement(LIGHT_MODE).addText(lightMode.name());
+		root.addElement(MIDI_COLOR_MAPPING).addText(midiColorMapping);
 
 		Element designElement = root.addElement(DESIGN_ELEMENT);
 		ModernGlobalDesignSerializer serializer = new ModernGlobalDesignSerializer();
