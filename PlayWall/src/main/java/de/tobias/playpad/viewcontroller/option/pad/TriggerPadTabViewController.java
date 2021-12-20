@@ -48,10 +48,12 @@ public class TriggerPadTabViewController extends PadSettingsTabViewController im
 
 		// Sort the types for the tree view
 		for (TriggerPoint point : TriggerPoint.values()) {
-			Trigger trigger = triggers.get(point);
+			if (point.isAvailable(pad)) {
+				Trigger trigger = triggers.get(point);
 
-			TreeItem<TriggerDisplayable> triggerItem = new TreeItem<>(new TriggerDisplayable(trigger));
-			rootItem.getChildren().add(triggerItem);
+				TreeItem<TriggerDisplayable> triggerItem = new TreeItem<>(new TriggerDisplayable(trigger));
+				rootItem.getChildren().add(triggerItem);
+			}
 		}
 
 		treeView.setRoot(rootItem);
