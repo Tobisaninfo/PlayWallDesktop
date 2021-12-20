@@ -85,7 +85,9 @@ class ContentPlayerPadContent(val pad: Pad, val `type`: String) extends PadConte
 	}
 
 	override def stop(): Boolean = {
-		isPause = false
+		if (isPause) {
+			play(false)
+		}
 		if (getCurrentPlayingMediaIndex != -1) {
 			mediaPlayers(getCurrentPlayingMediaIndex).stop()
 
