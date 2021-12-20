@@ -133,7 +133,7 @@ public class PadPositionListener implements Runnable, IPadPositionListener {
 		final ModernDesignProvider modernDesign = PlayPadMain.getProgramInstance().getModernDesign();
 
 		final ModernWarningDesignHandler handler = modernDesign.warning();
-		handler.stopWarning(controller);
+		handler.stopWarning(controller.getPad());
 		controller.getView().setStyle("");
 	}
 }

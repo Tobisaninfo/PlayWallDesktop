@@ -5,6 +5,7 @@ import de.tobias.playpad.design.modern.model.ModernGlobalDesign;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.play.Durationable;
 import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.util.FadeableColor;
 import javafx.util.Duration;
 
@@ -45,6 +46,6 @@ public interface ModernWarningDesignHandler {
 	 */
 	void performWarning(ModernGlobalDesign design, FadeableColor fadeStartColor, FadeableColor fadeStopColor, AbstractPadViewController controller, Duration duration);
 
-	default void stopWarning(AbstractPadViewController controller) {
+	default void stopWarning(IPad pad) {
 	}
 }

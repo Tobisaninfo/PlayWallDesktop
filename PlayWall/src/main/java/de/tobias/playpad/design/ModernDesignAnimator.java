@@ -1,7 +1,7 @@
 package de.tobias.playpad.design;
 
 import de.tobias.playpad.pad.view.IPadView;
-import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.util.FadeableColor;
 import de.tobias.playpad.view.PseudoClasses;
 import javafx.animation.KeyFrame;
@@ -17,22 +17,21 @@ import java.util.HashMap;
 
 public class ModernDesignAnimator {
 
-	// alles nur static, neine objecte von der Klasse
 	private ModernDesignAnimator() {
 	}
 
-	private static HashMap<Integer, Timeline> timelines = new HashMap<>();
+	private static final HashMap<Integer, Timeline> timelines = new HashMap<>();
 
-	public static void animateFade(AbstractPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateFade(IPad pad, IPadView padView, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
 				new KeyFrame(duration, new KeyValue(backgroundColor, endColor)));
 
-		animate(padViewController, timeline, backgroundColor);
+		animate(pad, padView, timeline, backgroundColor);
 	}
 
-	public static void animateWarn(AbstractPadViewController padViewController, FadeableColor startColor, FadeableColor endColor, Duration duration) {
+	public static void animateWarn(IPad pad, IPadView padView, FadeableColor startColor, FadeableColor endColor, Duration duration) {
 		ObjectProperty<FadeableColor> backgroundColor = new SimpleObjectProperty<>();
 
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0), new KeyValue(backgroundColor, startColor)),
@@ -42,17 +41,17 @@ public class ModernDesignAnimator {
 
 		timeline.setAutoReverse(true);
 		timeline.setCycleCount((int) (duration.toSeconds() / 0.625));
-		animate(padViewController, timeline, backgroundColor);
+		animate(pad, padView, timeline, backgroundColor);
 	}
 
-	private static void animate(AbstractPadViewController padViewController, Timeline timeline, ObjectProperty<FadeableColor> objectProperty) {
-		int index = padViewController.getPad().getPosition();
+	private static void animate(IPad pad, IPadView padView, Timeline timeline, ObjectProperty<FadeableColor> objectProperty) {
+		int index = pad.getPosition();
 
 		if (timelines.containsKey(index)) {
 			timelines.get(index).stop();
 		}
 
-		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padViewController.getView().setStyle("-fx-background-color: " + newValue.toString() + ";");
+		ChangeListener<FadeableColor> fadeListener = (observable, oldValue, newValue) -> padView.setStyle("-fx-background-color: " + newValue.toString() + ";");
 		objectProperty.addListener(fadeListener);
 
 		timeline.playFromStart();
@@ -60,7 +59,7 @@ public class ModernDesignAnimator {
 		timeline.setOnFinished(event ->
 		{
 			objectProperty.removeListener(fadeListener);
-			padViewController.getView().setStyle("");
+			padView.setStyle("");
 			timelines.remove(index);
 		});
 
@@ -68,16 +67,15 @@ public class ModernDesignAnimator {
 		timelines.put(index, timeline);
 	}
 
-	public static void stopAnimation(AbstractPadViewController controller) {
-		int index = controller.getPad().getPosition();
+	public static void stopAnimation(IPad pad) {
+		int index = pad.getPosition();
 
 		if (timelines.containsKey(index)) {
 			timelines.get(index).stop();
 		}
 	}
 
-	public static void warnFlash(AbstractPadViewController controller) {
-		final IPadView view = controller.getView();
+	public static void warnFlash(IPadView view) {
 		try {
 			while (!Thread.interrupted()) {
 
