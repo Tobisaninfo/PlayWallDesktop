@@ -337,18 +337,21 @@ public class MappingTabViewController extends ProfileSettingsTabViewController i
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(getContainingWindow());
-		dialog.setHeaderText("Umbenennen");
+		dialog.setHeaderText("Name");
 		dialog.setContentText("Geben Sie einen Namen für das Mapping Profil ein."); // TODO Localize
-		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(preset::setName);
+		dialog.showAndWait().filter(s -> !s.isEmpty()).ifPresent(name -> {
+			preset.setName(name);
 
-		final MappingCollection mappings = Profile.currentProfile().getMappings();
-		mappings.addMapping(preset);
-		mappingComboBox.getItems().add(preset);
-		mappingComboBox.getSelectionModel().select(preset);
+			final MappingCollection mappings = Profile.currentProfile().getMappings();
+			mappings.addMapping(preset);
+			mappingComboBox.getItems().add(preset);
+			mappingComboBox.getSelectionModel().select(preset);
 
-		if (mappings.count() > 1) {
-			mappingDeleteButton.setDisable(false);
-		}
+			if (mappings.count() > 1) {
+				mappingDeleteButton.setDisable(false);
+			}
+		});
+
 	}
 
 	@SuppressWarnings("Duplicates")
