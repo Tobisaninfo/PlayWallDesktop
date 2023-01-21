@@ -107,18 +107,15 @@ public class Project implements IProject {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
-		if (pad == null) {
-			return;
-		}
-		// Remove Pad from old location
-		if (pad.getPage().getPosition() != index.getPagePosition()) {
-			Page oldPage = pad.getPage();
+		// Remove Pad from old location if page changed
+		if (pad != null && pad.getPage().getPosition() != index.getPagePosition()) {
+			final Page oldPage = pad.getPage();
 			if (oldPage.getPad(pad.getPosition()).equals(pad)) {
 				oldPage.setPad(index.getId(), null);
 			}
 		}
 
-		Page page = pages.get(index.getPagePosition());
+		final Page page = pages.get(index.getPagePosition());
 		page.setPad(index.getId(), pad);
 	}
 
