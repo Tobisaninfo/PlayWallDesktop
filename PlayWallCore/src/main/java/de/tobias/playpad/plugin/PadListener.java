@@ -13,6 +13,8 @@ import javafx.collections.ListChangeListener;
  */
 public interface PadListener {
 
+	void onNameChanged(Pad pad, String oldValue, String newValue);
+
 	/**
 	 * Call then ever the status of a pad will be changed
 	 *

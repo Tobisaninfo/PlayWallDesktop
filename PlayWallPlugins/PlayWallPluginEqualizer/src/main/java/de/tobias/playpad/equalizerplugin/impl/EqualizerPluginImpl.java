@@ -75,6 +75,11 @@ public class EqualizerPluginImpl implements PlayPadPluginStub, PluginArtifact, M
 	}
 
 	@Override
+	public void onNameChanged(Pad pad, String oldValue, String newValue) {
+		// Nothing to implement
+	}
+
+	@Override
 	public void onStatusChange(Pad pad, PadStatus newValue) {
 		if (newValue == PadStatus.PLAY) {
 			onPlay(pad);

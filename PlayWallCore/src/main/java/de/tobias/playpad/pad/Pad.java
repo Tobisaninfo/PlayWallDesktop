@@ -8,6 +8,7 @@ import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.fade.listener.PadFadeContentListener;
 import de.tobias.playpad.pad.fade.listener.PadFadeDurationListener;
+import de.tobias.playpad.pad.listener.PadNameChangeListener;
 import de.tobias.playpad.pad.listener.PadStatusControlListener;
 import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
@@ -65,6 +66,7 @@ public class Pad implements IPad {
 	 */
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
+	private transient PadNameChangeListener padNameChangeListener;
 	private transient PadStatusControlListener padStatusControlListener;
 	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 	private transient PadFadeContentListener padFadeContentListener;
@@ -121,6 +123,9 @@ public class Pad implements IPad {
 
 	private void initPadListener() {
 		// Remove old listener from properties
+		if (padNameChangeListener != null && nameProperty != null) {
+			nameProperty.removeListener(padNameChangeListener);
+		}
 		if (padStatusControlListener != null && statusProperty != null) {
 			statusProperty.removeListener(padStatusControlListener);
 		}
@@ -143,18 +148,18 @@ public class Pad implements IPad {
 		}
 
 		// init new listener for properties
+		padNameChangeListener = new PadNameChangeListener(this);
+		nameProperty.addListener(padNameChangeListener);
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
 
 		// Fade
-
 		padFadeDurationListener = new PadFadeDurationListener(this);
 		padFadeContentListener = new PadFadeContentListener(this);
 		contentProperty.addListener(padFadeContentListener);
 		padFadeContentListener.changed(contentProperty, null, getContent());
 
 		// Not found status count
-
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
 

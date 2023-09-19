@@ -15,7 +15,7 @@ import de.tobias.playpad.plugin.api.WebApiPlugin.connectToRemoteInstances
 import de.tobias.playpad.plugin.api.client.WebApiRemoteConnectionStateListener
 import de.tobias.playpad.plugin.api.settings.{WebApiRemoteSettings, WebApiSettings, WebApiSettingsViewController}
 import de.tobias.playpad.plugin.api.websocket.WebSocketHandler
-import de.tobias.playpad.plugin.api.websocket.listener.{PadStatusListener, ProjectListener}
+import de.tobias.playpad.plugin.api.websocket.listener.{PadApiListener, ProjectListener}
 import de.tobias.playpad.plugin.{Module, PlayPadPluginStub}
 import javafx.application.Platform
 import javafx.collections.{FXCollections, ObservableMap}
@@ -36,7 +36,7 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 		module = new Module(descriptor.getName, descriptor.getArtifactId)
 		Localization.addResourceBundle("plugin/webapi/lang/base", getClass.getClassLoader)
 
-		PlayPadPlugin.getInstance().addPadListener(new PadStatusListener)
+		PlayPadPlugin.getInstance().addPadListener(new PadApiListener)
 		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener)
 
 		Logger.debug("Enable Web API Plugin")
