@@ -3,7 +3,7 @@ package de.tobias.playpad.plugin.api.websocket
 import com.google.gson.{Gson, JsonObject}
 import de.thecodelabs.logger.Logger
 import de.tobias.playpad.plugin.api.websocket.message.Message
-import de.tobias.playpad.plugin.api.websocket.methods.{PadStatusChangeMethod, ProjectCurrentMethod, ProjectListMethod, ProjectOpenMethod}
+import de.tobias.playpad.plugin.api.websocket.methods._
 import org.eclipse.jetty.websocket.api.annotations._
 import org.eclipse.jetty.websocket.api.{CloseException, Session}
 
@@ -18,7 +18,8 @@ class WebSocketHandler {
 		"project-list" -> new ProjectListMethod,
 		"project-current" -> new ProjectCurrentMethod,
 		"project-open" -> new ProjectOpenMethod,
-		"pad-status-change" -> new PadStatusChangeMethod
+		"pad-status-change" -> new PadStatusChangeMethod,
+		"cart-action" -> new CartActionMethod
 	)
 
 	@OnWebSocketConnect def connected(session: Session): Unit = {
@@ -52,6 +53,7 @@ class WebSocketHandler {
 		jsonObject.addProperty("updateType", message)
 		val payload = WebSocketHandler.gson.toJson(jsonObject)
 
+		Logger.debug("Write to WebSocket: {0}", payload)
 		sessions.stream()
 			.filter(session => session.isOpen)
 			.forEach(session => session.getRemote.sendStringByFuture(payload))
@@ -64,9 +66,12 @@ object WebSocketHandler {
 
 	private val gson = new Gson()
 
-	def sendResponse(session: Session, message: Message, response: JsonObject): Unit = {
+	private def sendResponse(session: Session, message: Message, response: JsonObject): Unit = {
 		response.addProperty("messageId", message.messageId)
 		response.addProperty("type", message.`type`)
-		session.getRemote.sendString(gson.toJson(response))
+
+		val payload = gson.toJson(response)
+		Logger.debug("Write to WebSocket: {0}", payload)
+		session.getRemote.sendString(payload)
 	}
 }

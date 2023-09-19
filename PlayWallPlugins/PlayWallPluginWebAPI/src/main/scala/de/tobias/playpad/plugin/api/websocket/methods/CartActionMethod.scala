@@ -4,18 +4,27 @@ import com.google.gson.JsonObject
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.plugin.api.websocket.MethodExecutable
 import de.tobias.playpad.plugin.api.websocket.message.Message
-import de.tobias.playpad.plugin.api.websocket.serialize.ProjectSerializer
-import de.tobias.playpad.profile.Profile
+import javafx.application.Platform
 import org.eclipse.jetty.websocket.api.Session
 
-class ProjectCurrentMethod extends MethodExecutable {
-	override def execute(session: Session, message: Message): JsonObject = {
-		val currentProject = PlayPadPlugin.getInstance().getCurrentProject
+import java.util.UUID
 
-		if (currentProject == null) {
-			null
-		} else {
-			ProjectSerializer.serializeProject(currentProject, Profile.currentProfile)
-		}
+class CartActionMethod extends MethodExecutable {
+
+	override def execute(session: Session, message: Message): JsonObject = {
+		val padId = UUID.fromString(message.payload.get("pad").getAsString)
+
+		val currentProject = PlayPadPlugin.getInstance().getCurrentProject
+		val pad = currentProject.getPad(padId)
+
+		Platform.runLater(() => {
+			if (pad.isPlay) {
+				pad.stop()
+			} else {
+				pad.play()
+			}
+		})
+
+		null
 	}
 }
