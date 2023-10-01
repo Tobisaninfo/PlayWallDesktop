@@ -30,6 +30,7 @@ public class PadSettings {
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 	private DoubleProperty speedProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
+	private BooleanProperty playOverlayProperty = new SimpleBooleanProperty(false);
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<FadeSettings> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
@@ -98,6 +99,18 @@ public class PadSettings {
 
 	public BooleanProperty loopProperty() {
 		return loopProperty;
+	}
+
+	public boolean isPlayOverlay() {
+		return playOverlayProperty.get();
+	}
+
+	public void setPlayOverlay(boolean playOverlay) {
+		playOverlayProperty.set(playOverlay);
+	}
+
+	public BooleanProperty playOverlayProperty() {
+		return playOverlayProperty;
 	}
 
 	public boolean isCustomTimeMode() {
@@ -242,6 +255,7 @@ public class PadSettings {
 
 		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
 		clone.loopProperty = new SimpleBooleanProperty(isLoop());
+		clone.playOverlayProperty = new SimpleBooleanProperty(isPlayOverlay());
 
 		if (isCustomTimeMode())
 			clone.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());

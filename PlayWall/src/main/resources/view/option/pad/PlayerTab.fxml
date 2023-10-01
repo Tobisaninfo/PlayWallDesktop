@@ -7,6 +7,22 @@
     <children>
         <VBox spacing="14.0">
             <children>
+                <HBox layoutX="14.0" layoutY="139.0" spacing="14.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.player.label.playOverlay" textAlignment="RIGHT" />
+                        <CheckBox fx:id="playOverlayEnableCheckBox" mnemonicParsing="false" text="%settings.checkbox.activate" />
+                    </children>
+                </HBox>
+            <Label text="%padSettings.player.label.playOverlay.description" wrapText="true">
+               <VBox.margin>
+                  <Insets left="164.0" />
+               </VBox.margin>
+            </Label>
+            </children>
+        </VBox>
+        <Separator prefWidth="200.0" />
+        <VBox spacing="14.0">
+            <children>
                 <HBox layoutX="14.0" layoutY="253.0" spacing="14.0">
                     <children>
                         <Label alignment="CENTER_RIGHT" prefWidth="150.0" text="%padSettings.player.label.fade" textAlignment="RIGHT" />

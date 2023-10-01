@@ -18,6 +18,8 @@ import javafx.util.Duration;
 public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 	@FXML
+	private CheckBox playOverlayEnableCheckBox;
+	@FXML
 	private CheckBox customFadeCheckBox;
 	@FXML
 	private VBox fadeContainer;
@@ -47,6 +49,8 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 
 		warningFeedbackViewController = WarningFeedbackViewController.newViewControllerForPad();
 		warningFeedbackContainer.getChildren().add(warningFeedbackViewController.getParent());
+
+		playOverlayEnableCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> pad.getPadSettings().setPlayOverlay(newValue));
 
 		customFadeCheckBox.selectedProperty().addListener((a, b, c) ->
 		{
@@ -102,6 +106,8 @@ public class PlayerPadTabViewController extends PadSettingsTabViewController {
 	@Override
 	public void loadSettings(Pad pad) {
 		PadSettings padSettings = pad.getPadSettings();
+
+		playOverlayEnableCheckBox.setSelected(padSettings.isPlayOverlay());
 
 		if (padSettings.isCustomFade())
 			fadeViewController.setFadeSettings(padSettings.getFade());

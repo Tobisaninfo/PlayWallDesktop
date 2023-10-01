@@ -43,7 +43,8 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 				pad.getProject().updateActivePlayerProperty();
 
 				// bei Single Pad Playing wird das alte Pad beendet.
-				if (!profileSettings.isMultiplePlayer()) {
+				// Und wenn das neu abzuspielende Pad nicht im Modus "PlayOverlay" ist.
+				if (!profileSettings.isMultiplePlayer() && !pad.getPadSettings().isPlayOverlay()) {
 					if (currentPlayingPad != null && currentPlayingPad != pad) {
 						if (currentPlayingPad.isPlay() || currentPlayingPad.isPaused()) {
 							currentPlayingPad.stop();

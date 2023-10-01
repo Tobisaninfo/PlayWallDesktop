@@ -21,6 +21,7 @@ public class PadSettingsSerializer {
 
 	private static final String VOLUME_ELEMENT = "Volume";
 	private static final String LOOP_ELEMENT = "Loop";
+	private static final String PLAY_OVERLAY_ELEMENT = "PlayOverlay";
 	private static final String TIME_MODE_ELEMENT = "TimeMode";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
@@ -47,6 +48,8 @@ public class PadSettingsSerializer {
 			padSettings.setVolume(Double.parseDouble(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
 		if (settingsElement.element(LOOP_ELEMENT) != null)
 			padSettings.setLoop(Boolean.parseBoolean(settingsElement.element(LOOP_ELEMENT).getStringValue()));
+		if (settingsElement.element(PLAY_OVERLAY_ELEMENT) != null)
+			padSettings.setPlayOverlay(Boolean.parseBoolean(settingsElement.element(PLAY_OVERLAY_ELEMENT).getStringValue()));
 		if (settingsElement.element(TIME_MODE_ELEMENT) != null)
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIME_MODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
@@ -108,6 +111,7 @@ public class PadSettingsSerializer {
 
 		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(padSettings.getVolume()));
 		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(padSettings.isLoop()));
+		settingsElement.addElement(PLAY_OVERLAY_ELEMENT).addText(String.valueOf(padSettings.isPlayOverlay()));
 		if (padSettings.isCustomTimeMode())
 			settingsElement.addElement(TIME_MODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
 		if (padSettings.isCustomWarning())
