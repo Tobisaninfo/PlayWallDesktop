@@ -19,7 +19,9 @@ class WebSocketHandler {
 		"project-current" -> new ProjectCurrentMethod,
 		"project-open" -> new ProjectOpenMethod,
 		"pad-status-change" -> new PadStatusChangeMethod,
-		"cart-action" -> new CartActionMethod
+		"cart-action" -> new CartActionMethod,
+		"page-action" -> new PageActionMethod,
+		"navigate-action" -> new NavigateActionMethod
 	)
 
 	@OnWebSocketConnect def connected(session: Session): Unit = {
