@@ -21,7 +21,8 @@ class WebSocketHandler {
 		"pad-status-change" -> new PadStatusChangeMethod,
 		"cart-action" -> new CartActionMethod,
 		"page-action" -> new PageActionMethod,
-		"navigate-action" -> new NavigateActionMethod
+		"navigate-action" -> new NavigateActionMethod,
+		"stop-action" -> new StopActionMethod
 	)
 
 	@OnWebSocketConnect def connected(session: Session): Unit = {
