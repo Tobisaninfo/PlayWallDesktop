@@ -468,6 +468,8 @@ public class MainViewController extends NVC implements IMainViewController, Noti
 		}
 		loadUserCss();
 
+		PlayPadPlugin.getInstance().getMainViewListeners().forEach(listener -> listener.onCurrentPageChanged(page));
+
 		return true;
 	}
 
