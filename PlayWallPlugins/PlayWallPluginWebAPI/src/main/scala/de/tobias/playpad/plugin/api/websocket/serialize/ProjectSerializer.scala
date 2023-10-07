@@ -32,8 +32,12 @@ object ProjectSerializer {
 				padObject.addProperty("page", pad.getPage.getPosition)
 
 				val padDesign = new JsonObject
-				padDesign.add("normal", serializeDesign(pad.getPadSettings.getDesign.getBackgroundColor))
-				padDesign.add("play", serializeDesign(pad.getPadSettings.getDesign.getPlayColor))
+				if (pad.getPadSettings.getDesign.isEnableCustomBackgroundColor) {
+					padDesign.add("normal", serializeDesign(pad.getPadSettings.getDesign.getBackgroundColor))
+				}
+				if (pad.getPadSettings.getDesign.isEnableCustomPlayColor) {
+					padDesign.add("play", serializeDesign(pad.getPadSettings.getDesign.getPlayColor))
+				}
 				padObject.add("design", padDesign)
 
 				padArray.add(padObject)
