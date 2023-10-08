@@ -212,6 +212,7 @@ public class PlayPadImpl implements PlayPad {
 		initializer.submit(new KeyboardDefaultMappingTask());
 
 		initializer.submit(new ServiceInitializationTask());
+		initializer.submit(new ListenerRegistrationTask());
 
 		initializer.submit(new VersionizerSetupTask());
 		initializer.submit(new ComponentLoadingTask());

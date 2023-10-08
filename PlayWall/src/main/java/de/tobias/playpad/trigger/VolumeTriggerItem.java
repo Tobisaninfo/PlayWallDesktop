@@ -21,7 +21,7 @@ public class VolumeTriggerItem extends TriggerItem {
 	private Duration duration = new Duration(2000);
 	private List<UUID> uuids;
 
-	private String type;
+	private final String type;
 
 	VolumeTriggerItem(String type) {
 		super();
@@ -58,11 +58,17 @@ public class VolumeTriggerItem extends TriggerItem {
 	public void performAction(Pad pad, Project project, IMainViewController controller, Profile profile) {
 		uuids.stream().map(project::getPad)
 				.filter(i -> i.getContent() instanceof Fadeable)
-				.forEach(destination -> {
-					Fadeable fadeable = (Fadeable) destination.getContent();
+				.forEach(targetPad -> {
+					final Fadeable fadeable = (Fadeable) targetPad.getContent();
 
-					final double start = VolumeManager.getInstance().computeVolume(destination);
-					fadeable.fade(start, volume, duration, null);
+					// Use pad * last VolumeTrigger
+					final double start = VolumeManager.getInstance().computeVolume(targetPad) * VolumeTriggerVolumeFilter.getInstance().getVolume(pad);
+					// Use pad * target VolumeTrigger
+					final double destination = VolumeManager.getInstance().computeVolume(targetPad) * volume;
+					// Update VolumeTrigger
+					VolumeTriggerVolumeFilter.getInstance().setVolume(pad, volume);
+
+					fadeable.fade(start, destination, duration, null);
 				});
 	}
 
