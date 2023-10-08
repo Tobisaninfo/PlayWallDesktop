@@ -13,12 +13,12 @@ import de.tobias.playpad.view.main.MainLayoutFactory;
 
 public class RegistryCollectionImpl implements Registries {
 
-	private Registry<ActionProvider> actionRegistry;
-	private AudioRegistry audioHandlerRegistry;
-	private Registry<PadDragMode> dragModeRegistry;
-	private PadContentRegistry padContentRegistry;
-	private Registry<TriggerItemFactory> triggerItemRegistry;
-	private DefaultRegistry<MainLayoutFactory> mainLayoutRegistry;
+	private final Registry<ActionProvider> actionRegistry;
+	private final AudioRegistry audioHandlerRegistry;
+	private final Registry<PadDragMode> dragModeRegistry;
+	private final PadContentRegistry padContentRegistry;
+	private final Registry<TriggerItemFactory> triggerItemRegistry;
+	private final DefaultRegistry<MainLayoutFactory> mainLayoutRegistry;
 
 	public RegistryCollectionImpl() {
 		actionRegistry = new ComponentRegistry<>("Action");

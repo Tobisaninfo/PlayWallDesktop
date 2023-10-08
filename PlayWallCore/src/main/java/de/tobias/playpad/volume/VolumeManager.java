@@ -17,7 +17,7 @@ public class VolumeManager {
 		return instance;
 	}
 
-	private List<VolumeFilter> filters;
+	private final List<VolumeFilter> filters;
 
 	private VolumeManager() {
 		this.filters = new ArrayList<>();
