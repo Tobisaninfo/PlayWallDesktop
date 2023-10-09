@@ -32,7 +32,7 @@ public class PadStatusControlListener implements ChangeListener<PadStatus> {
 		ProfileSettings profileSettings = Profile.currentProfile().getProfileSettings();
 
 		try {
-			PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStatusChange(pad, newValue));
+			PlayPadPlugin.getInstance().getPadListener().forEach(listener -> listener.onStatusChange(pad, oldValue, newValue));
 		} catch (Exception e) {
 			Logger.error(e);
 		}

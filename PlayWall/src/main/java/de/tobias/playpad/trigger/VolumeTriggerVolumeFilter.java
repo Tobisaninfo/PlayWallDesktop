@@ -44,8 +44,8 @@ public class VolumeTriggerVolumeFilter implements VolumeFilter, PadListener {
 	}
 
 	@Override
-	public void onStatusChange(Pad pad, PadStatus newValue) {
-		if (newValue == PadStatus.READY) {
+	public void onStatusChange(Pad pad, PadStatus oldValue, PadStatus newValue) {
+		if (oldValue == PadStatus.READY && newValue == PadStatus.PLAY) {
 			volumes.remove(pad.getUuid());
 		}
 	}

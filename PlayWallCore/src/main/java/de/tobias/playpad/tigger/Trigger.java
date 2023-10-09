@@ -115,8 +115,11 @@ public class Trigger {
 					break;
 				case EOF:
 					if (item.getDurationFromPoint() == Duration.ZERO) {
-						if (pad.isEof()) {
+						if (pad.isEof() && item.getPerformedAt() == null) {
+							item.setPerformedAt(currentDuration);
 							item.performAction(pad, project, mainViewController, currentProfile);
+						} else {
+							item.setPerformedAt(null);
 						}
 					} else {
 						handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);

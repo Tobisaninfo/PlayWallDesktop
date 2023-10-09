@@ -19,7 +19,7 @@ public class PadPlayLogListener implements PadListener {
 	}
 
 	@Override
-	public void onStatusChange(Pad pad, PadStatus newValue) {
+	public void onStatusChange(Pad pad, PadStatus oldValue, PadStatus newValue) {
 		if (newValue == PadStatus.PLAY) {
 			LogSeason instance = LogSeasons.getCurrentSession();
 			if (instance != null) {

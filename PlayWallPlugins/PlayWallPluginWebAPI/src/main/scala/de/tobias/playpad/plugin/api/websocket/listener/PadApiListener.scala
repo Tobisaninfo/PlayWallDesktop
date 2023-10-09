@@ -17,7 +17,7 @@ class PadApiListener extends PadListener {
 		WebSocketHandler.instance.sendUpdate("pad-name-changed", payload)
 	}
 
-	override def onStatusChange(pad: Pad, newValue: PadStatus): Unit = {
+	override def onStatusChange(pad: Pad, oldValue: PadStatus, newValue: PadStatus): Unit = {
 		val payload = new JsonObject
 
 		payload.addProperty("pad", pad.getUuid.toString)

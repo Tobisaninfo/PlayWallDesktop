@@ -21,7 +21,7 @@ public interface PadListener {
 	 * @param pad      corresponding pad
 	 * @param newValue new status value
 	 */
-	void onStatusChange(Pad pad, PadStatus newValue);
+	void onStatusChange(Pad pad, PadStatus oldValue, PadStatus newValue);
 
 	default void onMediaPathChanged(Pad pad, ListChangeListener.Change<? extends MediaPath> value) {
 	}
