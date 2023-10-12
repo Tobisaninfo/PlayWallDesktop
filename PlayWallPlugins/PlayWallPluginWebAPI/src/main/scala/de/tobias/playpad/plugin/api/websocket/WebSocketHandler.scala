@@ -22,7 +22,8 @@ class WebSocketHandler {
 		"cart-action" -> new CartActionMethod,
 		"page-action" -> new PageActionMethod,
 		"navigate-action" -> new NavigateActionMethod,
-		"stop-action" -> new StopActionMethod
+		"stop-action" -> new StopActionMethod,
+		"current-page-request" -> new CurrentPageRequestMethod
 	)
 
 	@OnWebSocketConnect def connected(session: Session): Unit = {
