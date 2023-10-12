@@ -15,6 +15,7 @@ class WebSocketHandler {
 	private val sessions = new ConcurrentLinkedQueue[Session]
 
 	private val methods: Map[String, MethodExecutable] = Map(
+		"ping" -> new PingMethod,
 		"project-list" -> new ProjectListMethod,
 		"project-current" -> new ProjectCurrentMethod,
 		"project-open" -> new ProjectOpenMethod,
