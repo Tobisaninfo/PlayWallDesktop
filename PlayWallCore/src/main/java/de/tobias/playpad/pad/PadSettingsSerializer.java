@@ -21,13 +21,13 @@ public class PadSettingsSerializer {
 
 	private static final String VOLUME_ELEMENT = "Volume";
 	private static final String LOOP_ELEMENT = "Loop";
+	private static final String PLAY_OVERLAY_ELEMENT = "PlayOverlay";
 	private static final String TIME_MODE_ELEMENT = "TimeMode";
 	private static final String FADE_ELEMENT = "Fade";
 	private static final String WARNING_ELEMENT = "Warning";
 	private static final String CUE_IN_ELEMENT = "CueIn";
 
 	private static final String DESIGN_ELEMENT = "Design";
-	private static final String CUSTOM_DESIGN_ELEMENT = "custom";
 
 	private static final String CUSTOM_SETTINGS_ITEM_ELEMENT = "Item";
 	private static final String CUSTOM_SETTINGS_TYPE_ATTR = "key";
@@ -48,6 +48,8 @@ public class PadSettingsSerializer {
 			padSettings.setVolume(Double.parseDouble(settingsElement.element(VOLUME_ELEMENT).getStringValue()));
 		if (settingsElement.element(LOOP_ELEMENT) != null)
 			padSettings.setLoop(Boolean.parseBoolean(settingsElement.element(LOOP_ELEMENT).getStringValue()));
+		if (settingsElement.element(PLAY_OVERLAY_ELEMENT) != null)
+			padSettings.setPlayOverlay(Boolean.parseBoolean(settingsElement.element(PLAY_OVERLAY_ELEMENT).getStringValue()));
 		if (settingsElement.element(TIME_MODE_ELEMENT) != null)
 			padSettings.setTimeMode(TimeMode.valueOf(settingsElement.element(TIME_MODE_ELEMENT).getStringValue()));
 		if (settingsElement.element(FADE_ELEMENT) != null)
@@ -72,9 +74,6 @@ public class PadSettingsSerializer {
 		// Layout
 		Element designElement = settingsElement.element(DESIGN_ELEMENT);
 		if (designElement != null) {
-			if (designElement.attributeValue(CUSTOM_DESIGN_ELEMENT) != null) {
-				padSettings.setCustomDesign(Boolean.parseBoolean(designElement.attributeValue(CUSTOM_DESIGN_ELEMENT)));
-			}
 			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
 			ModernCartDesign design = serializer.load(designElement, pad);
 			padSettings.setDesign(design);
@@ -112,6 +111,7 @@ public class PadSettingsSerializer {
 
 		settingsElement.addElement(VOLUME_ELEMENT).addText(String.valueOf(padSettings.getVolume()));
 		settingsElement.addElement(LOOP_ELEMENT).addText(String.valueOf(padSettings.isLoop()));
+		settingsElement.addElement(PLAY_OVERLAY_ELEMENT).addText(String.valueOf(padSettings.isPlayOverlay()));
 		if (padSettings.isCustomTimeMode())
 			settingsElement.addElement(TIME_MODE_ELEMENT).addText(String.valueOf(padSettings.getTimeMode()));
 		if (padSettings.isCustomWarning())
@@ -122,13 +122,10 @@ public class PadSettingsSerializer {
 		if (padSettings.getCueIn() != null)
 			settingsElement.addElement(CUE_IN_ELEMENT).addText(padSettings.getCueIn().toString());
 
-		// Layout
+		// Design
 		Element designElement = settingsElement.addElement(DESIGN_ELEMENT);
-		if (padSettings.isCustomDesign()) {
-			ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
-			serializer.save(designElement, padSettings.getDesign());
-		}
-		designElement.addAttribute(CUSTOM_DESIGN_ELEMENT, String.valueOf(padSettings.isCustomDesign()));
+		ModernCartDesignSerializer serializer = new ModernCartDesignSerializer();
+		serializer.save(designElement, padSettings.getDesign());
 
 		Element userInfoElement = settingsElement.addElement(CUSTOM_SETTINGS_ELEMENT);
 		for (String key : padSettings.getCustomSettings().keySet()) {

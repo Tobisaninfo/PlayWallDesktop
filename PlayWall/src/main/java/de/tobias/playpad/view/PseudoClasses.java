@@ -15,6 +15,4 @@ public class PseudoClasses {
 	public static final PseudoClass DRAG_CLASS = PseudoClass.getPseudoClass("drag");
 
 	public static final PseudoClass DEACTIVATED_CLASS = PseudoClass.getPseudoClass("deactivated");
-
-
 }

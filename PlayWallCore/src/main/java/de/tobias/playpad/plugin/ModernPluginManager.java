@@ -58,7 +58,7 @@ public class ModernPluginManager {
 	}
 
 	public void loadFile(Path path) {
-		if (path.endsWith("classes")) {
+		if (path.toString().endsWith("classes") || path.toString().endsWith("jar")) {
 			pluginManager.addPluginFile(path);
 		} else {
 			pluginManager.addPluginsOfDirectory(path);

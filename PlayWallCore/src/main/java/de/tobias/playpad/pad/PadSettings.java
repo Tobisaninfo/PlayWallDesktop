@@ -30,12 +30,12 @@ public class PadSettings {
 	private DoubleProperty volumeProperty = new SimpleDoubleProperty(1.0);
 	private DoubleProperty speedProperty = new SimpleDoubleProperty(1.0);
 	private BooleanProperty loopProperty = new SimpleBooleanProperty(false);
+	private BooleanProperty playOverlayProperty = new SimpleBooleanProperty(false);
 	private ObjectProperty<TimeMode> timeModeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<FadeSettings> fadeProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> warningProperty = new SimpleObjectProperty<>();
 	private ObjectProperty<Duration> cueInProperty = new SimpleObjectProperty<>();
 
-	private BooleanProperty customDesignProperty = new SimpleBooleanProperty(false);
 	private ModernCartDesign design;
 
 	private Map<TriggerPoint, Trigger> triggers = new EnumMap<>(TriggerPoint.class);
@@ -99,6 +99,18 @@ public class PadSettings {
 
 	public BooleanProperty loopProperty() {
 		return loopProperty;
+	}
+
+	public boolean isPlayOverlay() {
+		return playOverlayProperty.get();
+	}
+
+	public void setPlayOverlay(boolean playOverlay) {
+		playOverlayProperty.set(playOverlay);
+	}
+
+	public BooleanProperty playOverlayProperty() {
+		return playOverlayProperty;
 	}
 
 	public boolean isCustomTimeMode() {
@@ -187,21 +199,9 @@ public class PadSettings {
 		return cueInProperty.get();
 	}
 
-	public boolean isCustomDesign() {
-		return customDesignProperty.get();
-	}
-
-	public void setCustomDesign(boolean customLayout) {
-		this.customDesignProperty.set(customLayout);
-	}
-
-	public BooleanProperty customDesignProperty() {
-		return customDesignProperty;
-	}
-
 	public ModernCartDesign getDesign() {
 		if (design == null) {
-			ModernCartDesign newDesign = new ModernCartDesign(pad);
+			ModernCartDesign newDesign = new ModernCartDesign.ModernCartDesignBuilder(pad).build();
 
 			if (pad.getProject().getProjectReference().isSync()) {
 				CommandManager.execute(Commands.DESIGN_ADD, pad.getProject().getProjectReference(), newDesign);
@@ -255,6 +255,7 @@ public class PadSettings {
 
 		clone.volumeProperty = new SimpleDoubleProperty(getVolume());
 		clone.loopProperty = new SimpleBooleanProperty(isLoop());
+		clone.playOverlayProperty = new SimpleBooleanProperty(isPlayOverlay());
 
 		if (isCustomTimeMode())
 			clone.timeModeProperty = new SimpleObjectProperty<>(getTimeMode());
@@ -271,10 +272,7 @@ public class PadSettings {
 		else
 			clone.warningProperty = new SimpleObjectProperty<>();
 
-		clone.customDesignProperty = new SimpleBooleanProperty(isCustomDesign());
-		if (design != null) {
-			clone.design = design.copy(pad);
-		}
+		clone.design = design.copy(pad);
 
 		clone.triggers = new EnumMap<>(TriggerPoint.class);
 		triggers.forEach((key, value) -> clone.triggers.put(key, value.copy()));
@@ -307,10 +305,10 @@ public class PadSettings {
 	//// Computed
 
 	public ModernColor getBackgroundColor() {
-		if (isCustomDesign()) {
+		if (design.isEnableCustomBackgroundColor()) {
 			return design.getBackgroundColor();
-		} else {
-			return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 		}
+
+		return Profile.currentProfile().getProfileSettings().getDesign().getBackgroundColor();
 	}
 }

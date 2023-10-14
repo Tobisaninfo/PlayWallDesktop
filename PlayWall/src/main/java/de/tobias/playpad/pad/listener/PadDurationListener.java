@@ -7,7 +7,7 @@ import javafx.util.Duration;
 
 public class PadDurationListener implements ChangeListener<Duration> {
 
-	private AbstractPadViewController controller;
+	private final AbstractPadViewController controller;
 
 	public PadDurationListener(AbstractPadViewController controller) {
 		this.controller = controller;

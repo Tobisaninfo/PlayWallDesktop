@@ -1,11 +1,11 @@
 package de.tobias.playpad.initialize
 
-import java.util.UUID
-
 import de.thecodelabs.utils.application
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.project.ref.ProjectReferenceManager
 import javafx.application.Platform
+
+import java.util.UUID
 
 class OpenLastDocumentTask extends PlayPadInitializeTask {
 	override def name(): String = "Open Last Document"

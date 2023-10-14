@@ -119,10 +119,9 @@ public class ModernPluginViewController extends NVC implements ChangeListener<Mo
 		pluginList.getSelectionModel().selectedItemProperty().addListener(this);
 
 		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-			if(newValue == null || newValue.length() == 0) {
+			if (newValue == null || newValue.length() == 0) {
 				filteredData.setPredicate(s -> true);
-			}
-			else {
+			} else {
 				filteredData.setPredicate(p -> p.getDisplayName().contains(newValue));
 			}
 		});

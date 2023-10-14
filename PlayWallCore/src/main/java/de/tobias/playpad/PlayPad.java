@@ -108,6 +108,13 @@ public interface PlayPad {
 	Image getIcon();
 
 	/**
+	 * Gibt das Programm Icon als byte[] zurück.
+	 *
+	 * @return Icon
+	 */
+	byte[] getIconData();
+
+	/**
 	 * Beendet PlayWall.
 	 */
 	void shutdown();

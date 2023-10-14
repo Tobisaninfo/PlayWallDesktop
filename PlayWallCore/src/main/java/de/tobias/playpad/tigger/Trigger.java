@@ -106,25 +106,34 @@ public class Trigger {
 
 	public void handle(Pad pad, Duration currentDuration, Project project, IMainViewController mainViewController, Profile currentProfile) {
 		for (TriggerItem item : items) {
-			if (triggerPoint == TriggerPoint.START) {
-				handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.STOP) {
-				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.EOF) {
-				handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
-			} else if (triggerPoint == TriggerPoint.EOF_STATE) {
-				item.performAction(pad, project, mainViewController, currentProfile);
+			switch (triggerPoint) {
+				case START:
+					handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+					break;
+				case STOP:
+					item.performAction(pad, project, mainViewController, currentProfile);
+					break;
+				case EOF:
+					if (item.getDurationFromPoint() == Duration.ZERO) {
+						if (pad.isEof() && item.getPerformedAt() == null) {
+							item.setPerformedAt(currentDuration);
+							item.performAction(pad, project, mainViewController, currentProfile);
+						} else {
+							item.setPerformedAt(null);
+						}
+					} else {
+						handleEndPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+					}
+					break;
+				case PLAYLIST_START:
+				case PLAYLIST_ITEM_START:
+					handleStartPoint(pad, currentDuration, project, mainViewController, currentProfile, item);
+					break;
+				case PLAYLIST_ITEM_END:
+				case PLAYLIST_END:
+					item.performAction(pad, project, mainViewController, currentProfile);
+					break;
 			}
-		}
-	}
-
-	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
-		// Wenn Trigger noch nicht gespielt wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
-		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
-			item.performAction(pad, project, mainViewController, currentProfile);
-			item.setPerformedAt(duration);
-		} else if (item.getDurationFromPoint().lessThan(duration)) {
-			item.setPerformedAt(null);
 		}
 	}
 
@@ -140,6 +149,16 @@ public class Trigger {
 			} else if (item.getDurationFromPoint().greaterThan(duration)) {
 				item.setPerformedAt(null);
 			}
+		}
+	}
+
+	private void handleEndPoint(Pad pad, Duration duration, Project project, IMainViewController mainViewController, Profile currentProfile, TriggerItem item) {
+		// Wenn Trigger noch nicht gespielt wurde (null) und Zeit größer ist als gesetzte Zeit (oder 0)
+		if (item.getPerformedAt() == null && (item.getDurationFromPoint().greaterThan(duration) || duration.equals(Duration.ZERO))) {
+			item.performAction(pad, project, mainViewController, currentProfile);
+			item.setPerformedAt(duration);
+		} else if (item.getDurationFromPoint().lessThan(duration)) {
+			item.setPerformedAt(null);
 		}
 	}
 }

@@ -1,7 +1,5 @@
 package de.tobias.playpad.initialize
 
-import java.io.IOException
-
 import de.thecodelabs.logger.Logger
 import de.thecodelabs.utils.application
 import de.thecodelabs.utils.threading.Worker
@@ -9,6 +7,8 @@ import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.viewcontroller.dialog.AutoUpdateDialog
 import javafx.application.Platform
 import javafx.scene.control.ButtonType
+
+import java.io.IOException
 
 class CheckUpdateTask extends PlayPadInitializeTask {
 	override def name(): String = "Updates"

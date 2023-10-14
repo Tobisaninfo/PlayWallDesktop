@@ -1,4 +1,5 @@
 package de.tobias.playpad.initialize
+
 import de.thecodelabs.utils.application
 import de.thecodelabs.utils.application.system.NativeApplication
 import de.tobias.playpad.PlayPadImpl

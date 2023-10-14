@@ -9,6 +9,7 @@ import de.tobias.playpad.Strings;
 import de.tobias.playpad.layout.desktop.listener.PadNewContentListener;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.PadContentPlaylistFactory;
 import de.tobias.playpad.pad.content.PadContentRegistry;
 import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.mediapath.MediaPath;
@@ -16,10 +17,9 @@ import de.tobias.playpad.viewcontroller.PadSettingsTabViewController;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.util.Collections;
@@ -28,10 +28,15 @@ import java.util.List;
 public class PlaylistTabViewController extends PadSettingsTabViewController {
 
 	@FXML
-	private ListView<MediaPath> mediaPathListView;
+	private CheckBox shuffleCheckbox;
+	@FXML
+	private CheckBox autoNextCheckbox;
 
 	@FXML
 	private Button addButton;
+
+	@FXML
+	private ListView<MediaPath> mediaPathListView;
 	@FXML
 	private Button upButton;
 	@FXML
@@ -43,6 +48,9 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 	private Button deleteButton;
 	@FXML
 	private Button showFileButton;
+
+	@FXML
+	private VBox customItemView;
 
 	private final Pad pad;
 
@@ -86,6 +94,14 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 			} else {
 				pathLabel.setText(Localization.getString("padSettings.gen.label.media.empty"));
 			}
+
+			customItemView.getChildren().clear();
+
+			final PadContentFactory factory = PlayPadPlugin.getRegistries().getPadContents().getFactory(pad.getContentType());
+			if (factory instanceof PadContentPlaylistFactory) {
+				final Node customPlaylistItemView = ((PadContentPlaylistFactory) factory).getCustomPlaylistItemView(pad, newValue);
+				customItemView.getChildren().add(customPlaylistItemView);
+			}
 		});
 	}
 
@@ -108,12 +124,14 @@ public class PlaylistTabViewController extends PadSettingsTabViewController {
 
 	@Override
 	public void loadSettings(Pad pad) {
-		// Not implemented
+		shuffleCheckbox.setSelected((Boolean) pad.getPadSettings().getCustomSettings().getOrDefault(Playlistable.SHUFFLE_SETTINGS_KEY, false));
+		autoNextCheckbox.setSelected((Boolean) pad.getPadSettings().getCustomSettings().getOrDefault(Playlistable.AUTO_NEXT_SETTINGS_KEY, true));
 	}
 
 	@Override
 	public void saveSettings(Pad pad) {
-		// Not implemented
+		pad.getPadSettings().getCustomSettings().put(Playlistable.SHUFFLE_SETTINGS_KEY, shuffleCheckbox.isSelected());
+		pad.getPadSettings().getCustomSettings().put(Playlistable.AUTO_NEXT_SETTINGS_KEY, autoNextCheckbox.isSelected());
 	}
 
 	@FXML

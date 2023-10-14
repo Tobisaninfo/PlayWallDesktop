@@ -13,13 +13,15 @@ import javafx.collections.ListChangeListener;
  */
 public interface PadListener {
 
+	void onNameChanged(Pad pad, String oldValue, String newValue);
+
 	/**
 	 * Call then ever the status of a pad will be changed
 	 *
 	 * @param pad      corresponding pad
 	 * @param newValue new status value
 	 */
-	void onStatusChange(Pad pad, PadStatus newValue);
+	void onStatusChange(Pad pad, PadStatus oldValue, PadStatus newValue);
 
 	default void onMediaPathChanged(Pad pad, ListChangeListener.Change<? extends MediaPath> value) {
 	}

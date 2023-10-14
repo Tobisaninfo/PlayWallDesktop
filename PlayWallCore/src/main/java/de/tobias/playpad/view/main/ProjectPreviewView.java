@@ -1,9 +1,9 @@
 package de.tobias.playpad.view.main;
 
-import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
-import de.tobias.playpad.project.Project;
-import de.tobias.playpad.project.page.Page;
+import de.tobias.playpad.project.api.IPad;
+import de.tobias.playpad.project.api.IPage;
+import de.tobias.playpad.project.api.IProject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -18,10 +18,10 @@ import java.util.List;
 
 public class ProjectPreviewView extends Pagination {
 
-	private final Project project;
-	private final ObservableList<Pad> selected;
+	private final IProject project;
+	private final ObservableList<IPad> selected;
 
-	public ProjectPreviewView(Project project, List<Pad> preSelect, int initialPage) {
+	public ProjectPreviewView(IProject project, List<? extends IPad> preSelect, int initialPage) {
 		super(project.getPages().size());
 		this.project = project;
 		this.selected = FXCollections.observableArrayList(preSelect);
@@ -30,7 +30,7 @@ public class ProjectPreviewView extends Pagination {
 		setPageFactory(this::getPageNode);
 	}
 
-	private Node getPageNode(int index) {
+	private Node getPageNode(int pageIndex) {
 		GridPane gridPane = new GridPane();
 		gridPane.setHgap(7);
 		gridPane.setVgap(7);
@@ -38,10 +38,10 @@ public class ProjectPreviewView extends Pagination {
 
 		gridPane.setPadding(new Insets(0, 0, 7, 0));
 
-		final Page page = project.getPage(index);
+		final IPage page = project.getPage(pageIndex);
 		for (int x = 0; x < project.getSettings().getColumns(); x++) {
 			for (int y = 0; y < project.getSettings().getRows(); y++) {
-				final Pad pad = page.getPad(x, y);
+				final IPad pad = page.getPad(x, y);
 				ToggleButton toggleButton = getToggleButton(selected, pad);
 
 				gridPane.add(toggleButton, x, y);
@@ -50,7 +50,7 @@ public class ProjectPreviewView extends Pagination {
 		return gridPane;
 	}
 
-	private ToggleButton getToggleButton(List<Pad> preSelect, Pad pad) {
+	private ToggleButton getToggleButton(List<IPad> preSelect, IPad pad) {
 		ToggleButton toggleButton = new ToggleButton(String.valueOf(pad.getPositionReadable()));
 		if (pad.getStatus() != PadStatus.EMPTY) {
 			toggleButton.setTooltip(new Tooltip(pad.getName()));
@@ -72,11 +72,11 @@ public class ProjectPreviewView extends Pagination {
 		return toggleButton;
 	}
 
-	public List<Pad> getSelected() {
+	public List<? extends IPad> getSelected() {
 		return selected;
 	}
 
-	public ObservableList<Pad> selectedProperty() {
+	public ObservableList<? extends IPad> selectedProperty() {
 		return selected;
 	}
 }

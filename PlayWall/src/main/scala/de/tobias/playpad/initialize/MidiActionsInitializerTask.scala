@@ -1,10 +1,11 @@
 package de.tobias.playpad.initialize
+
 import de.thecodelabs.midi.action.{ActionKeyHandler, ActionRegistry}
 import de.thecodelabs.midi.midi.MidiCommandHandler
 import de.thecodelabs.utils.application
-import de.tobias.playpad.{PlayPadImpl, PlayPadPlugin}
 import de.tobias.playpad.action.ActionProvider
 import de.tobias.playpad.midi.PD12
+import de.tobias.playpad.{PlayPadImpl, PlayPadPlugin}
 
 class MidiActionsInitializerTask extends PlayPadInitializeTask {
 

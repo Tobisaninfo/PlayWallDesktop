@@ -12,8 +12,6 @@ object ProjectSerializer {
 
 		result.addProperty("id", project.getProjectReference.getUuid.toString)
 		result.addProperty("name", project.getProjectReference.getName)
-		result.addProperty("columns", project.getSettings.getColumns)
-		result.addProperty("rows", project.getSettings.getRows)
 
 		val pageArray = new JsonArray()
 		project.getPages.forEach(page => {
@@ -34,8 +32,12 @@ object ProjectSerializer {
 				padObject.addProperty("page", pad.getPage.getPosition)
 
 				val padDesign = new JsonObject
-				padDesign.add("normal", serializeDesign(pad.getPadSettings.getDesign.getBackgroundColor))
-				padDesign.add("play", serializeDesign(pad.getPadSettings.getDesign.getPlayColor))
+				if (pad.getPadSettings.getDesign.isEnableCustomBackgroundColor) {
+					padDesign.add("normal", serializeDesign(pad.getPadSettings.getDesign.getBackgroundColor))
+				}
+				if (pad.getPadSettings.getDesign.isEnableCustomPlayColor) {
+					padDesign.add("play", serializeDesign(pad.getPadSettings.getDesign.getPlayColor))
+				}
 				padObject.add("design", padDesign)
 
 				padArray.add(padObject)
@@ -50,6 +52,11 @@ object ProjectSerializer {
 		globalDesign.add("normal", serializeDesign(profile.getProfileSettings.getDesign.getBackgroundColor))
 		globalDesign.add("play", serializeDesign(profile.getProfileSettings.getDesign.getPlayColor))
 		result.add("design", globalDesign)
+
+		val settings = new JsonObject
+		settings.addProperty("columns", project.getSettings.getColumns)
+		settings.addProperty("rows", project.getSettings.getRows)
+		result.add("settings", settings)
 
 		result
 	}

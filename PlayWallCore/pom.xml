@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.tobias.playpad</groupId>
         <artifactId>PlayWallDesktop</artifactId>
-        <version>7.1.0</version>
+        <version>7.2.0</version>
     </parent>
 
     <artifactId>PlayWallCore</artifactId>
@@ -120,6 +120,12 @@
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>
             <version>${jna.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.jni4net</groupId>
+            <artifactId>jni4net.j</artifactId>
+            <version>${jni4net.j.version}</version>
         </dependency>
 
         <!--Tools-->

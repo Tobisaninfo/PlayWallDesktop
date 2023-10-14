@@ -1,4 +1,5 @@
 package de.tobias.playpad.initialize
+
 import de.thecodelabs.utils.application
 import de.tobias.playpad.server.ServerHandlerImpl
 import de.tobias.playpad.server.sync.command.CommandExecutorHandlerImpl

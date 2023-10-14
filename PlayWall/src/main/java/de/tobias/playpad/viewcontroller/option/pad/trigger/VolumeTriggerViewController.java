@@ -6,6 +6,7 @@ import de.tobias.playpad.PlayPadMain;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.trigger.VolumeTriggerItem;
 import de.tobias.playpad.view.main.ProjectPreviewView;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
@@ -48,7 +49,7 @@ public class VolumeTriggerViewController extends NVC {
 		projectPreviewView.setPadding(new Insets(0, 0, 0, 164));
 		projectPreviewView.selectedProperty().addListener((InvalidationListener) observable -> {
 			item.getCarts().clear();
-			for (Pad pad : projectPreviewView.getSelected()) {
+			for (IPad pad : projectPreviewView.getSelected()) {
 				item.getCarts().add(pad.getUuid());
 			}
 		});

@@ -1,7 +1,6 @@
 package de.tobias.playpad.viewcontroller.actions;
 
 import de.thecodelabs.midi.action.Action;
-import de.thecodelabs.utils.ui.NVC;
 import de.thecodelabs.utils.util.Localization;
 import de.tobias.playpad.Strings;
 import de.tobias.playpad.action.actions.CartAction;
@@ -13,7 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class CartActionViewController extends NVC {
+public class CartActionViewController extends AbstractActionViewController {
 
 	@FXML
 	private ComboBox<CartActionMode> controlMode;
@@ -41,6 +40,7 @@ public class CartActionViewController extends NVC {
 		VBox.setVgrow(rootContainer, Priority.ALWAYS);
 	}
 
+	@Override
 	public void setCartAction(Action action) {
 		this.action = action;
 

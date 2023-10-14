@@ -24,10 +24,10 @@ public class PlayPadInitializer implements Runnable {
 		void errorLoading(PlayPadInitializeTask task, Exception e);
 	}
 
-	private List<PlayPadInitializeTask> tasks;
+	private final List<PlayPadInitializeTask> tasks;
 
-	private PlayPadImpl instance;
-	private Listener listener;
+	private final PlayPadImpl instance;
+	private final Listener listener;
 
 	public PlayPadInitializer(PlayPadImpl instance, Listener listener) {
 		tasks = new ArrayList<>();
@@ -42,6 +42,9 @@ public class PlayPadInitializer implements Runnable {
 	public void start() {
 		Thread thread = new Thread(this);
 		thread.setName("PlayPad Initializer Thread");
+		thread.setUncaughtExceptionHandler((t, e) -> {
+			Logger.error(e);
+		});
 		thread.start();
 	}
 

@@ -41,13 +41,13 @@ public class DesignUpdateListener implements ServerListener {
 						if (field.equals(PropertyDef.DESIGN_BACKGROUND_COLOR)) {
 							Platform.runLater(() -> {
 								design.setBackgroundColor(color);
-								pad.getPadSettings().setCustomDesign(true);
+								design.setEnableCustomBackgroundColor(true);
 								mainViewController.loadUserCss();
 							});
 						} else if (field.equals(PropertyDef.DESIGN_PLAY_COLOR)) {
 							Platform.runLater(() -> {
 								design.setPlayColor(color);
-								pad.getPadSettings().setCustomDesign(true);
+								design.setEnableCustomPlayColor(true);
 								mainViewController.loadUserCss();
 							});
 						}

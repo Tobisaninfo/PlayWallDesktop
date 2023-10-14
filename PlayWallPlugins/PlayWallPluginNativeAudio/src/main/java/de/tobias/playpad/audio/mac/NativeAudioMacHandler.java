@@ -20,14 +20,14 @@ public class NativeAudioMacHandler extends AudioHandler implements Peakable, See
 
 	public static final String SOUND_CARD = "SoundCardMac";
 
-	private ObjectProperty<Duration> positionProperty;
-	private ObjectProperty<Duration> durationProperty;
+	private final ObjectProperty<Duration> positionProperty;
+	private final ObjectProperty<Duration> durationProperty;
 	private boolean isLoaded;
 
-	private DoubleProperty leftPeak;
-	private DoubleProperty rightPeak;
+	private final DoubleProperty leftPeak;
+	private final DoubleProperty rightPeak;
 
-	private AVAudioPlayerBridge bridge;
+	private final AVAudioPlayerBridge bridge;
 
 	NativeAudioMacHandler(PadContent content) {
 		super(content);

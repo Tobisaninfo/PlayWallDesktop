@@ -1,5 +1,6 @@
 package de.tobias.playpad.pad.fade;
 
+import de.thecodelabs.logger.Logger;
 import javafx.animation.Transition;
 import javafx.util.Duration;
 
@@ -42,6 +43,8 @@ public abstract class AbstractFadeController {
 	}
 
 	public void fade(double from, double to, Duration duration, Runnable onFinish) {
+		Logger.debug("Fading from {0} to {1} in {2}", from, to, duration);
+
 		if (currentFadeTransition != null) {
 			currentFadeTransition.stop();
 		}

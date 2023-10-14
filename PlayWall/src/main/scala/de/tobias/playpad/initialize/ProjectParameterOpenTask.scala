@@ -1,11 +1,10 @@
 package de.tobias.playpad.initialize
 
-import java.util.UUID
-
 import de.thecodelabs.utils.application
 import de.tobias.playpad.PlayPadImpl
 import de.tobias.playpad.project.ref.ProjectReferenceManager
-;
+
+import java.util.UUID;
 
 class ProjectParameterOpenTask extends PlayPadInitializeTask {
 	override def name(): String = "Open"

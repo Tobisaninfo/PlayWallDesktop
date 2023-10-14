@@ -10,7 +10,7 @@ import javafx.beans.value.ObservableValue;
 
 public class PadStatusListener implements ChangeListener<PadStatus> {
 
-	private AbstractPadViewController controller;
+	private final AbstractPadViewController controller;
 
 	public PadStatusListener(AbstractPadViewController controller) {
 		this.controller = controller;

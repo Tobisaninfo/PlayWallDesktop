@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAudioDelegate {
 
-	private NativeAudioMacHandlerFactory factory;
+	private final NativeAudioMacHandlerFactory factory;
 
 	public AVAudioPlayerBridgeDelegate(NativeAudioMacHandlerFactory factory) {
 		this.factory = factory;
@@ -24,6 +24,7 @@ public class AVAudioPlayerBridgeDelegate implements AVAudioPlayerBridge.NativeAu
 		nativeAudioMacHandler.ifPresent(handler -> {
 			PadContent content = handler.getContent();
 			if (content != null) {
+				content.getPad().setEof(true);
 				content.getPad().setStatus(PadStatus.STOP);
 			}
 		});

@@ -69,8 +69,8 @@ public class TriggerPointViewController extends NVC {
 		try {
 			TriggerItemFactory connect = PlayPadPlugin.getRegistries().getTriggerItems().getFactory(item.getType());
 
-			VBox itemBox = new VBox(14);
-			NVC controller = connect.getSettingsController(item, mainViewController);
+			final VBox itemBox = new VBox(14);
+			final NVC controller = connect.getSettingsController(item, mainViewController);
 			if (controller != null) {
 				itemBox.getChildren().add(controller.getParent());
 
@@ -79,11 +79,11 @@ public class TriggerPointViewController extends NVC {
 					itemBox.getChildren().add(timeViewController.getParent());
 				}
 
-				Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
-				HBox hbox = new HBox(itemBox, deleteButton);
+				final Button deleteButton = new Button("", new FontIcon(FontAwesomeType.TRASH));
+				final HBox hbox = new HBox(itemBox, deleteButton);
 				hbox.setSpacing(14);
 
-				VBox rootBox = new VBox(14.0, hbox, new Separator());
+				final VBox rootBox = new VBox(14.0, hbox, new Separator());
 
 				itemView.getChildren().addAll(rootBox);
 

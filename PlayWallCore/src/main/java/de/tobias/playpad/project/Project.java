@@ -3,6 +3,7 @@ package de.tobias.playpad.project;
 import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.pad.mediapath.MediaPath;
+import de.tobias.playpad.project.api.IProject;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.ref.ProjectReference;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  * @author tobias
  * @since 6.0.0
  */
-public class Project {
+public class Project implements IProject {
 
 	/**
 	 * Project file extension.
@@ -73,6 +74,7 @@ public class Project {
 				.forEach(Pad::stop);
 	}
 
+	@Override
 	public ProjectSettings getSettings() {
 		return settings;
 	}
@@ -81,15 +83,18 @@ public class Project {
 		return projectReference;
 	}
 
+	@Override
 	public Pad getPad(int x, int y, int page) {
 		return getPage(page).getPad(x, y);
 	}
 
+	@Override
 	public Pad getPad(PadIndex index) {
 		Page page = pages.get(index.getPagePosition());
 		return page.getPad(index.getId());
 	}
 
+	@Override
 	public Pad getPad(UUID uuid) {
 		for (Page page : pages) {
 			for (Pad pad : page.getPads()) {
@@ -102,21 +107,19 @@ public class Project {
 	}
 
 	public void setPad(PadIndex index, Pad pad) {
-		if (pad == null) {
-			return;
-		}
-		// Remove Pad from old location
-		if (pad.getPage().getPosition() != index.getPagePosition()) {
-			Page oldPage = pad.getPage();
+		// Remove Pad from old location if page changed
+		if (pad != null && pad.getPage().getPosition() != index.getPagePosition()) {
+			final Page oldPage = pad.getPage();
 			if (oldPage.getPad(pad.getPosition()).equals(pad)) {
 				oldPage.setPad(index.getId(), null);
 			}
 		}
 
-		Page page = pages.get(index.getPagePosition());
+		final Page page = pages.get(index.getPagePosition());
 		page.setPad(index.getId(), pad);
 	}
 
+	@Override
 	public Collection<Pad> getPads() {
 		return getPads(p -> true);
 	}
@@ -135,6 +138,7 @@ public class Project {
 	}
 
 	// Pages
+	@Override
 	public Page getPage(int position) {
 		if (position >= ProjectSettings.MAX_PAGES) {
 			return null;
@@ -146,7 +150,7 @@ public class Project {
 		return pages.get(position);
 	}
 
-
+	@Override
 	public Page getPage(UUID uuid) {
 		for (Page page : pages) {
 			if (page.getId().equals(uuid)) {
@@ -156,6 +160,7 @@ public class Project {
 		return null;
 	}
 
+	@Override
 	public ObservableList<Page> getPages() {
 		// Create new page if all is empty (automatic)
 		if (pages.isEmpty()) {

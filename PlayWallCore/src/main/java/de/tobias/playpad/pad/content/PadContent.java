@@ -34,7 +34,12 @@ public abstract class PadContent {
 
 	public abstract String getType();
 
-	public abstract void play();
+	/**
+	 * Start playing the media of the pad
+	 *
+	 * @param withFadeIn a fade that indicates whether the content gets fade in or not
+	 */
+	public abstract void play(boolean withFadeIn);
 
 	public abstract boolean stop();
 

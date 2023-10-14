@@ -4,11 +4,13 @@ import de.thecodelabs.plugins.PluginDescriptor
 import de.thecodelabs.storage.settings.{Storage, StorageTypes}
 import de.thecodelabs.utils.util.Localization
 import de.tobias.playpad.PlayPadPlugin
-import de.tobias.playpad.plugin.content.player.ContentPlayerViewController
-import de.tobias.playpad.plugin.content.settings.{ZoneConfiguration, ZoneSettingsViewController}
-import de.tobias.playpad.plugin.{Module, PlayPadPluginStub, SettingsListener}
+import de.tobias.playpad.plugin.content.player.ContentPlayerWindowController
+import de.tobias.playpad.plugin.content.settings.{ContentPlayerPluginConfiguration, ContentPlayerSettingsViewController}
+import de.tobias.playpad.plugin.content.util.FfmpegUtils
+import de.tobias.playpad.plugin.{Jni4NetBridgeInitializer, Module, PlayPadPluginStub, SettingsListener}
 import de.tobias.playpad.profile.{Profile, ProfileListener}
 import javafx.application.Platform
+import nativecontentplayerwindows.ContentPlayerWindow
 
 class ContentPluginMain extends PlayPadPluginStub with SettingsListener with ProfileListener {
 
@@ -17,25 +19,32 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 	override def startup(descriptor: PluginDescriptor): Unit = {
 		module = new Module(descriptor.getName, descriptor.getArtifactId)
 
+		Jni4NetBridgeInitializer.initialize()
+		Jni4NetBridgeInitializer.loadDll(getClass.getClassLoader, "dlls/", "j4n", "NativeContentPlayerWindows.j4n.dll",
+			"NativeContentPlayerWindows.j4n.dll", "NativeContentPlayerWindows.dll", "PVS.MediaPlayer.dll")
+
+		ContentPluginMain.window = new ContentPlayerWindow()
+		ContentPluginMain.window.SetSize(1440, 80)
+
 		val localization = Localization.loadBundle("lang/base", getClass.getClassLoader)
 		Localization.addResourceBundle(localization)
 
 		PlayPadPlugin.getRegistries.getPadContents.loadComponentsFromFile("PadContent.xml", getClass.getClassLoader, module, localization)
-		PlayPadPlugin.getInstance().addAdditionalProfileSettingsTab(() => new ZoneSettingsViewController)
+		PlayPadPlugin.getInstance().addAdditionalProfileSettingsTab(() => new ContentPlayerSettingsViewController)
 
 		PlayPadPlugin.getInstance().addSettingsListener(this)
 		Profile.registerListener(this)
 	}
 
 	override def shutdown(): Unit = {
-		ContentPluginMain.playerViewController.getStageContainer.ifPresent(container => container.forceClose())
+		ContentPluginMain.playerViewController.window.Close()
 	}
 
 	override def getModule: Module = module
 
 	override def onLoad(profile: Profile): Unit = {
 		val path = profile.getRef.getCustomFilePath("Zones.json")
-		val zoneConfiguration = Storage.load(path, StorageTypes.JSON, classOf[ZoneConfiguration])
+		val zoneConfiguration = Storage.load(path, StorageTypes.JSON, classOf[ContentPlayerPluginConfiguration])
 		profile.addCustomSettings(ContentPluginMain.zoneConfigurationKey, zoneConfiguration)
 	}
 
@@ -48,13 +57,16 @@ class ContentPluginMain extends PlayPadPluginStub with SettingsListener with Pro
 	}
 
 	override def reloadSettings(oldProfile: Profile, currentProfile: Profile): Unit = {
-		val zoneConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ZoneConfiguration]
-		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(zoneConfiguration))
+		FfmpegUtils.initialize()
+
+		val pluginConfiguration = currentProfile.getCustomSettings(ContentPluginMain.zoneConfigurationKey).asInstanceOf[ContentPlayerPluginConfiguration]
+		Platform.runLater(() => ContentPluginMain.playerViewController.configurePlayers(pluginConfiguration))
 	}
 }
 
 object ContentPluginMain {
-	lazy val playerViewController: ContentPlayerViewController = new ContentPlayerViewController
+	lazy val playerViewController: ContentPlayerWindowController = new ContentPlayerWindowController
+	private var window: ContentPlayerWindow = _
 
 	val zoneConfigurationKey = "ZoneConfiguration"
 }

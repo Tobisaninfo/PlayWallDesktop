@@ -45,9 +45,8 @@ public class ServerSyncListener extends WebSocketAdapter {
 	private static final int CONNECTION_CLOSED = 1005; // Login failed
 	private static final int DISCONNECTED = 1002; // Server closed
 
-	private ObjectProperty<ConnectionState> connectionStateProperty;
-
-	private Map<String, ServerListener> commands;
+	private final ObjectProperty<ConnectionState> connectionStateProperty;
+	private final Map<String, ServerListener> commands;
 
 	ServerSyncListener() {
 		commands = new HashMap<>();
@@ -103,7 +102,7 @@ public class ServerSyncListener extends WebSocketAdapter {
 	}
 
 	@Override
-	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+	public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) {
 		Logger.info("Disconnected: " + clientCloseFrame.getCloseReason());
 		if (clientCloseFrame.getCloseCode() == CONNECTION_CLOSED) {
 			connectionStateProperty.set(ConnectionState.CONNECTION_LOST);
@@ -115,9 +114,8 @@ public class ServerSyncListener extends WebSocketAdapter {
 	}
 
 	@Override
-	public void onTextMessage(WebSocket websocket, String text) throws Exception {
-		JsonParser parser = new JsonParser();
-		JsonElement element = parser.parse(text);
+	public void onTextMessage(WebSocket websocket, String text) {
+		final JsonElement element = JsonParser.parseString(text);
 		if (element instanceof JsonObject) {
 			JsonObject json = (JsonObject) element;
 			String cmd = json.get("cmd").getAsString();

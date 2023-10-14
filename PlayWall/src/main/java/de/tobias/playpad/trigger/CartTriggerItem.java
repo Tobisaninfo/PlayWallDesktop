@@ -5,30 +5,30 @@ import de.tobias.playpad.pad.Pad;
 import de.tobias.playpad.pad.PadStatus;
 import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.project.Project;
+import de.tobias.playpad.tigger.LocalPadTrigger;
 import de.tobias.playpad.tigger.TriggerItem;
 import de.tobias.playpad.viewcontroller.main.IMainViewController;
 import org.dom4j.Element;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CartTriggerItem extends TriggerItem {
+public class CartTriggerItem extends TriggerItem implements LocalPadTrigger {
 
 	private List<UUID> uuids;
 	private boolean allCarts;
 	private PadStatus newStatus; // Only Play, Pause, Stop
 
-	private String type;
+	private final String type;
 
 	CartTriggerItem(String type) {
-		super();
 		this.type = type;
-		newStatus = PadStatus.PLAY;
-		allCarts = false;
-		uuids = new UniqList<>();
+		this.newStatus = PadStatus.PLAY;
+		this.allCarts = false;
+		this.uuids = new UniqList<>();
 	}
 
+	@Override
 	public List<UUID> getCarts() {
 		return uuids;
 	}
@@ -64,11 +64,9 @@ public class CartTriggerItem extends TriggerItem {
 			}
 		} else {
 			for (UUID uuid : uuids) {
-				if (!uuid.equals(source.getUuid())) {
-					Pad pad = project.getPad(uuid);
-					if (pad != null)
-						pad.setStatus(newStatus);
-				}
+				Pad pad = project.getPad(uuid);
+				if (pad != null)
+					pad.setStatus(newStatus);
 			}
 		}
 	}
@@ -77,7 +75,7 @@ public class CartTriggerItem extends TriggerItem {
 	public TriggerItem copy() {
 		CartTriggerItem clone = new CartTriggerItem(getType());
 
-		clone.uuids = new ArrayList<>();
+		clone.uuids = new UniqList<>();
 		clone.uuids.addAll(uuids);
 		clone.allCarts = allCarts;
 		clone.newStatus = newStatus;

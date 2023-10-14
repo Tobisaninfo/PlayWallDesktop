@@ -4,18 +4,22 @@ import de.thecodelabs.utils.io.PathUtils;
 import de.tobias.playpad.PlayPadPlugin;
 import de.tobias.playpad.pad.content.PadContent;
 import de.tobias.playpad.pad.content.PadContentFactory;
+import de.tobias.playpad.pad.content.Playlistable;
 import de.tobias.playpad.pad.content.play.Pauseable;
 import de.tobias.playpad.pad.fade.listener.PadFadeContentListener;
 import de.tobias.playpad.pad.fade.listener.PadFadeDurationListener;
+import de.tobias.playpad.pad.listener.PadNameChangeListener;
 import de.tobias.playpad.pad.listener.PadStatusControlListener;
 import de.tobias.playpad.pad.listener.PadStatusNotFoundListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerContentListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerDurationListener;
+import de.tobias.playpad.pad.listener.trigger.PadTriggerPlaylistListener;
 import de.tobias.playpad.pad.listener.trigger.PadTriggerStatusListener;
 import de.tobias.playpad.pad.mediapath.MediaPath;
 import de.tobias.playpad.pad.viewcontroller.AbstractPadViewController;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectSettings;
+import de.tobias.playpad.project.api.IPad;
 import de.tobias.playpad.project.page.PadIndex;
 import de.tobias.playpad.project.page.Page;
 import de.tobias.playpad.project.page.PageCoordinate;
@@ -39,7 +43,7 @@ import java.util.UUID;
  * @author tobias
  * @version 6.2.0
  */
-public class Pad {
+public class Pad implements IPad {
 
 	private UUID uuid;
 	private IntegerProperty positionProperty = new SimpleIntegerProperty();
@@ -62,6 +66,7 @@ public class Pad {
 	 */
 
 	// Global Listener (unabhängig von der UI), für Core Functions wie Play, Pause
+	private transient PadNameChangeListener padNameChangeListener;
 	private transient PadStatusControlListener padStatusControlListener;
 	private transient PadStatusNotFoundListener padStatusNotFoundListener;
 	private transient PadFadeContentListener padFadeContentListener;
@@ -73,6 +78,7 @@ public class Pad {
 	private transient PadTriggerStatusListener padTriggerStatusListener;
 	private transient PadTriggerDurationListener padTriggerDurationListener;
 	private transient PadTriggerContentListener padTriggerContentListener;
+	private transient PadTriggerPlaylistListener padTriggerPlaylistListener;
 	private transient boolean ignoreTrigger = false;
 
 	// Utils
@@ -93,10 +99,10 @@ public class Pad {
 		padListener = new PadUpdateListener(this);
 	}
 
-	public Pad(Project project, int index, Page page) {
+	public Pad(Project project, int position, Page page) {
 		this(project);
 
-		setPosition(index);
+		setPosition(position);
 		setPage(page);
 		setStatus(PadStatus.EMPTY);
 
@@ -117,6 +123,9 @@ public class Pad {
 
 	private void initPadListener() {
 		// Remove old listener from properties
+		if (padNameChangeListener != null && nameProperty != null) {
+			nameProperty.removeListener(padNameChangeListener);
+		}
 		if (padStatusControlListener != null && statusProperty != null) {
 			statusProperty.removeListener(padStatusControlListener);
 		}
@@ -127,6 +136,11 @@ public class Pad {
 			contentProperty.removeListener(padTriggerContentListener);
 			padTriggerContentListener.changed(contentProperty, getContent(), null);
 		}
+		if (padTriggerPlaylistListener != null && contentProperty != null) {
+			if (getContent() instanceof Playlistable) {
+				((Playlistable) getContent()).removePlaylistListener(padTriggerPlaylistListener);
+			}
+		}
 
 		if (padFadeDurationListener != null && contentProperty != null) {
 			contentProperty.removeListener(padFadeContentListener);
@@ -134,18 +148,18 @@ public class Pad {
 		}
 
 		// init new listener for properties
+		padNameChangeListener = new PadNameChangeListener(this);
+		nameProperty.addListener(padNameChangeListener);
 		padStatusControlListener = new PadStatusControlListener(this);
 		statusProperty.addListener(padStatusControlListener);
 
 		// Fade
-
 		padFadeDurationListener = new PadFadeDurationListener(this);
 		padFadeContentListener = new PadFadeContentListener(this);
 		contentProperty.addListener(padFadeContentListener);
 		padFadeContentListener.changed(contentProperty, null, getContent());
 
 		// Not found status count
-
 		padStatusNotFoundListener = new PadStatusNotFoundListener(project);
 		statusProperty.addListener(padStatusNotFoundListener);
 
@@ -159,6 +173,8 @@ public class Pad {
 		padTriggerContentListener = new PadTriggerContentListener(this);
 		contentProperty.addListener(padTriggerContentListener);
 		padTriggerContentListener.changed(contentProperty, null, getContent());
+
+		padTriggerPlaylistListener = new PadTriggerPlaylistListener();
 
 		// Pad Listener
 		if (mediaPathUpdateListener != null) {
@@ -186,6 +202,7 @@ public class Pad {
 	 *
 	 * @return uuid
 	 */
+	@Override
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -222,6 +239,7 @@ public class Pad {
 	 *
 	 * @return position
 	 */
+	@Override
 	public int getPositionReadable() {
 		return positionProperty.get() + 1;
 	}
@@ -231,6 +249,7 @@ public class Pad {
 	 *
 	 * @return position
 	 */
+	@Override
 	public int getPosition() {
 		return positionProperty.get();
 	}
@@ -275,6 +294,7 @@ public class Pad {
 	 *
 	 * @return name
 	 */
+	@Override
 	public String getName() {
 		return nameProperty.get();
 	}
@@ -397,6 +417,7 @@ public class Pad {
 	 *
 	 * @return status
 	 */
+	@Override
 	public PadStatus getStatus() {
 		return statusProperty.get();
 	}
@@ -602,6 +623,10 @@ public class Pad {
 
 	public PadTriggerDurationListener getPadTriggerDurationListener() {
 		return padTriggerDurationListener;
+	}
+
+	public PadTriggerPlaylistListener getPadTriggerPlaylistListener() {
+		return padTriggerPlaylistListener;
 	}
 
 	public PadFadeDurationListener getPadFadeDurationListener() {

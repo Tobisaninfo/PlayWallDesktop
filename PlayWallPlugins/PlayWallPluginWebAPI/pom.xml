@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>PlayWallPlugins</artifactId>
         <groupId>de.tobias.playpad</groupId>
-        <version>7.1.0</version>
+        <artifactId>PlayWallPlugins</artifactId>
+        <version>7.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -28,6 +28,11 @@
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>${spark-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.tobias.playpad</groupId>
+            <artifactId>PlayWallWebApiClient</artifactId>
+            <version>${PlayWallWebApiClient.version}</version>
         </dependency>
     </dependencies>
 

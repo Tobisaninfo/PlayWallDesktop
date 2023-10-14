@@ -2,3 +2,4 @@
 **/build
 **/.idea/**
 *.iml
+.idea/encodings.xml 

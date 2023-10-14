@@ -78,7 +78,6 @@ public class ProjectJsonReader {
 			ModernCartDesign design = readModernCartDesign(pad, object.getJSONObject("design"));
 			if (design != null) {
 				pad.getPadSettings().setDesign(design);
-				pad.getPadSettings().setCustomDesign(true); // TODO Sync
 			}
 		}
 
@@ -101,7 +100,11 @@ public class ProjectJsonReader {
 			ModernColor backgroundColor = ModernColor.valueOf(object.getString("background_color"));
 			ModernColor playColor = ModernColor.valueOf(object.getString("play_color"));
 
-			return new ModernCartDesign(pad, id, backgroundColor, playColor, ModernColor.RED2); // TODO Fix Cue In Color
+			return new ModernCartDesign.ModernCartDesignBuilder(pad, id)
+					.withBackgroundColor(backgroundColor, false)
+					.withPlayColor(playColor, false)
+					.withCueInColor(ModernColor.RED2, false)
+					.build(); // TODO Fix Cue In Color
 		}
 		return null;
 	}

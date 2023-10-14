@@ -1,7 +1,5 @@
 package de.tobias.playpad.plugin.api.websocket.methods
 
-import java.util.UUID
-
 import com.google.gson.JsonObject
 import de.tobias.playpad.PlayPadPlugin
 import de.tobias.playpad.pad.PadStatus
@@ -9,6 +7,8 @@ import de.tobias.playpad.plugin.api.websocket.MethodExecutable
 import de.tobias.playpad.plugin.api.websocket.message.Message
 import javafx.application.Platform
 import org.eclipse.jetty.websocket.api.Session
+
+import java.util.UUID
 
 class PadStatusChangeMethod extends MethodExecutable {
 	override def execute(session: Session, message: Message): JsonObject = {
@@ -27,6 +27,6 @@ class PadStatusChangeMethod extends MethodExecutable {
 			}
 		})
 
-		new JsonObject
+		null
 	}
 }

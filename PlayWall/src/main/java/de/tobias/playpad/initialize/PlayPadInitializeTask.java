@@ -5,5 +5,6 @@ import de.tobias.playpad.PlayPadImpl;
 
 public interface PlayPadInitializeTask {
 	String name();
+
 	void run(App app, PlayPadImpl instance);
 }

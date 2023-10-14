@@ -13,7 +13,7 @@ class ProjectCurrentMethod extends MethodExecutable {
 		val currentProject = PlayPadPlugin.getInstance().getCurrentProject
 
 		if (currentProject == null) {
-			new JsonObject
+			null
 		} else {
 			ProjectSerializer.serializeProject(currentProject, Profile.currentProfile)
 		}

@@ -73,7 +73,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 		stage.getIcons().add(PlayPadPlugin.getInstance().getIcon());
 
 		stage.setMinWidth(715);
-		stage.setMinHeight(700);
+		stage.setMinHeight(800);
 		stage.setTitle(Localization.getString(Strings.UI_WINDOW_GLOBAL_SETTINGS_TITLE));
 
 		PlayPadPlugin.styleable().applyStyle(stage);
@@ -111,9 +111,7 @@ public class GlobalSettingsViewController extends NVC implements IGlobalSettings
 	// Button Listener
 	@FXML
 	private void finishButtonHandler(ActionEvent event) {
-		if (onFinish()) {
-			getStageContainer().ifPresent(NVCStage::close);
-		}
+		getStageContainer().ifPresent(NVCStage::close);
 	}
 
 	/**

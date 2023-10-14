@@ -17,7 +17,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.*;
 import org.controlsfx.control.SegmentedButton;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Diese View ist die Basis für die Einstellunge für eine CartAction. Dabei enthällt diese View ein Grid aus Buttons (Carts), eine
@@ -36,17 +38,24 @@ public class CartActionTypeViewController extends NVC {
 	@FXML
 	private VBox cartActionContainer;
 
-	private CartActionViewController cartActionViewController;
+	private final AbstractActionViewController actionViewController;
+	private final String actionType;
 
-	private Mapping mapping;
-	private IMappingTabViewController parentController;
+	private final Mapping mapping;
+	private final IMappingTabViewController parentController;
 
-	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController) {
+
+	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController, String actionType) {
+		this(mapping, parentController, actionType, null);
+	}
+
+	public CartActionTypeViewController(Mapping mapping, IMappingTabViewController parentController, String actionType, AbstractActionViewController actionViewController) {
 		load("view/actions", "CartActions", Localization.getBundle());
 		this.mapping = mapping;
 		this.parentController = parentController;
 
-		cartActionViewController = new CartActionViewController();
+		this.actionType = actionType;
+		this.actionViewController = actionViewController;
 
 		Project currentProject = PlayPadMain.getProgramInstance().getCurrentProject();
 		ProjectSettings settings = currentProject.getSettings();
@@ -106,15 +115,21 @@ public class CartActionTypeViewController extends NVC {
 			int currentY = data[1];
 
 			try {
-				List<Action> cartActions = mapping.getActionsForType(CartAction.TYPE);
-				for (Action action : cartActions) {
-					if (CartAction.getX(action) == currentX && CartAction.getY(action) == currentY) {
-						cartActionContainer.getChildren().setAll(cartActionViewController.getParent());
-						cartActionContainer.setVisible(true);
-						cartActionViewController.setCartAction(action);
-						parentController.showMapperFor(action);
-					}
+				final List<Action> cartActions = mapping.getActionsForType(actionType).stream()
+						.filter(action -> CartAction.getX(action) == currentX && CartAction.getY(action) == currentY)
+						.collect(Collectors.toList());
+
+				if (cartActions.size() > 1) {
+					throw new IllegalArgumentException("Only one action allowed per pad. Currently " + cartActions.size() + " are registered for pad coordinate " + Arrays.toString(data));
 				}
+
+				final Action action = cartActions.get(0);
+				if (actionViewController != null) {
+					cartActionContainer.getChildren().setAll(actionViewController.getParent());
+					cartActionContainer.setVisible(true);
+					actionViewController.setCartAction(action);
+				}
+				parentController.showMapperFor(action);
 			} catch (NoSuchComponentException e) {
 				Logger.error(e);
 			}

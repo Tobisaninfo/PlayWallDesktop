@@ -12,7 +12,7 @@ import de.thecodelabs.utils.ui.Alerts;
 import de.thecodelabs.utils.util.OS;
 import de.thecodelabs.utils.util.OS.OSType;
 import de.thecodelabs.utils.util.SystemUtils;
-import de.tobias.playpad.design.ModernDesignHandlerImpl;
+import de.tobias.playpad.design.ModernDesignProviderImpl;
 import de.tobias.playpad.design.ModernStyleableImpl;
 import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
@@ -71,7 +71,7 @@ public class PlayPadMain extends Application {
 
 		ApplicationUtils.addAppListener(PlayPadMain::applicationWillStart);
 		App app = ApplicationUtils.registerMainApplication(PlayPadMain.class);
-		ApplicationUtils.registerUpdateSercive(new VersionUpdater());
+		ApplicationUtils.registerUpdateService(new VersionUpdater());
 
 		app.start(args);
 	}
@@ -105,10 +105,10 @@ public class PlayPadMain extends Application {
 
 		Image stageIcon = new Image(ICON_PATH);
 		Alerts.getInstance().setDefaultIcon(stageIcon);
-		impl.setIcon(stageIcon);
+		impl.setIcon(stageIcon, getClass().getClassLoader().getResourceAsStream(ICON_PATH));
 
 		PlayPadPlugin.setStyleable(new ModernStyleableImpl());
-		impl.setModernDesign(new ModernDesignHandlerImpl());
+		impl.setModernDesign(new ModernDesignProviderImpl());
 
 		PlayPadPlugin.setInstance(impl);
 	}

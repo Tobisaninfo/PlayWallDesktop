@@ -21,7 +21,6 @@ import de.tobias.playpad.profile.Profile;
 import de.tobias.playpad.profile.ProfileNotFoundException;
 import de.tobias.playpad.profile.ProfileSettings;
 import de.tobias.playpad.profile.ref.ProfileReference;
-import de.tobias.playpad.profile.ref.ProfileReferenceManager;
 import de.tobias.playpad.project.Project;
 import de.tobias.playpad.project.ProjectNotFoundException;
 import de.tobias.playpad.project.ProjectReader.ProjectReaderDelegate.ProfileAbortException;
@@ -148,7 +147,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	private ToggleButton colorButton;
 	private Button addPageButton;
 
-	private IMainViewController mainViewController;
+	private final IMainViewController mainViewController;
 
 	private transient ProjectSettingsViewController projectSettingsViewController;
 	private transient ProfileSettingsViewController profileSettingsViewController;
@@ -553,18 +552,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 	@FXML
 	void saveMenuHandler(ActionEvent event) {
-		try {
-			ProjectReferenceManager.saveProjects();
-			ProjectReferenceManager.saveSingleProject(openProject);
-			ProfileReferenceManager.saveProfiles();
-			Profile.currentProfile().save();
-			PlayPadPlugin.getInstance().getGlobalSettings().save();
-
-			mainViewController.notify(Localization.getString(Strings.STANDARD_FILE_SAVE), PlayPadMain.NOTIFICATION_DISPLAY_TIME);
-		} catch (IOException e) {
-			mainViewController.showError(Localization.getString(Strings.ERROR_PROJECT_SAVE));
-			Logger.error(e);
-		}
+		mainViewController.save();
 	}
 
 	@FXML

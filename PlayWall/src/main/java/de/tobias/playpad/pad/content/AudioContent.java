@@ -60,7 +60,7 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 	}
 
 	@Override
-	public void play() {
+	public void play(boolean withFadeIn) {
 		getPad().setEof(false);
 		audioHandler.play();
 	}
@@ -134,8 +134,8 @@ public class AudioContent extends PadContent implements Pauseable, Durationable,
 
 	@Override
 	public void onFadeLevelChange(double level) {
-		Pad pad = getPad();
-		audioHandler.setVolume(level * VolumeManager.getInstance().computeVolume(pad));
+		final double newVolume = VolumeManager.getInstance().computeVolume(getPad()) * level;
+		audioHandler.setVolume(newVolume);
 	}
 
 	@Override

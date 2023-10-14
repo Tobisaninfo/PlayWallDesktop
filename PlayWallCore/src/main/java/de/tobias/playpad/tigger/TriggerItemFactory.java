@@ -13,5 +13,4 @@ public abstract class TriggerItemFactory extends Component {
 	public abstract TriggerItem newInstance(Trigger trigger);
 
 	public abstract NVC getSettingsController(TriggerItem item, IMainViewController mainViewController);
-
 }
