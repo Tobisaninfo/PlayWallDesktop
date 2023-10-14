@@ -3,4 +3,4 @@ name: "WebApiPlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 2
+build: 3
