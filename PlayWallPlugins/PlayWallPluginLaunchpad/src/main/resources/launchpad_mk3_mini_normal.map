@@ -1,0 +1,57 @@
+% RED
+0xef9a9aff=C1_2
+0xef5350ff=C1_2
+0xe53935ff=C1_2
+
+% DARK_RED
+0xd92349ff=C1_2
+0xc92349ff=C1_2
+0xa90329ff=C1_2
+
+% PINK
+0xf48fb1ff=C14_2
+0xec407aff=C14_2
+0xd81b60ff=C14_2
+
+% PURPLE
+0xce93d8ff=C12_2
+0xab47bcff=C12_2
+0x8e24aaff=C12_2
+
+% LIGHT_BLUE
+0x80deeaff=C10_2
+0x26c6daff=C10_2
+0x00acc1ff=C10_2
+
+% BLUE
+0x90caf9ff=C11_2
+0x42a5f5ff=C11_2
+0x1e88e5ff=C11_2
+
+% LIGHT_GREEN
+0xc5e1a5ff=C5_2
+0x9ccc65ff=C5_2
+0x7cb342ff=C5_2
+
+% LIME
+0xe6ee9cff=C4_2
+0xd4e157ff=C4_2
+0xc0ca33ff=C4_2
+
+% YELLOW
+0xfff59dff=C3_2
+0xffee58ff=C3_2
+0xfdd835ff=C3_2
+
+% ORANGE
+0xffcc80ff=C2_2
+0xffa726ff=C2_2
+0xfb8c00ff=C2_2
+
+% GRAY
+0xeeeeeeff=C0_3
+0xccccccff=C0_3
+0xaaaaaaff=C0_3
+0x888888ff=C0_2
+0x666666ff=C0_2
+0x444444ff=C0_1
