@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 public class ProjectSettings implements IProjectSettings {
 
-	public static int MAX_PAGES = 10;
+	public static int MAX_PAGES = 50;
 
 	static {
 		final UserDefaults userDefaults = ApplicationUtils.getApplication().getUserDefaults();

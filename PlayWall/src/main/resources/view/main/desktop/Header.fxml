@@ -150,8 +150,7 @@
         <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
               styleClass="tool-bar">
             <children>
-                <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0"
-                      HBox.hgrow="ALWAYS"/>
+                <FlowPane fx:id="pageButtonPage" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" hgap="14.0" vgap="14.0" HBox.hgrow="ALWAYS" />
                 <HBox fx:id="notFoundContainer" alignment="CENTER" spacing="14.0">
                     <children>
                         <Label fx:id="notFoundLabel"/>

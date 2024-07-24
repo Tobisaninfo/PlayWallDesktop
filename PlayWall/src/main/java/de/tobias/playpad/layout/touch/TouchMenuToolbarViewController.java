@@ -53,7 +53,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 
 	@Override
 	public void initPageButtons() {
-		pageHBox.getChildren().clear();
+		pageButtonPage.getChildren().clear();
 
 		if (openProject == null) {
 			return;
@@ -63,7 +63,7 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 			Page page = openProject.getPage(i);
 
 			Button button = createPageButton(page, i);
-			pageHBox.getChildren().add(button);
+			pageButtonPage.getChildren().add(button);
 		}
 	}
 
@@ -120,13 +120,13 @@ public class TouchMenuToolbarViewController extends BasicMenuToolbarViewControll
 	@Override
 	public void highlightPageButton(int index) {
 		if (index >= 0) {
-			if (pageHBox.getChildren().size() > currentPage) {
-				Node removeNode = pageHBox.getChildren().get(currentPage);
+			if (pageButtonPage.getChildren().size() > currentPage) {
+				Node removeNode = pageButtonPage.getChildren().get(currentPage);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
 			}
 
-			if (pageHBox.getChildren().size() > index) {
-				Node newNode = pageHBox.getChildren().get(index);
+			if (pageButtonPage.getChildren().size() > index) {
+				Node newNode = pageButtonPage.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentPage = index;
 			}

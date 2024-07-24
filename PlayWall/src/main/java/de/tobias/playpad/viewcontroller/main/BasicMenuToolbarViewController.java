@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 import java.util.ResourceBundle;
@@ -32,7 +33,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 	protected HBox iconHbox;
 
 	@FXML
-	protected HBox pageHBox;
+	protected FlowPane pageButtonPage;
 	@FXML
 	protected HBox toolbarHBox;
 	@FXML
@@ -50,7 +51,7 @@ public abstract class BasicMenuToolbarViewController extends MenuToolbarViewCont
 
 	protected Project openProject; // REFERENCE zu MainViewController
 
-	public BasicMenuToolbarViewController(String name, String path, ResourceBundle localization) {
+	protected BasicMenuToolbarViewController(String name, String path, ResourceBundle localization) {
 		super(name, path, localization);
 	}
 
