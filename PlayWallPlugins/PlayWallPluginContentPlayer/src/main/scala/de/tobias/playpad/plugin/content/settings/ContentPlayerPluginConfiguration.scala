@@ -60,12 +60,8 @@ class Zone extends Displayable {
 
 	override def toString: String = name
 
-	def canEqual(other: Any): Boolean = other.isInstanceOf[Zone]
-
 	override def equals(other: Any): Boolean = other match {
-		case that: Zone =>
-			(that canEqual this) &&
-			  name == that.name
+		case that: Zone => id == that.id
 		case _ => false
 	}
 

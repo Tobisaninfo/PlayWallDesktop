@@ -342,7 +342,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void initPageButtons() {
 		currentSelectedPageButton = -1;
-		pageHBox.getChildren().clear();
+		pageButtonPage.getChildren().clear();
 
 		if (openProject == null) {
 			return;
@@ -353,7 +353,7 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 
 			Button button = createPageButton(page, i);
 			button.setOnDragOver(new PageButtonDragHandler(mainViewController, i));
-			pageHBox.getChildren().add(button);
+			pageButtonPage.getChildren().add(button);
 		}
 	}
 
@@ -469,8 +469,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 	@Override
 	public void highlightPageButton(int index) {
 		if (index >= 0) {
-			if (pageHBox.getChildren().size() > currentSelectedPageButton && currentSelectedPageButton >= 0) {
-				Node removeNode = pageHBox.getChildren().get(currentSelectedPageButton);
+			if (pageButtonPage.getChildren().size() > currentSelectedPageButton && currentSelectedPageButton >= 0) {
+				Node removeNode = pageButtonPage.getChildren().get(currentSelectedPageButton);
 				removeNode.getStyleClass().remove(CURRENT_PAGE_BUTTON);
 
 				if (removeNode instanceof Button) {
@@ -478,8 +478,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 				}
 			}
 
-			if (index < pageHBox.getChildren().size()) {
-				Node newNode = pageHBox.getChildren().get(index);
+			if (index < pageButtonPage.getChildren().size()) {
+				Node newNode = pageButtonPage.getChildren().get(index);
 				newNode.getStyleClass().add(CURRENT_PAGE_BUTTON);
 				currentSelectedPageButton = index;
 
@@ -501,7 +501,8 @@ public class DesktopMenuToolbarViewController extends BasicMenuToolbarViewContro
 			dialog.showAndWait().ifPresent(projectReference -> {
 				try {
 					PlayPadMain.getProgramInstance().openProject(projectReference, null);
-				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException | ProfileAbortException e) {
+				} catch (DocumentException | IOException | ProjectNotFoundException | ProfileNotFoundException |
+						 ProfileAbortException e) {
 					Logger.error(e);
 				}
 			});

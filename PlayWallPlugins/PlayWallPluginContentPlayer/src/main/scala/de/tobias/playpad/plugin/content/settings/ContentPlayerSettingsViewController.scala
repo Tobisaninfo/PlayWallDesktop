@@ -157,15 +157,15 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 	override def loadSettings(settings: Profile): Unit = {
 		val configuration = ContentPlayerSettingsViewController.getZoneConfiguration
 		startZoneHash = configuration.zones.hashCode
-		startScreenHash = configuration.screen.hashCode
+		startScreenHash = if (configuration.screen != null) configuration.screen.hashCode else 0
 
 		listView.getItems.setAll(configuration.zones)
 
 		val screens = ContentPlayerWindow.GetScreens
 		val selectedScreen = configuration.screen
 		screenComboBox.getSelectionModel.select(new SelectableContentScreen(screens
-		  .find(screen => screen.getName == selectedScreen)
-		  .getOrElse(screens.head)))
+			.find(screen => screen.getName == selectedScreen)
+			.getOrElse(screens.head)))
 
 		ffmpegTextField.setText(configuration.ffmpegExecutable)
 		ffprobeTextField.setText(configuration.ffprobeExecutable)
@@ -188,8 +188,8 @@ class ContentPlayerSettingsViewController extends ProfileSettingsTabViewControll
 	}
 
 	override def needReload(): Boolean = startZoneHash != ContentPlayerSettingsViewController.getZoneConfiguration.zones.hashCode ||
-	  startScreenHash != ContentPlayerSettingsViewController.getZoneConfiguration.screen.hashCode ||
-	  !listView.getSelectionModel.isEmpty
+		startScreenHash != ContentPlayerSettingsViewController.getZoneConfiguration.screen.hashCode ||
+		!listView.getSelectionModel.isEmpty
 
 	override def validSettings(): Boolean = {
 		true

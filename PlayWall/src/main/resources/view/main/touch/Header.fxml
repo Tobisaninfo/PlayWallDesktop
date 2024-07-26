@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <HBox fx:id="toolbarHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="586.0" spacing="14.0" styleClass="tool-bar" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <HBox fx:id="pageHBox" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" spacing="14.0" HBox.hgrow="ALWAYS" />
+        <FlowPane fx:id="pageButtonPage" alignment="CENTER_LEFT" maxWidth="1.7976931348623157E308" hgap="14.0" vgap="14.0" HBox.hgrow="ALWAYS" />
         <HBox fx:id="notFoundContainer" alignment="CENTER" spacing="7.0">
             <children>
                 <Label fx:id="notFoundLabel" />
