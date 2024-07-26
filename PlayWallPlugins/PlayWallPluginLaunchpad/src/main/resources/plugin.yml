@@ -3,4 +3,4 @@ name: "LaunchpadPlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 6
+build: 7
