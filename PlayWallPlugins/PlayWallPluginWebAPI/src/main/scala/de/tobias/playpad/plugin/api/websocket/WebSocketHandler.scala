@@ -24,6 +24,7 @@ class WebSocketHandler {
 		"page-action" -> new PageActionMethod,
 		"navigate-action" -> new NavigateActionMethod,
 		"stop-action" -> new StopActionMethod,
+		"volume-action" -> new VolumeActionMethod,
 		"current-page-request" -> new CurrentPageRequestMethod
 	)
 
