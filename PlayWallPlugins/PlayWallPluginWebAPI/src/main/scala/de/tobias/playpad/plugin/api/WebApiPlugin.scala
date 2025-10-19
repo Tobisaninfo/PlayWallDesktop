@@ -37,7 +37,7 @@ class WebApiPlugin extends PlayPadPluginStub with PluginArtifact {
 		module = new Module(descriptor.getName, descriptor.getArtifactId)
 		Localization.addResourceBundle("plugin/webapi/lang/base", getClass.getClassLoader)
 
-		Profile.registerListener(new ProfileApiListener)
+		Profile.registerListener(ProfileApiListener)
 		PlayPadPlugin.getInstance().addPadListener(new PadApiListener)
 		PlayPadPlugin.getInstance().addGlobalListener(new ProjectListener)
 		PlayPadPlugin.getInstance().addMainViewListener(new MainWindowPageListener)
