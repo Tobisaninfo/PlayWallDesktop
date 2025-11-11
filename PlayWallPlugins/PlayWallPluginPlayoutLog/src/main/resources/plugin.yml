@@ -3,4 +3,4 @@ name: "PlayoutLogPlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 11
+build: 12

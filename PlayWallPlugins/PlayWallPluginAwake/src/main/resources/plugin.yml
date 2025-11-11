@@ -3,4 +3,4 @@ name: "AwakePlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 7
+build: 8

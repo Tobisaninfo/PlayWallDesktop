@@ -3,4 +3,4 @@ name: "ContentPlugin"
 artifactId: "${pom.artifactId}"
 groupId: "${pom.groupId}"
 version: "${pom.version}"
-build: 3
+build: 4
